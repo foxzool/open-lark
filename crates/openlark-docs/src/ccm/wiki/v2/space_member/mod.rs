@@ -139,6 +139,7 @@ impl SpaceMemberService {
         option: Option<openlark_core::req_option::RequestOption>,
     ) -> openlark_core::SDKResult<openlark_core::api::Response<DeleteSpaceMemberResponse>> {
         delete_space_member(request, &self.config, option).await
+    }
 }
 
 impl openlark_core::trait_system::service::Service for SpaceMemberService {
@@ -151,11 +152,9 @@ impl openlark_core::trait_system::service::Service for SpaceMemberService {
         Self: Sized,
     {
         "spacemember"
-}
+    }
 
-    fn transport(&self) -> &dyn openlark_core::http::Transport {
-        panic!("SpaceMemberService does not have a transport instance")
-}
+    }
 
 #[cfg(test)]
 mod tests {

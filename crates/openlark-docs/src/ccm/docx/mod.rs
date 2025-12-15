@@ -43,8 +43,8 @@ impl DocxService {
     }
 
     /// 获取V1版本API
-    pub fn v1(&self) -> crate::ccm::docx::v1::DocxV1Service {
-        crate::ccm::docx::v1::DocxV1Service::new(self.config.clone())
+    pub fn v1(&self) -> crate::ccm::docx::v1::DocxService {
+        crate::ccm::docx::v1::DocxService::new(self.config.clone())
     }
 
     /// 获取文档操作API

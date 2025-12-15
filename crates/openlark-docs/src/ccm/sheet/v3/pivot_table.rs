@@ -1,12 +1,15 @@
-use serde::{Deserialize, Serialize};
 use openlark_core::{
-    api:: ApiResponseTrait,
-    models::{OpenLarkConfig, OpenLarkRequest},
-    OpenLarkClient, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
+use serde_json::json;
+use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 
 /// 创建数据透视表请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreatePivotTableRequest {
     /// 电子表格token
     pub spreadsheet_token: String,
@@ -25,7 +28,7 @@ pub struct CreatePivotTableRequest {
 }
 
 /// 值字段
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ValueField {
     /// 字段名称
     pub field_name: String,
@@ -34,7 +37,7 @@ pub struct ValueField {
 }
 
 /// 创建数据透视表响应
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct CreatePivotTableResponse {
     /// 透视表ID
     pub pivot_table_id: String,
@@ -42,59 +45,159 @@ pub struct CreatePivotTableResponse {
     pub result: String,
 }
 
+impl ApiResponseTrait for CreatePivotTableResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl CreatePivotTableRequest {
+    /// 创建新的创建数据透视表请求构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置电子表格token
+    pub fn spreadsheet_token(mut self, token: impl Into<String>) -> Self {
+        self.spreadsheet_token = token.into();
+        self
+    }
+
+    /// 设置源工作表ID
+    pub fn source_sheet_id(mut self, id: impl Into<String>) -> Self {
+        self.source_sheet_id = id.into();
+        self
+    }
+
+    /// 设置数据范围
+    pub fn source_range(mut self, range: impl Into<String>) -> Self {
+        self.source_range = range.into();
+        self
+    }
+
+    /// 设置目标工作表ID
+    pub fn target_sheet_id(mut self, id: impl Into<String>) -> Self {
+        self.target_sheet_id = id.into();
+        self
+    }
+
+    /// 添加行字段
+    pub fn add_row_field(mut self, field: impl Into<String>) -> Self {
+        self.row_fields.push(field.into());
+        self
+    }
+
+    /// 设置行字段
+    pub fn row_fields(mut self, fields: Vec<String>) -> Self {
+        self.row_fields = fields;
+        self
+    }
+
+    /// 添加列字段
+    pub fn add_column_field(mut self, field: impl Into<String>) -> Self {
+        self.column_fields.push(field.into());
+        self
+    }
+
+    /// 设置列字段
+    pub fn column_fields(mut self, fields: Vec<String>) -> Self {
+        self.column_fields = fields;
+        self
+    }
+
+    /// 添加值字段
+    pub fn add_value_field(mut self, field: ValueField) -> Self {
+        self.value_fields.push(field);
+        self
+    }
+
+    /// 设置值字段
+    pub fn value_fields(mut self, fields: Vec<ValueField>) -> Self {
+        self.value_fields = fields;
+        self
+    }
+}
+
+impl ValueField {
+    /// 创建新的值字段构建器
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置字段名称
+    pub fn field_name(mut self, name: impl Into<String>) -> Self {
+        self.field_name = name.into();
+        self
+    }
+
+    /// 设置汇总函数
+    pub fn summarize_function(mut self, function: impl Into<String>) -> Self {
+        self.summarize_function = function.into();
+        self
+    }
+}
+
 /// 创建数据透视表
 /// docPath: https://open.feishu.cn/open-apis/sheets/v3/spreadsheets/:spreadsheetToken/pivotTables
 pub async fn create_pivot_table(
     request: CreatePivotTableRequest,
-    config: &OpenLarkConfig,
+    config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<CreatePivotTableResponse>> {
-    let url = format!(
-        "{}/open-apis/sheets/v3/spreadsheets/{}/pivotTables",
-        config.base_url, request.spreadsheet_token
-    );
+) -> SDKResult<Response<CreatePivotTableResponse>> {
+    // 构建请求体
+    let body = json!(request);
 
-    let req = OpenLarkRequest {
-        url,
-        method: http::Method::POST,
-        headers: vec![],
-        query_params: vec![],
-        body: Some(serde_json::to_vec(&request)?),
-    };
+    // 创建API请求
+    let mut api_request: ApiRequest<CreatePivotTableResponse> =
+        ApiRequest::post(&format!("{}/spreadsheets/{}/pivotTables", SheetsApiV3, request.spreadsheet_token))
+            .body(body);
 
-    OpenLarkClient::request(req, config, option).await
+    // 如果有请求选项，应用它们
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
+
+    // 发送请求
+    Transport::request(api_request, config, None).await
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio;
 
-    #[tokio::test]
-    async fn test_create_pivot_table() {
-        let config = OpenLarkConfig {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://open.feishu.cn".to_string(),
-            ..Default::default()
-        };
+    #[test]
+    fn test_create_pivot_table_request_builder() {
+        let request = CreatePivotTableRequest::new()
+            .spreadsheet_token("test_token")
+            .source_sheet_id("source_sheet")
+            .source_range("A1:D100")
+            .target_sheet_id("target_sheet")
+            .add_row_field("category")
+            .add_column_field("month")
+            .add_value_field(
+                ValueField::new()
+                    .field_name("amount")
+                    .summarize_function("SUM")
+            );
 
-        let request = CreatePivotTableRequest {
-            spreadsheet_token: "test_spreadsheet_token".to_string(),
-            source_sheet_id: "source_sheet".to_string(),
-            source_range: "A1:D100".to_string(),
-            target_sheet_id: "target_sheet".to_string(),
-            row_fields: vec!["category".to_string()],
-            column_fields: vec!["month".to_string()],
-            value_fields: vec![
-                ValueField {
-                    field_name: "amount".to_string(),
-                    summarize_function: "SUM".to_string(),
-                },
-            ],
-        };
+        assert_eq!(request.spreadsheet_token, "test_token");
+        assert_eq!(request.source_sheet_id, "source_sheet");
+        assert_eq!(request.source_range, "A1:D100");
+        assert_eq!(request.target_sheet_id, "target_sheet");
+        assert_eq!(request.row_fields, vec!["category"]);
+        assert_eq!(request.column_fields, vec!["month"]);
+        assert_eq!(request.value_fields.len(), 1);
+        assert_eq!(request.value_fields[0].field_name, "amount");
+        assert_eq!(request.value_fields[0].summarize_function, "SUM");
+    }
 
-        let result = create_pivot_table(request, &config, None).await;
-        assert!(result.is_ok());
+    #[test]
+    fn test_value_field_builder() {
+        let field = ValueField::new()
+            .field_name("sales")
+            .summarize_function("AVERAGE");
+
+        assert_eq!(field.field_name, "sales");
+        assert_eq!(field.summarize_function, "AVERAGE");
     }
 }

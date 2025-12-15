@@ -1583,6 +1583,16 @@ pub enum DriveApi {
     // V2 APIs
     /// 获取云文档的点赞者列表
     ListFileLikes(String), // file_token
+
+    // Media Upload Task APIs
+    /// 创建媒体上传任务
+    MediaUploadTasks,
+    /// 获取媒体上传任务
+    MediaUploadTask(String), // task_id
+    /// 创建媒体分享链接
+    CreateMediaShareLink(String), // file_token
+    /// 获取公开密码
+    GetPublicPassword(String), // file_token
 }
 
 impl DriveApi {
@@ -1791,6 +1801,18 @@ impl DriveApi {
             DriveApi::ListFileLikes(file_token) => {
                 format!("/open-apis/drive/v2/files/{}/likes", file_token)
             }
+
+            // Media Upload Task APIs
+            DriveApi::MediaUploadTasks => "/open-apis/drive/v1/medias/upload_tasks".to_string(),
+            DriveApi::MediaUploadTask(task_id) => {
+                format!("/open-apis/drive/v1/medias/upload_tasks/{}", task_id)
+            }
+            DriveApi::CreateMediaShareLink(file_token) => {
+                format!("/open-apis/drive/v1/medias/{}/share_link", file_token)
+            }
+            DriveApi::GetPublicPassword(file_token) => {
+                format!("/open-apis/drive/v1/publics/{}/password", file_token)
+            }
         }
     }
 }
@@ -1909,6 +1931,90 @@ impl WikiApi {
 
             // Node Search API (V1)
             WikiApi::SearchNodes => "/open-apis/wiki/v1/nodes/search".to_string(),
+        }
+    }
+}
+
+/// Sheets API V3 端点枚举
+/// 对应 meta.project = ccm_sheet, meta.version = v3
+#[derive(Debug, Clone, PartialEq)]
+pub enum SheetsApiV3 {
+    /// 获取工作表列表
+    SheetsMeta(String), // spreadsheet_token
+    /// 增加行列
+    DimensionRange(String), // spreadsheet_token
+    /// 更新行列
+    DimensionRangeUpdate(String), // spreadsheet_token
+    /// 删除行列
+    DimensionRangeDelete(String), // spreadsheet_token
+    /// 批量获取单元格值
+    ValuesBatchGet(String), // spreadsheet_token
+    /// 写入单元格值
+    Values(String), // spreadsheet_token
+    /// 追加单元格值
+    ValuesAppend(String), // spreadsheet_token
+    /// 更新单元格样式
+    Style(String), // spreadsheet_token
+    /// 合并单元格
+    MergeCells(String), // spreadsheet_token
+    /// 创建筛选
+    FilterViews(String), // spreadsheet_token
+    /// 更新筛选
+    FilterViewsUpdate(String), // spreadsheet_token
+    /// 复制工作表
+    CopyTo(String), // spreadsheet_token
+    /// 创建图表
+    Charts(String), // spreadsheet_token
+    /// 创建数据透视表
+    PivotTables(String), // spreadsheet_token
+}
+
+impl SheetsApiV3 {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            SheetsApiV3::SheetsMeta(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/sheets/meta", spreadsheet_token)
+            }
+            SheetsApiV3::DimensionRange(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/dimension_range", spreadsheet_token)
+            }
+            SheetsApiV3::DimensionRangeUpdate(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/dimension_range", spreadsheet_token)
+            }
+            SheetsApiV3::DimensionRangeDelete(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/dimension_range", spreadsheet_token)
+            }
+            SheetsApiV3::ValuesBatchGet(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/values:batchGet", spreadsheet_token)
+            }
+            SheetsApiV3::Values(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/values", spreadsheet_token)
+            }
+            SheetsApiV3::ValuesAppend(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/values:append", spreadsheet_token)
+            }
+            SheetsApiV3::Style(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/style", spreadsheet_token)
+            }
+            SheetsApiV3::MergeCells(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/merge_cells", spreadsheet_token)
+            }
+            SheetsApiV3::FilterViews(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/filterViews", spreadsheet_token)
+            }
+            SheetsApiV3::FilterViewsUpdate(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/filterViews", spreadsheet_token)
+            }
+            SheetsApiV3::CopyTo(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/sheets:copyTo", spreadsheet_token)
+            }
+            SheetsApiV3::Charts(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/charts", spreadsheet_token)
+            }
+            SheetsApiV3::PivotTables(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}/pivotTables", spreadsheet_token)
+            }
         }
     }
 }

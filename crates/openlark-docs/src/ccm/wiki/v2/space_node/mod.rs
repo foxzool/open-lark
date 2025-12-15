@@ -11,7 +11,6 @@
 /// 提供知识空间节点的管理功能，包括创建、查询、移动、更新和复制等操作。
 
 use openlark_core::{
-    error::validation_error,
     api::Response,
     config::Config,
     req_option::RequestOption,
@@ -80,11 +79,8 @@ impl SpaceNodeService {
         &self,
         request: CreateSpaceNodeRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<CreatedNode> {
-        let result = self.create_space_node(request, option).await?;
-        result.data.ok_or_else(|| {
-            validation_error("parameter", "Response data is missing"),
-        })
+    ) -> SDKResult<Response<CreateSpaceNodeResponse>> {
+        create_space_node(request, &self.config, option).await
     }
 
     /// 获取知识空间子节点列表
@@ -113,11 +109,10 @@ impl SpaceNodeService {
     /// ```
     pub async fn list(
         &self,
-        request: ListSpaceNodeRequest,
+        request: ListSpaceNodesRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<Vec<NodeItem>> {
-        let result = self.list_space_node(request, option).await?;
-        Ok(result.data.map(|data| data.items).unwrap_or_default())
+    ) -> SDKResult<Response<ListSpaceNodesResponse>> {
+        list_space_nodes(request, &self.config, option).await
     }
 
     /// 获取知识空间节点详情
@@ -147,11 +142,8 @@ impl SpaceNodeService {
         &self,
         request: GetSpaceNodeRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<SpaceNode> {
-        let result = self.get_space_node(request, option).await?;
-        result.data.ok_or_else(|| {
-            validation_error("parameter", "Response data is missing"),
-        })
+    ) -> SDKResult<Response<GetSpaceNodeResponse>> {
+        get_space_node(request, &self.config, option).await
     }
 
     /// 更新知识空间节点标题
@@ -180,11 +172,8 @@ impl SpaceNodeService {
         &self,
         request: UpdateSpaceNodeTitleRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<UpdatedNode> {
-        let result = self.update_space_node_title(request, option).await?;
-        result.data.ok_or_else(|| {
-            validation_error("parameter", "Response data is missing"),
-        })
+    ) -> SDKResult<Response<UpdateSpaceNodeTitleResponse>> {
+        update_space_node_title(request, &self.config, option).await
     }
 
     /// 移动知识空间节点
@@ -214,11 +203,8 @@ impl SpaceNodeService {
         &self,
         request: MoveSpaceNodeRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<MovedNode> {
-        let result = self.move_space_node(request, option).await?;
-        result.data.ok_or_else(|| {
-            validation_error("parameter", "Response data is missing"),
-        })
+    ) -> SDKResult<Response<MoveSpaceNodeResponse>> {
+        move_space_node(request, &self.config, option).await
     }
 
     /// 复制知识空间节点
@@ -249,11 +235,9 @@ impl SpaceNodeService {
         &self,
         request: CopySpaceNodeRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<CopiedNode> {
-        let result = self.copy_space_node(request, option).await?;
-        result.data.ok_or_else(|| {
-            validation_error("parameter", "Response data is missing"),
-        })
+    ) -> SDKResult<Response<CopySpaceNodeResponse>> {
+        copy_space_node(request, &self.config, option).await
+    }
 }
 
 impl openlark_core::trait_system::service::Service for SpaceNodeService {
@@ -266,10 +250,8 @@ impl openlark_core::trait_system::service::Service for SpaceNodeService {
         Self: Sized,
     {
         "spacenode"
-}
+    }
 
-    fn transport(&self) -> &dyn openlark_core::http::Transport {
-        panic!("SpaceNodeService does not have a transport instance")
 }
 
 #[cfg(test)]

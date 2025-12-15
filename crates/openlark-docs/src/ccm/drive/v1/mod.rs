@@ -21,7 +21,6 @@ pub mod permission;
 pub mod import_task;
 pub mod export_task;
 pub mod file_version;
-pub mod comment;
 pub mod task_check;
 pub mod password;
 pub mod search;
