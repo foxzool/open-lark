@@ -72,6 +72,9 @@ pub mod base;
 #[cfg(feature = "baike")]
 pub mod baike;
 
+#[cfg(feature = "lingo")]
+pub mod lingo;
+
 #[cfg(feature = "minutes")]
 pub mod minutes;
 
@@ -109,6 +112,9 @@ pub use base::BaseService;
 
 #[cfg(feature = "baike")]
 pub use baike::BaikeService;
+
+#[cfg(feature = "lingo")]
+pub use lingo::LingoService;
 
 #[cfg(feature = "minutes")]
 pub use minutes::MinutesService;

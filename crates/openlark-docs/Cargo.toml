@@ -46,6 +46,9 @@ base = ["core"]
 baike = ["ccm-wiki"]
 wiki = ["baike"]
 
+# 语言服务 (14 APIs)
+lingo = []
+
 # 会议纪要 (4 APIs)
 minutes = ["core"]
 
