@@ -71,7 +71,7 @@ impl TenantAccessTokenInternalRequestBuilder {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<TenantAccessTokenInternalResponseData> =
-            ApiRequest::post(&api_endpoint.to_url()).body(openlark_core::api::RequestData::Json(
+            ApiRequest::post(api_endpoint.to_url()).body(openlark_core::api::RequestData::Json(
                 serde_json::to_value(&request_body)?,
             ));
 
