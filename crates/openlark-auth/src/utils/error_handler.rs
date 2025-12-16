@@ -22,43 +22,43 @@ pub fn create_auth_error(
         Some(ErrorCode::AppAccessTokenInvalid) => CoreError::Authentication {
             message: "应用访问令牌格式或内容无效，请检查应用凭证".to_string(),
             code: ErrorCode::AppAccessTokenInvalid,
-            ctx,
+            ctx: Box::new(ctx),
         },
         Some(ErrorCode::PermissionMissing) => CoreError::Authentication {
             message: "应用权限不足，请在开发者后台检查权限配置".to_string(),
             code: ErrorCode::PermissionMissing,
-            ctx,
+            ctx: Box::new(ctx),
         },
         Some(ErrorCode::AccessTokenExpiredV2) => CoreError::Authentication {
             message: "访问令牌已过期，请重新获取令牌".to_string(),
             code: ErrorCode::AccessTokenExpiredV2,
-            ctx,
+            ctx: Box::new(ctx),
         },
         Some(ErrorCode::AccessTokenInvalid) => CoreError::Authentication {
             message: "用户访问令牌无效，请重新进行用户授权".to_string(),
             code: ErrorCode::AccessTokenInvalid,
-            ctx,
+            ctx: Box::new(ctx),
         },
         Some(ErrorCode::TenantAccessTokenInvalid) => CoreError::Authentication {
             message: "租户访问令牌无效，请重新获取企业访问令牌".to_string(),
             code: ErrorCode::TenantAccessTokenInvalid,
-            ctx,
+            ctx: Box::new(ctx),
         },
         Some(code) => CoreError::Authentication {
             message: get_user_friendly_message(feishu_code, &endpoint),
             code,
-            ctx,
+            ctx: Box::new(ctx),
         },
         None => {
             // 回退到HTTP状态码或内部业务码
-            CoreError::Api(openlark_core::error::ApiError {
+            CoreError::Api(Box::new(openlark_core::error::ApiError {
                 status: feishu_code as u16,
                 endpoint: endpoint.clone().into(),
                 message: get_user_friendly_message(feishu_code, &endpoint),
                 source: None,
                 code: ErrorCode::from_http_status(feishu_code as u16),
-                ctx,
-            })
+                ctx: Box::new(ctx),
+            }))
         }
     }
 }
@@ -108,15 +108,15 @@ pub fn create_api_error(
     }
     ctx.add_context("feishu_code", feishu_code.to_string());
 
-    CoreError::Api(openlark_core::error::ApiError {
+    CoreError::Api(Box::new(openlark_core::error::ApiError {
         status: feishu_code as u16,
         endpoint: endpoint.into(),
         message: error_message,
         source: None,
         code: ErrorCode::from_feishu_code(feishu_code)
             .unwrap_or_else(|| ErrorCode::from_http_status(feishu_code as u16)),
-        ctx,
-    })
+        ctx: Box::new(ctx),
+    }))
 }
 
 /// 处理API响应，检查成功或返回错误

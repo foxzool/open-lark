@@ -169,7 +169,7 @@ impl AuthorizationBuilder {
                 let mut ctx = openlark_core::error::ErrorContext::new();
                 ctx.add_context("endpoint", "/open-apis/authen/v1/index");
                 ctx.add_context("flow", "oauth_redirect");
-                ctx
+                Box::new(ctx)
             },
         })
     }

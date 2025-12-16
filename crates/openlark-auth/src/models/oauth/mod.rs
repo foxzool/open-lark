@@ -263,6 +263,7 @@ impl OAuthError {
     }
 
     /// 转换为错误字符串
+    #[allow(clippy::inherent_to_string)]
     pub fn to_string(&self) -> String {
         match self {
             OAuthError::InvalidClient => "invalid_client".to_string(),

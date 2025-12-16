@@ -11,7 +11,7 @@ impl TokenValidator {
 
     /// 验证应用ID格式
     pub fn validate_app_id(app_id: &str) -> bool {
-        !app_id.is_empty() && app_id.len() >= 1
+        !app_id.is_empty()
     }
 
     /// 验证应用密钥格式
