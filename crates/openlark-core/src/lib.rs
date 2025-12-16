@@ -33,8 +33,7 @@ pub mod trait_system;
 pub mod utils;
 
 // Business modules (should be moved to separate crates)
-pub mod contact;
-pub mod endpoints;
+// NOTE: contact 和 endpoints 已移至独立业务 crate
 
 // Re-export commonly used types from crate root
 pub use error::{validation_error, CoreError, SDKResult};

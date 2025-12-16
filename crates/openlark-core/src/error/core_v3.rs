@@ -169,20 +169,20 @@ impl ErrorBuilder {
     pub fn build(self) -> CoreError {
         let msg = self.message.unwrap_or_else(|| "unknown error".to_string());
         match self.kind {
-            BuilderKind::Network => CoreError::Network(NetworkError {
+            BuilderKind::Network => CoreError::Network(Box::new(NetworkError {
                 message: msg,
                 source: self.source,
                 policy: self.policy.unwrap_or_default(),
-                ctx: self.ctx,
-            }),
+                ctx: Box::new(self.ctx),
+            })),
             BuilderKind::Authentication => CoreError::Authentication {
                 message: msg,
                 code: self.code.unwrap_or(ErrorCode::AuthenticationFailed),
-                ctx: self.ctx,
+                ctx: Box::new(self.ctx),
             },
             BuilderKind::Api => {
                 let status = self.status.unwrap_or(500);
-                CoreError::Api(ApiError {
+                CoreError::Api(Box::new(ApiError {
                     status,
                     endpoint: self
                         .endpoint
@@ -193,54 +193,54 @@ impl ErrorBuilder {
                     code: self
                         .code
                         .unwrap_or_else(|| ErrorCode::from_http_status(status)),
-                    ctx: self.ctx,
-                })
+                    ctx: Box::new(self.ctx),
+                }))
             }
             BuilderKind::Validation => CoreError::Validation {
                 field: self.field.unwrap_or_else(|| "field".to_string()).into(),
                 message: msg,
                 code: self.code.unwrap_or(ErrorCode::ValidationError),
-                ctx: self.ctx,
+                ctx: Box::new(self.ctx),
             },
             BuilderKind::Configuration => CoreError::Configuration {
                 message: msg,
                 code: self.code.unwrap_or(ErrorCode::ConfigurationError),
-                ctx: self.ctx,
+                ctx: Box::new(self.ctx),
             },
             BuilderKind::Serialization => CoreError::Serialization {
                 message: msg,
                 source: self.source,
                 code: self.code.unwrap_or(ErrorCode::SerializationError),
-                ctx: self.ctx,
+                ctx: Box::new(self.ctx),
             },
             BuilderKind::Business => CoreError::Business {
                 code: self.code.unwrap_or(ErrorCode::BusinessError),
                 message: msg,
-                ctx: self.ctx,
+                ctx: Box::new(self.ctx),
             },
             BuilderKind::Timeout => CoreError::Timeout {
                 duration: self.duration.unwrap_or_default(),
                 operation: self.operation,
-                ctx: self.ctx,
+                ctx: Box::new(self.ctx),
             },
             BuilderKind::RateLimit => CoreError::RateLimit {
                 limit: self.limit.unwrap_or(0),
                 window: self.window.unwrap_or(Duration::from_secs(1)),
                 reset_after: self.reset_after,
                 code: self.code.unwrap_or(ErrorCode::RateLimitExceeded),
-                ctx: self.ctx,
+                ctx: Box::new(self.ctx),
             },
             BuilderKind::ServiceUnavailable => CoreError::ServiceUnavailable {
                 service: self.service.unwrap_or_else(|| "service".to_string()).into(),
                 retry_after: self.retry_after,
                 code: self.code.unwrap_or(ErrorCode::ServiceUnavailable),
-                ctx: self.ctx,
+                ctx: Box::new(self.ctx),
             },
             BuilderKind::Internal => CoreError::Internal {
                 code: self.code.unwrap_or(ErrorCode::InternalError),
                 message: msg,
                 source: self.source,
-                ctx: self.ctx,
+                ctx: Box::new(self.ctx),
             },
         }
     }
@@ -251,31 +251,31 @@ impl ErrorBuilder {
 #[derive(Debug, Error)]
 pub enum CoreError {
     #[error("网络错误: {0}")]
-    Network(NetworkError),
+    Network(Box<NetworkError>),
 
     #[error("认证失败: {message}")]
     Authentication {
         message: String,
         code: ErrorCode,
-        ctx: ErrorContext,
+        ctx: Box<ErrorContext>,
     },
 
     #[error("API错误 {0}")]
-    Api(ApiError),
+    Api(Box<ApiError>),
 
     #[error("验证错误 {field}: {message}")]
     Validation {
         field: Cow<'static, str>,
         message: String,
         code: ErrorCode,
-        ctx: ErrorContext,
+        ctx: Box<ErrorContext>,
     },
 
     #[error("配置错误: {message}")]
     Configuration {
         message: String,
         code: ErrorCode,
-        ctx: ErrorContext,
+        ctx: Box<ErrorContext>,
     },
 
     #[error("序列化错误: {message}")]
@@ -284,21 +284,21 @@ pub enum CoreError {
         #[source]
         source: Option<AnyError>,
         code: ErrorCode,
-        ctx: ErrorContext,
+        ctx: Box<ErrorContext>,
     },
 
     #[error("业务错误 {code:?}: {message}")]
     Business {
         code: ErrorCode,
         message: String,
-        ctx: ErrorContext,
+        ctx: Box<ErrorContext>,
     },
 
     #[error("超时 {operation:?} after {duration:?}")]
     Timeout {
         duration: Duration,
         operation: Option<String>,
-        ctx: ErrorContext,
+        ctx: Box<ErrorContext>,
     },
 
     #[error("限流: {limit} 次/{window:?}")]
@@ -307,7 +307,7 @@ pub enum CoreError {
         window: Duration,
         reset_after: Option<Duration>,
         code: ErrorCode,
-        ctx: ErrorContext,
+        ctx: Box<ErrorContext>,
     },
 
     #[error("服务不可用: {service}")]
@@ -315,7 +315,7 @@ pub enum CoreError {
         service: Cow<'static, str>,
         retry_after: Option<Duration>,
         code: ErrorCode,
-        ctx: ErrorContext,
+        ctx: Box<ErrorContext>,
     },
 
     #[error("内部错误 {code:?}: {message}")]
@@ -324,7 +324,7 @@ pub enum CoreError {
         message: String,
         #[source]
         source: Option<AnyError>,
-        ctx: ErrorContext,
+        ctx: Box<ErrorContext>,
     },
 }
 
@@ -333,7 +333,7 @@ pub struct NetworkError {
     pub message: String,
     pub source: Option<AnyError>,
     pub policy: RetryPolicy,
-    pub ctx: ErrorContext,
+    pub ctx: Box<ErrorContext>,
 }
 
 impl std::fmt::Display for NetworkError {
@@ -349,7 +349,7 @@ pub struct ApiError {
     pub message: String,
     pub source: Option<AnyError>,
     pub code: ErrorCode,
-    pub ctx: ErrorContext,
+    pub ctx: Box<ErrorContext>,
 }
 
 impl std::fmt::Display for ApiError {
@@ -361,25 +361,25 @@ impl std::fmt::Display for ApiError {
 impl Clone for CoreError {
     fn clone(&self) -> Self {
         match self {
-            Self::Network(net) => Self::Network(NetworkError {
+            Self::Network(net) => Self::Network(Box::new(NetworkError {
                 message: net.message.clone(),
                 source: None, // 源错误不可克隆，丢弃以便重试记录
                 policy: net.policy.clone(),
                 ctx: net.ctx.clone(),
-            }),
+            })),
             Self::Authentication { message, code, ctx } => Self::Authentication {
                 message: message.clone(),
                 code: *code,
                 ctx: ctx.clone(),
             },
-            Self::Api(api) => Self::Api(ApiError {
+            Self::Api(api) => Self::Api(Box::new(ApiError {
                 status: api.status,
                 endpoint: api.endpoint.clone(),
                 message: api.message.clone(),
                 source: None,
                 code: api.code,
                 ctx: api.ctx.clone(),
-            }),
+            })),
             Self::Validation {
                 field,
                 message,
@@ -534,19 +534,19 @@ impl CoreError {
             field: field.into(),
             message: message.into(),
             code: ErrorCode::ValidationError,
-            ctx,
+            ctx: Box::new(ctx),
         }
     }
 
     pub fn api_data_error(message: impl Into<String>) -> Self {
-        Self::Api(ApiError {
+        Self::Api(Box::new(ApiError {
             status: 500,
             endpoint: "data_error".into(),
             message: format!("no data: {}", message.into()),
             source: None,
             code: ErrorCode::InternalServerError,
-            ctx: ErrorContext::new(),
-        })
+            ctx: Box::new(ErrorContext::new()),
+        }))
     }
 
     pub fn code(&self) -> ErrorCode {
@@ -595,8 +595,8 @@ impl CoreError {
     pub fn ctx(&self) -> &ErrorContext {
         match self {
             Self::Network(net) => &net.ctx,
+            Self::Api(api) => &api.ctx,
             Self::Authentication { ctx, .. }
-            | Self::Api(ApiError { ctx, .. })
             | Self::Validation { ctx, .. }
             | Self::Configuration { ctx, .. }
             | Self::Serialization { ctx, .. }
@@ -618,12 +618,12 @@ impl CoreError {
     where
         E: std::error::Error + Send + Sync + 'static,
     {
-        Self::Network(NetworkError {
+        Self::Network(Box::new(NetworkError {
             message: "网络连接失败".to_string(),
             source: Some(Box::new(source)),
             policy: RetryPolicy::default(),
-            ctx,
-        })
+            ctx: Box::new(ctx),
+        }))
     }
 
     pub fn api(
@@ -632,14 +632,14 @@ impl CoreError {
         message: impl Into<String>,
         ctx: ErrorContext,
     ) -> Self {
-        Self::Api(ApiError {
+        Self::Api(Box::new(ApiError {
             status,
             endpoint: endpoint.into(),
             message: message.into(),
             source: None,
             code: ErrorCode::from_http_status(status),
-            ctx,
-        })
+            ctx: Box::new(ctx),
+        }))
     }
 }
 
@@ -679,12 +679,12 @@ impl From<&CoreError> for ErrorRecord {
 
 impl From<reqwest::Error> for CoreError {
     fn from(source: reqwest::Error) -> Self {
-        Self::Network(NetworkError {
+        Self::Network(Box::new(NetworkError {
             message: source.to_string(),
             source: Some(Box::new(source)),
             policy: RetryPolicy::default(),
-            ctx: ErrorContext::new(),
-        })
+            ctx: Box::new(ErrorContext::new()),
+        }))
     }
 }
 
@@ -694,7 +694,7 @@ impl From<serde_json::Error> for CoreError {
             message: format!("JSON序列化错误: {}", source),
             source: Some(Box::new(source)),
             code: ErrorCode::SerializationError,
-            ctx: ErrorContext::new(),
+            ctx: Box::new(ErrorContext::new()),
         }
     }
 }
@@ -759,12 +759,12 @@ impl ErrorTrait for CoreError {
 
 /// 创建网络错误
 pub fn network_error(message: impl Into<String>) -> CoreError {
-    CoreError::Network(NetworkError {
+    CoreError::Network(Box::new(NetworkError {
         message: message.into(),
         source: None,
         policy: RetryPolicy::default(),
-        ctx: ErrorContext::new(),
-    })
+        ctx: Box::new(ErrorContext::new()),
+    }))
 }
 
 /// 创建认证错误
@@ -772,7 +772,7 @@ pub fn authentication_error(message: impl Into<String>) -> CoreError {
     CoreError::Authentication {
         message: message.into(),
         code: ErrorCode::AuthenticationFailed,
-        ctx: ErrorContext::new(),
+        ctx: Box::new(ErrorContext::new()),
     }
 }
 
@@ -783,7 +783,7 @@ pub fn api_error(
     message: impl Into<String>,
     request_id: Option<String>,
 ) -> CoreError {
-    CoreError::Api(ApiError {
+    CoreError::Api(Box::new(ApiError {
         status,
         endpoint: endpoint.into().into(),
         message: message.into(),
@@ -794,18 +794,22 @@ pub fn api_error(
             if let Some(req_id) = request_id {
                 ctx.set_request_id(req_id);
             }
-            ctx
+            Box::new(ctx)
         },
-    })
+    }))
 }
 
 /// 创建验证错误
 pub fn validation_error(field: impl Into<String>, message: impl Into<String>) -> CoreError {
+    let field = field.into();
+    let mut ctx = ErrorContext::new();
+    ctx.add_context("field", field.clone());
+
     CoreError::Validation {
-        field: field.into().into(),
+        field: field.into(),
         message: message.into(),
         code: ErrorCode::ValidationError,
-        ctx: ErrorContext::new(),
+        ctx: Box::new(ctx),
     }
 }
 
@@ -818,7 +822,7 @@ pub fn serialization_error<T: std::error::Error + Send + Sync + 'static>(
         message: message.into(),
         source: source.map(|e| Box::new(e) as AnyError),
         code: ErrorCode::SerializationError,
-        ctx: ErrorContext::new(),
+        ctx: Box::new(ErrorContext::new()),
     }
 }
 
@@ -827,7 +831,7 @@ pub fn business_error(message: impl Into<String>) -> CoreError {
     CoreError::Business {
         message: message.into(),
         code: ErrorCode::BusinessError,
-        ctx: ErrorContext::new(),
+        ctx: Box::new(ErrorContext::new()),
     }
 }
 
@@ -836,7 +840,7 @@ pub fn configuration_error(message: impl Into<String>) -> CoreError {
     CoreError::Configuration {
         message: message.into(),
         code: ErrorCode::ConfigurationError,
-        ctx: ErrorContext::new(),
+        ctx: Box::new(ErrorContext::new()),
     }
 }
 
@@ -845,7 +849,7 @@ pub fn timeout_error(timeout: Duration, operation: Option<String>) -> CoreError 
     CoreError::Timeout {
         duration: timeout,
         operation,
-        ctx: ErrorContext::new(),
+        ctx: Box::new(ErrorContext::new()),
     }
 }
 
@@ -856,7 +860,7 @@ pub fn rate_limit_error(limit: u32, window: Duration, retry_after: Option<Durati
         window,
         reset_after: retry_after,
         code: ErrorCode::TooManyRequests,
-        ctx: ErrorContext::new(),
+        ctx: Box::new(ErrorContext::new()),
     }
 }
 
@@ -869,7 +873,7 @@ pub fn service_unavailable_error(
         service: service.into().into(),
         retry_after,
         code: ErrorCode::ServiceUnavailable,
-        ctx: ErrorContext::new(),
+        ctx: Box::new(ErrorContext::new()),
     }
 }
 
@@ -888,7 +892,7 @@ pub fn permission_missing_error(scopes: &[impl AsRef<str>]) -> CoreError {
     CoreError::Authentication {
         message: "权限范围不足".to_string(),
         code: ErrorCode::PermissionMissing,
-        ctx,
+        ctx: Box::new(ctx),
     }
 }
 
@@ -900,7 +904,7 @@ pub fn sso_token_invalid_error(detail: impl Into<String>) -> CoreError {
     CoreError::Authentication {
         message: "SSO令牌无效".to_string(),
         code: ErrorCode::SsoTokenInvalid,
-        ctx,
+        ctx: Box::new(ctx),
     }
 }
 
@@ -912,7 +916,7 @@ pub fn user_identity_invalid_error(desc: impl Into<String>) -> CoreError {
     CoreError::Authentication {
         message: "用户身份无效".to_string(),
         code: ErrorCode::UserIdentityInvalid,
-        ctx,
+        ctx: Box::new(ctx),
     }
 }
 
@@ -924,7 +928,7 @@ pub fn token_invalid_error(detail: impl Into<String>) -> CoreError {
     CoreError::Authentication {
         message: "访问令牌无效".to_string(),
         code: ErrorCode::AccessTokenInvalid,
-        ctx,
+        ctx: Box::new(ctx),
     }
 }
 
@@ -936,7 +940,7 @@ pub fn token_expired_error(detail: impl Into<String>) -> CoreError {
     CoreError::Authentication {
         message: "访问令牌过期".to_string(),
         code: ErrorCode::AccessTokenExpiredV2,
-        ctx,
+        ctx: Box::new(ctx),
     }
 }
 
@@ -954,12 +958,12 @@ pub fn network_error_with_details(
         ctx.set_request_id(req_id);
     }
 
-    CoreError::Network(NetworkError {
+    CoreError::Network(Box::new(NetworkError {
         message: message.into(),
         source: None,
         policy: RetryPolicy::default(),
-        ctx,
-    })
+        ctx: Box::new(ctx),
+    }))
 }
 
 #[cfg(test)]
@@ -1021,7 +1025,7 @@ mod tests {
             window: Duration::from_secs(60),
             reset_after: Some(Duration::from_secs(30)),
             code: ErrorCode::RateLimitExceeded,
-            ctx: ErrorContext::new(),
+            ctx: Box::new(ErrorContext::new()),
         };
 
         assert!(err.is_retryable());

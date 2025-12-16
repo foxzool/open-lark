@@ -90,8 +90,8 @@ impl UnifiedRequestBuilder {
             .iter()
             .map(|(k, v)| (k.as_str(), v.as_str()))
             .collect::<Vec<_>>();
-        Ok(url::Url::parse_with_params(&path, query)
-            .map_err(|e| crate::error::network_error(format!("invalid url: {e}")))?)
+        url::Url::parse_with_params(&path, query)
+            .map_err(|e| crate::error::network_error(format!("invalid url: {e}")))
     }
 }
 
@@ -135,7 +135,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_build_request_with_body() {
-        let mut api_req = ApiRequest::post("https://open.feishu.cn/open-apis/test").body(
+        let mut api_req = ApiRequest::<()>::post("https://open.feishu.cn/open-apis/test").body(
             crate::api::RequestData::Text("{\"test\": \"data\"}".to_string()),
         );
 
@@ -151,7 +151,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_build_request_with_files() {
-        let mut api_req = ApiRequest::post("https://open.feishu.cn/open-apis/test")
+        let mut api_req = ApiRequest::<()>::post("https://open.feishu.cn/open-apis/test")
             .body(crate::api::RequestData::Text("file content".to_string()));
 
         let config = create_test_config();
@@ -244,12 +244,12 @@ mod tests {
 
         for method in methods.iter() {
             let mut api_req = match method.as_str() {
-                "GET" => ApiRequest::get("https://open.feishu.cn/open-apis/test"),
-                "POST" => ApiRequest::post("https://open.feishu.cn/open-apis/test"),
-                "PUT" => ApiRequest::put("https://open.feishu.cn/open-apis/test"),
-                "DELETE" => ApiRequest::delete("https://open.feishu.cn/open-apis/test"),
-                "PATCH" => ApiRequest::get("https://open.feishu.cn/open-apis/test"), // PATCH not supported, fallback to GET
-                _ => ApiRequest::get("https://open.feishu.cn/open-apis/test"),
+                "GET" => ApiRequest::<()>::get("https://open.feishu.cn/open-apis/test"),
+                "POST" => ApiRequest::<()>::post("https://open.feishu.cn/open-apis/test"),
+                "PUT" => ApiRequest::<()>::put("https://open.feishu.cn/open-apis/test"),
+                "DELETE" => ApiRequest::<()>::delete("https://open.feishu.cn/open-apis/test"),
+                "PATCH" => ApiRequest::<()>::get("https://open.feishu.cn/open-apis/test"), // PATCH not supported, fallback to GET
+                _ => ApiRequest::<()>::get("https://open.feishu.cn/open-apis/test"),
             };
 
             let result =
@@ -362,7 +362,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_build_request_complex_scenario() {
-        let mut api_req = ApiRequest::post("https://open.feishu.cn/open-apis/complex/test")
+        let mut api_req = ApiRequest::<serde_json::Value>::post("https://open.feishu.cn/open-apis/complex/test")
             .body(crate::api::RequestData::Text(
                 "{\"complex\": \"data\", \"nested\": {\"value\": 123}}".to_string(),
             ))
@@ -395,7 +395,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_build_request_with_body_and_files_edge_case() {
-        let mut api_req = ApiRequest::post("https://open.feishu.cn/open-apis/test").body(
+        let mut api_req = ApiRequest::<()>::post("https://open.feishu.cn/open-apis/test").body(
             crate::api::RequestData::Text("file content combined".to_string()),
         );
 
@@ -413,7 +413,7 @@ mod tests {
     #[test]
     fn test_build_url_with_path_segments() {
         let config = create_test_config();
-        let api_req = ApiRequest::get("https://open.feishu.cn/open-apis/v1/users/123/messages");
+        let api_req = ApiRequest::<()>::get("https://open.feishu.cn/open-apis/v1/users/123/messages");
 
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 

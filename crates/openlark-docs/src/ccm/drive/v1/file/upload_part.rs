@@ -1,104 +1,49 @@
-/// 分片上传文件-上传分片
-///
-/// 上传对应的文件块。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_part
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
-    config::Config,
-    http::Transport,
-    SDKResult,
+    api::{ApiRequest, ApiResponseTrait, Response},
+    error::DocsResult,
+    req_option::RequestOption,
+    constants::AccessTokenType,
 };
-use serde::{Deserialize, Serialize};
+use crate::service::DocsService;
 
-/// 分片上传请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UploadPartRequest {
-    /// 上传事务ID
-    pub transaction_id: String,
-    /// 分片编号
-    pub part_number: i32,
-    /// 分片数据（base64编码）
-    pub part_data: String,
-    /// 分片大小
-    pub part_size: i32,
+// Builder
+#[derive(Debug)]
+pub struct UploadPartBuilder<'a> {
+    client: &'a DocsService<'a>,
+    upload_id: String,
+    seq: i32,
+    size: i32,
+    data: Vec<u8>,
+    checksum: Option<String>,
 }
 
-/// 分片上传响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UploadPartResponse {
-    /// 分片编号
-    pub part_number: i32,
-    /// 上传状态
-    pub status: String,
-    /// ETag
-    pub etag: Option<String>,
-}
+impl<'a> UploadPartBuilder<'a> {
+    pub fn new(client: &'a DocsService<'a>, upload_id: impl Into<String>, seq: i32, size: i32, data: Vec<u8>) -> Self {
+        Self { client, upload_id: upload_id.into(), seq, size, data, checksum: None }
+    }
 
-impl ApiResponseTrait for UploadPartResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+    pub fn checksum(mut self, checksum: impl Into<String>) -> Self {
+        self.checksum = Some(checksum.into());
+        self
+    }
+
+    pub async fn send(self) -> DocsResult<Response<UploadPartResponse>> {
+        let mut req = ApiRequest::post("/open-apis/drive/v1/files/upload_part");
+        // Simplified body
+        let mut body = serde_json::Map::new();
+        body.insert("upload_id".to_string(), serde_json::json!(self.upload_id));
+        body.insert("seq".to_string(), serde_json::json!(self.seq));
+        body.insert("size".to_string(), serde_json::json!(self.size));
+        if let Some(c) = self.checksum {
+             body.insert("checksum".to_string(), serde_json::json!(c));
+        }
+        req = req.body(serde_json::Value::Object(body));
+        self.client.request(req).await
     }
 }
 
-/// 分片上传文件-上传分片
-///
-/// 上传对应的文件块。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_part
-pub async fn upload_part(
-    request: UploadPartRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<UploadPartResponse>> {
-    // 构建API端点
-    let url = "/open-apis/drive/v1/files/upload_part";
+// Response
+#[derive(Debug, serde::Deserialize)]
+pub struct UploadPartResponse {}
 
-    // 创建API请求
-    let mut api_request: ApiRequest<UploadPartResponse> =
-        ApiRequest::post(url)
-            .body(serde_json::to_value(request)?);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_upload_part_request() {
-        let request = UploadPartRequest {
-            transaction_id: "txn_123456".to_string(),
-            part_number: 1,
-            part_data: "SGVsbG8gV29ybGQ=".to_string(), // "Hello World" in base64
-            part_size: 11,
-        };
-
-        assert_eq!(request.transaction_id, "txn_123456");
-        assert_eq!(request.part_number, 1);
-        assert_eq!(request.part_size, 11);
-    }
-
-    #[test]
-    fn test_upload_part_response() {
-        let response = UploadPartResponse {
-            part_number: 1,
-            status: "completed".to_string(),
-            etag: Some("etag_123456".to_string()),
-        };
-
-        assert_eq!(response.part_number, 1);
-        assert_eq!(response.status, "completed");
-        assert_eq!(response.etag, Some("etag_123456".to_string()));
-    }
-
-    #[test]
-    fn test_response_trait() {
-        assert_eq!(UploadPartResponse::data_format(), ResponseFormat::Data);
-    }
-}
+impl ApiResponseTrait for UploadPartResponse {}

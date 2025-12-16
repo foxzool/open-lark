@@ -67,7 +67,7 @@ impl SecurityErrorBuilder {
             service: "security_device".into(),
             retry_after,
             code: ErrorCode::ServiceUnavailable,
-            ctx,
+            ctx: Box::new(ctx),
         }
     }
 
@@ -107,7 +107,7 @@ impl SecurityErrorBuilder {
         CoreError::Authentication {
             message: "安全权限不足".to_string(),
             code: ErrorCode::PermissionMissing,
-            ctx,
+            ctx: Box::new(ctx),
         }
     }
 
@@ -136,7 +136,7 @@ impl SecurityErrorBuilder {
             service: "face_recognition".into(),
             retry_after: Some(Duration::from_secs(30)),
             code: ErrorCode::ServiceUnavailable,
-            ctx,
+            ctx: Box::new(ctx),
         }
     }
 
@@ -199,7 +199,7 @@ impl SecurityErrorBuilder {
             code: ErrorCode::InternalError,
             message: "审计日志写入失败".to_string(),
             source: None,
-            ctx,
+            ctx: Box::new(ctx),
         }
     }
 
@@ -247,7 +247,7 @@ impl SecurityErrorBuilder {
             code: ErrorCode::InternalError,
             message: "加密操作失败".to_string(),
             source: None,
-            ctx,
+            ctx: Box::new(ctx),
         }
     }
 
@@ -270,7 +270,7 @@ impl SecurityErrorBuilder {
                 "security_check:{}",
                 ctx.get_context("check_type").unwrap_or_default()
             )),
-            ctx,
+            ctx: Box::new(ctx),
         }
     }
 
@@ -308,7 +308,7 @@ pub fn map_feishu_security_error(
         Some(ErrorCode::PermissionMissing) => CoreError::Authentication {
             message: format!("安全权限不足: {}", message),
             code: ErrorCode::PermissionMissing,
-            ctx,
+            ctx: Box::new(ctx),
         },
         // 令牌相关错误
         Some(ErrorCode::AccessTokenExpiredV2) => {
@@ -323,14 +323,14 @@ pub fn map_feishu_security_error(
         // 其他映射
         _ => {
             // 回退到HTTP状态码或内部业务码
-            CoreError::Api(ApiError {
+            CoreError::Api(Box::new(ApiError {
                 status: feishu_code as u16,
                 endpoint: "security".into(),
                 message: message.to_string(),
                 source: None,
                 code: ErrorCode::from_feishu_code(feishu_code).unwrap_or(ErrorCode::InternalError),
-                ctx,
-            })
+                ctx: Box::new(ctx),
+            }))
         }
     }
 }
@@ -479,7 +479,7 @@ impl SecurityErrorAnalyzer {
 }
 
 /// 安全风险评估
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Copy, Serialize)]
 pub struct SecurityRiskAssessment {
     /// 风险级别
     pub risk_level: SecurityRiskLevel,

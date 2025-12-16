@@ -327,7 +327,7 @@ impl CreateDeviceRecordBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/security_and_compliance/v2/device_records",
-                &format!(
+                format!(
                     "HTTP {}: {}",
                     response.status(),
                     response.text().await.unwrap_or_default()
@@ -489,7 +489,7 @@ impl ListDeviceRecordsBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/security_and_compliance/v2/device_records",
-                &format!(
+                format!(
                     "HTTP {}: {}",
                     response.status(),
                     response.text().await.unwrap_or_default()
@@ -550,7 +550,7 @@ impl GetDeviceRecordBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/security_and_compliance/v2/device_records",
-                &format!(
+                format!(
                     "HTTP {}: {}",
                     response.status(),
                     response.text().await.unwrap_or_default()
@@ -690,7 +690,7 @@ impl UpdateDeviceRecordBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/security_and_compliance/v2/device_records",
-                &format!(
+                format!(
                     "HTTP {}: {}",
                     response.status(),
                     response.text().await.unwrap_or_default()
@@ -748,7 +748,7 @@ impl DeleteDeviceRecordBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/security_and_compliance/v2/device_records",
-                &format!(
+                format!(
                     "HTTP {}: {}",
                     response.status(),
                     response.text().await.unwrap_or_default()

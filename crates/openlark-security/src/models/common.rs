@@ -142,7 +142,7 @@ pub struct SortCondition {
 }
 
 /// 排序方向
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum SortDirection {
     /// 升序
@@ -152,7 +152,7 @@ pub enum SortDirection {
 }
 
 /// 时间范围查询
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct TimeRange {
     /// 开始时间
     pub start_time: crate::models::Timestamp,
