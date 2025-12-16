@@ -457,6 +457,7 @@ impl ServiceValidator {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use openlark_core::error::ErrorTrait;
 
     fn create_test_config() -> Config {
         Config {
@@ -479,7 +480,7 @@ mod tests {
         let stats = factory.get_stats();
 
         assert!(stats.total_services >= 1); // 至少有认证服务
-        assert!(stats.enabled_features.contains(&"auth"));
+        assert!(stats.enabled_features.contains(&"auth".to_string()));
     }
 
     #[test]
@@ -542,6 +543,6 @@ mod tests {
 
         assert!(stats.total_services >= 1);
         assert!(!stats.enabled_features.is_empty());
-        assert!(stats.enabled_features.contains(&"auth"));
+        assert!(stats.enabled_features.contains(&"auth".to_string()));
     }
 }

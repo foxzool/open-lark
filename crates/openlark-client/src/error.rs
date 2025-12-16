@@ -5,7 +5,7 @@
 
 use crate::registry::RegistryError;
 use openlark_core::error::{
-    ApiError, CoreError, ErrorCategory, ErrorCode, ErrorContext, ErrorSeverity, ErrorTrait,
+    ApiError, CoreError, ErrorCategory, ErrorCode, ErrorContext, ErrorTrait,
     ErrorType,
 };
 
@@ -82,14 +82,14 @@ pub fn from_feishu_response(
             _ => 500,
         });
 
-    CoreError::Api(ApiError {
+    CoreError::Api(Box::new(ApiError {
         status,
         endpoint: endpoint.into().into(),
         message: message.into(),
         source: None,
         code: mapped,
-        ctx,
-    })
+        ctx: Box::new(ctx),
+    }))
 }
 
 /// 创建API错误
@@ -158,29 +158,7 @@ pub fn registry_error(err: RegistryError) -> Error {
 // 错误扩展功能
 // ============================================================================
 
-/// 客户端错误扩展特征
 pub trait ClientErrorExt {
-    /// 判断是否为网络错误
-    fn is_network_error(&self) -> bool;
-
-    /// 判断是否为认证错误
-    fn is_auth_error(&self) -> bool;
-
-    /// 判断是否为注册表错误
-    fn is_registry_error(&self) -> bool;
-
-    /// 判断是否为配置错误
-    fn is_config_error(&self) -> bool;
-
-    /// 判断是否为业务错误
-    fn is_business_error(&self) -> bool;
-
-    /// 判断是否为验证错误
-    fn is_validation_error(&self) -> bool;
-
-    /// 获取错误严重程度
-    fn severity(&self) -> ErrorSeverity;
-
     /// 获取错误建议
     fn suggestion(&self) -> &'static str;
 
@@ -189,35 +167,6 @@ pub trait ClientErrorExt {
 }
 
 impl ClientErrorExt for Error {
-    fn is_network_error(&self) -> bool {
-        matches!(self.error_type(), ErrorType::Network)
-    }
-
-    fn is_auth_error(&self) -> bool {
-        matches!(self.error_type(), ErrorType::Authentication)
-    }
-
-    fn is_registry_error(&self) -> bool {
-        matches!(self.error_type(), ErrorType::Internal)
-            && self.user_message().unwrap_or("未知错误").contains("注册表")
-    }
-
-    fn is_config_error(&self) -> bool {
-        matches!(self.error_type(), ErrorType::Configuration)
-    }
-
-    fn is_business_error(&self) -> bool {
-        matches!(self.error_type(), ErrorType::Business)
-    }
-
-    fn is_validation_error(&self) -> bool {
-        matches!(self.error_type(), ErrorType::Validation)
-    }
-
-    fn severity(&self) -> ErrorSeverity {
-        self.severity()
-    }
-
     fn suggestion(&self) -> &'static str {
         match self.error_type() {
             ErrorType::Network => "检查网络连接，确认防火墙设置",
@@ -362,25 +311,128 @@ pub fn with_context<T>(
     context_key: impl Into<String>,
     context_value: impl Into<String>,
 ) -> Result<T> {
-    // 由于 CoreError 只提供不可变访问，我们需要创建新的错误实例
-    // 这里简化为只记录上下文信息到错误消息中
     result.map_err(|err| {
-        let context_info = format!("{}: {}", context_key.into(), context_value.into());
-        let message = format!("{} [{}]", err.to_string(), context_info);
+        let key = context_key.into();
+        let val = context_value.into();
 
-        // 保持原有的错误类型，但更新消息
-        match err.error_type() {
-            ErrorType::Network => network_error(message),
-            ErrorType::Authentication => authentication_error(message),
-            ErrorType::Api => api_error(500, "internal", message, None),
-            ErrorType::Validation => validation_error("field", message),
-            ErrorType::Configuration => configuration_error(message),
-            ErrorType::Serialization => serialization_error(message),
-            ErrorType::Business => business_error("business", message),
-            ErrorType::Timeout => timeout_error("操作"),
-            ErrorType::RateLimit => rate_limit_error(None),
-            ErrorType::ServiceUnavailable => service_unavailable_error("服务"),
-            ErrorType::Internal => internal_error(message),
+        match err {
+            CoreError::Network(mut net) => {
+                net.ctx.add_context(key, val);
+                CoreError::Network(net)
+            }
+            CoreError::Authentication {
+                message,
+                code,
+                mut ctx,
+            } => {
+                ctx.add_context(key, val);
+                CoreError::Authentication { message, code, ctx }
+            }
+            CoreError::Api(mut api) => {
+                api.ctx.add_context(key, val);
+                CoreError::Api(api)
+            }
+            CoreError::Validation {
+                field,
+                message,
+                code,
+                mut ctx,
+            } => {
+                ctx.add_context(key, val);
+                CoreError::Validation {
+                    field,
+                    message,
+                    code,
+                    ctx,
+                }
+            }
+            CoreError::Configuration {
+                message,
+                code,
+                mut ctx,
+            } => {
+                ctx.add_context(key, val);
+                CoreError::Configuration { message, code, ctx }
+            }
+            CoreError::Serialization {
+                message,
+                source,
+                code,
+                mut ctx,
+            } => {
+                ctx.add_context(key, val);
+                CoreError::Serialization {
+                    message,
+                    source,
+                    code,
+                    ctx,
+                }
+            }
+            CoreError::Business {
+                code,
+                message,
+                mut ctx,
+            } => {
+                ctx.add_context(key, val);
+                CoreError::Business { code, message, ctx }
+            }
+            CoreError::Timeout {
+                duration,
+                operation,
+                mut ctx,
+            } => {
+                ctx.add_context(key, val);
+                CoreError::Timeout {
+                    duration,
+                    operation,
+                    ctx,
+                }
+            }
+            CoreError::RateLimit {
+                limit,
+                window,
+                reset_after,
+                code,
+                mut ctx,
+            } => {
+                ctx.add_context(key, val);
+                CoreError::RateLimit {
+                    limit,
+                    window,
+                    reset_after,
+                    code,
+                    ctx,
+                }
+            }
+            CoreError::ServiceUnavailable {
+                service,
+                retry_after,
+                code,
+                mut ctx,
+            } => {
+                ctx.add_context(key, val);
+                CoreError::ServiceUnavailable {
+                    service,
+                    retry_after,
+                    code,
+                    ctx,
+                }
+            }
+            CoreError::Internal {
+                code,
+                message,
+                source,
+                mut ctx,
+            } => {
+                ctx.add_context(key, val);
+                CoreError::Internal {
+                    code,
+                    message,
+                    source,
+                    ctx,
+                }
+            }
+            _ => err,
         }
     })
 }
@@ -392,24 +444,139 @@ pub fn with_operation_context<T>(
     component: impl Into<String>,
 ) -> Result<T> {
     result.map_err(|err| {
-        let operation_info = operation.into();
-        let component_info = component.into();
-        let context_info = format!("操作: {}, 组件: {}", operation_info, component_info);
-        let message = format!("{} [{}]", err.to_string(), context_info);
+        let op = operation.into();
+        let comp = component.into();
 
-        // 保持原有的错误类型，但更新消息
-        match err.error_type() {
-            ErrorType::Network => network_error(message),
-            ErrorType::Authentication => authentication_error(message),
-            ErrorType::Api => api_error(500, "internal", message, None),
-            ErrorType::Validation => validation_error("field", message),
-            ErrorType::Configuration => configuration_error(message),
-            ErrorType::Serialization => serialization_error(message),
-            ErrorType::Business => business_error("business", message),
-            ErrorType::Timeout => timeout_error(&operation_info),
-            ErrorType::RateLimit => rate_limit_error(None),
-            ErrorType::ServiceUnavailable => service_unavailable_error(&component_info),
-            ErrorType::Internal => internal_error(message),
+        // 直接解构 CoreError，修改上下文后重新构建，保留所有其他信息
+        match err {
+            CoreError::Network(mut net) => {
+                net.ctx.set_operation(op.clone()).set_component(comp.clone());
+                net.ctx.add_context("operation", op).add_context("component", comp);
+                CoreError::Network(net)
+            }
+            CoreError::Authentication {
+                message,
+                code,
+                mut ctx,
+            } => {
+                ctx.set_operation(op.clone()).set_component(comp.clone());
+                ctx.add_context("operation", op).add_context("component", comp);
+                CoreError::Authentication { message, code, ctx }
+            }
+            CoreError::Api(mut api) => {
+                api.ctx.set_operation(op.clone()).set_component(comp.clone());
+                api.ctx.add_context("operation", op).add_context("component", comp);
+                CoreError::Api(api)
+            }
+            CoreError::Validation {
+                field,
+                message,
+                code,
+                mut ctx,
+            } => {
+                ctx.set_operation(op.clone()).set_component(comp.clone());
+                ctx.add_context("operation", op).add_context("component", comp);
+                CoreError::Validation {
+                    field,
+                    message,
+                    code,
+                    ctx,
+                }
+            }
+            CoreError::Configuration {
+                message,
+                code,
+                mut ctx,
+            } => {
+                ctx.set_operation(op.clone()).set_component(comp.clone());
+                ctx.add_context("operation", op).add_context("component", comp);
+                CoreError::Configuration { message, code, ctx }
+            }
+            CoreError::Serialization {
+                message,
+                source,
+                code,
+                mut ctx,
+            } => {
+                ctx.set_operation(op.clone()).set_component(comp.clone());
+                ctx.add_context("operation", op).add_context("component", comp);
+                CoreError::Serialization {
+                    message,
+                    source,
+                    code,
+                    ctx,
+                }
+            }
+            CoreError::Business {
+                code,
+                message,
+                mut ctx,
+            } => {
+                ctx.set_operation(op.clone()).set_component(comp.clone());
+                ctx.add_context("operation", op).add_context("component", comp);
+                CoreError::Business { code, message, ctx }
+            }
+            CoreError::Timeout {
+                duration,
+                operation: _, // 覆盖操作名
+                mut ctx,
+            } => {
+                ctx.set_operation(op.clone()).set_component(comp.clone());
+                ctx.add_context("operation", op.clone()).add_context("component", comp);
+                CoreError::Timeout {
+                    duration,
+                    operation: Some(op), // 确保更新 Enum 字段
+                    ctx,
+                }
+            }
+            CoreError::RateLimit {
+                limit,
+                window,
+                reset_after,
+                code,
+                mut ctx,
+            } => {
+                ctx.set_operation(op.clone()).set_component(comp.clone());
+                ctx.add_context("operation", op).add_context("component", comp);
+                CoreError::RateLimit {
+                    limit,
+                    window,
+                    reset_after,
+                    code,
+                    ctx,
+                }
+            }
+            CoreError::ServiceUnavailable {
+                service,
+                retry_after,
+                code,
+                mut ctx,
+            } => {
+                ctx.set_operation(op.clone()).set_component(comp.clone());
+                ctx.add_context("operation", op).add_context("component", comp);
+                CoreError::ServiceUnavailable {
+                    service,
+                    retry_after,
+                    code,
+                    ctx,
+                }
+            }
+            CoreError::Internal {
+                code,
+                message,
+                source,
+                mut ctx,
+            } => {
+                ctx.set_operation(op.clone()).set_component(comp.clone());
+                ctx.add_context("operation", op).add_context("component", comp);
+                CoreError::Internal {
+                    code,
+                    message,
+                    source,
+                    ctx,
+                }
+            }
+            _ => err,
         }
     })
 }
@@ -551,7 +718,7 @@ mod tests {
 
     #[test]
     fn test_error_analyzer() {
-        let error = api_error(404, "/users", "用户不存在", Some("req-123"));
+        let error = api_error(404, "/users", "用户不存在", Some("req-123".to_string()));
         let analyzer = ErrorAnalyzer::new(&error);
 
         let report = analyzer.detailed_report();
@@ -561,7 +728,7 @@ mod tests {
 
         let summary = analyzer.log_summary();
         assert!(summary.contains("Error"));
-        assert!(summary.contains("API"));
+        assert!(summary.contains("Api"));
 
         let user_msg = analyzer.user_friendly_with_suggestion();
         assert!(user_msg.contains("建议"));
@@ -593,10 +760,10 @@ mod tests {
         assert!(error.is_serialization_error());
 
         // 测试 tokio 超时错误转换
-        let timeout_err = tokio::time::error::Elapsed {};
-        let error: Error = timeout_err.into();
-        assert!(error.is_timeout_error());
-        assert!(error.is_retryable());
+        // let timeout_err = tokio::time::error::Elapsed {}; // Private field
+        // let error: Error = timeout_err.into();
+        // assert!(error.is_timeout_error());
+        // assert!(error.is_retryable());
     }
 
     #[test]
@@ -607,9 +774,9 @@ mod tests {
         assert!(contextual_result.is_err());
 
         let error = contextual_result.unwrap_err();
-        // 注意：由于我们的 with_context 实现将上下文信息嵌入到错误消息中，
-        // 我们无法直接访问原始的上下文信息，这里只验证错误发生
-        assert!(error.to_string().contains("user_id: 12345"));
+        // 我们现在使用结构化上下文，验证上下文内容而不是字符串
+        // assert!(error.to_string().contains("user_id: 12345"));
+        assert_eq!(error.context().get_context("user_id"), Some("12345"));
     }
 
     #[test]
