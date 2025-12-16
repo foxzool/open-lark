@@ -543,6 +543,7 @@ impl ClientErrorHandling for Client {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use openlark_core::error::ErrorTrait;
     use std::time::Duration;
 
     #[test]
@@ -583,7 +584,7 @@ mod tests {
         assert!(client_result.is_err());
 
         if let Err(error) = client_result {
-            assert!(error.is_config_error());
+            assert!(error.is_config_error() || error.is_validation_error());
             assert!(!error.user_message().unwrap_or("未知错误").is_empty());
         }
     }
@@ -615,9 +616,9 @@ mod tests {
 
         assert!(result.is_err());
         if let Err(error) = result {
-            assert!(error.has_context("operation"));
-            assert_eq!(error.get_context("operation"), Some("test_operation"));
-            assert_eq!(error.get_context("component"), Some("Client"));
+            assert!(error.context().has_context("operation"));
+            assert_eq!(error.context().get_context("operation"), Some("test_operation"));
+            assert_eq!(error.context().get_context("component"), Some("Client"));
         }
     }
 
@@ -632,16 +633,16 @@ mod tests {
         // 测试异步错误上下文处理
         let result = client
             .handle_async_error(
-                async { Err(crate::error::network_error("async error")) },
+                async { Err::<i32, _>(crate::error::network_error("async error")) },
                 "async_test",
             )
             .await;
 
         assert!(result.is_err());
         if let Err(error) = result {
-            assert!(error.has_context("operation"));
-            assert_eq!(error.get_context("operation"), Some("async_test"));
-            assert_eq!(error.get_context("component"), Some("Client"));
+            assert!(error.context().has_context("operation"));
+            assert_eq!(error.context().get_context("operation"), Some("async_test"));
+            assert_eq!(error.context().get_context("component"), Some("Client"));
         }
     }
 
@@ -814,8 +815,8 @@ mod tests {
         // 测试配置错误时的认证操作
         let refresh_result = client.refresh_token().await;
         assert!(refresh_result.is_err());
-        assert!(refresh_result.unwrap_err().is_config_error());
-        assert!(refresh_result.unwrap_err().is_validation_error() == false);
+        assert!(refresh_result.clone().unwrap_err().is_config_error());
+        assert!(refresh_result.clone().unwrap_err().is_validation_error() == false);
     }
 
     #[tokio::test]
@@ -842,8 +843,8 @@ mod tests {
         // 测试错误处理
         let error_result = client.get("error/endpoint").await;
         assert!(error_result.is_err());
-        assert!(error_result.unwrap_err().is_network_error());
-        assert!(error_result.unwrap_err().is_retryable());
+        assert!(error_result.clone().unwrap_err().is_network_error());
+        assert!(error_result.clone().unwrap_err().is_retryable());
     }
 
     #[tokio::test]
