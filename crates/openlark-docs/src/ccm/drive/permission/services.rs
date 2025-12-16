@@ -78,7 +78,7 @@ impl PermissionService {
         }
 
         // 构建API请求
-        let mut api_request: ApiRequest<CheckMemberPermissionResponse> =
+        let api_request: ApiRequest<CheckMemberPermissionResponse> =
             ApiRequest::post(&format!("/open-apis/drive/v1/permissions/{}/members/auth", request.file_token))
                 .body(serde_json::json!(&body));
 
@@ -146,7 +146,7 @@ impl PermissionService {
         }
 
         // 构建API请求
-        let mut api_request: ApiRequest<TransferOwnerResponse> =
+        let api_request: ApiRequest<TransferOwnerResponse> =
             ApiRequest::post("/open-apis/drive/permission/member/transfer")
                 .body(serde_json::json!(&body));
 
@@ -202,7 +202,7 @@ impl PermissionService {
         body.insert("file_token", Value::String(request.file_token.clone()));
 
         // 构建API请求
-        let mut api_request: ApiRequest<GetPublicPermissionResponse> =
+        let api_request: ApiRequest<GetPublicPermissionResponse> =
             ApiRequest::post("/open-apis/drive/permission/v2/public/")
                 .body(serde_json::json!(&body));
 

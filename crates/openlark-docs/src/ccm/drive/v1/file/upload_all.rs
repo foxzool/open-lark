@@ -1,54 +1,86 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response},
-    error::DocsResult,
-    req_option::RequestOption,
-    constants::AccessTokenType,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
-use crate::service::DocsService;
+/// 上传文件（一次性上传）
+///
+/// 上传指定文件到指定目录中，支持单次上传文件。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/upload_all
+use serde::{Deserialize, Serialize};
 
-// Builder
-#[derive(Debug)]
-pub struct UploadAllBuilder<'a> {
-    client: &'a DocsService<'a>,
-    file_name: String,
-    parent_type: String,
-    parent_node: String,
-    size: i64,
-    file: Vec<u8>,
-    checksum: Option<String>,
+use crate::common::api_endpoints::DriveApi;
+
+/// 上传文件请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UploadAllRequest {
+    /// 文件名
+    pub file_name: String,
+    /// 父文件夹token
+    pub parent_folder_token: String,
+    /// 文件内容的 base64 编码（实际上传时需要处理）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_content: Option<String>,
 }
 
-impl<'a> UploadAllBuilder<'a> {
-    pub fn new(client: &'a DocsService<'a>, file_name: impl Into<String>, parent_type: impl Into<String>, parent_node: impl Into<String>, size: i64, file: Vec<u8>) -> Self {
-        Self { client, file_name: file_name.into(), parent_type: parent_type.into(), parent_node: parent_node.into(), size, file, checksum: None }
+impl UploadAllRequest {
+    /// 创建上传请求
+    pub fn new(file_name: impl Into<String>, parent_folder_token: impl Into<String>) -> Self {
+        Self {
+            file_name: file_name.into(),
+            parent_folder_token: parent_folder_token.into(),
+            file_content: None,
+        }
     }
 
-    pub fn checksum(mut self, checksum: impl Into<String>) -> Self {
-        self.checksum = Some(checksum.into());
+    /// 设置文件内容
+    pub fn file_content(mut self, content: impl Into<String>) -> Self {
+        self.file_content = Some(content.into());
         self
     }
+}
 
-    pub async fn send(self) -> DocsResult<Response<UploadAllResponse>> {
-        let mut req = ApiRequest::post("/open-apis/drive/v1/files/upload_all");
-        let mut body = serde_json::Map::new();
-        body.insert("file_name".to_string(), serde_json::json!(self.file_name));
-        body.insert("parent_type".to_string(), serde_json::json!(self.parent_type));
-        body.insert("parent_node".to_string(), serde_json::json!(self.parent_node));
-        body.insert("size".to_string(), serde_json::json!(self.size));
-        if let Some(c) = self.checksum {
-            body.insert("checksum".to_string(), serde_json::json!(c));
-        }
-        // Note: Real upload usually requires Multipart. Assuming SDK/Core handles it or this is a placeholder structure.
-        // For now, adhering to the pattern of setting body fields.
-        req = req.body(serde_json::Value::Object(body));
-        self.client.request(req).await
+/// 上传文件响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UploadAllResponse {
+    /// 文件token
+    pub file_token: Option<String>,
+}
+
+impl ApiResponseTrait for UploadAllResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-// Response
-#[derive(Debug, serde::Deserialize)]
-pub struct UploadAllResponse {
-    pub file_token: String,
+/// 上传文件（一次性上传）
+pub async fn upload_all(
+    request: UploadAllRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<UploadAllResponse>> {
+    let api_endpoint = DriveApi::UploadFile;
+
+    let mut api_request: ApiRequest<UploadAllResponse> =
+        ApiRequest::post(&api_endpoint.to_url())
+            .body(serde_json::json!(&request));
+
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
+
+    Transport::request(api_request, config, None).await
 }
 
-impl ApiResponseTrait for UploadAllResponse {}
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_upload_all_request() {
+        let request = UploadAllRequest::new("test.txt", "folder_token");
+        assert_eq!(request.file_name, "test.txt");
+        assert_eq!(request.parent_folder_token, "folder_token");
+    }
+}

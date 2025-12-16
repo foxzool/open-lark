@@ -62,7 +62,7 @@ impl DocV2Service {
     /// use open_lark::prelude::*;
     /// use open_lark::service::docs::v2::DocV2Service;
     ///
-    /// let config = openlark_core::config::Config::new("app_id", "app_secret");
+    /// let config = openlark_core::config::Config::builder().app_id("app_id").app_secret("app_secret").build();
     /// let service = DocV2Service::new(config);
     /// ```
     pub fn new(config: Config) -> Self {

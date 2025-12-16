@@ -37,6 +37,7 @@ impl BaikeService {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use openlark_core::trait_system::service::Service;
 
     #[test]
     fn test_baike_service_creation() {

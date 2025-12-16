@@ -1,6 +1,11 @@
 /// 评论回复管理模块
 
 pub mod update;
+pub mod models;
+pub mod list;
+pub mod delete;
 
-// 重新导出所有API函数
 pub use update::*;
+pub use models::*;
+pub use list::*;
+pub use delete::*;

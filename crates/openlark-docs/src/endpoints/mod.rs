@@ -36,8 +36,8 @@
 /// // 卡片组件
 /// let cards_endpoint = CARDKIT_V1_CARDS;
 /// ```
-// 导入核心端点（auth, application等基础端点）
-pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
+// 注意: 以下端点在 openlark_core 中不可用，已被删除
+// pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 
 // ==================== Bitable (多维表格) v1 ====================
 

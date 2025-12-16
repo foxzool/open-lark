@@ -22,6 +22,23 @@ pub struct CreateTaskRequest {
     pub callback_url: Option<String>,
 }
 
+impl CreateTaskRequest {
+    /// 创建新的任务请求
+    pub fn new(task_type: impl Into<String>, task_params: serde_json::Value) -> Self {
+        Self {
+            task_type: task_type.into(),
+            task_params,
+            callback_url: None,
+        }
+    }
+
+    /// 设置回调URL
+    pub fn callback_url(mut self, url: impl Into<String>) -> Self {
+        self.callback_url = Some(url.into());
+        self
+    }
+}
+
 /// 创建的任务信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreatedTask {

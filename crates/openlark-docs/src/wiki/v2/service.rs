@@ -63,6 +63,7 @@ use super::{
 use crate::wiki::v1::node::search::SearchWikiRequest;
 
 /// Wiki 知识库服务
+#[derive(Clone, Debug)]
 pub struct WikiService {
     config: Config,
 }

@@ -3,7 +3,7 @@
 /// 本示例展示如何使用新实现的33个表格API进行各种表格操作
 /// 包括基础操作、样式设置、数据处理、权限管理等完整功能
 
-use openlark_client::{LarkClient, AsyncLarkClient};
+// use openlark_core::{LarkClient};
 use openlark_docs::ccm::ccm_sheet::old::v2::CcmSheetOldV2;
 use openlark_core::config::Config;
 use tokio;
@@ -17,10 +17,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = Config::builder()
         .app_id("your_app_id")
         .app_secret("your_app_secret")
-        .build()?;
+        .build();
 
-    let client = LarkClient::new(config)?;
-    let sheet_service = client.docs.ccm_sheet.old.v2();
+    // let client = LarkClient::new(config)?;
+    let sheet_service = CcmSheetOldV2::new(config);
 
     println!("🚀 CCM Sheet API 综合演示开始");
 
@@ -118,8 +118,8 @@ async fn demo_data_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<d
     });
 
     match read_request.execute(serde_json::from_value(read_params)?).await {
-        Ok(response) => {
-            if let Some(data) = response.data.and_then(|d| d.value_range) {
+        Ok(api_response) => {
+            if let Some(data) = api_response.data {
                 println!("   ✅ 读取到 {} 行 {} 列数据",
                     data.values.as_ref().map_or(0, |v| v.len()),
                     data.values.first().map_or(0, |row| row.len())
@@ -144,10 +144,10 @@ async fn demo_data_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<d
     });
 
     match write_request.execute(serde_json::from_value(write_params)?).await {
-        Ok(response) => {
+        Ok(api_response) => {
             println!("   ✅ 数据写入成功");
-            if let Some(result) = response.data {
-                println!("   📊 更新单元格数: {}", result.updated_rows.unwrap_or(0) * result.updated_columns.unwrap_or(0));
+            if let Some(result) = api_response.data {
+                println!("   📊 写入结果: {:?}", result);
             }
         }
         Err(e) => println!("   ❌ 写入数据失败: {}", e),
@@ -171,10 +171,10 @@ async fn demo_data_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<d
     });
 
     match batch_write_request.execute(serde_json::from_value(batch_params)?).await {
-        Ok(response) => {
+        Ok(api_response) => {
             println!("   ✅ 批量写入成功");
-            if let Some(result) = response.data {
-                println!("   📊 总更新单元格数: {:?}", result.updated_cells);
+            if let Some(result) = api_response.data {
+                 println!("   📊 批量写入结果: {:?}", result);
             }
         }
         Err(e) => println!("   ❌ 批量写入失败: {}", e),
@@ -193,10 +193,10 @@ async fn demo_data_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<d
     });
 
     match append_request.execute(serde_json::from_value(append_params)?).await {
-        Ok(response) => {
+        Ok(api_response) => {
             println!("   ✅ 数据追加成功");
-            if let Some(result) = response.data {
-                println!("   📊 追加行数: {:?}", result.updated_rows);
+            if let Some(result) = api_response.data {
+                println!("   📊 追加结果: {:?}", result);
             }
         }
         Err(e) => println!("   ❌ 追加数据失败: {}", e),
@@ -231,10 +231,10 @@ async fn demo_style_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<
     });
 
     match style_request.execute(serde_json::from_value(style_params)?).await {
-        Ok(response) => {
+        Ok(api_response) => {
             println!("   ✅ 样式设置成功");
-            if let Some(result) = response.data {
-                println!("   🎨 更新单元格数: {:?}", result.updated_cells);
+            if let Some(result) = api_response.data {
+                println!("   🎨 设置成功: {}", result.success);
             }
         }
         Err(e) => println!("   ❌ 样式设置失败: {}", e),
