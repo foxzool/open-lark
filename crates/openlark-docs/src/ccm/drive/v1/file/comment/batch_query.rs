@@ -3,14 +3,13 @@
 /// 该接口用于根据评论 ID 列表批量获取评论。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/batch_query
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 批量获取评论请求
 #[derive(Debug, Clone, Serialize, Deserialize)]

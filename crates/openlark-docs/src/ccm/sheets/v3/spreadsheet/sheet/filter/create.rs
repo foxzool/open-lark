@@ -11,7 +11,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 use super::{FilterRange, FilterCondition};
 
 /// 创建筛选器请求
@@ -68,7 +67,7 @@ impl CreateFilterRequest {
     pub async fn send(&self, config: &Config) -> SDKResult<CreateFilterResponse> {
         let endpoint = format!(
             "{}/spreadsheets/{}/sheets/{}/filters",
-            crate::common::api_endpoints::SheetsApiV3,
+            crate::common::api_endpoints::SHEETS_API_V3,
             self.spreadsheet_token,
             self.sheet_id
         );

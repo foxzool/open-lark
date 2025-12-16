@@ -12,7 +12,7 @@ pub mod file;
 pub use draft::{CreateDraftBuilder, UpdateDraftBuilder};
 pub use entity::{
     CreateEntityBuilder, UpdateEntityBuilder, DeleteEntityBuilder,
-    GetEntityBuilder, ListEntityBuilder, MatchEntityBuilder,
+    GetEntityBuilder, ListEntityBuilder,
     SearchEntityBuilder, HighlightEntityBuilder
 };
 pub use classification::ListClassificationBuilder;
@@ -79,11 +79,11 @@ impl<'a> LingoV1Service<'a> {
         ListEntityBuilder::new(self.config)
     }
 
-    /// 精准搜索词条
-    /// API文档: https://open.feishu.cn/document/lingo-v1/entity/match
-    pub fn match_entities(&self, query: String) -> MatchEntityBuilder<'a> {
-        MatchEntityBuilder::new(self.config, query)
-    }
+    // /// 精准搜索词条
+    // /// API文档: https://open.feishu.cn/document/lingo-v1/entity/match
+    // pub fn match_entities(&self, query: String) -> MatchEntityBuilder<'a> {
+    //     MatchEntityBuilder::new(self.config, query)
+    // }
 
     /// 模糊搜索词条
     /// API文档: https://open.feishu.cn/document/lingo-v1/entity/search

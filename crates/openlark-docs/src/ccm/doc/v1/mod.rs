@@ -6,13 +6,13 @@
 /// - 文档内容读取和编辑
 /// - 文档块操作和管理
 
-pub mod document;
+// pub mod document; // Generated: Module file not found
 pub mod models;
-pub mod requests;
-pub mod responses;
+// pub mod requests; // Generated: Module file not found
+// pub mod responses; // Generated: Module file not found
 
 // 重新导出所有服务类型
-pub use document::*;
+// pub use document::*; // Generated: Module use not found
 
 use openlark_core::config::Config;
 

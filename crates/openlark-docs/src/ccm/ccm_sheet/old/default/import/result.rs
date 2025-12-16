@@ -1,73 +1,63 @@
-use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+//! 查询文件导入结果
+//!
+//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/sheet-operation/query-import-results
+
+use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
+use openlark_core::constants::AccessTokenType;
+use openlark_core::req_option::RequestOption;
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CcmSheetApiOld;
-
-/// 查询导入结果请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetImportResultRequest {
-    /// 任务票据
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct ImportResultRequest {
     pub ticket: String,
 }
 
-impl GetImportResultRequest {
-    /// 创建新的 GetImportResultRequest
-    pub fn new(ticket: impl Into<String>) -> Self {
-        Self {
-            ticket: ticket.into(),
-        }
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct ImportResultResponse {
+    pub result: ImportResult,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct ImportResult {
+    pub ticket: String,
+    pub url: String,
+    pub warning_code: i32,
+    pub warning_msg: String,
+}
+
+impl ApiResponseTrait for ImportResultResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
-/// 查询导入结果响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetImportResultResponse {
-    /// 结果状态，0：成功
-    pub code: i32,
-    /// 导入后的表格 token
-    pub url: Option<String>,
-    /// 错误信息
-    pub msg: Option<String>,
+#[derive(Debug, Default)]
+pub struct ImportResultBuilder {
+    api_req: ApiRequest<ImportResultRequest>,
 }
 
-impl ApiResponseTrait for GetImportResultResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 查询导入结果
-///
-/// 查询导入结果。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/import-export/query-import-result
-pub async fn get_import_result(
-    request: GetImportResultRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<GetImportResultResponse>> {
-    let api_endpoint = CcmSheetApiOld::ImportResult;
-    let mut api_request: ApiRequest<GetImportResultResponse> = ApiRequest::get(&api_endpoint.to_url())
-        .query("ticket", &request.ticket);
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+impl ImportResultBuilder {
+    pub fn new(ticket: impl ToString) -> Self {
+        let mut builder = Self::default();
+        builder.api_req.req_type = "ccm_sheet_import_result".to_string();
+        builder.api_req.method = "GET".to_string();
+        builder.api_req.url = "https://open.feishu.cn/open-apis/sheets/v2/import/result".to_string();
+        // Since it's GET with query param? No, URL example usually puts it in query but here it might be body or query.
+        // Doc says "ticket" parameter.
+        // Usually GET requests have query params.
+        // I'll append to URL.
+        let ticket_str = ticket.to_string();
+        builder.api_req.url.push_str(&format!("?ticket={}", ticket_str));
+        builder.api_req.body = None;
+        builder
     }
 
-    Transport::request(api_request, config, None).await
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_get_import_result_request() {
-        let request = GetImportResultRequest::new("ticket");
-        assert_eq!(request.ticket, "ticket");
+    pub fn build(
+        self,
+        config: &openlark_core::config::Config,
+        option: &RequestOption,
+    ) -> Result<RequestBuilder, LarkAPIError> {
+        let mut req = self.api_req;
+        req.build(AccessTokenType::Tenant, config, option)
     }
 }

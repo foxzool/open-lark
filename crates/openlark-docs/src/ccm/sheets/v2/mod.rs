@@ -18,32 +18,32 @@
 /// 1. 这些API不被计入27个sheets v3新API
 /// 2. 仅用于历史兼容性维护
 /// 3. 新项目应直接使用v3 API
-pub mod batch_range_read;
-pub mod batch_read;
-pub mod batch_read_ranges;
-pub mod batch_write;
-pub mod condition_formats;
-pub mod data_validation;
-pub mod dimension_operations;
-pub mod image_write;
-pub mod image_write_enhanced;
-pub mod import;
-pub mod import_result;
-pub mod merge_cells;
-pub mod metainfo;
-pub mod properties;
-pub mod protected_ranges;
-pub mod sheet_cells;
-pub mod sheet_management;
-pub mod sheets_batch_update;
-pub mod single_range_read;
-pub mod single_read;
-pub mod single_write;
-pub mod style_operations;
-pub mod values_append;
-pub mod values_batch_write;
-pub mod values_prepend;
-pub mod values_single_write;
+// pub mod batch_range_read; // Generated: Module file not found
+// pub mod batch_read; // Generated: Module file not found
+// pub mod batch_read_ranges; // Generated: Module file not found
+// pub mod batch_write; // Generated: Module file not found
+// pub mod condition_formats; // Generated: Module file not found
+// pub mod data_validation; // Generated: Module file not found
+// pub mod dimension_operations; // Generated: Module file not found
+// pub mod image_write; // Generated: Module file not found
+// pub mod image_write_enhanced; // Generated: Module file not found
+// pub mod import; // Generated: Module file not found
+// pub mod import_result; // Generated: Module file not found
+// pub mod merge_cells; // Generated: Module file not found
+// pub mod metainfo; // Generated: Module file not found
+// pub mod properties; // Generated: Module file not found
+// pub mod protected_ranges; // Generated: Module file not found
+// pub mod sheet_cells; // Generated: Module file not found
+// pub mod sheet_management; // Generated: Module file not found
+// pub mod sheets_batch_update; // Generated: Module file not found
+// pub mod single_range_read; // Generated: Module file not found
+// pub mod single_read; // Generated: Module file not found
+// pub mod single_write; // Generated: Module file not found
+// pub mod style_operations; // Generated: Module file not found
+// pub mod values_append; // Generated: Module file not found
+// pub mod values_batch_write; // Generated: Module file not found
+// pub mod values_prepend; // Generated: Module file not found
+// pub mod values_single_write; // Generated: Module file not found
 
 // 暂时注释掉模糊的重导出以避免警告
 // 模块中的服务可以直接通过完整路径访问

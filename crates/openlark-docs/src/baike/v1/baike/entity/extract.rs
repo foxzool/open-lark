@@ -87,7 +87,7 @@ impl<'a> ExtractEntityBuilder<'a> {
 
     /// 执行提取潜在词条操作
     pub async fn execute(self) -> SDKResult<ExtractEntityResponse> {
-        let mut api_request = ApiRequest::post("/open-apis/baike/v1/entities/extract")
+        let mut api_request: ApiRequest<ExtractEntityResponse> = ApiRequest::post("/open-apis/baike/v1/entities/extract")
             .body(serde_json::to_value(&self.request)?);
 
         let http_request = UnifiedRequestBuilder::build(
@@ -97,9 +97,8 @@ impl<'a> ExtractEntityBuilder<'a> {
             &RequestOption::default(),
         ).await?;
 
-        let response = self.config.http_client().execute(http_request).await?;
-        let raw_response = Response::from_reqwest_response(response).await?;
-
-        raw_response.into_result()
+        let response = http_request.send().await?;
+        let resp: Response<_> = response.json().await?;
+        resp.into_result()
     }
 }

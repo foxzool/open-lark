@@ -19,5 +19,7 @@ pub struct WikiV1Service {
 impl WikiV1Service {
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
 }
-}
+
+pub mod node;

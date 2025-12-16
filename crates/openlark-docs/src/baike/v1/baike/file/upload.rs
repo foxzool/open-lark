@@ -37,7 +37,7 @@ impl ApiResponseTrait for UploadFileResponse {
 /// 上传图片构建器
 pub struct UploadFileBuilder<'a> {
     config: &'a Config,
-    file_path: String,
+    _file_path: String,
     request: FileUploadRequest,
     option: Option<openlark_core::req_option::RequestOption>,
 }
@@ -47,7 +47,7 @@ impl<'a> UploadFileBuilder<'a> {
     pub fn new(config: &'a Config, file_path: String) -> Self {
         Self {
             config,
-            file_path,
+            _file_path: file_path,
             request: FileUploadRequest::default(),
             option: None,
         }

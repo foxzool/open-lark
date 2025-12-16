@@ -126,7 +126,7 @@ impl<'a> CreateDraftBuilder<'a> {
 
     /// 执行创建草稿操作
     pub async fn execute(self) -> SDKResult<CreateDraftResponse> {
-        let mut api_request = ApiRequest::post("/open-apis/baike/v1/drafts")
+        let mut api_request: ApiRequest<CreateDraftResponse> = ApiRequest::post("/open-apis/baike/v1/drafts")
             .body(serde_json::to_value(&self.request)?);
 
         let http_request = UnifiedRequestBuilder::build(
@@ -136,9 +136,8 @@ impl<'a> CreateDraftBuilder<'a> {
             &RequestOption::default(),
         ).await?;
 
-        let response = self.config.http_client().execute(http_request).await?;
-        let raw_response = Response::from_reqwest_response(response).await?;
-
-        raw_response.into_result()
+        let response = http_request.send().await?;
+        let resp: Response<_> = response.json().await?;
+        resp.into_result()
     }
 }

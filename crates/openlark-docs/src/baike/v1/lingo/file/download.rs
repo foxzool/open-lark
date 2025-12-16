@@ -42,7 +42,7 @@ impl<'a> DownloadFileBuilder<'a> {
     /// 执行下载图片操作
     pub async fn execute(self) -> SDKResult<DownloadFileResponse> {
         let path = format!("/open-apis/lingo/v1/files/{}/download", self.file_token);
-        let mut api_request = ApiRequest::get(&path);
+        let mut api_request: ApiRequest<DownloadFileResponse> = ApiRequest::get(&path);
 
         let http_request = UnifiedRequestBuilder::build(
             &mut api_request,
@@ -51,23 +51,24 @@ impl<'a> DownloadFileBuilder<'a> {
             &RequestOption::default(),
         ).await?;
 
-        let response = self.config.http_client().execute(http_request).await?;
+        let response = http_request.send().await?;
 
         // 对于文件下载，需要特殊处理响应
         if response.status().is_success() {
-            let bytes = response.bytes().await.map_err(|e| {
-                openlark_core::error::CoreError::NetworkError(e.to_string())
-            })?;
-
-            // 将二进制数据转为base64编码
-            let content = base64::encode(&bytes);
-
             // 尝试从响应头获取文件信息
             let content_type = response.headers()
                 .get("content-type")
                 .and_then(|v| v.to_str().ok())
                 .unwrap_or("application/octet-stream")
                 .to_string();
+
+            let bytes = response.bytes().await.map_err(|e| {
+                openlark_core::error::CoreError::network_msg(e.to_string())
+            })?;
+
+            // 将二进制数据转为base64编码
+            use base64::Engine;
+            let content = base64::engine::general_purpose::STANDARD.encode(&bytes);
 
             let file_size = bytes.len() as i64;
             let file_name = format!("file_{}", self.file_token);
@@ -80,8 +81,8 @@ impl<'a> DownloadFileBuilder<'a> {
             })
         } else {
             // 处理错误响应
-            let raw_response = Response::from_reqwest_response(response).await?;
-            raw_response.into_result()
+            let resp: Response<_> = response.json().await?;
+            resp.into_result()
         }
     }
 }

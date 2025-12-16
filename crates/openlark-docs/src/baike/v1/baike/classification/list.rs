@@ -49,7 +49,7 @@ impl<'a> ListClassificationBuilder<'a> {
 
     /// 执行获取词典分类操作
     pub async fn execute(self) -> SDKResult<ListClassificationResponse> {
-        let mut api_request = ApiRequest::get("/open-apis/baike/v1/classifications");
+        let mut api_request: ApiRequest<ListClassificationResponse> = ApiRequest::get("/open-apis/baike/v1/classifications");
 
         if let Some(repo_id) = &self.repo_id {
             api_request = api_request.query("repo_id", repo_id);
@@ -62,9 +62,8 @@ impl<'a> ListClassificationBuilder<'a> {
             &RequestOption::default(),
         ).await?;
 
-        let response = self.config.http_client().execute(http_request).await?;
-        let raw_response = Response::from_reqwest_response(response).await?;
-
-        raw_response.into_result()
+        let response = http_request.send().await?;
+        let resp: Response<ListClassificationResponse> = response.json().await?;
+        resp.into_result()
     }
 }

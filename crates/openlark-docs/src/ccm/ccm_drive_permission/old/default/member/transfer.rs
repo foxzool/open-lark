@@ -1,97 +1,83 @@
-use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+//! 转移拥有者
+//!
+//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/transfer-ownership
+
+use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
+use openlark_core::constants::AccessTokenType;
+use openlark_core::req_option::RequestOption;
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CcmDrivePermissionApiOld;
-
-/// 转移拥有者请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct TransferRequest {
-    /// 令牌
     pub token: String,
-    /// 类型
-    pub r#type: String,
-    /// 所有者ID
+    #[serde(rename = "type")]
+    pub type_: String,
     pub owner_id: String,
-    /// 所有者ID类型
-    pub owner_type: String, // open_id, user_id, union_id
-    /// 是否移除旧所有者
+    pub owner_type: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_old_owner: Option<bool>,
-    /// 评论通知
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub comment: Option<String>,
-    /// 是否通知
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub notify: Option<bool>,
+    pub cancel_notify: Option<bool>,
 }
 
-impl TransferRequest {
-    /// 创建新的 TransferRequest
-    pub fn new(token: impl Into<String>, type_: impl Into<String>, owner_id: impl Into<String>, owner_type: impl Into<String>) -> Self {
-        Self {
-            token: token.into(),
-            r#type: type_.into(),
-            owner_id: owner_id.into(),
-            owner_type: owner_type.into(),
-            remove_old_owner: None,
-            comment: None,
-            notify: None,
-        }
-    }
-}
-
-/// 转移拥有者响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct TransferResponse {
-    /// 是否成功
     pub is_success: bool,
-    /// 拥有者类型
-    pub r#type: String,
-    /// 拥有者ID
-    pub id: String,
-    /// 名称
-    pub name: String,
+    pub token: String,
+    #[serde(rename = "type")]
+    pub type_: String,
+    pub owner_id: String,
+    pub owner_type: String,
 }
 
 impl ApiResponseTrait for TransferResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
-/// 转移拥有者
-///
-/// 根据文档信息和用户信息转移文档的所有者。
-/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/transfer-ownership
-pub async fn transfer(
-    request: TransferRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<TransferResponse>> {
-    let api_endpoint = CcmDrivePermissionApiOld::MemberTransfer;
-    let mut api_request: ApiRequest<TransferResponse> = ApiRequest::post(&api_endpoint.to_url())
-        .json_body(&request);
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    Transport::request(api_request, config, None).await
+#[derive(Debug, Default)]
+pub struct TransferBuilder {
+    api_req: ApiRequest<TransferRequest>,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+impl TransferBuilder {
+    pub fn new(token: impl ToString, type_: impl ToString, owner_id: impl ToString, owner_type: impl ToString) -> Self {
+        let mut builder = Self::default();
+        builder.api_req.req_type = "drive_permission_transfer".to_string();
+        builder.api_req.method = "POST".to_string();
+        builder.api_req.url = "https://open.feishu.cn/open-apis/drive/permission/member/transfer".to_string();
+        builder.api_req.body = Some(TransferRequest {
+            token: token.to_string(),
+            type_: type_.to_string(),
+            owner_id: owner_id.to_string(),
+            owner_type: owner_type.to_string(),
+            remove_old_owner: None,
+            cancel_notify: None,
+        });
+        builder
+    }
 
-    #[test]
-    fn test_transfer_request() {
-        let request = TransferRequest::new("token", "doc", "owner_id", "open_id");
-        assert_eq!(request.token, "token");
-        assert_eq!(request.owner_id, "owner_id");
+    pub fn remove_old_owner(mut self, remove: bool) -> Self {
+        if let Some(body) = &mut self.api_req.body {
+            body.remove_old_owner = Some(remove);
+        }
+        self
+    }
+
+    pub fn cancel_notify(mut self, cancel: bool) -> Self {
+        if let Some(body) = &mut self.api_req.body {
+            body.cancel_notify = Some(cancel);
+        }
+        self
+    }
+
+    pub fn build(
+        self,
+        config: &openlark_core::config::Config,
+        option: &RequestOption,
+    ) -> Result<RequestBuilder, LarkAPIError> {
+        let mut req = self.api_req;
+        req.build(AccessTokenType::Tenant, config, option)
     }
 }

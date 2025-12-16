@@ -86,7 +86,7 @@ impl<'a> ListEntityBuilder<'a> {
 
     /// 执行获取词条列表操作
     pub async fn execute(self) -> SDKResult<ListEntityResponse> {
-        let mut api_request = ApiRequest::get("/open-apis/baike/v1/entities");
+        let mut api_request: ApiRequest<ListEntityResponse> = ApiRequest::get("/open-apis/baike/v1/entities");
 
         // 添加查询参数
         if let Some(page_size) = self.page_size {
@@ -112,9 +112,8 @@ impl<'a> ListEntityBuilder<'a> {
             &RequestOption::default(),
         ).await?;
 
-        let response = self.config.http_client().execute(http_request).await?;
-        let raw_response = Response::from_reqwest_response(response).await?;
-
-        raw_response.into_result()
+        let response = http_request.send().await?;
+        let resp: Response<_> = response.json().await?;
+        resp.into_result()
     }
 }

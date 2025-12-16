@@ -27,7 +27,7 @@ impl DocsService {
 }
 
 pub mod v1;
-pub mod v2;
+// pub mod v2; // Generated: Module file not found
 
 pub use v1::*;
-pub use v2::*;
+// pub use v2::*; // Generated: Module use not found

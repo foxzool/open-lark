@@ -102,7 +102,7 @@ impl<'a> CreateEntityBuilder<'a> {
 
     /// 执行创建免审词条操作
     pub async fn execute(self) -> SDKResult<CreateEntityResponse> {
-        let mut api_request = ApiRequest::post("/open-apis/lingo/v1/entities")
+        let mut api_request: ApiRequest<CreateEntityResponse> = ApiRequest::post("/open-apis/lingo/v1/entities")
             .body(serde_json::to_value(&self.request)?);
 
         let http_request = UnifiedRequestBuilder::build(
@@ -112,9 +112,8 @@ impl<'a> CreateEntityBuilder<'a> {
             &RequestOption::default(),
         ).await?;
 
-        let response = self.config.http_client().execute(http_request).await?;
-        let raw_response = Response::from_reqwest_response(response).await?;
-
-        raw_response.into_result()
+        let response = http_request.send().await?;
+        let resp: Response<_> = response.json().await?;
+        resp.into_result()
     }
 }
