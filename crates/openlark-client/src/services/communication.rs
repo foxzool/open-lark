@@ -600,6 +600,7 @@ impl Default for RichTextContent {
 mod tests {
     use super::*;
 
+
     fn create_test_config() -> Config {
         Config {
             app_id: "test_app_id".to_string(),
@@ -794,7 +795,7 @@ mod tests {
         let service = CommunicationService::new(&config, &registry).unwrap();
 
         let result = service
-            .list_messages("chat", "chat_123", Some(10), None)
+            .list_messages("chat_id", "chat_123", Some(10), None)
             .await;
 
         assert!(result.is_ok(), "获取消息列表应该成功");
@@ -813,7 +814,7 @@ mod tests {
         let service = CommunicationService::new(&config, &registry).unwrap();
 
         let result = service
-            .list_messages("chat", "chat_123", Some(0), None) // 无效的page_size
+            .list_messages("chat_id", "chat_123", Some(0), None) // 无效的page_size
             .await;
 
         assert!(result.is_err(), "无效的分页大小应该导致获取失败");
@@ -926,16 +927,16 @@ mod tests {
 
         if let Err(error) = result {
             // 检查错误上下文
-            assert!(error.has_context("operation"));
-            assert_eq!(error.get_context("operation"), Some("send_text_message"));
+            assert!(error.context().has_context("operation"));
+            assert_eq!(error.context().get_context("operation"), Some("send_text_message"));
 
             // 检查错误分析功能
-            let report = error.detailed_report();
+            let report = crate::error::ErrorAnalyzer::new(&error).detailed_report();
             assert!(report.contains("错误分析报告"));
             assert!(report.contains("验证错误"));
 
             // 检查用户友好的错误消息
-            let user_msg = error.user_friendly_with_suggestion();
+            let user_msg = crate::error::ErrorAnalyzer::new(&error).user_friendly_with_suggestion();
             assert!(user_msg.contains("建议"));
             assert!(user_msg.contains("可以尝试"));
         }

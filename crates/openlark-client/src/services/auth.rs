@@ -80,7 +80,7 @@ impl AuthService {
             .app_access_token_internal()
             .app_id(&self.config.app_id)
             .app_secret(&self.config.app_secret)
-            .send()
+            .execute()
             .await;
 
         let result =
@@ -88,14 +88,14 @@ impl AuthService {
 
         tracing::debug!(
             "成功获取自建应用访问令牌，过期时间: {}秒",
-            result.expires_in
+            result.data.expires_in
         );
 
         Ok(TokenInfo {
-            access_token: result.app_access_token,
-            token_type: result.token_type.unwrap_or("Bearer".to_string()),
-            expires_in: result.expires_in,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expires_in as i64),
+            access_token: result.data.app_access_token,
+            token_type: result.data.token_type.unwrap_or("Bearer".to_string()),
+            expires_in: result.data.expires_in,
+            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.data.expires_in as i64),
             scope: Some("app:all".to_string()),
         })
     }
@@ -111,21 +111,21 @@ impl AuthService {
             .app_access_token()
             .app_id(&self.config.app_id)
             .app_secret(&self.config.app_secret)
-            .send()
+            .execute()
             .await;
 
         let result = with_operation_context(response, "get_app_access_token", "AuthService")?;
 
         tracing::debug!(
             "成功获取商店应用访问令牌，过期时间: {}秒",
-            result.expires_in
+            result.data.expires_in
         );
 
         Ok(TokenInfo {
-            access_token: result.app_access_token,
+            access_token: result.data.app_access_token,
             token_type: "Bearer".to_string(),
-            expires_in: result.expires_in as u64,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expires_in as i64),
+            expires_in: result.data.expires_in as u64,
+            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.data.expires_in as i64),
             scope: Some("app:all".to_string()),
         })
     }
@@ -141,7 +141,7 @@ impl AuthService {
             .tenant_access_token_internal()
             .app_id(&self.config.app_id)
             .app_secret(&self.config.app_secret)
-            .send()
+            .execute()
             .await;
 
         let result =
@@ -149,14 +149,14 @@ impl AuthService {
 
         tracing::debug!(
             "成功获取自建应用租户访问令牌，过期时间: {}秒",
-            result.expires_in
+            result.data.expires_in
         );
 
         Ok(TokenInfo {
-            access_token: result.tenant_access_token,
+            access_token: result.data.tenant_access_token,
             token_type: "Bearer".to_string(),
-            expires_in: result.expires_in as u64,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expires_in as i64),
+            expires_in: result.data.expires_in as u64,
+            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.data.expires_in as i64),
             scope: Some("tenant:all".to_string()),
         })
     }
@@ -172,21 +172,21 @@ impl AuthService {
             .tenant_access_token()
             .app_id(&self.config.app_id)
             .app_secret(&self.config.app_secret)
-            .send()
+            .execute()
             .await;
 
         let result = with_operation_context(response, "get_tenant_access_token", "AuthService")?;
 
         tracing::debug!(
             "成功获取商店应用租户访问令牌，过期时间: {}秒",
-            result.expires_in
+            result.data.expires_in
         );
 
         Ok(TokenInfo {
-            access_token: result.tenant_access_token,
+            access_token: result.data.tenant_access_token,
             token_type: "Bearer".to_string(),
-            expires_in: result.expires_in as u64,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.expires_in as i64),
+            expires_in: result.data.expires_in as u64,
+            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.data.expires_in as i64),
             scope: Some("tenant:all".to_string()),
         })
     }
@@ -202,23 +202,23 @@ impl AuthService {
             .user_info()
             .get()
             .user_access_token(user_access_token)
-            .send()
+            .execute()
             .await;
 
         let result = with_operation_context(response, "get_user_info", "AuthService")?;
 
         // 转换为统一的UserInfo结构
         let user_info = UserInfo {
-            user_id: result.data.user_id.unwrap_or_default(),
-            open_id: result.data.open_id,
-            union_id: result.data.union_id,
-            name: result.data.name.unwrap_or_default(),
-            nickname: result.data.en_name,
-            email: result.data.email,
-            mobile: result.data.mobile,
-            avatar_url: result.data.avatar.and_then(|a| a.avatar_240),
+            user_id: result.data.data.user_id.unwrap_or_default(),
+            open_id: result.data.data.open_id,
+            union_id: result.data.data.union_id,
+            name: result.data.data.name.unwrap_or_default(),
+            nickname: result.data.data.en_name,
+            email: result.data.data.email,
+            mobile: result.data.data.mobile,
+            avatar_url: result.data.data.avatar.and_then(|a| a.avatar_240),
             gender: None, // UserInfo 中没有 gender 字段
-            tenant_key: result.data.tenant_key,
+            tenant_key: result.data.data.tenant_key,
         };
 
         tracing::debug!("成功获取用户信息: {}", user_info.name);
@@ -237,7 +237,7 @@ impl AuthService {
             .app_ticket_resend()
             .app_id(&self.config.app_id)
             .app_secret(&self.config.app_secret)
-            .send()
+            .execute()
             .await;
 
         let _ = with_operation_context(response, "resend_app_ticket", "AuthService")?;
@@ -262,14 +262,14 @@ impl AuthService {
             .grant_code(grant_code)
             .app_id(&self.config.app_id)
             .app_secret(&self.config.app_secret)
-            .send()
+            .execute()
             .await;
 
         let result = with_operation_context(response, "get_user_access_token_v1", "AuthService")?;
 
         tracing::debug!("成功获取用户访问令牌");
 
-        Ok(result)
+        Ok(result.data)
     }
 
     /// 刷新用户访问令牌（v1版本）
@@ -287,7 +287,7 @@ impl AuthService {
             .refresh_token(refresh_token)
             .app_id(&self.config.app_id)
             .app_secret(&self.config.app_secret)
-            .send()
+            .execute()
             .await;
 
         let result =
@@ -295,7 +295,7 @@ impl AuthService {
 
         tracing::debug!("成功刷新用户访问令牌");
 
-        Ok(result)
+        Ok(result.data)
     }
 
     /// 获取OIDC用户访问令牌
@@ -314,14 +314,14 @@ impl AuthService {
             .access_token()
             .code(code)
             .redirect_uri(redirect_uri)
-            .send()
+            .execute()
             .await;
 
         let result = with_operation_context(response, "get_oidc_user_access_token", "AuthService")?;
 
         tracing::debug!("成功获取OIDC用户访问令牌");
 
-        Ok(result)
+        Ok(result.data)
     }
 
     /// 刷新OIDC用户访问令牌
@@ -338,7 +338,7 @@ impl AuthService {
             .oidc()
             .refresh_access_token()
             .refresh_token(refresh_token)
-            .send()
+            .execute()
             .await;
 
         let result =
@@ -346,7 +346,7 @@ impl AuthService {
 
         tracing::debug!("成功刷新OIDC用户访问令牌");
 
-        Ok(result)
+        Ok(result.data)
     }
 
     /// 构建OAuth授权URL
