@@ -38,6 +38,6 @@ impl CcmDrivePermissionOldV2 {
 }
 
 // 导出所有API模块
-pub mod member_permitted;
-pub mod member_transfer;
-pub mod public;
+// pub mod member_permitted; // Generated: Module file not found
+// pub mod member_transfer; // Generated: Module file not found
+// pub mod public; // Generated: Module file not found

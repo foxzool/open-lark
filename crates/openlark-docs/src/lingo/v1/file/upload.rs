@@ -61,7 +61,8 @@ pub async fn upload_file(
     // 添加文件
     let file_part = reqwest::multipart::Part::bytes(params.file_content)
         .file_name(params.file_name.clone())
-        .mime_str(&params.file_type)?;
+        .mime_str(&params.file_type)
+        .map_err(|e| openlark_core::error::CoreError::network_msg(e.to_string()))?;
     form_data = form_data.part("file", file_part);
 
     // 添加文件名和文件类型字段
@@ -69,16 +70,34 @@ pub async fn upload_file(
     form_data = form_data.text("file_type", params.file_type);
     form_data = form_data.text("file_size", params.file_size.to_string());
 
-    // 创建API请求
-    let api_request: ApiRequest<UploadFileResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).multipart(form_data);
+    // 使用 reqwest client 直接发送请求
+    let url = api_endpoint.to_url();
+    let full_url = format!("{}{}", config.base_url(), url);
 
-    // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
-    let resp: UploadFileResponse = response.data.ok_or_else(|| {
-        openlark_core::error::validation_error("response_data", "Response data is missing")
-    })?;
+    // 获取应用Token (使用空ticket，假设自建应用或ticket已缓存)
+    let token = {
+        let token_manager = config.token_manager.lock().await;
+        token_manager.get_app_access_token(config, "", &config.app_ticket_manager)
+            .await
+            .map_err(|e| openlark_core::error::CoreError::network_msg(format!("Failed to get token: {}", e)))?
+    };
 
+    let response = config.http_client
+        .post(&full_url)
+        .multipart(form_data)
+        .bearer_auth(token)
+        .send()
+        .await
+        .map_err(|e| openlark_core::error::CoreError::network_msg(e.to_string()))?;
+
+    if !response.status().is_success() {
+        let status = response.status();
+        let text = response.text().await.unwrap_or_default();
+        return Err(openlark_core::error::CoreError::api_error(status.as_u16() as i32, &url, text, None::<String>));
+    }
+
+    let resp: UploadFileResponse = response.json().await.map_err(|e| openlark_core::error::CoreError::network_msg(e.to_string()))?;
+    
     resp.data.ok_or_else(|| {
         openlark_core::error::validation_error("file_data", "File data is missing")
     })

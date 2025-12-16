@@ -1,76 +1,56 @@
-use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+//! 判断协作者是否有某权限
+//!
+//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/querying-if-a-collaborator-has-a-specific-permission
+
+use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
+use openlark_core::constants::AccessTokenType;
+use openlark_core::req_option::RequestOption;
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CcmDrivePermissionApiOld;
-
-/// 判断协作者是否有某权限请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct PermittedRequest {
-    /// 令牌
     pub token: String,
-    /// 类型
-    pub r#type: String,
-    /// 权限
+    #[serde(rename = "type")]
+    pub type_: String,
     pub perm: String,
 }
 
-impl PermittedRequest {
-    /// 创建新的 PermittedRequest
-    pub fn new(token: impl Into<String>, type_: impl Into<String>, perm: impl Into<String>) -> Self {
-        Self {
-            token: token.into(),
-            r#type: type_.into(),
-            perm: perm.into(),
-        }
-    }
-}
-
-/// 判断协作者是否有某权限响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct PermittedResponse {
-    /// 是否有权限
-    pub permitted: bool,
+    pub is_permitted: bool,
 }
 
 impl ApiResponseTrait for PermittedResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
-/// 判断协作者是否有某权限
-///
-/// 根据 filetoken 判断当前登录用户是否具有某权限。
-/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/querying-if-a-collaborator-has-a-specific-permission
-pub async fn permitted(
-    request: PermittedRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<PermittedResponse>> {
-    let api_endpoint = CcmDrivePermissionApiOld::MemberPermitted;
-    let mut api_request: ApiRequest<PermittedResponse> = ApiRequest::post(&api_endpoint.to_url())
-        .json_body(&request);
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    Transport::request(api_request, config, None).await
+#[derive(Debug, Default)]
+pub struct PermittedBuilder {
+    api_req: ApiRequest<PermittedRequest>,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+impl PermittedBuilder {
+    pub fn new(token: impl ToString, type_: impl ToString, perm: impl ToString) -> Self {
+        let mut builder = Self::default();
+        builder.api_req.req_type = "drive_permission_permitted".to_string();
+        builder.api_req.method = "POST".to_string();
+        builder.api_req.url = "https://open.feishu.cn/open-apis/drive/permission/member/permitted".to_string();
+        builder.api_req.body = Some(PermittedRequest {
+            token: token.to_string(),
+            type_: type_.to_string(),
+            perm: perm.to_string(),
+        });
+        builder
+    }
 
-    #[test]
-    fn test_permitted_request() {
-        let request = PermittedRequest::new("token", "type", "perm");
-        assert_eq!(request.token, "token");
-        assert_eq!(request.perm, "perm");
+    pub fn build(
+        self,
+        config: &openlark_core::config::Config,
+        option: &RequestOption,
+    ) -> Result<RequestBuilder, LarkAPIError> {
+        let mut req = self.api_req;
+        req.build(AccessTokenType::Tenant, config, option)
     }
 }

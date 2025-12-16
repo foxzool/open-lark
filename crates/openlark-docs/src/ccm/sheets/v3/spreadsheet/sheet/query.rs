@@ -12,7 +12,6 @@ use openlark_core::{
 use super::super::models::*;
 use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
 
-use serde_json::json;
 
 impl ApiResponseTrait for QuerySheetResponse {
     fn data_format() -> ResponseFormat {

@@ -3,14 +3,13 @@
 /// 批量为文件或文件夹添加协作者权限
 /// docPath: https://open.feishu.cn/document/docs/permission/permission-member/batch_create
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 批量增加协作者权限请求
 #[derive(Debug, Clone, Serialize, Deserialize)]

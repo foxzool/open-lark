@@ -2,7 +2,7 @@
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/batchCreate
 use openlark_core::{
-    api::{ApiRequest, RequestData, Response},
+    api::{ApiRequest, RequestData},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,

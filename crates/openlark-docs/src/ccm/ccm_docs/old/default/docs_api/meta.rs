@@ -1,81 +1,73 @@
-use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+//! 根据 token 获取各类文件的元数据。
+//!
+//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
+
+use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
+use openlark_core::constants::AccessTokenType;
+use openlark_core::req_option::RequestOption;
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CcmDocsApiOld;
-
-/// 获取元数据请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetMetaRequest {
-    /// token列表
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct GetDocsMetaRequest {
     pub request_docs: Vec<RequestDoc>,
-    /// 是否获取更多信息
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub with_more_info: Option<bool>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct RequestDoc {
-    /// 文档 token
     pub docs_token: String,
-    /// 文档类型
     pub docs_type: String,
 }
 
-impl GetMetaRequest {
-    /// 创建新的 GetMetaRequest
-    pub fn new(request_docs: Vec<RequestDoc>) -> Self {
-        Self {
-            request_docs,
-            with_more_info: None,
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct GetDocsMetaResponse {
+    pub docs_metas: Vec<DocMeta>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct DocMeta {
+    pub docs_token: String,
+    pub docs_type: String,
+    pub title: String,
+    pub owner_id: String,
+    pub create_time: i64,
+    pub latest_modify_user_id: String,
+    pub latest_modify_time: i64,
+}
+
+impl ApiResponseTrait for GetDocsMetaResponse {
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
+    }
+}
+
+#[derive(Debug, Default)]
+pub struct GetDocsMetaBuilder {
+    api_req: ApiRequest<GetDocsMetaRequest>,
+}
+
+impl GetDocsMetaBuilder {
+    pub fn new() -> Self {
+        let mut builder = Self::default();
+        builder.api_req.req_type = "ccm_docs_meta_get".to_string();
+        builder.api_req.method = "POST".to_string();
+        builder.api_req.url = "https://open.feishu.cn/open-apis/suite/docs-api/meta".to_string();
+        builder.api_req.body = Some(GetDocsMetaRequest::default());
+        builder
+    }
+
+    pub fn request_docs(mut self, request_docs: Vec<RequestDoc>) -> Self {
+        if let Some(body) = &mut self.api_req.body {
+            body.request_docs = request_docs;
         }
-    }
-}
-
-/// 获取元数据响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetMetaResponse {
-    /// 元数据列表
-    pub docs_metas: Vec<serde_json::Value>,
-}
-
-impl ApiResponseTrait for GetMetaResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 获取元数据
-///
-/// 根据 token 获取各类文件的元数据。
-/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
-pub async fn meta(
-    request: GetMetaRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<GetMetaResponse>> {
-    let api_endpoint = CcmDocsApiOld::Meta;
-    let mut api_request: ApiRequest<GetMetaResponse> = ApiRequest::post(&api_endpoint.to_url())
-        .json_body(&request);
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+        self
     }
 
-    Transport::request(api_request, config, None).await
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_get_meta_request() {
-        let request = GetMetaRequest::new(vec![]);
-        assert!(request.request_docs.is_empty());
+    pub fn build(
+        self,
+        config: &openlark_core::config::Config,
+        option: &RequestOption,
+    ) -> Result<RequestBuilder, LarkAPIError> {
+        let mut req = self.api_req;
+        req.build(AccessTokenType::Tenant, config, option)
     }
 }

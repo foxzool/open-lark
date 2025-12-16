@@ -75,4 +75,4 @@ pub use filter::FilterApi;
 pub use float_image::FloatImageApi;
 pub use sheet::SheetApi;
 pub use sheet_operations::SheetOperationsApi;
-pub use self::spreadsheet::SpreadsheetApi;
+// pub use self::spreadsheet::SpreadsheetApi; // Generated: Module use not found

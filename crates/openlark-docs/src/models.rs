@@ -3,7 +3,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use openlark_core::api::Response;
+// use openlark_core::api::Response;
 
 /// 文档资源基础信息
 #[derive(Debug, Clone, Serialize, Deserialize)]

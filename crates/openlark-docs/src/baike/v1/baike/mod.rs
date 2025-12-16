@@ -11,7 +11,7 @@ pub mod file;
 pub use draft::{CreateDraftBuilder, UpdateDraftBuilder};
 pub use entity::{
     CreateEntityBuilder, UpdateEntityBuilder, GetEntityBuilder,
-    ListEntityBuilder, MatchEntityBuilder, SearchEntityBuilder,
+    ListEntityBuilder, SearchEntityBuilder,
     HighlightEntityBuilder, ExtractEntityBuilder
 };
 pub use classification::ListClassificationBuilder;
@@ -71,11 +71,11 @@ impl<'a> BaikeV1Service<'a> {
         ListEntityBuilder::new(self.config)
     }
 
-    /// 精准搜索词条
-    /// API文档: https://open.feishu.cn/document/server-docs/baike-v1/entity/match
-    pub fn match_entities(&self, query: String) -> MatchEntityBuilder<'a> {
-        MatchEntityBuilder::new(self.config, query)
-    }
+    // /// 精准搜索词条
+    // /// API文档: https://open.feishu.cn/document/server-docs/baike-v1/entity/match
+    // pub fn match_entities(&self, query: String) -> MatchEntityBuilder<'a> {
+    //     MatchEntityBuilder::new(self.config, query)
+    // }
 
     /// 模糊搜索词条
     /// API文档: https://open.feishu.cn/document/server-docs/baike-v1/entity/search

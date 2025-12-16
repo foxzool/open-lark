@@ -153,7 +153,7 @@ pub struct EntityExtractResult {
 }
 
 /// 文件上传请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct FileUploadRequest {
     /// 文件名
     pub file_name: String,

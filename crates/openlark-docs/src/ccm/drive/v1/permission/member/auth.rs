@@ -3,14 +3,13 @@
 /// 该接口用于根据 filetoken 判断当前登录用户是否具有某权限。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-member/auth
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 判断用户云文档权限请求
 #[derive(Debug, Clone, Serialize, Deserialize)]

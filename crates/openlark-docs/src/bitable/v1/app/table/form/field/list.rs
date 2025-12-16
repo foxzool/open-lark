@@ -2,18 +2,14 @@
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/form/field/list
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, HttpMethod, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::validation_error,
-    http::Transport,
-    standard_response::StandardResponse,
     SDKResult,
 };
 
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 
-use crate::common::{api_endpoints::BitableApiV1, api_utils::*};
 
 /// 表单字段问题
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

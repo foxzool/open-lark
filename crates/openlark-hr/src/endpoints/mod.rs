@@ -28,7 +28,7 @@
 //! ```
 
 // 导入核心端点（auth, application等基础端点）
-pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
+// pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 
 // ===== 考勤管理端点 (Attendance) =====
 

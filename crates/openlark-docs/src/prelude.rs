@@ -33,7 +33,7 @@ pub use crate::minutes::MinutesService;
 pub use crate::service::DocsService;
 
 #[cfg(feature = "docx")]
-pub use crate::docx::DocxService;
+pub use crate::ccm::docx::DocxService;
 
 #[cfg(feature = "wiki")]
 pub use crate::wiki::WikiService;

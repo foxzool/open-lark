@@ -13,21 +13,21 @@
 /// - 获取电子表格元数据
 
 // 重新启用已修复的模块
-pub mod batch_update; // ✅ 已修复
-pub mod content; // ✅ 已修复
-pub mod meta; // ✅ 已修复
-  pub mod sheet_meta; // ✅ 已修复
-pub mod create;
+// pub mod batch_update; // ✅ 已修复 // Generated: Module file not found
+// pub mod content; // ✅ 已修复 // Generated: Module file not found
+// pub mod meta; // ✅ 已修复 // Generated: Module file not found
+//   pub mod sheet_meta; // ✅ 已修复 // Generated: Module file not found
+// pub mod create; // Generated: Module file not found
 pub mod models;
-pub mod requests;
-pub mod responses;
+// pub mod requests; // Generated: Module file not found
+// pub mod responses; // Generated: Module file not found
 
 // 重新导出所有服务类型
-pub use batch_update::*;
-pub use content::*;
-pub use create::*;
-pub use meta::*;
-pub use sheet_meta::*; // ✅ 已修复
+// pub use batch_update::*; // Generated: Module use not found
+// pub use content::*; // Generated: Module use not found
+// pub use create::*; // Generated: Module use not found
+// pub use meta::*; // Generated: Module use not found
+// pub use sheet_meta::*; // ✅ 已修复 // Generated: Module use not found
 
 use openlark_core::config::Config;
 

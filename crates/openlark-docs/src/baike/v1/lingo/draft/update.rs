@@ -105,7 +105,7 @@ impl<'a> UpdateDraftBuilder<'a> {
     /// 执行更新草稿操作
     pub async fn execute(self) -> SDKResult<UpdateDraftResponse> {
         let path = format!("/open-apis/lingo/v1/drafts/{}", self.request.draft_id);
-        let mut api_request = ApiRequest::put(&path)
+        let mut api_request: ApiRequest<UpdateDraftResponse> = ApiRequest::put(&path)
             .body(serde_json::to_value(&self.request)?);
 
         let http_request = UnifiedRequestBuilder::build(
@@ -115,9 +115,8 @@ impl<'a> UpdateDraftBuilder<'a> {
             &RequestOption::default(),
         ).await?;
 
-        let response = self.config.http_client().execute(http_request).await?;
-        let raw_response = Response::from_reqwest_response(response).await?;
-
-        raw_response.into_result()
+        let response = http_request.send().await?;
+        let resp: Response<_> = response.json().await?;
+        resp.into_result()
     }
 }

@@ -3,14 +3,14 @@
 /// 获取指定文件的所有版本列表。
 /// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/versions
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::DriveApi, api_utils::*};
+use crate::common::api_endpoints::DriveApi;
 
 /// 获取文件版本列表请求
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -10,7 +10,7 @@ use openlark_core::{
 /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/batch_get_tmp_download_url
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::DriveApi, api_utils::*};
+use crate::common::api_endpoints::DriveApi;
 
 /// 获取素材临时下载链接请求
 #[derive(Debug, Clone, Serialize, Deserialize)]

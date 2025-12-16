@@ -4,6 +4,11 @@
 use openlark_core::config::Config;
 
 // 导出v1版本实现和模型
+pub mod lingo;
+pub use lingo::*;
+pub mod baike;
+pub use baike::*;
+
 pub mod v1;
 pub mod models;
 

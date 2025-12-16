@@ -16,7 +16,7 @@ pub mod models_docx;
 // 重新导出常用类型，方便其他模块使用
 pub use common_types::*;
 
-/// API服务实现 (临时注释以修复编译问题)
+/// API服务实现
 // pub mod services;
 
 /// v1版本API
