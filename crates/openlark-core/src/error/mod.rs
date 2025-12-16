@@ -9,13 +9,13 @@ use uuid::Uuid;
 pub use self::codes::{ErrorCategory, ErrorCode};
 pub use self::context::{ErrorContext, ErrorContextBuilder};
 pub use self::core::{RecoveryStrategy, RetryPolicy};
-pub use self::core_v3::{
+pub use self::core::{
     api_error, authentication_error, business_error, configuration_error, network_error,
     network_error_with_details, permission_missing_error, rate_limit_error, serialization_error,
     service_unavailable_error, sso_token_invalid_error, timeout_error, token_expired_error,
     token_invalid_error, user_identity_invalid_error, validation_error,
 };
-pub use self::core_v3::{ApiError, BuilderKind, CoreError, ErrorBuilder, ErrorRecord};
+pub use self::core::{ApiError, BuilderKind, CoreError, ErrorBuilder, ErrorRecord};
 pub use self::kinds::ErrorKind;
 pub use self::traits::{ErrorContextTrait, ErrorFormatTrait, ErrorTrait, FullErrorTrait};
 pub use self::traits::{ErrorSeverity, ErrorType};
@@ -32,8 +32,7 @@ pub type LegacyCoreError = CoreError;
 // 核心模块
 pub mod codes;
 pub mod context;
-pub mod core; // 仅保留重试策略等基础设施
-pub mod core_v3; // 主实现
+pub mod core; // 主实现（含重试策略与错误定义）
 pub mod kinds;
 pub mod traits;
 

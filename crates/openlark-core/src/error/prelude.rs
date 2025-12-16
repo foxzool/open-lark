@@ -6,7 +6,7 @@
 pub use super::codes::ErrorCode;
 pub use super::context::ErrorContext;
 pub use super::core::{RecoveryStrategy, RetryPolicy};
-pub use super::core_v3::{BuilderKind, ErrorBuilder, ErrorRecord};
+pub use super::core::{BuilderKind, ErrorBuilder, ErrorRecord};
 pub use super::kinds::ErrorKind;
 pub use super::traits::{ErrorSeverity, ErrorType};
 pub use super::{CoreError, ErrorId, LarkAPIError, SDKResult};
@@ -14,7 +14,7 @@ pub use super::{CoreError, ErrorId, LarkAPIError, SDKResult};
 // 特征系统重新导出
 pub use super::traits::{ErrorContextTrait, ErrorFormatTrait, ErrorTrait, FullErrorTrait};
 
-pub use super::core_v3::{
+pub use super::core::{
     api_error, authentication_error, business_error, configuration_error, network_error,
     network_error_with_details, rate_limit_error, serialization_error, service_unavailable_error,
     timeout_error, validation_error,
