@@ -1,97 +1,93 @@
-use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+//! 根据搜索条件进行文档搜索。
+//!
+//! doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search
+
+use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
+use openlark_core::constants::AccessTokenType;
+use openlark_core::req_option::RequestOption;
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CcmDocsApiOld;
-
-/// 搜索云文档请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SearchObjectRequest {
-    /// 关键词
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub search_key: Option<String>,
-    /// 数量
-    pub count: Option<i32>,
-    /// 偏移
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offset: Option<i32>,
-    /// 所有者IDs
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub count: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_ids: Option<Vec<String>>,
-    /// 聊天IDs
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_ids: Option<Vec<String>>,
-    /// 文档类型
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub docs_types: Option<Vec<String>>,
-    /// 文档创建时间范围
-    pub docs_create_time_start: Option<i64>,
-    pub docs_create_time_end: Option<i64>,
-    /// 文档打开时间范围
-    pub docs_open_time_start: Option<i64>,
-    pub docs_open_time_end: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub docs_sort_type: Option<String>,
 }
 
-impl SearchObjectRequest {
-    /// 创建新的 SearchObjectRequest
-    pub fn new() -> Self {
-        Self {
-            search_key: None,
-            count: None,
-            offset: None,
-            owner_ids: None,
-            chat_ids: None,
-            docs_types: None,
-            docs_create_time_start: None,
-            docs_create_time_end: None,
-            docs_open_time_start: None,
-            docs_open_time_end: None,
-        }
-    }
-}
-
-/// 搜索云文档响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SearchObjectResponse {
-    /// 文档列表
-    pub docs_entities: Vec<serde_json::Value>,
-    /// 总数
-    pub total: i32,
-    /// 是否有更多
+    pub docs_entities: Vec<DocEntity>,
     pub has_more: bool,
+    pub total: i32,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct DocEntity {
+    pub docs_token: String,
+    pub docs_type: String,
+    pub title: String,
+    pub owner_id: String,
 }
 
 impl ApiResponseTrait for SearchObjectResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+    fn data_format() -> openlark_core::api::ResponseFormat {
+        openlark_core::api::ResponseFormat::Data
     }
 }
 
-/// 搜索云文档
-///
-/// 根据搜索条件进行文档搜索。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search
-pub async fn object(
-    request: SearchObjectRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<SearchObjectResponse>> {
-    let api_endpoint = CcmDocsApiOld::SearchObject;
-    let mut api_request: ApiRequest<SearchObjectResponse> = ApiRequest::post(&api_endpoint.to_url())
-        .json_body(&request);
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    Transport::request(api_request, config, None).await
+#[derive(Debug, Default)]
+pub struct SearchObjectBuilder {
+    api_req: ApiRequest<SearchObjectRequest>,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+impl SearchObjectBuilder {
+    pub fn new() -> Self {
+        let mut builder = Self::default();
+        builder.api_req.req_type = "ccm_docs_search_object".to_string();
+        builder.api_req.method = "POST".to_string();
+        builder.api_req.url = "https://open.feishu.cn/open-apis/suite/docs-api/search/object".to_string();
+        builder.api_req.body = Some(SearchObjectRequest::default());
+        builder
+    }
 
-    #[test]
-    fn test_search_object_request() {
-        let _request = SearchObjectRequest::new();
+    pub fn search_key(mut self, search_key: impl ToString) -> Self {
+        if let Some(body) = &mut self.api_req.body {
+            body.search_key = Some(search_key.to_string());
+        }
+        self
+    }
+
+    pub fn offset(mut self, offset: i32) -> Self {
+        if let Some(body) = &mut self.api_req.body {
+            body.offset = Some(offset);
+        }
+        self
+    }
+
+    pub fn count(mut self, count: i32) -> Self {
+        if let Some(body) = &mut self.api_req.body {
+            body.count = Some(count);
+        }
+        self
+    }
+
+    pub fn build(
+        self,
+        config: &openlark_core::config::Config,
+        option: &RequestOption,
+    ) -> Result<RequestBuilder, LarkAPIError> {
+        let mut req = self.api_req;
+        req.build(AccessTokenType::Tenant, config, option)
     }
 }

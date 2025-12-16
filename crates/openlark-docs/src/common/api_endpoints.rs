@@ -2020,7 +2020,7 @@ impl SheetsApiV3 {
 }
 
 // Sheets API v3 端点
-pub const SheetsApiV3: &str = "/open-apis/sheets/v3";
+pub const SHEETS_API_V3: &str = "/open-apis/sheets/v3";
 
 // ============================================================================
 // Baike API v1 端点定义
@@ -2128,7 +2128,7 @@ impl BaikeApiV1 {
 }
 
 // Baike API v1 端点
-pub const BaikeApiV1: &str = "/open-apis/baike/v1";
+pub const BAIKE_API_V1: &str = "/open-apis/baike/v1";
 
 // ============================================================================
 // Lingo API v1 端点定义
@@ -2214,4 +2214,4 @@ impl LingoApiV1 {
 }
 
 // Lingo API v1 端点
-pub const LingoApiV1: &str = "/open-apis/lingo/v1";
+pub const LINGO_API_V1: &str = "/open-apis/lingo/v1";

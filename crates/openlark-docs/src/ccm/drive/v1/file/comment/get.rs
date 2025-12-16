@@ -3,14 +3,13 @@
 /// 获取云文档中的某条评论。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/get
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 获取全文评论请求
 #[derive(Debug, Clone, Serialize, Deserialize)]

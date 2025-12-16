@@ -29,23 +29,11 @@ impl CcmDocService {
         &self.config
     }
 
-    /// 获取V1版本API
-    pub fn v1(&self) -> crate::ccm::ccm_doc::v1::CcmDocV1Service {
-        crate::ccm::ccm_doc::v1::CcmDocV1Service::new(self.config.clone())
-    }
-
-    /// 获取旧版版本API（兼容性保留）
-    pub fn old(&self) -> crate::ccm::ccm_doc::old::v1::CcmDocOldV1 {
-        crate::ccm::ccm_doc::old::v1::CcmDocOldV1::new(self.config.clone())
-    }
-
-    /// 获取V2版本API
-    pub fn v2(&self) -> crate::ccm::ccm_doc::v2::CcmDocV2 {
-        crate::ccm::ccm_doc::v2::CcmDocV2::new(self.config.clone())
-    }
+    // /// 获取旧版版本API
+    // pub fn old(&self) -> crate::ccm::ccm_doc::old::v1::CcmDocOldV1 {
+    //     crate::ccm::ccm_doc::old::v1::CcmDocOldV1::new(self.config.clone())
+    // }
 }
 
 // 导出版本模块
 pub mod old;
-pub mod v1;
-pub mod v2;

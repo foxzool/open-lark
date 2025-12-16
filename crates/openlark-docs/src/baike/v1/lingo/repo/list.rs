@@ -33,7 +33,7 @@ impl<'a> ListRepoBuilder<'a> {
 
     /// 执行获取词库列表操作
     pub async fn execute(self) -> SDKResult<ListRepoResponse> {
-        let mut api_request = ApiRequest::get("/open-apis/lingo/v1/repos");
+        let mut api_request: ApiRequest<ListRepoResponse> = ApiRequest::get("/open-apis/lingo/v1/repos");
 
         let http_request = UnifiedRequestBuilder::build(
             &mut api_request,
@@ -42,9 +42,8 @@ impl<'a> ListRepoBuilder<'a> {
             &RequestOption::default(),
         ).await?;
 
-        let response = self.config.http_client().execute(http_request).await?;
-        let raw_response = Response::from_reqwest_response(response).await?;
-
-        raw_response.into_result()
+        let response = http_request.send().await?;
+        let resp: Response<_> = response.json().await?;
+        resp.into_result()
     }
 }

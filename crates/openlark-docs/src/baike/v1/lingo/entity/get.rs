@@ -59,7 +59,7 @@ impl<'a> GetEntityBuilder<'a> {
     /// 执行获取词条详情操作
     pub async fn execute(self) -> SDKResult<GetEntityResponse> {
         let path = format!("/open-apis/lingo/v1/entities/{}", self.entity_id);
-        let mut api_request = ApiRequest::get(&path);
+        let mut api_request: ApiRequest<GetEntityResponse> = ApiRequest::get(&path);
 
         let http_request = UnifiedRequestBuilder::build(
             &mut api_request,
@@ -68,9 +68,8 @@ impl<'a> GetEntityBuilder<'a> {
             &RequestOption::default(),
         ).await?;
 
-        let response = self.config.http_client().execute(http_request).await?;
-        let raw_response = Response::from_reqwest_response(response).await?;
-
-        raw_response.into_result()
+        let response = http_request.send().await?;
+        let resp: Response<_> = response.json().await?;
+        resp.into_result()
     }
 }

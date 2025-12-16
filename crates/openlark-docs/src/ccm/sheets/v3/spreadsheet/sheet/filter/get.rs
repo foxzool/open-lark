@@ -10,7 +10,7 @@ use openlark_core::{
 /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter/get
 use serde::{Deserialize, Serialize};
 
-use super::{FilterData, FilterRange, FilterCondition};
+use super::FilterData;
 use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
 
 use serde_json::json;

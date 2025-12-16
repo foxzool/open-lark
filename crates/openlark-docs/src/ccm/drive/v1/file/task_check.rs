@@ -11,7 +11,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::DriveApi, api_utils::*};
+use crate::common::api_utils::*;
 
 /// 查询异步任务状态请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
-use openlark_core::api::Response;
 
 // ============================================================================
 // 基础类型定义

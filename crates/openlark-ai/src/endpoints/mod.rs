@@ -33,7 +33,7 @@
 //! ```
 
 // 导入核心端点（auth, application等基础端点）
-pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
+// pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 
 // ==================== Document AI (文档AI识别) ====================
 // 文档AI识别服务 - 支持各种证件和文档的智能识别

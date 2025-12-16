@@ -62,6 +62,8 @@ pub mod service;
 // 功能模块按业务域组织
 #[cfg(feature = "ccm")]
 pub mod ccm;
+pub mod base;
+
 
 #[cfg(feature = "bitable")]
 pub mod bitable;

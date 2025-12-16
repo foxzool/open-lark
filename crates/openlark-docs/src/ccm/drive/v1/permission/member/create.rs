@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -10,7 +10,7 @@ use openlark_core::{
 /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/create
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::DriveApi, api_utils::*};
+use crate::common::api_endpoints::DriveApi;
 
 /// 添加协作者请求
 #[derive(Debug, Clone, Serialize, Deserialize)]

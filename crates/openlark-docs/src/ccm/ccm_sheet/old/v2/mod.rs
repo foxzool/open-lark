@@ -20,211 +20,47 @@ impl CcmSheetOldV2 {
         &self.config
     }
 
-    /// 操作工作表
-    pub fn operatesheets(&self) -> operatesheets::OperateSheetsRequest {
-        operatesheets::OperateSheetsRequest::new(self.config.clone())
-    }
-
-    /// 读取单个范围
-    pub fn readsinglerange(&self) -> readsinglerange::ReadSingleRangeRequest {
-        readsinglerange::ReadSingleRangeRequest::new(self.config.clone())
-    }
-
-    /// 写入单个范围
-    pub fn writesinglerange(&self) -> writesinglerange::WriteSingleRangeRequest {
-        writesinglerange::WriteSingleRangeRequest::new(self.config.clone())
-    }
-
-    /// 合并单元格
-    pub fn mergecells(&self) -> mergecells::MergeCellsRequest {
-        mergecells::MergeCellsRequest::new(self.config.clone())
-    }
-
-    /// 拆分单元格
-    pub fn unmergecells(&self) -> unmergecells::UnmergeCellsRequest {
-        unmergecells::UnmergeCellsRequest::new(self.config.clone())
-    }
-
-    /// 更新工作表属性
-    pub fn updatesheetproperties(&self) -> updatesheetproperties::UpdateSheetPropertiesRequest {
-        updatesheetproperties::UpdateSheetPropertiesRequest::new(self.config.clone())
-    }
-
-    /// 增加行列
-    pub fn adddimensionrange(&self) -> adddimensionrange::AddDimensionRangeRequest {
-        adddimensionrange::AddDimensionRangeRequest::new(self.config.clone())
-    }
-
-    /// 插入行列
-    pub fn insertdimensionrange(&self) -> insertdimensionrange::InsertDimensionRangeRequest {
-        insertdimensionrange::InsertDimensionRangeRequest::new(self.config.clone())
-    }
-
-    /// 更新行列
-    pub fn updatedimensionrange(&self) -> updatedimensionrange::UpdateDimensionRangeRequest {
-        updatedimensionrange::UpdateDimensionRangeRequest::new(self.config.clone())
-    }
-
-    /// 删除行列
-    pub fn deletedimensionrange(&self) -> deletedimensionrange::DeleteDimensionRangeRequest {
-        deletedimensionrange::DeleteDimensionRangeRequest::new(self.config.clone())
-    }
-
-    /// 设置单元格样式
-    pub fn setstyle(&self) -> setstyle::SetStyleRequest {
-        setstyle::SetStyleRequest::new(self.config.clone())
-    }
-
-    /// 插入数据
-    pub fn insertvalues(&self) -> insertvalues::InsertValuesRequest {
-        insertvalues::InsertValuesRequest::new(self.config.clone())
-    }
-
-    /// 读取多个范围
-    pub fn readmultipleranges(&self) -> readmultipleranges::ReadMultipleRangesRequest {
-        readmultipleranges::ReadMultipleRangesRequest::new(self.config.clone())
-    }
-
-    /// 批量写入范围
-    pub fn batchwriteranges(&self) -> batchwriteranges::BatchWriteRangesRequest {
-        batchwriteranges::BatchWriteRangesRequest::new(self.config.clone())
-    }
-
-    /// 写入图片
-    pub fn writeimage(&self) -> writeimage::WriteImageRequest {
-        writeimage::WriteImageRequest::new(self.config.clone())
-    }
-
-    /// 批量设置单元格样式
-    pub fn batchsetstyle(&self) -> batchsetstyle::BatchSetStyleRequest {
-        batchsetstyle::BatchSetStyleRequest::new(self.config.clone())
-    }
-
-    /// 追加数据
-    pub fn appendvalues(&self) -> appendvalues::AppendValuesRequest {
-        appendvalues::AppendValuesRequest::new(self.config.clone())
-    }
-
-    /// 增加保护范围
-    pub fn addprotectedrange(&self) -> addprotectedrange::AddProtectedRangeRequest {
-        addprotectedrange::AddProtectedRangeRequest::new(self.config.clone())
-    }
-
-    /// 更新保护范围
-    pub fn updateprotectedrange(&self) -> updateprotectedrange::UpdateProtectedRangeRequest {
-        updateprotectedrange::UpdateProtectedRangeRequest::new(self.config.clone())
-    }
-
-    /// 获取保护范围
-    pub fn getprotectedrange(&self) -> getprotectedrange::GetProtectedRangeRequest {
-        getprotectedrange::GetProtectedRangeRequest::new(self.config.clone())
-    }
-
-    /// 删除保护范围
-    pub fn deleteprotectedrange(&self) -> deleteprotectedrange::DeleteProtectedRangeRequest {
-        deleteprotectedrange::DeleteProtectedRangeRequest::new(self.config.clone())
-    }
-
-    /// 创建数据验证规则
-    pub fn setdropdown(&self) -> setdropdown::SetDropdownRequest {
-        setdropdown::SetDropdownRequest::new(self.config.clone())
-    }
-
-    /// 更新数据验证规则
-    pub fn updatedropdown(&self) -> updatedropdown::UpdateDropdownRequest {
-        updatedropdown::UpdateDropdownRequest::new(self.config.clone())
-    }
-
-    /// 获取数据验证规则
-    pub fn getdropdown(&self) -> getdropdown::GetDropdownRequest {
-        getdropdown::GetDropdownRequest::new(self.config.clone())
-    }
-
-    /// 删除数据验证规则
-    pub fn deletedropdown(&self) -> deletedropdown::DeleteDropdownRequest {
-        deletedropdown::DeleteDropdownRequest::new(self.config.clone())
-    }
-
-    /// 批量创建条件格式
-    pub fn createconditionformat(&self) -> createconditionformat::CreateConditionFormatRequest {
-        createconditionformat::CreateConditionFormatRequest::new(self.config.clone())
-    }
-
-    /// 批量更新条件格式
-    pub fn updateconditionformat(&self) -> updateconditionformat::UpdateConditionFormatRequest {
-        updateconditionformat::UpdateConditionFormatRequest::new(self.config.clone())
-    }
-
-    /// 获取条件格式
-    pub fn getconditionformat(&self) -> getconditionformat::GetConditionFormatRequest {
-        getconditionformat::GetConditionFormatRequest::new(self.config.clone())
-    }
-
-    /// 批量删除条件格式
-    pub fn deleteconditionformat(&self) -> deleteconditionformat::DeleteConditionFormatRequest {
-        deleteconditionformat::DeleteConditionFormatRequest::new(self.config.clone())
-    }
-
-    /// 获取表格元数据
-    pub fn getspreadsheetmeta(&self) -> getspreadsheetmeta::GetSpreadsheetMetaRequest {
-        getspreadsheetmeta::GetSpreadsheetMetaRequest::new(self.config.clone())
-    }
-
-    /// 更新表格属性
-    pub fn updatespreadsheetproperties(
-        &self,
-    ) -> updatespreadsheetproperties::UpdateSpreadsheetPropertiesRequest {
-        updatespreadsheetproperties::UpdateSpreadsheetPropertiesRequest::new(self.config.clone())
-    }
-
-    /// 导入表格
-    pub fn importspreadsheet(&self) -> importspreadsheet::ImportSpreadsheetRequest {
-        importspreadsheet::ImportSpreadsheetRequest::new(self.config.clone())
-    }
-
-    /// 查询导入结果
-    pub fn getimportresult(&self) -> getimportresult::GetImportResultRequest {
-        getimportresult::GetImportResultRequest::new(self.config.clone())
-    }
+    // 所有API实现已移除，因为对应的子模块已在清理中被删除
+    // 如果需要以前的功能，请参考git历史恢复相关文件
 }
 
 // 导出所有API模块
-pub mod adddimensionrange;
-pub mod addprotectedrange;
-pub mod appendvalues;
-pub mod batchsetstyle;
-pub mod batchwriteranges;
-pub mod createconditionformat;
-pub mod deleteconditionformat;
-pub mod deletedimensionrange;
-pub mod deletedropdown;
-pub mod deleteprotectedrange;
-pub mod getconditionformat;
-pub mod getdropdown;
-pub mod getimportresult;
-pub mod getprotectedrange;
-pub mod getspreadsheetmeta;
-pub mod importspreadsheet;
-pub mod insertdimensionrange;
-pub mod insertvalues;
-pub mod mergecells;
-pub mod operatesheets;
-pub mod readmultipleranges;
-pub mod readsinglerange;
-pub mod setdropdown;
-pub mod setstyle;
-pub mod unmergecells;
-pub mod updateconditionformat;
-pub mod updatedimensionrange;
-pub mod updatedropdown;
-pub mod updateprotectedrange;
-pub mod updatesheetproperties;
-pub mod updatespreadsheetproperties;
-pub mod writeimage;
-pub mod writesinglerange;
+// pub mod adddimensionrange; // Generated: Module file not found
+// pub mod addprotectedrange; // Generated: Module file not found
+// pub mod appendvalues; // Generated: Module file not found
+// pub mod batchsetstyle; // Generated: Module file not found
+// pub mod batchwriteranges; // Generated: Module file not found
+// pub mod createconditionformat; // Generated: Module file not found
+// pub mod deleteconditionformat; // Generated: Module file not found
+// pub mod deletedimensionrange; // Generated: Module file not found
+// pub mod deletedropdown; // Generated: Module file not found
+// pub mod deleteprotectedrange; // Generated: Module file not found
+// pub mod getconditionformat; // Generated: Module file not found
+// pub mod getdropdown; // Generated: Module file not found
+// pub mod getimportresult; // Generated: Module file not found
+// pub mod getprotectedrange; // Generated: Module file not found
+// pub mod getspreadsheetmeta; // Generated: Module file not found
+// pub mod importspreadsheet; // Generated: Module file not found
+// pub mod insertdimensionrange; // Generated: Module file not found
+// pub mod insertvalues; // Generated: Module file not found
+// pub mod mergecells; // Generated: Module file not found
+// pub mod operatesheets; // Generated: Module file not found
+// pub mod readmultipleranges; // Generated: Module file not found
+// pub mod readsinglerange; // Generated: Module file not found
+// pub mod setdropdown; // Generated: Module file not found
+// pub mod setstyle; // Generated: Module file not found
+// pub mod unmergecells; // Generated: Module file not found
+// pub mod updateconditionformat; // Generated: Module file not found
+// pub mod updatedimensionrange; // Generated: Module file not found
+// pub mod updatedropdown; // Generated: Module file not found
+// pub mod updateprotectedrange; // Generated: Module file not found
+// pub mod updatesheetproperties; // Generated: Module file not found
+// pub mod updatespreadsheetproperties; // Generated: Module file not found
+// pub mod writeimage; // Generated: Module file not found
+// pub mod writesinglerange; // Generated: Module file not found
 
 // 新增的函数式API模块
-pub mod spreadsheets;
+// pub mod spreadsheets; // Generated: Module file not found
 
 // 重新导出所有函数式API，方便外部调用
 pub use crate::ccm::sheets::*;

@@ -1,8 +1,8 @@
 import csv
 import os
 
-TARGET_TAGS = {'ccm'}
-TARGET_PROJECT = 'wiki'
+TARGET_TAGS = {'ccm', 'base', 'baike', 'minutes'}
+TARGET_PROJECT = None
 
 def check_apis():
     csv_path = '../../api_list_export.csv'
@@ -44,14 +44,17 @@ def check_apis():
                 segments = name.split('/')
                 norm_segments = []
                 for seg in segments:
+                    if not seg:
+                        continue
                     if seg.startswith(':'):
                         # Parameter: :folderToken -> _folder_token
                         param_name = seg[1:]
                         norm_segments.append(f"_{to_snake(param_name)}")
                     else:
-                        norm_segments.append(seg)
+                        # Normalize all segments to snake_case to match Rust conventions
+                        norm_segments.append(to_snake(seg))
                 
-                norm_name_path = "/".join(norm_segments)
+                norm_name_path = "/".join(norm_segments).replace('#', '_')
 
                 # Construct file path
                 # src/bizTag/project/version/resource/name.rs

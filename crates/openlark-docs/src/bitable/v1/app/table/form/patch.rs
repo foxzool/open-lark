@@ -1,7 +1,6 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::Response,
     config::Config,
-    http::Transport,
     SDKResult,
 };
 /// Bitable 更新表单问题API
@@ -112,9 +111,9 @@ impl Default for PatchFormQuestionRequestBuilder {
 
 /// 更新表单问题
 pub async fn patch_form_question(
-    request: PatchFormQuestionRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
+    _request: PatchFormQuestionRequest,
+    _config: &Config,
+    _option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<Response<PatchFormQuestionResponse>> {
     // TODO: 实现API调用
     unimplemented!("API implementation pending")

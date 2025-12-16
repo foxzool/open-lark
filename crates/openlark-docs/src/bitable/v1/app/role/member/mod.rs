@@ -18,7 +18,6 @@ pub mod models;
 pub use batch_create::*;
 pub use batch_delete::*;
 pub use create::*;
-pub use delete::*;
 pub use list::*;
 pub use models::*;
 

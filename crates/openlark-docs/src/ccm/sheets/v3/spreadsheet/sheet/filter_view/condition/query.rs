@@ -10,7 +10,6 @@ use openlark_core::{
 /// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter_view/spreadsheet-sheet-filter_view-condition/query
 use serde::{Deserialize, Serialize};
 
-use super::create::*;
 use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
 
 /// 查询筛选条件响应

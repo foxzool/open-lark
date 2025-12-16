@@ -3,14 +3,14 @@
 /// 获取文件的查看记录列表，包括查看者、查看时间等信息。
 /// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/view_records
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::DriveApi, api_utils::*};
+use crate::common::api_endpoints::DriveApi;
 
 /// 获取文件查看记录请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
