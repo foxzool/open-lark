@@ -37,6 +37,7 @@ impl LingoService {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use openlark_core::trait_system::service::Service;
 
     #[test]
     fn test_lingo_service_creation() {

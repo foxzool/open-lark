@@ -250,6 +250,7 @@ impl ApiResponseTrait for MoveDocsToWikiResponse {
 }
 
 /// 知识空间节点管理服务
+#[derive(Clone, Debug)]
 pub struct NodesService {
     config: Config,
 }

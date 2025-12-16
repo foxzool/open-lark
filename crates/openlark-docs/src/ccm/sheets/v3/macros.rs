@@ -19,7 +19,7 @@ pub type CellValue = serde_json::Value;
 pub type SheetPagedResponse<T> = Vec<T>;
 
 /// 宏类型
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MacroType {
     /// VBA宏
     #[serde(rename = "VBA")]
@@ -684,6 +684,7 @@ impl openlark_core::api::ApiResponseTrait for GetMacroStatusResponse {
 }
 
 /// Sheets电子表格宏服务 v3
+#[derive(Clone, Debug)]
 pub struct MacroService {
     config: openlark_core::config::Config,
 }
@@ -1085,6 +1086,7 @@ mod tests {
                 false,
             ))
             .async_execution(true)
+            .build()
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1123,6 +1125,7 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
             .macro_script(script)
+            .build()
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1145,6 +1148,7 @@ mod tests {
         let request = GetMacroStatusRequest::builder()
             .spreadsheet_token("token123".to_string())
             .execution_id("execution123".to_string())
+            .build()
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1153,7 +1157,7 @@ mod tests {
 
     #[test]
     fn test_macro_service_creation() {
-        let config = openlark_core::config::openlark_core::config::Config::default();
+        let config = openlark_core::config::Config::default();
         let service = MacroService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }
@@ -1199,6 +1203,7 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .sheet_id("sheet123".to_string())
             .macro_script(vba_script)
+            .build()
             .unwrap();
 
         assert_eq!(vba_request.macro_script.macro_type, MacroType::VBA);
@@ -1218,6 +1223,7 @@ mod tests {
             .macro_name("DataValidator".to_string())
             .add_parameter(MacroParameter::array("data".to_string(), vec![], false))
             .async_execution(false)
+            .build()
             .unwrap();
 
         assert_eq!(js_request.macro_name, "DataValidator");
@@ -1236,6 +1242,7 @@ mod tests {
             .macro_name("Calculator".to_string())
             .parameters(vec![])
             .async_execution(true)
+            .build()
             .unwrap();
 
         assert_eq!(formula_request.macro_name, "Calculator");

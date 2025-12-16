@@ -1,49 +1,66 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response},
-    error::DocsResult,
-    req_option::RequestOption,
-    constants::AccessTokenType,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
-use crate::service::DocsService;
+/// 上传分片
+///
+/// 上传文件分片数据。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/upload_part
+use serde::{Deserialize, Serialize};
 
-// Builder
-#[derive(Debug)]
-pub struct UploadPartBuilder<'a> {
-    client: &'a DocsService<'a>,
-    upload_id: String,
-    seq: i32,
-    size: i32,
-    data: Vec<u8>,
-    checksum: Option<String>,
+use crate::common::api_endpoints::DriveApi;
+
+/// 上传分片请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UploadPartRequest {
+    /// 上传会话ID
+    pub upload_id: String,
+    /// 分片序号
+    pub seq: i32,
+    /// 分片大小
+    pub size: i64,
 }
 
-impl<'a> UploadPartBuilder<'a> {
-    pub fn new(client: &'a DocsService<'a>, upload_id: impl Into<String>, seq: i32, size: i32, data: Vec<u8>) -> Self {
-        Self { client, upload_id: upload_id.into(), seq, size, data, checksum: None }
-    }
-
-    pub fn checksum(mut self, checksum: impl Into<String>) -> Self {
-        self.checksum = Some(checksum.into());
-        self
-    }
-
-    pub async fn send(self) -> DocsResult<Response<UploadPartResponse>> {
-        let mut req = ApiRequest::post("/open-apis/drive/v1/files/upload_part");
-        // Simplified body
-        let mut body = serde_json::Map::new();
-        body.insert("upload_id".to_string(), serde_json::json!(self.upload_id));
-        body.insert("seq".to_string(), serde_json::json!(self.seq));
-        body.insert("size".to_string(), serde_json::json!(self.size));
-        if let Some(c) = self.checksum {
-             body.insert("checksum".to_string(), serde_json::json!(c));
+impl UploadPartRequest {
+    pub fn new(upload_id: impl Into<String>, seq: i32, size: i64) -> Self {
+        Self {
+            upload_id: upload_id.into(),
+            seq,
+            size,
         }
-        req = req.body(serde_json::Value::Object(body));
-        self.client.request(req).await
     }
 }
 
-// Response
-#[derive(Debug, serde::Deserialize)]
-pub struct UploadPartResponse {}
+/// 上传分片响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UploadPartResponse {
+    /// 是否成功
+    pub success: Option<bool>,
+}
 
-impl ApiResponseTrait for UploadPartResponse {}
+impl ApiResponseTrait for UploadPartResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 上传分片
+pub async fn upload_part(
+    request: UploadPartRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<UploadPartResponse>> {
+    let api_endpoint = DriveApi::UploadPart;
+
+    let mut api_request: ApiRequest<UploadPartResponse> =
+        ApiRequest::post(&api_endpoint.to_url())
+            .body(serde_json::json!(&request));
+
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
+
+    Transport::request(api_request, config, None).await
+}

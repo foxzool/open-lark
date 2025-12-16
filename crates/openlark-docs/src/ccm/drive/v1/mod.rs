@@ -15,26 +15,26 @@
 
 pub mod file;
 pub mod meta;
-pub mod upload;
+// pub mod upload;
 pub mod media;
 pub mod permission;
 pub mod import_task;
 pub mod export_task;
 pub mod file_version;
-pub mod task_check;
+// pub mod task_check;
 pub mod password;
 pub mod search;
 
 // 重新导出所有模块
 pub use file::*;
 pub use meta::*;
-pub use upload::*;
+// pub use upload::*;
 pub use media::*;
 pub use permission::*;
 pub use import_task::*;
 pub use export_task::*;
 pub use file_version::*;
 pub use comment::*;
-pub use task_check::*;
+// pub use task_check::*;
 pub use password::*;
 pub use search::*;

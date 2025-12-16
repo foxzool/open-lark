@@ -1,35 +1,69 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response},
-    error::DocsResult,
-    req_option::RequestOption,
-    constants::AccessTokenType,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
-use crate::service::DocsService;
+/// 获取导出任务状态
+///
+/// 获取导出任务的执行状态。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/export_task/get
+use serde::{Deserialize, Serialize};
 
-// Builder
-#[derive(Debug)]
-pub struct GetBuilder<'a> {
-    client: &'a DocsService<'a>,
-    ticket: String,
-    token: String,
+use crate::common::api_endpoints::DriveApi;
+
+/// 获取导出任务请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetExportTaskRequest {
+    /// 任务ticket
+    pub ticket: String,
+    /// 文件token
+    pub token: String,
 }
 
-impl<'a> GetBuilder<'a> {
-    pub fn new(client: &'a DocsService<'a>, ticket: impl Into<String>, token: impl Into<String>) -> Self {
-        Self { client, ticket: ticket.into(), token: token.into() }
+impl GetExportTaskRequest {
+    pub fn new(ticket: impl Into<String>, token: impl Into<String>) -> Self {
+        Self {
+            ticket: ticket.into(),
+            token: token.into(),
+        }
+    }
+}
+
+/// 获取导出任务响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetExportTaskResponse {
+    /// 任务状态
+    pub job_status: Option<i32>,
+    /// 错误信息
+    pub job_error_msg: Option<String>,
+    /// 下载token
+    pub file_token: Option<String>,
+    /// 文件大小
+    pub file_size: Option<i64>,
+}
+
+impl ApiResponseTrait for GetExportTaskResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 获取导出任务状态
+pub async fn get_export_task(
+    request: GetExportTaskRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<GetExportTaskResponse>> {
+    let api_endpoint = DriveApi::GetExportTask(request.ticket.clone());
+
+    let mut api_request: ApiRequest<GetExportTaskResponse> =
+        ApiRequest::get(&api_endpoint.to_url())
+            .query("token", &request.token);
+
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    pub async fn send(self) -> DocsResult<Response<GetResponse>> {
-        let mut req = ApiRequest::get(format!("/open-apis/drive/v1/export_tasks/{}", self.ticket));
-        req = req.query("token", &self.token);
-        self.client.request(req).await
-    }
+    Transport::request(api_request, config, None).await
 }
-
-// Response
-#[derive(Debug, serde::Deserialize)]
-pub struct GetResponse {
-    pub result: serde_json::Value,
-}
-
-impl ApiResponseTrait for GetResponse {}

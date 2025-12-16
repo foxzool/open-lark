@@ -84,7 +84,7 @@ impl DocsService {
     /// use open_lark::prelude::*;
     /// use open_lark::service::docs::DocsService;
     ///
-    /// let config = openlark_core::config::Config::new("app_id", "app_secret");
+    /// let config = openlark_core::config::Config::builder().app_id("app_id").app_secret("app_secret").build();
     /// let service = DocsService::new(config);
     /// ```
     pub fn new(config: Config) -> Self {
@@ -113,6 +113,7 @@ impl openlark_core::trait_system::Service for DocsService {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use openlark_core::trait_system::service::Service;
     use openlark_core::trait_system::Service;
 
     #[test]

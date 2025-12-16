@@ -11,11 +11,13 @@ pub mod subscribe;
 pub mod comment;
 pub mod version;
 pub mod statistics;
-pub mod view_records;
+pub mod view_record;
 pub mod upload_all;
 pub mod upload_prepare;
 pub mod upload_part;
 pub mod upload_finish;
+pub mod task_check;
+pub mod get_subscribe;
 
 // 重新导出所有API函数
 pub use delete_subscribe::*;
@@ -29,7 +31,9 @@ pub use subscribe::*;
 pub use comment::*;
 pub use version::*;
 pub use statistics::*;
-pub use view_records::*;
+pub use view_record::*;
+pub use task_check::*;
+pub use get_subscribe::*;
 pub use upload_all::*;
 pub use upload_prepare::*;
 pub use upload_part::*;
