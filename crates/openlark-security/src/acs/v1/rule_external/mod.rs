@@ -147,7 +147,7 @@ impl CreateRuleBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/rule_external",
-                &format!("HTTP: {}", response.status()),
+                format!("HTTP: {}", response.status()),
                 None,
             ))
         }
@@ -203,7 +203,7 @@ impl GetRuleBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/rule_external",
-                &format!("HTTP: {}", response.status()),
+                format!("HTTP: {}", response.status()),
                 None,
             ))
         }
@@ -259,7 +259,7 @@ impl DeleteRuleBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/rule_external",
-                &format!("HTTP: {}", response.status()),
+                format!("HTTP: {}", response.status()),
                 None,
             ))
         }
@@ -334,7 +334,7 @@ impl DeviceBindRuleBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/rule_external",
-                &format!("HTTP: {}", response.status()),
+                format!("HTTP: {}", response.status()),
                 None,
             ))
         }

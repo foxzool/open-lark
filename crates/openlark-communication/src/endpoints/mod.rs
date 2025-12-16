@@ -31,8 +31,7 @@
 //! let user_mailbox_endpoint = MAIL_V1_USER_MAILBOXES;
 //! ```
 
-// 导入核心端点（auth, application等基础端点）
-pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
+// NOTE: auth, application 等基础端点已移至各自的业务 crate
 
 // ==================== IM (即时通讯) v1/v2 ====================
 // 即时通讯系统 - 消息发送、聊天管理、批量消息处理

@@ -43,6 +43,7 @@ impl SecurityAndComplianceProject {
 /// 主要提供审计日志功能
 #[derive(Debug)]
 pub struct SecurityAndComplianceV1Service {
+    #[allow(dead_code)]
     config: Arc<crate::models::SecurityConfig>,
     openapi_logs: crate::security_and_compliance::v1::openapi_logs::OpenApiLogsService,
 }
@@ -71,6 +72,7 @@ impl SecurityAndComplianceV1Service {
 /// 主要提供设备记录管理和设备申报审批功能
 #[derive(Debug)]
 pub struct SecurityAndComplianceV2Service {
+    #[allow(dead_code)]
     config: Arc<crate::models::SecurityConfig>,
     device_records: crate::security_and_compliance::v2::device_records::DeviceRecordsService,
     device_apply_records:

@@ -72,7 +72,7 @@ pub mod defaults {
     }
 }
 
-/// 现代化便利函数
+// 现代化便利函数
 // modern_convenience 功能已收敛到核心错误系统中
 
 /// 错误分析工具
@@ -150,7 +150,7 @@ mod tests {
 
     #[test]
     fn test_modern_error_creation() {
-        let error = api_error(404, "/api/users/123", "用户不存在", Some("req-123"));
+        let error = api_error(404, "/api/users/123", "用户不存在", Some("req-123".to_string()));
 
         assert_eq!(error.error_type(), ErrorType::Api);
         assert_eq!(error.severity(), ErrorSeverity::Warning);
@@ -163,8 +163,8 @@ mod tests {
     fn test_detailed_error_creation() {
         let error = network_error_with_details(
             "连接超时",
-            Some("req-456"),
-            Some("https://api.example.com"),
+            Some("https://api.example.com".to_string()), // endpoint
+            Some("req-456".to_string()),                 // request_id
         );
 
         assert!(error.is_network_error());

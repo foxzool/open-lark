@@ -120,7 +120,7 @@ impl ApproveDeviceApplyRecordBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/security_and_compliance/v2/device_apply_records",
-                &format!("HTTP {}: {}", response.status(), response.status()),
+                format!("HTTP {}: {}", response.status(), response.status()),
                 None,
             ))
         }

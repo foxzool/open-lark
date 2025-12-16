@@ -355,14 +355,14 @@ where
                         _ => 500,
                     });
 
-            Err(LarkAPIError::Api(crate::error::ApiError {
+            Err(LarkAPIError::Api(Box::new(crate::error::ApiError {
                 status,
                 endpoint: "unknown_endpoint".into(),
                 message: self.msg,
                 source: None,
                 code: mapped_code,
-                ctx,
-            }))
+                ctx: Box::new(ctx),
+            })))
         }
     }
 

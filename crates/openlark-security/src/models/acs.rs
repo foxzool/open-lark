@@ -172,7 +172,7 @@ pub struct HostInfo {
 }
 
 /// 访客状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum VisitorStatus {
     /// 待审核
@@ -258,7 +258,7 @@ pub enum DeviceType {
 }
 
 /// 设备状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum DeviceStatus {
     /// 正常
@@ -299,7 +299,7 @@ pub struct AccessRecord {
 }
 
 /// 访问结果
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum AccessResult {
     /// 成功

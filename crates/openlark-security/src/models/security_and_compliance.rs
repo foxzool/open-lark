@@ -46,7 +46,7 @@ pub struct DeviceRecord {
 }
 
 /// 设备记录状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum DeviceRecordStatus {
     /// 待审核
@@ -64,7 +64,7 @@ pub enum DeviceRecordStatus {
 }
 
 /// 合规状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum ComplianceStatus {
     /// 合规
@@ -159,7 +159,7 @@ pub struct DeviceApplyRecord {
 }
 
 /// 申报状态
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum ApplyStatus {
     /// 待审批
@@ -271,7 +271,7 @@ pub struct DeviceComplianceRule {
 }
 
 /// 合规规则类型
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum ComplianceRuleType {
     /// 设备类型检查
@@ -310,7 +310,7 @@ pub struct ComplianceCheckResult {
 }
 
 /// 合规结果
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum ComplianceResult {
     /// 通过

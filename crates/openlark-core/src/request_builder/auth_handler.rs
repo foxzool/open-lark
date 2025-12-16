@@ -86,6 +86,7 @@ mod tests {
     use super::*;
     use crate::constants::AppType;
     use crate::error::traits::ErrorTrait;
+    use crate::prelude::ErrorType;
     use reqwest::Client;
 
     fn create_test_config() -> Config {

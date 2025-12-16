@@ -32,7 +32,6 @@ pub mod common_imports {
     pub use std::time::Duration;
 }
 
-/// 现代化便利宏定义（精简版）
 
 /// 创建网络错误的宏
 #[macro_export]
@@ -210,7 +209,7 @@ mod tests {
 
     #[test]
     fn test_modern_error_creation() {
-        let error = api_error(404, "/api/v1/users/123", "用户不存在", Some("req-123"));
+        let error = api_error(404, "/api/v1/users/123", "用户不存在", Some("req-123".to_string()));
 
         assert!(error.is_api_error());
         assert_eq!(error.severity(), ErrorSeverity::Warning);
@@ -223,8 +222,8 @@ mod tests {
     fn test_error_analysis_integration() {
         let error = network_error_with_details(
             "连接超时",
-            Some("req-456"),
-            Some("https://api.example.com"),
+            Some("https://api.example.com".to_string()), // endpoint
+            Some("req-456".to_string()),                 // request_id
         );
 
         let analysis = super::analysis::analyze_error(&error);
