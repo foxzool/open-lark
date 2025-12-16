@@ -34,6 +34,7 @@ impl AcsProject {
 /// ACS v1 版本服务
 #[derive(Debug)]
 pub struct AcsV1Service {
+    #[allow(dead_code)]
     config: Arc<crate::models::SecurityConfig>,
     users: crate::acs::v1::users::UsersService,
     user_faces: crate::acs::v1::user_faces::UserFacesService,

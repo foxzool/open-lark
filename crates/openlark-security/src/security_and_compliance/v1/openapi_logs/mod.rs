@@ -265,7 +265,7 @@ impl ListOpenApiLogsBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/security_and_compliance/v1/openapi_logs",
-                &format!("HTTP: {}", response.status()),
+                format!("HTTP: {}", response.status()),
                 None,
             ))
         }

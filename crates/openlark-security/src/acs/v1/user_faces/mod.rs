@@ -4,7 +4,7 @@
 
 use std::sync::Arc;
 
-use openlark_core::error::{api_error, network_error_with_details, validation_error};
+use openlark_core::error::api_error;
 /// 人脸识别管理服务
 #[derive(Debug)]
 pub struct UserFacesService {
@@ -83,7 +83,7 @@ impl GetUserFaceBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/user_faces",
-                &format!("HTTP: {}", response.status()),
+                format!("HTTP: {}", response.status()),
                 None,
             ))
         }
@@ -124,7 +124,7 @@ impl UpdateUserFaceBuilder {
         file_path: impl AsRef<std::path::Path>,
     ) -> crate::SecurityResult<Self> {
         use std::fs;
-        let image_data = fs::read(file_path).map_err(|e| {
+        let image_data = fs::read(file_path).map_err(|_e| {
             openlark_core::error::network_error_with_details(
                 "Failed to read image file",
                 None,
@@ -182,7 +182,7 @@ impl UpdateUserFaceBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/user_faces",
-                &format!("HTTP: {}", response.status()),
+                format!("HTTP: {}", response.status()),
                 None,
             ))
         }

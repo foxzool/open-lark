@@ -35,8 +35,7 @@ impl<T> StandardResponse<T> for Response<T> {
                 Some(data) => Ok(data),
                 None => Err(CoreError::api_data_error(
                     "Response succeeded but contains no data".to_string(),
-                )
-                .into()),
+                )),
             }
         } else {
             Err(api_error(
@@ -44,8 +43,7 @@ impl<T> StandardResponse<T> for Response<T> {
                 "unknown",
                 self.message().to_string(),
                 self.raw_response.request_id.clone(),
-            )
-            .into())
+            ))
         }
     }
 

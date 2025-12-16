@@ -61,7 +61,7 @@ pub trait ErrorTrait: std::error::Error + Send + Sync + 'static {
 
     /// 判断是否为验证错误
     fn is_validation_error(&self) -> bool {
-        matches!(self.error_type(), ErrorType::Validation { .. })
+        matches!(self.error_type(), ErrorType::Validation)
     }
 
     /// 判断是否为超时错误
@@ -91,7 +91,7 @@ pub trait ErrorTrait: std::error::Error + Send + Sync + 'static {
 
     /// 判断是否为API错误
     fn is_api_error(&self) -> bool {
-        matches!(self.error_type(), ErrorType::Api { .. })
+        matches!(self.error_type(), ErrorType::Api)
     }
 
     /// 判断是否为服务不可用错误
