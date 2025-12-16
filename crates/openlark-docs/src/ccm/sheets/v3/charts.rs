@@ -19,7 +19,7 @@ use serde::{Deserialize, Serialize};
 use super::Range;
 
 /// 图表类型
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum ChartType {
     /// 柱状图
     #[serde(rename = "COLUMN")]
@@ -54,7 +54,7 @@ pub enum ChartType {
 }
 
 /// 图表子类型
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum ChartSubType {
     /// 二维图表
     #[serde(rename = "2D")]
@@ -132,7 +132,7 @@ pub struct ChartLegend {
 }
 
 /// 图例位置
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum LegendPosition {
     /// 顶部
     #[serde(rename = "TOP")]
@@ -708,6 +708,7 @@ impl ApiResponseTrait for DeleteChartResponse {
 }
 
 /// Sheets电子表格图表服务 v3
+#[derive(Clone, Debug)]
 pub struct ChartService {
     config: openlark_core::config::Config,
 }
@@ -924,7 +925,7 @@ mod tests {
     fn test_chart_series_creation() {
         use super::super::models::Range;
 
-        let data_range = Range::from("A1".to_string(), "A10".to_string());
+        let data_range = format!("{}:{}", "A1", "A10");
         let series = ChartSeries::new("销售额".to_string(), data_range)
             .color("#FF0000".to_string())
             .add_style("line_width".to_string(), "3".to_string());
@@ -974,17 +975,17 @@ mod tests {
     fn test_chart_config_creation() {
         use super::super::models::Range;
 
-        let data_range = Range::from("A1".to_string(), "B10".to_string());
+        let data_range = format!("{}:{}", "A1", "B10");
         let series1 = ChartSeries::new(
             "销售额".to_string(),
-            Range::from("A1".to_string(), "A10".to_string()),
+            format!("{}:{}", "A1", "A10"),
         );
         let series2 = ChartSeries::new(
             "利润".to_string(),
-            Range::from("B1".to_string(), "B10".to_string()),
+            format!("{}:{}", "B1", "B10"),
         );
 
-        let config = openlark_core::config::Config::new(
+        let config = ChartConfig::new(
             ChartType::Column,
             "sheet123".to_string(),
             data_range,
@@ -1005,14 +1006,14 @@ mod tests {
     fn test_chart_config_validation() {
         use super::super::models::Range;
 
-        let data_range = Range::from("A1".to_string(), "B10".to_string());
+        let data_range = format!("{}:{}", "A1", "B10");
         let series = ChartSeries::new(
             "销售额".to_string(),
-            Range::from("A1".to_string(), "A10".to_string()),
+            format!("{}:{}", "A1", "A10"),
         );
 
         // 测试有效配置
-        let valid_config = openlark_core::config::Config::new(
+        let valid_config = ChartConfig::new(
             ChartType::Line,
             "sheet123".to_string(),
             data_range,
@@ -1021,19 +1022,19 @@ mod tests {
         assert!(valid_config.validate().is_ok());
 
         // 测试空工作表ID
-        let invalid_config = openlark_core::config::Config::new(
+        let invalid_config = ChartConfig::new(
             ChartType::Line,
             "".to_string(),
-            Range::from("A1".to_string(), "B10".to_string()),
+            format!("{}:{}", "A1", "B10"),
             vec![],
         );
         assert!(invalid_config.validate().is_err());
 
         // 测试空系列列表
-        let invalid_config2 = openlark_core::config::Config::new(
+        let invalid_config2 = ChartConfig::new(
             ChartType::Line,
             "sheet123".to_string(),
-            Range::from("A1".to_string(), "B10".to_string()),
+            format!("{}:{}", "A1", "B10"),
             vec![],
         );
         assert!(invalid_config2.validate().is_err());
@@ -1043,10 +1044,10 @@ mod tests {
     fn test_create_chart_request_builder() {
         use super::super::models::Range;
 
-        let data_range = Range::from("A1".to_string(), "B10".to_string());
+        let data_range = format!("{}:{}", "A1", "B10");
         let series = ChartSeries::new(
             "销售额".to_string(),
-            Range::from("A1".to_string(), "A10".to_string()),
+            format!("{}:{}", "A1", "A10"),
         );
 
         let request = CreateChartRequest::builder()
@@ -1055,6 +1056,7 @@ mod tests {
             .sheet_id("sheet123".to_string())
             .data_range(data_range)
             .add_series(series)
+            .build()
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1075,6 +1077,7 @@ mod tests {
         let request = DeleteChartRequest::builder()
             .spreadsheet_token("token123".to_string())
             .chart_id("chart123".to_string())
+            .build()
             .unwrap();
 
         assert_eq!(request.spreadsheet_token, "token123");
@@ -1083,7 +1086,7 @@ mod tests {
 
     #[test]
     fn test_chart_service_creation() {
-        let config = openlark_core::config::openlark_core::config::Config::default();
+        let config = openlark_core::config::Config::default();
         let service = ChartService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }
@@ -1097,12 +1100,13 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .chart_type(ChartType::Column)
             .sheet_id("sheet123".to_string())
-            .data_range(Range::from("A1".to_string(), "B10".to_string()))
+            .data_range(format!("{}:{}", "A1", "B10"))
             .add_series(ChartSeries::new(
                 "销售额".to_string(),
-                Range::from("A1".to_string(), "A10".to_string()),
+                format!("{}:{}", "A1", "A10"),
             ))
             .position(ChartPosition::new(1, 3, 8, 10))
+            .build()
             .unwrap();
 
         assert_eq!(
@@ -1115,12 +1119,13 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .chart_type(ChartType::Line)
             .sheet_id("sheet123".to_string())
-            .data_range(Range::from("A1".to_string(), "B10".to_string()))
+            .data_range(format!("{}:{}", "A1", "B10"))
             .add_series(ChartSeries::new(
                 "趋势".to_string(),
-                Range::from("A1".to_string(), "A10".to_string()),
+                format!("{}:{}", "A1", "A10"),
             ))
             .style(ChartStyle::new())
+            .build()
             .unwrap();
 
         assert_eq!(line_chart_request.chart_config.chart_type, ChartType::Line);
@@ -1136,6 +1141,7 @@ mod tests {
                 Range::from("A1".to_string(), "A10".to_string()),
             ))
             .sub_type(ChartSubType::TwoD)
+            .build()
             .unwrap();
 
         assert_eq!(pie_chart_request.chart_config.chart_type, ChartType::Pie);
@@ -1149,19 +1155,19 @@ mod tests {
             .spreadsheet_token("token123".to_string())
             .chart_type(ChartType::Combo)
             .sheet_id("sheet123".to_string())
-            .data_range(Range::from("A1".to_string(), "C10".to_string()))
+            .data_range(format!("{}:{}", "A1", "C10"))
             .series(vec![
                 ChartSeries::new(
                     "销售额".to_string(),
-                    Range::from("A1".to_string(), "A10".to_string()),
+                    format!("{}:{}", "A1", "A10"),
                 ),
                 ChartSeries::new(
                     "利润".to_string(),
-                    Range::from("B1".to_string(), "B10".to_string()),
+                    format!("{}:{}", "B1", "B10"),
                 ),
                 ChartSeries::new(
                     "成本".to_string(),
-                    Range::from("C1".to_string(), "C10".to_string()),
+                    format!("{}:{}", "C1", "C10"),
                 ),
             ])
             .style(
@@ -1169,6 +1175,7 @@ mod tests {
                     .title(ChartTitle::new("财务分析".to_string()))
                     .legend(ChartLegend::new().position(LegendPosition::Bottom)),
             )
+            .build()
             .unwrap();
 
         assert_eq!(multi_series_request.chart_config.series.len(), 3);
@@ -1182,10 +1189,10 @@ mod tests {
     fn test_chart_serialization() {
         use serde_json;
 
-        let config = openlark_core::config::Config::new(
+        let config = ChartConfig::new(
             ChartType::Column,
             "sheet123".to_string(),
-            super::super::models::Range::from("A1".to_string(), "B10".to_string()),
+            format!("{}:{}", "A1", "B10"),
             vec![],
         );
         let json = serde_json::to_string(&config).unwrap();
@@ -1209,13 +1216,13 @@ mod tests {
         ];
 
         for chart_type in chart_types {
-            let config = openlark_core::config::Config::new(
+            let config = ChartConfig::new(
                 chart_type,
                 "sheet123".to_string(),
-                super::super::models::Range::from("A1".to_string(), "B10".to_string()),
+                format!("{}:{}", "A1", "B10"),
                 vec![ChartSeries::new(
                     "test".to_string(),
-                    super::super::models::Range::from("A1".to_string(), "A10".to_string()),
+                    format!("{}:{}", "A1", "A10"),
                 )],
             );
             assert!(config.validate().is_ok());

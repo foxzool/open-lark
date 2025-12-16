@@ -1007,7 +1007,7 @@ impl DocumentService {
     /// use open_lark::prelude::*;
     /// use open_lark::service::docx::v1::document::DocumentService;
     ///
-    /// let config = openlark_core::config::Config::new("app_id", "app_secret");
+    /// let config = openlark_core::config::Config::builder().app_id("app_id").app_secret("app_secret").build();
     /// let service = DocumentService::new(config);
     /// ```
     pub fn new(config: Config) -> Self {

@@ -38,7 +38,7 @@ impl SheetMetaDocService {
     ///
     /// #[tokio::main]
     /// async fn main() -> SDKResult<()> {
-    ///     let config = Config::new("app_id", "app_secret");
+    ///     let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
     ///     let service = DocV2Service::new(config);
     ///
     ///     let request = GetDocSheetMetaV2Request {
@@ -118,7 +118,7 @@ impl SheetMetaDocService {
     ///
     /// #[tokio::main]
     /// async fn main() -> SDKResult<()> {
-    ///     let config = Config::new("app_id", "app_secret");
+    ///     let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
     ///     let service = DocV2Service::new(config);
     ///
     ///     let response = service.sheet_meta

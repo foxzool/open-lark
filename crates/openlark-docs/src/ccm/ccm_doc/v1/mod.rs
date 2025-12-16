@@ -82,7 +82,7 @@ impl CcmDocV1Service {
     /// use open_lark::service::cloud_docs::ccm_doc::v1::{CcmDocV1Service, CreateDocumentRequest};
     ///
     /// let service = CcmDocV1Service::new(config);
-    /// let request = CreateDocumentRequest::new("doc", "文档标题");
+    /// let request = CreateDocumentRequest::new("文档标题").parent_type("doc");
     ///
     /// let response = service.create(request, None).await?;
     /// println!("文档token: {}", response.document_token);
@@ -257,15 +257,22 @@ impl openlark_core::trait_system::service::Service for CcmDocV1Service {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use openlark_core::trait_system::service::Service;
 
     fn create_test_service() -> CcmDocV1Service {
-        let config = openlark_core::config::Config::new("test_app_id", "test_app_secret");
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         CcmDocV1Service::new(config)
     }
 
     #[test]
     fn test_ccm_doc_v1_service_creation() {
-        let config = openlark_core::config::Config::new("test_app_id", "test_app_secret");
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         let service = CcmDocV1Service::new(config);
 
         assert_eq!(service.config().app_id(), "test_app_id");
@@ -299,7 +306,7 @@ mod tests {
         let service = create_test_service();
 
         // 验证可以访问所有服务方法
-        let _create_request = CreateDocumentRequest::new("doc", "文档标题");
+        let _create_request = CreateDocumentRequest::new("文档标题").parent_type("doc");
         let _meta_request = DocumentMetaRequest::new("document_token");
         let _sheet_meta_request = SheetMetaRequest::new("spreadsheet_token");
         let _raw_content_request = RawContentRequest::new("document_token");

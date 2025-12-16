@@ -54,11 +54,12 @@ pub use models::*;
 pub use pivot_tables::*;
 pub use sheet::*;
 pub use sheet_protection::*;
-pub use spreadsheet::*;
-pub use spreadsheet_create::*;
-pub use spreadsheet_info::*;
+// pub use crate::ccm::sheets::*;
+// pub use crate::ccm::sheets_create::*;
+// pub use crate::ccm::sheets_info::*;
 
 /// Sheets 服务主结构
+#[derive(Clone, Debug)]
 pub struct SheetsService {
     /// 配置信息
     config: Config,

@@ -1,33 +1,65 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response},
-    error::DocsResult,
-    req_option::RequestOption,
-    constants::AccessTokenType,
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
-use crate::service::DocsService;
+/// 获取导入任务状态
+///
+/// 获取导入任务的执行状态。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/import_task/get
+use serde::{Deserialize, Serialize};
 
-// Builder
-#[derive(Debug)]
-pub struct GetBuilder<'a> {
-    client: &'a DocsService<'a>,
-    ticket: String,
+use crate::common::api_endpoints::DriveApi;
+
+/// 获取导入任务请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetImportTaskRequest {
+    /// 任务ticket
+    pub ticket: String,
 }
 
-impl<'a> GetBuilder<'a> {
-    pub fn new(client: &'a DocsService<'a>, ticket: impl Into<String>) -> Self {
-        Self { client, ticket: ticket.into() }
+impl GetImportTaskRequest {
+    pub fn new(ticket: impl Into<String>) -> Self {
+        Self {
+            ticket: ticket.into(),
+        }
+    }
+}
+
+/// 获取导入任务响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetImportTaskResponse {
+    /// 任务状态
+    pub job_status: Option<i32>,
+    /// 错误信息
+    pub job_error_msg: Option<String>,
+    /// 目标token
+    pub token: Option<String>,
+    /// 目标URL
+    pub url: Option<String>,
+}
+
+impl ApiResponseTrait for GetImportTaskResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 获取导入任务状态
+pub async fn get_import_task(
+    request: GetImportTaskRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<GetImportTaskResponse>> {
+    let api_endpoint = DriveApi::GetImportTask(request.ticket.clone());
+
+    let mut api_request: ApiRequest<GetImportTaskResponse> =
+        ApiRequest::get(&api_endpoint.to_url());
+
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    pub async fn send(self) -> DocsResult<Response<GetResponse>> {
-        let mut req = ApiRequest::get(format!("/open-apis/drive/v1/import_tasks/{}", self.ticket));
-        self.client.request(req).await
-    }
+    Transport::request(api_request, config, None).await
 }
-
-// Response
-#[derive(Debug, serde::Deserialize)]
-pub struct GetResponse {
-    pub result: serde_json::Value,
-}
-
-impl ApiResponseTrait for GetResponse {}

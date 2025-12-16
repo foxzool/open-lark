@@ -15,7 +15,13 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
+pub use member::*;
+pub use setting::*;
+pub use node::*;
 
+pub mod member;
+pub mod setting;
+pub mod node;
 /// 知识空间信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SpaceInfo {
@@ -257,6 +263,7 @@ impl ApiResponseTrait for UpdateSpaceSettingResponse {
 }
 
 /// 知识空间管理服务
+#[derive(Clone, Debug)]
 pub struct SpaceService {
     config: Config,
 }

@@ -107,6 +107,7 @@ impl CreateFileShortcutBuilder {
 }
 
 /// 文件服务
+#[derive(Clone, Debug)]
 pub struct FileService {
     config: Config,
 }

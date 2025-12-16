@@ -96,15 +96,16 @@ impl openlark_core::trait_system::service::Service for AnnouncementService {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use openlark_core::trait_system::service::Service;
 
     fn create_test_service() -> AnnouncementService {
-        let config = openlark_core::config::Config::new("test_app_id", "test_app_secret");
+        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
         AnnouncementService::new(config)
     }
 
     #[test]
     fn test_announcement_service_creation() {
-        let config = openlark_core::config::Config::new("test_app_id", "test_app_secret");
+        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
         let service = AnnouncementService::new(config);
 
         assert_eq!(service.config().app_id(), "test_app_id");

@@ -2,7 +2,7 @@
 //!
 /// 展示高效的批量数据处理方式，提升性能和用户体验
 
-use openlark_client::{LarkClient};
+// use openlark_core::{LarkClient};
 use openlark_docs::ccm::ccm_sheet::old::v2::CcmSheetOldV2;
 use openlark_core::config::Config;
 use tokio;
@@ -11,13 +11,14 @@ use serde_json::json;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // 初始化客户端
     let config = Config::builder()
         .app_id("your_app_id")
         .app_secret("your_app_secret")
-        .build()?;
+        .build();
 
-    let client = LarkClient::new(config)?;
-    let sheet_service = client.docs.ccm_sheet.old.v2();
+    // let client = LarkClient::new(config)?;
+    let sheet_service = CcmSheetOldV2::new(config);
     let spreadsheet_token = "your_spreadsheet_token";
 
     println!("📦 CCM Sheet API 批量操作演示");
@@ -97,10 +98,10 @@ async fn demo_batch_write(
     if let Some(result) = response.data {
         println!("✅ 批量写入完成:");
         println!("   📊 写入范围数: {}", batch_data.len());
-        println!("   📈 更新单元格数: {:?}", result.updated_cells);
+        // println!("   📈 更新单元格数: {:?}", result.updated_cells);
         println!("   ⏱️  耗时: {:?}", duration);
-        println!("   💡 平均速度: {:.0} 单元格/秒",
-            result.updated_cells.unwrap_or(0) as f64 / duration.as_secs_f64());
+        // println!("   💡 平均速度: {:.0} 单元格/秒",
+        //    result.updated_cells.unwrap_or(0) as f64 / duration.as_secs_f64());
     }
 
     Ok(())
@@ -189,7 +190,7 @@ async fn demo_batch_style(
     if let Some(result) = response.data {
         println!("✅ 批量样式设置完成:");
         println!("   🎨 样式数量: {}", styles.len());
-        println!("   📈 更新单元格数: {:?}", result.updated_cells);
+        println!("   📈 更新列表长度: {}", result.style_update_list.len());
         println!("   ⏱️  耗时: {:?}", duration);
     }
 

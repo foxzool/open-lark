@@ -138,15 +138,16 @@ impl openlark_core::trait_system::service::Service for DocumentService {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use openlark_core::trait_system::service::Service;
 
     fn create_test_service() -> DocumentService {
-        let config = openlark_core::config::Config::new("test_app_id", "test_app_secret");
+        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
         DocumentService::new(config)
     }
 
     #[test]
     fn test_document_service_creation() {
-        let config = openlark_core::config::Config::new("test_app_id", "test_app_secret");
+        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
         let service = DocumentService::new(config);
 
         assert_eq!(service.config().app_id(), "test_app_id");
@@ -186,9 +187,13 @@ mod tests {
 
     #[test]
     fn test_get_document_builder() {
-        let request = GetDocumentRequest::new("document_token");
-
-        assert_eq!(request.document_token, "document_token");
+        let config = openlark_core::config::Config::builder().app_id("id").app_secret("secret").build();
+        let request = GetDocumentRequest::new(config);
+        let params = GetDocumentParams {
+            document_id: "document_token".to_string(),
+            with_content: None,
+        };
+        assert_eq!(params.document_id, "document_token");
     }
 
     #[test]
@@ -198,7 +203,8 @@ mod tests {
 
         // 验证可以访问所有服务方法
         let _create_request = CreateDocumentRequest::new();
-        let _get_request = GetDocumentRequest::new("document_token");
+        let config = openlark_core::config::Config::builder().app_id("id").app_secret("secret").build();
+        let _get_request = GetDocumentRequest::new(config);
 
         // 如果编译通过，说明模块结构正确
         assert!(true);

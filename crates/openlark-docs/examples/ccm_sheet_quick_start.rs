@@ -2,7 +2,7 @@
 //!
 /// 最简单的使用方式，帮助用户快速上手表格API
 
-use openlark_client::{LarkClient};
+use openlark_core::LarkClient;
 use openlark_docs::ccm::ccm_sheet::old::v2::CcmSheetOldV2;
 use openlark_core::config::Config;
 use tokio;
