@@ -90,7 +90,7 @@ impl WriteSingleRangeRequest {
         validate_required!(params.values, "写入数据不能为空");
 
         // 使用enum+builder系统生成API端点
-        let api_endpoint = CcmSheetApiOld::WriteSingleRange(params.spreadsheet_token.clone());
+        let _api_endpoint = CcmSheetApiOld::WriteSingleRange(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<WriteSingleRangeResponse> = ApiRequest::put(&format!(

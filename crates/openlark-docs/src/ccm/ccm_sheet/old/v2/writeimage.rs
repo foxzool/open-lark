@@ -99,7 +99,7 @@ impl WriteImageRequest {
         let api_endpoint = CcmSheetApiOld::ValuesImage(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<WriteImageResponse> = ApiRequest::post(
+        let api_request: ApiRequest<WriteImageResponse> = ApiRequest::post(
             &api_endpoint.to_url(),
         )
         .body(serde_json::to_value(params).map_err(|e| {

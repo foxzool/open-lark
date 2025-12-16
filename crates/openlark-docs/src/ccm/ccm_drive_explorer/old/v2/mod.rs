@@ -4,6 +4,16 @@
 
 use openlark_core::config::Config;
 
+// Import migrated modules
+use super::default::v2::root_folder::meta as root_folder_meta;
+use super::default::v2::folder::meta as folder_meta;
+use super::default::v2::folder::_folder_token as folder_create;
+use super::default::v2::folder::children as folder_children;
+use super::default::v2::file::_folder_token as file_create;
+use super::default::v2::file::spreadsheets::_spreadsheet_token as file_spreadsheets;
+use super::default::v2::file::copy::files::_file_token as file_copy;
+use super::default::v2::file::docs::_doc_token as file_docs;
+
 /// 云盘浏览器服务
 #[derive(Debug, Clone)]
 pub struct CcmDriveExplorerOldV2 {
@@ -32,8 +42,8 @@ impl CcmDriveExplorerOldV2 {
     }
 
     /// 新建文件
-    pub fn file(&self) -> file::CreateFileRequest {
-        file::CreateFileRequest::new(self.config.clone())
+    pub fn file(&self) -> file_create::CreateFileRequest {
+        file_create::CreateFileRequest::new(self.config.clone())
     }
 
     /// 删除Sheet
@@ -57,17 +67,7 @@ impl CcmDriveExplorerOldV2 {
     }
 
     /// 新建文件夹
-    pub fn folder(&self) -> folder::CreateFolderRequest {
-        folder::CreateFolderRequest::new(self.config.clone())
+    pub fn folder(&self) -> folder_create::CreateFolderRequest {
+        folder_create::CreateFolderRequest::new(self.config.clone())
     }
 }
-
-// 导出所有API模块
-pub mod root_folder_meta;
-pub mod folder_meta;
-pub mod file;
-pub mod file_spreadsheets;
-pub mod file_copy;
-pub mod file_docs;
-pub mod folder_children;
-pub mod folder;
