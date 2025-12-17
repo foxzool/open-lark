@@ -1,15 +1,14 @@
 //! 列出自定义角色
 //!
-//! 
-//!
-//! [官方文档](https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/list-2)
+//! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/list
+//! doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/list-2
 
-use crate::base::base::v2::models::*;
+use crate::base::base::v2::models::AppRole;
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, RequestBuilder, Send},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::Error,
-    response::Response,
+    http::Transport,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -73,15 +72,28 @@ impl List {
         self
     }
 
-    pub async fn send(self) -> Result<Response<ListResp>, Error> {
-        let url = format!(
-            "{}/open-apis/base/v2/apps/{}/roles",
-            self.config.base_url, self.app_token
+    pub async fn send(self) -> SDKResult<ListResp> {
+        validate_required!(self.app_token, "app_token 不能为空");
+
+        use crate::common::api_endpoints::BaseApiV2;
+        let api_endpoint = BaseApiV2::RoleList(self.app_token);
+
+        let mut api_request: ApiRequest<ListResp> = ApiRequest::get(&api_endpoint.to_url());
+        api_request = api_request.query_opt(
+            "page_size",
+            self.req.page_size.map(|v| v.to_string()),
         );
-        let request = ApiRequest::get(&url).query(&self.req);
-        let response = RequestBuilder::new(self.config, request).send().await?;
-        Ok(response)
+        api_request = api_request.query_opt("page_token", self.req.page_token);
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("response", "响应数据为空")
+        })
     }
 }
 
-impl ApiResponseTrait for ListResp {}
+impl ApiResponseTrait for ListResp {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}

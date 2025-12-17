@@ -1,14 +1,17 @@
 //! 根据 filetoken 获取文档的公共设置。
 //!
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/get-document-sharing-settings-v2
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/get-document-sharing-settings-v2
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct GetPublicPermissionRequest {
+pub struct GetPublicPermissionReq {
     pub token: String,
     #[serde(rename = "type")]
     pub type_: String,
@@ -25,46 +28,45 @@ pub struct GetPublicPermissionResponse {
 }
 
 impl ApiResponseTrait for GetPublicPermissionResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct GetPublicPermissionBuilder {
-    api_req: ApiRequest<GetPublicPermissionRequest>,
+/// 获取云文档权限设置V2请求
+pub struct GetPublicPermissionRequest {
+    config: Config,
+    req: GetPublicPermissionReq,
 }
 
-impl GetPublicPermissionBuilder {
-    pub fn new() -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_drive_permission_public_get".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/drive/permission/v2/public/".to_string();
-        builder.api_req.body = Some(GetPublicPermissionRequest::default());
-        builder
+impl GetPublicPermissionRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            req: GetPublicPermissionReq::default(),
+        }
     }
 
-    pub fn token(mut self, token: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.token = token.to_string();
-        }
+    pub fn token(mut self, token: impl Into<String>) -> Self {
+        self.req.token = token.into();
         self
     }
 
-    pub fn type_(mut self, type_: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.type_ = type_.to_string();
-        }
+    pub fn type_(mut self, type_: impl Into<String>) -> Self {
+        self.req.type_ = type_.into();
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> SDKResult<GetPublicPermissionResponse> {
+        use crate::common::api_endpoints::CcmDrivePermissionApiOld;
+
+        let api_request: ApiRequest<GetPublicPermissionResponse> =
+            ApiRequest::post(&CcmDrivePermissionApiOld::Public.to_url())
+                .body(serde_json::to_value(&self.req)?);
+        let response: Response<GetPublicPermissionResponse> =
+            Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("response", "响应数据为空")
+        })
     }
 }

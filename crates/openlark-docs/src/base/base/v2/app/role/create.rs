@@ -1,15 +1,14 @@
 //! 新增自定义角色
 //!
-//! 
-//!
-//! [官方文档](https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/create-2)
+//! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/create
+//! doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/create-2
 
-use crate::base::base::v2::models::*;
+use crate::base::base::v2::models::AppRole;
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, RequestBuilder, Send},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::Error,
-    response::Response,
+    http::Transport,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -66,15 +65,26 @@ impl Create {
         self
     }
 
-    pub async fn send(self) -> Result<Response<CreateResp>, Error> {
-        let url = format!(
-            "{}/open-apis/base/v2/apps/{}/roles",
-            self.config.base_url, self.app_token
-        );
-        let request = ApiRequest::post(&url).body(&self.req);
-        let response = RequestBuilder::new(self.config, request).send().await?;
-        Ok(response)
+    pub async fn send(self) -> SDKResult<CreateResp> {
+        validate_required!(self.app_token, "app_token 不能为空");
+        validate_required!(self.req.role_name, "role_name 不能为空");
+
+        // 使用类型安全的端点枚举生成路径
+        use crate::common::api_endpoints::BaseApiV2;
+        let api_endpoint = BaseApiV2::RoleCreate(self.app_token);
+
+        let api_request: ApiRequest<CreateResp> =
+            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(&self.req)?);
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("response", "响应数据为空")
+        })
     }
 }
 
-impl ApiResponseTrait for CreateResp {}
+impl ApiResponseTrait for CreateResp {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}

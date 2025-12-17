@@ -1,14 +1,17 @@
-//! 根据 docToken 获取元数据。
+//! 获取旧版文档元信息
 //!
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-document-meta
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-document-meta
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct GetDocMetaRequest {}
+pub struct GetDocMetaReq {}
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct GetDocMetaResponse {
@@ -28,37 +31,34 @@ pub struct GetDocMetaResponse {
 }
 
 impl ApiResponseTrait for GetDocMetaResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct GetDocMetaBuilder {
-    api_req: ApiRequest<GetDocMetaRequest>,
+/// 获取旧版文档元信息请求
+pub struct GetDocMetaRequest {
+    config: Config,
     doc_token: String,
 }
 
-impl GetDocMetaBuilder {
-    pub fn new(doc_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_doc_meta_get".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.doc_token = doc_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/doc/v2/meta/{}",
-            builder.doc_token
-        );
-        builder.api_req.body = None;
-        builder
+impl GetDocMetaRequest {
+    pub fn new(config: Config, doc_token: impl Into<String>) -> Self {
+        Self {
+            config,
+            doc_token: doc_token.into(),
+        }
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> SDKResult<GetDocMetaResponse> {
+        use crate::common::api_endpoints::CcmDocApiOld;
+
+        let api_request: ApiRequest<GetDocMetaResponse> =
+            ApiRequest::get(&CcmDocApiOld::Meta(self.doc_token).to_url());
+        let response: Response<GetDocMetaResponse> =
+            Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("response", "响应数据为空")
+        })
     }
 }

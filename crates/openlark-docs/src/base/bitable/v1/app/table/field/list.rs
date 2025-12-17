@@ -1,85 +1,238 @@
-//! 根据 app_token 和 table_id，获取数据表的所有字段
-//!
-//! doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/list
-
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+/// Bitable 列出字段API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/field/list
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    error::{validation_error, SDKResult},
+    http::Transport,
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+/// 重用Field类型
+pub use super::create::Field;
+
+/// 列出字段请求
+#[allow(dead_code)]
+#[derive(Debug, Clone)]
 pub struct ListFieldRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub view_id: Option<String>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct ListFieldResponse {
-    pub items: Vec<Field>,
-    pub page_token: String,
-    pub has_more: bool,
-    pub total: i32,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Field {
-    pub field_id: String,
-    pub field_name: String,
-    #[serde(rename = "type")]
-    pub type_: i32,
-    pub property: Option<serde_json::Value>,
-}
-
-impl ApiResponseTrait for ListFieldResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
-    }
-}
-
-#[derive(Debug)]
-pub struct ListField {
-    config: openlark_core::config::Config,
+    /// 配置信息
+    config: Config,
+    api_request: ApiRequest<ListFieldResponse>,
+    /// 多维表格的 app_token
     app_token: String,
+    /// 数据表的 table_id
     table_id: String,
-    req: ListFieldRequest,
+    /// 视图 ID
+    view_id: Option<String>,
+    /// 控制字段描述数据的返回格式
+    text_field_as_array: Option<bool>,
+    /// 分页标记
+    page_token: Option<String>,
+    /// 分页大小
+    page_size: Option<i32>,
+    /// 用户 ID 类型
+    user_id_type: Option<String>,
 }
 
-impl ListField {
-    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>) -> Self {
+impl ListFieldRequest {
+    /// 创建列出字段请求
+    pub fn new(config: Config) -> Self {
         Self {
             config,
-            app_token: app_token.into(),
-            table_id: table_id.into(),
-            req: ListFieldRequest::default(),
+            api_request: ApiRequest::get(""),
+            app_token: String::new(),
+            table_id: String::new(),
+            view_id: None,
+            text_field_as_array: None,
+            page_token: None,
+            page_size: None,
+            user_id_type: None,
         }
     }
 
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.app_token = app_token;
+        self
+    }
+
+    /// 设置数据表ID
+    pub fn table_id(mut self, table_id: String) -> Self {
+        self.table_id = table_id;
+        self
+    }
+
+    /// 设置视图ID
+    pub fn view_id(mut self, view_id: String) -> Self {
+        self.view_id = Some(view_id);
+        self
+    }
+
+    /// 设置文本字段为数组格式
+    pub fn text_field_as_array(mut self, text_field_as_array: bool) -> Self {
+        self.text_field_as_array = Some(text_field_as_array);
+        self
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: String) -> Self {
+        self.page_token = Some(page_token);
+        self
+    }
+
+    /// 设置分页大小
     pub fn page_size(mut self, page_size: i32) -> Self {
-        self.req.page_size = Some(page_size);
+        self.page_size = Some(page_size.min(100)); // 限制最大100
         self
     }
 
-    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
-        self.req.page_token = Some(page_token.into());
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.user_id_type = Some(user_id_type);
         self
     }
 
-    pub fn view_id(mut self, view_id: impl Into<String>) -> Self {
-        self.req.view_id = Some(view_id.into());
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<ListFieldResponse> {
+        // 参数验证
+        if self.app_token.trim().is_empty() {
+            return Err(validation_error("app_token", "应用token不能为空"));
+        }
+
+        if self.table_id.trim().is_empty() {
+            return Err(validation_error("table_id", "数据表ID不能为空"));
+        }
+
+        // 验证分页大小
+        if let Some(page_size) = self.page_size {
+            if page_size <= 0 {
+                return Err(validation_error("page_size", "分页大小必须大于0"));
+            }
+        }
+
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::FieldList(self.app_token.clone(), self.table_id.clone());
+
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<ListFieldResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
+
+        // 构建查询参数
+        if let Some(ref view_id) = self.view_id {
+            api_request = api_request.query("view_id", view_id);
+        }
+
+        if let Some(text_field_as_array) = self.text_field_as_array {
+            api_request =
+                api_request.query("text_field_as_array", &text_field_as_array.to_string());
+        }
+
+        if let Some(ref page_token) = self.page_token {
+            api_request = api_request.query("page_token", page_token);
+        }
+
+        if let Some(page_size) = self.page_size {
+            api_request = api_request.query("page_size", &page_size.to_string());
+        }
+
+        if let Some(ref user_id_type) = self.user_id_type {
+            api_request = api_request.query("user_id_type", user_id_type);
+        }
+
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+    }
+}
+
+/// 列出字段Builder
+pub struct ListFieldRequestBuilder {
+    request: ListFieldRequest,
+}
+
+impl ListFieldRequestBuilder {
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: ListFieldRequest::new(config),
+        }
+    }
+
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.request = self.request.app_token(app_token);
         self
     }
 
-    pub async fn send(self) -> Result<openlark_core::response::Response<ListFieldResponse>, openlark_core::error::Error> {
-        let url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables/{}/fields",
-            self.config.base_url, self.app_token, self.table_id
-        );
-        let request = ApiRequest::get(&url).query(&self.req);
-        let response = RequestBuilder::new(self.config, request).send().await?;
-        Ok(response)
+    /// 设置数据表ID
+    pub fn table_id(mut self, table_id: String) -> Self {
+        self.request = self.request.table_id(table_id);
+        self
+    }
+
+    /// 设置视图ID
+    pub fn view_id(mut self, view_id: String) -> Self {
+        self.request = self.request.view_id(view_id);
+        self
+    }
+
+    /// 设置文本字段为数组格式
+    pub fn text_field_as_array(mut self, text_field_as_array: bool) -> Self {
+        self.request = self.request.text_field_as_array(text_field_as_array);
+        self
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: String) -> Self {
+        self.request = self.request.page_token(page_token);
+        self
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request = self.request.page_size(page_size);
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.request = self.request.user_id_type(user_id_type);
+        self
+    }
+
+    /// 构建请求
+    pub fn build(self) -> ListFieldRequest {
+        self.request
+    }
+}
+
+/// 列出字段数据
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ListFieldData {
+    /// 是否还有更多项
+    pub has_more: Option<bool>,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 总数
+    pub total: Option<i32>,
+    /// 字段信息列表
+    pub items: Option<Vec<Field>>,
+}
+
+/// 列出字段响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ListFieldResponse {
+    /// 字段列表数据
+    pub data: ListFieldData,
+}
+
+impl ApiResponseTrait for ListFieldResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }

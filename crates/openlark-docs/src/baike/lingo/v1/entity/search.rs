@@ -1,79 +1,43 @@
-//! 模糊搜索词条
-//!
-//! doc: https://open.feishu.cn/document/lingo-v1/entity/search
+/// 模糊搜索词条
+///
+/// 使用关键词模糊搜索词条。
+/// docPath: https://open.feishu.cn/document/lingo-v1/entity/search
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
-use serde::{Deserialize, Serialize};
+use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
+use crate::lingo::v1::LingoEntity;
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct SearchEntityRequest {
-    pub query: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub classification_filter: Option<ClassificationFilter>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub sources: Option<Vec<i32>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub creators: Option<Vec<String>>,
+#[derive(Debug, serde::Deserialize)]
+pub struct LingoEntityResponse {
+    pub data: Option<LingoEntity>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct ClassificationFilter {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub include: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub exclude: Option<Vec<String>>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct SearchEntityResponse {
-    pub entities: Vec<Entity>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Entity {
-    pub id: String,
-    pub main_keys: Vec<Term>,
-    pub aliases: Option<Vec<Term>>,
-    pub description: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Term {
-    pub key: String,
-}
-
-impl ApiResponseTrait for SearchEntityResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+impl ApiResponseTrait for LingoEntityResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct SearchEntityBuilder {
-    api_req: ApiRequest<SearchEntityRequest>,
-}
-
-impl SearchEntityBuilder {
-    pub fn new(query: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "lingo_entity_search".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/lingo/v1/entities/search".to_string();
-        builder.api_req.body = Some(SearchEntityRequest {
-            query: query.to_string(),
-            ..Default::default()
-        });
-        builder
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+/// Lingo词条update
+pub async fn search(
+    config: &Config,
+) -> SDKResult<LingoEntity> {
+    let api_endpoint = LingoApiV1::EntityCreate;
+    
+    let api_request: ApiRequest<LingoEntityResponse> = 
+        ApiRequest::get(&api_endpoint.to_url());
+    
+    let response = Transport::request(api_request, config, None).await?;
+    let resp: LingoEntityResponse = response.data.ok_or_else(|| {
+        openlark_core::error::validation_error("response_data", "Response data is missing")
+    })?;
+    
+    resp.data.ok_or_else(|| {
+        openlark_core::error::validation_error("entity_data", "Entity data is missing")
+    })
 }

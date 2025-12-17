@@ -1,76 +1,197 @@
-//! 根据 app_token 和 table_id，获取数据表的所有视图
-//!
-//! doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/list
-
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+/// Bitable 列出视图API
+///
+/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/view/list
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    error::{validation_error, SDKResult},
+    http::Transport,
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct ListViewRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
+// 从 patch 模块导入 View 类型
+use super::patch::View;
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct ListViewResponse {
-    pub items: Vec<View>,
-    pub page_token: String,
-    pub has_more: bool,
-    pub total: i32,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct View {
-    pub view_id: String,
-    pub view_name: String,
-    pub view_type: String,
-}
-
-impl ApiResponseTrait for ListViewResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
-    }
-}
-
-#[derive(Debug)]
-pub struct ListView {
-    config: openlark_core::config::Config,
+/// 列出视图请求
+#[allow(dead_code)]
+#[derive(Debug, Clone)]
+pub struct ListViewsRequest {
+    /// 配置信息
+    config: Config,
+    api_request: ApiRequest<ListViewsResponse>,
+    /// 多维表格的 app_token
     app_token: String,
+    /// 数据表的 table_id
     table_id: String,
-    req: ListViewRequest,
+    /// 用户 ID 类型
+    user_id_type: Option<String>,
+    /// 分页标记
+    page_token: Option<String>,
+    /// 分页大小
+    page_size: Option<i32>,
 }
 
-impl ListView {
-    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>) -> Self {
+impl ListViewsRequest {
+    /// 创建列出视图请求
+    pub fn new(config: Config) -> Self {
         Self {
             config,
-            app_token: app_token.into(),
-            table_id: table_id.into(),
-            req: ListViewRequest::default(),
+            api_request: ApiRequest::get(""),
+            app_token: String::new(),
+            table_id: String::new(),
+            user_id_type: None,
+            page_token: None,
+            page_size: None,
         }
     }
 
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.app_token = app_token;
+        self
+    }
+
+    /// 设置数据表ID
+    pub fn table_id(mut self, table_id: String) -> Self {
+        self.table_id = table_id;
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: String) -> Self {
+        self.page_token = Some(page_token);
+        self
+    }
+
+    /// 设置分页大小
     pub fn page_size(mut self, page_size: i32) -> Self {
-        self.req.page_size = Some(page_size);
+        self.page_size = Some(page_size.min(100)); // 限制最大100
         self
     }
 
-    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
-        self.req.page_token = Some(page_token.into());
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<ListViewsResponse> {
+        // 参数验证
+        if self.app_token.trim().is_empty() {
+            return Err(validation_error("app_token", "应用token不能为空"));
+        }
+
+        if self.table_id.trim().is_empty() {
+            return Err(validation_error("table_id", "数据表ID不能为空"));
+        }
+
+        // 验证分页大小
+        if let Some(page_size) = self.page_size {
+            if page_size <= 0 {
+                return Err(validation_error("page_size", "分页大小必须大于0"));
+            }
+        }
+
+        // 🚀 使用新的enum+builder系统生成API端点
+        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::ViewList(self.app_token.clone(), self.table_id.clone());
+
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<ListViewsResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
+
+        // 构建查询参数
+        if let Some(ref user_id_type) = self.user_id_type {
+            api_request = api_request.query("user_id_type", user_id_type);
+        }
+
+        if let Some(ref page_token) = self.page_token {
+            api_request = api_request.query("page_token", page_token);
+        }
+
+        if let Some(page_size) = self.page_size {
+            api_request = api_request.query("page_size", &page_size.to_string());
+        }
+
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+    }
+}
+
+/// 列出视图Builder
+pub struct ListViewsRequestBuilder {
+    request: ListViewsRequest,
+}
+
+impl ListViewsRequestBuilder {
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: ListViewsRequest::new(config),
+        }
+    }
+
+    /// 设置应用token
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.request = self.request.app_token(app_token);
         self
     }
 
-    pub async fn send(self) -> Result<openlark_core::response::Response<ListViewResponse>, openlark_core::error::Error> {
-        let url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/tables/{}/views",
-            self.config.base_url, self.app_token, self.table_id
-        );
-        let request = ApiRequest::get(&url).query(&self.req);
-        let response = RequestBuilder::new(self.config, request).send().await?;
-        Ok(response)
+    /// 设置数据表ID
+    pub fn table_id(mut self, table_id: String) -> Self {
+        self.request = self.request.table_id(table_id);
+        self
     }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.request = self.request.user_id_type(user_id_type);
+        self
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: String) -> Self {
+        self.request = self.request.page_token(page_token);
+        self
+    }
+
+    /// 设置分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request = self.request.page_size(page_size);
+        self
+    }
+
+    /// 构建请求
+    pub fn build(self) -> ListViewsRequest {
+        self.request
+    }
+}
+
+/// 列出视图响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ListViewsResponse {
+    /// 视图列表数据
+    pub data: ListViewsData,
+}
+
+impl ApiResponseTrait for ListViewsResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 列出视图数据
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ListViewsData {
+    /// 是否还有更多项
+    pub has_more: bool,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 视图信息列表
+    pub items: Vec<View>,
 }

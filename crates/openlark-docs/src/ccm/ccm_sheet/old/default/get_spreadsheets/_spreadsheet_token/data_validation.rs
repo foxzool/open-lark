@@ -1,11 +1,16 @@
-//! 根据 spreadsheetToken 、range 查询range内的下拉列表设置信息；单次查询范围不超过5000行，100列。
+//! 查询下拉列表设置
 //!
-//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/query-datavalidation
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/query-datavalidation
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct QueryDataValidationRequest {
@@ -38,55 +43,26 @@ pub struct DataValidationOptions {
 }
 
 impl ApiResponseTrait for QueryDataValidationResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct QueryDataValidationBuilder {
-    api_req: ApiRequest<QueryDataValidationRequest>,
+/// 查询下拉列表设置
+pub async fn data_validation(
     spreadsheet_token: String,
-}
+    request: QueryDataValidationRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<QueryDataValidationResponse>> {
+    let api_endpoint = CcmSheetApiOld::DataValidation(spreadsheet_token);
+    let mut api_request: ApiRequest<QueryDataValidationResponse> = ApiRequest::get(&api_endpoint.to_url())
+        .query_opt("range", request.range)
+        .query_opt("dataValidationType", request.dataValidationType);
 
-impl QueryDataValidationBuilder {
-    pub fn new(spreadsheet_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_sheet_data_validation_query".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.spreadsheet_token = spreadsheet_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/{}/dataValidation",
-            builder.spreadsheet_token
-        );
-        builder.api_req.body = None;
-        builder
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    pub fn range(mut self, range: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&range={}", range.to_string()));
-        } else {
-            self.api_req.url.push_str(&format!("?range={}", range.to_string()));
-        }
-        self
-    }
-
-    pub fn data_validation_type(mut self, data_validation_type: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&dataValidationType={}", data_validation_type.to_string()));
-        } else {
-            self.api_req.url.push_str(&format!("?dataValidationType={}", data_validation_type.to_string()));
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    Transport::request(api_request, config, None).await
 }

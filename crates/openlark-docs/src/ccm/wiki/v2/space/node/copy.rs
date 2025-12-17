@@ -1,136 +1,97 @@
 /// 复制知识空间节点
 ///
-/// 此接口用于复制知识空间节点到指定位置，包括节点内容和子节点。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space_node/copy
-
+/// 复制知识空间中的节点。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/copy
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat, Response},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceNode;
+
 /// 复制知识空间节点请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CopySpaceNodeRequest {
-    /// 空间ID
-    pub space_id: String,
-    /// 节点ID
-    pub node_id: String,
-    /// 目标父节点ID
-    pub parent_node_id: String,
-    /// 复制后的节点标题
-    pub title: Option<String>,
-    /// 是否复制子节点
-    pub recursive: Option<bool>,
+pub struct CopyWikiSpaceNodeRequest {
+    space_id: String,
+    node_token: String,
+    config: Config,
 }
 
-/// 复制后的节点信息
+/// 复制知识空间节点请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CopiedNode {
-    /// 新节点ID
-    pub node_id: String,
-    /// 节点标题
-    pub title: String,
-    /// 父节点ID
-    pub parent_node_id: String,
-    /// 节点类型
-    pub node_type: String,
-    /// 创建时间
-    pub create_time: Option<i64>,
-    /// 更新时间
-    pub update_time: Option<i64>,
+pub struct CopyWikiSpaceNodeParams {
+    /// 目标父节点Token
+    pub parent_node_token: String,
+    /// 复制后的节点标题（可选，不传则使用原标题）
+    pub title: Option<String>,
 }
 
 /// 复制知识空间节点响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CopySpaceNodeResponse {
+pub struct CopyWikiSpaceNodeResponse {
     /// 复制后的节点信息
-    pub data: Option<CopiedNode>,
+    pub data: Option<WikiSpaceNode>,
 }
 
-impl ApiResponseTrait for CopySpaceNodeResponse {
+impl ApiResponseTrait for CopyWikiSpaceNodeResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 复制知识空间节点
-///
-/// 此接口用于复制知识空间节点到指定位置，包括节点内容和子节点。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space_node/copy
-pub async fn copy_space_node(
-    request: CopySpaceNodeRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<CopySpaceNodeResponse>> {
-    // 构建请求体
-    let mut body = serde_json::json!({
-        "space_id": request.space_id,
-        "node_id": request.node_id,
-        "parent_node_id": request.parent_node_id
-    });
-
-    if let Some(title) = request.title {
-        body["title"] = serde_json::json!(title);
-    }
-    if let Some(recursive) = request.recursive {
-        body["recursive"] = serde_json::json!(recursive);
+impl CopyWikiSpaceNodeRequest {
+    /// 创建复制知识空间节点请求
+    pub fn new(config: Config) -> Self {
+        Self {
+            space_id: String::new(),
+            node_token: String::new(),
+            config,
+        }
     }
 
-    // 创建API请求
-    let mut api_request: ApiRequest<CopySpaceNodeResponse> =
-        ApiRequest::post("/open-apis/wiki/v2/spaces/nodes/copy")
-            .body(body);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+    /// 设置知识空间ID
+    pub fn space_id(mut self, space_id: impl Into<String>) -> Self {
+        self.space_id = space_id.into();
+        self
     }
 
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_copy_space_node_request() {
-        let request = CopySpaceNodeRequest {
-            space_id: "space_123".to_string(),
-            node_id: "node_456".to_string(),
-            parent_node_id: "node_789".to_string(),
-            title: Some("复制的文档".to_string()),
-            recursive: Some(true),
-        };
-
-        assert_eq!(request.space_id, "space_123");
-        assert_eq!(request.node_id, "node_456");
-        assert_eq!(request.title, Some("复制的文档".to_string()));
-        assert_eq!(request.recursive, Some(true));
+    /// 设置节点Token
+    pub fn node_token(mut self, node_token: impl Into<String>) -> Self {
+        self.node_token = node_token.into();
+        self
     }
 
-    #[test]
-    fn test_copied_node() {
-        let node = CopiedNode {
-            node_id: "new_node_456".to_string(),
-            title: "复制的文档".to_string(),
-            parent_node_id: "node_789".to_string(),
-            node_type: "document".to_string(),
-            create_time: Some(1609459200),
-            update_time: Some(1609459200),
-        };
+    /// 执行请求
+    ///
+    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/copy
+    pub async fn execute(
+        self,
+        params: CopyWikiSpaceNodeParams,
+    ) -> SDKResult<CopyWikiSpaceNodeResponse> {
+        // 验证必填字段
+        validate_required!(self.space_id, "知识空间ID不能为空");
+        validate_required!(self.node_token, "节点Token不能为空");
+        validate_required!(params.parent_node_token, "目标父节点Token不能为空");
 
-        assert_eq!(node.node_id, "new_node_456");
-        assert_eq!(node.title, "复制的文档");
-        assert_eq!(node.node_type, "document");
-    }
+        // 使用新的enum+builder系统生成API端点
+        let api_endpoint = WikiApiV2::SpaceNodeCopy(self.space_id.clone(), self.node_token.clone());
 
-    #[test]
-    fn test_response_trait() {
-        assert_eq!(CopySpaceNodeResponse::data_format(), ResponseFormat::Data);
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<CopyWikiSpaceNodeResponse> =
+            ApiRequest::post(&api_endpoint.to_url());
+
+        // 设置请求体
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+            &params,
+        )?));
+
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }

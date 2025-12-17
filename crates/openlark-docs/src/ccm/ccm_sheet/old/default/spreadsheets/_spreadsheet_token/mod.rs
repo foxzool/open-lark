@@ -1,4 +1,5 @@
 pub mod sheets_batch_update;
+pub mod update_sheet_properties;
 pub mod values_prepend;
 pub mod values_append;
 pub mod values_image;
@@ -11,6 +12,7 @@ pub mod values;
 pub mod protected_dimension;
 
 pub use sheets_batch_update::*;
+pub use update_sheet_properties::*;
 pub use values_prepend::*;
 pub use values_append::*;
 pub use values_image::*;

@@ -118,3 +118,4 @@ pub struct FailedItem {
     /// 错误代码
     pub error_code: Option<i32>,
 }
+

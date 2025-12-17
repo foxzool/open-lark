@@ -16,6 +16,7 @@ pub use permission::*;
 
 // 子模块
 pub mod permission;
+pub mod old;
 
 /// CCM Drive Permission 服务
 ///
@@ -43,6 +44,11 @@ impl CcmDrivePermissionService {
     /// 返回权限API服务实例
     pub fn permission(&self) -> crate::ccm::ccm_drive_permission::permission::PermissionService {
         crate::ccm::ccm_drive_permission::permission::PermissionService::new(self.config.clone())
+    }
+
+    /// 获取旧版（old）API
+    pub fn old(&self) -> crate::ccm::ccm_drive_permission::old::CcmDrivePermissionOldService {
+        crate::ccm::ccm_drive_permission::old::CcmDrivePermissionOldService::new(self.config.clone())
     }
 }
 

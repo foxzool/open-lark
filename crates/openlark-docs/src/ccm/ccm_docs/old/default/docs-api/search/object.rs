@@ -3,7 +3,7 @@
 /// 根据搜索条件进行文档搜索。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -11,7 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SearchObjectRequest {
+pub struct SearchObjectReq {
     pub search_key: Option<String>,
     pub count: Option<i32>,
     pub offset: Option<i32>,
@@ -20,21 +20,6 @@ pub struct SearchObjectRequest {
     pub docs_types: Option<Vec<String>>,
     pub docs_sort_type: Option<String>,
     pub is_folder: Option<bool>,
-}
-
-impl SearchObjectRequest {
-    pub fn new() -> Self {
-        Self {
-            search_key: None,
-            count: None,
-            offset: None,
-            owner_ids: None,
-            chat_ids: None,
-            docs_types: None,
-            docs_sort_type: None,
-            is_folder: None,
-        }
-    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -59,12 +44,80 @@ impl ApiResponseTrait for SearchObjectResponse {
     }
 }
 
-pub async fn search_object(
-    request: SearchObjectRequest,
-    config: &Config,
-) -> SDKResult<Response<SearchObjectResponse>> {
-    let mut api_request: ApiRequest<SearchObjectResponse> = ApiRequest::post("/open-apis/suite/docs-api/search/object")
-        .body(serde_json::to_value(request)?);
-    
-    Transport::request(api_request, config, None).await
+/// 搜索云文档请求（旧版）
+pub struct SearchObjectRequest {
+    config: Config,
+    req: SearchObjectReq,
+}
+
+impl SearchObjectRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            req: SearchObjectReq {
+                search_key: None,
+                count: None,
+                offset: None,
+                owner_ids: None,
+                chat_ids: None,
+                docs_types: None,
+                docs_sort_type: None,
+                is_folder: None,
+            },
+        }
+    }
+
+    pub fn search_key(mut self, search_key: impl Into<String>) -> Self {
+        self.req.search_key = Some(search_key.into());
+        self
+    }
+
+    pub fn count(mut self, count: i32) -> Self {
+        self.req.count = Some(count);
+        self
+    }
+
+    pub fn offset(mut self, offset: i32) -> Self {
+        self.req.offset = Some(offset);
+        self
+    }
+
+    pub fn owner_ids(mut self, owner_ids: Vec<String>) -> Self {
+        self.req.owner_ids = Some(owner_ids);
+        self
+    }
+
+    pub fn chat_ids(mut self, chat_ids: Vec<String>) -> Self {
+        self.req.chat_ids = Some(chat_ids);
+        self
+    }
+
+    pub fn docs_types(mut self, docs_types: Vec<String>) -> Self {
+        self.req.docs_types = Some(docs_types);
+        self
+    }
+
+    pub fn docs_sort_type(mut self, docs_sort_type: impl Into<String>) -> Self {
+        self.req.docs_sort_type = Some(docs_sort_type.into());
+        self
+    }
+
+    pub fn is_folder(mut self, is_folder: bool) -> Self {
+        self.req.is_folder = Some(is_folder);
+        self
+    }
+
+    pub async fn send(self) -> SDKResult<SearchObjectResponse> {
+        use crate::common::api_endpoints::CcmDocsApiOld;
+
+        let api_request: ApiRequest<SearchObjectResponse> = ApiRequest::post(
+            &CcmDocsApiOld::SearchObject.to_url(),
+        )
+        .body(serde_json::to_value(&self.req)?);
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("response", "响应数据为空")
+        })
+    }
 }

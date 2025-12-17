@@ -1,53 +1,65 @@
-//! 获取词库列表
-//!
-//! doc: https://open.feishu.cn/document/lingo-v1/repo/list
+/// 获取词库列表
+///
+/// 获取当前可用的词库列表。
+/// docPath: https://open.feishu.cn/document/lingo-v1/repo/list
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
-use serde::{Deserialize, Serialize};
+use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct ListRepoRequest {}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[derive(Debug, serde::Deserialize)]
 pub struct ListRepoResponse {
-    pub items: Vec<Repo>,
+    pub data: Option<RepoData>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Repo {
-    pub id: String,
-    pub name: String,
+#[derive(Debug, serde::Deserialize)]
+pub struct RepoData {
+    pub repos: Vec<RepoItem>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct RepoItem {
+    pub repo_id: String,
+    pub repo_name: String,
+    pub description: Option<String>,
+    pub repo_type: String,
+    pub is_default: bool,
+    pub entity_count: i32,
+    pub create_time: String,
+    pub update_time: String,
 }
 
 impl ApiResponseTrait for ListRepoResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct ListRepoBuilder {
-    api_req: ApiRequest<ListRepoRequest>,
-}
+/// 获取词库列表
+///
+/// 获取当前可用的词库列表。
+/// docPath: https://open.feishu.cn/document/lingo-v1/repo/list
+pub async fn list_repo(
+    config: &Config,
+) -> SDKResult<Vec<RepoItem>> {
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = LingoApiV1::RepoList;
 
-impl ListRepoBuilder {
-    pub fn new() -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "lingo_repo_list".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/lingo/v1/repos".to_string();
-        builder.api_req.body = None;
-        builder
-    }
+    // 创建API请求
+    let api_request: ApiRequest<ListRepoResponse> =
+        ApiRequest::get(&api_endpoint.to_url());
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    let resp: ListRepoResponse = response.data.ok_or_else(|| {
+        openlark_core::error::validation_error("response_data", "Response data is missing")
+    })?;
+
+    resp.data.map(|data| data.repos).ok_or_else(|| {
+        openlark_core::error::validation_error("repo_data", "Repo data is missing")
+    })
 }

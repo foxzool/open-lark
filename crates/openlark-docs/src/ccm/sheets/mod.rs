@@ -204,7 +204,8 @@ mod tests {
     fn test_sheets_service_creation() {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
-            .app_secret("test_app_secret");
+            .app_secret("test_app_secret")
+            .build();
         let service = SheetsService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }
@@ -213,10 +214,11 @@ mod tests {
     fn test_service_trait_implementation() {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
-            .app_secret("test_app_secret");
+            .app_secret("test_app_secret")
+            .build();
         let service = SheetsService::new(config);
 
         let config_ref = service.config();
-        assert_eq!(config_ref.app_id, "test_app_id");
+        assert_eq!(config_ref.app_id(), "test_app_id");
     }
 }

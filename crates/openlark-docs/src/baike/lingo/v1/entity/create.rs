@@ -1,126 +1,64 @@
-//! 创建免审词条
-//!
-//! doc: https://open.feishu.cn/document/lingo-v1/entity/create
+/// 创建Lingo词条
+///
+/// 创建Lingo语言服务词条。
+/// docPath: https://open.feishu.cn/document/lingo-v1/entity/create
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
-use serde::{Deserialize, Serialize};
+use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
+use crate::lingo::v1::LingoEntity;
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct CreateEntityRequest {
-    pub main_keys: Vec<Term>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub aliases: Option<Vec<Term>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub related_meta: Option<RelatedMeta>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub outer_info: Option<OuterInfo>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub rich_text: Option<String>,
+#[derive(Debug, serde::Deserialize)]
+pub struct CreateLingoEntityResponse {
+    pub data: Option<LingoEntity>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Term {
-    pub key: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub display_status: Option<DisplayStatus>,
+#[derive(Debug, serde::Serialize)]
+pub struct CreateLingoEntityParams {
+    pub title: String,
+    pub content: String,
+    pub entity_type: String,
+    pub tags: Option<Vec<String>>,
+    pub language: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DisplayStatus {
-    pub allow_highlight: bool,
-    pub allow_search: bool,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct RelatedMeta {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub users: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub chats: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub docs: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub oncalls: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub links: Option<Vec<String>>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct OuterInfo {
-    pub provider: String,
-    pub outer_id: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct CreateEntityResponse {
-    pub entity: Entity,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Entity {
-    pub id: String,
-    pub main_keys: Vec<Term>,
-    pub aliases: Option<Vec<Term>>,
-    pub description: String,
-    pub creator: String,
-    pub create_time: i64,
-    pub updater: String,
-    pub update_time: i64,
-    pub related_meta: Option<RelatedMeta>,
-    pub outer_info: Option<OuterInfo>,
-    pub rich_text: Option<String>,
-    pub source: Option<i32>,
-}
-
-impl ApiResponseTrait for CreateEntityResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+impl ApiResponseTrait for CreateLingoEntityResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct CreateEntityBuilder {
-    api_req: ApiRequest<CreateEntityRequest>,
-    repo_id: Option<String>,
-}
+/// 创建Lingo词条
+///
+/// 创建Lingo语言服务词条。
+/// docPath: https://open.feishu.cn/document/lingo-v1/entity/create
+pub async fn create_lingo_entity(
+    config: &Config,
+    params: CreateLingoEntityParams,
+) -> SDKResult<LingoEntity> {
+    // 验证必填字段
+    validate_required_field("词条标题", Some(&params.title), "词条标题不能为空")?;
+    validate_required_field("词条内容", Some(&params.content), "词条内容不能为空")?;
+    validate_required_field("词条类型", Some(&params.entity_type), "词条类型不能为空")?;
 
-impl CreateEntityBuilder {
-    pub fn new() -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "lingo_entity_create".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/lingo/v1/entities".to_string();
-        builder.api_req.body = Some(CreateEntityRequest::default());
-        builder
-    }
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = LingoApiV1::EntityCreate;
 
-    pub fn repo_id(mut self, repo_id: impl ToString) -> Self {
-        self.repo_id = Some(repo_id.to_string());
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&repo_id={}", self.repo_id.as_ref().unwrap()));
-        } else {
-            self.api_req.url.push_str(&format!("?repo_id={}", self.repo_id.as_ref().unwrap()));
-        }
-        self
-    }
+    // 创建API请求
+    let api_request: ApiRequest<CreateLingoEntityResponse> =
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建Lingo词条")?);
 
-    pub fn main_keys(mut self, main_keys: Vec<Term>) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.main_keys = main_keys;
-        }
-        self
-    }
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    let resp: CreateLingoEntityResponse = response.data.ok_or_else(|| {
+        openlark_core::error::validation_error("response_data", "Response data is missing")
+    })?;
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    resp.data.ok_or_else(|| {
+        openlark_core::error::validation_error("entity_data", "Entity data is missing")
+    })
 }

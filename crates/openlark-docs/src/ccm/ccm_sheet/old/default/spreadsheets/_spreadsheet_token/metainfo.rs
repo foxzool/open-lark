@@ -1,11 +1,16 @@
 //! 获取表格元数据
 //!
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/obtain-spreadsheet-metadata
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/obtain-spreadsheet-metadata
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct GetSpreadsheetMetaRequest {}
@@ -37,37 +42,24 @@ pub struct Sheet {
 }
 
 impl ApiResponseTrait for GetSpreadsheetMetaResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct GetSpreadsheetMetaBuilder {
-    api_req: ApiRequest<GetSpreadsheetMetaRequest>,
+/// 获取表格元数据
+pub async fn metainfo(
     spreadsheet_token: String,
-}
+    _request: GetSpreadsheetMetaRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<GetSpreadsheetMetaResponse>> {
+    let api_endpoint = CcmSheetApiOld::Metainfo(spreadsheet_token);
+    let mut api_request: ApiRequest<GetSpreadsheetMetaResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-impl GetSpreadsheetMetaBuilder {
-    pub fn new(spreadsheet_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_sheet_spreadsheet_meta_get".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.spreadsheet_token = spreadsheet_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/{}/metainfo",
-            builder.spreadsheet_token
-        );
-        builder.api_req.body = None;
-        builder
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    Transport::request(api_request, config, None).await
 }

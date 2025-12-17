@@ -145,16 +145,16 @@ mod tests {
 
     #[test]
     fn test_version_info_structure() {
-        let creator = CreatorInfo {
+        let creator = GetVersionCreatorInfo {
             user_id: "user_123".to_string(),
             name: "张三".to_string(),
-            avatar: Some(AvatarInfo {
+            avatar: Some(GetVersionAvatarInfo {
                 url: "https://example.com/avatar.jpg".to_string(),
                 size: Some(128),
             }),
         };
 
-        let version_info = VersionInfo {
+        let version_info = GetVersionInfo {
             version_id: "version_456".to_string(),
             version_number: 1,
             name: "第一版".to_string(),

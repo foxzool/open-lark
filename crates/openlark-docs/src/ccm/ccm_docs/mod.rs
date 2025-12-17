@@ -16,6 +16,7 @@ pub use docs::*;
 
 // 子模块
 pub mod docs;
+pub mod old;
 
 /// CCM 文档服务
 ///

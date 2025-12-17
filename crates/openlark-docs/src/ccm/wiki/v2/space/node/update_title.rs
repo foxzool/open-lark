@@ -1,116 +1,96 @@
 /// 更新知识空间节点标题
 ///
-/// 此接口用于更新知识空间节点的标题，支持修改文档或文件夹的名称。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space_node/update_title
-
+/// 更新知识空间中节点的标题。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/updateTitle
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat, Response},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceNode;
+
 /// 更新知识空间节点标题请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UpdateSpaceNodeTitleRequest {
-    /// 空间ID
-    pub space_id: String,
-    /// 节点ID
-    pub node_id: String,
-    /// 新标题
-    pub title: String,
+pub struct UpdateWikiSpaceNodeTitleRequest {
+    space_id: String,
+    node_token: String,
+    config: Config,
 }
 
-/// 更新后的节点信息
+/// 更新知识空间节点标题请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UpdatedNode {
-    /// 节点ID
-    pub node_id: String,
-    /// 新标题
+pub struct UpdateWikiSpaceNodeTitleParams {
+    /// 新的节点标题
     pub title: String,
-    /// 节点类型
-    pub node_type: String,
-    /// 更新时间
-    pub update_time: Option<i64>,
 }
 
 /// 更新知识空间节点标题响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UpdateSpaceNodeTitleResponse {
+pub struct UpdateWikiSpaceNodeTitleResponse {
     /// 更新后的节点信息
-    pub data: Option<UpdatedNode>,
+    pub data: Option<WikiSpaceNode>,
 }
 
-impl ApiResponseTrait for UpdateSpaceNodeTitleResponse {
+impl ApiResponseTrait for UpdateWikiSpaceNodeTitleResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 更新知识空间节点标题
-///
-/// 此接口用于更新知识空间节点的标题，支持修改文档或文件夹的名称。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space_node/update_title
-pub async fn update_space_node_title(
-    request: UpdateSpaceNodeTitleRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<UpdateSpaceNodeTitleResponse>> {
-    // 构建请求体
-    let body = serde_json::json!({
-        "space_id": request.space_id,
-        "node_id": request.node_id,
-        "title": request.title
-    });
-
-    // 创建API请求
-    let mut api_request: ApiRequest<UpdateSpaceNodeTitleResponse> =
-        ApiRequest::patch("/open-apis/wiki/v2/spaces/nodes/title")
-            .body(body);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+impl UpdateWikiSpaceNodeTitleRequest {
+    /// 创建更新知识空间节点标题请求
+    pub fn new(config: Config) -> Self {
+        Self {
+            space_id: String::new(),
+            node_token: String::new(),
+            config,
+        }
     }
 
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_update_space_node_title_request() {
-        let request = UpdateSpaceNodeTitleRequest {
-            space_id: "space_123".to_string(),
-            node_id: "node_456".to_string(),
-            title: "新标题".to_string(),
-        };
-
-        assert_eq!(request.space_id, "space_123");
-        assert_eq!(request.node_id, "node_456");
-        assert_eq!(request.title, "新标题");
+    /// 设置知识空间ID
+    pub fn space_id(mut self, space_id: impl Into<String>) -> Self {
+        self.space_id = space_id.into();
+        self
     }
 
-    #[test]
-    fn test_updated_node() {
-        let node = UpdatedNode {
-            node_id: "node_456".to_string(),
-            title: "新标题".to_string(),
-            node_type: "document".to_string(),
-            update_time: Some(1609459200),
-        };
-
-        assert_eq!(node.node_id, "node_456");
-        assert_eq!(node.title, "新标题");
-        assert_eq!(node.node_type, "document");
+    /// 设置节点Token
+    pub fn node_token(mut self, node_token: impl Into<String>) -> Self {
+        self.node_token = node_token.into();
+        self
     }
 
-    #[test]
-    fn test_response_trait() {
-        assert_eq!(UpdateSpaceNodeTitleResponse::data_format(), ResponseFormat::Data);
+    /// 执行请求
+    ///
+    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/updateTitle
+    pub async fn execute(
+        self,
+        params: UpdateWikiSpaceNodeTitleParams,
+    ) -> SDKResult<UpdateWikiSpaceNodeTitleResponse> {
+        // 验证必填字段
+        validate_required!(self.space_id, "知识空间ID不能为空");
+        validate_required!(self.node_token, "节点Token不能为空");
+        validate_required!(params.title, "节点标题不能为空");
+
+        // 使用新的enum+builder系统生成API端点
+        let api_endpoint =
+            WikiApiV2::SpaceNodeUpdateTitle(self.space_id.clone(), self.node_token.clone());
+
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<UpdateWikiSpaceNodeTitleResponse> =
+            ApiRequest::put(&api_endpoint.to_url());
+
+        // 设置请求体
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+            &params,
+        )?));
+
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
