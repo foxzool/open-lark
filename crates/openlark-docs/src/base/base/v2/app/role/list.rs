@@ -1,98 +1,87 @@
 //! 列出自定义角色
 //!
-//! doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/list-2
+//! 
+//!
+//! [官方文档](https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/list-2)
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use crate::base::base::v2::models::*;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, RequestBuilder, Send},
+    config::Config,
+    error::Error,
+    response::Response,
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct ListRoleRequest {
+/// 列出自定义角色
+#[derive(Debug)]
+pub struct List {
+    config: Config,
+    app_token: String,
+    req: ListReq,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ListReq {
+    /// 分页大小
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
+    /// 分页标记
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct ListRoleResponse {
-    pub items: Vec<Role>,
-    pub page_token: String,
-    pub has_more: bool,
-    pub total: i32,
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ListResp {
+    /// 角色列表
+    pub items: Vec<AppRole>,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 是否还有更多
+    pub has_more: Option<bool>,
+    /// 总数
+    pub total: Option<i32>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Role {
-    pub role_id: String,
-    pub role_name: String,
-    pub table_perms: Vec<TablePerm>,
-    pub block_perms: Option<Vec<BlockPerm>>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct TablePerm {
-    pub table_id: String,
-    pub perm: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct BlockPerm {
-    pub block_id: String,
-    pub perm: String,
-}
-
-impl ApiResponseTrait for ListRoleResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
-    }
-}
-
-#[derive(Debug, Default)]
-pub struct ListRoleBuilder {
-    api_req: ApiRequest<ListRoleRequest>,
-    app_token: String,
-}
-
-impl ListRoleBuilder {
-    pub fn new(app_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "base_role_list".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.app_token = app_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/base/v2/apps/{}/roles",
-            builder.app_token
-        );
-        builder.api_req.body = None;
-        builder
+impl List {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            app_token: String::new(),
+            req: ListReq {
+                page_size: None,
+                page_token: None,
+            },
+        }
     }
 
+    /// 应用 token
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.app_token = app_token.into();
+        self
+    }
+
+    /// 分页大小
     pub fn page_size(mut self, page_size: i32) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_size={}", page_size));
-        } else {
-            self.api_req.url.push_str(&format!("?page_size={}", page_size));
-        }
+        self.req.page_size = Some(page_size);
         self
     }
 
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_token={}", page_token.to_string()));
-        } else {
-            self.api_req.url.push_str(&format!("?page_token={}", page_token.to_string()));
-        }
+    /// 分页标记
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.req.page_token = Some(page_token.into());
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<Response<ListResp>, Error> {
+        let url = format!(
+            "{}/open-apis/base/v2/apps/{}/roles",
+            self.config.base_url, self.app_token
+        );
+        let request = ApiRequest::get(&url).query(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }
+
+impl ApiResponseTrait for ListResp {}

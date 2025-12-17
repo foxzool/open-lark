@@ -3,20 +3,20 @@
 /// 获取用户云空间中指定文件夹下的文件清单。清单类型包括文件、各种在线文档（文档、电子表格、多维表格、思维笔记）、文件夹和快捷方式。
 /// 该接口支持分页，但是不会递归的获取子文件夹的清单。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/list
-
 use serde::{Deserialize, Serialize};
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 
-use crate::common::{api_endpoints::DriveApi, api_utils::*};
+use crate::common::api_endpoints::DriveApi;
 
 /// 获取文件夹中的文件清单请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug)]
 pub struct ListFilesRequest {
+    config: Config,
     /// 文件夹token，不填则获取根目录
     pub parent_folder_token: Option<String>,
     /// 分页大小，默认50，最大1000
@@ -78,23 +78,81 @@ impl ApiResponseTrait for ListFilesResponse {
     }
 }
 
-/// 获取文件夹中的文件清单
-///
-/// 获取用户云空间中指定文件夹下的文件清单。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/list
-pub async fn list_files(
-    config: &Config,
-    params: ListFilesRequest,
-) -> SDKResult<ListFilesResponse> {
-    // 使用DriveApi枚举生成API端点
-    let api_endpoint = DriveApi::ListFiles;
+impl ListFilesRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            parent_folder_token: None,
+            page_size: None,
+            page_token: None,
+            order_by: None,
+            direction: None,
+            search_key: None,
+            file_type: None,
+        }
+    }
 
-    // 创建API请求
-    let api_request: ApiRequest<ListFilesResponse> =
-        ApiRequest::get(&api_endpoint.to_url())
-            .body(serde_json::json!(&params));
+    pub fn parent_folder_token(mut self, parent_folder_token: impl Into<String>) -> Self {
+        self.parent_folder_token = Some(parent_folder_token.into());
+        self
+    }
 
-    // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
-    extract_response_data(response, "获取文件清单")
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.page_token = Some(page_token.into());
+        self
+    }
+
+    pub fn order_by(mut self, order_by: impl Into<String>) -> Self {
+        self.order_by = Some(order_by.into());
+        self
+    }
+
+    pub fn direction(mut self, direction: impl Into<String>) -> Self {
+        self.direction = Some(direction.into());
+        self
+    }
+
+    pub fn search_key(mut self, search_key: impl Into<String>) -> Self {
+        self.search_key = Some(search_key.into());
+        self
+    }
+
+    pub fn file_type(mut self, file_type: impl Into<String>) -> Self {
+        self.file_type = Some(file_type.into());
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<ListFilesResponse>> {
+        let api_endpoint = DriveApi::ListFiles;
+        let mut request = ApiRequest::<ListFilesResponse>::get(&api_endpoint.to_url());
+        
+        if let Some(token) = &self.parent_folder_token {
+            request = request.query("folder_token", token);
+        }
+        if let Some(size) = self.page_size {
+            request = request.query("page_size", size.to_string());
+        }
+        if let Some(token) = &self.page_token {
+            request = request.query("page_token", token);
+        }
+        if let Some(order) = &self.order_by {
+            request = request.query("order_by", order);
+        }
+        if let Some(direction) = &self.direction {
+            request = request.query("direction", direction);
+        }
+        if let Some(key) = &self.search_key {
+            request = request.query("search_key", key);
+        }
+        if let Some(t) = &self.file_type {
+            request = request.query("file_type", t);
+        }
+
+        Transport::request(request, &self.config, None).await
+    }
 }

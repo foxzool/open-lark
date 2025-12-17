@@ -28,41 +28,36 @@ impl ApiResponseTrait for UpdateWorkflowResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct UpdateWorkflowBuilder {
-    api_req: ApiRequest<UpdateWorkflowRequest>,
+#[derive(Debug)]
+pub struct UpdateWorkflow {
+    config: openlark_core::config::Config,
     app_token: String,
     workflow_id: String,
+    req: UpdateWorkflowRequest,
 }
 
-impl UpdateWorkflowBuilder {
-    pub fn new(app_token: impl ToString, workflow_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_workflow_update".to_string();
-        builder.api_req.method = "PUT".to_string();
-        builder.app_token = app_token.to_string();
-        builder.workflow_id = workflow_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/workflows/{}",
-            builder.app_token, builder.workflow_id
-        );
-        builder.api_req.body = Some(UpdateWorkflowRequest::default());
-        builder
+impl UpdateWorkflow {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, workflow_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            workflow_id: workflow_id.into(),
+            req: UpdateWorkflowRequest::default(),
+        }
     }
 
-    pub fn status(mut self, status: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.status = status.to_string();
-        }
+    pub fn status(mut self, status: impl Into<String>) -> Self {
+        self.req.status = status.into();
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<UpdateWorkflowResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/workflows/{}",
+            self.config.base_url, self.app_token, self.workflow_id
+        );
+        let request = ApiRequest::put(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

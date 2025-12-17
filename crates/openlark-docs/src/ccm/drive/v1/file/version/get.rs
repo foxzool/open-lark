@@ -42,7 +42,7 @@ impl GetFileVersionRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetFileVersionResponse {
     /// 版本信息
-    pub data: Option<VersionInfo>,
+    pub data: Option<GetVersionInfo>,
 }
 
 impl ApiResponseTrait for GetFileVersionResponse {
@@ -53,7 +53,7 @@ impl ApiResponseTrait for GetFileVersionResponse {
 
 /// 版本信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct VersionInfo {
+pub struct GetVersionInfo {
     /// 版本ID
     pub version_id: String,
     /// 版本号
@@ -63,7 +63,7 @@ pub struct VersionInfo {
     /// 创建时间
     pub created_at: String,
     /// 创建者信息
-    pub creator: CreatorInfo,
+    pub creator: GetVersionCreatorInfo,
     /// 文件大小
     pub size: u64,
     /// 版本类型
@@ -82,18 +82,18 @@ pub struct VersionInfo {
 
 /// 创建者信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreatorInfo {
+pub struct GetVersionCreatorInfo {
     /// 用户ID
     pub user_id: String,
     /// 用户名
     pub name: String,
     /// 头像
-    pub avatar: Option<AvatarInfo>,
+    pub avatar: Option<GetVersionAvatarInfo>,
 }
 
 /// 头像信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AvatarInfo {
+pub struct GetVersionAvatarInfo {
     /// 头像URL
     pub url: String,
     /// 头像大小

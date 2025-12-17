@@ -3,7 +3,7 @@
 /// 批量为文件或文件夹添加协作者权限
 /// docPath: https://open.feishu.cn/document/docs/permission/permission-member/batch_create
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -14,6 +14,8 @@ use serde::{Deserialize, Serialize};
 /// 批量增加协作者权限请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchCreatePermissionMemberRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件token
     pub token: String,
     /// 成员权限列表
@@ -44,13 +46,16 @@ impl BatchCreatePermissionMemberRequest {
     /// 创建批量增加协作者权限请求
     ///
     /// # 参数
+    /// * `config` - 配置
     /// * `token` - 文件token
     /// * `members` - 成员权限列表
     pub fn new(
+        config: Config,
         token: impl Into<String>,
         members: Vec<MemberPermission>,
     ) -> Self {
         Self {
+            config,
             token: token.into(),
             members,
             notify: None,
@@ -61,6 +66,23 @@ impl BatchCreatePermissionMemberRequest {
     pub fn notify(mut self, notify: bool) -> Self {
         self.notify = Some(notify);
         self
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<BatchCreatePermissionMemberResponse>> {
+        let api_endpoint = format!("/open-apis/drive/v1/permissions/{}/members/batch_create", self.token);
+
+        let mut body = serde_json::json!({
+            "members": self.members
+        });
+
+        if let Some(notify) = self.notify {
+            body["notify"] = serde_json::json!(notify);
+        }
+
+        let api_request = ApiRequest::<BatchCreatePermissionMemberResponse>::post(&api_endpoint)
+            .body(body);
+        
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -135,47 +157,16 @@ impl ApiResponseTrait for BatchCreatePermissionMemberResponse {
     }
 }
 
-/// 批量增加协作者权限
-///
-/// 批量为文件或文件夹添加协作者权限
-/// docPath: https://open.feishu.cn/document/docs/permission/permission-member/batch_create
-pub async fn batch_create_permission_member(
-    request: BatchCreatePermissionMemberRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<BatchCreatePermissionMemberResponse>> {
-    // 构建请求体
-    let mut body = serde_json::json!({
-        "members": request.members
-    });
-
-    if let Some(notify) = request.notify {
-        body["notify"] = serde_json::json!(notify);
-    }
-
-    // 创建API请求
-    let mut api_request: ApiRequest<BatchCreatePermissionMemberResponse> =
-        ApiRequest::post(&format!("/open-apis/drive/v1/permissions/{}/members/batch_create", request.token))
-            .body(body);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_batch_create_permission_member_request_builder() {
+        let config = Config::default();
         let member = MemberInfo::new("user_123", "user");
         let permission = MemberPermission::new(member, "view");
-        let request = BatchCreatePermissionMemberRequest::new("file_token", vec![permission])
+        let request = BatchCreatePermissionMemberRequest::new(config, "file_token", vec![permission])
             .notify(true);
 
         assert_eq!(request.token, "file_token");

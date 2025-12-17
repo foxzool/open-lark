@@ -73,41 +73,56 @@ impl ApiResponseTrait for SearchRecordResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct SearchRecordBuilder {
-    api_req: ApiRequest<SearchRecordRequest>,
+#[derive(Debug)]
+pub struct SearchRecord {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
+    req: SearchRecordRequest,
 }
 
-impl SearchRecordBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_record_search".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/search",
-            builder.app_token, builder.table_id
-        );
-        builder.api_req.body = Some(SearchRecordRequest::default());
-        builder
+impl SearchRecord {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            req: SearchRecordRequest::default(),
+        }
     }
 
-    pub fn view_id(mut self, view_id: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.view_id = Some(view_id.to_string());
-        }
+    pub fn view_id(mut self, view_id: impl Into<String>) -> Self {
+        self.req.view_id = Some(view_id.into());
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub fn field_names(mut self, field_names: Vec<String>) -> Self {
+        self.req.field_names = Some(field_names);
+        self
+    }
+
+    pub fn sort(mut self, sort: Vec<Sort>) -> Self {
+        self.req.sort = Some(sort);
+        self
+    }
+
+    pub fn filter(mut self, filter: Filter) -> Self {
+        self.req.filter = Some(filter);
+        self
+    }
+
+    pub fn automatic_fields(mut self, automatic_fields: bool) -> Self {
+        self.req.automatic_fields = Some(automatic_fields);
+        self
+    }
+
+    pub async fn send(self) -> Result<openlark_core::response::Response<SearchRecordResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/records/search",
+            self.config.base_url, self.app_token, self.table_id
+        );
+        let request = ApiRequest::post(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

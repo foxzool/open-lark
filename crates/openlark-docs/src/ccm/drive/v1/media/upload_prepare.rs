@@ -13,6 +13,8 @@ use serde::{Deserialize, Serialize};
 /// 分片上传素材-预上传请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UploadPrepareRequest {
+    #[serde(skip)]
+    config: Config,
     /// 父文件夹token
     pub parent_folder_token: String,
     /// 文件名
@@ -27,15 +29,18 @@ impl UploadPrepareRequest {
     /// 创建分片上传素材-预上传请求
     ///
     /// # 参数
+    /// * `config` - 配置
     /// * `parent_folder_token` - 父文件夹token
     /// * `file_name` - 文件名
     /// * `size` - 文件大小
     pub fn new(
+        config: Config,
         parent_folder_token: impl Into<String>,
         file_name: impl Into<String>,
         size: i64,
     ) -> Self {
         Self {
+            config,
             parent_folder_token: parent_folder_token.into(),
             file_name: file_name.into(),
             size,
@@ -47,6 +52,18 @@ impl UploadPrepareRequest {
     pub fn content_type(mut self, content_type: impl Into<String>) -> Self {
         self.content_type = Some(content_type.into());
         self
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<UploadPrepareResponse>> {
+        // 构建API端点 - media upload prepare uses different endpoint than file upload prepare
+        // Using manual path as per original code
+        let url = "/open-apis/drive/v1/medias/upload_prepare";
+
+        let api_request: ApiRequest<UploadPrepareResponse> =
+            ApiRequest::post(url)
+                .json_body(&self);
+
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -80,39 +97,14 @@ impl ApiResponseTrait for UploadPrepareResponse {
     }
 }
 
-/// 分片上传素材-预上传
-///
-/// 发送初始化请求获取上传事务ID和分块策略，目前是以4MB大小进行定长分片。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/multipart-upload-media/upload_prepare
-pub async fn upload_prepare(
-    request: UploadPrepareRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<UploadPrepareResponse>> {
-    // 构建API端点
-    let url = "/open-apis/drive/v1/medias/upload_prepare";
-
-    // 创建API请求
-    let mut api_request: ApiRequest<UploadPrepareResponse> =
-        ApiRequest::post(url)
-            .body(serde_json::to_value(request)?);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_upload_prepare_request() {
-        let request = UploadPrepareRequest::new("folder_token", "image.jpg", 2048576)
+        let config = Config::default();
+        let request = UploadPrepareRequest::new(config, "folder_token", "image.jpg", 2048576)
             .content_type("image/jpeg");
 
         assert_eq!(request.parent_folder_token, "folder_token");

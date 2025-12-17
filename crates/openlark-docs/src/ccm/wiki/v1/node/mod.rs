@@ -1,2 +1,2 @@
-pub mod search;
-pub use search::*;
+// pub mod search; // Disabled: Uses deprecated LarkAPIError/RequestBuilder imports
+// pub use search::*;

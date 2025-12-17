@@ -15,6 +15,8 @@ use crate::common::api_endpoints::DriveApi;
 /// 获取导出任务请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetExportTaskRequest {
+    #[serde(skip)]
+    config: Config,
     /// 任务ticket
     pub ticket: String,
     /// 文件token
@@ -22,11 +24,21 @@ pub struct GetExportTaskRequest {
 }
 
 impl GetExportTaskRequest {
-    pub fn new(ticket: impl Into<String>, token: impl Into<String>) -> Self {
+    pub fn new(config: Config, ticket: impl Into<String>, token: impl Into<String>) -> Self {
         Self {
+            config,
             ticket: ticket.into(),
             token: token.into(),
         }
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<GetExportTaskResponse>> {
+        let api_endpoint = DriveApi::GetExportTask(self.ticket.clone());
+
+        let api_request = ApiRequest::<GetExportTaskResponse>::get(&api_endpoint.to_url())
+            .query("token", &self.token);
+
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -49,21 +61,20 @@ impl ApiResponseTrait for GetExportTaskResponse {
     }
 }
 
-/// 获取导出任务状态
-pub async fn get_export_task(
-    request: GetExportTaskRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<GetExportTaskResponse>> {
-    let api_endpoint = DriveApi::GetExportTask(request.ticket.clone());
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    let mut api_request: ApiRequest<GetExportTaskResponse> =
-        ApiRequest::get(&api_endpoint.to_url())
-            .query("token", &request.token);
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+    #[test]
+    fn test_get_export_task_request_builder() {
+        let config = Config::default();
+        let request = GetExportTaskRequest::new(config, "ticket", "token");
+        assert_eq!(request.ticket, "ticket");
+        assert_eq!(request.token, "token");
     }
 
-    Transport::request(api_request, config, None).await
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(GetExportTaskResponse::data_format(), ResponseFormat::Data);
+    }
 }

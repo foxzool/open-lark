@@ -97,6 +97,7 @@ pub struct ApiRequest<R> {
     pub headers: HashMap<String, String>,
     pub query: HashMap<String, String>,
     pub body: Option<RequestData>,
+    pub file: Option<Vec<u8>>,
     pub timeout: Option<Duration>,
     pub _phantom: std::marker::PhantomData<R>,
 }
@@ -109,6 +110,7 @@ impl<R> ApiRequest<R> {
             headers: HashMap::new(),
             query: HashMap::new(),
             body: None,
+            file: None,
             timeout: None,
             _phantom: std::marker::PhantomData,
         }
@@ -121,6 +123,7 @@ impl<R> ApiRequest<R> {
             headers: HashMap::new(),
             query: HashMap::new(),
             body: None,
+            file: None,
             timeout: None,
             _phantom: std::marker::PhantomData,
         }
@@ -133,6 +136,7 @@ impl<R> ApiRequest<R> {
             headers: HashMap::new(),
             query: HashMap::new(),
             body: None,
+            file: None,
             timeout: None,
             _phantom: std::marker::PhantomData,
         }
@@ -145,6 +149,7 @@ impl<R> ApiRequest<R> {
             headers: HashMap::new(),
             query: HashMap::new(),
             body: None,
+            file: None,
             timeout: None,
             _phantom: std::marker::PhantomData,
         }
@@ -157,6 +162,7 @@ impl<R> ApiRequest<R> {
             headers: HashMap::new(),
             query: HashMap::new(),
             body: None,
+            file: None,
             timeout: None,
             _phantom: std::marker::PhantomData,
         }
@@ -194,6 +200,12 @@ impl<R> ApiRequest<R> {
 
     pub fn body(mut self, body: impl Into<RequestData>) -> Self {
         self.body = Some(body.into());
+        self
+    }
+
+    /// 设置文件内容 (用于 multipart 上传)
+    pub fn file_content(mut self, file: Vec<u8>) -> Self {
+        self.file = Some(file);
         self
     }
 
@@ -267,8 +279,7 @@ impl<R> ApiRequest<R> {
     }
 
     pub fn file(&self) -> Vec<u8> {
-        // 默认返回空，因为新结构不直接支持文件上传
-        vec![]
+        self.file.clone().unwrap_or_default()
     }
 
     /// 应用请求选项（兼容方法）

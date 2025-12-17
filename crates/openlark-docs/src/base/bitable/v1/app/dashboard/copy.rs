@@ -24,41 +24,46 @@ impl ApiResponseTrait for CopyDashboardResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct CopyDashboardBuilder {
-    api_req: ApiRequest<CopyDashboardRequest>,
+#[derive(Debug)]
+pub struct CopyDashboard {
+    config: openlark_core::config::Config,
     app_token: String,
     block_id: String,
+    req: CopyDashboardRequest,
 }
 
-impl CopyDashboardBuilder {
-    pub fn new(app_token: impl ToString, block_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_dashboard_copy".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.app_token = app_token.to_string();
-        builder.block_id = block_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/dashboards/{}/copy",
-            builder.app_token, builder.block_id
-        );
-        builder.api_req.body = Some(CopyDashboardRequest::default());
-        builder
+impl CopyDashboard {
+    pub fn new(config: openlark_core::config::Config) -> Self {
+        Self {
+            config,
+            app_token: String::new(),
+            block_id: String::new(),
+            req: CopyDashboardRequest::default(),
+        }
     }
 
-    pub fn name(mut self, name: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.name = name.to_string();
-        }
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.app_token = app_token.into();
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub fn block_id(mut self, block_id: impl Into<String>) -> Self {
+        self.block_id = block_id.into();
+        self
+    }
+
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.req.name = name.into();
+        self
+    }
+
+    pub async fn send(self) -> Result<openlark_core::response::Response<CopyDashboardResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/dashboards/{}/copy",
+            self.config.base_url, self.app_token, self.block_id
+        );
+        let request = ApiRequest::post(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

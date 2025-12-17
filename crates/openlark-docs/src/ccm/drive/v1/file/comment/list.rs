@@ -73,7 +73,7 @@ pub struct AuthorInfo {
 
 /// 评论信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CommentInfo {
+pub struct ListCommentInfo {
     /// 评论ID
     pub comment_id: String,
     /// 评论内容
@@ -99,7 +99,7 @@ pub struct ListCommentsResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CommentsData {
     /// 评论列表
-    pub items: Option<Vec<CommentInfo>>,
+    pub items: Option<Vec<ListCommentInfo>>,
     /// 分页标记
     pub page_token: Option<String>,
     /// 是否有更多

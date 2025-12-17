@@ -66,7 +66,7 @@ impl ApiResponseTrait for ListFileVersionsResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VersionListData {
     /// 版本列表
-    pub versions: Vec<VersionInfo>,
+    pub versions: Vec<ListVersionInfo>,
     /// 是否有更多数据
     pub has_more: bool,
     /// 分页标记
@@ -75,7 +75,7 @@ pub struct VersionListData {
 
 /// 版本信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct VersionInfo {
+pub struct ListVersionInfo {
     /// 版本ID
     pub version_id: String,
     /// 版本号
@@ -85,7 +85,7 @@ pub struct VersionInfo {
     /// 创建时间
     pub created_at: String,
     /// 创建者信息
-    pub creator: CreatorInfo,
+    pub creator: ListVersionCreatorInfo,
     /// 文件大小
     pub size: u64,
     /// 版本类型
@@ -100,18 +100,18 @@ pub struct VersionInfo {
 
 /// 创建者信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreatorInfo {
+pub struct ListVersionCreatorInfo {
     /// 用户ID
     pub user_id: String,
     /// 用户名
     pub name: String,
     /// 头像
-    pub avatar: Option<AvatarInfo>,
+    pub avatar: Option<ListVersionAvatarInfo>,
 }
 
 /// 头像信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AvatarInfo {
+pub struct ListVersionAvatarInfo {
     /// 头像URL
     pub url: String,
     /// 头像大小

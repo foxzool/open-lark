@@ -35,46 +35,44 @@ impl ApiResponseTrait for UpdateAppResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct UpdateAppBuilder {
-    api_req: ApiRequest<UpdateAppRequest>,
+#[derive(Debug)]
+pub struct UpdateApp {
+    config: openlark_core::config::Config,
     app_token: String,
+    req: UpdateAppRequest,
 }
 
-impl UpdateAppBuilder {
-    pub fn new(app_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_app_update".to_string();
-        builder.api_req.method = "PUT".to_string();
-        builder.app_token = app_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}",
-            builder.app_token
-        );
-        builder.api_req.body = Some(UpdateAppRequest::default());
-        builder
+impl UpdateApp {
+    pub fn new(config: openlark_core::config::Config) -> Self {
+        Self {
+            config,
+            app_token: String::new(),
+            req: UpdateAppRequest::default(),
+        }
     }
 
-    pub fn name(mut self, name: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.name = Some(name.to_string());
-        }
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.app_token = app_token.into();
+        self
+    }
+
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.req.name = Some(name.into());
         self
     }
 
     pub fn is_advanced(mut self, is_advanced: bool) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.is_advanced = Some(is_advanced);
-        }
+        self.req.is_advanced = Some(is_advanced);
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<UpdateAppResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}",
+            self.config.base_url, self.app_token
+        );
+        let request = ApiRequest::put(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

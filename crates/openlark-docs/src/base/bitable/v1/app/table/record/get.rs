@@ -51,36 +51,58 @@ impl ApiResponseTrait for GetRecordResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct GetRecordBuilder {
-    api_req: ApiRequest<GetRecordRequest>,
+#[derive(Debug)]
+pub struct GetRecord {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
     record_id: String,
+    req: GetRecordRequest,
 }
 
-impl GetRecordBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString, record_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_record_get".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.record_id = record_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
-            builder.app_token, builder.table_id, builder.record_id
-        );
-        builder.api_req.body = None;
-        builder
+impl GetRecord {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>, record_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            record_id: record_id.into(),
+            req: GetRecordRequest::default(),
+        }
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub fn text_field_as_array(mut self, text_field_as_array: bool) -> Self {
+        self.req.text_field_as_array = Some(text_field_as_array);
+        self
+    }
+
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.req.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    pub fn display_formula_ref(mut self, display_formula_ref: bool) -> Self {
+        self.req.display_formula_ref = Some(display_formula_ref);
+        self
+    }
+
+    pub fn with_shared_url(mut self, with_shared_url: bool) -> Self {
+        self.req.with_shared_url = Some(with_shared_url);
+        self
+    }
+
+    pub fn automatic_fields(mut self, automatic_fields: bool) -> Self {
+        self.req.automatic_fields = Some(automatic_fields);
+        self
+    }
+
+    pub async fn send(self) -> Result<openlark_core::response::Response<GetRecordResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
+            self.config.base_url, self.app_token, self.table_id, self.record_id
+        );
+        let request = ApiRequest::get(&url).query(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

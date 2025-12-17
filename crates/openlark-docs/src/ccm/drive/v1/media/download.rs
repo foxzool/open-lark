@@ -15,15 +15,25 @@ use crate::common::api_endpoints::DriveApi;
 /// 下载素材请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DownloadMediaRequest {
+    #[serde(skip)]
+    config: Config,
     /// 媒体token
     pub file_token: String,
 }
 
 impl DownloadMediaRequest {
-    pub fn new(file_token: impl Into<String>) -> Self {
+    pub fn new(config: Config, file_token: impl Into<String>) -> Self {
         Self {
+            config,
             file_token: file_token.into(),
         }
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<DownloadMediaResponse>> {
+        let api_endpoint = DriveApi::DownloadMedia(self.file_token.clone());
+        let request = ApiRequest::<DownloadMediaResponse>::get(&api_endpoint.to_url());
+
+        Transport::request(request, &self.config, None).await
     }
 }
 
@@ -40,20 +50,19 @@ impl ApiResponseTrait for DownloadMediaResponse {
     }
 }
 
-/// 下载素材
-pub async fn download_media(
-    request: DownloadMediaRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<DownloadMediaResponse>> {
-    let api_endpoint = DriveApi::DownloadMedia(request.file_token.clone());
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    let mut api_request: ApiRequest<DownloadMediaResponse> =
-        ApiRequest::get(&api_endpoint.to_url());
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+    #[test]
+    fn test_download_media_request() {
+        let config = Config::default();
+        let request = DownloadMediaRequest::new(config, "media_token");
+        assert_eq!(request.file_token, "media_token");
     }
 
-    Transport::request(api_request, config, None).await
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(DownloadMediaResponse::data_format(), ResponseFormat::Data);
+    }
 }

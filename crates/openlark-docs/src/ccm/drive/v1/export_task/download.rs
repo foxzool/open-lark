@@ -15,15 +15,26 @@ use crate::common::api_endpoints::DriveApi;
 /// 下载导出文件请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DownloadExportRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件token
     pub file_token: String,
 }
 
 impl DownloadExportRequest {
-    pub fn new(file_token: impl Into<String>) -> Self {
+    pub fn new(config: Config, file_token: impl Into<String>) -> Self {
         Self {
+            config,
             file_token: file_token.into(),
         }
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<DownloadExportResponse>> {
+        let api_endpoint = DriveApi::DownloadExportFile(self.file_token.clone());
+
+        let api_request = ApiRequest::<DownloadExportResponse>::get(&api_endpoint.to_url());
+
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -40,20 +51,19 @@ impl ApiResponseTrait for DownloadExportResponse {
     }
 }
 
-/// 下载导出文件
-pub async fn download_export(
-    request: DownloadExportRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<DownloadExportResponse>> {
-    let api_endpoint = DriveApi::DownloadExportFile(request.file_token.clone());
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    let mut api_request: ApiRequest<DownloadExportResponse> =
-        ApiRequest::get(&api_endpoint.to_url());
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+    #[test]
+    fn test_download_export_request_builder() {
+        let config = Config::default();
+        let request = DownloadExportRequest::new(config, "file_token");
+        assert_eq!(request.file_token, "file_token");
     }
 
-    Transport::request(api_request, config, None).await
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(DownloadExportResponse::data_format(), ResponseFormat::Data);
+    }
 }

@@ -22,36 +22,31 @@ impl ApiResponseTrait for DeleteRecordResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct DeleteRecordBuilder {
-    api_req: ApiRequest<DeleteRecordRequest>,
+#[derive(Debug)]
+pub struct DeleteRecord {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
     record_id: String,
 }
 
-impl DeleteRecordBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString, record_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_record_delete".to_string();
-        builder.api_req.method = "DELETE".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.record_id = record_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
-            builder.app_token, builder.table_id, builder.record_id
-        );
-        builder.api_req.body = Some(DeleteRecordRequest::default());
-        builder
+impl DeleteRecord {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>, record_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            record_id: record_id.into(),
+        }
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<DeleteRecordResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
+            self.config.base_url, self.app_token, self.table_id, self.record_id
+        );
+        let request = ApiRequest::delete(&url);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

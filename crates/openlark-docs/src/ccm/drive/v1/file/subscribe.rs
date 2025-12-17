@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -15,19 +15,43 @@ use crate::common::api_endpoints::DriveApi;
 /// 订阅文件请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SubscribeFileRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件token
     pub file_token: String,
+    /// 订阅类型
+    pub event_type: Option<String>,
 }
 
 impl SubscribeFileRequest {
     /// 创建订阅文件请求
     ///
     /// # 参数
+    /// * `config` - 配置
     /// * `file_token` - 文件token
-    pub fn new(file_token: impl Into<String>) -> Self {
+    pub fn new(config: Config, file_token: impl Into<String>) -> Self {
         Self {
+            config,
             file_token: file_token.into(),
+            event_type: None,
         }
+    }
+
+    /// 设置订阅类型
+    pub fn event_type(mut self, event_type: impl Into<String>) -> Self {
+        self.event_type = Some(event_type.into());
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<SubscribeFileResponse>> {
+        let api_endpoint = DriveApi::SubscribeFile(self.file_token.clone());
+        let mut request = ApiRequest::<SubscribeFileResponse>::post(&api_endpoint.to_url());
+        
+        if let Some(et) = &self.event_type {
+            request = request.query("event_type", et);
+        }
+
+        Transport::request(request, &self.config, None).await
     }
 }
 
@@ -53,38 +77,14 @@ impl ApiResponseTrait for SubscribeFileResponse {
     }
 }
 
-/// 订阅文件更新
-///
-/// 订阅文件的更新通知
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/event/subscribe
-pub async fn subscribe_file(
-    request: SubscribeFileRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<SubscribeFileResponse>> {
-    // 使用DriveApi枚举生成API端点
-    let api_endpoint = DriveApi::SubscribeFile(request.file_token.clone());
-
-    // 创建API请求
-    let mut api_request: ApiRequest<SubscribeFileResponse> =
-        ApiRequest::post(&api_endpoint.to_url());
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_subscribe_file_request_builder() {
-        let request = SubscribeFileRequest::new("file_token");
+        let config = Config::default();
+        let request = SubscribeFileRequest::new(config, "file_token");
 
         assert_eq!(request.file_token, "file_token");
     }

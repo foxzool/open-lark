@@ -48,41 +48,36 @@ impl ApiResponseTrait for BatchUpdateRecordResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct BatchUpdateRecordBuilder {
-    api_req: ApiRequest<BatchUpdateRecordRequest>,
+#[derive(Debug)]
+pub struct BatchUpdateRecord {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
+    req: BatchUpdateRecordRequest,
 }
 
-impl BatchUpdateRecordBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_record_batch_update".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_update",
-            builder.app_token, builder.table_id
-        );
-        builder.api_req.body = Some(BatchUpdateRecordRequest::default());
-        builder
+impl BatchUpdateRecord {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            req: BatchUpdateRecordRequest::default(),
+        }
     }
 
     pub fn records(mut self, records: Vec<RecordSpec>) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.records = records;
-        }
+        self.req.records = records;
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<BatchUpdateRecordResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_update",
+            self.config.base_url, self.app_token, self.table_id
+        );
+        let request = ApiRequest::post(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }
