@@ -1,20 +1,19 @@
+use crate::baike::models::*;
 /// 词条高亮
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/baike-v1/entity/highlight
 ///
 /// 传入一句话，智能识别句中对应的词条，并返回词条位置和 entity_id，
 /// 可在外部系统中快速实现词条智能高亮。
-
 use openlark_core::{
-    error::SDKResult,
-    config::Config,
-    request_builder::UnifiedRequestBuilder,
-    constants::AccessTokenType,
     api::{ApiRequest, Response},
+    config::Config,
+    constants::AccessTokenType,
+    error::SDKResult,
     req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
 use serde::{Deserialize, Serialize};
-use crate::baike::models::*;
 
 /// 词条高亮请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -78,15 +77,17 @@ impl<'a> HighlightEntityBuilder<'a> {
 
     /// 执行词条高亮操作
     pub async fn execute(self) -> SDKResult<HighlightEntityResponse> {
-        let mut api_request: ApiRequest<HighlightEntityResponse> = ApiRequest::post("/open-apis/baike/v1/entities/highlight")
-            .body(serde_json::to_value(&self.request)?);
+        let mut api_request: ApiRequest<HighlightEntityResponse> =
+            ApiRequest::post("/open-apis/baike/v1/entities/highlight")
+                .body(serde_json::to_value(&self.request)?);
 
         let http_request = UnifiedRequestBuilder::build(
             &mut api_request,
             AccessTokenType::App,
             self.config,
             &RequestOption::default(),
-        ).await?;
+        )
+        .await?;
 
         let response = http_request.send().await?;
         let resp: Response<_> = response.json().await?;

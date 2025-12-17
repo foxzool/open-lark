@@ -2,7 +2,6 @@
 ///
 /// 批量更新块的富文本内容。
 /// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/batch_update
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

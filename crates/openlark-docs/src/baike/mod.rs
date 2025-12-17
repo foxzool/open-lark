@@ -9,11 +9,11 @@ pub use lingo::*;
 pub mod baike;
 pub use baike::*;
 
-pub mod v1;
 pub mod models;
+pub mod v1;
 
 // 重新导出服务和v1版本
-pub use v1::{LingoV1Service, BaikeV1Service};
+pub use v1::{BaikeV1Service, LingoV1Service};
 
 /// Baike 知识库服务（兼容旧接口）
 #[derive(Debug, Clone)]
@@ -42,7 +42,6 @@ impl BaikeService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::trait_system::service::Service;
 
     #[test]
     fn test_baike_service_creation() {

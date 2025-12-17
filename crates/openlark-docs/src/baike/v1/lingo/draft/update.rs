@@ -1,19 +1,18 @@
+use crate::baike::models::*;
 /// 更新草稿
 ///
 /// API文档: https://open.feishu.cn/document/lingo-v1/draft/update
 ///
 /// 根据 draft_id 更新草稿内容，已审批的草稿无法编辑。
-
 use openlark_core::{
-    error::SDKResult,
-    config::Config,
-    request_builder::UnifiedRequestBuilder,
-    constants::AccessTokenType,
     api::{ApiRequest, Response},
+    config::Config,
+    constants::AccessTokenType,
+    error::SDKResult,
     req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
 use serde::{Deserialize, Serialize};
-use crate::baike::models::*;
 
 /// 更新草稿请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -105,15 +104,16 @@ impl<'a> UpdateDraftBuilder<'a> {
     /// 执行更新草稿操作
     pub async fn execute(self) -> SDKResult<UpdateDraftResponse> {
         let path = format!("/open-apis/lingo/v1/drafts/{}", self.request.draft_id);
-        let mut api_request: ApiRequest<UpdateDraftResponse> = ApiRequest::put(&path)
-            .body(serde_json::to_value(&self.request)?);
+        let mut api_request: ApiRequest<UpdateDraftResponse> =
+            ApiRequest::put(&path).body(serde_json::to_value(&self.request)?);
 
         let http_request = UnifiedRequestBuilder::build(
             &mut api_request,
             AccessTokenType::App,
             self.config,
             &RequestOption::default(),
-        ).await?;
+        )
+        .await?;
 
         let response = http_request.send().await?;
         let resp: Response<_> = response.json().await?;

@@ -69,20 +69,20 @@ impl BatchDeleteTableRequest {
         }
 
         let api_endpoint = BitableApiV1::TableBatchDelete(self.app_token);
-        let mut api_request: ApiRequest<BatchDeleteTableResponse> =
-            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(
-                &BatchDeleteTableRequestBody {
-                    table_ids: self.table_ids,
-                },
-            )?);
+        let mut api_request: ApiRequest<BatchDeleteTableResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_vec(&BatchDeleteTableRequestBody {
+            table_ids: self.table_ids,
+        })?);
 
         api_request = api_request.query_opt("user_id_type", self.user_id_type);
         api_request = api_request.query_opt("client_token", self.client_token);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("response", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 
@@ -137,4 +137,3 @@ impl ApiResponseTrait for BatchDeleteTableResponse {
         ResponseFormat::Data
     }
 }
-

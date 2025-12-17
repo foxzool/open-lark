@@ -41,7 +41,7 @@ impl DownloadFileRequest {
     pub async fn execute(self) -> SDKResult<Response<DownloadFileResponse>> {
         let api_endpoint = DriveApi::DownloadFile(self.file_token.clone());
         let mut request = ApiRequest::<DownloadFileResponse>::get(&api_endpoint.to_url());
-        
+
         if let Some(r) = self.range {
             request = request.header("Range", &r);
         }
@@ -59,13 +59,13 @@ pub struct DownloadFileResponse {
     // If binary data is returned directly as body, `ResponseFormat::Binary` should be used.
     // However, the original code used ResponseFormat::Data.
     // Based on `minutes` implementation, we typically wrap response.
-    // For download, we might receive binary stream. 
+    // For download, we might receive binary stream.
     // Let's stick to Data format for metadata if any, or check core implementation.
     // Actually, for file download, we usually want binary content.
     // "下载文件" doc says it returns file stream.
     // Start with Data for metadata compliance, or better, maybe Empty if raw body is handled elsewhere.
     #[serde(skip)]
-    pub data: Option<Vec<u8>>, 
+    pub data: Option<Vec<u8>>,
 }
 
 impl ApiResponseTrait for DownloadFileResponse {
@@ -73,7 +73,7 @@ impl ApiResponseTrait for DownloadFileResponse {
         // If the API returns raw bytes, it should be Binary.
         // But the original code was Data. Let's assume Data for now to avoid breaking changes if Core handles it implicitly.
         // Actually, looking at older implementation, it was Data.
-        ResponseFormat::Data 
+        ResponseFormat::Data
     }
 }
 
@@ -83,10 +83,7 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            DownloadFileResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(DownloadFileResponse::data_format(), ResponseFormat::Data);
     }
 
     #[tokio::test]
@@ -98,8 +95,7 @@ mod tests {
         let file_token = "test_file_token_123";
         let range_header = "bytes=0-100";
 
-        let request = DownloadFileRequest::new(config.clone(), file_token)
-            .range(range_header);
+        let request = DownloadFileRequest::new(config.clone(), file_token).range(range_header);
 
         assert_eq!(request.file_token, file_token);
         assert_eq!(request.range, Some(range_header.to_string()));

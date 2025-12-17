@@ -15,8 +15,8 @@ use openlark_core::config::Config;
 pub use permission::*;
 
 // 子模块
-pub mod permission;
 pub mod old;
+pub mod permission;
 
 /// CCM Drive Permission 服务
 ///
@@ -48,7 +48,9 @@ impl CcmDrivePermissionService {
 
     /// 获取旧版（old）API
     pub fn old(&self) -> crate::ccm::ccm_drive_permission::old::CcmDrivePermissionOldService {
-        crate::ccm::ccm_drive_permission::old::CcmDrivePermissionOldService::new(self.config.clone())
+        crate::ccm::ccm_drive_permission::old::CcmDrivePermissionOldService::new(
+            self.config.clone(),
+        )
     }
 }
 
@@ -71,13 +73,19 @@ mod tests {
     use openlark_core::trait_system::service::Service;
 
     fn create_test_service() -> CcmDrivePermissionService {
-        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         CcmDrivePermissionService::new(config)
     }
 
     #[test]
     fn test_ccm_drive_permission_service_creation() {
-        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         let service = CcmDrivePermissionService::new(config);
 
         assert_eq!(service.config().app_id(), "test_app_id");

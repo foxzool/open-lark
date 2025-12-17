@@ -2,7 +2,6 @@
 ///
 /// 删除指定块的子块。
 /// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/batch_delete
-
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

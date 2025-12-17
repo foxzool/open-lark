@@ -10,7 +10,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 /// 判断用户云文档权限请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AuthPermissionMemberRequest {
@@ -31,11 +30,7 @@ impl AuthPermissionMemberRequest {
     /// * `config` - 配置
     /// * `token` - 文件token
     /// * `type` - 权限类型
-    pub fn new(
-        config: Config,
-        token: impl Into<String>,
-        r#type: impl Into<String>,
-    ) -> Self {
+    pub fn new(config: Config, token: impl Into<String>, r#type: impl Into<String>) -> Self {
         Self {
             config,
             token: token.into(),
@@ -51,7 +46,10 @@ impl AuthPermissionMemberRequest {
     }
 
     pub async fn execute(self) -> SDKResult<Response<AuthPermissionMemberResponse>> {
-        let api_endpoint = format!("/open-apis/drive/v1/permissions/{}/members/auth", self.token);
+        let api_endpoint = format!(
+            "/open-apis/drive/v1/permissions/{}/members/auth",
+            self.token
+        );
 
         let mut api_request = ApiRequest::<AuthPermissionMemberResponse>::get(&api_endpoint)
             .query("type", &self.r#type);
@@ -86,8 +84,8 @@ mod tests {
     #[test]
     fn test_auth_permission_member_request_builder() {
         let config = Config::default();
-        let request = AuthPermissionMemberRequest::new(config, "file_token", "view")
-            .user_id_type("openid");
+        let request =
+            AuthPermissionMemberRequest::new(config, "file_token", "view").user_id_type("openid");
 
         assert_eq!(request.token, "file_token");
         assert_eq!(request.r#type, "view");
@@ -96,6 +94,9 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(AuthPermissionMemberResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            AuthPermissionMemberResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

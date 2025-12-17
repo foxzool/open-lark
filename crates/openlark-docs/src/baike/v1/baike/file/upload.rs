@@ -1,17 +1,16 @@
-/// 上传图片
-///
-/// API文档: https://open.feishu.cn/document/server-docs/baike-v1/file/upload
-///
-/// 词条图片资源上传。
-
-use serde::{Deserialize, Serialize};
+use crate::baike::models::*;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-use crate::baike::models::*;
+/// 上传图片
+///
+/// API文档: https://open.feishu.cn/document/server-docs/baike-v1/file/upload
+///
+/// 词条图片资源上传。
+use serde::{Deserialize, Serialize};
 
 /// 上传图片响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -66,8 +65,7 @@ impl<'a> UploadFileBuilder<'a> {
 
         // 创建API请求
         let mut api_request: ApiRequest<UploadFileResponse> =
-            ApiRequest::post(url)
-                .body(serde_json::to_value(self.request)?);
+            ApiRequest::post(url).body(serde_json::to_value(self.request)?);
 
         // 如果有请求选项，应用它们
         if let Some(opt) = self.option {
@@ -91,8 +89,7 @@ pub async fn upload_file(
 
     // 创建API请求
     let mut api_request: ApiRequest<UploadFileResponse> =
-        ApiRequest::post(url)
-            .body(serde_json::to_value(request)?);
+        ApiRequest::post(url).body(serde_json::to_value(request)?);
 
     // 如果有请求选项，应用它们
     if let Some(opt) = option {

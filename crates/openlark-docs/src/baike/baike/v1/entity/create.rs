@@ -90,8 +90,7 @@ pub struct CreateEntityBuilder {
 impl CreateEntityBuilder {
     pub fn new() -> Self {
         let mut builder = Self::default();
-        builder.api_req.req_type = "baike_entity_create".to_string();
-        builder.api_req.method = "POST".to_string();
+        builder.api_req.method = openlark_core::api::HttpMethod::Post;
         builder.api_req.url = "https://open.feishu.cn/open-apis/baike/v1/entities".to_string();
         builder.api_req.body = Some(CreateEntityRequest::default());
         builder

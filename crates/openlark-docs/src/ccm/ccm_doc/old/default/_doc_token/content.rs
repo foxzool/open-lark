@@ -46,8 +46,8 @@ impl GetDocContentRequest {
             ApiRequest::get(&CcmDocApiOld::Content(self.doc_token).to_url());
         let response: Response<GetDocContentResponse> =
             Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("response", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }

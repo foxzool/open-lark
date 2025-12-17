@@ -2,7 +2,6 @@
 ///
 /// 根据 spreadsheetToken 删除对应的 sheet 文档。
 /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -56,7 +55,8 @@ impl DeleteSpreadsheetRequest {
         validate_required!(params.spreadsheet_token, "电子表格token不能为空");
 
         // 使用enum+builder系统生成API端点
-        let api_endpoint = CcmDriveExplorerApiOld::FileSpreadsheets(params.spreadsheet_token.clone());
+        let api_endpoint =
+            CcmDriveExplorerApiOld::FileSpreadsheets(params.spreadsheet_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<DeleteSpreadsheetResponse> =

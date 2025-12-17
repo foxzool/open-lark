@@ -125,8 +125,7 @@ pub async fn list_comments(
     let api_endpoint = DriveApi::ListFileComments(request.file_token.clone());
 
     // 创建API请求
-    let mut api_request: ApiRequest<ListCommentsResponse> =
-        ApiRequest::get(&api_endpoint.to_url());
+    let mut api_request: ApiRequest<ListCommentsResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     // 添加查询参数
     if let Some(page_size) = request.page_size {
@@ -191,9 +190,6 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            ListCommentsResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(ListCommentsResponse::data_format(), ResponseFormat::Data);
     }
 }

@@ -1182,6 +1182,7 @@ mod tests {
             headers: std::collections::HashMap::new(),
             query: std::collections::HashMap::new(),
             body: None,
+            file: None,
             timeout: None,
             _phantom: std::marker::PhantomData,
         };
@@ -1195,6 +1196,7 @@ mod tests {
             headers: std::collections::HashMap::new(),
             query: std::collections::HashMap::new(),
             body: None,
+            file: None,
             timeout: None,
             _phantom: std::marker::PhantomData,
         };
@@ -1213,6 +1215,7 @@ mod tests {
             headers: std::collections::HashMap::new(),
             query: query_params,
             body: None,
+            file: None,
             timeout: None,
             _phantom: std::marker::PhantomData,
         };

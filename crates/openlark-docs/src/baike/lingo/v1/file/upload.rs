@@ -44,10 +44,7 @@ impl ApiResponseTrait for UploadFileResponse {
 ///
 /// 词条图片资源上传。
 /// docPath: https://open.feishu.cn/document/lingo-v1/file/upload
-pub async fn upload_file(
-    config: &Config,
-    params: UploadFileParams,
-) -> SDKResult<FileData> {
+pub async fn upload_file(config: &Config, params: UploadFileParams) -> SDKResult<FileData> {
     // 验证必填字段
     validate_required_field("文件名", Some(&params.file_name), "文件名不能为空")?;
     validate_required_field("文件类型", Some(&params.file_type), "文件类型不能为空")?;
@@ -77,12 +74,16 @@ pub async fn upload_file(
     // 获取应用Token (使用空ticket，假设自建应用或ticket已缓存)
     let token = {
         let token_manager = config.token_manager.lock().await;
-        token_manager.get_app_access_token(config, "", &config.app_ticket_manager)
+        token_manager
+            .get_app_access_token(config, "", &config.app_ticket_manager)
             .await
-            .map_err(|e| openlark_core::error::CoreError::network_msg(format!("Failed to get token: {}", e)))?
+            .map_err(|e| {
+                openlark_core::error::CoreError::network_msg(format!("Failed to get token: {}", e))
+            })?
     };
 
-    let response = config.http_client
+    let response = config
+        .http_client
         .post(&full_url)
         .multipart(form_data)
         .bearer_auth(token)
@@ -93,12 +94,19 @@ pub async fn upload_file(
     if !response.status().is_success() {
         let status = response.status();
         let text = response.text().await.unwrap_or_default();
-        return Err(openlark_core::error::CoreError::api_error(status.as_u16() as i32, &url, text, None::<String>));
+        return Err(openlark_core::error::CoreError::api_error(
+            status.as_u16() as i32,
+            &url,
+            text,
+            None::<String>,
+        ));
     }
 
-    let resp: UploadFileResponse = response.json().await.map_err(|e| openlark_core::error::CoreError::network_msg(e.to_string()))?;
-    
-    resp.data.ok_or_else(|| {
-        openlark_core::error::validation_error("file_data", "File data is missing")
-    })
+    let resp: UploadFileResponse = response
+        .json()
+        .await
+        .map_err(|e| openlark_core::error::CoreError::network_msg(e.to_string()))?;
+
+    resp.data
+        .ok_or_else(|| openlark_core::error::validation_error("file_data", "File data is missing"))
 }

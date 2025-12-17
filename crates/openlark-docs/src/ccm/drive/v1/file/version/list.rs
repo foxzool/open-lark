@@ -138,8 +138,7 @@ pub async fn list_file_versions(
 ) -> SDKResult<openlark_core::api::Response<ListFileVersionsResponse>> {
     // 创建API请求
     let url = DriveApi::ListFileVersions(request.file_token.clone()).to_url();
-    let mut api_request: ApiRequest<ListFileVersionsResponse> =
-        ApiRequest::get(&url);
+    let mut api_request: ApiRequest<ListFileVersionsResponse> = ApiRequest::get(&url);
 
     // 添加查询参数
     if let Some(page_size) = request.page_size {
@@ -175,24 +174,22 @@ mod tests {
 
     #[test]
     fn test_version_list_data_structure() {
-        let versions = vec![
-            ListVersionInfo {
-                version_id: "v1".to_string(),
-                version_number: 1,
-                name: "版本1".to_string(),
-                created_at: "2023-01-01T00:00:00Z".to_string(),
-                creator: ListVersionCreatorInfo {
-                    user_id: "user1".to_string(),
-                    name: "张三".to_string(),
-                    avatar: None,
-                },
-                size: 1024,
-                r#type: "docx".to_string(),
-                is_major: true,
-                remarks: None,
-                changes: None,
-            }
-        ];
+        let versions = vec![ListVersionInfo {
+            version_id: "v1".to_string(),
+            version_number: 1,
+            name: "版本1".to_string(),
+            created_at: "2023-01-01T00:00:00Z".to_string(),
+            creator: ListVersionCreatorInfo {
+                user_id: "user1".to_string(),
+                name: "张三".to_string(),
+                avatar: None,
+            },
+            size: 1024,
+            r#type: "docx".to_string(),
+            is_major: true,
+            remarks: None,
+            changes: None,
+        }];
 
         let data = VersionListData {
             versions: versions.clone(),
@@ -207,6 +204,9 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(ListFileVersionsResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            ListFileVersionsResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

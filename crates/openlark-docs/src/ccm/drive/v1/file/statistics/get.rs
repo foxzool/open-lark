@@ -84,8 +84,7 @@ pub async fn get_file_statistics(
 ) -> SDKResult<openlark_core::api::Response<GetFileStatisticsResponse>> {
     // 创建API请求
     let url = DriveApi::GetFileStatistics(request.file_token.clone()).to_url();
-    let mut api_request: ApiRequest<GetFileStatisticsResponse> =
-        ApiRequest::get(&url);
+    let mut api_request: ApiRequest<GetFileStatisticsResponse> = ApiRequest::get(&url);
 
     // 如果有请求选项，应用它们
     if let Some(opt) = option {
@@ -126,11 +125,17 @@ mod tests {
         assert_eq!(stats.file_token, "file_123");
         assert_eq!(stats.total_visits, 100);
         assert_eq!(stats.today_visits, 5);
-        assert_eq!(stats.last_visit_time, Some("2023-01-01T00:00:00Z".to_string()));
+        assert_eq!(
+            stats.last_visit_time,
+            Some("2023-01-01T00:00:00Z".to_string())
+        );
     }
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(GetFileStatisticsResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            GetFileStatisticsResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

@@ -52,8 +52,8 @@ pub async fn protected_range_batch_get(
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<Response<BatchGetProtectedRangeResponse>> {
     let api_endpoint = CcmSheetApiOld::ProtectedRangeBatchGet(spreadsheet_token);
-    let mut api_request: ApiRequest<BatchGetProtectedRangeResponse> = ApiRequest::get(&api_endpoint.to_url())
-        .query("protectIds", request.protectIds.join(","));
+    let mut api_request: ApiRequest<BatchGetProtectedRangeResponse> =
+        ApiRequest::get(&api_endpoint.to_url()).query("protectIds", request.protectIds.join(","));
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

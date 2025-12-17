@@ -79,16 +79,13 @@ impl List {
         let api_endpoint = BaseApiV2::RoleList(self.app_token);
 
         let mut api_request: ApiRequest<ListResp> = ApiRequest::get(&api_endpoint.to_url());
-        api_request = api_request.query_opt(
-            "page_size",
-            self.req.page_size.map(|v| v.to_string()),
-        );
+        api_request = api_request.query_opt("page_size", self.req.page_size.map(|v| v.to_string()));
         api_request = api_request.query_opt("page_token", self.req.page_token);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("response", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 

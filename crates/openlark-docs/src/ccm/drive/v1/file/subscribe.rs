@@ -46,7 +46,7 @@ impl SubscribeFileRequest {
     pub async fn execute(self) -> SDKResult<Response<SubscribeFileResponse>> {
         let api_endpoint = DriveApi::SubscribeFile(self.file_token.clone());
         let mut request = ApiRequest::<SubscribeFileResponse>::post(&api_endpoint.to_url());
-        
+
         if let Some(et) = &self.event_type {
             request = request.query("event_type", et);
         }
@@ -102,9 +102,6 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            SubscribeFileResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(SubscribeFileResponse::data_format(), ResponseFormat::Data);
     }
 }

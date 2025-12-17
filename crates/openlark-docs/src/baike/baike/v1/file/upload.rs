@@ -31,8 +31,7 @@ pub struct UploadFileBuilder {
 impl UploadFileBuilder {
     pub fn new(name: impl ToString) -> Self {
         let mut builder = Self::default();
-        builder.api_req.req_type = "baike_file_upload".to_string();
-        builder.api_req.method = "POST".to_string();
+        builder.api_req.method = openlark_core::api::HttpMethod::Post;
         builder.api_req.url = "https://open.feishu.cn/open-apis/baike/v1/files/upload".to_string();
         builder.api_req.body = Some(UploadFileRequest {
             name: name.to_string(),

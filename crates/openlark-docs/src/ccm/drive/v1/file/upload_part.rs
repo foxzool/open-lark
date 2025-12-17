@@ -29,7 +29,13 @@ pub struct UploadPartRequest {
 }
 
 impl UploadPartRequest {
-    pub fn new(config: Config, upload_id: impl Into<String>, seq: i32, size: i64, data: Vec<u8>) -> Self {
+    pub fn new(
+        config: Config,
+        upload_id: impl Into<String>,
+        seq: i32,
+        size: i64,
+        data: Vec<u8>,
+    ) -> Self {
         Self {
             config,
             upload_id: upload_id.into(),
@@ -41,7 +47,7 @@ impl UploadPartRequest {
 
     pub async fn execute(self) -> SDKResult<Response<UploadPartResponse>> {
         let api_endpoint = DriveApi::UploadPart;
-        
+
         // Metadata for JSON body
         #[derive(Serialize)]
         struct PartMeta {
@@ -49,7 +55,7 @@ impl UploadPartRequest {
             seq: i32,
             size: i64,
         }
-        
+
         let meta = PartMeta {
             upload_id: self.upload_id,
             seq: self.seq,

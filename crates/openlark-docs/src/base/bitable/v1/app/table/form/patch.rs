@@ -1,3 +1,4 @@
+use crate::common::api_endpoints::BitableApiV1;
 /// Bitable 更新表单元数据
 ///
 /// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-form/patch
@@ -7,12 +8,8 @@
 /// - 该接口的请求体字段会随表单能力迭代而变化，因此这里以 `serde_json::Value` 透传。
 /// - 你可以根据官方文档构造请求体 JSON。
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
-use crate::common::api_endpoints::BitableApiV1;
 
 /// 更新表单元数据请求
 #[derive(Debug, Clone)]
@@ -75,9 +72,9 @@ impl PatchFormRequest {
         api_request = api_request.query_opt("user_id_type", self.user_id_type);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("response", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 

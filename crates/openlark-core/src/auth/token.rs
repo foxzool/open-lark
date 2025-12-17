@@ -356,7 +356,7 @@ mod tests {
         assert_eq!(token.access_count, 0);
         let expires_in = token.expires_in_seconds();
         assert!(
-            expires_in >= 3599 && expires_in <= 3600,
+            (3599..=3600).contains(&expires_in),
             "expires_in_seconds should be ~3600, got {}",
             expires_in
         );

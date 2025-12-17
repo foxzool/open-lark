@@ -59,11 +59,13 @@ impl CreatePermissionMemberRequest {
     pub async fn execute(self) -> SDKResult<Response<CreatePermissionMemberResponse>> {
         let api_endpoint = DriveApi::CreatePermissionMember(self.token.clone());
 
-        let api_request = ApiRequest::<CreatePermissionMemberResponse>::post(&api_endpoint.to_url())
-            .body(serde_json::json!({
-                "member": self.member,
-                "type": self.r#type
-            }));
+        let api_request = ApiRequest::<CreatePermissionMemberResponse>::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::json!({
+            "member": self.member,
+            "type": self.r#type
+        }));
 
         Transport::request(api_request, &self.config, None).await
     }
@@ -107,12 +109,7 @@ mod tests {
             user_type: "user".to_string(),
         };
 
-        let request = CreatePermissionMemberRequest::new(
-            config,
-            "file_token",
-            member,
-            "admin",
-        );
+        let request = CreatePermissionMemberRequest::new(config, "file_token", member, "admin");
 
         assert_eq!(request.token, "file_token");
         assert_eq!(request.r#type, "admin");

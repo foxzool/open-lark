@@ -1,25 +1,24 @@
 /// Lingo语言服务 v1
 ///
 /// 提供智能语言处理功能。
-
 use openlark_core::config::Config;
 use openlark_core::SDKResult;
 
 // 导出子模块
+pub mod classification;
 pub mod draft;
 pub mod entity;
-pub mod classification;
-pub mod repo;
 pub mod file;
 pub mod models;
+pub mod repo;
 
 // 重新导出所有服务类型
+pub use classification::*;
 pub use draft::*;
 pub use entity::*;
-pub use classification::*;
-pub use repo::*;
 pub use file::*;
 pub use models::*;
+pub use repo::*;
 
 /// Lingo 语言服务主结构
 pub struct LingoServiceV1 {
@@ -59,7 +58,11 @@ impl<'a> LingoV1Service<'a> {
 
     /// 更新草稿
     /// docPath: https://open.feishu.cn/document/lingo-v1/draft/update
-    pub async fn update_draft(&self, draft_id: &str, params: UpdateLingoDraftParams) -> SDKResult<LingoDraft> {
+    pub async fn update_draft(
+        &self,
+        draft_id: &str,
+        params: UpdateLingoDraftParams,
+    ) -> SDKResult<LingoDraft> {
         update_lingo_draft(draft_id, self.config, params).await
     }
 
@@ -120,7 +123,7 @@ impl<'a> LingoV1Service<'a> {
     // pub async fn update_entity(&self, entity_id: &str, params: UpdateLingoEntityParams) -> SDKResult<LingoEntity> {
     //     update_lingo_entity(self.config, entity_id, params).await
     // }
-    
+
     // ... (other method comments)
 
     // 分类管理

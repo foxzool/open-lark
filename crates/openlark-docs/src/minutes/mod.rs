@@ -2,11 +2,11 @@
 pub mod minutes;
 pub use minutes::*;
 
-use openlark_core::config::Config;
 use crate::minutes::v1::minute::get::GetMinuteRequest;
 use crate::minutes::v1::minute::media::get::GetMinuteMediaRequest;
 use crate::minutes::v1::minute::statistics::get::GetMinuteStatisticsRequest;
 use crate::minutes::v1::minute::transcript::get::GetMinuteTranscriptRequest;
+use openlark_core::config::Config;
 
 #[derive(Debug, Clone)]
 pub struct MinutesService<'a> {

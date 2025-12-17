@@ -1,20 +1,19 @@
+use crate::baike::models::*;
 /// 创建免审词条
 ///
 /// API文档: https://open.feishu.cn/document/lingo-v1/entity/create
 ///
 /// 通过此接口创建的词条，无需经过词典管理员审核，直接写入词库。
 /// 因此，调用此接口时，应当慎重操作。
-
 use openlark_core::{
-    error::SDKResult,
-    config::Config,
-    request_builder::UnifiedRequestBuilder,
-    constants::AccessTokenType,
     api::{ApiRequest, Response},
+    config::Config,
+    constants::AccessTokenType,
+    error::SDKResult,
     req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
 use serde::{Deserialize, Serialize};
-use crate::baike::models::*;
 
 /// 创建免审词条请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -102,15 +101,17 @@ impl<'a> CreateEntityBuilder<'a> {
 
     /// 执行创建免审词条操作
     pub async fn execute(self) -> SDKResult<CreateEntityResponse> {
-        let mut api_request: ApiRequest<CreateEntityResponse> = ApiRequest::post("/open-apis/lingo/v1/entities")
-            .body(serde_json::to_value(&self.request)?);
+        let mut api_request: ApiRequest<CreateEntityResponse> =
+            ApiRequest::post("/open-apis/lingo/v1/entities")
+                .body(serde_json::to_value(&self.request)?);
 
         let http_request = UnifiedRequestBuilder::build(
             &mut api_request,
             AccessTokenType::App,
             self.config,
             &RequestOption::default(),
-        ).await?;
+        )
+        .await?;
 
         let response = http_request.send().await?;
         let resp: Response<_> = response.json().await?;

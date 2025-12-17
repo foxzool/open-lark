@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-get
 
 pub mod batch_create;
-pub mod batch_update;
 pub mod batch_delete;
+pub mod batch_update;
 pub use batch_create::*;
-pub use batch_update::*;
 pub use batch_delete::*;
+pub use batch_update::*;
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},

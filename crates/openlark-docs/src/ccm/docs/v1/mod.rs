@@ -65,13 +65,19 @@ mod tests {
     use openlark_core::trait_system::service::Service;
 
     fn create_test_service() -> DocsService {
-        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         DocsService::new(config)
     }
 
     #[test]
     fn test_docs_service_creation() {
-        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         let service = DocsService::new(config);
 
         assert_eq!(service.config().app_id(), "test_app_id");

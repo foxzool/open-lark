@@ -8,7 +8,6 @@ use uuid::Uuid;
 // 暴露错误体系（CoreError 为主要错误类型）
 pub use self::codes::{ErrorCategory, ErrorCode};
 pub use self::context::{ErrorContext, ErrorContextBuilder};
-pub use self::core::{RecoveryStrategy, RetryPolicy};
 pub use self::core::{
     api_error, authentication_error, business_error, configuration_error, network_error,
     network_error_with_details, permission_missing_error, rate_limit_error, serialization_error,
@@ -16,6 +15,7 @@ pub use self::core::{
     token_invalid_error, user_identity_invalid_error, validation_error,
 };
 pub use self::core::{ApiError, BuilderKind, CoreError, ErrorBuilder, ErrorRecord};
+pub use self::core::{RecoveryStrategy, RetryPolicy};
 pub use self::kinds::ErrorKind;
 pub use self::traits::{ErrorContextTrait, ErrorFormatTrait, ErrorTrait, FullErrorTrait};
 pub use self::traits::{ErrorSeverity, ErrorType};
@@ -149,7 +149,12 @@ mod tests {
 
     #[test]
     fn test_modern_error_creation() {
-        let error = api_error(404, "/api/users/123", "用户不存在", Some("req-123".to_string()));
+        let error = api_error(
+            404,
+            "/api/users/123",
+            "用户不存在",
+            Some("req-123".to_string()),
+        );
 
         assert_eq!(error.error_type(), ErrorType::Api);
         assert_eq!(error.severity(), ErrorSeverity::Warning);

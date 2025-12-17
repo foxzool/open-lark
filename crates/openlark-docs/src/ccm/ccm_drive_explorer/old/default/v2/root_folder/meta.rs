@@ -24,13 +24,14 @@ impl GetRootFolderMetaRequest {
     /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
     pub async fn send(self) -> SDKResult<GetRootFolderMetaResponse> {
         let api_endpoint = CcmDriveExplorerApiOld::RootFolderMeta;
-        let api_request: ApiRequest<GetRootFolderMetaResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let api_request: ApiRequest<GetRootFolderMetaResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         let response: Response<GetRootFolderMetaResponse> =
             Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("response", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 

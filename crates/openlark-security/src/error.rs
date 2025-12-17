@@ -384,7 +384,7 @@ impl SecurityErrorExt for SecurityError {
 
     fn security_operation(&self) -> Option<&str> {
         match self.context().get_context("operation") {
-            Some(s) => Some(s.as_ref()),
+            Some(s) => Some(s),
             None => None,
         }
     }
@@ -395,7 +395,7 @@ impl SecurityErrorExt for SecurityError {
             .get_context("device_id")
             .or_else(|| self.context().get_context("visitor_id"))
         {
-            Some(s) => Some(s.as_ref()),
+            Some(s) => Some(s),
             None => None,
         }
     }

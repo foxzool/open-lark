@@ -1,23 +1,21 @@
+pub mod classification;
 /// Lingo语言服务 v1 模块
 ///
 /// 提供智能语言处理功能，包括草稿管理和词条管理
-
 pub mod draft;
 pub mod entity;
-pub mod classification;
-pub mod repo;
 pub mod file;
+pub mod repo;
 
 // 重新导出所有构建器
+pub use classification::ListClassificationBuilder;
 pub use draft::{CreateDraftBuilder, UpdateDraftBuilder};
 pub use entity::{
-    CreateEntityBuilder, UpdateEntityBuilder, DeleteEntityBuilder,
-    GetEntityBuilder, ListEntityBuilder,
-    SearchEntityBuilder, HighlightEntityBuilder
+    CreateEntityBuilder, DeleteEntityBuilder, GetEntityBuilder, HighlightEntityBuilder,
+    ListEntityBuilder, SearchEntityBuilder, UpdateEntityBuilder,
 };
-pub use classification::ListClassificationBuilder;
+pub use file::{DownloadFileBuilder, UploadFileBuilder};
 pub use repo::ListRepoBuilder;
-pub use file::{UploadFileBuilder, DownloadFileBuilder};
 
 /// Lingo v1 服务
 pub struct LingoV1Service<'a> {

@@ -58,8 +58,7 @@ pub async fn batch_query(
     let api_endpoint = DriveApi::BatchQueryMetas;
 
     let mut api_request: ApiRequest<BatchQueryMetaResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serde_json::json!(&request));
+        ApiRequest::post(&api_endpoint.to_url()).body(serde_json::json!(&request));
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);
