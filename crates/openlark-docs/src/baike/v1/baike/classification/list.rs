@@ -1,20 +1,19 @@
+use crate::baike::models::*;
 /// 获取词典分类
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/baike-v1/classification/list
 ///
 /// 获取飞书词典当前分类。飞书词典目前为二级分类体系，每个词条可添加多个二级分类，
 /// 但选择的二级分类必须从属于不同的一级分类。
-
 use openlark_core::{
-    error::SDKResult,
-    config::Config,
-    request_builder::UnifiedRequestBuilder,
-    constants::AccessTokenType,
     api::{ApiRequest, Response},
+    config::Config,
+    constants::AccessTokenType,
+    error::SDKResult,
     req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
 use serde::{Deserialize, Serialize};
-use crate::baike::models::*;
 
 /// 获取词典分类响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -49,7 +48,8 @@ impl<'a> ListClassificationBuilder<'a> {
 
     /// 执行获取词典分类操作
     pub async fn execute(self) -> SDKResult<ListClassificationResponse> {
-        let mut api_request: ApiRequest<ListClassificationResponse> = ApiRequest::get("/open-apis/baike/v1/classifications");
+        let mut api_request: ApiRequest<ListClassificationResponse> =
+            ApiRequest::get("/open-apis/baike/v1/classifications");
 
         if let Some(repo_id) = &self.repo_id {
             api_request = api_request.query("repo_id", repo_id);
@@ -60,7 +60,8 @@ impl<'a> ListClassificationBuilder<'a> {
             AccessTokenType::App,
             self.config,
             &RequestOption::default(),
-        ).await?;
+        )
+        .await?;
 
         let response = http_request.send().await?;
         let resp: Response<ListClassificationResponse> = response.json().await?;

@@ -10,7 +10,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 /// 批量增加协作者权限请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchCreatePermissionMemberRequest {
@@ -49,11 +48,7 @@ impl BatchCreatePermissionMemberRequest {
     /// * `config` - 配置
     /// * `token` - 文件token
     /// * `members` - 成员权限列表
-    pub fn new(
-        config: Config,
-        token: impl Into<String>,
-        members: Vec<MemberPermission>,
-    ) -> Self {
+    pub fn new(config: Config, token: impl Into<String>, members: Vec<MemberPermission>) -> Self {
         Self {
             config,
             token: token.into(),
@@ -69,7 +64,10 @@ impl BatchCreatePermissionMemberRequest {
     }
 
     pub async fn execute(self) -> SDKResult<Response<BatchCreatePermissionMemberResponse>> {
-        let api_endpoint = format!("/open-apis/drive/v1/permissions/{}/members/batch_create", self.token);
+        let api_endpoint = format!(
+            "/open-apis/drive/v1/permissions/{}/members/batch_create",
+            self.token
+        );
 
         let mut body = serde_json::json!({
             "members": self.members
@@ -79,9 +77,9 @@ impl BatchCreatePermissionMemberRequest {
             body["notify"] = serde_json::json!(notify);
         }
 
-        let api_request = ApiRequest::<BatchCreatePermissionMemberResponse>::post(&api_endpoint)
-            .body(body);
-        
+        let api_request =
+            ApiRequest::<BatchCreatePermissionMemberResponse>::post(&api_endpoint).body(body);
+
         Transport::request(api_request, &self.config, None).await
     }
 }
@@ -92,10 +90,7 @@ impl MemberPermission {
     /// # 参数
     /// * `member` - 成员信息
     /// * `type` - 权限类型
-    pub fn new(
-        member: MemberInfo,
-        r#type: impl Into<String>,
-    ) -> Self {
+    pub fn new(member: MemberInfo, r#type: impl Into<String>) -> Self {
         Self {
             member,
             r#type: r#type.into(),
@@ -109,10 +104,7 @@ impl MemberInfo {
     /// # 参数
     /// * `user_id` - 用户ID
     /// * `user_type` - 用户类型
-    pub fn new(
-        user_id: impl Into<String>,
-        user_type: impl Into<String>,
-    ) -> Self {
+    pub fn new(user_id: impl Into<String>, user_type: impl Into<String>) -> Self {
         Self {
             user_id: user_id.into(),
             user_type: user_type.into(),
@@ -166,8 +158,9 @@ mod tests {
         let config = Config::default();
         let member = MemberInfo::new("user_123", "user");
         let permission = MemberPermission::new(member, "view");
-        let request = BatchCreatePermissionMemberRequest::new(config, "file_token", vec![permission])
-            .notify(true);
+        let request =
+            BatchCreatePermissionMemberRequest::new(config, "file_token", vec![permission])
+                .notify(true);
 
         assert_eq!(request.token, "file_token");
         assert_eq!(request.members.len(), 1);
@@ -185,6 +178,9 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(BatchCreatePermissionMemberResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            BatchCreatePermissionMemberResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

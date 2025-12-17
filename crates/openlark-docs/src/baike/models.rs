@@ -1,7 +1,6 @@
 /// 知识库公共数据模型
 ///
 /// 包含baike和lingo服务共用的数据结构定义
-
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 

@@ -8,8 +8,7 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use openlark_core::{
-    api::ApiRequest, config::Config,
-    http::Transport, SDKResult, validation_error,
+    api::ApiRequest, config::Config, http::Transport, validation_error, SDKResult,
 };
 
 use super::models::*;
@@ -78,15 +77,15 @@ impl PermissionService {
         }
 
         // 构建API请求
-        let api_request: ApiRequest<CheckMemberPermissionResponse> =
-            ApiRequest::post(&format!("/open-apis/drive/v1/permissions/{}/members/auth", request.file_token))
-                .body(serde_json::json!(&body));
+        let api_request: ApiRequest<CheckMemberPermissionResponse> = ApiRequest::post(&format!(
+            "/open-apis/drive/v1/permissions/{}/members/auth",
+            request.file_token
+        ))
+        .body(serde_json::json!(&body));
 
-        
         // 发送请求
         let resp: openlark_core::api::Response<CheckMemberPermissionResponse> =
-            Transport::request(api_request, &self.config, None)
-            .await?;
+            Transport::request(api_request, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -150,7 +149,6 @@ impl PermissionService {
             ApiRequest::post("/open-apis/drive/permission/member/transfer")
                 .body(serde_json::json!(&body));
 
-        
         // 发送请求
         let resp: openlark_core::api::Response<TransferOwnerResponse> =
             Transport::request(api_request, &self.config, None).await?;
@@ -206,7 +204,6 @@ impl PermissionService {
             ApiRequest::post("/open-apis/drive/permission/v2/public/")
                 .body(serde_json::json!(&body));
 
-        
         // 发送请求
         let resp: openlark_core::api::Response<GetPublicPermissionResponse> =
             Transport::request(api_request, &self.config, None).await?;

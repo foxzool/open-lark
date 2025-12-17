@@ -1,15 +1,15 @@
-/// 获取文件夹中的文件清单
-///
-/// 获取用户云空间中指定文件夹下的文件清单。清单类型包括文件、各种在线文档（文档、电子表格、多维表格、思维笔记）、文件夹和快捷方式。
-/// 该接口支持分页，但是不会递归的获取子文件夹的清单。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/list
-use serde::{Deserialize, Serialize};
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
+/// 获取文件夹中的文件清单
+///
+/// 获取用户云空间中指定文件夹下的文件清单。清单类型包括文件、各种在线文档（文档、电子表格、多维表格、思维笔记）、文件夹和快捷方式。
+/// 该接口支持分页，但是不会递归的获取子文件夹的清单。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/list
+use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::DriveApi;
 
@@ -130,7 +130,7 @@ impl ListFilesRequest {
     pub async fn execute(self) -> SDKResult<Response<ListFilesResponse>> {
         let api_endpoint = DriveApi::ListFiles;
         let mut request = ApiRequest::<ListFilesResponse>::get(&api_endpoint.to_url());
-        
+
         if let Some(token) = &self.parent_folder_token {
             request = request.query("folder_token", token);
         }

@@ -2,7 +2,6 @@
 ///
 /// 根据 folderToken 创建 Doc、 Sheet 或 Bitable 。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -69,10 +68,7 @@ impl CreateFileRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
-    pub async fn execute(
-        self,
-        params: CreateFileParams,
-    ) -> SDKResult<CreateFileResponse> {
+    pub async fn execute(self, params: CreateFileParams) -> SDKResult<CreateFileResponse> {
         // 验证必填字段
         validate_required!(params.folder_token, "父文件夹token不能为空");
         validate_required!(params.doc_type, "文件类型不能为空");
@@ -82,14 +78,15 @@ impl CreateFileRequest {
         let api_endpoint = CcmDriveExplorerApiOld::File(params.folder_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<CreateFileResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serde_json::to_value(params).map_err(|e| {
-                    openlark_core::error::validation_error(
-                        "参数序列化失败",
-                        &format!("无法序列化请求参数: {}", e)
-                    )
-                })?);
+        let mut api_request: ApiRequest<CreateFileResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_value(params).map_err(|e| {
+            openlark_core::error::validation_error(
+                "参数序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

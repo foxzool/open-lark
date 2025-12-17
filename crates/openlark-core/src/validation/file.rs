@@ -363,8 +363,8 @@ mod tests {
 
     #[test]
     fn test_file_limits() {
-        assert!(file_limits::MAX_FILE_SIZE > 0);
-        assert!(file_limits::MAX_FILENAME_LENGTH > 0);
+        const { assert!(file_limits::MAX_FILE_SIZE > 0) };
+        const { assert!(file_limits::MAX_FILENAME_LENGTH > 0) };
         assert!(!file_limits::ALLOWED_EXTENSIONS.is_empty());
         assert!(!file_limits::ALLOWED_IMAGE_TYPES.is_empty());
         assert!(!file_limits::ALLOWED_DOCUMENT_TYPES.is_empty());

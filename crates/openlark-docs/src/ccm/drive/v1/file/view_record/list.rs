@@ -145,8 +145,7 @@ pub async fn get_file_view_records(
 ) -> SDKResult<openlark_core::api::Response<GetFileViewRecordsResponse>> {
     // 创建API请求
     let url = DriveApi::ListFileViewRecords(request.file_token.clone()).to_url();
-    let mut api_request: ApiRequest<GetFileViewRecordsResponse> =
-        ApiRequest::get(&url);
+    let mut api_request: ApiRequest<GetFileViewRecordsResponse> = ApiRequest::get(&url);
 
     // 添加查询参数
     if let Some(page_size) = request.page_size {
@@ -217,6 +216,9 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(GetFileViewRecordsResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            GetFileViewRecordsResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

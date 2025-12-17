@@ -526,10 +526,10 @@ mod tests {
 
     #[test]
     fn test_employee_limits() {
-        assert!(employee_limits::MAX_NAME_LENGTH > 0);
-        assert!(employee_limits::MAX_EMAIL_LENGTH > 0);
-        assert!(employee_limits::MAX_PHONE_LENGTH > 0);
-        assert!(employee_limits::MAX_TAGS_COUNT > 0);
-        assert!(employee_limits::MAX_CUSTOM_FIELDS_COUNT > 0);
+        const { assert!(employee_limits::MAX_NAME_LENGTH > 0) };
+        const { assert!(employee_limits::MAX_EMAIL_LENGTH > 0) };
+        const { assert!(employee_limits::MAX_PHONE_LENGTH > 0) };
+        const { assert!(employee_limits::MAX_TAGS_COUNT > 0) };
+        const { assert!(employee_limits::MAX_CUSTOM_FIELDS_COUNT > 0) };
     }
 }

@@ -43,15 +43,12 @@ impl ApiResponseTrait for ListRepoResponse {
 ///
 /// 获取当前可用的词库列表。
 /// docPath: https://open.feishu.cn/document/lingo-v1/repo/list
-pub async fn list_repo(
-    config: &Config,
-) -> SDKResult<Vec<RepoItem>> {
+pub async fn list_repo(config: &Config) -> SDKResult<Vec<RepoItem>> {
     // 使用enum+builder系统生成API端点
     let api_endpoint = LingoApiV1::RepoList;
 
     // 创建API请求
-    let api_request: ApiRequest<ListRepoResponse> =
-        ApiRequest::get(&api_endpoint.to_url());
+    let api_request: ApiRequest<ListRepoResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
@@ -59,7 +56,7 @@ pub async fn list_repo(
         openlark_core::error::validation_error("response_data", "Response data is missing")
     })?;
 
-    resp.data.map(|data| data.repos).ok_or_else(|| {
-        openlark_core::error::validation_error("repo_data", "Repo data is missing")
-    })
+    resp.data
+        .map(|data| data.repos)
+        .ok_or_else(|| openlark_core::error::validation_error("repo_data", "Repo data is missing"))
 }

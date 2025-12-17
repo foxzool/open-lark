@@ -1,13 +1,12 @@
+use openlark_core::config::Config;
 /// CCM Sheet API 综合演示示例
-//!
+//
 /// 本示例展示如何使用新实现的33个表格API进行各种表格操作
 /// 包括基础操作、样式设置、数据处理、权限管理等完整功能
-
 // use openlark_core::{LarkClient};
 use openlark_docs::ccm::ccm_sheet::old::v2::CcmSheetOldV2;
-use openlark_core::config::Config;
-use tokio;
 use std::collections::HashMap;
+use tokio;
 
 use serde_json::json;
 
@@ -44,7 +43,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 /// 演示表格基础操作
-async fn demo_basic_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_basic_operations(
+    sheet_service: &CcmSheetOldV2,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📋 === 表格基础操作演示 ===");
 
     // 示例：获取表格元数据
@@ -54,7 +55,10 @@ async fn demo_basic_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<
         "spreadsheetToken": "your_spreadsheet_token"
     });
 
-    match meta_request.execute(serde_json::from_value(meta_params)?).await {
+    match meta_request
+        .execute(serde_json::from_value(meta_params)?)
+        .await
+    {
         Ok(meta) => {
             println!("   ✅ 表格标题: {}", meta.data.unwrap().title);
             println!("   📊 工作表数量: {}", meta.data.unwrap().sheets.len());
@@ -79,7 +83,10 @@ async fn demo_basic_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<
         ]
     });
 
-    match operate_request.execute(serde_json::from_value(operate_params)?).await {
+    match operate_request
+        .execute(serde_json::from_value(operate_params)?)
+        .await
+    {
         Ok(response) => println!("   ✅ 工作表操作成功"),
         Err(e) => println!("   ❌ 工作表操作失败: {}", e),
     }
@@ -94,7 +101,10 @@ async fn demo_basic_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<
         }
     });
 
-    match update_props_request.execute(serde_json::from_value(update_params)?).await {
+    match update_props_request
+        .execute(serde_json::from_value(update_params)?)
+        .await
+    {
         Ok(response) => println!("   ✅ 工作表属性更新成功"),
         Err(e) => println!("   ❌ 属性更新失败: {}", e),
     }
@@ -103,7 +113,9 @@ async fn demo_basic_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<
 }
 
 /// 演示数据读写操作
-async fn demo_data_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_data_operations(
+    sheet_service: &CcmSheetOldV2,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n💾 === 数据读写操作演示 ===");
 
     let spreadsheet_token = "your_spreadsheet_token";
@@ -117,10 +129,14 @@ async fn demo_data_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<d
         "valueRenderOption": "DisplayedValue"
     });
 
-    match read_request.execute(serde_json::from_value(read_params)?).await {
+    match read_request
+        .execute(serde_json::from_value(read_params)?)
+        .await
+    {
         Ok(api_response) => {
             if let Some(data) = api_response.data {
-                println!("   ✅ 读取到 {} 行 {} 列数据",
+                println!(
+                    "   ✅ 读取到 {} 行 {} 列数据",
                     data.values.as_ref().map_or(0, |v| v.len()),
                     data.values.first().map_or(0, |row| row.len())
                 );
@@ -143,7 +159,10 @@ async fn demo_data_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<d
         ]
     });
 
-    match write_request.execute(serde_json::from_value(write_params)?).await {
+    match write_request
+        .execute(serde_json::from_value(write_params)?)
+        .await
+    {
         Ok(api_response) => {
             println!("   ✅ 数据写入成功");
             if let Some(result) = api_response.data {
@@ -170,11 +189,14 @@ async fn demo_data_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<d
         ]
     });
 
-    match batch_write_request.execute(serde_json::from_value(batch_params)?).await {
+    match batch_write_request
+        .execute(serde_json::from_value(batch_params)?)
+        .await
+    {
         Ok(api_response) => {
             println!("   ✅ 批量写入成功");
             if let Some(result) = api_response.data {
-                 println!("   📊 批量写入结果: {:?}", result);
+                println!("   📊 批量写入结果: {:?}", result);
             }
         }
         Err(e) => println!("   ❌ 批量写入失败: {}", e),
@@ -192,7 +214,10 @@ async fn demo_data_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<d
         ]
     });
 
-    match append_request.execute(serde_json::from_value(append_params)?).await {
+    match append_request
+        .execute(serde_json::from_value(append_params)?)
+        .await
+    {
         Ok(api_response) => {
             println!("   ✅ 数据追加成功");
             if let Some(result) = api_response.data {
@@ -206,7 +231,9 @@ async fn demo_data_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<d
 }
 
 /// 演示样式和格式操作
-async fn demo_style_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_style_operations(
+    sheet_service: &CcmSheetOldV2,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n🎨 === 样式和格式操作演示 ===");
 
     let spreadsheet_token = "your_spreadsheet_token";
@@ -230,7 +257,10 @@ async fn demo_style_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<
         }
     });
 
-    match style_request.execute(serde_json::from_value(style_params)?).await {
+    match style_request
+        .execute(serde_json::from_value(style_params)?)
+        .await
+    {
         Ok(api_response) => {
             println!("   ✅ 样式设置成功");
             if let Some(result) = api_response.data {
@@ -272,7 +302,10 @@ async fn demo_style_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<
         ]
     });
 
-    match batch_style_request.execute(serde_json::from_value(batch_style_params)?).await {
+    match batch_style_request
+        .execute(serde_json::from_value(batch_style_params)?)
+        .await
+    {
         Ok(response) => println!("   ✅ 批量样式设置成功"),
         Err(e) => println!("   ❌ 批量样式设置失败: {}", e),
     }
@@ -288,7 +321,10 @@ async fn demo_style_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<
         }
     });
 
-    match merge_request.execute(serde_json::from_value(merge_params)?).await {
+    match merge_request
+        .execute(serde_json::from_value(merge_params)?)
+        .await
+    {
         Ok(response) => println!("   ✅ 单元格合并成功"),
         Err(e) => println!("   ❌ 单元格合并失败: {}", e),
     }
@@ -297,7 +333,9 @@ async fn demo_style_operations(sheet_service: &CcmSheetOldV2) -> Result<(), Box<
 }
 
 /// 演示高级功能
-async fn demo_advanced_features(sheet_service: &CcmSheetOldV2) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_advanced_features(
+    sheet_service: &CcmSheetOldV2,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n⚙️ === 高级功能演示 ===");
 
     let spreadsheet_token = "your_spreadsheet_token";
@@ -318,7 +356,10 @@ async fn demo_advanced_features(sheet_service: &CcmSheetOldV2) -> Result<(), Box
         }
     });
 
-    match insert_request.execute(serde_json::from_value(insert_params)?).await {
+    match insert_request
+        .execute(serde_json::from_value(insert_params)?)
+        .await
+    {
         Ok(response) => println!("   ✅ 插入行成功"),
         Err(e) => println!("   ❌ 插入行失败: {}", e),
     }
@@ -348,7 +389,10 @@ async fn demo_advanced_features(sheet_service: &CcmSheetOldV2) -> Result<(), Box
         ]
     });
 
-    match condition_request.execute(serde_json::from_value(condition_params)?).await {
+    match condition_request
+        .execute(serde_json::from_value(condition_params)?)
+        .await
+    {
         Ok(response) => println!("   ✅ 条件格式创建成功"),
         Err(e) => println!("   ❌ 条件格式创建失败: {}", e),
     }
@@ -370,7 +414,10 @@ async fn demo_advanced_features(sheet_service: &CcmSheetOldV2) -> Result<(), Box
         ]
     });
 
-    match dropdown_request.execute(serde_json::from_value(dropdown_params)?).await {
+    match dropdown_request
+        .execute(serde_json::from_value(dropdown_params)?)
+        .await
+    {
         Ok(response) => println!("   ✅ 数据验证规则设置成功"),
         Err(e) => println!("   ❌ 数据验证规则设置失败: {}", e),
     }
@@ -379,7 +426,9 @@ async fn demo_advanced_features(sheet_service: &CcmSheetOldV2) -> Result<(), Box
 }
 
 /// 演示权限和安全功能
-async fn demo_security_features(sheet_service: &CcmSheetOldV2) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_security_features(
+    sheet_service: &CcmSheetOldV2,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n🔒 === 权限和安全功能演示 ===");
 
     let spreadsheet_token = "your_spreadsheet_token";
@@ -404,7 +453,10 @@ async fn demo_security_features(sheet_service: &CcmSheetOldV2) -> Result<(), Box
         }
     });
 
-    match protect_request.execute(serde_json::from_value(protect_params)?).await {
+    match protect_request
+        .execute(serde_json::from_value(protect_params)?)
+        .await
+    {
         Ok(response) => println!("   ✅ 保护范围添加成功"),
         Err(e) => println!("   ❌ 保护范围添加失败: {}", e),
     }
@@ -416,7 +468,10 @@ async fn demo_security_features(sheet_service: &CcmSheetOldV2) -> Result<(), Box
         "spreadsheetToken": spreadsheet_token
     });
 
-    match get_protect_request.execute(serde_json::from_value(get_params)?).await {
+    match get_protect_request
+        .execute(serde_json::from_value(get_params)?)
+        .await
+    {
         Ok(response) => {
             if let Some(result) = response.data {
                 println!("   ✅ 找到 {} 个保护范围", result.protected_ranges.len());
@@ -442,7 +497,10 @@ async fn demo_security_features(sheet_service: &CcmSheetOldV2) -> Result<(), Box
         }
     });
 
-    match image_request.execute(serde_json::from_value(image_params)?).await {
+    match image_request
+        .execute(serde_json::from_value(image_params)?)
+        .await
+    {
         Ok(response) => println!("   ✅ 图片插入成功"),
         Err(e) => println!("   ❌ 图片插入失败: {}", e),
     }
@@ -451,7 +509,9 @@ async fn demo_security_features(sheet_service: &CcmSheetOldV2) -> Result<(), Box
 }
 
 /// 错误处理最佳实践示例
-async fn demo_error_handling(sheet_service: &CcmSheetOldV2) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_error_handling(
+    sheet_service: &CcmSheetOldV2,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n⚠️ === 错误处理最佳实践 ===");
 
     let spreadsheet_token = "invalid_token_for_demo";
@@ -463,7 +523,10 @@ async fn demo_error_handling(sheet_service: &CcmSheetOldV2) -> Result<(), Box<dy
         "range": "Sheet1!A1:C10"
     });
 
-    match read_request.execute(serde_json::from_value(read_params)?).await {
+    match read_request
+        .execute(serde_json::from_value(read_params)?)
+        .await
+    {
         Ok(response) => {
             println!("✅ 数据读取成功");
             // 处理成功响应
@@ -489,7 +552,9 @@ async fn demo_error_handling(sheet_service: &CcmSheetOldV2) -> Result<(), Box<dy
 }
 
 /// 批量操作性能优化示例
-async fn demo_performance_optimization(sheet_service: &CcmSheetOldV2) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_performance_optimization(
+    sheet_service: &CcmSheetOldV2,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n⚡ === 性能优化示例 ===");
 
     let spreadsheet_token = "your_spreadsheet_token";
@@ -509,7 +574,10 @@ async fn demo_performance_optimization(sheet_service: &CcmSheetOldV2) -> Result<
         });
 
         // 在实际应用中需要正确的错误处理
-        let _ = write_request.clone().execute(serde_json::from_value(params)?).await;
+        let _ = write_request
+            .clone()
+            .execute(serde_json::from_value(params)?)
+            .await;
     }
 
     let individual_time = start.elapsed();
@@ -533,13 +601,17 @@ async fn demo_performance_optimization(sheet_service: &CcmSheetOldV2) -> Result<
         "data": batch_data
     });
 
-    let _ = batch_request.execute(serde_json::from_value(batch_params)?).await;
+    let _ = batch_request
+        .execute(serde_json::from_value(batch_params)?)
+        .await;
     let batch_time = start.elapsed();
     println!("   ⏱️  批量操作耗时: {:?}", batch_time);
 
     if individual_time > batch_time {
-        println!("   🚀 批量操作性能提升: {:.1}x",
-            individual_time.as_secs_f64() / batch_time.as_secs_f64());
+        println!(
+            "   🚀 批量操作性能提升: {:.1}x",
+            individual_time.as_secs_f64() / batch_time.as_secs_f64()
+        );
     }
 
     Ok(())

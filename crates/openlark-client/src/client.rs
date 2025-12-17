@@ -617,7 +617,10 @@ mod tests {
         assert!(result.is_err());
         if let Err(error) = result {
             assert!(error.context().has_context("operation"));
-            assert_eq!(error.context().get_context("operation"), Some("test_operation"));
+            assert_eq!(
+                error.context().get_context("operation"),
+                Some("test_operation")
+            );
             assert_eq!(error.context().get_context("component"), Some("Client"));
         }
     }

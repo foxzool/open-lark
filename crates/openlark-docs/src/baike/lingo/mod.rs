@@ -1,7 +1,6 @@
 /// Lingo语言服务模块
 ///
 /// 提供智能语言处理功能，包括草稿管理和词条管理。
-
 use openlark_core::config::Config;
 
 // 导出v1版本实现
@@ -37,7 +36,6 @@ impl LingoService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::trait_system::service::Service;
 
     #[test]
     fn test_lingo_service_creation() {

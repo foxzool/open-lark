@@ -43,7 +43,6 @@ fn test_api_builder_creation() {
     let _access_token_builder = authen_service.v1().access_token();
 
     // 如果到这里没有 panic，说明构建器创建成功
-    assert!(true);
 }
 
 #[test]
@@ -90,5 +89,4 @@ fn test_debug_implementations() {
     let _debug_oauth = format!("{:?}", oauth_service);
 
     // 如果能正常调用 Debug 格式化，说明实现正确
-    assert!(true);
 }

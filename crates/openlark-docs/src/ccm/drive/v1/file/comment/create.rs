@@ -124,8 +124,7 @@ mod tests {
 
     #[test]
     fn test_create_comment_request_with_type() {
-        let request = CreateCommentRequest::new("file_token", "这是一条评论")
-            .comment_type("text");
+        let request = CreateCommentRequest::new("file_token", "这是一条评论").comment_type("text");
 
         assert_eq!(request.file_token, "file_token");
         assert_eq!(request.comment_type.unwrap(), "text");
@@ -153,9 +152,6 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            CreateCommentResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(CreateCommentResponse::data_format(), ResponseFormat::Data);
     }
 }

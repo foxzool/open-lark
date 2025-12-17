@@ -28,8 +28,7 @@ pub struct DownloadFileBuilder {
 impl DownloadFileBuilder {
     pub fn new(file_token: impl ToString) -> Self {
         let mut builder = Self::default();
-        builder.api_req.req_type = "baike_file_download".to_string();
-        builder.api_req.method = "GET".to_string();
+        builder.api_req.method = openlark_core::api::HttpMethod::Get;
         builder.file_token = file_token.to_string();
         builder.api_req.url = format!(
             "https://open.feishu.cn/open-apis/baike/v1/files/{}/download",

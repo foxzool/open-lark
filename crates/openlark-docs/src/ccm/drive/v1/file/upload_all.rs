@@ -1,14 +1,14 @@
-/// 上传文件（一次性上传）
-///
-/// 上传指定文件到指定目录中，支持单次上传文件。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/upload_all
-use serde::{Deserialize, Serialize};
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
+/// 上传文件（一次性上传）
+///
+/// 上传指定文件到指定目录中，支持单次上传文件。
+/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/upload_all
+use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::DriveApi;
 
@@ -63,7 +63,7 @@ impl UploadAllRequest {
 
     pub async fn execute(self) -> SDKResult<Response<UploadAllResponse>> {
         let api_endpoint = DriveApi::UploadFile;
-        
+
         // 构建 multipart 所需的元数据
         #[derive(Serialize)]
         struct UploadMeta {
@@ -85,7 +85,7 @@ impl UploadAllRequest {
         let request = ApiRequest::<UploadAllResponse>::post(&api_endpoint.to_url())
             .json_body(&meta)
             .file_content(self.file);
-        
+
         Transport::request(request, &self.config, None).await
     }
 }
@@ -97,7 +97,8 @@ mod tests {
     #[test]
     fn test_upload_all_request() {
         let config = Config::default();
-        let request = UploadAllRequest::new(config, "test.txt", "folder_token", "explorer", 100, vec![]);
+        let request =
+            UploadAllRequest::new(config, "test.txt", "folder_token", "explorer", 100, vec![]);
         assert_eq!(request.file_name, "test.txt");
         assert_eq!(request.parent_node, "folder_token");
         assert_eq!(request.parent_type, "explorer");

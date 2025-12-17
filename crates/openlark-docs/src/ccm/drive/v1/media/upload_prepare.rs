@@ -59,9 +59,7 @@ impl UploadPrepareRequest {
         // Using manual path as per original code
         let url = "/open-apis/drive/v1/medias/upload_prepare";
 
-        let api_request: ApiRequest<UploadPrepareResponse> =
-            ApiRequest::post(url)
-                .json_body(&self);
+        let api_request: ApiRequest<UploadPrepareResponse> = ApiRequest::post(url).json_body(&self);
 
         Transport::request(api_request, &self.config, None).await
     }

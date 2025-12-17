@@ -1,19 +1,18 @@
+use crate::baike::models::*;
 /// 模糊搜索词条
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/baike-v1/entity/search
 ///
 /// 传入关键词，与词条名、别名、释义等信息进行模糊匹配，返回搜到的词条信息。
-
 use openlark_core::{
-    error::SDKResult,
-    config::Config,
-    request_builder::UnifiedRequestBuilder,
-    constants::AccessTokenType,
     api::{ApiRequest, Response},
+    config::Config,
+    constants::AccessTokenType,
+    error::SDKResult,
     req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
 use serde::{Deserialize, Serialize};
-use crate::baike::models::*;
 
 /// 模糊搜索词条请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -90,15 +89,17 @@ impl<'a> SearchEntityBuilder<'a> {
 
     /// 执行模糊搜索词条操作
     pub async fn execute(self) -> SDKResult<SearchEntityResponse> {
-        let mut api_request: ApiRequest<SearchEntityResponse> = ApiRequest::post("/open-apis/baike/v1/entities/search")
-            .body(serde_json::to_value(&self.request)?);
+        let mut api_request: ApiRequest<SearchEntityResponse> =
+            ApiRequest::post("/open-apis/baike/v1/entities/search")
+                .body(serde_json::to_value(&self.request)?);
 
         let http_request = UnifiedRequestBuilder::build(
             &mut api_request,
             AccessTokenType::App,
             self.config,
             &RequestOption::default(),
-        ).await?;
+        )
+        .await?;
 
         let response = http_request.send().await?;
         let resp: Response<_> = response.json().await?;

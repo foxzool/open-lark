@@ -40,9 +40,7 @@ impl ApiResponseTrait for ListClassificationResponse {
 ///
 /// 获取飞书词典当前分类。
 /// docPath: https://open.feishu.cn/document/lingo-v1/classification/list
-pub async fn list_classification(
-    config: &Config,
-) -> SDKResult<Vec<ClassificationItem>> {
+pub async fn list_classification(config: &Config) -> SDKResult<Vec<ClassificationItem>> {
     // 使用enum+builder系统生成API端点
     let api_endpoint = LingoApiV1::ClassificationList;
 
@@ -57,6 +55,9 @@ pub async fn list_classification(
     })?;
 
     resp.data.map(|data| data.classifications).ok_or_else(|| {
-        openlark_core::error::validation_error("classification_data", "Classification data is missing")
+        openlark_core::error::validation_error(
+            "classification_data",
+            "Classification data is missing",
+        )
     })
 }

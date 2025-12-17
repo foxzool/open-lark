@@ -30,4 +30,3 @@ pub async fn update_sheet_properties(
 
     Transport::request(api_request, config, None).await
 }
-

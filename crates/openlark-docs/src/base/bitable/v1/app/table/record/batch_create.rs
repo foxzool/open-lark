@@ -9,7 +9,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 /// 批量创建数据记录请求
 #[allow(dead_code)]
 pub struct BatchCreateRecordRequest {

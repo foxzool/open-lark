@@ -1,6 +1,6 @@
 //! 精准搜索词条
 //!
-//! 
+//!
 //!
 //! [官方文档](https://open.feishu.cn/document/server-docs/baike-v1/entity/match)
 
@@ -74,10 +74,7 @@ impl Match {
     }
 
     pub async fn send(self) -> Result<Response<MatchResp>, Error> {
-        let url = format!(
-            "{}/open-apis/baike/v1/entities/match",
-            self.config.base_url
-        );
+        let url = format!("{}/open-apis/baike/v1/entities/match", self.config.base_url);
         let request = ApiRequest::post(&url).body(&self.req);
         let response = RequestBuilder::new(self.config, request).send().await?;
         Ok(response)

@@ -74,8 +74,7 @@ mod tests {
     #[test]
     fn test_create_export_task_request_builder() {
         let config = Config::default();
-        let request = CreateExportTaskRequest::new(config, "file_token", "pdf")
-            .sub_type("param");
+        let request = CreateExportTaskRequest::new(config, "file_token", "pdf").sub_type("param");
 
         assert_eq!(request.token, "file_token");
         assert_eq!(request.r#type, "pdf");
@@ -84,6 +83,9 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(CreateExportTaskResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            CreateExportTaskResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

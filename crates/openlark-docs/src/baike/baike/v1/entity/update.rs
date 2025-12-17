@@ -2,11 +2,11 @@
 //!
 //! doc: https://open.feishu.cn/document/server-docs/baike-v1/entity/update
 
+use super::create::*;
 use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
 use openlark_core::constants::AccessTokenType;
 use openlark_core::req_option::RequestOption;
 use serde::{Deserialize, Serialize};
-use super::create::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct UpdateEntityRequest {
@@ -44,8 +44,7 @@ pub struct UpdateEntityBuilder {
 impl UpdateEntityBuilder {
     pub fn new(entity_id: impl ToString) -> Self {
         let mut builder = Self::default();
-        builder.api_req.req_type = "baike_entity_update".to_string();
-        builder.api_req.method = "PUT".to_string();
+        builder.api_req.method = openlark_core::api::HttpMethod::Put;
         builder.entity_id = entity_id.to_string();
         builder.api_req.url = format!(
             "https://open.feishu.cn/open-apis/baike/v1/entities/{}",

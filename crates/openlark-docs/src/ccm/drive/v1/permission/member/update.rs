@@ -48,12 +48,15 @@ impl UpdatePermissionMemberRequest {
     }
 
     pub async fn execute(self) -> SDKResult<Response<UpdatePermissionMemberResponse>> {
-        let api_endpoint = DriveApi::UpdatePermissionMember(self.token.clone(), self.member_id.clone());
+        let api_endpoint =
+            DriveApi::UpdatePermissionMember(self.token.clone(), self.member_id.clone());
 
-        let api_request = ApiRequest::<UpdatePermissionMemberResponse>::patch(&api_endpoint.to_url())
-            .body(serde_json::json!({
-                "type": self.r#type
-            }));
+        let api_request = ApiRequest::<UpdatePermissionMemberResponse>::patch(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::json!({
+            "type": self.r#type
+        }));
 
         Transport::request(api_request, &self.config, None).await
     }
@@ -92,12 +95,8 @@ mod tests {
     #[test]
     fn test_update_permission_member_request_builder() {
         let config = Config::default();
-        let request = UpdatePermissionMemberRequest::new(
-            config,
-            "file_token",
-            "member_id",
-            "editor",
-        );
+        let request =
+            UpdatePermissionMemberRequest::new(config, "file_token", "member_id", "editor");
 
         assert_eq!(request.token, "file_token");
         assert_eq!(request.member_id, "member_id");

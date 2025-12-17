@@ -75,7 +75,8 @@ pub async fn create_float_image(
     validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::CreateFloatImage(spreadsheet_token.to_string(), params.sheet_id.clone());
+    let api_endpoint =
+        CcmSheetApiOld::CreateFloatImage(spreadsheet_token.to_string(), params.sheet_id.clone());
 
     // 创建API请求
     let api_request: ApiRequest<CreateFloatImageResponse> =
@@ -102,7 +103,11 @@ pub async fn get_float_image(
     validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::GetFloatImage(spreadsheet_token.to_string(), params.sheet_id.clone(), params.float_image_id.clone());
+    let api_endpoint = CcmSheetApiOld::GetFloatImage(
+        spreadsheet_token.to_string(),
+        params.sheet_id.clone(),
+        params.float_image_id.clone(),
+    );
 
     // 创建API请求
     let api_request: ApiRequest<GetFloatImageResponse> =
@@ -128,7 +133,11 @@ pub async fn update_float_image(
     validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::UpdateFloatImage(spreadsheet_token.to_string(), params.sheet_id.clone(), params.float_image_id.clone());
+    let api_endpoint = CcmSheetApiOld::UpdateFloatImage(
+        spreadsheet_token.to_string(),
+        params.sheet_id.clone(),
+        params.float_image_id.clone(),
+    );
 
     // 创建API请求
     let api_request: ApiRequest<UpdateFloatImageResponse> =
@@ -154,7 +163,11 @@ pub async fn delete_float_image(
     validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::DeleteFloatImage(spreadsheet_token.to_string(), params.sheet_id.clone(), params.float_image_id.clone());
+    let api_endpoint = CcmSheetApiOld::DeleteFloatImage(
+        spreadsheet_token.to_string(),
+        params.sheet_id.clone(),
+        params.float_image_id.clone(),
+    );
 
     // 创建API请求
     let api_request: ApiRequest<DeleteFloatImageResponse> =

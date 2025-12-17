@@ -11,7 +11,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use super::{FilterRange, FilterCondition};
+use super::{FilterCondition, FilterRange};
 
 /// 创建筛选器请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -72,14 +72,14 @@ impl CreateFilterRequest {
             self.sheet_id
         );
 
-        let json_value = serde_json::to_value(self).map_err(|e| {
-            validation_error("parameter",format!("请求序列化失败: {}", e))
-        })?;
-        let api_request: ApiRequest<CreateFilterResponse> = ApiRequest::post(&endpoint).body(json_value);
+        let json_value = serde_json::to_value(self)
+            .map_err(|e| validation_error("parameter", format!("请求序列化失败: {}", e)))?;
+        let api_request: ApiRequest<CreateFilterResponse> =
+            ApiRequest::post(&endpoint).body(json_value);
         let response = Transport::request(api_request, config, None).await?;
 
-        response.data.ok_or_else(|| {
-            validation_error("parameter", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| validation_error("parameter", "响应数据为空"))
     }
 }

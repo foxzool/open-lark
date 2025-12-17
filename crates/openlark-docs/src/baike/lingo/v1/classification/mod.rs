@@ -1,7 +1,6 @@
 /// 词典分类管理模块
 ///
 /// 提供词典分类的查询功能。
-
 use openlark_core::config::Config;
 
 // 导出具体的API实现

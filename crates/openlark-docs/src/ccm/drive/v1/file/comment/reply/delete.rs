@@ -20,10 +20,10 @@ pub struct DeleteCommentReplyRequest {
 
 impl DeleteCommentReplyRequest {
     pub fn new(
-        file_token: impl Into<String>, 
-        comment_id: impl Into<String>, 
+        file_token: impl Into<String>,
+        comment_id: impl Into<String>,
         reply_id: impl Into<String>,
-        file_type: impl Into<String>
+        file_type: impl Into<String>,
     ) -> Self {
         Self {
             file_token: file_token.into(),
@@ -52,7 +52,7 @@ pub async fn delete_comment_reply(
         request.file_token, request.comment_id, request.reply_id
     );
     let mut api_request: ApiRequest<DeleteCommentReplyResponse> = ApiRequest::delete(&url);
-    
+
     api_request = api_request.query_param("file_type", &request.file_type);
 
     Transport::request(api_request, config, None).await

@@ -1,19 +1,18 @@
+use crate::baike::models::*;
 /// 获取词条列表
 ///
 /// API文档: https://open.feishu.cn/document/lingo-v1/entity/list
 ///
 /// 分页拉取词条列表数据，支持拉取租户内的全部词条。
-
 use openlark_core::{
-    error::SDKResult,
-    config::Config,
-    request_builder::UnifiedRequestBuilder,
-    constants::AccessTokenType,
     api::{ApiRequest, Response},
+    config::Config,
+    constants::AccessTokenType,
+    error::SDKResult,
     req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
 use serde::{Deserialize, Serialize};
-use crate::baike::models::*;
 
 /// 获取词条列表响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -86,7 +85,8 @@ impl<'a> ListEntityBuilder<'a> {
 
     /// 执行获取词条列表操作
     pub async fn execute(self) -> SDKResult<ListEntityResponse> {
-        let mut api_request: ApiRequest<ListEntityResponse> = ApiRequest::get("/open-apis/lingo/v1/entities");
+        let mut api_request: ApiRequest<ListEntityResponse> =
+            ApiRequest::get("/open-apis/lingo/v1/entities");
 
         // 添加查询参数
         if let Some(page_size) = self.page_size {
@@ -110,7 +110,8 @@ impl<'a> ListEntityBuilder<'a> {
             AccessTokenType::App,
             self.config,
             &RequestOption::default(),
-        ).await?;
+        )
+        .await?;
 
         let response = http_request.send().await?;
         let resp: Response<_> = response.json().await?;

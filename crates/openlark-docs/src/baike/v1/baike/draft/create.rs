@@ -1,20 +1,19 @@
+use crate::baike::models::*;
 /// 创建草稿
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/baike-v1/draft/create
 ///
 /// 草稿并非词条，而是指通过 API 发起创建新词条或更新现有词条的申请。
 /// 词典管理员审核通过后，草稿将变为新的词条或覆盖已有词条。
-
 use openlark_core::{
-    error::SDKResult,
-    config::Config,
-    request_builder::UnifiedRequestBuilder,
-    constants::AccessTokenType,
     api::{ApiRequest, Response},
+    config::Config,
+    constants::AccessTokenType,
+    error::SDKResult,
     req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
 use serde::{Deserialize, Serialize};
-use crate::baike::models::*;
 
 /// 创建草稿请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -126,15 +125,17 @@ impl<'a> CreateDraftBuilder<'a> {
 
     /// 执行创建草稿操作
     pub async fn execute(self) -> SDKResult<CreateDraftResponse> {
-        let mut api_request: ApiRequest<CreateDraftResponse> = ApiRequest::post("/open-apis/baike/v1/drafts")
-            .body(serde_json::to_value(&self.request)?);
+        let mut api_request: ApiRequest<CreateDraftResponse> =
+            ApiRequest::post("/open-apis/baike/v1/drafts")
+                .body(serde_json::to_value(&self.request)?);
 
         let http_request = UnifiedRequestBuilder::build(
             &mut api_request,
             AccessTokenType::App,
             self.config,
             &RequestOption::default(),
-        ).await?;
+        )
+        .await?;
 
         let response = http_request.send().await?;
         let resp: Response<_> = response.json().await?;
