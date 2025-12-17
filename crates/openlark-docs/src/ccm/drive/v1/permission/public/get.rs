@@ -15,6 +15,8 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 /// 获取公开权限设置请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetPublicPermissionRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件token
     pub token: String,
 }
@@ -23,11 +25,21 @@ impl GetPublicPermissionRequest {
     /// 创建获取公开权限设置请求
     ///
     /// # 参数
+    /// * `config` - 配置
     /// * `token` - 文件token
-    pub fn new(token: impl Into<String>) -> Self {
+    pub fn new(config: Config, token: impl Into<String>) -> Self {
         Self {
+            config,
             token: token.into(),
         }
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<GetPublicPermissionResponse>> {
+        let api_endpoint = DriveApi::GetPublicPermission(self.token.clone());
+
+        let api_request = ApiRequest::<GetPublicPermissionResponse>::get(&api_endpoint.to_url());
+
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -68,38 +80,14 @@ impl ApiResponseTrait for GetPublicPermissionResponse {
     }
 }
 
-/// 获取云文档权限设置
-///
-/// 获取文件或文件夹的公开权限设置
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-public/get
-pub async fn get_public_permission(
-    request: GetPublicPermissionRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<GetPublicPermissionResponse>> {
-    // 使用DriveApi枚举生成API端点
-    let api_endpoint = DriveApi::GetPublicPermission(request.token.clone());
-
-    // 创建API请求
-    let mut api_request: ApiRequest<GetPublicPermissionResponse> =
-        ApiRequest::get(&api_endpoint.to_url());
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_get_public_permission_request_builder() {
-        let request = GetPublicPermissionRequest::new("file_token");
+        let config = Config::default();
+        let request = GetPublicPermissionRequest::new(config, "file_token");
 
         assert_eq!(request.token, "file_token");
     }

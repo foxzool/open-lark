@@ -10,7 +10,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::MinuteMediaInfo;
+use crate::minutes::v1::minute::models::MinuteMediaInfo;
 
 /// 下载妙记音视频文件请求
 pub struct GetMinuteMediaRequest {

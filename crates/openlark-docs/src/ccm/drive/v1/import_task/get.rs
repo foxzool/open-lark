@@ -15,15 +15,26 @@ use crate::common::api_endpoints::DriveApi;
 /// 获取导入任务请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetImportTaskRequest {
+    #[serde(skip)]
+    config: Config,
     /// 任务ticket
     pub ticket: String,
 }
 
 impl GetImportTaskRequest {
-    pub fn new(ticket: impl Into<String>) -> Self {
+    pub fn new(config: Config, ticket: impl Into<String>) -> Self {
         Self {
+            config,
             ticket: ticket.into(),
         }
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<GetImportTaskResponse>> {
+        let api_endpoint = DriveApi::GetImportTask(self.ticket.clone());
+
+        let api_request = ApiRequest::<GetImportTaskResponse>::get(&api_endpoint.to_url());
+
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -46,20 +57,19 @@ impl ApiResponseTrait for GetImportTaskResponse {
     }
 }
 
-/// 获取导入任务状态
-pub async fn get_import_task(
-    request: GetImportTaskRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<GetImportTaskResponse>> {
-    let api_endpoint = DriveApi::GetImportTask(request.ticket.clone());
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    let mut api_request: ApiRequest<GetImportTaskResponse> =
-        ApiRequest::get(&api_endpoint.to_url());
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+    #[test]
+    fn test_get_import_task_request_builder() {
+        let config = Config::default();
+        let request = GetImportTaskRequest::new(config, "ticket");
+        assert_eq!(request.ticket, "ticket");
     }
 
-    Transport::request(api_request, config, None).await
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(GetImportTaskResponse::data_format(), ResponseFormat::Data);
+    }
 }

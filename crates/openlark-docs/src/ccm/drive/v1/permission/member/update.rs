@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -15,6 +15,8 @@ use crate::common::api_endpoints::DriveApi;
 /// 更新协作者权限请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdatePermissionMemberRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件token
     pub token: String,
     /// 成员ID
@@ -27,19 +29,33 @@ impl UpdatePermissionMemberRequest {
     /// 创建更新协作者权限请求
     ///
     /// # 参数
+    /// * `config` - 配置
     /// * `token` - 文件token
     /// * `member_id` - 成员ID
     /// * `type` - 权限类型
     pub fn new(
+        config: Config,
         token: impl Into<String>,
         member_id: impl Into<String>,
         r#type: impl Into<String>,
     ) -> Self {
         Self {
+            config,
             token: token.into(),
             member_id: member_id.into(),
             r#type: r#type.into(),
         }
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<UpdatePermissionMemberResponse>> {
+        let api_endpoint = DriveApi::UpdatePermissionMember(self.token.clone(), self.member_id.clone());
+
+        let api_request = ApiRequest::<UpdatePermissionMemberResponse>::patch(&api_endpoint.to_url())
+            .body(serde_json::json!({
+                "type": self.r#type
+            }));
+
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -69,40 +85,15 @@ impl ApiResponseTrait for UpdatePermissionMemberResponse {
     }
 }
 
-/// 更新协作者权限
-///
-/// 更新文件或文件夹中指定协作者的权限
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/update
-pub async fn update_permission_member(
-    request: UpdatePermissionMemberRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<UpdatePermissionMemberResponse>> {
-    // 使用DriveApi枚举生成API端点
-    let api_endpoint = DriveApi::UpdatePermissionMember(request.token.clone(), request.member_id.clone());
-
-    // 创建API请求
-    let mut api_request: ApiRequest<UpdatePermissionMemberResponse> =
-        ApiRequest::patch(&api_endpoint.to_url()).body(serde_json::json!({
-            "type": request.r#type
-        }));
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_update_permission_member_request_builder() {
+        let config = Config::default();
         let request = UpdatePermissionMemberRequest::new(
+            config,
             "file_token",
             "member_id",
             "editor",

@@ -1,7 +1,7 @@
-/// 导出妙记文字记录
+/// 获取妙记统计数据
 ///
-/// 导出妙记的文字记录。
-/// 文档参考：https://open.feishu.cn/document/minutes-v1/minute-transcript/get
+/// 通过这个接口，可以获得妙记的访问情况统计，包含PV、UV、访问过的 user id、访问过的 user timestamp。
+/// 文档参考：https://open.feishu.cn/document/server-docs/minutes-v1/minute-statistics/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,29 +10,29 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::MinuteTranscript;
+use crate::minutes::v1::minute::models::MinuteStatistics;
 
-/// 导出妙记文字记录请求
-pub struct GetMinuteTranscriptRequest {
+/// 获取妙记统计数据请求
+pub struct GetMinuteStatisticsRequest {
     minute_token: String,
     config: Config,
 }
 
-/// 导出妙记文字记录响应
+/// 获取妙记统计数据响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetMinuteTranscriptResponse {
-    /// 文字记录
-    pub transcript: MinuteTranscript,
+pub struct GetMinuteStatisticsResponse {
+    /// 统计数据
+    pub statistics: MinuteStatistics,
 }
 
-impl ApiResponseTrait for GetMinuteTranscriptResponse {
+impl ApiResponseTrait for GetMinuteStatisticsResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl GetMinuteTranscriptRequest {
-    /// 创建导出妙记文字记录请求
+impl GetMinuteStatisticsRequest {
+    /// 创建获取妙记统计数据请求
     pub fn new(config: Config) -> Self {
         Self {
             minute_token: String::new(),
@@ -48,18 +48,18 @@ impl GetMinuteTranscriptRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/minutes-v1/minute-transcript/get
-    pub async fn execute(self) -> SDKResult<GetMinuteTranscriptResponse> {
+    /// API文档: https://open.feishu.cn/document/server-docs/minutes-v1/minute-statistics/get
+    pub async fn execute(self) -> SDKResult<GetMinuteStatisticsResponse> {
         // 验证必填字段
         validate_required!(self.minute_token, "妙记Token不能为空");
 
         // 🚀 使用新的enum+builder系统生成API端点
         // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         use crate::common::api_endpoints::MinutesApiV1;
-        let api_endpoint = MinutesApiV1::TranscriptGet(self.minute_token.clone());
+        let api_endpoint = MinutesApiV1::StatisticsGet(self.minute_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<GetMinuteTranscriptResponse> =
+        let api_request: ApiRequest<GetMinuteStatisticsResponse> =
             ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求

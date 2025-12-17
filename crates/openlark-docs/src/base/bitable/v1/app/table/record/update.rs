@@ -42,43 +42,38 @@ impl ApiResponseTrait for UpdateRecordResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct UpdateRecordBuilder {
-    api_req: ApiRequest<UpdateRecordRequest>,
+#[derive(Debug)]
+pub struct UpdateRecord {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
     record_id: String,
+    req: UpdateRecordRequest,
 }
 
-impl UpdateRecordBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString, record_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_record_update".to_string();
-        builder.api_req.method = "PUT".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.record_id = record_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
-            builder.app_token, builder.table_id, builder.record_id
-        );
-        builder.api_req.body = Some(UpdateRecordRequest::default());
-        builder
+impl UpdateRecord {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>, record_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            record_id: record_id.into(),
+            req: UpdateRecordRequest::default(),
+        }
     }
 
     pub fn fields(mut self, fields: serde_json::Value) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.fields = fields;
-        }
+        self.req.fields = fields;
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<UpdateRecordResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
+            self.config.base_url, self.app_token, self.table_id, self.record_id
+        );
+        let request = ApiRequest::put(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

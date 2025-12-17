@@ -51,7 +51,7 @@ impl CreateFileVersionRequest {
 
 /// 版本信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct VersionInfo {
+pub struct CreateVersionInfo {
     /// 版本ID
     pub version_id: String,
     /// 版本名称
@@ -61,12 +61,12 @@ pub struct VersionInfo {
     /// 创建时间
     pub create_time: i64,
     /// 创建者信息
-    pub creator: CreatorInfo,
+    pub creator: CreateVersionCreatorInfo,
 }
 
 /// 创建者信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreatorInfo {
+pub struct CreateVersionCreatorInfo {
     /// 用户ID
     pub user_id: String,
     /// 用户名称
@@ -77,7 +77,7 @@ pub struct CreatorInfo {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFileVersionResponse {
     /// 版本信息
-    pub data: Option<VersionInfo>,
+    pub data: Option<CreateVersionInfo>,
 }
 
 impl ApiResponseTrait for CreateFileVersionResponse {

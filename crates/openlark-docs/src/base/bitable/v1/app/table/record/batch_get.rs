@@ -46,41 +46,41 @@ impl ApiResponseTrait for BatchGetRecordResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct BatchGetRecordBuilder {
-    api_req: ApiRequest<BatchGetRecordRequest>,
+#[derive(Debug)]
+pub struct BatchGetRecord {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
+    req: BatchGetRecordRequest,
 }
 
-impl BatchGetRecordBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_record_batch_get".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_get",
-            builder.app_token, builder.table_id
-        );
-        builder.api_req.body = Some(BatchGetRecordRequest::default());
-        builder
+impl BatchGetRecord {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            req: BatchGetRecordRequest::default(),
+        }
     }
 
     pub fn record_ids(mut self, record_ids: Vec<String>) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.record_ids = record_ids;
-        }
+        self.req.record_ids = record_ids;
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.req.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    pub async fn send(self) -> Result<openlark_core::response::Response<BatchGetRecordResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_get",
+            self.config.base_url, self.app_token, self.table_id
+        );
+        let request = ApiRequest::post(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

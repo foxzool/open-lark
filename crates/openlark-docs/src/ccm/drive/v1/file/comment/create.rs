@@ -46,7 +46,7 @@ impl CreateCommentRequest {
 
 /// 评论信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CommentInfo {
+pub struct CreateCommentInfo {
     /// 评论ID
     pub comment_id: String,
     /// 评论内容
@@ -54,14 +54,14 @@ pub struct CommentInfo {
     /// 评论类型
     pub comment_type: String,
     /// 创建者信息
-    pub creator: CreatorInfo,
+    pub creator: CreateCreatorInfo,
     /// 创建时间
     pub create_time: i64,
 }
 
 /// 创建者信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreatorInfo {
+pub struct CreateCreatorInfo {
     /// 用户ID
     pub user_id: String,
     /// 用户名称
@@ -72,7 +72,7 @@ pub struct CreatorInfo {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateCommentResponse {
     /// 评论信息
-    pub data: Option<CommentInfo>,
+    pub data: Option<CreateCommentInfo>,
 }
 
 impl ApiResponseTrait for CreateCommentResponse {

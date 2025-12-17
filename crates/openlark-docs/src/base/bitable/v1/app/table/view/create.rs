@@ -31,48 +31,41 @@ impl ApiResponseTrait for CreateViewResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct CreateViewBuilder {
-    api_req: ApiRequest<CreateViewRequest>,
+#[derive(Debug)]
+pub struct CreateView {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
+    req: CreateViewRequest,
 }
 
-impl CreateViewBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_view_create".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/views",
-            builder.app_token, builder.table_id
+impl CreateView {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            req: CreateViewRequest::default(),
+        }
+    }
+
+    pub fn view_name(mut self, view_name: impl Into<String>) -> Self {
+        self.req.view_name = view_name.into();
+        self
+    }
+
+    pub fn view_type(mut self, view_type: impl Into<String>) -> Self {
+        self.req.view_type = view_type.into();
+        self
+    }
+
+    pub async fn send(self) -> Result<openlark_core::response::Response<CreateViewResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/views",
+            self.config.base_url, self.app_token, self.table_id
         );
-        builder.api_req.body = Some(CreateViewRequest::default());
-        builder
-    }
-
-    pub fn view_name(mut self, view_name: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.view_name = view_name.to_string();
-        }
-        self
-    }
-
-    pub fn view_type(mut self, view_type: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.view_type = view_type.to_string();
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+        let request = ApiRequest::post(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

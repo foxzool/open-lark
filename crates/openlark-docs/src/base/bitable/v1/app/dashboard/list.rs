@@ -34,50 +34,44 @@ impl ApiResponseTrait for ListDashboardResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct ListDashboardBuilder {
-    api_req: ApiRequest<ListDashboardRequest>,
+#[derive(Debug)]
+pub struct ListDashboard {
+    config: openlark_core::config::Config,
     app_token: String,
+    req: ListDashboardRequest,
 }
 
-impl ListDashboardBuilder {
-    pub fn new(app_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_dashboard_list".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.app_token = app_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/dashboards",
-            builder.app_token
-        );
-        builder.api_req.body = None;
-        builder
+impl ListDashboard {
+    pub fn new(config: openlark_core::config::Config) -> Self {
+        Self {
+            config,
+            app_token: String::new(),
+            req: ListDashboardRequest::default(),
+        }
+    }
+
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.app_token = app_token.into();
+        self
     }
 
     pub fn page_size(mut self, page_size: i32) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_size={}", page_size));
-        } else {
-            self.api_req.url.push_str(&format!("?page_size={}", page_size));
-        }
+        self.req.page_size = Some(page_size);
         self
     }
 
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_token={}", page_token.to_string()));
-        } else {
-            self.api_req.url.push_str(&format!("?page_token={}", page_token.to_string()));
-        }
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.req.page_token = Some(page_token.into());
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<ListDashboardResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/dashboards",
+            self.config.base_url, self.app_token
+        );
+        let request = ApiRequest::get(&url).query(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

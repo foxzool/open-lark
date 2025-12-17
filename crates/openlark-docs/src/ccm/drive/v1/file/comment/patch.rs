@@ -46,12 +46,12 @@ impl PatchCommentRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchCommentResponse {
     /// 评论信息
-    pub comment: CommentInfo,
+    pub comment: PatchCommentInfo,
 }
 
 /// 评论信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CommentInfo {
+pub struct PatchCommentInfo {
     /// 评论ID
     pub comment_id: String,
     /// 评论内容
@@ -61,7 +61,7 @@ pub struct CommentInfo {
     /// 评论状态
     pub status: String,
     /// 创建者信息
-    pub creator: CreatorInfo,
+    pub creator: PatchCreatorInfo,
     /// 创建时间
     pub create_time: String,
     /// 更新时间
@@ -74,7 +74,7 @@ pub struct CommentInfo {
 
 /// 创建者信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreatorInfo {
+pub struct PatchCreatorInfo {
     /// 用户ID
     pub user_id: String,
     /// 用户名称

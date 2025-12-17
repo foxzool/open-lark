@@ -39,39 +39,34 @@ impl ApiResponseTrait for CreateTableResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct CreateTableBuilder {
-    api_req: ApiRequest<CreateTableRequest>,
+#[derive(Debug)]
+pub struct CreateTable {
+    config: openlark_core::config::Config,
     app_token: String,
+    req: CreateTableRequest,
 }
 
-impl CreateTableBuilder {
-    pub fn new(app_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_table_create".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.app_token = app_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables",
-            builder.app_token
-        );
-        builder.api_req.body = Some(CreateTableRequest::default());
-        builder
+impl CreateTable {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            req: CreateTableRequest::default(),
+        }
     }
 
     pub fn table(mut self, table: TableSpec) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.table = Some(table);
-        }
+        self.req.table = Some(table);
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<CreateTableResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables",
+            self.config.base_url, self.app_token
+        );
+        let request = ApiRequest::post(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

@@ -41,52 +41,45 @@ impl ApiResponseTrait for PatchFormFieldResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct PatchFormFieldBuilder {
-    api_req: ApiRequest<PatchFormFieldRequest>,
+#[derive(Debug)]
+pub struct PatchFormField {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
     form_id: String,
     field_id: String,
+    req: PatchFormFieldRequest,
 }
 
-impl PatchFormFieldBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString, form_id: impl ToString, field_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_form_field_patch".to_string();
-        builder.api_req.method = "PATCH".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.form_id = form_id.to_string();
-        builder.field_id = field_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/fields/{}",
-            builder.app_token, builder.table_id, builder.form_id, builder.field_id
+impl PatchFormField {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>, form_id: impl Into<String>, field_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            form_id: form_id.into(),
+            field_id: field_id.into(),
+            req: PatchFormFieldRequest::default(),
+        }
+    }
+
+    pub fn title(mut self, title: impl Into<String>) -> Self {
+        self.req.title = Some(title.into());
+        self
+    }
+
+    pub fn description(mut self, description: impl Into<String>) -> Self {
+        self.req.description = Some(description.into());
+        self
+    }
+
+    pub async fn send(self) -> Result<openlark_core::response::Response<PatchFormFieldResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/fields/{}",
+            self.config.base_url, self.app_token, self.table_id, self.form_id, self.field_id
         );
-        builder.api_req.body = Some(PatchFormFieldRequest::default());
-        builder
-    }
-
-    pub fn title(mut self, title: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.title = Some(title.to_string());
-        }
-        self
-    }
-
-    pub fn description(mut self, description: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.description = Some(description.to_string());
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+        let request = ApiRequest::patch(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

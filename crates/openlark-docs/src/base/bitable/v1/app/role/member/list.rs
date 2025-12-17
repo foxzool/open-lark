@@ -39,52 +39,41 @@ impl ApiResponseTrait for ListRoleMemberResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct ListRoleMemberBuilder {
-    api_req: ApiRequest<ListRoleMemberRequest>,
+#[derive(Debug)]
+pub struct ListRoleMember {
+    config: openlark_core::config::Config,
     app_token: String,
     role_id: String,
+    req: ListRoleMemberRequest,
 }
 
-impl ListRoleMemberBuilder {
-    pub fn new(app_token: impl ToString, role_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_role_member_list".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.app_token = app_token.to_string();
-        builder.role_id = role_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/roles/{}/members",
-            builder.app_token, builder.role_id
-        );
-        builder.api_req.body = None;
-        builder
+impl ListRoleMember {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, role_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            role_id: role_id.into(),
+            req: ListRoleMemberRequest::default(),
+        }
     }
 
     pub fn page_size(mut self, page_size: i32) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_size={}", page_size));
-        } else {
-            self.api_req.url.push_str(&format!("?page_size={}", page_size));
-        }
+        self.req.page_size = Some(page_size);
         self
     }
 
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_token={}", page_token.to_string()));
-        } else {
-            self.api_req.url.push_str(&format!("?page_token={}", page_token.to_string()));
-        }
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.req.page_token = Some(page_token.into());
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<ListRoleMemberResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/roles/{}/members",
+            self.config.base_url, self.app_token, self.role_id
+        );
+        let request = ApiRequest::get(&url).query(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

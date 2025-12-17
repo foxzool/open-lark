@@ -22,45 +22,38 @@ impl ApiResponseTrait for DeleteRoleMemberResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct DeleteRoleMemberBuilder {
-    api_req: ApiRequest<DeleteRoleMemberRequest>,
+#[derive(Debug)]
+pub struct DeleteRoleMember {
+    config: openlark_core::config::Config,
     app_token: String,
     role_id: String,
     member_id: String,
+    req: DeleteRoleMemberRequest,
 }
 
-impl DeleteRoleMemberBuilder {
-    pub fn new(app_token: impl ToString, role_id: impl ToString, member_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_role_member_delete".to_string();
-        builder.api_req.method = "DELETE".to_string();
-        builder.app_token = app_token.to_string();
-        builder.role_id = role_id.to_string();
-        builder.member_id = member_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/roles/{}/members/{}",
-            builder.app_token, builder.role_id, builder.member_id
-        );
-        builder.api_req.body = None;
-        builder
+impl DeleteRoleMember {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, role_id: impl Into<String>, member_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            role_id: role_id.into(),
+            member_id: member_id.into(),
+            req: DeleteRoleMemberRequest::default(),
+        }
     }
 
-    pub fn member_type(mut self, member_type: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&member_type={}", member_type.to_string()));
-        } else {
-            self.api_req.url.push_str(&format!("?member_type={}", member_type.to_string()));
-        }
+    pub fn member_type(mut self, member_type: impl Into<String>) -> Self {
+        self.req.member_type = Some(member_type.into());
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<DeleteRoleMemberResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/roles/{}/members/{}",
+            self.config.base_url, self.app_token, self.role_id, self.member_id
+        );
+        let request = ApiRequest::delete(&url).query(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

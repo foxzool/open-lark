@@ -40,46 +40,54 @@ impl ApiResponseTrait for CopyAppResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct CopyAppBuilder {
-    api_req: ApiRequest<CopyAppRequest>,
+#[derive(Debug)]
+pub struct CopyApp {
+    config: openlark_core::config::Config,
     app_token: String,
+    req: CopyAppRequest,
 }
 
-impl CopyAppBuilder {
-    pub fn new(app_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_app_copy".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.app_token = app_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/copy",
-            builder.app_token
+impl CopyApp {
+    pub fn new(config: openlark_core::config::Config) -> Self {
+        Self {
+            config,
+            app_token: String::new(),
+            req: CopyAppRequest::default(),
+        }
+    }
+
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.app_token = app_token.into();
+        self
+    }
+
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.req.name = Some(name.into());
+        self
+    }
+
+    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
+        self.req.folder_token = Some(folder_token.into());
+        self
+    }
+
+    pub fn without_content(mut self, without_content: bool) -> Self {
+        self.req.without_content = Some(without_content);
+        self
+    }
+
+    pub fn time_zone(mut self, time_zone: impl Into<String>) -> Self {
+        self.req.time_zone = Some(time_zone.into());
+        self
+    }
+
+    pub async fn send(self) -> Result<openlark_core::response::Response<CopyAppResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/copy",
+            self.config.base_url, self.app_token
         );
-        builder.api_req.body = Some(CopyAppRequest::default());
-        builder
-    }
-
-    pub fn name(mut self, name: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.name = Some(name.to_string());
-        }
-        self
-    }
-
-    pub fn folder_token(mut self, folder_token: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.folder_token = Some(folder_token.to_string());
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+        let request = ApiRequest::post(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

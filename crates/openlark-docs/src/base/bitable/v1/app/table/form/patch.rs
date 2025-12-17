@@ -42,57 +42,48 @@ impl ApiResponseTrait for PatchFormResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct PatchFormBuilder {
-    api_req: ApiRequest<PatchFormRequest>,
+#[derive(Debug)]
+pub struct PatchForm {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
     form_id: String,
+    req: PatchFormRequest,
 }
 
-impl PatchFormBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString, form_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_form_patch".to_string();
-        builder.api_req.method = "PATCH".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.form_id = form_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
-            builder.app_token, builder.table_id, builder.form_id
-        );
-        builder.api_req.body = Some(PatchFormRequest::default());
-        builder
+impl PatchForm {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>, form_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            form_id: form_id.into(),
+            req: PatchFormRequest::default(),
+        }
     }
 
-    pub fn name(mut self, name: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.name = Some(name.to_string());
-        }
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.req.name = Some(name.into());
         self
     }
 
-    pub fn description(mut self, description: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.description = Some(description.to_string());
-        }
+    pub fn description(mut self, description: impl Into<String>) -> Self {
+        self.req.description = Some(description.into());
         self
     }
 
     pub fn shared(mut self, shared: bool) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.shared = Some(shared);
-        }
+        self.req.shared = Some(shared);
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<PatchFormResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
+            self.config.base_url, self.app_token, self.table_id, self.form_id
+        );
+        let request = ApiRequest::patch(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

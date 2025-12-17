@@ -15,6 +15,8 @@ use crate::common::api_endpoints::DriveApi;
 /// 创建导出任务请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateExportTaskRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件token
     pub token: String,
     /// 导出文件类型
@@ -24,12 +26,31 @@ pub struct CreateExportTaskRequest {
 }
 
 impl CreateExportTaskRequest {
-    pub fn new(token: impl Into<String>, r#type: impl Into<String>) -> Self {
+    pub fn new(config: Config, token: impl Into<String>, r#type: impl Into<String>) -> Self {
         Self {
+            config,
             token: token.into(),
             r#type: r#type.into(),
             sub_type: None,
         }
+    }
+
+    pub fn sub_type(mut self, sub_type: impl Into<String>) -> Self {
+        self.sub_type = Some(sub_type.into());
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<CreateExportTaskResponse>> {
+        let api_endpoint = DriveApi::CreateExportTask;
+
+        let api_request = ApiRequest::<CreateExportTaskResponse>::post(&api_endpoint.to_url())
+            .body(serde_json::json!({
+                "token": self.token,
+                "type": self.r#type,
+                "sub_type": self.sub_type
+            }));
+
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -46,21 +67,23 @@ impl ApiResponseTrait for CreateExportTaskResponse {
     }
 }
 
-/// 创建导出任务
-pub async fn create_export_task(
-    request: CreateExportTaskRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<CreateExportTaskResponse>> {
-    let api_endpoint = DriveApi::CreateExportTask;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    let mut api_request: ApiRequest<CreateExportTaskResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serde_json::json!(&request));
+    #[test]
+    fn test_create_export_task_request_builder() {
+        let config = Config::default();
+        let request = CreateExportTaskRequest::new(config, "file_token", "pdf")
+            .sub_type("param");
 
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+        assert_eq!(request.token, "file_token");
+        assert_eq!(request.r#type, "pdf");
+        assert_eq!(request.sub_type, Some("param".to_string()));
     }
 
-    Transport::request(api_request, config, None).await
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(CreateExportTaskResponse::data_format(), ResponseFormat::Data);
+    }
 }

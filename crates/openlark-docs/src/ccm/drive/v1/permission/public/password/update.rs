@@ -15,6 +15,8 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 /// 刷新云文档密码请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdatePublicPasswordRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件token
     pub token: String,
     /// 新密码
@@ -27,13 +29,16 @@ impl UpdatePublicPasswordRequest {
     /// 创建刷新云文档密码请求
     ///
     /// # 参数
+    /// * `config` - 配置
     /// * `token` - 文件token
     /// * `password` - 新密码
     pub fn new(
+        config: Config,
         token: impl Into<String>,
         password: impl Into<String>,
     ) -> Self {
         Self {
+            config,
             token: token.into(),
             password: password.into(),
             password_hint: None,
@@ -44,6 +49,23 @@ impl UpdatePublicPasswordRequest {
     pub fn password_hint(mut self, password_hint: impl Into<String>) -> Self {
         self.password_hint = Some(password_hint.into());
         self
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<UpdatePublicPasswordResponse>> {
+        let api_endpoint = format!("/open-apis/drive/v1/permissions/{}/public/password", self.token);
+
+        let mut body = serde_json::json!({
+            "password": self.password
+        });
+
+        if let Some(password_hint) = &self.password_hint {
+            body["passwordHint"] = serde_json::json!(password_hint);
+        }
+
+        let api_request = ApiRequest::<UpdatePublicPasswordResponse>::put(&api_endpoint)
+            .body(body);
+        
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -73,45 +95,14 @@ impl ApiResponseTrait for UpdatePublicPasswordResponse {
     }
 }
 
-/// 刷新云文档密码
-///
-/// 刷新云文档的密码保护设置。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/permission-public-password/update
-pub async fn update_public_password(
-    request: UpdatePublicPasswordRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<UpdatePublicPasswordResponse>> {
-    // 构建请求体
-    let mut body = serde_json::json!({
-        "password": request.password
-    });
-
-    if let Some(password_hint) = &request.password_hint {
-        body["passwordHint"] = serde_json::json!(password_hint);
-    }
-
-    // 创建API请求
-    let mut api_request: ApiRequest<UpdatePublicPasswordResponse> =
-        ApiRequest::put(&format!("/open-apis/drive/v1/permissions/{}/public/password", request.token))
-            .body(body);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_update_public_password_request_builder() {
-        let request = UpdatePublicPasswordRequest::new("file_token", "new_password123")
+        let config = Config::default();
+        let request = UpdatePublicPasswordRequest::new(config, "file_token", "new_password123")
             .password_hint("新的密码提示");
 
         assert_eq!(request.token, "file_token");

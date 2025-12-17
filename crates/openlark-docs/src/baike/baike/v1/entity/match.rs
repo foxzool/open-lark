@@ -1,58 +1,87 @@
 //! 精准搜索词条
 //!
-//! doc: https://open.feishu.cn/document/server-docs/baike-v1/entity/match
+//! 
+//!
+//! [官方文档](https://open.feishu.cn/document/server-docs/baike-v1/entity/match)
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, RequestBuilder, Send},
+    config::Config,
+    error::Error,
+    response::Response,
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct MatchEntityRequest {
+/// 精准搜索词条
+#[derive(Debug)]
+pub struct Match {
+    config: Config,
+    req: MatchReq,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MatchReq {
+    /// 搜索关键词，将与词条名、别名进行精准匹配
     pub word: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct MatchEntityResponse {
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MatchResp {
+    /// 匹配结果
     pub results: Vec<MatchResult>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct MatchResult {
+    /// 词条 ID
     pub entity_id: String,
-    #[serde(rename = "type")]
-    pub type_: i32,
+    /// 词条名
+    pub main_keys: Vec<TermKey>,
+    /// 别名
+    pub aliases: Vec<TermKey>,
 }
 
-impl ApiResponseTrait for MatchEntityResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TermKey {
+    /// 名称的值
+    pub key: String,
+    /// 名称的展示状态
+    pub display_status: DisplayStatus,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DisplayStatus {
+    /// 对应名称是否在词条卡片允许展示
+    pub allow: bool,
+    /// 对应名称是否在词条卡片不允许展示
+    pub deny: bool,
+}
+
+impl Match {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            req: MatchReq {
+                word: String::new(),
+            },
+        }
+    }
+
+    /// 搜索关键词
+    pub fn word(mut self, word: impl Into<String>) -> Self {
+        self.req.word = word.into();
+        self
+    }
+
+    pub async fn send(self) -> Result<Response<MatchResp>, Error> {
+        let url = format!(
+            "{}/open-apis/baike/v1/entities/match",
+            self.config.base_url
+        );
+        let request = ApiRequest::post(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }
 
-#[derive(Debug, Default)]
-pub struct MatchEntityBuilder {
-    api_req: ApiRequest<MatchEntityRequest>,
-}
-
-impl MatchEntityBuilder {
-    pub fn new(word: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "baike_entity_match".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/baike/v1/entities/match".to_string();
-        builder.api_req.body = Some(MatchEntityRequest {
-            word: word.to_string(),
-        });
-        builder
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
-}
+impl ApiResponseTrait for MatchResp {}

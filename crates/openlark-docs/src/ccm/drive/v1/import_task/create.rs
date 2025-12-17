@@ -15,6 +15,8 @@ use crate::common::api_endpoints::DriveApi;
 /// 创建导入任务请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateImportTaskRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件扩展名
     pub file_extension: String,
     /// 文件token
@@ -37,14 +39,45 @@ pub struct Point {
 }
 
 impl CreateImportTaskRequest {
-    pub fn new(file_extension: impl Into<String>, file_token: impl Into<String>, r#type: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        file_extension: impl Into<String>,
+        file_token: impl Into<String>,
+        r#type: impl Into<String>,
+    ) -> Self {
         Self {
+            config,
             file_extension: file_extension.into(),
             file_token: file_token.into(),
             r#type: r#type.into(),
             file_name: None,
             point: None,
         }
+    }
+
+    pub fn file_name(mut self, file_name: impl Into<String>) -> Self {
+        self.file_name = Some(file_name.into());
+        self
+    }
+
+    pub fn point(mut self, point: Point) -> Self {
+        self.point = Some(point);
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<CreateImportTaskResponse>> {
+        let api_endpoint = DriveApi::CreateImportTask;
+
+        let api_request = ApiRequest::<CreateImportTaskResponse>::post(&api_endpoint.to_url())
+            .body(serde_json::json!({
+                "file_extension": self.file_extension,
+                "file_token": self.file_token,
+                "type": self.r#type,
+                "file_name": self.file_name,
+                "point": self.point
+            }));
+
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -61,21 +94,35 @@ impl ApiResponseTrait for CreateImportTaskResponse {
     }
 }
 
-/// 创建导入任务
-pub async fn create_import_task(
-    request: CreateImportTaskRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<CreateImportTaskResponse>> {
-    let api_endpoint = DriveApi::CreateImportTask;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    let mut api_request: ApiRequest<CreateImportTaskResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serde_json::json!(&request));
+    #[test]
+    fn test_create_import_task_request_builder() {
+        let config = Config::default();
+        let request = CreateImportTaskRequest::new(config, "pdf", "file_token", "sheet")
+            .file_name("test_file");
 
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+        assert_eq!(request.file_extension, "pdf");
+        assert_eq!(request.file_token, "file_token");
+        assert_eq!(request.r#type, "sheet");
+        assert_eq!(request.file_name, Some("test_file".to_string()));
     }
 
-    Transport::request(api_request, config, None).await
+    #[test]
+    fn test_point_structure() {
+        let point = Point {
+            mount_type: 1,
+            mount_key: "mount_key".to_string(),
+        };
+
+        assert_eq!(point.mount_type, 1);
+        assert_eq!(point.mount_key, "mount_key");
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(CreateImportTaskResponse::data_format(), ResponseFormat::Data);
+    }
 }

@@ -30,32 +30,32 @@ impl ApiResponseTrait for GetAppResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct GetAppBuilder {
-    api_req: ApiRequest<GetAppRequest>,
+#[derive(Debug)]
+pub struct GetApp {
+    config: openlark_core::config::Config,
     app_token: String,
 }
 
-impl GetAppBuilder {
-    pub fn new(app_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_app_get".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.app_token = app_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}",
-            builder.app_token
-        );
-        builder.api_req.body = None;
-        builder
+impl GetApp {
+    pub fn new(config: openlark_core::config::Config) -> Self {
+        Self {
+            config,
+            app_token: String::new(),
+        }
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.app_token = app_token.into();
+        self
+    }
+
+    pub async fn send(self) -> Result<openlark_core::response::Response<GetAppResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}",
+            self.config.base_url, self.app_token
+        );
+        let request = ApiRequest::get(&url);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

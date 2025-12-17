@@ -22,36 +22,31 @@ impl ApiResponseTrait for DeleteFieldResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct DeleteFieldBuilder {
-    api_req: ApiRequest<DeleteFieldRequest>,
+#[derive(Debug)]
+pub struct DeleteField {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
     field_id: String,
 }
 
-impl DeleteFieldBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString, field_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_field_delete".to_string();
-        builder.api_req.method = "DELETE".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.field_id = field_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}",
-            builder.app_token, builder.table_id, builder.field_id
-        );
-        builder.api_req.body = Some(DeleteFieldRequest::default());
-        builder
+impl DeleteField {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>, field_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            field_id: field_id.into(),
+        }
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<DeleteFieldResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}",
+            self.config.base_url, self.app_token, self.table_id, self.field_id
+        );
+        let request = ApiRequest::delete(&url);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }
