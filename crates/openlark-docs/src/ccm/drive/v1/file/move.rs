@@ -15,6 +15,8 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 /// 移动文件请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MoveFileRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件token
     pub file_token: String,
     /// 目标文件夹token
@@ -27,10 +29,12 @@ impl MoveFileRequest {
     /// 创建移动文件请求
     ///
     /// # 参数
+    /// * `config` - 配置
     /// * `file_token` - 文件token
     /// * `parent_folder_token` - 目标文件夹token
-    pub fn new(file_token: impl Into<String>, parent_folder_token: impl Into<String>) -> Self {
+    pub fn new(config: Config, file_token: impl Into<String>, parent_folder_token: impl Into<String>) -> Self {
         Self {
+            config,
             file_token: file_token.into(),
             parent_folder_token: parent_folder_token.into(),
             name: None,
@@ -42,62 +46,21 @@ impl MoveFileRequest {
         self.name = Some(name.into());
         self
     }
-}
 
-/// 移动文件响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MoveFileResponse {
-    /// 移动后的文件信息
-    pub data: Option<FileData>,
-}
+    pub async fn execute(self) -> SDKResult<Response<MoveFileResponse>> {
+        let api_endpoint = DriveApi::MoveFile(self.file_token.clone());
+        let mut request = ApiRequest::<MoveFileResponse>::post(&api_endpoint.to_url());
+        
+        let mut body = serde_json::Map::new();
+        body.insert("parent_folder_token".to_string(), serde_json::Value::String(self.parent_folder_token.clone()));
+        if let Some(name) = &self.name {
+            body.insert("name".to_string(), serde_json::Value::String(name.clone()));
+        }
 
-/// 文件数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FileData {
-    /// 文件token
-    pub file_token: String,
-    /// 文件名称
-    pub name: String,
-    /// 文件类型
-    pub r#type: String,
-    /// 创建时间
-    pub create_time: i64,
-    /// 更新时间
-    pub update_time: i64,
-}
+        request = request.json_body(&body);
 
-impl ApiResponseTrait for MoveFileResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+        Transport::request(request, &self.config, None).await
     }
-}
-
-/// 移动文件或文件夹
-///
-/// 将文件或者文件夹移动到用户云空间的其他位置。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/move
-pub async fn move_file(
-    request: MoveFileRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<MoveFileResponse>> {
-    // 使用DriveApi枚举生成API端点
-    let api_endpoint = DriveApi::MoveFile(request.file_token.clone());
-
-    // 创建API请求
-    let mut api_request: ApiRequest<MoveFileResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serde_json::json!({
-            "parent_folder_token": request.parent_folder_token,
-            "name": request.name
-        }));
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
 }
 
 #[cfg(test)]
@@ -106,7 +69,8 @@ mod tests {
 
     #[test]
     fn test_move_file_request_builder() {
-        let request = MoveFileRequest::new("file_token", "folder_token");
+        let config = Config::default();
+        let request = MoveFileRequest::new(config, "file_token", "folder_token");
 
         assert_eq!(request.file_token, "file_token");
         assert_eq!(request.parent_folder_token, "folder_token");
@@ -115,7 +79,8 @@ mod tests {
 
     #[test]
     fn test_move_file_request_with_name() {
-        let request = MoveFileRequest::new("file_token", "folder_token")
+        let config = Config::default();
+        let request = MoveFileRequest::new(config, "file_token", "folder_token")
             .name("new_file_name");
 
         assert_eq!(request.file_token, "file_token");

@@ -22,10 +22,32 @@ pub struct PartInfo {
 /// 完成上传请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UploadFinishRequest {
+    #[serde(skip)]
+    config: Config,
     /// 上传事务ID
     pub transaction_id: String,
     /// 分片信息列表
     pub parts: Vec<PartInfo>,
+}
+
+impl UploadFinishRequest {
+    pub fn new(config: Config, transaction_id: impl Into<String>, parts: Vec<PartInfo>) -> Self {
+        Self {
+            config,
+            transaction_id: transaction_id.into(),
+            parts,
+        }
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<UploadFinishResponse>> {
+        let url = "/open-apis/drive/v1/medias/upload_finish";
+
+        let api_request: ApiRequest<UploadFinishResponse> =
+            ApiRequest::post(url)
+                .json_body(&self);
+
+        Transport::request(api_request, &self.config, None).await
+    }
 }
 
 /// 媒体文件上传完成信息
@@ -60,47 +82,23 @@ impl ApiResponseTrait for UploadFinishResponse {
     }
 }
 
-/// 分片上传素材-完成上传
-///
-/// 触发完成上传。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/multipart-upload-media/upload_finish
-pub async fn upload_finish(
-    request: UploadFinishRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<UploadFinishResponse>> {
-    // 构建API端点
-    let url = "/open-apis/drive/v1/medias/upload_finish";
-
-    // 创建API请求
-    let mut api_request: ApiRequest<UploadFinishResponse> =
-        ApiRequest::post(url)
-            .body(serde_json::to_value(request)?);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_upload_finish_request() {
+        let config = Config::default();
         let part_info = PartInfo {
             part_number: 1,
             etag: "etag_media_123456".to_string(),
         };
 
-        let request = UploadFinishRequest {
-            transaction_id: "txn_media_123456".to_string(),
-            parts: vec![part_info],
-        };
+        let request = UploadFinishRequest::new(
+            config,
+            "txn_media_123456",
+            vec![part_info],
+        );
 
         assert_eq!(request.transaction_id, "txn_media_123456");
         assert_eq!(request.parts.len(), 1);

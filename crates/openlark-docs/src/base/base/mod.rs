@@ -1,2 +1,1 @@
-pub mod v2;
-pub use v2::*;
+// pub mod v2; // Disabled: Uses deprecated LarkAPIError/RequestBuilder imports

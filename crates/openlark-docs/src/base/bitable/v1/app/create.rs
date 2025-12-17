@@ -35,41 +35,37 @@ impl ApiResponseTrait for CreateAppResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct CreateAppBuilder {
-    api_req: ApiRequest<CreateAppRequest>,
+#[derive(Debug)]
+pub struct CreateApp {
+    config: openlark_core::config::Config,
+    req: CreateAppRequest,
 }
 
-impl CreateAppBuilder {
-    pub fn new() -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_app_create".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/bitable/v1/apps".to_string();
-        builder.api_req.body = Some(CreateAppRequest::default());
-        builder
+impl CreateApp {
+    pub fn new(config: openlark_core::config::Config) -> Self {
+        Self {
+            config,
+            req: CreateAppRequest::default(),
+        }
     }
 
-    pub fn name(mut self, name: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.name = Some(name.to_string());
-        }
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.req.name = Some(name.into());
         self
     }
 
-    pub fn folder_token(mut self, folder_token: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.folder_token = Some(folder_token.to_string());
-        }
+    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
+        self.req.folder_token = Some(folder_token.into());
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<CreateAppResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps",
+            self.config.base_url
+        );
+        let request = ApiRequest::post(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

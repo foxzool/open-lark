@@ -1,4 +1,4 @@
-pub mod bitable;
-pub use bitable::*;
 pub mod base;
-pub use base::*;
+// pub mod bitable; // Disabled: Uses deprecated LarkAPIError/RequestBuilder imports
+pub mod service;
+pub use service::BaseService;

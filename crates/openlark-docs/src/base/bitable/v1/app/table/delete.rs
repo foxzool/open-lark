@@ -19,34 +19,29 @@ impl ApiResponseTrait for DeleteTableResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct DeleteTableBuilder {
-    api_req: ApiRequest<DeleteTableRequest>,
+#[derive(Debug)]
+pub struct DeleteTable {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
 }
 
-impl DeleteTableBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_table_delete".to_string();
-        builder.api_req.method = "DELETE".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}",
-            builder.app_token, builder.table_id
-        );
-        builder.api_req.body = Some(DeleteTableRequest::default());
-        builder
+impl DeleteTable {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+        }
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<DeleteTableResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}",
+            self.config.base_url, self.app_token, self.table_id
+        );
+        let request = ApiRequest::delete(&url);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

@@ -37,46 +37,39 @@ impl ApiResponseTrait for CreateRoleResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct CreateRoleBuilder {
-    api_req: ApiRequest<CreateRoleRequest>,
+#[derive(Debug)]
+pub struct CreateRole {
+    config: openlark_core::config::Config,
     app_token: String,
+    req: CreateRoleRequest,
 }
 
-impl CreateRoleBuilder {
-    pub fn new(app_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_role_create".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.app_token = app_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/roles",
-            builder.app_token
-        );
-        builder.api_req.body = Some(CreateRoleRequest::default());
-        builder
+impl CreateRole {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            req: CreateRoleRequest::default(),
+        }
     }
 
-    pub fn role_name(mut self, role_name: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.role_name = role_name.to_string();
-        }
+    pub fn role_name(mut self, role_name: impl Into<String>) -> Self {
+        self.req.role_name = role_name.into();
         self
     }
 
     pub fn table_perms(mut self, table_perms: Vec<TablePerm>) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.table_perms = table_perms;
-        }
+        self.req.table_perms = table_perms;
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<CreateRoleResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/roles",
+            self.config.base_url, self.app_token
+        );
+        let request = ApiRequest::post(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

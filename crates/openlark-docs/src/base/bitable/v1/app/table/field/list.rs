@@ -40,61 +40,46 @@ impl ApiResponseTrait for ListFieldResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct ListFieldBuilder {
-    api_req: ApiRequest<ListFieldRequest>,
+#[derive(Debug)]
+pub struct ListField {
+    config: openlark_core::config::Config,
     app_token: String,
     table_id: String,
+    req: ListFieldRequest,
 }
 
-impl ListFieldBuilder {
-    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_field_list".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.app_token = app_token.to_string();
-        builder.table_id = table_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/fields",
-            builder.app_token, builder.table_id
-        );
-        builder.api_req.body = None;
-        builder
+impl ListField {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>, table_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            req: ListFieldRequest::default(),
+        }
     }
 
     pub fn page_size(mut self, page_size: i32) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_size={}", page_size));
-        } else {
-            self.api_req.url.push_str(&format!("?page_size={}", page_size));
-        }
+        self.req.page_size = Some(page_size);
         self
     }
 
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_token={}", page_token.to_string()));
-        } else {
-            self.api_req.url.push_str(&format!("?page_token={}", page_token.to_string()));
-        }
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.req.page_token = Some(page_token.into());
         self
     }
 
-    pub fn view_id(mut self, view_id: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&view_id={}", view_id.to_string()));
-        } else {
-            self.api_req.url.push_str(&format!("?view_id={}", view_id.to_string()));
-        }
+    pub fn view_id(mut self, view_id: impl Into<String>) -> Self {
+        self.req.view_id = Some(view_id.into());
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<ListFieldResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/{}/fields",
+            self.config.base_url, self.app_token, self.table_id
+        );
+        let request = ApiRequest::get(&url).query(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

@@ -36,39 +36,34 @@ impl ApiResponseTrait for BatchCreateTableResponse {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct BatchCreateTableBuilder {
-    api_req: ApiRequest<BatchCreateTableRequest>,
+#[derive(Debug)]
+pub struct BatchCreateTable {
+    config: openlark_core::config::Config,
     app_token: String,
+    req: BatchCreateTableRequest,
 }
 
-impl BatchCreateTableBuilder {
-    pub fn new(app_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "bitable_table_batch_create".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.app_token = app_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/batch_create",
-            builder.app_token
-        );
-        builder.api_req.body = Some(BatchCreateTableRequest::default());
-        builder
+impl BatchCreateTable {
+    pub fn new(config: openlark_core::config::Config, app_token: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_token: app_token.into(),
+            req: BatchCreateTableRequest::default(),
+        }
     }
 
     pub fn tables(mut self, tables: Vec<TableSpec>) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.tables = tables;
-        }
+        self.req.tables = tables;
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> Result<openlark_core::response::Response<BatchCreateTableResponse>, openlark_core::error::Error> {
+        let url = format!(
+            "{}/open-apis/bitable/v1/apps/{}/tables/batch_create",
+            self.config.base_url, self.app_token
+        );
+        let request = ApiRequest::post(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }

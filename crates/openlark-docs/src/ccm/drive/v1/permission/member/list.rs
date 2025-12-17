@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -15,6 +15,8 @@ use crate::common::api_endpoints::DriveApi;
 /// 获取协作者列表请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListPermissionMembersRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件token
     pub token: String,
     /// 页码，从0开始
@@ -29,9 +31,11 @@ impl ListPermissionMembersRequest {
     /// 创建获取协作者列表请求
     ///
     /// # 参数
+    /// * `config` - 配置
     /// * `token` - 文件token
-    pub fn new(token: impl Into<String>) -> Self {
+    pub fn new(config: Config, token: impl Into<String>) -> Self {
         Self {
+            config,
             token: token.into(),
             page_size: None,
             page_token: None,
@@ -55,6 +59,24 @@ impl ListPermissionMembersRequest {
     pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
         self.r#type = Some(r#type.into());
         self
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<ListPermissionMembersResponse>> {
+        let api_endpoint = DriveApi::ListPermissionMembers(self.token.clone());
+
+        let mut api_request = ApiRequest::<ListPermissionMembersResponse>::get(&api_endpoint.to_url());
+
+        if let Some(page_size) = self.page_size {
+            api_request = api_request.query("page_size", &page_size.to_string());
+        }
+        if let Some(page_token) = &self.page_token {
+            api_request = api_request.query("page_token", page_token);
+        }
+        if let Some(r#type) = &self.r#type {
+            api_request = api_request.query("type", r#type);
+        }
+
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -99,49 +121,14 @@ impl ApiResponseTrait for ListPermissionMembersResponse {
     }
 }
 
-/// 获取云文档协作者
-///
-/// 获取文件或文件夹的协作者列表
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/list
-pub async fn list_permission_members(
-    request: ListPermissionMembersRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<ListPermissionMembersResponse>> {
-    // 使用DriveApi枚举生成API端点
-    let api_endpoint = DriveApi::ListPermissionMembers(request.token.clone());
-
-    // 创建API请求
-    let mut api_request: ApiRequest<ListPermissionMembersResponse> =
-        ApiRequest::get(&api_endpoint.to_url());
-
-    // 添加查询参数
-    if let Some(page_size) = request.page_size {
-        api_request = api_request.query("page_size", &page_size.to_string());
-    }
-    if let Some(page_token) = &request.page_token {
-        api_request = api_request.query("page_token", page_token);
-    }
-    if let Some(r#type) = &request.r#type {
-        api_request = api_request.query("type", r#type);
-    }
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_list_permission_members_request_builder() {
-        let request = ListPermissionMembersRequest::new("file_token");
+        let config = Config::default();
+        let request = ListPermissionMembersRequest::new(config, "file_token");
 
         assert_eq!(request.token, "file_token");
         assert!(request.page_size.is_none());
@@ -149,7 +136,8 @@ mod tests {
 
     #[test]
     fn test_list_permission_members_request_with_params() {
-        let request = ListPermissionMembersRequest::new("file_token")
+        let config = Config::default();
+        let request = ListPermissionMembersRequest::new(config, "file_token")
             .page_size(20)
             .page_token("next_page_token")
             .r#type("admin");

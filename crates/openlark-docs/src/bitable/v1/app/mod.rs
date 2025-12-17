@@ -1,8 +1,8 @@
 use openlark_core::config::Config;
 
 // 导入Base模块的RoleService
-#[cfg(feature = "base")]
-use crate::base::v2::app::role::RoleService;
+// #[cfg(feature = "base")]
+// use crate::base::v2::app::role::RoleService; // Disabled: base::v2 module is disabled
 
 // 应用级别API
 pub mod copy;
@@ -68,11 +68,11 @@ impl AppService {
         table::TableService::new(self.config.clone())
     }
 
-    /// 获取角色服务
-    #[cfg(feature = "base")]
-    pub fn role_service(&self) -> RoleService {
-        RoleService::new(self.config.clone())
-    }
+    // /// 获取角色服务
+    // #[cfg(feature = "base")]
+    // pub fn role_service(&self) -> RoleService {
+    //     RoleService::new(self.config.clone())
+    // } // Disabled: RoleService from base::v2 module is disabled
 
     /// 获取仪表盘服务
     pub fn dashboard_service(&self) -> dashboard::AppDashboardService {

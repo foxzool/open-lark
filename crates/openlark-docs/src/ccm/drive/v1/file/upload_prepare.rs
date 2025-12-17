@@ -15,6 +15,8 @@ use crate::common::api_endpoints::DriveApi;
 /// 分片上传预备请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UploadPrepareRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件名
     pub file_name: String,
     /// 父文件夹token
@@ -24,12 +26,21 @@ pub struct UploadPrepareRequest {
 }
 
 impl UploadPrepareRequest {
-    pub fn new(file_name: impl Into<String>, parent_folder_token: impl Into<String>, size: i64) -> Self {
+    pub fn new(config: Config, file_name: impl Into<String>, parent_folder_token: impl Into<String>, size: i64) -> Self {
         Self {
+            config,
             file_name: file_name.into(),
             parent_folder_token: parent_folder_token.into(),
             size,
         }
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<UploadPrepareResponse>> {
+        let api_endpoint = DriveApi::UploadPrepare;
+        let request = ApiRequest::<UploadPrepareResponse>::post(&api_endpoint.to_url())
+            .json_body(&self);
+
+        Transport::request(request, &self.config, None).await
     }
 }
 
@@ -50,21 +61,16 @@ impl ApiResponseTrait for UploadPrepareResponse {
     }
 }
 
-/// 文件分片上传预备
-pub async fn upload_prepare(
-    request: UploadPrepareRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<UploadPrepareResponse>> {
-    let api_endpoint = DriveApi::UploadPrepare;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    let mut api_request: ApiRequest<UploadPrepareResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serde_json::json!(&request));
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+    #[test]
+    fn test_upload_prepare_request_builder() {
+        let config = Config::default();
+        let request = UploadPrepareRequest::new(config, "test.txt", "folder_token", 1024);
+        assert_eq!(request.file_name, "test.txt");
+        assert_eq!(request.parent_folder_token, "folder_token");
+        assert_eq!(request.size, 1024);
     }
-
-    Transport::request(api_request, config, None).await
 }

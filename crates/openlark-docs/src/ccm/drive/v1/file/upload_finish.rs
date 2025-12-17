@@ -15,6 +15,8 @@ use crate::common::api_endpoints::DriveApi;
 /// 完成分片上传请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UploadFinishRequest {
+    #[serde(skip)]
+    config: Config,
     /// 上传会话ID
     pub upload_id: String,
     /// 分片数量
@@ -22,11 +24,20 @@ pub struct UploadFinishRequest {
 }
 
 impl UploadFinishRequest {
-    pub fn new(upload_id: impl Into<String>, block_num: i32) -> Self {
+    pub fn new(config: Config, upload_id: impl Into<String>, block_num: i32) -> Self {
         Self {
+            config,
             upload_id: upload_id.into(),
             block_num,
         }
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<UploadFinishResponse>> {
+        let api_endpoint = DriveApi::UploadFinish;
+        let request = ApiRequest::<UploadFinishResponse>::post(&api_endpoint.to_url())
+            .json_body(&self);
+
+        Transport::request(request, &self.config, None).await
     }
 }
 
@@ -43,21 +54,15 @@ impl ApiResponseTrait for UploadFinishResponse {
     }
 }
 
-/// 完成分片上传
-pub async fn upload_finish(
-    request: UploadFinishRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<UploadFinishResponse>> {
-    let api_endpoint = DriveApi::UploadFinish;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    let mut api_request: ApiRequest<UploadFinishResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serde_json::json!(&request));
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+    #[test]
+    fn test_upload_finish_request_builder() {
+        let config = Config::default();
+        let request = UploadFinishRequest::new(config, "upload_id", 10);
+        assert_eq!(request.upload_id, "upload_id");
+        assert_eq!(request.block_num, 10);
     }
-
-    Transport::request(api_request, config, None).await
 }

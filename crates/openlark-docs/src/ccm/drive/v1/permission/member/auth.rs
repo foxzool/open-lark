@@ -3,7 +3,7 @@
 /// 该接口用于根据 filetoken 判断当前登录用户是否具有某权限。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-member/auth
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -14,6 +14,8 @@ use serde::{Deserialize, Serialize};
 /// 判断用户云文档权限请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AuthPermissionMemberRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件token
     pub token: String,
     /// 权限类型，可选值：view（可见）、edit（可编辑）
@@ -26,13 +28,16 @@ impl AuthPermissionMemberRequest {
     /// 创建判断用户云文档权限请求
     ///
     /// # 参数
+    /// * `config` - 配置
     /// * `token` - 文件token
     /// * `type` - 权限类型
     pub fn new(
+        config: Config,
         token: impl Into<String>,
         r#type: impl Into<String>,
     ) -> Self {
         Self {
+            config,
             token: token.into(),
             r#type: r#type.into(),
             user_id_type: None,
@@ -43,6 +48,19 @@ impl AuthPermissionMemberRequest {
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<AuthPermissionMemberResponse>> {
+        let api_endpoint = format!("/open-apis/drive/v1/permissions/{}/members/auth", self.token);
+
+        let mut api_request = ApiRequest::<AuthPermissionMemberResponse>::get(&api_endpoint)
+            .query("type", &self.r#type);
+
+        if let Some(user_id_type) = &self.user_id_type {
+            api_request = api_request.query("user_id_type", user_id_type);
+        }
+
+        Transport::request(api_request, &self.config, None).await
     }
 }
 
@@ -61,47 +79,14 @@ impl ApiResponseTrait for AuthPermissionMemberResponse {
     }
 }
 
-/// 判断用户云文档权限
-///
-/// 该接口用于根据 filetoken 判断当前登录用户是否具有某权限。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-member/auth
-pub async fn auth_permission_member(
-    request: AuthPermissionMemberRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<AuthPermissionMemberResponse>> {
-    // 构建查询参数
-    let mut query_params = vec![("type", request.r#type.clone())];
-
-    if let Some(user_id_type) = &request.user_id_type {
-        query_params.push(("user_id_type", user_id_type.clone()));
-    }
-
-    // 创建API请求
-    let mut api_request: ApiRequest<AuthPermissionMemberResponse> =
-        ApiRequest::get(&format!("/open-apis/drive/v1/permissions/{}/members/auth", request.token));
-
-    // 添加查询参数
-    for (key, value) in query_params {
-        api_request = api_request.query(key, value);
-    }
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_auth_permission_member_request_builder() {
-        let request = AuthPermissionMemberRequest::new("file_token", "view")
+        let config = Config::default();
+        let request = AuthPermissionMemberRequest::new(config, "file_token", "view")
             .user_id_type("openid");
 
         assert_eq!(request.token, "file_token");

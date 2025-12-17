@@ -1,7 +1,5 @@
 pub mod create;
-pub mod update;
 pub mod list;
-
-pub use create::*;
-pub use update::*;
-pub use list::*;
+pub mod update;
+pub mod service;
+pub use service::RoleService;

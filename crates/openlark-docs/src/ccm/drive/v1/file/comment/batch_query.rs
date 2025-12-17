@@ -41,14 +41,14 @@ impl BatchQueryCommentRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchQueryCommentResponse {
     /// 评论列表
-    pub comments: Vec<CommentInfo>,
+    pub comments: Vec<BatchCommentInfo>,
     /// 批量操作结果
     pub batch_result: BatchOperationResult,
 }
 
 /// 评论信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CommentInfo {
+pub struct BatchCommentInfo {
     /// 评论ID
     pub comment_id: String,
     /// 评论内容
@@ -56,7 +56,7 @@ pub struct CommentInfo {
     /// 评论类型
     pub comment_type: String,
     /// 创建者信息
-    pub creator: CreatorInfo,
+    pub creator: BatchCreatorInfo,
     /// 创建时间
     pub create_time: String,
     /// 更新时间
@@ -69,7 +69,7 @@ pub struct CommentInfo {
 
 /// 创建者信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreatorInfo {
+pub struct BatchCreatorInfo {
     /// 用户ID
     pub user_id: String,
     /// 用户名称

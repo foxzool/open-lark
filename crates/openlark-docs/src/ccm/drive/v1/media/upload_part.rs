@@ -13,6 +13,8 @@ use serde::{Deserialize, Serialize};
 /// 分片上传请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UploadPartRequest {
+    #[serde(skip)]
+    config: Config,
     /// 上传事务ID
     pub transaction_id: String,
     /// 分片编号
@@ -21,6 +23,34 @@ pub struct UploadPartRequest {
     pub part_data: String,
     /// 分片大小
     pub part_size: i32,
+}
+
+impl UploadPartRequest {
+    pub fn new(
+        config: Config,
+        transaction_id: impl Into<String>,
+        part_number: i32,
+        part_data: impl Into<String>,
+        part_size: i32
+    ) -> Self {
+        Self {
+            config,
+            transaction_id: transaction_id.into(),
+            part_number,
+            part_data: part_data.into(),
+            part_size,
+        }
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<UploadPartResponse>> {
+        let url = "/open-apis/drive/v1/medias/upload_part";
+
+        let api_request: ApiRequest<UploadPartResponse> =
+            ApiRequest::post(url)
+                .json_body(&self);
+
+        Transport::request(api_request, &self.config, None).await
+    }
 }
 
 /// 分片上传响应
@@ -40,44 +70,20 @@ impl ApiResponseTrait for UploadPartResponse {
     }
 }
 
-/// 分片上传素材-上传分片
-///
-/// 上传对应的文件块。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/multipart-upload-media/upload_part
-pub async fn upload_part(
-    request: UploadPartRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<UploadPartResponse>> {
-    // 构建API端点
-    let url = "/open-apis/drive/v1/medias/upload_part";
-
-    // 创建API请求
-    let mut api_request: ApiRequest<UploadPartResponse> =
-        ApiRequest::post(url)
-            .body(serde_json::to_value(request)?);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_upload_part_request() {
-        let request = UploadPartRequest {
-            transaction_id: "txn_media_123456".to_string(),
-            part_number: 1,
-            part_data: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==".to_string(), // 1x1 red pixel PNG in base64
-            part_size: 67,
-        };
+        let config = Config::default();
+        let request = UploadPartRequest::new(
+            config,
+            "txn_media_123456",
+            1,
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
+            67
+        );
 
         assert_eq!(request.transaction_id, "txn_media_123456");
         assert_eq!(request.part_number, 1);

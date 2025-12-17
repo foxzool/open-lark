@@ -1,102 +1,78 @@
 //! 更新自定义角色
 //!
-//! doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/update-2
+//! 
+//!
+//! [官方文档](https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/update-2)
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use crate::base::base::v2::models::*;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, RequestBuilder, Send},
+    config::Config,
+    error::Error,
+    response::Response,
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct UpdateRoleRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_name: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub table_perms: Option<Vec<TablePerm>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub block_perms: Option<Vec<BlockPerm>>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct TablePerm {
-    pub table_id: String,
-    pub perm: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct BlockPerm {
-    pub block_id: String,
-    pub perm: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct UpdateRoleResponse {
-    pub role: Role,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Role {
-    pub role_id: String,
-    pub role_name: String,
-    pub table_perms: Vec<TablePerm>,
-    pub block_perms: Option<Vec<BlockPerm>>,
-}
-
-impl ApiResponseTrait for UpdateRoleResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
-    }
-}
-
-#[derive(Debug, Default)]
-pub struct UpdateRoleBuilder {
-    api_req: ApiRequest<UpdateRoleRequest>,
+/// 更新自定义角色
+#[derive(Debug)]
+pub struct Update {
+    config: Config,
     app_token: String,
     role_id: String,
+    req: UpdateReq,
 }
 
-impl UpdateRoleBuilder {
-    pub fn new(app_token: impl ToString, role_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "base_role_update".to_string();
-        builder.api_req.method = "PUT".to_string();
-        builder.app_token = app_token.to_string();
-        builder.role_id = role_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/base/v2/apps/{}/roles/{}",
-            builder.app_token, builder.role_id
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UpdateReq {
+    /// 自定义角色的名字
+    pub role_name: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UpdateResp {
+    /// 自定义角色
+    pub role: AppRole,
+}
+
+impl Update {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            app_token: String::new(),
+            role_id: String::new(),
+            req: UpdateReq {
+                role_name: String::new(),
+            },
+        }
+    }
+
+    /// 应用 token
+    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
+        self.app_token = app_token.into();
+        self
+    }
+
+    /// 角色ID
+    pub fn role_id(mut self, role_id: impl Into<String>) -> Self {
+        self.role_id = role_id.into();
+        self
+    }
+
+    /// 自定义角色的名字
+    pub fn role_name(mut self, role_name: impl Into<String>) -> Self {
+        self.req.role_name = role_name.into();
+        self
+    }
+
+    pub async fn send(self) -> Result<Response<UpdateResp>, Error> {
+        let url = format!(
+            "{}/open-apis/base/v2/apps/{}/roles/{}",
+            self.config.base_url, self.app_token, self.role_id
         );
-        builder.api_req.body = Some(UpdateRoleRequest::default());
-        builder
-    }
-
-    pub fn role_name(mut self, role_name: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.role_name = Some(role_name.to_string());
-        }
-        self
-    }
-
-    pub fn table_perms(mut self, table_perms: Vec<TablePerm>) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.table_perms = Some(table_perms);
-        }
-        self
-    }
-
-    pub fn block_perms(mut self, block_perms: Vec<BlockPerm>) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.block_perms = Some(block_perms);
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+        let request = ApiRequest::put(&url).body(&self.req);
+        let response = RequestBuilder::new(self.config, request).send().await?;
+        Ok(response)
     }
 }
+
+impl ApiResponseTrait for UpdateResp {}

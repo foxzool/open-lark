@@ -3,18 +3,20 @@
 /// 该接口**仅支持文档拥有者**取消订阅自己文档的通知事件，可订阅的文档类型为**旧版文档**、**新版文档**、**电子表格**和**多维表格**。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/event/delete_subscribe
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-// use crate::common::{api_endpoints::DriveApi, api_utils::*};
+use crate::common::api_endpoints::DriveApi;
 
 /// 取消云文档事件订阅请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteSubscribeRequest {
+    #[serde(skip)]
+    config: Config,
     /// 文件token
     pub file_token: String,
 }
@@ -23,11 +25,20 @@ impl DeleteSubscribeRequest {
     /// 创建取消云文档事件订阅请求
     ///
     /// # 参数
+    /// * `config` - 配置
     /// * `file_token` - 文件token
-    pub fn new(file_token: impl Into<String>) -> Self {
+    pub fn new(config: Config, file_token: impl Into<String>) -> Self {
         Self {
+            config,
             file_token: file_token.into(),
         }
+    }
+
+    pub async fn execute(self) -> SDKResult<Response<DeleteSubscribeResponse>> {
+        let api_endpoint = DriveApi::DeleteFileSubscribe(self.file_token.clone());
+        let request = ApiRequest::<DeleteSubscribeResponse>::delete(&api_endpoint.to_url());
+
+        Transport::request(request, &self.config, None).await
     }
 }
 
@@ -35,9 +46,9 @@ impl DeleteSubscribeRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteSubscribeResponse {
     /// 操作结果
-    pub result: String,
+    pub result: Option<String>,
     /// 文件token
-    pub file_token: String,
+    pub file_token: Option<String>,
 }
 
 impl ApiResponseTrait for DeleteSubscribeResponse {
@@ -46,35 +57,14 @@ impl ApiResponseTrait for DeleteSubscribeResponse {
     }
 }
 
-/// 取消云文档事件订阅
-///
-/// 该接口**仅支持文档拥有者**取消订阅自己文档的通知事件，可订阅的文档类型为**旧版文档**、**新版文档**、**电子表格**和**多维表格**。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/event/delete_subscribe
-pub async fn delete_subscribe(
-    request: DeleteSubscribeRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<DeleteSubscribeResponse>> {
-    // 创建API请求
-    let mut api_request: ApiRequest<DeleteSubscribeResponse> =
-        ApiRequest::delete(&format!("/open-apis/drive/v1/files/{}/delete_subscribe", request.file_token));
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_delete_subscribe_request_builder() {
-        let request = DeleteSubscribeRequest::new("file_token");
+        let config = Config::default();
+        let request = DeleteSubscribeRequest::new(config, "file_token");
 
         assert_eq!(request.file_token, "file_token");
     }

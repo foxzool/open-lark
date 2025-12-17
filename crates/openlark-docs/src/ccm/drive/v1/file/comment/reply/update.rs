@@ -51,18 +51,18 @@ impl UpdateReplyRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateReplyResponse {
     /// 回复信息
-    pub reply: ReplyInfo,
+    pub reply: UpdateReplyInfo,
 }
 
 /// 回复信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ReplyInfo {
+pub struct UpdateReplyInfo {
     /// 回复ID
     pub reply_id: String,
     /// 回复内容
     pub content: String,
     /// 创建者信息
-    pub creator: CreatorInfo,
+    pub creator: UpdateReplyCreatorInfo,
     /// 创建时间
     pub create_time: String,
     /// 更新时间
@@ -73,7 +73,7 @@ pub struct ReplyInfo {
 
 /// 创建者信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreatorInfo {
+pub struct UpdateReplyCreatorInfo {
     /// 用户ID
     pub user_id: String,
     /// 用户名称
