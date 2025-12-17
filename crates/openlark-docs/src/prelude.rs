@@ -17,7 +17,7 @@ pub use crate::models::{
 };
 
 // 重新导出服务类型（如果启用了相应功能）
-#[cfg(feature = "ccm")]
+#[cfg(feature = "ccm-core")]
 pub use crate::ccm::CcmService;
 
 #[cfg(feature = "base")]
@@ -35,7 +35,7 @@ pub use crate::service::DocsService;
 #[cfg(feature = "docx")]
 pub use crate::ccm::docx::DocxService;
 
-#[cfg(feature = "wiki")]
+#[cfg(feature = "ccm-wiki")]
 pub use crate::wiki::WikiService;
 
 // 为了向后兼容性，保留类型别名

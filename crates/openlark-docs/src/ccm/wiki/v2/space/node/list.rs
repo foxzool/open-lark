@@ -1,174 +1,106 @@
 /// 获取知识空间节点列表
 ///
-/// 此接口用于获取知识空间下的节点列表，包括文件夹和文档。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space_node/list
-
+/// 获取知识空间的节点列表。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/list
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat, Response},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceNode;
+
 /// 获取知识空间节点列表请求
+pub struct ListWikiSpaceNodesRequest {
+    space_id: String,
+    config: Config,
+}
+
+/// 获取知识空间节点列表请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListSpaceNodesRequest {
-    /// 空间ID
-    pub space_id: String,
-    /// 父节点ID，根节点为0
-    pub parent_node_id: String,
-    /// 页面大小，默认20，最大100
-    pub page_size: Option<i32>,
-    /// 页码，从1开始
-    pub page_token: Option<String>,
-    /// 节点类型过滤：document(文档)、folder(文件夹)、sheet(表格)、mindnote(思维导图)、file(文件)、bitable(多维表格)
+pub struct ListWikiSpaceNodesParams {
+    /// 父节点Token (可选，获取指定节点的子节点)
+    pub parent_node_token: Option<String>,
+    /// 节点类型过滤 (可选)
     pub node_type: Option<String>,
-}
-
-/// 知识空间节点信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SpaceNodeItem {
-    /// 节点ID
-    pub node_id: String,
-    /// 节点标题
-    pub title: String,
-    /// 节点类型：document(文档)、folder(文件夹)、sheet(表格)、mindnote(思维导图)、file(文件)、bitable(多维表格)
-    pub node_type: String,
-    /// 父节点ID
-    pub parent_node_id: String,
-    /// 子节点数量（仅文件夹有此字段）
-    pub child_node_count: Option<i32>,
-    /// 创建时间
-    pub create_time: Option<i64>,
-    /// 更新时间
-    pub update_time: Option<i64>,
-    /// 创建者信息
-    pub creator: Option<CreatorInfo>,
-}
-
-/// 创建者信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreatorInfo {
-    /// 用户ID
-    pub user_id: Option<String>,
-    /// 用户名称
-    pub name: Option<String>,
-}
-
-/// 分页信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PageTokenInfo {
-    /// 是否还有下一页
-    pub has_more: Option<bool>,
-    /// 页码
+    /// 每页大小 (默认: 20, 最大: 100)
+    pub page_size: Option<i32>,
+    /// 分页标记
     pub page_token: Option<String>,
 }
 
 /// 获取知识空间节点列表响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListSpaceNodesResponse {
-    /// 节点列表数据
-    pub data: Option<ListSpaceNodesData>,
-}
-
-/// 节点列表数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListSpaceNodesData {
+pub struct ListWikiSpaceNodesResponse {
     /// 节点列表
-    pub items: Option<Vec<SpaceNodeItem>>,
+    pub data: Option<Vec<WikiSpaceNode>>,
     /// 分页信息
-    pub page_token: Option<PageTokenInfo>,
+    pub page_token: Option<String>,
+    /// 是否有更多数据
+    pub has_more: Option<bool>,
 }
 
-impl ApiResponseTrait for ListSpaceNodesResponse {
+impl ApiResponseTrait for ListWikiSpaceNodesResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 获取知识空间节点列表
-///
-/// 此接口用于获取知识空间下的节点列表，包括文件夹和文档。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space_node/list
-pub async fn list_space_nodes(
-    request: ListSpaceNodesRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<ListSpaceNodesResponse>> {
-    // 构建请求体
-    let mut body = serde_json::json!({
-        "space_id": request.space_id,
-        "parent_node_id": request.parent_node_id
-    });
-
-    if let Some(page_size) = request.page_size {
-        body["page_size"] = serde_json::json!(page_size);
-    }
-    if let Some(page_token) = request.page_token {
-        body["page_token"] = serde_json::json!(page_token);
-    }
-    if let Some(node_type) = request.node_type {
-        body["node_type"] = serde_json::json!(node_type);
+impl ListWikiSpaceNodesRequest {
+    /// 创建获取知识空间节点列表请求
+    pub fn new(config: Config) -> Self {
+        Self {
+            space_id: String::new(),
+            config,
+        }
     }
 
-    // 创建API请求
-    let mut api_request: ApiRequest<ListSpaceNodesResponse> =
-        ApiRequest::get("/open-apis/wiki/v2/spaces/nodes")
-            .body(body);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+    /// 设置知识空间ID
+    pub fn space_id(mut self, space_id: impl Into<String>) -> Self {
+        self.space_id = space_id.into();
+        self
     }
 
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
+    /// 执行请求
+    ///
+    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/list
+    pub async fn execute(
+        self,
+        params: Option<ListWikiSpaceNodesParams>,
+    ) -> SDKResult<ListWikiSpaceNodesResponse> {
+        // 验证必填字段
+        validate_required!(self.space_id, "知识空间ID不能为空");
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+        // 使用新的enum+builder系统生成API端点
+        let api_endpoint = WikiApiV2::SpaceNodeList(self.space_id.clone());
 
-    #[test]
-    fn test_list_space_nodes_request() {
-        let request = ListSpaceNodesRequest {
-            space_id: "space_123".to_string(),
-            parent_node_id: "0".to_string(),
-            page_size: Some(20),
-            page_token: Some("token_456".to_string()),
-            node_type: Some("document".to_string()),
-        };
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<ListWikiSpaceNodesResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
-        assert_eq!(request.space_id, "space_123");
-        assert_eq!(request.parent_node_id, "0");
-        assert_eq!(request.page_size, Some(20));
-        assert_eq!(request.node_type, Some("document"));
-    }
+        // 设置查询参数
+        if let Some(params) = params {
+            if let Some(parent_node_token) = params.parent_node_token {
+                api_request = api_request.query("parent_node_token", &parent_node_token);
+            }
+            if let Some(node_type) = params.node_type {
+                api_request = api_request.query("node_type", &node_type);
+            }
+            if let Some(page_size) = params.page_size {
+                api_request = api_request.query("page_size", &page_size.to_string());
+            }
+            if let Some(page_token) = params.page_token {
+                api_request = api_request.query("page_token", &page_token);
+            }
+        }
 
-    #[test]
-    fn test_space_node_item() {
-        let node = SpaceNodeItem {
-            node_id: "node_789".to_string(),
-            title: "测试文档".to_string(),
-            node_type: "document".to_string(),
-            parent_node_id: "0".to_string(),
-            child_node_count: None,
-            create_time: Some(1609459200),
-            update_time: Some(1609459200),
-            creator: Some(CreatorInfo {
-                user_id: Some("user_123".to_string()),
-                name: Some("张三".to_string()),
-            }),
-        };
-
-        assert_eq!(node.node_id, "node_789");
-        assert_eq!(node.node_type, "document");
-        assert_eq!(node.parent_node_id, "0");
-    }
-
-    #[test]
-    fn test_response_trait() {
-        assert_eq!(ListSpaceNodesResponse::data_format(), ResponseFormat::Data);
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }

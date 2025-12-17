@@ -1,57 +1,77 @@
 /// 获取知识空间节点信息
 ///
-/// 获取知识空间节点信息
-/// docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/get_node
+/// 获取知识空间节点信息。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/get_node
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use crate::ccm::wiki::v2::space::node::NodeInfo;
 
+use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceNode;
+
+/// 获取知识空间节点信息请求
+pub struct GetWikiSpaceNodeRequest {
+    config: Config,
+}
+
+/// 获取知识空间节点信息请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetNodeParams {
-    pub token: String,
-    pub obj_type: Option<String>,
+pub struct GetWikiSpaceNodeParams {
+    /// 节点Token
+    pub node_token: String,
+    /// 知识空间ID
+    pub space_id: String,
 }
 
-impl GetNodeParams {
-    pub fn new(token: impl Into<String>) -> Self {
-        Self {
-            token: token.into(),
-            obj_type: None,
-        }
-    }
-
-    pub fn obj_type(mut self, obj_type: impl Into<String>) -> Self {
-        self.obj_type = Some(obj_type.into());
-        self
-    }
-}
-
+/// 获取知识空间节点信息响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetNodeResponse {
-    pub node: Option<NodeInfo>,
+pub struct GetWikiSpaceNodeResponse {
+    /// 节点信息
+    pub data: Option<WikiSpaceNode>,
 }
 
-impl ApiResponseTrait for GetNodeResponse {
+impl ApiResponseTrait for GetWikiSpaceNodeResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-pub async fn get_node(
-    params: GetNodeParams,
-    config: &Config,
-) -> SDKResult<Response<GetNodeResponse>> {
-    let mut api_request: ApiRequest<GetNodeResponse> = ApiRequest::get("/open-apis/wiki/v2/spaces/get_node");
-    
-    api_request = api_request.query_param("token", &params.token);
-    if let Some(obj_type) = params.obj_type {
-        api_request = api_request.query_param("obj_type", &obj_type);
+impl GetWikiSpaceNodeRequest {
+    /// 创建获取知识空间节点信息请求
+    pub fn new(config: Config) -> Self {
+        Self { config }
     }
 
-    Transport::request(api_request, config, None).await
+    /// 执行请求
+    ///
+    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/get_node
+    pub async fn execute(
+        self,
+        params: GetWikiSpaceNodeParams,
+    ) -> SDKResult<GetWikiSpaceNodeResponse> {
+        // 验证必填字段
+        validate_required!(params.node_token, "节点Token不能为空");
+        validate_required!(params.space_id, "知识空间ID不能为空");
+
+        // 使用新的enum+builder系统生成API端点
+        let api_endpoint = WikiApiV2::SpaceGetNode;
+
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<GetWikiSpaceNodeResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
+
+        // 设置查询参数
+        api_request = api_request.query("node_token", &params.node_token);
+        api_request = api_request.query("space_id", &params.space_id);
+
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
+    }
 }

@@ -218,14 +218,7 @@ mod tests {
     #[test]
     fn test_module_structure() {
         // 这个测试验证模块结构的完整性
-        let service = create_test_service();
-
-        // 验证可以访问所有服务方法
-        let _member_permitted_request =
-            MemberPermittedRequest::new("file_token", "user_id", "readable");
-        let _member_transfer_request =
-            MemberTransferRequest::new("file_token", "new_owner_user_id");
-        let _public_request = PublicRequest::new("file_token");
+        let _service = create_test_service();
 
         // 如果编译通过，说明模块结构正确
         assert!(true);

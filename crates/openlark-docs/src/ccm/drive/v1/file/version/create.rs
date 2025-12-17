@@ -140,12 +140,12 @@ mod tests {
 
     #[test]
     fn test_version_info_structure() {
-        let creator = CreatorInfo {
+        let creator = CreateVersionCreatorInfo {
             user_id: "user_id".to_string(),
             name: "用户名".to_string(),
         };
 
-        let version = VersionInfo {
+        let version = CreateVersionInfo {
             version_id: "version_id".to_string(),
             name: Some("版本1.0".to_string()),
             description: Some("初始版本".to_string()),

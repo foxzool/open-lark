@@ -8,6 +8,7 @@ pub use explorer::*;
 
 // 子模块
 pub mod explorer;
+pub mod old;
 
 /// 云盘浏览器服务
 #[derive(Clone)]
@@ -24,6 +25,11 @@ impl CcmDriveExplorerService {
     /// 获取浏览器服务
     pub fn explorer(&self) -> explorer::ExplorerService {
         explorer::ExplorerService::new(self.config.clone())
+    }
+
+    /// 获取旧版（old）API
+    pub fn old(&self) -> crate::ccm::ccm_drive_explorer::old::CcmDriveExplorerOldService {
+        crate::ccm::ccm_drive_explorer::old::CcmDriveExplorerOldService::new(self.config.clone())
     }
 }
 

@@ -1,11 +1,16 @@
 //! 更新表格属性
 //!
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/update-spreadsheet-properties
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/update-spreadsheet-properties
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct UpdateSpreadsheetPropertiesRequest {
@@ -25,44 +30,25 @@ pub struct UpdateSpreadsheetPropertiesResponse {
 }
 
 impl ApiResponseTrait for UpdateSpreadsheetPropertiesResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct UpdateSpreadsheetPropertiesBuilder {
-    api_req: ApiRequest<UpdateSpreadsheetPropertiesRequest>,
+/// 更新表格属性
+pub async fn properties(
     spreadsheet_token: String,
-}
+    request: UpdateSpreadsheetPropertiesRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<UpdateSpreadsheetPropertiesResponse>> {
+    let api_endpoint = CcmSheetApiOld::Properties(spreadsheet_token);
+    let mut api_request: ApiRequest<UpdateSpreadsheetPropertiesResponse> =
+        ApiRequest::put(&api_endpoint.to_url()).body(serde_json::to_value(request)?);
 
-impl UpdateSpreadsheetPropertiesBuilder {
-    pub fn new(spreadsheet_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_sheet_spreadsheet_properties_update".to_string();
-        builder.api_req.method = "PUT".to_string();
-        builder.spreadsheet_token = spreadsheet_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/{}/properties",
-            builder.spreadsheet_token
-        );
-        builder.api_req.body = Some(UpdateSpreadsheetPropertiesRequest::default());
-        builder
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    pub fn title(mut self, title: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.properties.title = Some(title.to_string());
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    Transport::request(api_request, config, None).await
 }

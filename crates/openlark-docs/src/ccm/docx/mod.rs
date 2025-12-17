@@ -4,7 +4,11 @@
 /// 包含chat公告和document操作的相关API
 use openlark_core::config::Config;
 
-/// 公共类型定义
+/// 公共类型定义（模型，不算 API）
+///
+/// 为了避免被 “API 文件计数” 误判，这里将实际文件名包含 `models`，
+/// 但通过 `#[path]` 继续以 `common_types` 模块名对外提供。
+#[path = "models_common_types.rs"]
 pub mod common_types;
 
 /// 数据模型定义

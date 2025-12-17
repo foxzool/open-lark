@@ -1,1 +1,2 @@
-// pub mod delete; // Generated: Module file not found
+pub mod _doc_token;
+pub use _doc_token::*;

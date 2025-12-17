@@ -1,55 +1,58 @@
-//! 根据 docToken 获取文档中的电子表格的元数据。
+//! 获取旧版文档中的电子表格元数据
 //!
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-sheet-meta-info-in-doc
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-sheet-meta-info-in-doc
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct GetDocSheetMetaRequest {}
+pub struct GetDocSheetMetaReq {}
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct GetDocSheetMetaResponse {
-    pub sheetId: i32,
+    #[serde(rename = "sheetId")]
+    pub sheet_id: i32,
     pub title: String,
-    pub rowCount: i32,
-    pub colCount: i32,
+    #[serde(rename = "rowCount")]
+    pub row_count: i32,
+    #[serde(rename = "colCount")]
+    pub col_count: i32,
 }
 
 impl ApiResponseTrait for GetDocSheetMetaResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct GetDocSheetMetaBuilder {
-    api_req: ApiRequest<GetDocSheetMetaRequest>,
+/// 获取旧版文档中的电子表格元数据请求
+pub struct GetDocSheetMetaRequest {
+    config: Config,
     doc_token: String,
 }
 
-impl GetDocSheetMetaBuilder {
-    pub fn new(doc_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_doc_sheet_meta_get".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.doc_token = doc_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/doc/v2/{}/sheet_meta",
-            builder.doc_token
-        );
-        builder.api_req.body = None;
-        builder
+impl GetDocSheetMetaRequest {
+    pub fn new(config: Config, doc_token: impl Into<String>) -> Self {
+        Self {
+            config,
+            doc_token: doc_token.into(),
+        }
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> SDKResult<GetDocSheetMetaResponse> {
+        use crate::common::api_endpoints::CcmDocApiOld;
+
+        let api_request: ApiRequest<GetDocSheetMetaResponse> =
+            ApiRequest::get(&CcmDocApiOld::SheetMeta(self.doc_token).to_url());
+        let response: Response<GetDocSheetMetaResponse> =
+            Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("response", "响应数据为空")
+        })
     }
 }

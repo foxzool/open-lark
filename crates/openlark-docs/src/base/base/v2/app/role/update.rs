@@ -1,15 +1,14 @@
 //! 更新自定义角色
 //!
-//! 
-//!
-//! [官方文档](https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/update-2)
+//! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/update
+//! doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/update-2
 
-use crate::base::base::v2::models::*;
+use crate::base::base::v2::models::AppRole;
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, RequestBuilder, Send},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::Error,
-    response::Response,
+    http::Transport,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -64,15 +63,26 @@ impl Update {
         self
     }
 
-    pub async fn send(self) -> Result<Response<UpdateResp>, Error> {
-        let url = format!(
-            "{}/open-apis/base/v2/apps/{}/roles/{}",
-            self.config.base_url, self.app_token, self.role_id
-        );
-        let request = ApiRequest::put(&url).body(&self.req);
-        let response = RequestBuilder::new(self.config, request).send().await?;
-        Ok(response)
+    pub async fn send(self) -> SDKResult<UpdateResp> {
+        validate_required!(self.app_token, "app_token 不能为空");
+        validate_required!(self.role_id, "role_id 不能为空");
+        validate_required!(self.req.role_name, "role_name 不能为空");
+
+        use crate::common::api_endpoints::BaseApiV2;
+        let api_endpoint = BaseApiV2::RoleUpdate(self.app_token, self.role_id);
+
+        let api_request: ApiRequest<UpdateResp> =
+            ApiRequest::put(&api_endpoint.to_url()).body(serde_json::to_vec(&self.req)?);
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("response", "响应数据为空")
+        })
     }
 }
 
-impl ApiResponseTrait for UpdateResp {}
+impl ApiResponseTrait for UpdateResp {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}

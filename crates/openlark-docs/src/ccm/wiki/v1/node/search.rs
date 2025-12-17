@@ -1,92 +1,86 @@
-//! 搜索 Wiki，用户通过关键词查询 Wiki，只能查找自己可见的 wiki。
-//!
-//! doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/search_wiki
-
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+/// 搜索Wiki
+///
+/// 搜索Wiki，用户通过关键词查询Wiki，只能查找自己可见的wiki。
+/// 文档参考：https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/wiki-v1/search_wiki
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct SearchNodeRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub query: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+use crate::common::api_endpoints::WikiApiV1;
+use crate::wiki::v2::models::WikiSearchResult;
+
+/// 搜索Wiki请求
+pub struct SearchWikiRequest {
+    config: Config,
+}
+
+/// 搜索Wiki请求参数
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SearchWikiParams {
+    /// 搜索关键词
+    pub query: String,
+    /// 空间ID列表
+    pub space_ids: Option<Vec<String>>,
+    /// 节点类型过滤
+    pub node_type: Option<String>,
+    /// 每页大小
     pub page_size: Option<i32>,
+    /// 页面标记
+    pub page_token: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct SearchNodeResponse {
-    pub items: Vec<WikiNode>,
-    pub page_token: String,
-    pub has_more: bool,
-    pub total: i32,
+/// 搜索Wiki响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SearchWikiResponse {
+    /// 搜索结果列表
+    pub data: Option<Vec<WikiSearchResult>>,
+    /// 是否有更多数据
+    pub has_more: Option<bool>,
+    /// 页面标记
+    pub page_token: Option<String>,
+    /// 总数
+    pub total: Option<i32>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct WikiNode {
-    pub node_token: String,
-    pub node_type: String,
-    pub obj_token: String,
-    pub obj_type: String,
-    pub parent_node_token: String,
-    pub node_name: String,
-    pub origin_node_token: String,
-    pub origin_space_id: String,
-    pub has_child: bool,
-    pub title: String,
-}
-
-impl ApiResponseTrait for SearchNodeResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+impl ApiResponseTrait for SearchWikiResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct SearchNodeBuilder {
-    api_req: ApiRequest<SearchNodeRequest>,
-}
-
-impl SearchNodeBuilder {
-    pub fn new() -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "wiki_v1_node_search".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/wiki/v1/nodes/search".to_string();
-        builder.api_req.body = Some(SearchNodeRequest::default());
-        builder
+impl SearchWikiRequest {
+    /// 创建搜索Wiki请求
+    pub fn new(config: Config) -> Self {
+        Self { config }
     }
 
-    pub fn query(mut self, query: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.query = Some(query.to_string());
-        }
-        self
-    }
+    /// 执行请求
+    ///
+    /// API文档: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/wiki-v1/search_wiki
+    pub async fn execute(self, params: SearchWikiParams) -> SDKResult<SearchWikiResponse> {
+        // 验证必填字段
+        validate_required!(params.query, "搜索关键词不能为空");
 
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.page_token = Some(page_token.to_string());
-        }
-        self
-    }
+        // 使用新的enum+builder系统生成API端点
+        let api_endpoint = WikiApiV1::NodeSearch;
 
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.page_size = Some(page_size);
-        }
-        self
-    }
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<SearchWikiResponse> =
+            ApiRequest::post(&api_endpoint.to_url());
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::User, config, option) // Typically search is user-bound
+        // 设置请求体
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+            &params,
+        )?));
+
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }

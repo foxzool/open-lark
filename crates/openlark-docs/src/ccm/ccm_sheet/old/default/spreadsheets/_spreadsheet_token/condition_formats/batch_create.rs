@@ -1,11 +1,16 @@
-//! 该接口用于根据 spreadsheetToken 和 sheetId 批量添加条件格式。
+//! 批量创建条件格式
 //!
-//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/condition-format/condition-format-create
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-set
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct BatchCreateConditionFormatRequest {
@@ -61,42 +66,25 @@ pub struct ConditionFormatResponse {
 }
 
 impl ApiResponseTrait for BatchCreateConditionFormatResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct BatchCreateConditionFormatBuilder {
-    api_req: ApiRequest<BatchCreateConditionFormatRequest>,
-}
+/// 批量创建条件格式
+pub async fn batch_create(
+    spreadsheet_token: String,
+    request: BatchCreateConditionFormatRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<BatchCreateConditionFormatResponse>> {
+    let api_endpoint = CcmSheetApiOld::ConditionFormatsBatchCreate(spreadsheet_token);
+    let mut api_request: ApiRequest<BatchCreateConditionFormatResponse> =
+        ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_value(request)?);
 
-impl BatchCreateConditionFormatBuilder {
-    pub fn new(spreadsheet_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_sheet_condition_format_batch_create".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/{}/condition_formats/batch_create",
-            spreadsheet_token.to_string()
-        );
-        builder.api_req.body = Some(BatchCreateConditionFormatRequest::default());
-        builder
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    pub fn sheet_condition_formats(mut self, formats: Vec<SheetConditionFormat>) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.sheet_condition_formats = formats;
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    Transport::request(api_request, config, None).await
 }

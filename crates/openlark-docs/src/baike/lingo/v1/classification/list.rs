@@ -1,80 +1,62 @@
-//! 获取词典分类
-//!
-//! doc: https://open.feishu.cn/document/lingo-v1/classification/list
+/// 获取词典分类
+///
+/// 获取飞书词典当前分类。
+/// docPath: https://open.feishu.cn/document/lingo-v1/classification/list
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
-use serde::{Deserialize, Serialize};
+use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct ListClassificationRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[derive(Debug, serde::Deserialize)]
 pub struct ListClassificationResponse {
-    pub items: Vec<Classification>,
-    pub page_token: Option<String>,
-    pub has_more: bool,
-    pub total: i32,
+    pub data: Option<ClassificationData>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Classification {
-    pub id: String,
+#[derive(Debug, serde::Deserialize)]
+pub struct ClassificationData {
+    pub classifications: Vec<ClassificationItem>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct ClassificationItem {
+    pub classification_id: String,
     pub name: String,
-    pub father_id: String,
+    pub level: i32,
+    pub parent_id: Option<String>,
+    pub children: Option<Vec<ClassificationItem>>,
 }
 
 impl ApiResponseTrait for ListClassificationResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct ListClassificationBuilder {
-    api_req: ApiRequest<ListClassificationRequest>,
-}
+/// 获取词典分类
+///
+/// 获取飞书词典当前分类。
+/// docPath: https://open.feishu.cn/document/lingo-v1/classification/list
+pub async fn list_classification(
+    config: &Config,
+) -> SDKResult<Vec<ClassificationItem>> {
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = LingoApiV1::ClassificationList;
 
-impl ListClassificationBuilder {
-    pub fn new() -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "lingo_classification_list".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/lingo/v1/classifications".to_string();
-        builder.api_req.body = None;
-        builder
-    }
+    // 创建API请求
+    let api_request: ApiRequest<ListClassificationResponse> =
+        ApiRequest::get(&api_endpoint.to_url());
 
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_size={}", page_size));
-        } else {
-            self.api_req.url.push_str(&format!("?page_size={}", page_size));
-        }
-        self
-    }
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    let resp: ListClassificationResponse = response.data.ok_or_else(|| {
+        openlark_core::error::validation_error("response_data", "Response data is missing")
+    })?;
 
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_token={}", page_token.to_string()));
-        } else {
-            self.api_req.url.push_str(&format!("?page_token={}", page_token.to_string()));
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    resp.data.map(|data| data.classifications).ok_or_else(|| {
+        openlark_core::error::validation_error("classification_data", "Classification data is missing")
+    })
 }

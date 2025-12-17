@@ -1,88 +1,61 @@
-//! 创建草稿
-//!
-//! doc: https://open.feishu.cn/document/lingo-v1/draft/create
+/// 创建Lingo草稿
+///
+/// 创建Lingo语言服务草稿。
+/// docPath: https://open.feishu.cn/document/lingo-v1/draft/create
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
-use serde::{Deserialize, Serialize};
+use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
+use crate::lingo::v1::{LingoDraft, DraftStatus};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct CreateDraftRequest {
-    pub entity: Entity,
+#[derive(Debug, serde::Deserialize)]
+pub struct CreateLingoDraftResponse {
+    pub data: Option<LingoDraft>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Entity {
-    pub main_keys: Vec<Term>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub aliases: Option<Vec<Term>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub related_meta: Option<RelatedMeta>,
+#[derive(Debug, serde::Serialize)]
+pub struct CreateLingoDraftParams {
+    pub title: String,
+    pub content: String,
+    pub language: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Term {
-    pub key: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub display_status: Option<DisplayStatus>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DisplayStatus {
-    pub allow_highlight: bool,
-    pub allow_search: bool,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct RelatedMeta {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub users: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub chats: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub docs: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub oncalls: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub links: Option<Vec<String>>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct CreateDraftResponse {
-    pub draft_id: String,
-    pub entity: Entity,
-}
-
-impl ApiResponseTrait for CreateDraftResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+impl ApiResponseTrait for CreateLingoDraftResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct CreateDraftBuilder {
-    api_req: ApiRequest<CreateDraftRequest>,
-}
+/// 创建Lingo草稿
+///
+/// 创建Lingo语言服务草稿。
+/// docPath: https://open.feishu.cn/document/lingo-v1/draft/create
+pub async fn create_lingo_draft(
+    config: &Config,
+    params: CreateLingoDraftParams,
+) -> SDKResult<LingoDraft> {
+    // 验证必填字段
+    validate_required_field("草稿标题", Some(&params.title), "草稿标题不能为空")?;
+    validate_required_field("草稿内容", Some(&params.content), "草稿内容不能为空")?;
 
-impl CreateDraftBuilder {
-    pub fn new(entity: Entity) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "lingo_draft_create".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/lingo/v1/drafts".to_string();
-        builder.api_req.body = Some(CreateDraftRequest { entity });
-        builder
-    }
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = LingoApiV1::DraftCreate;
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    // 创建API请求
+    let api_request: ApiRequest<CreateLingoDraftResponse> =
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建Lingo草稿")?);
+
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    let resp: CreateLingoDraftResponse = response.data.ok_or_else(|| {
+        openlark_core::error::validation_error("response_data", "Response data is missing")
+    })?;
+
+    resp.data.ok_or_else(|| {
+        openlark_core::error::validation_error("draft_data", "Draft data is missing")
+    })
 }

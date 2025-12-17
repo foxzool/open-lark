@@ -1,7 +1,7 @@
 /// 复制文档
 ///
 /// 复制指定的文档或表格。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/copy-files
+/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/copy-a-doc-or-sheet
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

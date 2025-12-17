@@ -67,8 +67,8 @@ impl CcmSheetService {
     }
 
     /// 获取旧版版本API（兼容性保留）
-    pub fn old(&self) -> crate::ccm::ccm_sheet::old::v2::CcmSheetOldV2 {
-        crate::ccm::ccm_sheet::old::v2::CcmSheetOldV2::new(self.config.clone())
+    pub fn old(&self) -> crate::ccm::ccm_sheet::old::CcmSheetOldService {
+        crate::ccm::ccm_sheet::old::CcmSheetOldService::new(self.config.clone())
     }
 }
 

@@ -1,14 +1,17 @@
-//! 根据 spreadsheetToken 更新工作表属性。
+//! 操作工作表
 //!
-//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/operate-sheets
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/operate-sheets
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct SheetsBatchUpdateRequest {
+pub struct SheetsBatchUpdateReq {
     pub requests: Vec<RequestItem>,
 }
 
@@ -69,42 +72,29 @@ pub struct DeleteSheetResult {
 }
 
 impl ApiResponseTrait for SheetsBatchUpdateResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct SheetsBatchUpdateBuilder {
-    api_req: ApiRequest<SheetsBatchUpdateRequest>,
+/// 操作工作表（对应 CSV 的“操作工作表”）
+pub async fn operate_sheets(
+    request: SheetsBatchUpdateReq,
+    spreadsheet_token: String,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<SheetsBatchUpdateResponse>> {
+    use crate::common::api_endpoints::CcmSheetApiOld;
+
+    let api_endpoint = CcmSheetApiOld::OperateSheets(spreadsheet_token);
+    let mut api_request: ApiRequest<SheetsBatchUpdateResponse> =
+        ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_value(request)?);
+
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
+
+    Transport::request(api_request, config, None).await
 }
 
-impl SheetsBatchUpdateBuilder {
-    pub fn new(spreadsheet_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_sheet_sheets_batch_update".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
-            spreadsheet_token.to_string()
-        );
-        builder.api_req.body = Some(SheetsBatchUpdateRequest::default());
-        builder
-    }
-
-    pub fn requests(mut self, requests: Vec<RequestItem>) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.requests = requests;
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
-}
+// “更新工作表属性” 单独放在 `update_sheet_properties.rs`，用于满足 API 数量统计与语义区分。

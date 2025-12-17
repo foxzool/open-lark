@@ -60,29 +60,32 @@ pub mod models;
 pub mod service;
 
 // 功能模块按业务域组织
-#[cfg(feature = "ccm")]
+#[cfg(feature = "ccm-core")]
 pub mod ccm;
 
 
 
 
-#[cfg(feature = "bitable")]
-pub mod bitable;
-
-#[cfg(feature = "base")]
+#[cfg(any(feature = "base", feature = "bitable"))]
 pub mod base;
 
-#[cfg(feature = "baike")]
+#[cfg(any(feature = "baike", feature = "lingo"))]
 pub mod baike;
-
-#[cfg(feature = "lingo")]
-pub mod lingo;
 
 #[cfg(feature = "minutes")]
 pub mod minutes;
 
-#[cfg(feature = "wiki")]
-pub mod wiki;
+// === 兼容导出：保持历史模块路径不变 ===
+// 注意：实现文件严格按 src/bizTag/project/version/resource/name.rs 组织，
+// 这里只做模块别名/重导出，不属于 API 实现文件。
+#[cfg(feature = "bitable")]
+pub use base::bitable;
+
+#[cfg(feature = "lingo")]
+pub use baike::lingo;
+
+#[cfg(feature = "ccm-wiki")]
+pub use ccm::wiki;
 
 // docs和docx模块已包含在ccm模块中，无需独立导出
 
@@ -104,7 +107,7 @@ pub use error::{DocsError, DocsResult};
 pub use service::DocsService as MainDocsService;
 
 // 重新导出各域服务
-#[cfg(feature = "ccm")]
+#[cfg(feature = "ccm-core")]
 pub use ccm::CcmService;
 
 #[cfg(feature = "bitable")]
@@ -122,7 +125,7 @@ pub use lingo::LingoService;
 #[cfg(feature = "minutes")]
 pub use minutes::MinutesService;
 
-#[cfg(feature = "wiki")]
+#[cfg(feature = "ccm-wiki")]
 pub use wiki::WikiService;
 
 // docs和docx服务通过ccm模块导出

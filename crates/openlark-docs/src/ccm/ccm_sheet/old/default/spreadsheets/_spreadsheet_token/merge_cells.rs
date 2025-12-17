@@ -1,11 +1,16 @@
-//! 根据 spreadsheetToken 和维度信息合并单元格；单次操作不超过5000行，100列。
+//! 合并单元格
 //!
-//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/merge-cells
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/merge-cells
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct MergeCellsRequest {
@@ -19,49 +24,25 @@ pub struct MergeCellsResponse {
 }
 
 impl ApiResponseTrait for MergeCellsResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct MergeCellsBuilder {
-    api_req: ApiRequest<MergeCellsRequest>,
-}
+/// 合并单元格
+pub async fn merge_cells(
+    spreadsheet_token: String,
+    request: MergeCellsRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<MergeCellsResponse>> {
+    let api_endpoint = CcmSheetApiOld::MergeCells(spreadsheet_token);
+    let mut api_request: ApiRequest<MergeCellsResponse> =
+        ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_value(request)?);
 
-impl MergeCellsBuilder {
-    pub fn new(spreadsheet_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_sheet_merge_cells".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/{}/merge_cells",
-            spreadsheet_token.to_string()
-        );
-        builder.api_req.body = Some(MergeCellsRequest::default());
-        builder
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    pub fn ranges(mut self, ranges: Vec<String>) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.ranges = ranges;
-        }
-        self
-    }
-
-    pub fn merge_type(mut self, merge_type: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.mergeType = merge_type.to_string();
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    Transport::request(api_request, config, None).await
 }

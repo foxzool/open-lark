@@ -1,50 +1,62 @@
-//! 下载图片
-//!
-//! doc: https://open.feishu.cn/document/lingo-v1/file/download
+/// 下载图片
+///
+/// 通过 file_token 下载原图片。
+/// docPath: https://open.feishu.cn/document/lingo-v1/file/download
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
-use serde::{Deserialize, Serialize};
+use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DownloadFileRequest {}
+#[derive(Debug, serde::Deserialize)]
+pub struct DownloadFileResponse {
+    pub data: Option<FileData>,
+}
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DownloadFileResponse {}
+#[derive(Debug, serde::Deserialize)]
+pub struct FileData {
+    pub file_token: String,
+    pub file_url: String,
+    pub file_name: String,
+    pub file_size: i64,
+    pub file_type: String,
+    pub download_time: String,
+}
 
 impl ApiResponseTrait for DownloadFileResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct DownloadFileBuilder {
-    api_req: ApiRequest<DownloadFileRequest>,
-    file_token: String,
-}
+/// 下载图片
+///
+/// 通过 file_token 下载原图片。
+/// docPath: https://open.feishu.cn/document/lingo-v1/file/download
+pub async fn download_file(
+    config: &Config,
+    file_token: &str,
+) -> SDKResult<FileData> {
+    // 验证必填字段
+    validate_required_field("文件令牌", Some(file_token), "文件令牌不能为空")?;
 
-impl DownloadFileBuilder {
-    pub fn new(file_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "lingo_file_download".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.file_token = file_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/lingo/v1/files/{}/download",
-            builder.file_token
-        );
-        builder.api_req.body = None;
-        builder
-    }
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = LingoApiV1::FileDownload(file_token.to_string());
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    // 创建API请求
+    let api_request: ApiRequest<DownloadFileResponse> =
+        ApiRequest::get(&api_endpoint.to_url());
+
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    let resp: DownloadFileResponse = response.data.ok_or_else(|| {
+        openlark_core::error::validation_error("response_data", "Response data is missing")
+    })?;
+
+    resp.data.ok_or_else(|| {
+        openlark_core::error::validation_error("file_data", "File data is missing")
+    })
 }

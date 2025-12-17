@@ -29,10 +29,10 @@ impl CcmDocService {
         &self.config
     }
 
-    // /// 获取旧版版本API
-    // pub fn old(&self) -> crate::ccm::ccm_doc::old::v1::CcmDocOldV1 {
-    //     crate::ccm::ccm_doc::old::v1::CcmDocOldV1::new(self.config.clone())
-    // }
+    /// 获取旧版（old）API
+    pub fn old(&self) -> crate::ccm::ccm_doc::old::CcmDocOldService {
+        crate::ccm::ccm_doc::old::CcmDocOldService::new(self.config.clone())
+    }
 }
 
 // 导出版本模块

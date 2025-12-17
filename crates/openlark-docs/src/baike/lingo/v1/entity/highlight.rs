@@ -1,64 +1,73 @@
-//! 词条高亮
-//!
-//! doc: https://open.feishu.cn/document/lingo-v1/entity/highlight
+/// 词条高亮
+///
+/// 传入一句话，智能识别句中对应的词条，并返回词条位置和 entity_id，可在外部系统中快速实现词条智能高亮。
+/// docPath: https://open.feishu.cn/document/lingo-v1/entity/highlight
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
-use serde::{Deserialize, Serialize};
+use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct HighlightEntityRequest {
-    pub text: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[derive(Debug, serde::Deserialize)]
 pub struct HighlightEntityResponse {
-    pub phrases: Vec<Phrase>,
+    pub data: Option<HighlightData>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Phrase {
-    pub name: String,
-    pub entity_ids: Vec<String>,
-    pub span: Span,
+#[derive(Debug, serde::Deserialize)]
+pub struct HighlightData {
+    pub highlights: Vec<EntityHighlight>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Span {
-    pub start: i32,
-    pub end: i32,
+#[derive(Debug, serde::Deserialize)]
+pub struct EntityHighlight {
+    pub entity_id: String,
+    pub title: String,
+    pub start_pos: i32,
+    pub end_pos: i32,
+    pub matched_text: String,
+}
+
+#[derive(Debug, serde::Serialize)]
+pub struct HighlightEntityParams {
+    pub text: String,
+    pub repo_id: Option<String>,
+    pub max_highlights: Option<i32>,
 }
 
 impl ApiResponseTrait for HighlightEntityResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct HighlightEntityBuilder {
-    api_req: ApiRequest<HighlightEntityRequest>,
-}
+/// 词条高亮
+///
+/// 传入一句话，智能识别句中对应的词条，并返回词条位置和 entity_id，可在外部系统中快速实现词条智能高亮。
+/// docPath: https://open.feishu.cn/document/lingo-v1/entity/highlight
+pub async fn highlight_entity(
+    config: &Config,
+    params: HighlightEntityParams,
+) -> SDKResult<Vec<EntityHighlight>> {
+    // 验证必填字段
+    validate_required_field("文本", Some(&params.text), "文本不能为空")?;
 
-impl HighlightEntityBuilder {
-    pub fn new(text: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "lingo_entity_highlight".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/lingo/v1/entities/highlight".to_string();
-        builder.api_req.body = Some(HighlightEntityRequest {
-            text: text.to_string(),
-        });
-        builder
-    }
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = LingoApiV1::EntityHighlight;
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    // 创建API请求
+    let api_request: ApiRequest<HighlightEntityResponse> =
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "词条高亮")?);
+
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    let resp: HighlightEntityResponse = response.data.ok_or_else(|| {
+        openlark_core::error::validation_error("response_data", "Response data is missing")
+    })?;
+
+    resp.data.map(|data| data.highlights).ok_or_else(|| {
+        openlark_core::error::validation_error("highlight_data", "Highlight data is missing")
+    })
 }

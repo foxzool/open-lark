@@ -9,13 +9,28 @@ use serde::{Deserialize, Serialize};
 use crate::common::api_endpoints::CcmDriveExplorerApiOld;
 
 /// 获取我的空间（根文件夹）元数据请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetRootFolderMetaRequest {}
+pub struct GetRootFolderMetaRequest {
+    config: Config,
+}
 
 impl GetRootFolderMetaRequest {
-    /// 创建新的 GetRootFolderMetaRequest
-    pub fn new() -> Self {
-        Self {}
+    /// 创建获取我的空间（根文件夹）元数据请求
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// 发送请求
+    ///
+    /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
+    pub async fn send(self) -> SDKResult<GetRootFolderMetaResponse> {
+        let api_endpoint = CcmDriveExplorerApiOld::RootFolderMeta;
+        let api_request: ApiRequest<GetRootFolderMetaResponse> = ApiRequest::get(&api_endpoint.to_url());
+
+        let response: Response<GetRootFolderMetaResponse> =
+            Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("response", "响应数据为空")
+        })
     }
 }
 
@@ -36,31 +51,5 @@ impl ApiResponseTrait for GetRootFolderMetaResponse {
     }
 }
 
-/// 获取我的空间（根文件夹）元数据
-///
-/// 获取 "我的空间" 的元信息。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
-pub async fn meta(
-    _request: GetRootFolderMetaRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<GetRootFolderMetaResponse>> {
-    let api_endpoint = CcmDriveExplorerApiOld::RootFolderMeta;
-    let mut api_request: ApiRequest<GetRootFolderMetaResponse> = ApiRequest::get(&api_endpoint.to_url());
-
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    Transport::request(api_request, config, None).await
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_get_root_folder_meta_request() {
-        let _request = GetRootFolderMetaRequest::new();
-    }
-}
+// 注：旧实现曾提供 `meta(request, config, option)` 形式函数调用；
+// 目前统一为 `GetRootFolderMetaRequest { config }.send()` 以保持风格一致。

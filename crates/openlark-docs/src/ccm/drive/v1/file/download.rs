@@ -91,7 +91,10 @@ mod tests {
 
     #[tokio::test]
     async fn test_download_file_request_builder() {
-        let config = Config::new("test_app_id", "test_app_secret");
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         let file_token = "test_file_token_123";
         let range_header = "bytes=0-100";
 

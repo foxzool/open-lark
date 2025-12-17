@@ -1,50 +1,45 @@
-//! 删除免审词条
-//!
-//! doc: https://open.feishu.cn/document/lingo-v1/entity/delete
+/// 删除免审词条
+///
+/// 删除指定的词条。
+/// docPath: https://open.feishu.cn/document/lingo-v1/entity/delete
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
-use serde::{Deserialize, Serialize};
+use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DeleteEntityRequest {}
+#[derive(Debug, serde::Deserialize)]
+pub struct DeleteLingoEntityResponse {
+    pub data: Option<serde_json::Value>,
+}
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DeleteEntityResponse {}
-
-impl ApiResponseTrait for DeleteEntityResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+impl ApiResponseTrait for DeleteLingoEntityResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct DeleteEntityBuilder {
-    api_req: ApiRequest<DeleteEntityRequest>,
-    entity_id: String,
-}
+/// 删除Lingo词条
+pub async fn delete_lingo_entity(
+    config: &Config,
+    entity_id: &str,
+) -> SDKResult<()> {
+    // 验证必填字段
+    validate_required_field("词条ID", Some(entity_id), "词条ID不能为空")?;
 
-impl DeleteEntityBuilder {
-    pub fn new(entity_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "lingo_entity_delete".to_string();
-        builder.api_req.method = "DELETE".to_string();
-        builder.entity_id = entity_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/lingo/v1/entities/{}",
-            builder.entity_id
-        );
-        builder.api_req.body = Some(DeleteEntityRequest::default());
-        builder
-    }
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = LingoApiV1::EntityDelete(entity_id.to_string());
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    // 创建API请求
+    let api_request: ApiRequest<DeleteLingoEntityResponse> =
+        ApiRequest::delete(&api_endpoint.to_url());
+
+    // 发送请求
+    let _response: openlark_core::api::Response<DeleteLingoEntityResponse> =
+        Transport::request(api_request, config, None).await?;
+
+    Ok(())
 }

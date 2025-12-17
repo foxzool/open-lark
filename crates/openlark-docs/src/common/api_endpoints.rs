@@ -35,11 +35,11 @@ impl BaseApiV2 {
 pub enum BitableApiV1 {
     /// App管理相关
     AppCreate,
-    AppCopy,
+    AppCopy(String),
     AppGet(String),
     AppUpdate(String),
-    AppList,
     DashboardList(String),
+    DashboardCopy(String, String),
 
     /// 表格管理相关
     TableCreate(String),
@@ -77,6 +77,12 @@ pub enum BitableApiV1 {
     RecordList(String, String),
     RecordSearch(String, String),
 
+    /// 表单管理相关
+    FormGet(String, String, String),
+    FormPatch(String, String, String),
+    FormFieldList(String, String, String),
+    FormFieldPatch(String, String, String, String),
+
     /// 权限管理相关
     RoleCreate(String),
     RoleUpdate(String, String),
@@ -95,16 +101,23 @@ impl BitableApiV1 {
         match self {
             // App管理
             BitableApiV1::AppCreate => "/open-apis/bitable/v1/apps".to_string(),
-            BitableApiV1::AppCopy => "/open-apis/bitable/v1/apps/copy".to_string(),
+            BitableApiV1::AppCopy(app_token) => {
+                format!("/open-apis/bitable/v1/apps/{}/copy", app_token)
+            }
             BitableApiV1::AppGet(app_token) => {
                 format!("/open-apis/bitable/v1/apps/{}", app_token)
             }
             BitableApiV1::AppUpdate(app_token) => {
                 format!("/open-apis/bitable/v1/apps/{}", app_token)
             }
-            BitableApiV1::AppList => "/open-apis/bitable/v1/apps".to_string(),
             BitableApiV1::DashboardList(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}/dashboard/list", app_token)
+                format!("/open-apis/bitable/v1/apps/{}/dashboards", app_token)
+            }
+            BitableApiV1::DashboardCopy(app_token, block_id) => {
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/dashboards/{}/copy",
+                    app_token, block_id
+                )
             }
 
             // 表格管理
@@ -274,6 +287,32 @@ impl BitableApiV1 {
                 format!(
                     "/open-apis/bitable/v1/apps/{}/tables/{}/records/search",
                     app_token, table_id
+                )
+            }
+
+            // 表单管理
+            BitableApiV1::FormGet(app_token, table_id, form_id) => {
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
+                    app_token, table_id, form_id
+                )
+            }
+            BitableApiV1::FormPatch(app_token, table_id, form_id) => {
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
+                    app_token, table_id, form_id
+                )
+            }
+            BitableApiV1::FormFieldList(app_token, table_id, form_id) => {
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/fields",
+                    app_token, table_id, form_id
+                )
+            }
+            BitableApiV1::FormFieldPatch(app_token, table_id, form_id, field_id) => {
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/fields/{}",
+                    app_token, table_id, form_id, field_id
                 )
             }
 
@@ -963,10 +1002,10 @@ pub enum CcmSheetApiOld {
     DataValidation(String), // spreadsheet_token
     /// 创建数据验证规则
     DataValidationCreate(String), // spreadsheet_token
-    /// 更新数据验证规则
-    DataValidationUpdate(String, String), // spreadsheet_token, validation_id
-    /// 删除数据验证规则
-    DataValidationDelete(String, String), // spreadsheet_token, validation_id
+    /// 更新下拉列表设置（PUT）
+    DataValidationUpdate(String, String, String), // spreadsheet_token, sheet_id, data_validation_id
+    /// 删除下拉列表设置（DELETE，按 range 删除）
+    DataValidationDelete(String), // spreadsheet_token
     /// 读取单个范围 (V3)
     ReadSingleRange(String), // spreadsheet_token
     /// 读取多个范围 (V3)
@@ -1223,16 +1262,16 @@ impl CcmSheetApiOld {
                     spreadsheet_token
                 )
             }
-            CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, validation_id) => {
+            CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id, data_validation_id) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}",
-                    spreadsheet_token, validation_id
+                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}/{}",
+                    spreadsheet_token, sheet_id, data_validation_id
                 )
             }
-            CcmSheetApiOld::DataValidationDelete(spreadsheet_token, validation_id) => {
+            CcmSheetApiOld::DataValidationDelete(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}",
-                    spreadsheet_token, validation_id
+                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation",
+                    spreadsheet_token
                 )
             }
             // V3 APIs

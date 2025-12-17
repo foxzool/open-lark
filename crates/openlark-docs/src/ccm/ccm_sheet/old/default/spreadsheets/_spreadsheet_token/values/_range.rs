@@ -1,11 +1,16 @@
-//! 根据 spreadsheetToken 和 range 读取表格数据，返回数据；单次读取不超过5000行，100列。
+//! 读取单个范围
 //!
-//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct GetValuesRangeRequest {
@@ -29,60 +34,27 @@ pub struct ValueRange {
 }
 
 impl ApiResponseTrait for GetValuesRangeResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct GetValuesRangeBuilder {
-    api_req: ApiRequest<GetValuesRangeRequest>,
+/// 读取单个范围
+pub async fn values_range(
     spreadsheet_token: String,
     range: String,
-}
+    request: GetValuesRangeRequest,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<GetValuesRangeResponse>> {
+    let api_endpoint = CcmSheetApiOld::ValuesRange(spreadsheet_token, range);
+    let mut api_request: ApiRequest<GetValuesRangeResponse> = ApiRequest::get(&api_endpoint.to_url())
+        .query_opt("valueRenderOption", request.valueRenderOption)
+        .query_opt("dateTimeRenderOption", request.dateTimeRenderOption);
 
-impl GetValuesRangeBuilder {
-    pub fn new(spreadsheet_token: impl ToString, range: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_sheet_values_range_get".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.spreadsheet_token = spreadsheet_token.to_string();
-        builder.range = range.to_string();
-        builder.api_req.body = None; // GET has no body usually, depends on client impl
-        builder
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    pub fn value_render_option(mut self, option: impl ToString) -> Self {
-        if self.api_req.body.is_none() {
-            self.api_req.body = Some(GetValuesRangeRequest::default());
-        }
-        if let Some(body) = &mut self.api_req.body {
-            body.valueRenderOption = Some(option.to_string());
-        }
-        self
-    }
-
-    pub fn date_time_render_option(mut self, option: impl ToString) -> Self {
-        if self.api_req.body.is_none() {
-            self.api_req.body = Some(GetValuesRangeRequest::default());
-        }
-        if let Some(body) = &mut self.api_req.body {
-            body.dateTimeRenderOption = Some(option.to_string());
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.url = format!(
-            "https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/{}/values/{}",
-            self.spreadsheet_token,
-            self.range
-        );
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    Transport::request(api_request, config, None).await
 }

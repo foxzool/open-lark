@@ -1,14 +1,17 @@
 //! 判断协作者是否有某权限
 //!
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/querying-if-a-collaborator-has-a-specific-permission
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/querying-if-a-collaborator-has-a-specific-permission
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct PermittedRequest {
+pub struct PermittedReq {
     pub token: String,
     #[serde(rename = "type")]
     pub type_: String,
@@ -21,36 +24,39 @@ pub struct PermittedResponse {
 }
 
 impl ApiResponseTrait for PermittedResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct PermittedBuilder {
-    api_req: ApiRequest<PermittedRequest>,
+/// 判断协作者是否有某权限请求
+pub struct PermittedRequest {
+    config: Config,
+    req: PermittedReq,
 }
 
-impl PermittedBuilder {
-    pub fn new(token: impl ToString, type_: impl ToString, perm: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "drive_permission_permitted".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/drive/permission/member/permitted".to_string();
-        builder.api_req.body = Some(PermittedRequest {
-            token: token.to_string(),
-            type_: type_.to_string(),
-            perm: perm.to_string(),
-        });
-        builder
+impl PermittedRequest {
+    pub fn new(config: Config, token: impl Into<String>, type_: impl Into<String>, perm: impl Into<String>) -> Self {
+        Self {
+            config,
+            req: PermittedReq {
+                token: token.into(),
+                type_: type_.into(),
+                perm: perm.into(),
+            },
+        }
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> SDKResult<PermittedResponse> {
+        use crate::common::api_endpoints::CcmDrivePermissionApiOld;
+
+        let api_request: ApiRequest<PermittedResponse> =
+            ApiRequest::post(&CcmDrivePermissionApiOld::MemberPermitted.to_url())
+                .body(serde_json::to_value(&self.req)?);
+        let response: Response<PermittedResponse> =
+            Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("response", "响应数据为空")
+        })
     }
 }
