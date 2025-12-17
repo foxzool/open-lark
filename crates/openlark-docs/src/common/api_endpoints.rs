@@ -832,7 +832,10 @@ impl CcmDriveExplorerApi {
                 format!("/open-apis/drive/v1/explorer/file/{}", file_token)
             }
             CcmDriveExplorerApi::FileCopy(file_token) => {
-                format!("/open-apis/drive/v1/explorer/file/copy/files/{}", file_token)
+                format!(
+                    "/open-apis/drive/v1/explorer/file/copy/files/{}",
+                    file_token
+                )
             }
             CcmDriveExplorerApi::FileDocs(file_token) => {
                 format!("/open-apis/drive/v1/explorer/file/docs/{}", file_token)
@@ -844,7 +847,10 @@ impl CcmDriveExplorerApi {
                 )
             }
             CcmDriveExplorerApi::FolderChildren(folder_token) => {
-                format!("/open-apis/drive/v1/explorer/folder/{}/children", folder_token)
+                format!(
+                    "/open-apis/drive/v1/explorer/folder/{}/children",
+                    folder_token
+                )
             }
             CcmDriveExplorerApi::Folder => "/open-apis/drive/v1/explorer/folder".to_string(),
         }
@@ -1262,7 +1268,11 @@ impl CcmSheetApiOld {
                     spreadsheet_token
                 )
             }
-            CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id, data_validation_id) => {
+            CcmSheetApiOld::DataValidationUpdate(
+                spreadsheet_token,
+                sheet_id,
+                data_validation_id,
+            ) => {
                 format!(
                     "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}/{}",
                     spreadsheet_token, sheet_id, data_validation_id
@@ -2013,46 +2023,88 @@ impl SheetsApiV3 {
     pub fn to_url(&self) -> String {
         match self {
             SheetsApiV3::SheetsMeta(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/sheets/meta", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/meta",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::DimensionRange(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/dimension_range", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/dimension_range",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::DimensionRangeUpdate(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/dimension_range", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/dimension_range",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::DimensionRangeDelete(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/dimension_range", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/dimension_range",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::ValuesBatchGet(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/values:batchGet", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/values:batchGet",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::Values(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/values", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/values",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::ValuesAppend(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/values:append", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/values:append",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::Style(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/style", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/style",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::MergeCells(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/merge_cells", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/merge_cells",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::FilterViews(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/filterViews", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/filterViews",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::FilterViewsUpdate(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/filterViews", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/filterViews",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::CopyTo(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/sheets:copyTo", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets:copyTo",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::Charts(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/charts", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/charts",
+                    spreadsheet_token
+                )
             }
             SheetsApiV3::PivotTables(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/pivotTables", spreadsheet_token)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/pivotTables",
+                    spreadsheet_token
+                )
             }
         }
     }
@@ -2075,15 +2127,15 @@ pub enum BaikeApiV1 {
     /// 词条管理
     EntityCreate,
     EntityUpdate(String), // entity_id
-    EntityGet(String), // entity_id
+    EntityGet(String),    // entity_id
     EntityDelete(String), // entity_id
     EntityList,
     EntityMatch,
     EntitySearch,
     EntityHighlight,
     EntityExtract,
-    EntityApprove(String), // entity_id
-    EntityReject(String), // entity_id
+    EntityApprove(String),   // entity_id
+    EntityReject(String),    // entity_id
     EntityAuditList(String), // space_id
 
     /// 分类管理
@@ -2127,9 +2179,7 @@ impl BaikeApiV1 {
             BaikeApiV1::EntityDelete(entity_id) => {
                 format!("/open-apis/baike/v1/entities/{}", entity_id)
             }
-            BaikeApiV1::EntityList => {
-                "/open-apis/baike/v1/entities".to_string()
-            }
+            BaikeApiV1::EntityList => "/open-apis/baike/v1/entities".to_string(),
             BaikeApiV1::EntityApprove(entity_id) => {
                 format!("/open-apis/baike/v1/entities/{}/approve", entity_id)
             }
@@ -2152,16 +2202,30 @@ impl BaikeApiV1 {
             BaikeApiV1::SearchUser => "/open-apis/baike/v1/search/users".to_string(),
             BaikeApiV1::SearchHistory => "/open-apis/baike/v1/search/history".to_string(),
             BaikeApiV1::SearchHistoryDelete => "/open-apis/baike/v1/search/history".to_string(),
-            BaikeApiV1::SearchEntityHistory => "/open-apis/baike/v1/search/entity_history".to_string(),
+            BaikeApiV1::SearchEntityHistory => {
+                "/open-apis/baike/v1/search/entity_history".to_string()
+            }
             BaikeApiV1::SearchSpace => "/open-apis/baike/v1/search/spaces".to_string(),
             BaikeApiV1::SearchSpaceMember => "/open-apis/baike/v1/search/space_members".to_string(),
             BaikeApiV1::SearchSpaceAccess => "/open-apis/baike/v1/search/space_access".to_string(),
-            BaikeApiV1::SearchSpaceAccessList => "/open-apis/baike/v1/search/space_access_list".to_string(),
-            BaikeApiV1::SearchSpaceRecommend => "/open-apis/baike/v1/search/space_recommend".to_string(),
-            BaikeApiV1::SearchSpaceMemberList => "/open-apis/baike/v1/search/space_member_list".to_string(),
-            BaikeApiV1::SearchSpaceOperation => "/open-apis/baike/v1/search/space_operations".to_string(),
-            BaikeApiV1::SearchSpaceOperationLog => "/open-apis/baike/v1/search/space_operation_logs".to_string(),
-            BaikeApiV1::SearchSpaceOperationStatus => "/open-apis/baike/v1/search/space_operation_status".to_string(),
+            BaikeApiV1::SearchSpaceAccessList => {
+                "/open-apis/baike/v1/search/space_access_list".to_string()
+            }
+            BaikeApiV1::SearchSpaceRecommend => {
+                "/open-apis/baike/v1/search/space_recommend".to_string()
+            }
+            BaikeApiV1::SearchSpaceMemberList => {
+                "/open-apis/baike/v1/search/space_member_list".to_string()
+            }
+            BaikeApiV1::SearchSpaceOperation => {
+                "/open-apis/baike/v1/search/space_operations".to_string()
+            }
+            BaikeApiV1::SearchSpaceOperationLog => {
+                "/open-apis/baike/v1/search/space_operation_logs".to_string()
+            }
+            BaikeApiV1::SearchSpaceOperationStatus => {
+                "/open-apis/baike/v1/search/space_operation_status".to_string()
+            }
         }
     }
 }
@@ -2184,7 +2248,7 @@ pub enum LingoApiV1 {
     EntityCreate,
     EntityUpdate(String), // entity_id
     EntityDelete(String), // entity_id
-    EntityGet(String), // entity_id
+    EntityGet(String),    // entity_id
     EntityList,
     EntityMatch,
     EntitySearch,
@@ -2234,7 +2298,9 @@ impl LingoApiV1 {
             LingoApiV1::EntityHighlight => "/open-apis/lingo/v1/entities/highlight".to_string(),
             LingoApiV1::EntityBatchGet => "/open-apis/lingo/v1/entities:batchGet".to_string(),
             LingoApiV1::EntityBatchUpdate => "/open-apis/lingo/v1/entities:batchUpdate".to_string(),
-            LingoApiV1::EntitySearchRecommend => "/open-apis/lingo/v1/entities:searchRecommend".to_string(),
+            LingoApiV1::EntitySearchRecommend => {
+                "/open-apis/lingo/v1/entities:searchRecommend".to_string()
+            }
             LingoApiV1::EntityHistoryGet(entity_id) => {
                 format!("/open-apis/lingo/v1/entities/{}/history", entity_id)
             }

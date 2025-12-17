@@ -95,7 +95,8 @@ impl AuthService {
             access_token: result.data.app_access_token,
             token_type: result.data.token_type.unwrap_or("Bearer".to_string()),
             expires_in: result.data.expires_in,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.data.expires_in as i64),
+            expires_at: chrono::Utc::now()
+                + chrono::Duration::seconds(result.data.expires_in as i64),
             scope: Some("app:all".to_string()),
         })
     }
@@ -125,7 +126,8 @@ impl AuthService {
             access_token: result.data.app_access_token,
             token_type: "Bearer".to_string(),
             expires_in: result.data.expires_in as u64,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.data.expires_in as i64),
+            expires_at: chrono::Utc::now()
+                + chrono::Duration::seconds(result.data.expires_in as i64),
             scope: Some("app:all".to_string()),
         })
     }
@@ -156,7 +158,8 @@ impl AuthService {
             access_token: result.data.tenant_access_token,
             token_type: "Bearer".to_string(),
             expires_in: result.data.expires_in as u64,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.data.expires_in as i64),
+            expires_at: chrono::Utc::now()
+                + chrono::Duration::seconds(result.data.expires_in as i64),
             scope: Some("tenant:all".to_string()),
         })
     }
@@ -186,7 +189,8 @@ impl AuthService {
             access_token: result.data.tenant_access_token,
             token_type: "Bearer".to_string(),
             expires_in: result.data.expires_in as u64,
-            expires_at: chrono::Utc::now() + chrono::Duration::seconds(result.data.expires_in as i64),
+            expires_at: chrono::Utc::now()
+                + chrono::Duration::seconds(result.data.expires_in as i64),
             scope: Some("tenant:all".to_string()),
         })
     }

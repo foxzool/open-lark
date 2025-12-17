@@ -39,9 +39,11 @@ impl DeletePermissionMemberRequest {
     }
 
     pub async fn execute(self) -> SDKResult<Response<DeletePermissionMemberResponse>> {
-        let api_endpoint = DriveApi::DeletePermissionMember(self.token.clone(), self.member_id.clone());
+        let api_endpoint =
+            DriveApi::DeletePermissionMember(self.token.clone(), self.member_id.clone());
 
-        let api_request = ApiRequest::<DeletePermissionMemberResponse>::delete(&api_endpoint.to_url());
+        let api_request =
+            ApiRequest::<DeletePermissionMemberResponse>::delete(&api_endpoint.to_url());
 
         Transport::request(api_request, &self.config, None).await
     }

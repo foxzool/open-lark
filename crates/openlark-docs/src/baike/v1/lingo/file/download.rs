@@ -3,14 +3,13 @@
 /// API文档: https://open.feishu.cn/document/lingo-v1/file/download
 ///
 /// 通过 file_token 下载原图片。
-
 use openlark_core::{
-    error::SDKResult,
-    config::Config,
-    request_builder::UnifiedRequestBuilder,
-    constants::AccessTokenType,
     api::{ApiRequest, Response},
+    config::Config,
+    constants::AccessTokenType,
+    error::SDKResult,
     req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
 use serde::{Deserialize, Serialize};
 
@@ -49,22 +48,25 @@ impl<'a> DownloadFileBuilder<'a> {
             AccessTokenType::App,
             self.config,
             &RequestOption::default(),
-        ).await?;
+        )
+        .await?;
 
         let response = http_request.send().await?;
 
         // 对于文件下载，需要特殊处理响应
         if response.status().is_success() {
             // 尝试从响应头获取文件信息
-            let content_type = response.headers()
+            let content_type = response
+                .headers()
                 .get("content-type")
                 .and_then(|v| v.to_str().ok())
                 .unwrap_or("application/octet-stream")
                 .to_string();
 
-            let bytes = response.bytes().await.map_err(|e| {
-                openlark_core::error::CoreError::network_msg(e.to_string())
-            })?;
+            let bytes = response
+                .bytes()
+                .await
+                .map_err(|e| openlark_core::error::CoreError::network_msg(e.to_string()))?;
 
             // 将二进制数据转为base64编码
             use base64::Engine;

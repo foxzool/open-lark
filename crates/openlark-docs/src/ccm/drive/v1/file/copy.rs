@@ -32,7 +32,11 @@ impl CopyFileRequest {
     /// * `config` - 配置
     /// * `file_token` - 文件token
     /// * `parent_folder_token` - 目标文件夹token
-    pub fn new(config: Config, file_token: impl Into<String>, parent_folder_token: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        file_token: impl Into<String>,
+        parent_folder_token: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             file_token: file_token.into(),
@@ -50,9 +54,12 @@ impl CopyFileRequest {
     pub async fn execute(self) -> SDKResult<Response<CopyFileResponse>> {
         let api_endpoint = DriveApi::CopyFile(self.file_token.clone());
         let mut request = ApiRequest::<CopyFileResponse>::post(&api_endpoint.to_url());
-        
+
         let mut body = serde_json::Map::new();
-        body.insert("parent_folder_token".to_string(), serde_json::Value::String(self.parent_folder_token.clone()));
+        body.insert(
+            "parent_folder_token".to_string(),
+            serde_json::Value::String(self.parent_folder_token.clone()),
+        );
         if let Some(name) = &self.name {
             body.insert("name".to_string(), serde_json::Value::String(name.clone()));
         }
@@ -110,8 +117,8 @@ mod tests {
     #[test]
     fn test_copy_file_request_with_name() {
         let config = Config::default();
-        let request = CopyFileRequest::new(config, "file_token", "folder_token")
-            .name("new_file_name");
+        let request =
+            CopyFileRequest::new(config, "file_token", "folder_token").name("new_file_name");
 
         assert_eq!(request.file_token, "file_token");
         assert_eq!(request.parent_folder_token, "folder_token");
@@ -134,9 +141,6 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            CopyFileResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(CopyFileResponse::data_format(), ResponseFormat::Data);
     }
 }

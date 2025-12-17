@@ -6,7 +6,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 /// 获取文件的订阅状态请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetSubscribeRequest {
@@ -39,9 +38,10 @@ impl GetSubscribeRequest {
     }
 
     pub async fn execute(self) -> SDKResult<Response<GetSubscribeResponse>> {
-        let api_endpoint = crate::common::api_endpoints::DriveApi::GetFileSubscribe(self.file_token.clone());
+        let api_endpoint =
+            crate::common::api_endpoints::DriveApi::GetFileSubscribe(self.file_token.clone());
         let mut request = ApiRequest::<GetSubscribeResponse>::get(&api_endpoint.to_url());
-        
+
         if let Some(et) = &self.event_type {
             request = request.query("event_type", et);
         }
@@ -78,9 +78,6 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            GetSubscribeResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(GetSubscribeResponse::data_format(), ResponseFormat::Data);
     }
 }

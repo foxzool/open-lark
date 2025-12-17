@@ -1,8 +1,7 @@
 /// CCM Sheet API 实现验证示例
-//!
+//
 /// 用于验证新实现的33个API功能是否正常工作
 /// 独立运行，不依赖完整的模块集成
-
 use std::process::Command;
 
 fn main() {
@@ -36,14 +35,39 @@ fn main() {
 
 fn validate_api_files() {
     let api_files = vec![
-        "operatesheets", "updatesheetproperties", "adddimensionrange", "insertdimensionrange",
-        "updatedimensionrange", "deletedimensionrange", "mergecells", "unmergecells", "setstyle",
-        "batchsetstyle", "insertvalues", "appendvalues", "writeimage", "readsinglerange",
-        "readmultipleranges", "writesinglerange", "batchwriteranges", "addprotectedrange",
-        "updateprotectedrange", "getprotectedrange", "deleteprotectedrange", "setdropdown",
-        "updatedropdown", "getdropdown", "deletedropdown", "createconditionformat",
-        "updateconditionformat", "getconditionformat", "deleteconditionformat", "getspreadsheetmeta",
-        "updatespreadsheetproperties", "importspreadsheet", "getimportresult"
+        "operatesheets",
+        "updatesheetproperties",
+        "adddimensionrange",
+        "insertdimensionrange",
+        "updatedimensionrange",
+        "deletedimensionrange",
+        "mergecells",
+        "unmergecells",
+        "setstyle",
+        "batchsetstyle",
+        "insertvalues",
+        "appendvalues",
+        "writeimage",
+        "readsinglerange",
+        "readmultipleranges",
+        "writesinglerange",
+        "batchwriteranges",
+        "addprotectedrange",
+        "updateprotectedrange",
+        "getprotectedrange",
+        "deleteprotectedrange",
+        "setdropdown",
+        "updatedropdown",
+        "getdropdown",
+        "deletedropdown",
+        "createconditionformat",
+        "updateconditionformat",
+        "getconditionformat",
+        "deleteconditionformat",
+        "getspreadsheetmeta",
+        "updatespreadsheetproperties",
+        "importspreadsheet",
+        "getimportresult",
     ];
 
     let mut existing_count = 0;
@@ -72,8 +96,14 @@ fn validate_module_exports() {
 
             // 检查关键的API导出
             let key_apis = vec![
-                "operatesheets", "readsinglerange", "writesinglerange", "batchwriteranges",
-                "setstyle", "batchsetstyle", "mergecells", "getspreadsheetmeta"
+                "operatesheets",
+                "readsinglerange",
+                "writesinglerange",
+                "batchwriteranges",
+                "setstyle",
+                "batchsetstyle",
+                "mergecells",
+                "getspreadsheetmeta",
             ];
 
             for api in key_apis {
@@ -102,8 +132,14 @@ fn validate_api_endpoints() {
 
                 // 检查关键端点
                 let key_endpoints = vec![
-                    "OperateSheets", "ReadSingleRange", "WriteSingleRange", "BatchWriteRanges",
-                    "Style", "StylesBatchUpdate", "MergeCells", "Metainfo"
+                    "OperateSheets",
+                    "ReadSingleRange",
+                    "WriteSingleRange",
+                    "BatchWriteRanges",
+                    "Style",
+                    "StylesBatchUpdate",
+                    "MergeCells",
+                    "Metainfo",
                 ];
 
                 for endpoint in key_endpoints {

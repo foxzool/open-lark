@@ -110,14 +110,13 @@ impl SearchObjectRequest {
     pub async fn send(self) -> SDKResult<SearchObjectResponse> {
         use crate::common::api_endpoints::CcmDocsApiOld;
 
-        let api_request: ApiRequest<SearchObjectResponse> = ApiRequest::post(
-            &CcmDocsApiOld::SearchObject.to_url(),
-        )
-        .body(serde_json::to_value(&self.req)?);
+        let api_request: ApiRequest<SearchObjectResponse> =
+            ApiRequest::post(&CcmDocsApiOld::SearchObject.to_url())
+                .body(serde_json::to_value(&self.req)?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("response", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }

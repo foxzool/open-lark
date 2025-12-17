@@ -26,7 +26,12 @@ pub struct UploadPrepareRequest {
 }
 
 impl UploadPrepareRequest {
-    pub fn new(config: Config, file_name: impl Into<String>, parent_folder_token: impl Into<String>, size: i64) -> Self {
+    pub fn new(
+        config: Config,
+        file_name: impl Into<String>,
+        parent_folder_token: impl Into<String>,
+        size: i64,
+    ) -> Self {
         Self {
             config,
             file_name: file_name.into(),
@@ -37,8 +42,8 @@ impl UploadPrepareRequest {
 
     pub async fn execute(self) -> SDKResult<Response<UploadPrepareResponse>> {
         let api_endpoint = DriveApi::UploadPrepare;
-        let request = ApiRequest::<UploadPrepareResponse>::post(&api_endpoint.to_url())
-            .json_body(&self);
+        let request =
+            ApiRequest::<UploadPrepareResponse>::post(&api_endpoint.to_url()).json_body(&self);
 
         Transport::request(request, &self.config, None).await
     }

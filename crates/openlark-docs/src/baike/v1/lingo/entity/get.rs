@@ -1,19 +1,18 @@
+use crate::baike::models::*;
 /// 获取词条详情
 ///
 /// API文档: https://open.feishu.cn/document/lingo-v1/entity/get
 ///
 /// 通过词条 ID 拉取对应的词条详情信息。
-
 use openlark_core::{
-    error::SDKResult,
-    config::Config,
-    request_builder::UnifiedRequestBuilder,
-    constants::AccessTokenType,
     api::{ApiRequest, Response},
+    config::Config,
+    constants::AccessTokenType,
+    error::SDKResult,
     req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
 use serde::{Deserialize, Serialize};
-use crate::baike::models::*;
 
 /// 获取词条详情响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -66,7 +65,8 @@ impl<'a> GetEntityBuilder<'a> {
             AccessTokenType::App,
             self.config,
             &RequestOption::default(),
-        ).await?;
+        )
+        .await?;
 
         let response = http_request.send().await?;
         let resp: Response<_> = response.json().await?;

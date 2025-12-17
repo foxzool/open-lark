@@ -23,10 +23,7 @@ impl ApiResponseTrait for DeleteLingoEntityResponse {
 }
 
 /// 删除Lingo词条
-pub async fn delete_lingo_entity(
-    config: &Config,
-    entity_id: &str,
-) -> SDKResult<()> {
+pub async fn delete_lingo_entity(config: &Config, entity_id: &str) -> SDKResult<()> {
     // 验证必填字段
     validate_required_field("词条ID", Some(entity_id), "词条ID不能为空")?;
 

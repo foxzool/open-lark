@@ -27,10 +27,7 @@ impl GetFileVersionRequest {
     /// # 参数
     /// * `file_token` - 文件token
     /// * `version_id` - 版本ID
-    pub fn new(
-        file_token: impl Into<String>,
-        version_id: impl Into<String>,
-    ) -> Self {
+    pub fn new(file_token: impl Into<String>, version_id: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
             version_id: version_id.into(),
@@ -119,9 +116,9 @@ pub async fn get_file_version(
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<openlark_core::api::Response<GetFileVersionResponse>> {
     // 创建API请求
-    let url = DriveApi::GetFileVersion(request.file_token.clone(), request.version_id.clone()).to_url();
-    let mut api_request: ApiRequest<GetFileVersionResponse> =
-        ApiRequest::get(&url);
+    let url =
+        DriveApi::GetFileVersion(request.file_token.clone(), request.version_id.clone()).to_url();
+    let mut api_request: ApiRequest<GetFileVersionResponse> = ApiRequest::get(&url);
 
     // 如果有请求选项，应用它们
     if let Some(opt) = option {

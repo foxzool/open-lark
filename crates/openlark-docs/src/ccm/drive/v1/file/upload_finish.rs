@@ -34,8 +34,8 @@ impl UploadFinishRequest {
 
     pub async fn execute(self) -> SDKResult<Response<UploadFinishResponse>> {
         let api_endpoint = DriveApi::UploadFinish;
-        let request = ApiRequest::<UploadFinishResponse>::post(&api_endpoint.to_url())
-            .json_body(&self);
+        let request =
+            ApiRequest::<UploadFinishResponse>::post(&api_endpoint.to_url()).json_body(&self);
 
         Transport::request(request, &self.config, None).await
     }

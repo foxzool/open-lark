@@ -50,11 +50,12 @@ impl TransferOwnerRequest {
     pub async fn execute(self) -> SDKResult<Response<TransferOwnerResponse>> {
         let api_endpoint = DriveApi::TransferOwner(self.token.clone());
 
-        let api_request = ApiRequest::<TransferOwnerResponse>::post(&api_endpoint.to_url())
-            .body(serde_json::json!({
+        let api_request = ApiRequest::<TransferOwnerResponse>::post(&api_endpoint.to_url()).body(
+            serde_json::json!({
                 "to_user_id": self.to_user_id,
                 "to_user_type": self.to_user_type
-            }));
+            }),
+        );
 
         Transport::request(api_request, &self.config, None).await
     }
@@ -93,12 +94,7 @@ mod tests {
     #[test]
     fn test_transfer_owner_request_builder() {
         let config = Config::default();
-        let request = TransferOwnerRequest::new(
-            config,
-            "file_token",
-            "new_user_id",
-            "user",
-        );
+        let request = TransferOwnerRequest::new(config, "file_token", "new_user_id", "user");
 
         assert_eq!(request.token, "file_token");
         assert_eq!(request.to_user_id, "new_user_id");
@@ -121,9 +117,6 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            TransferOwnerResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(TransferOwnerResponse::data_format(), ResponseFormat::Data);
     }
 }

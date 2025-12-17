@@ -59,9 +59,10 @@ mod tests {
 
     #[tokio::test]
     async fn test_req_translator_with_different_token_types() {
-        let mut api_req = ApiRequest::<serde_json::Value>::post("https://open.feishu.cn/open-apis/test").body(
-            crate::api::RequestData::Json(serde_json::json!({"test": "body"})),
-        );
+        let mut api_req =
+            ApiRequest::<serde_json::Value>::post("https://open.feishu.cn/open-apis/test").body(
+                crate::api::RequestData::Json(serde_json::json!({"test": "body"})),
+            );
 
         let config = Config::builder()
             .app_id("test_app")
@@ -112,7 +113,9 @@ mod tests {
                 reqwest::Method::GET => ApiRequest::<()>::get("https://open.feishu.cn/test/path"),
                 reqwest::Method::POST => ApiRequest::<()>::post("https://open.feishu.cn/test/path"),
                 reqwest::Method::PUT => ApiRequest::<()>::put("https://open.feishu.cn/test/path"),
-                reqwest::Method::DELETE => ApiRequest::<()>::delete("https://open.feishu.cn/test/path"),
+                reqwest::Method::DELETE => {
+                    ApiRequest::<()>::delete("https://open.feishu.cn/test/path")
+                }
                 reqwest::Method::PATCH => ApiRequest::<()>::get("https://open.feishu.cn/test/path"), // 使用GET作为fallback
                 _ => ApiRequest::<()>::get("https://open.feishu.cn/test/path"),
             };
@@ -138,7 +141,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_req_translator_with_marketplace_app() {
-        let mut api_req = ApiRequest::<()>::get("https://open.feishu.cn/open-apis/marketplace/test");
+        let mut api_req =
+            ApiRequest::<()>::get("https://open.feishu.cn/open-apis/marketplace/test");
 
         let config = Config::builder()
             .app_id("marketplace_app")

@@ -1,7 +1,6 @@
 /// Lingo语言服务数据模型
 ///
 /// 定义Lingo相关的数据结构。
-
 use serde::{Deserialize, Serialize};
 
 /// 草稿数据结构

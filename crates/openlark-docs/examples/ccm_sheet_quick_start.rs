@@ -1,10 +1,9 @@
+use openlark_core::config::Config;
 /// CCM Sheet API 快速开始示例
-//!
+//
 /// 最简单的使用方式，帮助用户快速上手表格API
-
 use openlark_core::LarkClient;
 use openlark_docs::ccm::ccm_sheet::old::v2::CcmSheetOldV2;
-use openlark_core::config::Config;
 use tokio;
 
 use serde_json::json;
@@ -13,8 +12,8 @@ use serde_json::json;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 1. 初始化配置
     let config = Config::builder()
-        .app_id("your_app_id")              // 替换为你的应用ID
-        .app_secret("your_app_secret")      // 替换为你的应用密钥
+        .app_id("your_app_id") // 替换为你的应用ID
+        .app_secret("your_app_secret") // 替换为你的应用密钥
         .build()?;
 
     // 2. 创建客户端
@@ -58,7 +57,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 /// 读取数据示例
 async fn read_data(
     sheet_service: &CcmSheetOldV2,
-    spreadsheet_token: &str
+    spreadsheet_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let request = sheet_service.readsinglerange();
     let params = serde_json::json!({
@@ -86,7 +85,7 @@ async fn read_data(
 /// 写入数据示例
 async fn write_data(
     sheet_service: &CcmSheetOldV2,
-    spreadsheet_token: &str
+    spreadsheet_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let request = sheet_service.writesinglerange();
     let params = serde_json::json!({
@@ -116,7 +115,7 @@ async fn write_data(
 /// 获取表格信息示例
 async fn get_sheet_info(
     sheet_service: &CcmSheetOldV2,
-    spreadsheet_token: &str
+    spreadsheet_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let request = sheet_service.getspreadsheetmeta();
     let params = serde_json::json!({
@@ -134,8 +133,10 @@ async fn get_sheet_info(
         println!("   工作表数量: {}", meta.sheets.len());
 
         for sheet in meta.sheets {
-            println!("   工作表: {} (ID: {}, 类型: {})",
-                sheet.title, sheet.sheet_id, sheet.sheet_type);
+            println!(
+                "   工作表: {} (ID: {}, 类型: {})",
+                sheet.title, sheet.sheet_id, sheet.sheet_type
+            );
         }
     }
 

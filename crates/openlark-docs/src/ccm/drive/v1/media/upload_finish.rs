@@ -42,9 +42,7 @@ impl UploadFinishRequest {
     pub async fn execute(self) -> SDKResult<Response<UploadFinishResponse>> {
         let url = "/open-apis/drive/v1/medias/upload_finish";
 
-        let api_request: ApiRequest<UploadFinishResponse> =
-            ApiRequest::post(url)
-                .json_body(&self);
+        let api_request: ApiRequest<UploadFinishResponse> = ApiRequest::post(url).json_body(&self);
 
         Transport::request(api_request, &self.config, None).await
     }
@@ -94,11 +92,7 @@ mod tests {
             etag: "etag_media_123456".to_string(),
         };
 
-        let request = UploadFinishRequest::new(
-            config,
-            "txn_media_123456",
-            vec![part_info],
-        );
+        let request = UploadFinishRequest::new(config, "txn_media_123456", vec![part_info]);
 
         assert_eq!(request.transaction_id, "txn_media_123456");
         assert_eq!(request.parts.len(), 1);

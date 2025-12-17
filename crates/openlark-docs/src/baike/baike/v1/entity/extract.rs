@@ -32,9 +32,9 @@ pub struct ExtractEntityBuilder {
 impl ExtractEntityBuilder {
     pub fn new(text: impl ToString) -> Self {
         let mut builder = Self::default();
-        builder.api_req.req_type = "baike_entity_extract".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/baike/v1/entities/extract".to_string();
+        builder.api_req.method = openlark_core::api::HttpMethod::Post;
+        builder.api_req.url =
+            "https://open.feishu.cn/open-apis/baike/v1/entities/extract".to_string();
         builder.api_req.body = Some(ExtractEntityRequest {
             text: text.to_string(),
         });

@@ -2,7 +2,6 @@
 ///
 /// 根据 docToken 删除对应的 Docs 文档。
 /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -48,10 +47,7 @@ impl DeleteDocRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
-    pub async fn execute(
-        self,
-        params: DeleteDocParams,
-    ) -> SDKResult<DeleteDocResponse> {
+    pub async fn execute(self, params: DeleteDocParams) -> SDKResult<DeleteDocResponse> {
         // 验证必填字段
         validate_required!(params.doc_token, "文档token不能为空");
 
@@ -59,8 +55,7 @@ impl DeleteDocRequest {
         let api_endpoint = CcmDriveExplorerApiOld::FileDocs(params.doc_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<DeleteDocResponse> =
-            ApiRequest::delete(&api_endpoint.to_url());
+        let api_request: ApiRequest<DeleteDocResponse> = ApiRequest::delete(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

@@ -362,12 +362,13 @@ mod tests {
 
     #[tokio::test]
     async fn test_build_request_complex_scenario() {
-        let mut api_req = ApiRequest::<serde_json::Value>::post("https://open.feishu.cn/open-apis/complex/test")
-            .body(crate::api::RequestData::Text(
-                "{\"complex\": \"data\", \"nested\": {\"value\": 123}}".to_string(),
-            ))
-            .query("version", "v1")
-            .query("format", "json");
+        let mut api_req =
+            ApiRequest::<serde_json::Value>::post("https://open.feishu.cn/open-apis/complex/test")
+                .body(crate::api::RequestData::Text(
+                    "{\"complex\": \"data\", \"nested\": {\"value\": 123}}".to_string(),
+                ))
+                .query("version", "v1")
+                .query("format", "json");
 
         let config = create_test_config();
         let option = RequestOption {
@@ -413,7 +414,8 @@ mod tests {
     #[test]
     fn test_build_url_with_path_segments() {
         let config = create_test_config();
-        let api_req = ApiRequest::<()>::get("https://open.feishu.cn/open-apis/v1/users/123/messages");
+        let api_req =
+            ApiRequest::<()>::get("https://open.feishu.cn/open-apis/v1/users/123/messages");
 
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 

@@ -321,8 +321,23 @@ impl<R> ApiRequest<R> {
     {
         // 这个方法只是占位符，实际的发送逻辑在 Transport 中
         Err(crate::error::configuration_error(
-            "send() method not supported directly on ApiRequest. Use Transport::request() instead."
+            "send() method not supported directly on ApiRequest. Use Transport::request() instead.",
         ))
+    }
+}
+
+impl<R> Default for ApiRequest<R> {
+    fn default() -> Self {
+        Self {
+            method: HttpMethod::Get,
+            url: String::default(),
+            headers: HashMap::new(),
+            query: HashMap::new(),
+            body: None,
+            file: None,
+            timeout: None,
+            _phantom: std::marker::PhantomData,
+        }
     }
 }
 

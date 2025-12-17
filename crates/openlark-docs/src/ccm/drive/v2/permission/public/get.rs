@@ -48,6 +48,6 @@ pub async fn get_permission_public(
     let url = format!("/open-apis/drive/v2/permissions/{}/public", request.token);
     let mut api_request: ApiRequest<GetPermissionPublicResponse> = ApiRequest::get(&url);
     api_request = api_request.query_param("type", &request.r#type);
-    
+
     Transport::request(api_request, config, None).await
 }

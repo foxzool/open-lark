@@ -2,11 +2,11 @@
 //!
 //! doc: https://open.feishu.cn/document/server-docs/baike-v1/draft/update
 
+use super::super::entity::*;
 use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
 use openlark_core::constants::AccessTokenType;
 use openlark_core::req_option::RequestOption;
 use serde::{Deserialize, Serialize};
-use super::super::entity::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct UpdateDraftRequest {
@@ -34,8 +34,7 @@ pub struct UpdateDraftBuilder {
 impl UpdateDraftBuilder {
     pub fn new(draft_id: impl ToString, entity: Entity) -> Self {
         let mut builder = Self::default();
-        builder.api_req.req_type = "baike_draft_update".to_string();
-        builder.api_req.method = "PUT".to_string();
+        builder.api_req.method = openlark_core::api::HttpMethod::Put;
         builder.draft_id = draft_id.to_string();
         builder.api_req.url = format!(
             "https://open.feishu.cn/open-apis/baike/v1/drafts/{}",

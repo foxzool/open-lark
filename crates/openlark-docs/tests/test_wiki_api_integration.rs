@@ -1,5 +1,5 @@
 /// Wiki API 集成测试
-//!
+//
 /// 测试标准化后的Wiki API是否能正常工作
 
 #[cfg(feature = "wiki")]

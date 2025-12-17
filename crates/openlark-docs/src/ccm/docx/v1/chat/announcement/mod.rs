@@ -10,20 +10,16 @@
 ///
 /// 提供聊天公告的管理功能，包括公告获取、区块管理等。
 use openlark_core::{
-    error::validation_error,
-    api::Response,
-    config::Config,
-    req_option::RequestOption,
-    SDKResult,
+    api::Response, config::Config, error::validation_error, req_option::RequestOption, SDKResult,
 };
 
 // 重新导出所有模块类型
-pub use get::*;
 pub use block::*;
+pub use get::*;
 
 // 子模块
-mod get;
-mod block;  // 群公告区块管理
+mod block;
+mod get; // 群公告区块管理
 
 /// 聊天公告服务
 ///
@@ -71,12 +67,12 @@ impl AnnouncementService {
         option: Option<RequestOption>,
     ) -> SDKResult<AnnouncementData> {
         let response = get_chat_announcement(request, &self.config, option).await?;
-        let resp_data = response.data.ok_or_else(|| {
-            validation_error("response_data", "Response data is missing")
-        })?;
-        resp_data.data.ok_or_else(|| {
-            validation_error("data", "Announcement data is missing")
-        })
+        let resp_data = response
+            .data
+            .ok_or_else(|| validation_error("response_data", "Response data is missing"))?;
+        resp_data
+            .data
+            .ok_or_else(|| validation_error("data", "Announcement data is missing"))
     }
 }
 
@@ -99,13 +95,19 @@ mod tests {
     use openlark_core::trait_system::service::Service;
 
     fn create_test_service() -> AnnouncementService {
-        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         AnnouncementService::new(config)
     }
 
     #[test]
     fn test_announcement_service_creation() {
-        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         let service = AnnouncementService::new(config);
 
         assert_eq!(service.config().app_id(), "test_app_id");

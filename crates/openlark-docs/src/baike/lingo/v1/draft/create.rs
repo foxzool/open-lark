@@ -10,7 +10,7 @@ use openlark_core::{
 };
 
 use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
-use crate::lingo::v1::{LingoDraft, DraftStatus};
+use crate::lingo::v1::{DraftStatus, LingoDraft};
 
 #[derive(Debug, serde::Deserialize)]
 pub struct CreateLingoDraftResponse {

@@ -9,11 +9,7 @@
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::module_inception)]
 use openlark_core::{
-    error::validation_error,
-    api::Response,
-    config::Config,
-    req_option::RequestOption,
-    SDKResult,
+    api::Response, config::Config, error::validation_error, req_option::RequestOption, SDKResult,
 };
 
 // 重新导出所有模块类型
@@ -68,12 +64,12 @@ impl ContentService {
         option: Option<RequestOption>,
     ) -> SDKResult<serde_json::Value> {
         let response = get_docs_content(request, &self.config, option).await?;
-        let resp_data = response.data.ok_or_else(|| {
-            validation_error("response_data", "Response data is missing")
-        })?;
-        resp_data.data.ok_or_else(|| {
-            validation_error("data", "Docs content data is missing")
-        })
+        let resp_data = response
+            .data
+            .ok_or_else(|| validation_error("response_data", "Response data is missing"))?;
+        resp_data
+            .data
+            .ok_or_else(|| validation_error("data", "Docs content data is missing"))
     }
 }
 
@@ -96,13 +92,19 @@ mod tests {
     use openlark_core::trait_system::service::Service;
 
     fn create_test_service() -> ContentService {
-        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         ContentService::new(config)
     }
 
     #[test]
     fn test_content_service_creation() {
-        let config = openlark_core::config::Config::builder().app_id("test_app_id").app_secret("test_app_secret").build();
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
         let service = ContentService::new(config);
 
         assert_eq!(service.config().app_id(), "test_app_id");

@@ -44,9 +44,9 @@ pub struct HighlightEntityBuilder {
 impl HighlightEntityBuilder {
     pub fn new(text: impl ToString) -> Self {
         let mut builder = Self::default();
-        builder.api_req.req_type = "baike_entity_highlight".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/baike/v1/entities/highlight".to_string();
+        builder.api_req.method = openlark_core::api::HttpMethod::Post;
+        builder.api_req.url =
+            "https://open.feishu.cn/open-apis/baike/v1/entities/highlight".to_string();
         builder.api_req.body = Some(HighlightEntityRequest {
             text: text.to_string(),
         });

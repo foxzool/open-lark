@@ -1,20 +1,19 @@
+use crate::baike::models::*;
 /// 更新免审词条
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/baike-v1/entity/update
 ///
 /// 通过此接口更新已有的词条，无需经过词典管理员审核，直接写入词库。
 /// 因此，调用该接口时应当慎重操作。
-
 use openlark_core::{
-    error::SDKResult,
-    config::Config,
-    request_builder::UnifiedRequestBuilder,
-    constants::AccessTokenType,
     api::{ApiRequest, Response},
+    config::Config,
+    constants::AccessTokenType,
+    error::SDKResult,
     req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
 use serde::{Deserialize, Serialize};
-use crate::baike::models::*;
 
 /// 更新免审词条请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -106,15 +105,16 @@ impl<'a> UpdateEntityBuilder<'a> {
     /// 执行更新免审词条操作
     pub async fn execute(self) -> SDKResult<UpdateEntityResponse> {
         let path = format!("/open-apis/baike/v1/entities/{}", self.request.entity_id);
-        let mut api_request: ApiRequest<UpdateEntityResponse> = ApiRequest::put(&path)
-            .body(serde_json::to_value(&self.request)?);
+        let mut api_request: ApiRequest<UpdateEntityResponse> =
+            ApiRequest::put(&path).body(serde_json::to_value(&self.request)?);
 
         let http_request = UnifiedRequestBuilder::build(
             &mut api_request,
             AccessTokenType::App,
             self.config,
             &RequestOption::default(),
-        ).await?;
+        )
+        .await?;
 
         let response = http_request.send().await?;
         let resp: Response<_> = response.json().await?;

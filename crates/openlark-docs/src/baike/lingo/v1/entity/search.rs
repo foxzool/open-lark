@@ -24,19 +24,16 @@ impl ApiResponseTrait for LingoEntityResponse {
 }
 
 /// Lingo词条update
-pub async fn search(
-    config: &Config,
-) -> SDKResult<LingoEntity> {
+pub async fn search(config: &Config) -> SDKResult<LingoEntity> {
     let api_endpoint = LingoApiV1::EntityCreate;
-    
-    let api_request: ApiRequest<LingoEntityResponse> = 
-        ApiRequest::get(&api_endpoint.to_url());
-    
+
+    let api_request: ApiRequest<LingoEntityResponse> = ApiRequest::get(&api_endpoint.to_url());
+
     let response = Transport::request(api_request, config, None).await?;
     let resp: LingoEntityResponse = response.data.ok_or_else(|| {
         openlark_core::error::validation_error("response_data", "Response data is missing")
     })?;
-    
+
     resp.data.ok_or_else(|| {
         openlark_core::error::validation_error("entity_data", "Entity data is missing")
     })

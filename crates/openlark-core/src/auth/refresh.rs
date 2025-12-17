@@ -627,7 +627,7 @@ mod tests {
         // assert_eq!(refresh_config.refresh_config.refresh_ahead_seconds, 600);
 
         // 暂时跳过测试，因为Config结构的依赖问题
-        assert!(true); // 占位测试
+        // 占位测试
     }
 
     #[tokio::test]

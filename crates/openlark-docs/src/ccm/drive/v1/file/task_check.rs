@@ -2,7 +2,6 @@
 ///
 /// 查询异步任务状态，用于获取长时间运行任务的执行结果。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/task_check
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
@@ -27,7 +26,7 @@ pub struct CheckTaskStatusRequest {
 impl CheckTaskStatusRequest {
     /// 创建新的请求实例
     pub fn new(config: Config, task_id: impl Into<String>) -> Self {
-        Self { 
+        Self {
             config,
             task_id: task_id.into(),
             task_type: None,
@@ -101,8 +100,7 @@ mod tests {
     #[test]
     fn test_check_task_status_request_builder() {
         let config = Config::default();
-        let request = CheckTaskStatusRequest::new(config, "task_123")
-            .task_type("import");
+        let request = CheckTaskStatusRequest::new(config, "task_123").task_type("import");
 
         assert_eq!(request.task_id, "task_123");
         assert_eq!(request.task_type, Some("import".to_string()));

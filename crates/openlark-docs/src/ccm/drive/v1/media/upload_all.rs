@@ -2,7 +2,6 @@
 ///
 /// 向云空间指定目录下上传一个小文件。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/upload_all
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
@@ -10,8 +9,6 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
-
-
 
 /// 上传文件请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -40,7 +37,7 @@ impl UploadFileRequest {
         parent_type: impl Into<String>,
         parent_node: impl Into<String>,
         size: usize,
-        file: Vec<u8>
+        file: Vec<u8>,
     ) -> Self {
         Self {
             config,
@@ -60,7 +57,7 @@ impl UploadFileRequest {
 
     pub async fn execute(self) -> SDKResult<Response<UploadFileResponse>> {
         let api_endpoint = crate::common::api_endpoints::DriveApi::UploadFile;
-        
+
         #[derive(Serialize)]
         struct UploadMeta {
             file_name: String,
@@ -82,7 +79,7 @@ impl UploadFileRequest {
         let request = ApiRequest::<UploadFileResponse>::post(&api_endpoint.to_url())
             .json_body(&meta)
             .file_content(self.file);
-        
+
         Transport::request(request, &self.config, None).await
     }
 }
@@ -122,8 +119,15 @@ mod tests {
     #[test]
     fn test_upload_file_request_builder() {
         let config = Config::default();
-        let request = UploadFileRequest::new(config, "test.png", "explorer", "folder_token", 100, vec![0; 100])
-            .extra("extra_info");
+        let request = UploadFileRequest::new(
+            config,
+            "test.png",
+            "explorer",
+            "folder_token",
+            100,
+            vec![0; 100],
+        )
+        .extra("extra_info");
 
         assert_eq!(request.file_name, "test.png");
         assert_eq!(request.parent_type, "explorer");

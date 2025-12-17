@@ -78,14 +78,15 @@ impl ImportRequest {
 
     pub async fn send(self) -> SDKResult<ImportResp> {
         // multipart: body 提供 file_name + 其它字段，file_content 提供真实文件 bytes
-        let api_request: ApiRequest<ImportResp> = ApiRequest::post(&CcmSheetApiOld::Import.to_url())
-            .body(serde_json::to_value(&self.req)?)
-            .file_content(self.file);
+        let api_request: ApiRequest<ImportResp> =
+            ApiRequest::post(&CcmSheetApiOld::Import.to_url())
+                .body(serde_json::to_value(&self.req)?)
+                .file_content(self.file);
 
         let response: Response<ImportResp> =
             Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("response", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }

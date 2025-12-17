@@ -22,7 +22,9 @@ impl DocsApiService {
     }
 
     /// 搜索云文档
-    pub fn search_object(&self) -> crate::ccm::ccm_docs::old::default::docs_api::search::object::SearchObjectRequest {
+    pub fn search_object(
+        &self,
+    ) -> crate::ccm::ccm_docs::old::default::docs_api::search::object::SearchObjectRequest {
         crate::ccm::ccm_docs::old::default::docs_api::search::object::SearchObjectRequest::new(
             self.config.clone(),
         )

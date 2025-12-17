@@ -10,7 +10,6 @@ use openlark_core::{
 
 use serde::{Deserialize, Serialize};
 
-
 /// 表单字段问题
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FormFieldQuestion {
@@ -101,12 +100,9 @@ impl ListFormFieldQuestionRequest {
     pub fn new(app_token: String, table_id: String, form_id: String) -> Self {
         let endpoint = format!(
             "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/fields",
-            app_token,
-            table_id,
-            form_id
+            app_token, table_id, form_id
         );
-        let api_request = ApiRequest::get(endpoint)
-            .header("Content-Type", "application/json");
+        let api_request = ApiRequest::get(endpoint).header("Content-Type", "application/json");
 
         Self {
             api_request,
@@ -152,12 +148,12 @@ impl ListFormFieldQuestionRequest {
             openlark_core::http::Transport::request(request, config, None).await?;
 
         // 解析响应
-        let resp_data = response.data.ok_or_else(|| {
-            validation_error("response_data", "Response data is missing")
-        })?;
-        resp_data.data.ok_or_else(|| {
-            validation_error("data", "List form field question data is missing")
-        })
+        let resp_data = response
+            .data
+            .ok_or_else(|| validation_error("response_data", "Response data is missing"))?;
+        resp_data
+            .data
+            .ok_or_else(|| validation_error("data", "List form field question data is missing"))
     }
 }
 

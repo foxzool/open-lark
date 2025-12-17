@@ -36,7 +36,12 @@ pub struct PermittedRequest {
 }
 
 impl PermittedRequest {
-    pub fn new(config: Config, token: impl Into<String>, type_: impl Into<String>, perm: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        token: impl Into<String>,
+        type_: impl Into<String>,
+        perm: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             req: PermittedReq {
@@ -55,8 +60,8 @@ impl PermittedRequest {
                 .body(serde_json::to_value(&self.req)?);
         let response: Response<PermittedResponse> =
             Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("response", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }

@@ -2,7 +2,6 @@
 ///
 /// 根据 folderToken 获取该文件夹的文档清单，如 doc、sheet、file、bitable、folder。
 /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/get-folder-children
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

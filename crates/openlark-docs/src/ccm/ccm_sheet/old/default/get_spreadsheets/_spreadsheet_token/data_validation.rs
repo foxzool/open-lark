@@ -56,9 +56,10 @@ pub async fn data_validation(
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<Response<QueryDataValidationResponse>> {
     let api_endpoint = CcmSheetApiOld::DataValidation(spreadsheet_token);
-    let mut api_request: ApiRequest<QueryDataValidationResponse> = ApiRequest::get(&api_endpoint.to_url())
-        .query_opt("range", request.range)
-        .query_opt("dataValidationType", request.dataValidationType);
+    let mut api_request: ApiRequest<QueryDataValidationResponse> =
+        ApiRequest::get(&api_endpoint.to_url())
+            .query_opt("range", request.range)
+            .query_opt("dataValidationType", request.dataValidationType);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

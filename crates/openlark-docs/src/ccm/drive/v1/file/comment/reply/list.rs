@@ -1,3 +1,4 @@
+use super::models::ReplyInfo;
 /// 获取回复列表
 ///
 /// 该接口用于获取云文档中的某条评论的回复信息。
@@ -9,7 +10,6 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use super::models::ReplyInfo;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListCommentReplyRequest {
@@ -22,7 +22,11 @@ pub struct ListCommentReplyRequest {
 }
 
 impl ListCommentReplyRequest {
-    pub fn new(file_token: impl Into<String>, comment_id: impl Into<String>, file_type: impl Into<String>) -> Self {
+    pub fn new(
+        file_token: impl Into<String>,
+        comment_id: impl Into<String>,
+        file_type: impl Into<String>,
+    ) -> Self {
         Self {
             file_token: file_token.into(),
             comment_id: comment_id.into(),
@@ -56,9 +60,9 @@ pub async fn list_comment_reply(
         request.file_token, request.comment_id
     );
     let mut api_request: ApiRequest<ListCommentReplyResponse> = ApiRequest::get(&url);
-    
+
     api_request = api_request.query_param("file_type", &request.file_type);
-    
+
     if let Some(token) = request.page_token {
         api_request = api_request.query_param("page_token", &token);
     }

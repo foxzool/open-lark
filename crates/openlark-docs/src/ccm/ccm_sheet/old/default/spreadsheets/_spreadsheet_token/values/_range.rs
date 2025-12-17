@@ -48,9 +48,10 @@ pub async fn values_range(
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<Response<GetValuesRangeResponse>> {
     let api_endpoint = CcmSheetApiOld::ValuesRange(spreadsheet_token, range);
-    let mut api_request: ApiRequest<GetValuesRangeResponse> = ApiRequest::get(&api_endpoint.to_url())
-        .query_opt("valueRenderOption", request.valueRenderOption)
-        .query_opt("dateTimeRenderOption", request.dateTimeRenderOption);
+    let mut api_request: ApiRequest<GetValuesRangeResponse> =
+        ApiRequest::get(&api_endpoint.to_url())
+            .query_opt("valueRenderOption", request.valueRenderOption)
+            .query_opt("dateTimeRenderOption", request.dateTimeRenderOption);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

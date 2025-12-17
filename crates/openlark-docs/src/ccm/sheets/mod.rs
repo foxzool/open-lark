@@ -198,7 +198,6 @@ impl openlark_core::trait_system::Service for SheetsService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openlark_core::trait_system::Service;
 
     #[test]
     fn test_sheets_service_creation() {

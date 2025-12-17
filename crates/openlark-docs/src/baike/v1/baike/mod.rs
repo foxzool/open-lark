@@ -1,21 +1,19 @@
+pub mod classification;
 /// Baike知识库服务 v1 模块
 ///
 /// 提供企业知识库、Wiki管理功能
-
 pub mod draft;
 pub mod entity;
-pub mod classification;
 pub mod file;
 
 // 重新导出所有构建器
+pub use classification::ListClassificationBuilder;
 pub use draft::{CreateDraftBuilder, UpdateDraftBuilder};
 pub use entity::{
-    CreateEntityBuilder, UpdateEntityBuilder, GetEntityBuilder,
-    ListEntityBuilder, SearchEntityBuilder,
-    HighlightEntityBuilder, ExtractEntityBuilder
+    CreateEntityBuilder, ExtractEntityBuilder, GetEntityBuilder, HighlightEntityBuilder,
+    ListEntityBuilder, SearchEntityBuilder, UpdateEntityBuilder,
 };
-pub use classification::ListClassificationBuilder;
-pub use file::{UploadFileBuilder, DownloadFileBuilder};
+pub use file::{DownloadFileBuilder, UploadFileBuilder};
 
 /// Baike v1 服务
 pub struct BaikeV1Service<'a> {

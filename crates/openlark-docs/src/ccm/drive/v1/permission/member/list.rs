@@ -64,7 +64,8 @@ impl ListPermissionMembersRequest {
     pub async fn execute(self) -> SDKResult<Response<ListPermissionMembersResponse>> {
         let api_endpoint = DriveApi::ListPermissionMembers(self.token.clone());
 
-        let mut api_request = ApiRequest::<ListPermissionMembersResponse>::get(&api_endpoint.to_url());
+        let mut api_request =
+            ApiRequest::<ListPermissionMembersResponse>::get(&api_endpoint.to_url());
 
         if let Some(page_size) = self.page_size {
             api_request = api_request.query("page_size", &page_size.to_string());

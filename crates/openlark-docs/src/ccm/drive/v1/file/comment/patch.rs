@@ -10,7 +10,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 /// 解决/恢复评论请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchCommentRequest {
@@ -104,9 +103,11 @@ pub async fn patch_comment(
     });
 
     // 创建API请求
-    let mut api_request: ApiRequest<PatchCommentResponse> =
-        ApiRequest::patch(&format!("/open-apis/drive/v1/files/{}/comments/{}", request.file_token, request.comment_id))
-            .body(body);
+    let mut api_request: ApiRequest<PatchCommentResponse> = ApiRequest::patch(&format!(
+        "/open-apis/drive/v1/files/{}/comments/{}",
+        request.file_token, request.comment_id
+    ))
+    .body(body);
 
     // 如果有请求选项，应用它们
     if let Some(opt) = option {

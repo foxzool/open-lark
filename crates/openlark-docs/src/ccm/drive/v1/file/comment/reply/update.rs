@@ -10,7 +10,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 /// 更新回复请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateReplyRequest {
@@ -103,10 +102,11 @@ pub async fn update_reply(
     });
 
     // 创建API请求
-    let mut api_request: ApiRequest<UpdateReplyResponse> =
-        ApiRequest::put(&format!("/open-apis/drive/v1/files/{}/comments/{}/replies/{}",
-            request.file_token, request.comment_id, request.reply_id))
-            .body(body);
+    let mut api_request: ApiRequest<UpdateReplyResponse> = ApiRequest::put(&format!(
+        "/open-apis/drive/v1/files/{}/comments/{}/replies/{}",
+        request.file_token, request.comment_id, request.reply_id
+    ))
+    .body(body);
 
     // 如果有请求选项，应用它们
     if let Some(opt) = option {
@@ -123,7 +123,8 @@ mod tests {
 
     #[test]
     fn test_update_reply_request_builder() {
-        let request = UpdateReplyRequest::new("file_token", "comment_123", "reply_456", "更新的回复内容");
+        let request =
+            UpdateReplyRequest::new("file_token", "comment_123", "reply_456", "更新的回复内容");
 
         assert_eq!(request.file_token, "file_token");
         assert_eq!(request.comment_id, "comment_123");

@@ -55,7 +55,8 @@ pub async fn metainfo(
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<Response<GetSpreadsheetMetaResponse>> {
     let api_endpoint = CcmSheetApiOld::Metainfo(spreadsheet_token);
-    let mut api_request: ApiRequest<GetSpreadsheetMetaResponse> = ApiRequest::get(&api_endpoint.to_url());
+    let mut api_request: ApiRequest<GetSpreadsheetMetaResponse> =
+        ApiRequest::get(&api_endpoint.to_url());
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

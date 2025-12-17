@@ -31,7 +31,7 @@ impl UploadPartRequest {
         transaction_id: impl Into<String>,
         part_number: i32,
         part_data: impl Into<String>,
-        part_size: i32
+        part_size: i32,
     ) -> Self {
         Self {
             config,
@@ -45,9 +45,7 @@ impl UploadPartRequest {
     pub async fn execute(self) -> SDKResult<Response<UploadPartResponse>> {
         let url = "/open-apis/drive/v1/medias/upload_part";
 
-        let api_request: ApiRequest<UploadPartResponse> =
-            ApiRequest::post(url)
-                .json_body(&self);
+        let api_request: ApiRequest<UploadPartResponse> = ApiRequest::post(url).json_body(&self);
 
         Transport::request(api_request, &self.config, None).await
     }

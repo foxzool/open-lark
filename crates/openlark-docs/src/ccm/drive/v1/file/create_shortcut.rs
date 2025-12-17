@@ -2,7 +2,6 @@
 ///
 /// 创建文件快捷方式，用于访问云空间的文件。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create_shortcut
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
@@ -12,7 +11,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::DriveApi;
-
 
 /// 创建文件快捷方式响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -62,9 +60,9 @@ impl CreateFileShortcutRequest {
         name: impl Into<String>,
         shortcut_type: impl Into<String>,
         file_token: impl Into<String>,
-        parent_folder_token: impl Into<String>
+        parent_folder_token: impl Into<String>,
     ) -> Self {
-        Self { 
+        Self {
             config,
             name: name.into(),
             shortcut_type: shortcut_type.into(),
@@ -76,8 +74,8 @@ impl CreateFileShortcutRequest {
     /// 执行创建文件快捷方式操作
     pub async fn execute(self) -> SDKResult<Response<CreateFileShortcutResponse>> {
         let api_endpoint = DriveApi::CreateShortcut;
-        let request = ApiRequest::<CreateFileShortcutResponse>::post(&api_endpoint.to_url())
-            .json_body(&self);
+        let request =
+            ApiRequest::<CreateFileShortcutResponse>::post(&api_endpoint.to_url()).json_body(&self);
 
         Transport::request(request, &self.config, None).await
     }
@@ -95,7 +93,7 @@ mod tests {
             "快捷方式名称",
             "document",
             "file_token_123",
-            "folder_token_456"
+            "folder_token_456",
         );
 
         assert_eq!(request.name, "快捷方式名称");
@@ -106,6 +104,9 @@ mod tests {
 
     #[test]
     fn test_response_trait_implementation() {
-        assert_eq!(CreateFileShortcutResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            CreateFileShortcutResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

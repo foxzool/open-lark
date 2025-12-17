@@ -44,9 +44,9 @@ pub struct ListClassificationBuilder {
 impl ListClassificationBuilder {
     pub fn new() -> Self {
         let mut builder = Self::default();
-        builder.api_req.req_type = "baike_classification_list".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/baike/v1/classifications".to_string();
+        builder.api_req.method = openlark_core::api::HttpMethod::Get;
+        builder.api_req.url =
+            "https://open.feishu.cn/open-apis/baike/v1/classifications".to_string();
         builder.api_req.body = None;
         builder
     }

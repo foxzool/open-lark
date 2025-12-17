@@ -10,7 +10,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 /// 获取全文评论请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetCommentRequest {
@@ -26,10 +25,7 @@ impl GetCommentRequest {
     /// # 参数
     /// * `file_token` - 文件token
     /// * `comment_id` - 评论ID
-    pub fn new(
-        file_token: impl Into<String>,
-        comment_id: impl Into<String>,
-    ) -> Self {
+    pub fn new(file_token: impl Into<String>, comment_id: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
             comment_id: comment_id.into(),
@@ -96,8 +92,10 @@ pub async fn get_comment(
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<openlark_core::api::Response<GetCommentResponse>> {
     // 创建API请求
-    let mut api_request: ApiRequest<GetCommentResponse> =
-        ApiRequest::get(&format!("/open-apis/drive/v1/files/{}/comments/{}", request.file_token, request.comment_id));
+    let mut api_request: ApiRequest<GetCommentResponse> = ApiRequest::get(&format!(
+        "/open-apis/drive/v1/files/{}/comments/{}",
+        request.file_token, request.comment_id
+    ));
 
     // 如果有请求选项，应用它们
     if let Some(opt) = option {

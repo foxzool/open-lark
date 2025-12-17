@@ -2,7 +2,6 @@
 ///
 /// 在指定块的子块列表中，新创建一批子块，并放置到指定位置。如果操作成功，接口将返回新创建子块的富文本内容。
 /// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/create
-
 use crate::ccm::docx::common_types::BlockContent;
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{

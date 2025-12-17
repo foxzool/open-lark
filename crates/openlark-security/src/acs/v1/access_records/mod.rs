@@ -227,7 +227,7 @@ impl ListAccessRecordsBuilder {
                 Err(api_error(
                     response.status().as_u16(),
                     "/acs/v1/access_records",
-                    &format!(
+                    format!(
                         "HTTP {}: {}",
                         response.status(),
                         response.text().await.unwrap_or_default()
@@ -263,7 +263,7 @@ impl ListAccessRecordsBuilder {
                 Err(api_error(
                     response.status().as_u16(),
                     "/acs/v1/access_records",
-                    &format!(
+                    format!(
                         "HTTP {}: {}",
                         response.status(),
                         response.text().await.unwrap_or_default()

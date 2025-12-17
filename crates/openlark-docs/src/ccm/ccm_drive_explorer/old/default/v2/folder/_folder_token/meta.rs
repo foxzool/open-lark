@@ -2,7 +2,6 @@
 ///
 /// 根据 folderToken 获取该文件夹的元信息。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -82,10 +81,7 @@ impl GetFolderMetaRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta
-    pub async fn execute(
-        self,
-        params: GetFolderMetaParams,
-    ) -> SDKResult<GetFolderMetaResponse> {
+    pub async fn execute(self, params: GetFolderMetaParams) -> SDKResult<GetFolderMetaResponse> {
         // 验证必填字段
         validate_required!(params.folder_token, "文件夹token不能为空");
 

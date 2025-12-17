@@ -5,8 +5,8 @@
 // 核心类型重新导出（主要推荐 CoreError）
 pub use super::codes::ErrorCode;
 pub use super::context::ErrorContext;
-pub use super::core::{RecoveryStrategy, RetryPolicy};
 pub use super::core::{BuilderKind, ErrorBuilder, ErrorRecord};
+pub use super::core::{RecoveryStrategy, RetryPolicy};
 pub use super::kinds::ErrorKind;
 pub use super::traits::{ErrorSeverity, ErrorType};
 pub use super::{CoreError, ErrorId, LarkAPIError, SDKResult};
@@ -31,7 +31,6 @@ pub mod common_imports {
     pub use std::collections::HashMap;
     pub use std::time::Duration;
 }
-
 
 /// 创建网络错误的宏
 #[macro_export]
@@ -209,7 +208,12 @@ mod tests {
 
     #[test]
     fn test_modern_error_creation() {
-        let error = api_error(404, "/api/v1/users/123", "用户不存在", Some("req-123".to_string()));
+        let error = api_error(
+            404,
+            "/api/v1/users/123",
+            "用户不存在",
+            Some("req-123".to_string()),
+        );
 
         assert!(error.is_api_error());
         assert_eq!(error.severity(), ErrorSeverity::Warning);

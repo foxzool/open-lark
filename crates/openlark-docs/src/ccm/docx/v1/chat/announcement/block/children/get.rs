@@ -2,7 +2,6 @@
 ///
 /// 获取群公告中指定块的所有子块的富文本内容并分页返回。
 /// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/get-2
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

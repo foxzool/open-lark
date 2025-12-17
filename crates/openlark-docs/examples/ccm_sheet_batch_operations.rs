@@ -1,10 +1,9 @@
+use openlark_core::config::Config;
 /// CCM Sheet API 批量操作示例
-//!
+//
 /// 展示高效的批量数据处理方式，提升性能和用户体验
-
 // use openlark_core::{LarkClient};
 use openlark_docs::ccm::ccm_sheet::old::v2::CcmSheetOldV2;
-use openlark_core::config::Config;
 use tokio;
 
 use serde_json::json;
@@ -42,7 +41,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 /// 演示批量数据写入
 async fn demo_batch_write(
     sheet_service: &CcmSheetOldV2,
-    spreadsheet_token: &str
+    spreadsheet_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n🔄 === 批量数据写入演示 ===");
 
@@ -110,7 +109,7 @@ async fn demo_batch_write(
 /// 演示批量样式设置
 async fn demo_batch_style(
     sheet_service: &CcmSheetOldV2,
-    spreadsheet_token: &str
+    spreadsheet_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n🎨 === 批量样式设置演示 ===");
 
@@ -200,7 +199,7 @@ async fn demo_batch_style(
 /// 演示多工作表批量操作
 async fn demo_multi_sheet_operations(
     sheet_service: &CcmSheetOldV2,
-    spreadsheet_token: &str
+    spreadsheet_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📑 === 多工作表批量操作演示 ===");
 
@@ -237,7 +236,9 @@ async fn demo_multi_sheet_operations(
         ]
     });
 
-    let _ = operate_request.execute(serde_json::from_value(operate_params)?).await?;
+    let _ = operate_request
+        .execute(serde_json::from_value(operate_params)?)
+        .await?;
 
     // 2. 批量写入到多个工作表
     println!("\n2. 批量写入到多个工作表");
@@ -288,7 +289,7 @@ async fn demo_multi_sheet_operations(
                 ["11月", 720000, 470000],
                 ["12月", 750000, 480000]
             ]
-        })
+        }),
     ];
 
     let multi_sheet_params = serde_json::json!({
@@ -297,7 +298,9 @@ async fn demo_multi_sheet_operations(
     });
 
     let start = std::time::Instant::now();
-    let response = batch_request.execute(serde_json::from_value(multi_sheet_params)?).await?;
+    let response = batch_request
+        .execute(serde_json::from_value(multi_sheet_params)?)
+        .await?;
     let duration = start.elapsed();
 
     if let Some(result) = response.data {
@@ -313,7 +316,7 @@ async fn demo_multi_sheet_operations(
 /// 演示性能优化技巧
 async fn demo_performance_tips(
     sheet_service: &CcmSheetOldV2,
-    spreadsheet_token: &str
+    spreadsheet_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n⚡ === 性能优化技巧演示 ===");
 
@@ -334,18 +337,20 @@ async fn demo_performance_tips(
         serde_json::json!({
             "range": "Performance!C1:C1",
             "values": [["部门"]]
-        })
+        }),
     ];
 
     // 推荐：合并为一个连续范围
-    let optimized_data = vec![
-        serde_json::json!({
-            "range": "Performance!A1:C1",
-            "values": [["姓名", "年龄", "部门"]]
-        })
-    ];
+    let optimized_data = vec![serde_json::json!({
+        "range": "Performance!A1:C1",
+        "values": [["姓名", "年龄", "部门"]]
+    })];
 
-    println!("   📈 API调用减少: {} -> {}", scattered_data.len(), optimized_data.len());
+    println!(
+        "   📈 API调用减少: {} -> {}",
+        scattered_data.len(),
+        optimized_data.len()
+    );
 
     // 技巧2: 预计算和缓存
     println!("\n2. 技巧：预计算和缓存数据");
@@ -357,7 +362,16 @@ async fn demo_performance_tips(
             format!("产品{}", i),
             (i * 10).to_string(),
             (i * 100).to_string(),
-            format!("类别{}", if i % 3 == 0 { "A" } else if i % 3 == 1 { "B" } else { "C" })
+            format!(
+                "类别{}",
+                if i % 3 == 0 {
+                    "A"
+                } else if i % 3 == 1 {
+                    "B"
+                } else {
+                    "C"
+                }
+            ),
         ]);
     }
 
@@ -370,7 +384,9 @@ async fn demo_performance_tips(
     });
 
     let start = std::time::Instant::now();
-    let _ = batch_request.execute(serde_json::from_value(precomputed_params)?).await?;
+    let _ = batch_request
+        .execute(serde_json::from_value(precomputed_params)?)
+        .await?;
     let duration = start.elapsed();
 
     println!("   ⚡ 预计算数据写入耗时: {:?}", duration);
@@ -396,7 +412,9 @@ async fn demo_performance_tips(
     });
 
     let start = std::time::Instant::now();
-    let _ = read_request.execute(serde_json::from_value(read_params)?).await?;
+    let _ = read_request
+        .execute(serde_json::from_value(read_params)?)
+        .await?;
     let duration = start.elapsed();
 
     println!("   📊 批量读取耗时: {:?}", duration);

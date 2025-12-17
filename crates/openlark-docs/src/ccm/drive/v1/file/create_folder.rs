@@ -2,7 +2,6 @@
 ///
 /// 在用户云空间的指定文件夹中创建一个新的空文件夹。
 /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/create_folder
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
@@ -11,8 +10,8 @@ use openlark_core::{
 };
 
 // 导入序列化支持
-use serde::{Deserialize, Serialize};
 use crate::common::api_endpoints::DriveApi;
+use serde::{Deserialize, Serialize};
 
 /// 新建文件夹请求
 #[derive(Debug)]
@@ -55,7 +54,11 @@ impl ApiResponseTrait for CreateFolderResponse {
 }
 
 impl CreateFolderRequest {
-    pub fn new(config: Config, name: impl Into<String>, parent_folder_token: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        name: impl Into<String>,
+        parent_folder_token: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             name: name.into(),
@@ -66,11 +69,17 @@ impl CreateFolderRequest {
     pub async fn execute(self) -> SDKResult<Response<CreateFolderResponse>> {
         let api_endpoint = DriveApi::CreateFolder;
         let mut request = ApiRequest::<CreateFolderResponse>::post(&api_endpoint.to_url());
-        
+
         let mut body = serde_json::Map::new();
-        body.insert("name".to_string(), serde_json::Value::String(self.name.clone()));
-        body.insert("folder_token".to_string(), serde_json::Value::String(self.parent_folder_token.clone()));
-        
+        body.insert(
+            "name".to_string(),
+            serde_json::Value::String(self.name.clone()),
+        );
+        body.insert(
+            "folder_token".to_string(),
+            serde_json::Value::String(self.parent_folder_token.clone()),
+        );
+
         request = request.json_body(&body);
 
         Transport::request(request, &self.config, None).await

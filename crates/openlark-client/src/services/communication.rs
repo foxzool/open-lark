@@ -600,7 +600,6 @@ impl Default for RichTextContent {
 mod tests {
     use super::*;
 
-
     fn create_test_config() -> Config {
         Config {
             app_id: "test_app_id".to_string(),
@@ -928,7 +927,10 @@ mod tests {
         if let Err(error) = result {
             // 检查错误上下文
             assert!(error.context().has_context("operation"));
-            assert_eq!(error.context().get_context("operation"), Some("send_text_message"));
+            assert_eq!(
+                error.context().get_context("operation"),
+                Some("send_text_message")
+            );
 
             // 检查错误分析功能
             let report = crate::error::ErrorAnalyzer::new(&error).detailed_report();

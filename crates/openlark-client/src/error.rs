@@ -5,8 +5,7 @@
 
 use crate::registry::RegistryError;
 use openlark_core::error::{
-    ApiError, CoreError, ErrorCategory, ErrorCode, ErrorContext, ErrorTrait,
-    ErrorType,
+    ApiError, CoreError, ErrorCategory, ErrorCode, ErrorContext, ErrorTrait, ErrorType,
 };
 
 /// 🚨 OpenLark 客户端错误类型
@@ -450,8 +449,12 @@ pub fn with_operation_context<T>(
         // 直接解构 CoreError，修改上下文后重新构建，保留所有其他信息
         match err {
             CoreError::Network(mut net) => {
-                net.ctx.set_operation(op.clone()).set_component(comp.clone());
-                net.ctx.add_context("operation", op).add_context("component", comp);
+                net.ctx
+                    .set_operation(op.clone())
+                    .set_component(comp.clone());
+                net.ctx
+                    .add_context("operation", op)
+                    .add_context("component", comp);
                 CoreError::Network(net)
             }
             CoreError::Authentication {
@@ -460,12 +463,17 @@ pub fn with_operation_context<T>(
                 mut ctx,
             } => {
                 ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op).add_context("component", comp);
+                ctx.add_context("operation", op)
+                    .add_context("component", comp);
                 CoreError::Authentication { message, code, ctx }
             }
             CoreError::Api(mut api) => {
-                api.ctx.set_operation(op.clone()).set_component(comp.clone());
-                api.ctx.add_context("operation", op).add_context("component", comp);
+                api.ctx
+                    .set_operation(op.clone())
+                    .set_component(comp.clone());
+                api.ctx
+                    .add_context("operation", op)
+                    .add_context("component", comp);
                 CoreError::Api(api)
             }
             CoreError::Validation {
@@ -475,7 +483,8 @@ pub fn with_operation_context<T>(
                 mut ctx,
             } => {
                 ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op).add_context("component", comp);
+                ctx.add_context("operation", op)
+                    .add_context("component", comp);
                 CoreError::Validation {
                     field,
                     message,
@@ -489,7 +498,8 @@ pub fn with_operation_context<T>(
                 mut ctx,
             } => {
                 ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op).add_context("component", comp);
+                ctx.add_context("operation", op)
+                    .add_context("component", comp);
                 CoreError::Configuration { message, code, ctx }
             }
             CoreError::Serialization {
@@ -499,7 +509,8 @@ pub fn with_operation_context<T>(
                 mut ctx,
             } => {
                 ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op).add_context("component", comp);
+                ctx.add_context("operation", op)
+                    .add_context("component", comp);
                 CoreError::Serialization {
                     message,
                     source,
@@ -513,7 +524,8 @@ pub fn with_operation_context<T>(
                 mut ctx,
             } => {
                 ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op).add_context("component", comp);
+                ctx.add_context("operation", op)
+                    .add_context("component", comp);
                 CoreError::Business { code, message, ctx }
             }
             CoreError::Timeout {
@@ -522,7 +534,8 @@ pub fn with_operation_context<T>(
                 mut ctx,
             } => {
                 ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op.clone()).add_context("component", comp);
+                ctx.add_context("operation", op.clone())
+                    .add_context("component", comp);
                 CoreError::Timeout {
                     duration,
                     operation: Some(op), // 确保更新 Enum 字段
@@ -537,7 +550,8 @@ pub fn with_operation_context<T>(
                 mut ctx,
             } => {
                 ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op).add_context("component", comp);
+                ctx.add_context("operation", op)
+                    .add_context("component", comp);
                 CoreError::RateLimit {
                     limit,
                     window,
@@ -553,7 +567,8 @@ pub fn with_operation_context<T>(
                 mut ctx,
             } => {
                 ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op).add_context("component", comp);
+                ctx.add_context("operation", op)
+                    .add_context("component", comp);
                 CoreError::ServiceUnavailable {
                     service,
                     retry_after,
@@ -568,7 +583,8 @@ pub fn with_operation_context<T>(
                 mut ctx,
             } => {
                 ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op).add_context("component", comp);
+                ctx.add_context("operation", op)
+                    .add_context("component", comp);
                 CoreError::Internal {
                     code,
                     message,

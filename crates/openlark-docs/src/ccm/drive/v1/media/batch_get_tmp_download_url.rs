@@ -28,9 +28,9 @@ impl BatchGetTmpDownloadUrlRequest {
     /// * `config` - 配置
     /// * `file_tokens` - 文件token列表
     pub fn new(config: Config, file_tokens: Vec<String>) -> Self {
-        Self { 
+        Self {
             config,
-            file_tokens 
+            file_tokens,
         }
     }
 
@@ -80,10 +80,10 @@ mod tests {
     #[test]
     fn test_batch_get_tmp_download_url_request_builder() {
         let config = Config::default();
-        let request = BatchGetTmpDownloadUrlRequest::new(config, vec![
-            "file_token_1".to_string(),
-            "file_token_2".to_string(),
-        ]);
+        let request = BatchGetTmpDownloadUrlRequest::new(
+            config,
+            vec!["file_token_1".to_string(), "file_token_2".to_string()],
+        );
 
         assert_eq!(request.file_tokens.len(), 2);
         assert_eq!(request.file_tokens[0], "file_token_1");

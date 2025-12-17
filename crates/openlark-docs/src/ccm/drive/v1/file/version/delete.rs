@@ -27,10 +27,7 @@ impl DeleteFileVersionRequest {
     /// # 参数
     /// * `file_token` - 文件token
     /// * `version_id` - 版本ID
-    pub fn new(
-        file_token: impl Into<String>,
-        version_id: impl Into<String>,
-    ) -> Self {
+    pub fn new(file_token: impl Into<String>, version_id: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
             version_id: version_id.into(),
@@ -61,9 +58,9 @@ pub async fn delete_file_version(
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<openlark_core::api::Response<DeleteFileVersionResponse>> {
     // 创建API请求
-    let url = DriveApi::DeleteFileVersion(request.file_token.clone(), request.version_id.clone()).to_url();
-    let mut api_request: ApiRequest<DeleteFileVersionResponse> =
-        ApiRequest::delete(&url);
+    let url = DriveApi::DeleteFileVersion(request.file_token.clone(), request.version_id.clone())
+        .to_url();
+    let mut api_request: ApiRequest<DeleteFileVersionResponse> = ApiRequest::delete(&url);
 
     // 如果有请求选项，应用它们
     if let Some(opt) = option {
@@ -87,6 +84,9 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(DeleteFileVersionResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            DeleteFileVersionResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

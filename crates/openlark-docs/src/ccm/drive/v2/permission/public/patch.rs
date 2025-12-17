@@ -10,7 +10,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdatePermissionPublicRequest {
     pub token: String,
@@ -55,7 +54,7 @@ pub async fn update_permission_public(
 ) -> SDKResult<Response<UpdatePermissionPublicResponse>> {
     let url = format!("/open-apis/drive/v2/permissions/{}/public", request.token);
     let mut api_request: ApiRequest<UpdatePermissionPublicResponse> = ApiRequest::patch(&url);
-    
+
     let mut body = serde_json::Map::new();
     body.insert("type".to_string(), serde_json::json!(request.r#type));
     if let Some(v) = request.security_entity {
@@ -76,7 +75,7 @@ pub async fn update_permission_public(
     if let Some(v) = request.invite_external {
         body.insert("invite_external".to_string(), serde_json::json!(v));
     }
-    
+
     api_request = api_request.body(serde_json::Value::Object(body));
 
     Transport::request(api_request, config, None).await

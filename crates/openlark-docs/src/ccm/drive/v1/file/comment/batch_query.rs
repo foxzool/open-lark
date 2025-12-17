@@ -10,7 +10,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 /// 批量获取评论请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchQueryCommentRequest {
@@ -26,10 +25,7 @@ impl BatchQueryCommentRequest {
     /// # 参数
     /// * `file_token` - 文件token
     /// * `comment_ids` - 评论ID列表
-    pub fn new(
-        file_token: impl Into<String>,
-        comment_ids: Vec<String>,
-    ) -> Self {
+    pub fn new(file_token: impl Into<String>, comment_ids: Vec<String>) -> Self {
         Self {
             file_token: file_token.into(),
             comment_ids,
@@ -110,9 +106,11 @@ pub async fn batch_query_comment(
     });
 
     // 创建API请求
-    let mut api_request: ApiRequest<BatchQueryCommentResponse> =
-        ApiRequest::post(&format!("/open-apis/drive/v1/files/{}/comments/batch_query", request.file_token))
-            .body(body);
+    let mut api_request: ApiRequest<BatchQueryCommentResponse> = ApiRequest::post(&format!(
+        "/open-apis/drive/v1/files/{}/comments/batch_query",
+        request.file_token
+    ))
+    .body(body);
 
     // 如果有请求选项，应用它们
     if let Some(opt) = option {
@@ -138,6 +136,9 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(BatchQueryCommentResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            BatchQueryCommentResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }
