@@ -1,102 +1,88 @@
-//! 获取词条列表
-//!
-//! doc: https://open.feishu.cn/document/lingo-v1/entity/list
+/// 获取词条列表
+///
+/// 分页拉取词条列表数据，支持拉取租户内的全部词条。
+/// docPath: https://open.feishu.cn/document/lingo-v1/entity/list
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
-use serde::{Deserialize, Serialize};
+use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct ListEntityRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub repo_id: Option<String>,
+#[derive(Debug, serde::Deserialize)]
+pub struct ListEntityResponse {
+    pub data: Option<EntityListData>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct ListEntityResponse {
-    pub items: Vec<Entity>,
+#[derive(Debug, serde::Deserialize)]
+pub struct EntityListData {
+    pub items: Vec<EntityItem>,
     pub page_token: Option<String>,
     pub has_more: bool,
     pub total: i32,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Entity {
-    pub id: String,
-    pub main_keys: Vec<Term>,
-    pub aliases: Option<Vec<Term>>,
-    pub description: String,
-    pub creator: String,
-    pub create_time: i64,
-    pub updater: String,
-    pub update_time: i64,
+#[derive(Debug, serde::Deserialize)]
+pub struct EntityItem {
+    pub entity_id: String,
+    pub title: String,
+    pub content: String,
+    pub aliases: Vec<String>,
+    pub repo_id: String,
+    pub status: String,
+    pub create_time: String,
+    pub update_time: String,
+    pub tags: Option<Vec<String>>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Term {
-    pub key: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub display_status: Option<DisplayStatus>,
+#[derive(Debug, serde::Serialize)]
+pub struct ListEntityParams {
+    pub repo_id: Option<String>,
+    pub page_size: Option<i32>,
+    pub page_token: Option<String>,
+    pub filter: Option<ListFilter>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DisplayStatus {
-    pub allow_highlight: bool,
-    pub allow_search: bool,
+#[derive(Debug, serde::Serialize)]
+pub struct ListFilter {
+    pub classification_ids: Option<Vec<String>>,
+    pub tags: Option<Vec<String>>,
+    pub status: Option<String>,
 }
 
 impl ApiResponseTrait for ListEntityResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct ListEntityBuilder {
-    api_req: ApiRequest<ListEntityRequest>,
-}
+/// 获取词条列表
+///
+/// 分页拉取词条列表数据，支持拉取租户内的全部词条。
+/// docPath: https://open.feishu.cn/document/lingo-v1/entity/list
+pub async fn list_entity(
+    config: &Config,
+    params: Option<ListEntityParams>,
+) -> SDKResult<Vec<EntityItem>> {
+    // 使用enum+builder系统生成API端点
+    let api_endpoint = LingoApiV1::EntityList;
 
-impl ListEntityBuilder {
-    pub fn new() -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "lingo_entity_list".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.api_req.url = "https://open.feishu.cn/open-apis/lingo/v1/entities".to_string();
-        builder.api_req.body = None;
-        builder
-    }
+    // 创建API请求
+    let api_request: ApiRequest<ListEntityResponse> = if let Some(params) = params {
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取词条列表")?)
+    } else {
+        ApiRequest::get(&api_endpoint.to_url())
+    };
 
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_size={}", page_size));
-        } else {
-            self.api_req.url.push_str(&format!("?page_size={}", page_size));
-        }
-        self
-    }
+    // 发送请求并提取响应数据
+    let response = Transport::request(api_request, config, None).await?;
+    let resp: ListEntityResponse = response.data.ok_or_else(|| {
+        openlark_core::error::validation_error("response_data", "Response data is missing")
+    })?;
 
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req.url.push_str(&format!("&page_token={}", page_token.to_string()));
-        } else {
-            self.api_req.url.push_str(&format!("?page_token={}", page_token.to_string()));
-        }
-        self
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    resp.data.map(|data| data.items).ok_or_else(|| {
+        openlark_core::error::validation_error("entity_list_data", "Entity list data is missing")
+    })
 }

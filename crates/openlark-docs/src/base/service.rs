@@ -14,8 +14,8 @@ impl BaseService {
         &self.config
     }
 
-    // /// V2版本接口
-    // pub fn v2(&self) -> crate::base::base::v2::BaseV2Service {
-    //     crate::base::base::v2::BaseV2Service::new(self.config.clone())
-    // } // Disabled: base::v2 module is disabled
+    /// V2版本接口
+    pub fn v2(&self) -> crate::base::base::v2::BaseV2Service {
+        crate::base::base::v2::BaseV2Service::new(self.config.clone())
+    }
 }

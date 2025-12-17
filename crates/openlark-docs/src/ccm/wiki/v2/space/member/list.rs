@@ -1,146 +1,96 @@
 /// 获取知识空间成员列表
 ///
-/// 此接口用于获取知识空间成员列表，包含成员信息和权限角色。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space_member/list
-
+/// 获取知识空间的成员列表。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/list
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat, Response},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceMember;
+
 /// 获取知识空间成员列表请求
+pub struct ListWikiSpaceMembersRequest {
+    space_id: String,
+    config: Config,
+}
+
+/// 获取知识空间成员列表请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListSpaceMembersRequest {
-    /// 空间ID
-    pub space_id: String,
-    /// 页面大小，默认20
+pub struct ListWikiSpaceMembersParams {
+    /// 每页大小 (默认: 20, 最大: 100)
     pub page_size: Option<i32>,
-    /// 页码，从1开始
-    pub page_token: Option<String>,
-}
-
-/// 空间成员信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SpaceMemberItem {
-    /// 成员ID
-    pub member_id: String,
-    /// 成员类型：user(用户)、group(群组)、department(部门)
-    pub member_type: String,
-    /// 成员名称
-    pub name: Option<String>,
-    /// 成员邮箱
-    pub email: Option<String>,
-    /// 权限角色：admin(管理员)、editor(编辑者)、viewer(查看者)
-    pub perm: String,
-    /// 加入时间
-    pub join_time: Option<i64>,
-}
-
-/// 分页信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PageToken {
-    /// 是否还有下一页
-    pub has_more: Option<bool>,
-    /// 页码
+    /// 分页标记
     pub page_token: Option<String>,
 }
 
 /// 获取知识空间成员列表响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListSpaceMembersResponse {
+pub struct ListWikiSpaceMembersResponse {
     /// 成员列表
-    pub data: Option<ListSpaceMembersData>,
-}
-
-/// 成员列表数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListSpaceMembersData {
-    /// 成员列表
-    pub items: Option<Vec<SpaceMemberItem>>,
+    pub data: Option<Vec<WikiSpaceMember>>,
     /// 分页信息
-    pub page_token: Option<PageToken>,
+    pub page_token: Option<String>,
+    /// 是否有更多数据
+    pub has_more: Option<bool>,
 }
 
-impl ApiResponseTrait for ListSpaceMembersResponse {
+impl ApiResponseTrait for ListWikiSpaceMembersResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 获取知识空间成员列表
-///
-/// 此接口用于获取知识空间成员列表，包含成员信息和权限角色。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space_member/list
-pub async fn list_space_members(
-    request: ListSpaceMembersRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<ListSpaceMembersResponse>> {
-    // 构建请求体
-    let mut body = serde_json::json!({
-        "space_id": request.space_id
-    });
-
-    if let Some(page_size) = request.page_size {
-        body["page_size"] = serde_json::json!(page_size);
-    }
-    if let Some(page_token) = request.page_token {
-        body["page_token"] = serde_json::json!(page_token);
+impl ListWikiSpaceMembersRequest {
+    /// 创建获取知识空间成员列表请求
+    pub fn new(config: Config) -> Self {
+        Self {
+            space_id: String::new(),
+            config,
+        }
     }
 
-    // 创建API请求
-    let mut api_request: ApiRequest<ListSpaceMembersResponse> =
-        ApiRequest::get("/open-apis/wiki/v2/spaces/members")
-            .body(body);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+    /// 设置知识空间ID
+    pub fn space_id(mut self, space_id: impl Into<String>) -> Self {
+        self.space_id = space_id.into();
+        self
     }
 
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
+    /// 执行请求
+    ///
+    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/list
+    pub async fn execute(
+        self,
+        params: Option<ListWikiSpaceMembersParams>,
+    ) -> SDKResult<ListWikiSpaceMembersResponse> {
+        // 验证必填字段
+        validate_required!(self.space_id, "知识空间ID不能为空");
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+        // 使用新的enum+builder系统生成API端点
+        let api_endpoint = WikiApiV2::SpaceMemberList(self.space_id.clone());
 
-    #[test]
-    fn test_list_space_members_request() {
-        let request = ListSpaceMembersRequest {
-            space_id: "space_123".to_string(),
-            page_size: Some(20),
-            page_token: Some("token_456".to_string()),
-        };
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<ListWikiSpaceMembersResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
-        assert_eq!(request.space_id, "space_123");
-        assert_eq!(request.page_size, Some(20));
-        assert_eq!(request.page_token, Some("token_456"));
-    }
+        // 设置查询参数
+        if let Some(params) = params {
+            if let Some(page_size) = params.page_size {
+                api_request = api_request.query("page_size", &page_size.to_string());
+            }
+            if let Some(page_token) = params.page_token {
+                api_request = api_request.query("page_token", &page_token);
+            }
+        }
 
-    #[test]
-    fn test_space_member_item() {
-        let member = SpaceMemberItem {
-            member_id: "user_123".to_string(),
-            member_type: "user".to_string(),
-            name: Some("张三".to_string()),
-            email: Some("zhangsan@example.com".to_string()),
-            perm: "editor".to_string(),
-            join_time: Some(1609459200),
-        };
-
-        assert_eq!(member.member_id, "user_123");
-        assert_eq!(member.member_type, "user");
-        assert_eq!(member.name, Some("张三"));
-        assert_eq!(member.perm, "editor");
-    }
-
-    #[test]
-    fn test_response_trait() {
-        assert_eq!(ListSpaceMembersResponse::data_format(), ResponseFormat::Data);
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }

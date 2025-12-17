@@ -6,24 +6,16 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::module_inception)]
 
-/// 文档API模块
-///
-/// 提供文档相关的API功能，包括文档搜索和元数据获取等。
-use openlark_core::{
-    error::validation_error,
-    api::Response,
-    config::Config,
-    req_option::RequestOption,
-    SDKResult,
-};
+//! 文档（ccm_docs）API 模块
+//!
+//! 该模块对外保持 `crate::ccm::ccm_docs::docs::DocsService` 的入口，
+//! 实际 API 实现位于 `crate::ccm::ccm_docs::old::default::docs_api`。
+//!
+//! docPath:
+//! - `https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search`
+//! - `https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata`
 
-// 重新导出所有模块类型，解决名称冲突
-// pub use meta::{GetMetaRequest, GetMetaResponse, MetaData, UserInfo as MetaUserInfo}; // Generated: Module use not found
-// pub use search_object::{SearchObjectRequest, SearchObjectResponse, SearchObjectData, UserInfo as SearchUserInfo}; // Generated: Module use not found
-
-// 子模块
-// mod meta; // Generated: Module file not found
-// mod search_object; // Generated: Module file not found
+use openlark_core::config::Config;
 
 /// 文档API服务
 ///
@@ -43,35 +35,19 @@ impl DocsService {
         Self { config }
     }
 
-    // /// 搜索文档
-    // pub async fn search_object(
-    //     &self,
-    //     request: SearchObjectRequest,
-    //     option: Option<RequestOption>,
-    // ) -> SDKResult<SearchObjectData> {
-    //     let response = search_object::search_object(request, &self.config, option).await?;
-    //     let resp_data = response.data.ok_or_else(|| {
-    //         validation_error("response_data", "Response data is missing")
-    //     })?;
-    //     resp_data.data.ok_or_else(|| {
-    //         validation_error("data", "Search object data is missing")
-    //     })
-    // }
+    /// 搜索云文档
+    pub fn search_object(
+        &self,
+    ) -> crate::ccm::ccm_docs::old::default::docs_api::search::object::SearchObjectRequest {
+        crate::ccm::ccm_docs::old::default::docs_api::search::object::SearchObjectRequest::new(
+            self.config.clone(),
+        )
+    }
 
-    // /// 获取文档元数据
-    // pub async fn get_meta(
-    //     &self,
-    //     request: GetMetaRequest,
-    //     option: Option<RequestOption>,
-    // ) -> SDKResult<MetaData> {
-    //     let response = meta::get_meta(request, &self.config, option).await?;
-    //     let resp_data = response.data.ok_or_else(|| {
-    //         validation_error("response_data", "Response data is missing")
-    //     })?;
-    //     resp_data.data.ok_or_else(|| {
-    //         validation_error("data", "Meta data is missing")
-    //     })
-    // }
+    /// 获取元数据
+    pub fn meta(&self) -> crate::ccm::ccm_docs::old::default::docs_api::meta::GetMetaRequest {
+        crate::ccm::ccm_docs::old::default::docs_api::meta::GetMetaRequest::new(self.config.clone())
+    }
 }
 
 impl openlark_core::trait_system::service::Service for DocsService {

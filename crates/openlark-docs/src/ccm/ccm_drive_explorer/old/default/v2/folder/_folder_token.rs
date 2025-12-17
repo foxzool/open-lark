@@ -1,67 +1,68 @@
 //! 根据 folderToken 在该 folder 下创建文件夹。
 //!
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
 
 pub mod children;
 pub mod meta;
 pub use children::*;
 pub use meta::*;
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct CreateFolderRequest {
+pub struct CreateFolderReq {
     pub name: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct CreateFolderResponse {
-    #[serde(flatten)]
-    pub data: serde_json::Value,
+    pub data: Option<serde_json::Value>,
 }
 
 impl ApiResponseTrait for CreateFolderResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct CreateFolderBuilder {
-    api_req: ApiRequest<CreateFolderRequest>,
+/// 新建文件夹请求
+pub struct CreateFolderRequest {
+    config: Config,
     folder_token: String,
+    req: CreateFolderReq,
 }
 
-impl CreateFolderBuilder {
-    pub fn new(folder_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_drive_explorer_folder_create".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.folder_token = folder_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/drive/explorer/v2/folder/{}",
-            builder.folder_token
-        );
-        builder.api_req.body = Some(CreateFolderRequest::default());
-        builder
+impl CreateFolderRequest {
+    pub fn new(config: Config, folder_token: impl Into<String>) -> Self {
+        Self {
+            config,
+            folder_token: folder_token.into(),
+            req: CreateFolderReq::default(),
+        }
     }
 
     pub fn name(mut self, name: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.name = name.to_string();
-        }
+        self.req.name = name.to_string();
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> SDKResult<CreateFolderResponse> {
+        use crate::common::api_endpoints::CcmDriveExplorerApiOld;
+
+        let api_request: ApiRequest<CreateFolderResponse> =
+            ApiRequest::post(&CcmDriveExplorerApiOld::Folder(self.folder_token).to_url())
+                .body(serde_json::to_value(&self.req)?);
+
+        let response: Response<CreateFolderResponse> =
+            Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("response", "响应数据为空")
+        })
     }
 }

@@ -175,7 +175,7 @@ mod tests {
             name: "用户名".to_string(),
         };
 
-        let comment = CommentInfo {
+        let comment = ListCommentInfo {
             comment_id: "comment_id".to_string(),
             content: "评论内容".to_string(),
             comment_type: "text".to_string(),

@@ -133,12 +133,12 @@ mod tests {
 
     #[test]
     fn test_comment_info_structure() {
-        let creator = CreatorInfo {
+        let creator = CreateCreatorInfo {
             user_id: "user_id".to_string(),
             name: "用户名".to_string(),
         };
 
-        let comment = CommentInfo {
+        let comment = CreateCommentInfo {
             comment_id: "comment_id".to_string(),
             content: "评论内容".to_string(),
             comment_type: "text".to_string(),

@@ -1,88 +1,85 @@
-//! 该接口允许移动云空间文档至知识空间，并挂载在指定位置
-//!
-//! doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/move_docs_to_wiki
-
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+/// 移动云空间文档至知识空间
+///
+/// 该接口允许移动云空间文档至知识空间，并挂载在指定位置。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/move_docs_to_wiki
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+use crate::common::api_endpoints::WikiApiV2;
+
+/// 移动云空间文档至知识空间请求
 pub struct MoveDocsToWikiRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub parent_wiki_token: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub obj_type: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub obj_token: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub apply: Option<bool>,
+    space_id: String,
+    config: Config,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+/// 移动云空间文档至知识空间请求参数
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MoveDocsToWikiParams {
+    /// 源文档Token列表
+    pub obj_tokens: Vec<String>,
+    /// 目标父节点Token
+    pub parent_node_token: String,
+}
+
+/// 移动云空间文档至知识空间响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MoveDocsToWikiResponse {
-    pub task_id: String,
-    pub applied: bool,
+    /// 移动结果信息
+    pub data: Option<serde_json::Value>,
 }
 
 impl ApiResponseTrait for MoveDocsToWikiResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct MoveDocsToWikiBuilder {
-    api_req: ApiRequest<MoveDocsToWikiRequest>,
-}
-
-impl MoveDocsToWikiBuilder {
-    pub fn new(space_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "wiki_v2_space_node_move_docs_to_wiki".to_string();
-        builder.api_req.method = "POST".to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/wiki/v2/spaces/{}/nodes/move_docs_to_wiki",
-            space_id.to_string()
-        );
-        builder.api_req.body = Some(MoveDocsToWikiRequest::default());
-        builder
+impl MoveDocsToWikiRequest {
+    /// 创建移动云空间文档至知识空间请求
+    pub fn new(config: Config) -> Self {
+        Self {
+            space_id: String::new(),
+            config,
+        }
     }
 
-    pub fn parent_wiki_token(mut self, parent_wiki_token: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.parent_wiki_token = Some(parent_wiki_token.to_string());
-        }
+    /// 设置知识空间ID
+    pub fn space_id(mut self, space_id: impl Into<String>) -> Self {
+        self.space_id = space_id.into();
         self
     }
 
-    pub fn obj_type(mut self, obj_type: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.obj_type = Some(obj_type.to_string());
-        }
-        self
-    }
+    /// 执行请求
+    ///
+    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/move_docs_to_wiki
+    pub async fn execute(self, params: MoveDocsToWikiParams) -> SDKResult<MoveDocsToWikiResponse> {
+        // 验证必填字段
+        validate_required!(self.space_id, "知识空间ID不能为空");
+        validate_required!(params.obj_tokens, "源文档Token列表不能为空");
+        validate_required!(params.parent_node_token, "目标父节点Token不能为空");
 
-    pub fn obj_token(mut self, obj_token: impl ToString) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.obj_token = Some(obj_token.to_string());
-        }
-        self
-    }
+        // 使用新的enum+builder系统生成API端点
+        let api_endpoint = WikiApiV2::SpaceNodeMoveDocsToWiki(self.space_id.clone());
 
-    pub fn apply(mut self, apply: bool) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.apply = Some(apply);
-        }
-        self
-    }
+        // 创建API请求 - 使用类型安全的URL生成
+        let mut api_request: ApiRequest<MoveDocsToWikiResponse> =
+            ApiRequest::post(&api_endpoint.to_url());
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+        // 设置请求体
+        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
+            &params,
+        )?));
+
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }

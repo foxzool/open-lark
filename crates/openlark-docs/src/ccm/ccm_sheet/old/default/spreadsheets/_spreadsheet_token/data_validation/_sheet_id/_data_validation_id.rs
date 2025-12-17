@@ -1,75 +1,35 @@
-//! 该接口用于根据 sheetId 和 dataValidationId 查询单个下拉列表的详细信息。
+//! 更新下拉列表设置
 //!
-//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/query-single-datavalidation
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/update-datavalidation
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
-use serde::{Deserialize, Serialize};
+use openlark_core::{
+    api::{ApiRequest, Response},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct GetDataValidationRequest {}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct GetDataValidationResponse {
-    pub spreadsheetToken: String,
-    pub sheetId: String,
-    pub dataValidation: DataValidationDetail,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DataValidationDetail {
-    pub dataValidationId: i32,
-    pub dataValidationType: String,
-    pub conditionValues: Vec<String>,
-    pub options: Option<DataValidationOptions>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DataValidationOptions {
-    pub multipleValues: bool,
-    pub highlightValidData: bool,
-    pub colors: Vec<String>,
-}
-
-impl ApiResponseTrait for GetDataValidationResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
-    }
-}
-
-#[derive(Debug, Default)]
-pub struct GetDataValidationBuilder {
-    api_req: ApiRequest<GetDataValidationRequest>,
+/// 更新下拉列表设置（PUT）
+///
+/// 注意：该接口的请求体字段在不同历史版本中可能存在差异，先使用 JSON 透传。
+pub async fn update(
+    body: serde_json::Value,
     spreadsheet_token: String,
     sheet_id: String,
     data_validation_id: String,
-}
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<Response<serde_json::Value>> {
+    use crate::common::api_endpoints::CcmSheetApiOld;
 
-impl GetDataValidationBuilder {
-    pub fn new(spreadsheet_token: impl ToString, sheet_id: impl ToString, data_validation_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.req_type = "ccm_sheet_data_validation_get_single".to_string();
-        builder.api_req.method = "GET".to_string();
-        builder.spreadsheet_token = spreadsheet_token.to_string();
-        builder.sheet_id = sheet_id.to_string();
-        builder.data_validation_id = data_validation_id.to_string();
-        builder.api_req.body = None;
-        builder
+    let api_endpoint =
+        CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id, data_validation_id);
+    let mut api_request: ApiRequest<serde_json::Value> =
+        ApiRequest::put(&api_endpoint.to_url()).body(body);
+
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.url = format!(
-            "https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}/{}",
-            self.spreadsheet_token,
-            self.sheet_id,
-            self.data_validation_id
-        );
-        req.build(AccessTokenType::Tenant, config, option)
-    }
+    Transport::request(api_request, config, None).await
 }

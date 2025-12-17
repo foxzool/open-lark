@@ -3,7 +3,7 @@
 /// 根据 token 获取各类文件的元数据。
 /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -11,7 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetMetaRequest {
+pub struct GetMetaReq {
     pub request_docs: Vec<RequestDoc>,
 }
 
@@ -19,12 +19,6 @@ pub struct GetMetaRequest {
 pub struct RequestDoc {
     pub docs_token: String,
     pub docs_type: String,
-}
-
-impl GetMetaRequest {
-    pub fn new(request_docs: Vec<RequestDoc>) -> Self {
-        Self { request_docs }
-    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -49,12 +43,37 @@ impl ApiResponseTrait for GetMetaResponse {
     }
 }
 
-pub async fn get_meta(
-    request: GetMetaRequest,
-    config: &Config,
-) -> SDKResult<Response<GetMetaResponse>> {
-    let mut api_request: ApiRequest<GetMetaResponse> = ApiRequest::post("/open-apis/suite/docs-api/meta")
-        .body(serde_json::to_value(request)?);
-    
-    Transport::request(api_request, config, None).await
+/// 获取元数据请求（旧版）
+pub struct GetMetaRequest {
+    config: Config,
+    req: GetMetaReq,
+}
+
+impl GetMetaRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            req: GetMetaReq {
+                request_docs: Vec::new(),
+            },
+        }
+    }
+
+    /// 请求文档列表
+    pub fn request_docs(mut self, request_docs: Vec<RequestDoc>) -> Self {
+        self.req.request_docs = request_docs;
+        self
+    }
+
+    pub async fn send(self) -> SDKResult<GetMetaResponse> {
+        use crate::common::api_endpoints::CcmDocsApiOld;
+
+        let api_request: ApiRequest<GetMetaResponse> =
+            ApiRequest::post(&CcmDocsApiOld::Meta.to_url()).body(serde_json::to_value(&self.req)?);
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("response", "响应数据为空")
+        })
+    }
 }

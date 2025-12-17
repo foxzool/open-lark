@@ -1,89 +1,92 @@
 /// 删除知识空间成员
 ///
-/// 此接口用于从知识空间中删除成员。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space_member/delete
-
+/// 从知识空间删除成员。
+/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/delete
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat, Response},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::WikiApiV2;
+use crate::wiki::v2::models::WikiSpaceMember;
+
 /// 删除知识空间成员请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeleteSpaceMemberRequest {
-    /// 空间ID
-    pub space_id: String,
-    /// 成员类型：user(用户)、group(群组)、department(部门)
-    pub member_type: String,
-    /// 成员ID
-    pub member_id: String,
+pub struct DeleteWikiSpaceMemberRequest {
+    space_id: String,
+    member_id: String,
+    member_type: String,
+    config: Config,
 }
 
 /// 删除知识空间成员响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeleteSpaceMemberResponse {
-    /// 操作结果
-    pub data: Option<serde_json::Value>,
+pub struct DeleteWikiSpaceMemberResponse {
+    /// 删除的成员信息
+    pub data: Option<WikiSpaceMember>,
 }
 
-impl ApiResponseTrait for DeleteSpaceMemberResponse {
+impl ApiResponseTrait for DeleteWikiSpaceMemberResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 删除知识空间成员
-///
-/// 此接口用于从知识空间中删除成员。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space_member/delete
-pub async fn delete_space_member(
-    request: DeleteSpaceMemberRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<DeleteSpaceMemberResponse>> {
-    // 构建请求体
-    let body = serde_json::json!({
-        "space_id": request.space_id,
-        "member_type": request.member_type,
-        "member_id": request.member_id
-    });
-
-    // 创建API请求
-    let mut api_request: ApiRequest<DeleteSpaceMemberResponse> =
-        ApiRequest::delete("/open-apis/wiki/v2/spaces/members")
-            .body(body);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+impl DeleteWikiSpaceMemberRequest {
+    /// 创建删除知识空间成员请求
+    pub fn new(config: Config) -> Self {
+        Self {
+            space_id: String::new(),
+            member_id: String::new(),
+            member_type: String::new(),
+            config,
+        }
     }
 
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_delete_space_member_request() {
-        let request = DeleteSpaceMemberRequest {
-            space_id: "space_123".to_string(),
-            member_type: "user".to_string(),
-            member_id: "user_456".to_string(),
-        };
-
-        assert_eq!(request.space_id, "space_123");
-        assert_eq!(request.member_type, "user");
-        assert_eq!(request.member_id, "user_456");
+    /// 设置知识空间ID
+    pub fn space_id(mut self, space_id: impl Into<String>) -> Self {
+        self.space_id = space_id.into();
+        self
     }
 
-    #[test]
-    fn test_response_trait() {
-        assert_eq!(DeleteSpaceMemberResponse::data_format(), ResponseFormat::Data);
+    /// 设置成员ID
+    pub fn member_id(mut self, member_id: impl Into<String>) -> Self {
+        self.member_id = member_id.into();
+        self
+    }
+
+    /// 设置成员类型
+    pub fn member_type(mut self, member_type: impl Into<String>) -> Self {
+        self.member_type = member_type.into();
+        self
+    }
+
+    /// 执行请求
+    ///
+    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/delete
+    pub async fn execute(self) -> SDKResult<DeleteWikiSpaceMemberResponse> {
+        // 验证必填字段
+        validate_required!(self.space_id, "知识空间ID不能为空");
+        validate_required!(self.member_id, "成员ID不能为空");
+        validate_required!(self.member_type, "成员类型不能为空");
+
+        // 使用新的enum+builder系统生成API端点
+        let api_endpoint = WikiApiV2::SpaceMemberDelete(
+            self.space_id.clone(),
+            self.member_id.clone(),
+            self.member_type.clone(),
+        );
+
+        // 创建API请求 - 使用类型安全的URL生成
+        let api_request: ApiRequest<DeleteWikiSpaceMemberResponse> =
+            ApiRequest::delete(&api_endpoint.to_url());
+
+        // 发送请求
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
