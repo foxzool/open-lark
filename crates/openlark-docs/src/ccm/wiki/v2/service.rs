@@ -19,7 +19,6 @@
 ///
 /// // 获取知识空间列表
 /// let params = ListWikiSpacesParams {
-///     site_type: Some(1),
 ///     page_size: Some(20),
 ///     page_token: None,
 /// };
@@ -31,9 +30,6 @@
 /// let create_params = CreateWikiSpaceParams {
 ///     name: "我的知识库".to_string(),
 ///     description: Some("团队知识管理空间".to_string()),
-///     space_type: Some("private".to_string()),
-///     icon: Some("📚".to_string()),
-///     domain: None,
 /// };
 ///
 /// let new_space = wiki.create_space()

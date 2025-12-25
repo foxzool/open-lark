@@ -1,7 +1,8 @@
 /// 复制知识空间节点
 ///
 /// 复制知识空间中的节点。
-/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/copy
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/copy
+/// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/copy
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,7 +11,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::WikiApiV2;
+use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 use crate::wiki::v2::models::WikiSpaceNode;
 
 /// 复制知识空间节点请求
@@ -23,8 +24,10 @@ pub struct CopyWikiSpaceNodeRequest {
 /// 复制知识空间节点请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CopyWikiSpaceNodeParams {
-    /// 目标父节点Token
-    pub parent_node_token: String,
+    /// 目标父节点 token
+    pub target_parent_token: String,
+    /// 目标知识空间 ID
+    pub target_space_id: String,
     /// 复制后的节点标题（可选，不传则使用原标题）
     pub title: Option<String>,
 }
@@ -33,7 +36,7 @@ pub struct CopyWikiSpaceNodeParams {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CopyWikiSpaceNodeResponse {
     /// 复制后的节点信息
-    pub data: Option<WikiSpaceNode>,
+    pub node: Option<WikiSpaceNode>,
 }
 
 impl ApiResponseTrait for CopyWikiSpaceNodeResponse {
@@ -66,7 +69,8 @@ impl CopyWikiSpaceNodeRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/copy
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/copy
+    /// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/copy
     pub async fn execute(
         self,
         params: CopyWikiSpaceNodeParams,
@@ -74,24 +78,18 @@ impl CopyWikiSpaceNodeRequest {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
         validate_required!(self.node_token, "节点Token不能为空");
-        validate_required!(params.parent_node_token, "目标父节点Token不能为空");
+        validate_required!(params.target_parent_token, "目标父节点token不能为空");
+        validate_required!(params.target_space_id, "目标知识空间ID不能为空");
 
         // 使用新的enum+builder系统生成API端点
         let api_endpoint = WikiApiV2::SpaceNodeCopy(self.space_id.clone(), self.node_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<CopyWikiSpaceNodeResponse> =
-            ApiRequest::post(&api_endpoint.to_url());
-
-        // 设置请求体
-        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
-            &params,
-        )?));
+        let api_request: ApiRequest<CopyWikiSpaceNodeResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建知识空间节点副本")?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "创建知识空间节点副本")
     }
 }

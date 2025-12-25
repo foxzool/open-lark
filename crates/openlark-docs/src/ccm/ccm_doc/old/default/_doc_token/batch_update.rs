@@ -1,26 +1,26 @@
 //! 编辑旧版文档内容
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
+//! docPath: /document/ukTMukTMukTM/uYDM2YjL2AjN24iNwYjN
+//! doc: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct BatchUpdateDocRequest {
-    pub revision: i32,
-    pub requests: Vec<DocRequest>,
-}
+use crate::common::api_utils::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DocRequest {
-    /// 文档编辑请求结构较复杂，允许按文档示例透传 JSON。
-    #[serde(flatten)]
-    pub request: serde_json::Value,
+pub struct BatchUpdateDocRequest {
+    /// 文档版本号（>=0）
+    #[serde(rename = "Revision")]
+    pub revision: i32,
+    /// OperationRequest 序列化后的 JSON 字符串数组
+    #[serde(rename = "Requests")]
+    pub requests: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -53,21 +53,32 @@ impl BatchUpdateDocRequestBuilder {
         self
     }
 
-    pub fn requests(mut self, requests: Vec<DocRequest>) -> Self {
+    /// 设置 OperationRequest 序列化后的 JSON 字符串数组
+    pub fn requests(mut self, requests: Vec<String>) -> Self {
         self.req.requests = requests;
         self
     }
 
+    /// 追加单个 OperationRequest（以 JSON 形式传入，内部会序列化为字符串）
+    pub fn push_request_json(mut self, request: serde_json::Value) -> Self {
+        self.req.requests.push(request.to_string());
+        self
+    }
+
     pub async fn send(self) -> SDKResult<BatchUpdateDocResponse> {
+        if self.req.revision < 0 {
+            return Err(openlark_core::error::validation_error(
+                "revision",
+                "revision 必须 >= 0",
+            ));
+        }
+
         use crate::common::api_endpoints::CcmDocApiOld;
 
         let api_request: ApiRequest<BatchUpdateDocResponse> =
             ApiRequest::post(&CcmDocApiOld::BatchUpdate(self.doc_token).to_url())
-                .body(serde_json::to_value(&self.req)?);
-        let response: Response<BatchUpdateDocResponse> =
-            Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+                .body(serialize_params(&self.req, "编辑旧版文档内容")?);
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "编辑旧版文档内容")
     }
 }

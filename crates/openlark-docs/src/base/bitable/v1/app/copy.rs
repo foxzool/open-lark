@@ -1,6 +1,6 @@
 /// Bitable 复制多维表格API
 ///
-/// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/copy
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/copy
 /// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/copy
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -29,18 +29,11 @@ pub struct CopyAppRequest {
     config: Config,
 }
 
-/// 复制多维表格数据
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct CopyAppData {
-    /// 应用信息
-    pub app: App,
-}
-
 /// 复制多维表格响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CopyAppResponse {
-    /// 复制多维表格数据
-    pub data: CopyAppData,
+    /// 应用信息
+    pub app: App,
 }
 
 impl ApiResponseTrait for CopyAppResponse {

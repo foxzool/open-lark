@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,16 +7,23 @@ use openlark_core::{
 /// 批量获取文件元数据
 ///
 /// 批量获取文件元数据信息。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/meta/batch_query
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/meta/batch_query
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/batch_query
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 批量查询元数据请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct BatchQueryMetaRequest {
+    /// 用户 ID 类型（默认 open_id）
+    #[serde(skip)]
+    pub user_id_type: Option<String>,
     /// 文件token列表
     pub request_docs: Vec<RequestDoc>,
+    /// 是否获取文件的访问链接
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub with_url: Option<bool>,
 }
 
 /// 请求文档
@@ -30,17 +37,66 @@ pub struct RequestDoc {
 
 impl BatchQueryMetaRequest {
     pub fn new(request_docs: Vec<RequestDoc>) -> Self {
-        Self { request_docs }
+        Self {
+            user_id_type: None,
+            request_docs,
+            with_url: None,
+        }
+    }
+
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    pub fn with_url(mut self, with_url: bool) -> Self {
+        self.with_url = Some(with_url);
+        self
     }
 }
 
-/// 批量查询元数据响应
+/// 文件元数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Meta {
+    /// 文件的 token
+    pub doc_token: String,
+    /// 文件的类型
+    pub doc_type: String,
+    /// 标题
+    pub title: String,
+    /// 文件的所有者（ID 类型由 user_id_type 决定）
+    pub owner_id: String,
+    /// 创建时间。UNIX 时间戳，单位为秒
+    pub create_time: String,
+    /// 最后编辑者（ID 类型由 user_id_type 决定）
+    pub latest_modify_user: String,
+    /// 最后编辑时间。UNIX 时间戳，单位为秒
+    pub latest_modify_time: String,
+    /// 文档访问链接
+    pub url: String,
+    /// 文档密级标签名称（需对应权限才返回）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sec_label_name: Option<String>,
+}
+
+/// 获取元数据失败信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FailedMeta {
+    /// 获取元数据失败的文档 token
+    pub token: String,
+    /// 获取元数据失败的错误码
+    pub code: i32,
+}
+
+/// 批量查询元数据响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchQueryMetaResponse {
     /// 文档元数据列表
-    pub metas: Option<Vec<serde_json::Value>>,
-    /// 失败列表
-    pub failed_list: Option<Vec<serde_json::Value>>,
+    #[serde(default)]
+    pub metas: Vec<Meta>,
+    /// 获取元数据失败的文档 token 列表
+    #[serde(default)]
+    pub failed_list: Vec<FailedMeta>,
 }
 
 impl ApiResponseTrait for BatchQueryMetaResponse {
@@ -54,15 +110,42 @@ pub async fn batch_query(
     request: BatchQueryMetaRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<BatchQueryMetaResponse>> {
+) -> SDKResult<BatchQueryMetaResponse> {
+    if request.request_docs.is_empty() || request.request_docs.len() > 200 {
+        return Err(openlark_core::error::validation_error(
+            "request_docs",
+            "request_docs 数量必须在 1~200 之间",
+        ));
+    }
+
+    for doc in &request.request_docs {
+        if doc.doc_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "request_docs.doc_token",
+                "doc_token 不能为空",
+            ));
+        }
+        if doc.doc_type.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "request_docs.doc_type",
+                "doc_type 不能为空",
+            ));
+        }
+    }
+
     let api_endpoint = DriveApi::BatchQueryMetas;
 
     let mut api_request: ApiRequest<BatchQueryMetaResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serde_json::json!(&request));
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&request, "获取文件元数据")?);
+
+    if let Some(user_id_type) = &request.user_id_type {
+        api_request = api_request.query("user_id_type", user_id_type);
+    }
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "获取文件元数据")
 }

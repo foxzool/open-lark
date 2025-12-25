@@ -1,5 +1,6 @@
 /// Bitable 更新多维表格API
 ///
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/update
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/update
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -30,7 +31,7 @@ pub struct UpdateAppRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpdateAppResponse {
     /// 应用信息
-    pub data: App,
+    pub app: App,
 }
 
 impl ApiResponseTrait for UpdateAppResponse {

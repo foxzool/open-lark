@@ -31,11 +31,11 @@
 pub mod models;
 
 /// API服务实现
-pub mod services;
+pub mod service;
 
 // 重新导出主要类型
 pub use models::*;
-pub use services::{
+pub use service::{
     CheckMemberPermissionRequestBuilder, GetPublicPermissionRequestBuilder, PermissionService,
     TransferOwnerRequestBuilder,
 };

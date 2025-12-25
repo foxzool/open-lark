@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, Response},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,8 +7,8 @@ use openlark_core::{
 /// 下载文件
 ///
 /// 使用该接口可以下载在云空间目录下的文件（不含飞书文档/电子表格/多维表格等在线文档）。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/download
-use serde::{Deserialize, Serialize};
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/download
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/download/download
 
 use crate::common::api_endpoints::DriveApi;
 
@@ -38,9 +38,19 @@ impl DownloadFileRequest {
         self
     }
 
-    pub async fn execute(self) -> SDKResult<Response<DownloadFileResponse>> {
+    /// 执行下载请求
+    ///
+    /// 成功时返回文件二进制内容（`Response<Vec<u8>>`）。
+    pub async fn execute(self) -> SDKResult<Response<Vec<u8>>> {
+        if self.file_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "file_token",
+                "file_token 不能为空",
+            ));
+        }
+
         let api_endpoint = DriveApi::DownloadFile(self.file_token.clone());
-        let mut request = ApiRequest::<DownloadFileResponse>::get(&api_endpoint.to_url());
+        let mut request = ApiRequest::<Vec<u8>>::get(&api_endpoint.to_url());
 
         if let Some(r) = self.range {
             request = request.header("Range", &r);
@@ -50,44 +60,12 @@ impl DownloadFileRequest {
     }
 }
 
-/// 下载文件响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DownloadFileResponse {
-    /// 文件内容（二进制数据由核心层处理）
-    // Note: The actual binary data handling depends on openlark-core Transport implementation
-    // For now assuming the standard response structure handles body via `data` or similar.
-    // If binary data is returned directly as body, `ResponseFormat::Binary` should be used.
-    // However, the original code used ResponseFormat::Data.
-    // Based on `minutes` implementation, we typically wrap response.
-    // For download, we might receive binary stream.
-    // Let's stick to Data format for metadata if any, or check core implementation.
-    // Actually, for file download, we usually want binary content.
-    // "下载文件" doc says it returns file stream.
-    // Start with Data for metadata compliance, or better, maybe Empty if raw body is handled elsewhere.
-    #[serde(skip)]
-    pub data: Option<Vec<u8>>,
-}
-
-impl ApiResponseTrait for DownloadFileResponse {
-    fn data_format() -> ResponseFormat {
-        // If the API returns raw bytes, it should be Binary.
-        // But the original code was Data. Let's assume Data for now to avoid breaking changes if Core handles it implicitly.
-        // Actually, looking at older implementation, it was Data.
-        ResponseFormat::Data
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_response_trait() {
-        assert_eq!(DownloadFileResponse::data_format(), ResponseFormat::Data);
-    }
-
-    #[tokio::test]
-    async fn test_download_file_request_builder() {
+    fn test_download_file_request_builder() {
         let config = Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
@@ -99,7 +77,5 @@ mod tests {
 
         assert_eq!(request.file_token, file_token);
         assert_eq!(request.range, Some(range_header.to_string()));
-        // We can't directly assert the config field without making it public,
-        // but its presence and usage in `new` and `execute` implies correct handling.
     }
 }

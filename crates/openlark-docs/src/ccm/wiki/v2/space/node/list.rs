@@ -1,7 +1,8 @@
 /// 获取知识空间节点列表
 ///
 /// 获取知识空间的节点列表。
-/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/list
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/list
+/// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,7 +11,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::WikiApiV2;
+use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 use crate::wiki::v2::models::WikiSpaceNode;
 
 /// 获取知识空间节点列表请求
@@ -24,9 +25,7 @@ pub struct ListWikiSpaceNodesRequest {
 pub struct ListWikiSpaceNodesParams {
     /// 父节点Token (可选，获取指定节点的子节点)
     pub parent_node_token: Option<String>,
-    /// 节点类型过滤 (可选)
-    pub node_type: Option<String>,
-    /// 每页大小 (默认: 20, 最大: 100)
+    /// 每页大小
     pub page_size: Option<i32>,
     /// 分页标记
     pub page_token: Option<String>,
@@ -36,8 +35,9 @@ pub struct ListWikiSpaceNodesParams {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListWikiSpaceNodesResponse {
     /// 节点列表
-    pub data: Option<Vec<WikiSpaceNode>>,
-    /// 分页信息
+    #[serde(default)]
+    pub items: Vec<WikiSpaceNode>,
+    /// 下一页 token
     pub page_token: Option<String>,
     /// 是否有更多数据
     pub has_more: Option<bool>,
@@ -66,7 +66,8 @@ impl ListWikiSpaceNodesRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/list
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/list
+    /// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/list
     pub async fn execute(
         self,
         params: Option<ListWikiSpaceNodesParams>,
@@ -86,9 +87,6 @@ impl ListWikiSpaceNodesRequest {
             if let Some(parent_node_token) = params.parent_node_token {
                 api_request = api_request.query("parent_node_token", &parent_node_token);
             }
-            if let Some(node_type) = params.node_type {
-                api_request = api_request.query("node_type", &node_type);
-            }
             if let Some(page_size) = params.page_size {
                 api_request = api_request.query("page_size", &page_size.to_string());
             }
@@ -99,8 +97,6 @@ impl ListWikiSpaceNodesRequest {
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "获取知识空间节点列表")
     }
 }

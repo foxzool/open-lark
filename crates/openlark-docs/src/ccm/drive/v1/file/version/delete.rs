@@ -1,74 +1,95 @@
-/// 删除文件版本
-///
-/// 删除指定文件的特定版本。
-/// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/versions/:version_id
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
+
+/// 删除文档版本
+///
+/// 删除指定源文档的指定版本。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/delete
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-version/delete
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
-/// 删除文件版本请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// 删除文档版本请求
+#[derive(Debug, Clone)]
 pub struct DeleteFileVersionRequest {
-    /// 文件token
+    config: Config,
+    /// 源文档 token
     pub file_token: String,
-    /// 版本ID
+    /// 版本文档的版本标识
     pub version_id: String,
+    /// 源文档类型（docx/sheet）
+    pub obj_type: String,
+    /// 用户 ID 类型
+    pub user_id_type: Option<String>,
 }
 
 impl DeleteFileVersionRequest {
-    /// 创建删除文件版本请求
-    ///
-    /// # 参数
-    /// * `file_token` - 文件token
-    /// * `version_id` - 版本ID
-    pub fn new(file_token: impl Into<String>, version_id: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        file_token: impl Into<String>,
+        version_id: impl Into<String>,
+        obj_type: impl Into<String>,
+    ) -> Self {
         Self {
+            config,
             file_token: file_token.into(),
             version_id: version_id.into(),
+            obj_type: obj_type.into(),
+            user_id_type: None,
         }
+    }
+
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<DeleteFileVersionResponse> {
+        if self.file_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "file_token",
+                "file_token 不能为空",
+            ));
+        }
+        if self.version_id.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "version_id",
+                "version_id 不能为空",
+            ));
+        }
+        match self.obj_type.as_str() {
+            "docx" | "sheet" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "obj_type",
+                    "obj_type 仅支持 docx/sheet",
+                ))
+            }
+        }
+
+        let api_endpoint = DriveApi::DeleteFileVersion(self.file_token, self.version_id);
+        let request = ApiRequest::<DeleteFileVersionResponse>::delete(&api_endpoint.to_url())
+            .query("obj_type", self.obj_type)
+            .query_opt("user_id_type", self.user_id_type);
+
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "删除文档版本")
     }
 }
 
-/// 删除文件版本响应
+/// 删除文档版本响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeleteFileVersionResponse {
-    /// 是否成功
-    pub data: Option<serde_json::Value>,
-}
+pub struct DeleteFileVersionResponse {}
 
 impl ApiResponseTrait for DeleteFileVersionResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
-}
-
-/// 删除文件版本
-///
-/// 删除指定文件的特定版本。
-/// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/versions/:version_id
-pub async fn delete_file_version(
-    request: DeleteFileVersionRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<DeleteFileVersionResponse>> {
-    // 创建API请求
-    let url = DriveApi::DeleteFileVersion(request.file_token.clone(), request.version_id.clone())
-        .to_url();
-    let mut api_request: ApiRequest<DeleteFileVersionResponse> = ApiRequest::delete(&url);
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    // 发送请求
-    Transport::request(api_request, config, None).await
 }
 
 #[cfg(test)]
@@ -77,16 +98,18 @@ mod tests {
 
     #[test]
     fn test_delete_file_version_request_builder() {
-        let request = DeleteFileVersionRequest::new("file_token", "version_id");
+        let config = Config::default();
+        let request =
+            DeleteFileVersionRequest::new(config, "file_token", "fnJfyX", "docx").user_id_type("open_id");
+
         assert_eq!(request.file_token, "file_token");
-        assert_eq!(request.version_id, "version_id");
+        assert_eq!(request.version_id, "fnJfyX");
+        assert_eq!(request.obj_type, "docx");
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            DeleteFileVersionResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(DeleteFileVersionResponse::data_format(), ResponseFormat::Data);
     }
 }

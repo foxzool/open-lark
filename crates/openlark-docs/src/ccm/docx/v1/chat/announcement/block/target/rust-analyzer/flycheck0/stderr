@@ -1,0 +1,2858 @@
+   0.108104167s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="open_lark"}: cargo::core::compiler::fingerprint: fingerprint error for open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark)/Check { test: false }/TargetInner { ..: lib_target("open_lark", ["lib"], "/Users/zool/RustroverProjects/open-lark/src/lib.rs", Edition2021) }
+   0.108131875s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="open_lark"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/open-lark-9167c8ee997d69dc/lib-open_lark`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.112040917s  INFO prepare_target{force=false package_id=chrono v0.4.42 target="chrono"}: cargo::core::compiler::fingerprint: fingerprint error for chrono v0.4.42/Check { test: false }/TargetInner { ..: lib_target("chrono", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/chrono-0.4.42/src/lib.rs", Edition2021) }
+   0.112052667s  INFO prepare_target{force=false package_id=chrono v0.4.42 target="chrono"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/chrono-98e3b2a7480e1fd6/lib-chrono`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.112731084s  INFO prepare_target{force=false package_id=clap v4.5.53 target="clap"}: cargo::core::compiler::fingerprint: fingerprint error for clap v4.5.53/Check { test: false }/TargetInner { benched: false, ..: lib_target("clap", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/clap-4.5.53/src/lib.rs", Edition2021) }
+   0.112736417s  INFO prepare_target{force=false package_id=clap v4.5.53 target="clap"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/clap-c2e73fc58cdc5f0f/lib-clap`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.114102917s  INFO prepare_target{force=false package_id=lark-websocket-protobuf v0.1.1 target="lark_websocket_protobuf"}: cargo::core::compiler::fingerprint: fingerprint error for lark-websocket-protobuf v0.1.1/Check { test: false }/TargetInner { ..: lib_target("lark_websocket_protobuf", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/lark-websocket-protobuf-0.1.1/src/lib.rs", Edition2021) }
+   0.114108667s  INFO prepare_target{force=false package_id=lark-websocket-protobuf v0.1.1 target="lark_websocket_protobuf"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/lark-websocket-protobuf-a35c6f74ee3c40e1/lib-lark_websocket_protobuf`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.115837542s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="openlark_auth"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_auth", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-auth/src/lib.rs", Edition2021) }
+   0.115843959s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="openlark_auth"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-auth-0ca261358d051a50/lib-openlark_auth`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.116445417s  INFO prepare_target{force=false package_id=openlark-core v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-core) target="openlark_core"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-core v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-core)/Check { test: false }/TargetInner { name_inferred: true, doctest: false, ..: lib_target("openlark_core", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-core/src/lib.rs", Edition2021) }
+   0.116450417s  INFO prepare_target{force=false package_id=openlark-core v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-core) target="openlark_core"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-core-81251348641cd050/lib-openlark_core`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.117455250s  INFO prepare_target{force=false package_id=quick_cache v0.6.18 target="quick_cache"}: cargo::core::compiler::fingerprint: fingerprint error for quick_cache v0.6.18/Check { test: false }/TargetInner { ..: lib_target("quick_cache", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/quick_cache-0.6.18/src/lib.rs", Edition2021) }
+   0.117463709s  INFO prepare_target{force=false package_id=quick_cache v0.6.18 target="quick_cache"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/quick_cache-e3d7b1831773409e/lib-quick_cache`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.117708375s  INFO prepare_target{force=false package_id=ahash v0.8.12 target="ahash"}: cargo::core::compiler::fingerprint: fingerprint error for ahash v0.8.12/Check { test: false }/TargetInner { ..: lib_target("ahash", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/ahash-0.8.12/src/lib.rs", Edition2018) }
+   0.117712875s  INFO prepare_target{force=false package_id=ahash v0.8.12 target="ahash"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/ahash-0d1f113e412504db/lib-ahash`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.118693417s  INFO prepare_target{force=false package_id=rand v0.8.5 target="rand"}: cargo::core::compiler::fingerprint: fingerprint error for rand v0.8.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/rand-0.8.5/src/lib.rs", Edition2018) }
+   0.118697292s  INFO prepare_target{force=false package_id=rand v0.8.5 target="rand"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/rand-bb032b5d768212aa/lib-rand`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.118854125s  INFO prepare_target{force=false package_id=rand_chacha v0.3.1 target="rand_chacha"}: cargo::core::compiler::fingerprint: fingerprint error for rand_chacha v0.3.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand_chacha", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/rand_chacha-0.3.1/src/lib.rs", Edition2018) }
+   0.118857125s  INFO prepare_target{force=false package_id=rand_chacha v0.3.1 target="rand_chacha"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/rand_chacha-b1d2bc0ad3411d66/lib-rand_chacha`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.118992459s  INFO prepare_target{force=false package_id=ppv-lite86 v0.2.21 target="ppv_lite86"}: cargo::core::compiler::fingerprint: fingerprint error for ppv-lite86 v0.2.21/Check { test: false }/TargetInner { ..: lib_target("ppv_lite86", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/ppv-lite86-0.2.21/src/lib.rs", Edition2021) }
+   0.118995584s  INFO prepare_target{force=false package_id=ppv-lite86 v0.2.21 target="ppv_lite86"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/ppv-lite86-090f491e399c6268/lib-ppv_lite86`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: std::rt::lang_start_internal
+  22: _main
+   0.119285542s  INFO prepare_target{force=false package_id=reqwest v0.12.28 target="reqwest"}: cargo::core::compiler::fingerprint: fingerprint error for reqwest v0.12.28/Check { test: false }/TargetInner { ..: lib_target("reqwest", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/reqwest-0.12.28/src/lib.rs", Edition2021) }
+   0.119288500s  INFO prepare_target{force=false package_id=reqwest v0.12.28 target="reqwest"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/reqwest-a7eb5f8389af9fc2/lib-reqwest`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.119961417s  INFO prepare_target{force=false package_id=hyper v1.8.1 target="hyper"}: cargo::core::compiler::fingerprint: fingerprint error for hyper v1.8.1/Check { test: false }/TargetInner { ..: lib_target("hyper", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-1.8.1/src/lib.rs", Edition2021) }
+   0.119964250s  INFO prepare_target{force=false package_id=hyper v1.8.1 target="hyper"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/hyper-39dd4a8bd7571b3d/lib-hyper`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.120353375s  INFO prepare_target{force=false package_id=h2 v0.4.12 target="h2"}: cargo::core::compiler::fingerprint: fingerprint error for h2 v0.4.12/Check { test: false }/TargetInner { ..: lib_target("h2", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/h2-0.4.12/src/lib.rs", Edition2021) }
+   0.120356417s  INFO prepare_target{force=false package_id=h2 v0.4.12 target="h2"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/h2-67ae47e089464a12/lib-h2`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: std::rt::lang_start_internal
+  22: _main
+   0.120713875s  INFO prepare_target{force=false package_id=tokio v1.48.0 target="tokio"}: cargo::core::compiler::fingerprint: fingerprint error for tokio v1.48.0/Check { test: false }/TargetInner { ..: lib_target("tokio", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/tokio-1.48.0/src/lib.rs", Edition2021) }
+   0.120717500s  INFO prepare_target{force=false package_id=tokio v1.48.0 target="tokio"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/tokio-8d29f09aab5532bd/lib-tokio`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: std::rt::lang_start_internal
+  23: _main
+   0.121114500s  INFO prepare_target{force=false package_id=tokio-util v0.7.17 target="tokio_util"}: cargo::core::compiler::fingerprint: fingerprint error for tokio-util v0.7.17/Check { test: false }/TargetInner { ..: lib_target("tokio_util", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/tokio-util-0.7.17/src/lib.rs", Edition2021) }
+   0.121118250s  INFO prepare_target{force=false package_id=tokio-util v0.7.17 target="tokio_util"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/tokio-util-b80cdf3e122c7f51/lib-tokio_util`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: std::rt::lang_start_internal
+  23: _main
+   0.121601292s  INFO prepare_target{force=false package_id=hyper-rustls v0.27.7 target="hyper_rustls"}: cargo::core::compiler::fingerprint: fingerprint error for hyper-rustls v0.27.7/Check { test: false }/TargetInner { ..: lib_target("hyper_rustls", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-rustls-0.27.7/src/lib.rs", Edition2021) }
+   0.121605375s  INFO prepare_target{force=false package_id=hyper-rustls v0.27.7 target="hyper_rustls"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/hyper-rustls-bf0b4396d39150fc/lib-hyper_rustls`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.121882459s  INFO prepare_target{force=false package_id=hyper-util v0.1.19 target="hyper_util"}: cargo::core::compiler::fingerprint: fingerprint error for hyper-util v0.1.19/Check { test: false }/TargetInner { ..: lib_target("hyper_util", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/hyper-util-0.1.19/src/lib.rs", Edition2021) }
+   0.121885334s  INFO prepare_target{force=false package_id=hyper-util v0.1.19 target="hyper_util"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/hyper-util-90afcb562b9278e7/lib-hyper_util`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: std::rt::lang_start_internal
+  22: _main
+   0.122350000s  INFO prepare_target{force=false package_id=rustls v0.23.35 target="rustls"}: cargo::core::compiler::fingerprint: fingerprint error for rustls v0.23.35/Check { test: false }/TargetInner { ..: lib_target("rustls", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/rustls-0.23.35/src/lib.rs", Edition2021) }
+   0.122353167s  INFO prepare_target{force=false package_id=rustls v0.23.35 target="rustls"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/rustls-75770ceba0970f77/lib-rustls`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: std::rt::lang_start_internal
+  22: _main
+   0.122656542s  INFO prepare_target{force=false package_id=ring v0.17.14 target="ring"}: cargo::core::compiler::fingerprint: fingerprint error for ring v0.17.14/Check { test: false }/TargetInner { ..: lib_target("ring", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/ring-0.17.14/src/lib.rs", Edition2021) }
+   0.122662292s  INFO prepare_target{force=false package_id=ring v0.17.14 target="ring"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/ring-ca3e59f115116668/lib-ring`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: std::rt::lang_start_internal
+  23: _main
+   0.123343750s  INFO prepare_target{force=false package_id=rustls-webpki v0.103.8 target="webpki"}: cargo::core::compiler::fingerprint: fingerprint error for rustls-webpki v0.103.8/Check { test: false }/TargetInner { ..: lib_target("webpki", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/rustls-webpki-0.103.8/src/lib.rs", Edition2021) }
+   0.123349084s  INFO prepare_target{force=false package_id=rustls-webpki v0.103.8 target="webpki"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/rustls-webpki-823e82f491a665b5/lib-webpki`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: std::rt::lang_start_internal
+  23: _main
+   0.123504500s  INFO prepare_target{force=false package_id=tokio-rustls v0.26.4 target="tokio_rustls"}: cargo::core::compiler::fingerprint: fingerprint error for tokio-rustls v0.26.4/Check { test: false }/TargetInner { ..: lib_target("tokio_rustls", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/tokio-rustls-0.26.4/src/lib.rs", Edition2021) }
+   0.123509125s  INFO prepare_target{force=false package_id=tokio-rustls v0.26.4 target="tokio_rustls"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/tokio-rustls-f2d14d1a2d021ad0/lib-tokio_rustls`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: std::rt::lang_start_internal
+  22: _main
+   0.124147125s  INFO prepare_target{force=false package_id=tower v0.5.2 target="tower"}: cargo::core::compiler::fingerprint: fingerprint error for tower v0.5.2/Check { test: false }/TargetInner { ..: lib_target("tower", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/tower-0.5.2/src/lib.rs", Edition2018) }
+   0.124151750s  INFO prepare_target{force=false package_id=tower v0.5.2 target="tower"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/tower-7b1daa868befc7ab/lib-tower`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.124410417s  INFO prepare_target{force=false package_id=tower-http v0.6.8 target="tower_http"}: cargo::core::compiler::fingerprint: fingerprint error for tower-http v0.6.8/Check { test: false }/TargetInner { ..: lib_target("tower_http", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/tower-http-0.6.8/src/lib.rs", Edition2018) }
+   0.124414625s  INFO prepare_target{force=false package_id=tower-http v0.6.8 target="tower_http"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/tower-http-475a3695c868d1d8/lib-tower_http`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.124757042s  INFO prepare_target{force=false package_id=url v2.5.7 target="url"}: cargo::core::compiler::fingerprint: fingerprint error for url v2.5.7/Check { test: false }/TargetInner { ..: lib_target("url", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/url-2.5.7/src/lib.rs", Edition2018) }
+   0.124760750s  INFO prepare_target{force=false package_id=url v2.5.7 target="url"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/url-fde25c920bd6e701/lib-url`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.124938625s  INFO prepare_target{force=false package_id=idna v1.1.0 target="idna"}: cargo::core::compiler::fingerprint: fingerprint error for idna v1.1.0/Check { test: false }/TargetInner { doctest: false, ..: lib_target("idna", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/idna-1.1.0/src/lib.rs", Edition2018) }
+   0.124943167s  INFO prepare_target{force=false package_id=idna v1.1.0 target="idna"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/idna-477a8c7c481e8233/lib-idna`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  13: cargo::ops::cargo_compile::compile_ws
+  14: cargo::ops::cargo_compile::compile_with_exec
+  15: cargo::ops::cargo_compile::compile
+  16: cargo::commands::check::exec
+  17: <cargo::cli::Exec>::exec
+  18: cargo::main
+  19: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  20: std::rt::lang_start::<()>::{closure#0}
+  21: std::rt::lang_start_internal
+  22: _main
+   0.125093584s  INFO prepare_target{force=false package_id=idna_adapter v1.2.1 target="idna_adapter"}: cargo::core::compiler::fingerprint: fingerprint error for idna_adapter v1.2.1/Check { test: false }/TargetInner { ..: lib_target("idna_adapter", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/idna_adapter-1.2.1/src/lib.rs", Edition2021) }
+   0.125097542s  INFO prepare_target{force=false package_id=idna_adapter v1.2.1 target="idna_adapter"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/idna_adapter-c6f73b47f7f6bf78/lib-idna_adapter`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  14: cargo::ops::cargo_compile::compile_ws
+  15: cargo::ops::cargo_compile::compile_with_exec
+  16: cargo::ops::cargo_compile::compile
+  17: cargo::commands::check::exec
+  18: <cargo::cli::Exec>::exec
+  19: cargo::main
+  20: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  21: std::rt::lang_start::<()>::{closure#0}
+  22: std::rt::lang_start_internal
+  23: _main
+   0.125226750s  INFO prepare_target{force=false package_id=icu_normalizer v2.1.1 target="icu_normalizer"}: cargo::core::compiler::fingerprint: fingerprint error for icu_normalizer v2.1.1/Check { test: false }/TargetInner { ..: lib_target("icu_normalizer", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/icu_normalizer-2.1.1/src/lib.rs", Edition2021) }
+   0.125231125s  INFO prepare_target{force=false package_id=icu_normalizer v2.1.1 target="icu_normalizer"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/icu_normalizer-c481bd0bdd5b231f/lib-icu_normalizer`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: cargo::core::compiler::compile
+  14: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  15: cargo::ops::cargo_compile::compile_ws
+  16: cargo::ops::cargo_compile::compile_with_exec
+  17: cargo::ops::cargo_compile::compile
+  18: cargo::commands::check::exec
+  19: <cargo::cli::Exec>::exec
+  20: cargo::main
+  21: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  22: std::rt::lang_start::<()>::{closure#0}
+  23: std::rt::lang_start_internal
+  24: _main
+   0.125431334s  INFO prepare_target{force=false package_id=icu_collections v2.1.1 target="icu_collections"}: cargo::core::compiler::fingerprint: fingerprint error for icu_collections v2.1.1/Check { test: false }/TargetInner { benched: false, ..: lib_target("icu_collections", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/icu_collections-2.1.1/src/lib.rs", Edition2021) }
+   0.125435750s  INFO prepare_target{force=false package_id=icu_collections v2.1.1 target="icu_collections"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/icu_collections-94d2f4d1f9d1307e/lib-icu_collections`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: cargo::core::compiler::compile
+  14: cargo::core::compiler::compile
+  15: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  16: cargo::ops::cargo_compile::compile_ws
+  17: cargo::ops::cargo_compile::compile_with_exec
+  18: cargo::ops::cargo_compile::compile
+  19: cargo::commands::check::exec
+  20: <cargo::cli::Exec>::exec
+  21: cargo::main
+  22: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  23: std::rt::lang_start::<()>::{closure#0}
+  24: std::rt::lang_start_internal
+  25: _main
+   0.126032917s  INFO prepare_target{force=false package_id=icu_provider v2.1.1 target="icu_provider"}: cargo::core::compiler::fingerprint: fingerprint error for icu_provider v2.1.1/Check { test: false }/TargetInner { benched: false, ..: lib_target("icu_provider", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/icu_provider-2.1.1/src/lib.rs", Edition2021) }
+   0.126036875s  INFO prepare_target{force=false package_id=icu_provider v2.1.1 target="icu_provider"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/icu_provider-ddb0017b677eb2a8/lib-icu_provider`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: cargo::core::compiler::compile
+  14: cargo::core::compiler::compile
+  15: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  16: cargo::ops::cargo_compile::compile_ws
+  17: cargo::ops::cargo_compile::compile_with_exec
+  18: cargo::ops::cargo_compile::compile
+  19: cargo::commands::check::exec
+  20: <cargo::cli::Exec>::exec
+  21: cargo::main
+  22: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  23: std::rt::lang_start::<()>::{closure#0}
+  24: std::rt::lang_start_internal
+  25: _main
+   0.126274500s  INFO prepare_target{force=false package_id=icu_locale_core v2.1.1 target="icu_locale_core"}: cargo::core::compiler::fingerprint: fingerprint error for icu_locale_core v2.1.1/Check { test: false }/TargetInner { benched: false, ..: lib_target("icu_locale_core", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/icu_locale_core-2.1.1/src/lib.rs", Edition2021) }
+   0.126278750s  INFO prepare_target{force=false package_id=icu_locale_core v2.1.1 target="icu_locale_core"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/icu_locale_core-94dfb018377c2431/lib-icu_locale_core`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: cargo::core::compiler::compile
+  14: cargo::core::compiler::compile
+  15: cargo::core::compiler::compile
+  16: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  17: cargo::ops::cargo_compile::compile_ws
+  18: cargo::ops::cargo_compile::compile_with_exec
+  19: cargo::ops::cargo_compile::compile
+  20: cargo::commands::check::exec
+  21: <cargo::cli::Exec>::exec
+  22: cargo::main
+  23: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  24: std::rt::lang_start::<()>::{closure#0}
+  25: std::rt::lang_start_internal
+  26: _main
+   0.126597875s  INFO prepare_target{force=false package_id=icu_properties v2.1.2 target="icu_properties"}: cargo::core::compiler::fingerprint: fingerprint error for icu_properties v2.1.2/Check { test: false }/TargetInner { ..: lib_target("icu_properties", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/icu_properties-2.1.2/src/lib.rs", Edition2021) }
+   0.126602250s  INFO prepare_target{force=false package_id=icu_properties v2.1.2 target="icu_properties"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/icu_properties-7780608e7bb78b87/lib-icu_properties`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: cargo::core::compiler::compile
+  12: cargo::core::compiler::compile
+  13: cargo::core::compiler::compile
+  14: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  15: cargo::ops::cargo_compile::compile_ws
+  16: cargo::ops::cargo_compile::compile_with_exec
+  17: cargo::ops::cargo_compile::compile
+  18: cargo::commands::check::exec
+  19: <cargo::cli::Exec>::exec
+  20: cargo::main
+  21: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  22: std::rt::lang_start::<()>::{closure#0}
+  23: std::rt::lang_start_internal
+  24: _main
+   0.126943667s  INFO prepare_target{force=false package_id=rstest v0.19.0 target="rstest"}: cargo::core::compiler::fingerprint: fingerprint error for rstest v0.19.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rstest", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/rstest-0.19.0/src/lib.rs", Edition2021) }
+   0.126948917s  INFO prepare_target{force=false package_id=rstest v0.19.0 target="rstest"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/rstest-0ebc610b2bd41028/lib-rstest`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.128041459s  INFO prepare_target{force=false package_id=tracing-subscriber v0.3.22 target="tracing_subscriber"}: cargo::core::compiler::fingerprint: fingerprint error for tracing-subscriber v0.3.22/Check { test: false }/TargetInner { ..: lib_target("tracing_subscriber", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/tracing-subscriber-0.3.22/src/lib.rs", Edition2018) }
+   0.128052209s  INFO prepare_target{force=false package_id=tracing-subscriber v0.3.22 target="tracing_subscriber"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/tracing-subscriber-2e11aaaaf52f9453/lib-tracing_subscriber`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.128641875s  INFO prepare_target{force=false package_id=tracing-test v0.2.5 target="tracing_test"}: cargo::core::compiler::fingerprint: fingerprint error for tracing-test v0.2.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("tracing_test", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/tracing-test-0.2.5/src/lib.rs", Edition2018) }
+   0.128646917s  INFO prepare_target{force=false package_id=tracing-test v0.2.5 target="tracing_test"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/tracing-test-dbe5f30c6ad081bd/lib-tracing_test`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.128930334s  INFO prepare_target{force=false package_id=openlark-client v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-client) target="openlark_client"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-client v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-client)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_client", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-client/src/lib.rs", Edition2021) }
+   0.128934459s  INFO prepare_target{force=false package_id=openlark-client v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-client) target="openlark_client"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-client-3e72eeecc3049932/lib-openlark_client`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.129403000s  INFO prepare_target{force=false package_id=openlark-communication v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-communication) target="openlark_communication"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-communication v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-communication)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_communication", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-communication/src/lib.rs", Edition2021) }
+   0.129406709s  INFO prepare_target{force=false package_id=openlark-communication v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-communication) target="openlark_communication"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-communication-3df55b5ea8a4c0ad/lib-openlark_communication`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.129660250s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="openlark_docs"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_docs", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-docs/src/lib.rs", Edition2021) }
+   0.129663625s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="openlark_docs"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-docs-d75a64ca56f73521/lib-openlark_docs`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.132134209s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="open_lark"}: cargo::core::compiler::fingerprint: fingerprint error for open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark)/Check { test: true }/TargetInner { ..: lib_target("open_lark", ["lib"], "/Users/zool/RustroverProjects/open-lark/src/lib.rs", Edition2021) }
+   0.132140709s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="open_lark"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/open-lark-62f5eefe42ab3f92/test-lib-open_lark`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.133139917s  INFO prepare_target{force=false package_id=criterion v0.5.1 target="criterion"}: cargo::core::compiler::fingerprint: fingerprint error for criterion v0.5.1/Check { test: false }/TargetInner { name_inferred: true, benched: false, ..: lib_target("criterion", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/criterion-0.5.1/src/lib.rs", Edition2018) }
+   0.133144625s  INFO prepare_target{force=false package_id=criterion v0.5.1 target="criterion"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/criterion-3cff0b451f4349bc/lib-criterion`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.133717084s  INFO prepare_target{force=false package_id=ciborium v0.2.2 target="ciborium"}: cargo::core::compiler::fingerprint: fingerprint error for ciborium v0.2.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ciborium", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/ciborium-0.2.2/src/lib.rs", Edition2021) }
+   0.133725875s  INFO prepare_target{force=false package_id=ciborium v0.2.2 target="ciborium"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/ciborium-ae686b8ce4bdaa3a/lib-ciborium`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.133964584s  INFO prepare_target{force=false package_id=ciborium-ll v0.2.2 target="ciborium_ll"}: cargo::core::compiler::fingerprint: fingerprint error for ciborium-ll v0.2.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ciborium_ll", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/ciborium-ll-0.2.2/src/lib.rs", Edition2021) }
+   0.133969542s  INFO prepare_target{force=false package_id=ciborium-ll v0.2.2 target="ciborium_ll"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/ciborium-ll-c68354bf40a73e24/lib-ciborium_ll`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.134114834s  INFO prepare_target{force=false package_id=half v2.7.1 target="half"}: cargo::core::compiler::fingerprint: fingerprint error for half v2.7.1/Check { test: false }/TargetInner { ..: lib_target("half", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/half-2.7.1/src/lib.rs", Edition2021) }
+   0.134118209s  INFO prepare_target{force=false package_id=half v2.7.1 target="half"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/half-3685fee4c34846f3/lib-half`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.134356167s  INFO prepare_target{force=false package_id=is-terminal v0.4.17 target="is_terminal"}: cargo::core::compiler::fingerprint: fingerprint error for is-terminal v0.4.17/Check { test: false }/TargetInner { ..: lib_target("is_terminal", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/is-terminal-0.4.17/src/lib.rs", Edition2018) }
+   0.134359209s  INFO prepare_target{force=false package_id=is-terminal v0.4.17 target="is_terminal"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/is-terminal-406c4edcc74067ec/lib-is_terminal`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.134985959s  INFO prepare_target{force=false package_id=tinytemplate v1.2.1 target="tinytemplate"}: cargo::core::compiler::fingerprint: fingerprint error for tinytemplate v1.2.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("tinytemplate", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/tinytemplate-1.2.1/src/lib.rs", Edition2015) }
+   0.134989792s  INFO prepare_target{force=false package_id=tinytemplate v1.2.1 target="tinytemplate"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/tinytemplate-fd4753966cf70972/lib-tinytemplate`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.135195500s  INFO prepare_target{force=false package_id=env_logger v0.10.2 target="env_logger"}: cargo::core::compiler::fingerprint: fingerprint error for env_logger v0.10.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("env_logger", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/env_logger-0.10.2/src/lib.rs", Edition2021) }
+   0.135198750s  INFO prepare_target{force=false package_id=env_logger v0.10.2 target="env_logger"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/env_logger-6187279f06eb0dd3/lib-env_logger`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.135674292s  INFO prepare_target{force=false package_id=proptest v1.9.0 target="proptest"}: cargo::core::compiler::fingerprint: fingerprint error for proptest v1.9.0/Check { test: false }/TargetInner { ..: lib_target("proptest", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/proptest-1.9.0/src/lib.rs", Edition2021) }
+   0.135677875s  INFO prepare_target{force=false package_id=proptest v1.9.0 target="proptest"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/proptest-cf196d1eae37b0d7/lib-proptest`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.136026000s  INFO prepare_target{force=false package_id=rand v0.9.2 target="rand"}: cargo::core::compiler::fingerprint: fingerprint error for rand v0.9.2/Check { test: false }/TargetInner { ..: lib_target("rand", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/rand-0.9.2/src/lib.rs", Edition2021) }
+   0.136029584s  INFO prepare_target{force=false package_id=rand v0.9.2 target="rand"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/rand-1002f90dd0ab8138/lib-rand`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.136167917s  INFO prepare_target{force=false package_id=rand_chacha v0.9.0 target="rand_chacha"}: cargo::core::compiler::fingerprint: fingerprint error for rand_chacha v0.9.0/Check { test: false }/TargetInner { ..: lib_target("rand_chacha", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/rand_chacha-0.9.0/src/lib.rs", Edition2021) }
+   0.136171042s  INFO prepare_target{force=false package_id=rand_chacha v0.9.0 target="rand_chacha"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/rand_chacha-a497bb2d79d910a9/lib-rand_chacha`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.136306625s  INFO prepare_target{force=false package_id=rand_xorshift v0.4.0 target="rand_xorshift"}: cargo::core::compiler::fingerprint: fingerprint error for rand_xorshift v0.4.0/Check { test: false }/TargetInner { ..: lib_target("rand_xorshift", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/rand_xorshift-0.4.0/src/lib.rs", Edition2021) }
+   0.136309750s  INFO prepare_target{force=false package_id=rand_xorshift v0.4.0 target="rand_xorshift"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/rand_xorshift-a02f44be180cc393/lib-rand_xorshift`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.136412667s  INFO prepare_target{force=false package_id=rusty-fork v0.3.1 target="rusty_fork"}: cargo::core::compiler::fingerprint: fingerprint error for rusty-fork v0.3.1/Check { test: false }/TargetInner { ..: lib_target("rusty_fork", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/rusty-fork-0.3.1/src/lib.rs", Edition2018) }
+   0.136415417s  INFO prepare_target{force=false package_id=rusty-fork v0.3.1 target="rusty_fork"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/rusty-fork-efbdefa3877f931e/lib-rusty_fork`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.136596209s  INFO prepare_target{force=false package_id=tempfile v3.24.0 target="tempfile"}: cargo::core::compiler::fingerprint: fingerprint error for tempfile v3.24.0/Check { test: false }/TargetInner { ..: lib_target("tempfile", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/tempfile-3.24.0/src/lib.rs", Edition2021) }
+   0.136599209s  INFO prepare_target{force=false package_id=tempfile v3.24.0 target="tempfile"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/tempfile-ec6ff6812a8af9d2/lib-tempfile`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.136801625s  INFO prepare_target{force=false package_id=rustix v1.1.3 target="rustix"}: cargo::core::compiler::fingerprint: fingerprint error for rustix v1.1.3/Check { test: false }/TargetInner { ..: lib_target("rustix", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/rustix-1.1.3/src/lib.rs", Edition2021) }
+   0.136804250s  INFO prepare_target{force=false package_id=rustix v1.1.3 target="rustix"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/rustix-de4d875722058378/lib-rustix`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: cargo::core::compiler::compile
+  11: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  12: cargo::ops::cargo_compile::compile_ws
+  13: cargo::ops::cargo_compile::compile_with_exec
+  14: cargo::ops::cargo_compile::compile
+  15: cargo::commands::check::exec
+  16: <cargo::cli::Exec>::exec
+  17: cargo::main
+  18: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  19: std::rt::lang_start::<()>::{closure#0}
+  20: std::rt::lang_start_internal
+  21: _main
+   0.136996584s  INFO prepare_target{force=false package_id=wait-timeout v0.2.1 target="wait_timeout"}: cargo::core::compiler::fingerprint: fingerprint error for wait-timeout v0.2.1/Check { test: false }/TargetInner { ..: lib_target("wait_timeout", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/wait-timeout-0.2.1/src/lib.rs", Edition2015) }
+   0.136999834s  INFO prepare_target{force=false package_id=wait-timeout v0.2.1 target="wait_timeout"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/wait-timeout-24f5fe335665a404/lib-wait_timeout`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.137151084s  INFO prepare_target{force=false package_id=test-log v0.2.19 target="test_log"}: cargo::core::compiler::fingerprint: fingerprint error for test-log v0.2.19/Check { test: false }/TargetInner { ..: lib_target("test_log", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/test-log-0.2.19/src/lib.rs", Edition2021) }
+   0.137153834s  INFO prepare_target{force=false package_id=test-log v0.2.19 target="test_log"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/test-log-73650dfc0ba5f215/lib-test_log`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.137461417s  INFO prepare_target{force=false package_id=env_logger v0.11.8 target="env_logger"}: cargo::core::compiler::fingerprint: fingerprint error for env_logger v0.11.8/Check { test: false }/TargetInner { ..: lib_target("env_logger", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/env_logger-0.11.8/src/lib.rs", Edition2021) }
+   0.137473375s  INFO prepare_target{force=false package_id=env_logger v0.11.8 target="env_logger"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/env_logger-40de40cd4a636826/lib-env_logger`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.137691167s  INFO prepare_target{force=false package_id=env_filter v0.1.4 target="env_filter"}: cargo::core::compiler::fingerprint: fingerprint error for env_filter v0.1.4/Check { test: false }/TargetInner { ..: lib_target("env_filter", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/env_filter-0.1.4/src/lib.rs", Edition2021) }
+   0.137696542s  INFO prepare_target{force=false package_id=env_filter v0.1.4 target="env_filter"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/env_filter-cedd5ec04ed346bf/lib-env_filter`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: cargo::core::compiler::compile
+  10: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  11: cargo::ops::cargo_compile::compile_ws
+  12: cargo::ops::cargo_compile::compile_with_exec
+  13: cargo::ops::cargo_compile::compile
+  14: cargo::commands::check::exec
+  15: <cargo::cli::Exec>::exec
+  16: cargo::main
+  17: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  18: std::rt::lang_start::<()>::{closure#0}
+  19: std::rt::lang_start_internal
+  20: _main
+   0.137871084s  INFO prepare_target{force=false package_id=wiremock v0.6.5 target="wiremock"}: cargo::core::compiler::fingerprint: fingerprint error for wiremock v0.6.5/Check { test: false }/TargetInner { ..: lib_target("wiremock", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/wiremock-0.6.5/src/lib.rs", Edition2024) }
+   0.137875417s  INFO prepare_target{force=false package_id=wiremock v0.6.5 target="wiremock"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/wiremock-5afaa509348ff6e9/lib-wiremock`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.138345834s  INFO prepare_target{force=false package_id=deadpool v0.12.3 target="deadpool"}: cargo::core::compiler::fingerprint: fingerprint error for deadpool v0.12.3/Check { test: false }/TargetInner { ..: lib_target("deadpool", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/deadpool-0.12.3/src/lib.rs", Edition2021) }
+   0.138349834s  INFO prepare_target{force=false package_id=deadpool v0.12.3 target="deadpool"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/deadpool-e26f9166295e80c0/lib-deadpool`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.138604000s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="e2e_tests"}: cargo::core::compiler::fingerprint: fingerprint error for open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark)/Check { test: true }/TargetInner { kind: "test", name: "e2e_tests", benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/tests/e2e_tests.rs", Edition2021) }
+   0.138609959s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="e2e_tests"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/open-lark-dcfa6c9c36784a4f/test-integration-test-e2e_tests`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.140238500s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="integration_tests"}: cargo::core::compiler::fingerprint: fingerprint error for open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark)/Check { test: true }/TargetInner { kind: "test", name: "integration_tests", benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/tests/integration_tests.rs", Edition2021) }
+   0.140247709s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="integration_tests"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/open-lark-4f3627e4f4a8ca93/test-integration-test-integration_tests`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.141291500s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="performance_tests"}: cargo::core::compiler::fingerprint: fingerprint error for open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark)/Check { test: true }/TargetInner { kind: "test", name: "performance_tests", benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/tests/performance_tests.rs", Edition2021) }
+   0.141297042s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="performance_tests"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/open-lark-1e0d3f21b10002f1/test-integration-test-performance_tests`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.142249209s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="common"}: cargo::core::compiler::fingerprint: fingerprint error for open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark)/Check { test: false }/TargetInner { kind: "example", name: "common", tested: false, benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/examples/common/mod.rs", Edition2021) }
+   0.142254167s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="common"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/open-lark-ccb460f8bfa5449c/example-common`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.143106709s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="authentication"}: cargo::core::compiler::fingerprint: fingerprint error for open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark)/Check { test: false }/TargetInner { kind: "example", name: "authentication", tested: false, benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/examples/01_getting_started/authentication.rs", Edition2021) }
+   0.143112125s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="authentication"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/open-lark-3b56117131dc591f/example-authentication`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.144120875s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="client_setup"}: cargo::core::compiler::fingerprint: fingerprint error for open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark)/Check { test: false }/TargetInner { kind: "example", name: "client_setup", required_features: Some(["client"]), tested: false, benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/examples/01_getting_started/client_setup.rs", Edition2021) }
+   0.144129667s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="client_setup"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/open-lark-44dbc0a825135b6a/example-client_setup`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.145241042s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="send_message"}: cargo::core::compiler::fingerprint: fingerprint error for open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark)/Check { test: false }/TargetInner { kind: "example", name: "send_message", required_features: Some(["communication"]), tested: false, benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/examples/02_core_features/communication/send_message.rs", Edition2021) }
+   0.145246084s  INFO prepare_target{force=false package_id=open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark) target="send_message"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/open-lark-162afa5fe08ef2e1/example-send_message`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.146215542s  INFO prepare_target{force=false package_id=openlark-ai v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-ai) target="openlark_ai"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-ai v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-ai)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_ai", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-ai/src/lib.rs", Edition2021) }
+   0.146220042s  INFO prepare_target{force=false package_id=openlark-ai v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-ai) target="openlark_ai"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-ai-41d02d10e0ba16f4/lib-openlark_ai`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.146539167s  INFO prepare_target{force=false package_id=openlark-ai v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-ai) target="openlark_ai"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-ai v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-ai)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_ai", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-ai/src/lib.rs", Edition2021) }
+   0.146542625s  INFO prepare_target{force=false package_id=openlark-ai v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-ai) target="openlark_ai"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-ai-137025a95ca5f049/test-lib-openlark_ai`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.146926209s  INFO prepare_target{force=false package_id=openlark-application v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-application) target="openlark_application"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-application v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-application)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_application", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-application/src/lib.rs", Edition2021) }
+   0.146931792s  INFO prepare_target{force=false package_id=openlark-application v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-application) target="openlark_application"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-application-2be4157583711080/lib-openlark_application`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.147217417s  INFO prepare_target{force=false package_id=openlark-application v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-application) target="openlark_application"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-application v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-application)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_application", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-application/src/lib.rs", Edition2021) }
+   0.147220959s  INFO prepare_target{force=false package_id=openlark-application v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-application) target="openlark_application"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-application-6e5da89e96d9fa3d/test-lib-openlark_application`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.147809917s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="openlark_auth"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_auth", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-auth/src/lib.rs", Edition2021) }
+   0.147813250s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="openlark_auth"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-auth-da4b1e6b067e2ead/test-lib-openlark_auth`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.148515209s  INFO prepare_target{force=false package_id=rstest v0.18.2 target="rstest"}: cargo::core::compiler::fingerprint: fingerprint error for rstest v0.18.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rstest", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/rstest-0.18.2/src/lib.rs", Edition2021) }
+   0.148520834s  INFO prepare_target{force=false package_id=rstest v0.18.2 target="rstest"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/rstest-7baaf06ccd72785e/lib-rstest`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.148855834s  INFO prepare_target{force=false package_id=tokio-test v0.4.4 target="tokio_test"}: cargo::core::compiler::fingerprint: fingerprint error for tokio-test v0.4.4/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("tokio_test", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/tokio-test-0.4.4/src/lib.rs", Edition2021) }
+   0.148860500s  INFO prepare_target{force=false package_id=tokio-test v0.4.4 target="tokio_test"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/tokio-test-1a8ccac879e13bbd/lib-tokio_test`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   9: cargo::ops::cargo_compile::compile_ws
+  10: cargo::ops::cargo_compile::compile_with_exec
+  11: cargo::ops::cargo_compile::compile
+  12: cargo::commands::check::exec
+  13: <cargo::cli::Exec>::exec
+  14: cargo::main
+  15: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  16: std::rt::lang_start::<()>::{closure#0}
+  17: std::rt::lang_start_internal
+  18: _main
+   0.149144000s  INFO prepare_target{force=false package_id=tokio-stream v0.1.17 target="tokio_stream"}: cargo::core::compiler::fingerprint: fingerprint error for tokio-stream v0.1.17/Check { test: false }/TargetInner { ..: lib_target("tokio_stream", ["lib"], "/Users/zool/.cargo/registry/src/rsproxy.cn-e3de039b2554c837/tokio-stream-0.1.17/src/lib.rs", Edition2021) }
+   0.149148209s  INFO prepare_target{force=false package_id=tokio-stream v0.1.17 target="tokio_stream"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/tokio-stream-ac870f598109a3b9/lib-tokio_stream`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: cargo::core::compiler::compile
+   8: cargo::core::compiler::compile
+   9: <cargo::core::compiler::build_runner::BuildRunner>::compile
+  10: cargo::ops::cargo_compile::compile_ws
+  11: cargo::ops::cargo_compile::compile_with_exec
+  12: cargo::ops::cargo_compile::compile
+  13: cargo::commands::check::exec
+  14: <cargo::cli::Exec>::exec
+  15: cargo::main
+  16: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  17: std::rt::lang_start::<()>::{closure#0}
+  18: std::rt::lang_start_internal
+  19: _main
+   0.149354375s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="auth_api_tests"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth)/Check { test: true }/TargetInner { kind: "test", name: "auth_api_tests", benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-auth/tests/auth_api_tests.rs", Edition2021) }
+   0.149358125s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="auth_api_tests"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-auth-a5baf2f9db8b4076/test-integration-test-auth_api_tests`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.150034959s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="auth_mock_tests"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth)/Check { test: true }/TargetInner { kind: "test", name: "auth_mock_tests", benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-auth/tests/auth_mock_tests.rs", Edition2021) }
+   0.150038917s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="auth_mock_tests"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-auth-95316fe04d9944a2/test-integration-test-auth_mock_tests`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.150685375s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="basic_tests"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth)/Check { test: true }/TargetInner { kind: "test", name: "basic_tests", benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-auth/tests/basic_tests.rs", Edition2021) }
+   0.150689334s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="basic_tests"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-auth-f259cbf7dd71a798/test-integration-test-basic_tests`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.151327750s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="api_demo"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth)/Check { test: false }/TargetInner { kind: "example", name: "api_demo", tested: false, benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-auth/examples/api_demo.rs", Edition2021) }
+   0.151331375s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="api_demo"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-auth-2b3661faa317435b/example-api_demo`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.151927875s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="api_validation_demo"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth)/Check { test: false }/TargetInner { kind: "example", name: "api_validation_demo", tested: false, benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-auth/examples/api_validation_demo.rs", Edition2021) }
+   0.151931000s  INFO prepare_target{force=false package_id=openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth) target="api_validation_demo"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-auth-a489b7fbcb442207/example-api_validation_demo`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.152545667s  INFO prepare_target{force=false package_id=openlark-client v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-client) target="openlark_client"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-client v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-client)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_client", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-client/src/lib.rs", Edition2021) }
+   0.152549375s  INFO prepare_target{force=false package_id=openlark-client v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-client) target="openlark_client"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-client-537cefbf2221a879/test-lib-openlark_client`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.153047334s  INFO prepare_target{force=false package_id=openlark-client v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-client) target="auth_integration_tests"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-client v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-client)/Check { test: true }/TargetInner { kind: "test", name: "auth_integration_tests", benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-client/tests/auth_integration_tests.rs", Edition2021) }
+   0.153051250s  INFO prepare_target{force=false package_id=openlark-client v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-client) target="auth_integration_tests"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-client-78e451891bf51e07/test-integration-test-auth_integration_tests`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.153549500s  INFO prepare_target{force=false package_id=openlark-communication v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-communication) target="openlark_communication"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-communication v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-communication)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_communication", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-communication/src/lib.rs", Edition2021) }
+   0.153553250s  INFO prepare_target{force=false package_id=openlark-communication v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-communication) target="openlark_communication"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-communication-6c415af21f42079f/test-lib-openlark_communication`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.153856917s  INFO prepare_target{force=false package_id=openlark-core v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-core) target="openlark_core"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-core v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-core)/Check { test: true }/TargetInner { name_inferred: true, doctest: false, ..: lib_target("openlark_core", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-core/src/lib.rs", Edition2021) }
+   0.153860209s  INFO prepare_target{force=false package_id=openlark-core v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-core) target="openlark_core"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-core-5378661ac7ddc81d/test-lib-openlark_core`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.154448625s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="openlark_docs"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_docs", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-docs/src/lib.rs", Edition2021) }
+   0.154451875s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="openlark_docs"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-docs-2f803a12aad6e85b/test-lib-openlark_docs`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.155117375s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="test_api_access"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs)/Check { test: true }/TargetInner { kind: "test", name: "test_api_access", benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-docs/tests/test_api_access.rs", Edition2021) }
+   0.155122584s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="test_api_access"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-docs-2364fa29cb639930/test-integration-test-test_api_access`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.156004375s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="test_wiki_api_integration"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs)/Check { test: true }/TargetInner { kind: "test", name: "test_wiki_api_integration", benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-docs/tests/test_wiki_api_integration.rs", Edition2021) }
+   0.156011500s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="test_wiki_api_integration"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-docs-f20e806510bc009f/test-integration-test-test_wiki_api_integration`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.156646417s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="ccm_sheet_batch_operations"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs)/Check { test: false }/TargetInner { kind: "example", name: "ccm_sheet_batch_operations", tested: false, benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-docs/examples/ccm_sheet_batch_operations.rs", Edition2021) }
+   0.156651417s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="ccm_sheet_batch_operations"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-docs-a19dee44fd8d3a47/example-ccm_sheet_batch_operations`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.157225292s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="ccm_sheet_comprehensive_demo"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs)/Check { test: false }/TargetInner { kind: "example", name: "ccm_sheet_comprehensive_demo", tested: false, benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-docs/examples/ccm_sheet_comprehensive_demo.rs", Edition2021) }
+   0.157229709s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="ccm_sheet_comprehensive_demo"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-docs-0b9d6d70fc40dd3c/example-ccm_sheet_comprehensive_demo`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.157804292s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="ccm_sheet_quick_start"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs)/Check { test: false }/TargetInner { kind: "example", name: "ccm_sheet_quick_start", tested: false, benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-docs/examples/ccm_sheet_quick_start.rs", Edition2021) }
+   0.157808709s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="ccm_sheet_quick_start"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-docs-f5634c3eacfae9f3/example-ccm_sheet_quick_start`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.158367959s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="sheet_api_validation"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs)/Check { test: false }/TargetInner { kind: "example", name: "sheet_api_validation", tested: false, benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-docs/examples/sheet_api_validation.rs", Edition2021) }
+   0.158372625s  INFO prepare_target{force=false package_id=openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs) target="sheet_api_validation"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-docs-8505caf59ed55e9b/example-sheet_api_validation`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.158944417s  INFO prepare_target{force=false package_id=openlark-helpdesk v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-helpdesk) target="openlark_helpdesk"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-helpdesk v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-helpdesk)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_helpdesk", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-helpdesk/src/lib.rs", Edition2021) }
+   0.158949209s  INFO prepare_target{force=false package_id=openlark-helpdesk v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-helpdesk) target="openlark_helpdesk"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-helpdesk-a93f809e65d1e9c0/lib-openlark_helpdesk`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.159245292s  INFO prepare_target{force=false package_id=openlark-helpdesk v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-helpdesk) target="openlark_helpdesk"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-helpdesk v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-helpdesk)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_helpdesk", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-helpdesk/src/lib.rs", Edition2021) }
+   0.159249209s  INFO prepare_target{force=false package_id=openlark-helpdesk v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-helpdesk) target="openlark_helpdesk"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-helpdesk-7fa13d0be6cb3d7d/test-lib-openlark_helpdesk`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.159612417s  INFO prepare_target{force=false package_id=openlark-hr v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-hr) target="openlark_hr"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-hr v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-hr)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_hr", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-hr/src/lib.rs", Edition2021) }
+   0.159616792s  INFO prepare_target{force=false package_id=openlark-hr v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-hr) target="openlark_hr"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-hr-72df82a0462eff0c/lib-openlark_hr`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.159944959s  INFO prepare_target{force=false package_id=openlark-hr v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-hr) target="openlark_hr"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-hr v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-hr)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_hr", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-hr/src/lib.rs", Edition2021) }
+   0.159948834s  INFO prepare_target{force=false package_id=openlark-hr v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-hr) target="openlark_hr"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-hr-da968b95fad58c89/test-lib-openlark_hr`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.160320209s  INFO prepare_target{force=false package_id=openlark-mail v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-mail) target="openlark_mail"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-mail v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-mail)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_mail", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-mail/src/lib.rs", Edition2021) }
+   0.160324209s  INFO prepare_target{force=false package_id=openlark-mail v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-mail) target="openlark_mail"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-mail-a025f3d7c2f1f7df/lib-openlark_mail`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.160606834s  INFO prepare_target{force=false package_id=openlark-mail v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-mail) target="openlark_mail"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-mail v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-mail)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_mail", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-mail/src/lib.rs", Edition2021) }
+   0.160611167s  INFO prepare_target{force=false package_id=openlark-mail v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-mail) target="openlark_mail"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-mail-cfa8ef6927856ed6/test-lib-openlark_mail`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.160916667s  INFO prepare_target{force=false package_id=openlark-meeting v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-meeting) target="openlark_meeting"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-meeting v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-meeting)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_meeting", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-meeting/src/lib.rs", Edition2021) }
+   0.160920667s  INFO prepare_target{force=false package_id=openlark-meeting v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-meeting) target="openlark_meeting"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-meeting-a1752dc2a91f90ea/lib-openlark_meeting`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.161187584s  INFO prepare_target{force=false package_id=openlark-meeting v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-meeting) target="openlark_meeting"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-meeting v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-meeting)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_meeting", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-meeting/src/lib.rs", Edition2021) }
+   0.161191709s  INFO prepare_target{force=false package_id=openlark-meeting v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-meeting) target="openlark_meeting"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-meeting-15d6fb66fa1aa367/test-lib-openlark_meeting`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.163084625s  INFO prepare_target{force=false package_id=openlark-protocol v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-protocol) target="openlark_protocol"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-protocol v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-protocol)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_protocol", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-protocol/src/lib.rs", Edition2021) }
+   0.163097209s  INFO prepare_target{force=false package_id=openlark-protocol v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-protocol) target="openlark_protocol"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-protocol-2a959491cddd7db9/lib-openlark_protocol`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.163449792s  INFO prepare_target{force=false package_id=openlark-protocol v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-protocol) target="openlark_protocol"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-protocol v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-protocol)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_protocol", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-protocol/src/lib.rs", Edition2021) }
+   0.163454917s  INFO prepare_target{force=false package_id=openlark-protocol v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-protocol) target="openlark_protocol"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-protocol-9df9fd7772937aa0/test-lib-openlark_protocol`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.163660709s  INFO prepare_target{force=false package_id=openlark-security v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-security) target="openlark_security"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-security v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-security)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("openlark_security", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-security/src/lib.rs", Edition2021) }
+   0.163671125s  INFO prepare_target{force=false package_id=openlark-security v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-security) target="openlark_security"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-security-14bdb5baa018e46a/lib-openlark_security`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.164362500s  INFO prepare_target{force=false package_id=openlark-security v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-security) target="openlark_security"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-security v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-security)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("openlark_security", ["lib"], "/Users/zool/RustroverProjects/open-lark/crates/openlark-security/src/lib.rs", Edition2021) }
+   0.164370500s  INFO prepare_target{force=false package_id=openlark-security v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-security) target="openlark_security"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-security-c7fe6bd88d04a462/test-lib-openlark_security`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+   0.165015584s  INFO prepare_target{force=false package_id=openlark-security v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-security) target="basic_tests"}: cargo::core::compiler::fingerprint: fingerprint error for openlark-security v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-security)/Check { test: true }/TargetInner { kind: "test", name: "basic_tests", benched: false, ..: with_path("/Users/zool/RustroverProjects/open-lark/crates/openlark-security/tests/basic_tests.rs", Edition2021) }
+   0.165021542s  INFO prepare_target{force=false package_id=openlark-security v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-security) target="basic_tests"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/zool/RustroverProjects/open-lark/target/debug/.fingerprint/openlark-security-566ee6fcdc259f1c/test-integration-test-basic_tests`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: std::backtrace::Backtrace::create
+   1: std::backtrace::Backtrace::capture
+   2: cargo_util::paths::read_bytes
+   3: cargo_util::paths::read
+   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   5: cargo::core::compiler::fingerprint::prepare_target
+   6: cargo::core::compiler::compile
+   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   8: cargo::ops::cargo_compile::compile_ws
+   9: cargo::ops::cargo_compile::compile_with_exec
+  10: cargo::ops::cargo_compile::compile
+  11: cargo::commands::check::exec
+  12: <cargo::cli::Exec>::exec
+  13: cargo::main
+  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  15: std::rt::lang_start::<()>::{closure#0}
+  16: std::rt::lang_start_internal
+  17: _main
+    Checking tokio v1.48.0
+    Checking ring v0.17.14
+    Checking icu_locale_core v2.1.1
+    Checking icu_collections v2.1.1
+    Checking ppv-lite86 v0.2.21
+    Checking tracing-subscriber v0.3.22
+    Checking ahash v0.8.12
+    Checking chrono v0.4.42
+    Checking rstest v0.19.0
+    Checking rustix v1.1.3
+    Checking half v2.7.1
+    Checking clap v4.5.53
+    Checking env_filter v0.1.4
+    Checking is-terminal v0.4.17
+    Checking wait-timeout v0.2.1
+    Checking lark-websocket-protobuf v0.1.1
+    Checking rand v0.9.2
+    Checking env_logger v0.11.8
+    Checking quick_cache v0.6.18
+    Checking rand_chacha v0.3.1
+    Checking rand_chacha v0.9.0
+    Checking ciborium-ll v0.2.2
+    Checking rand_xorshift v0.4.0
+    Checking icu_provider v2.1.1
+    Checking tinytemplate v1.2.1
+    Checking rand v0.8.5
+    Checking tempfile v3.24.0
+    Checking env_logger v0.10.2
+    Checking ciborium v0.2.2
+    Checking test-log v0.2.19
+    Checking rstest v0.18.2
+    Checking rustls-webpki v0.103.8
+    Checking openlark-protocol v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-protocol)
+    Checking tracing-test v0.2.5
+    Checking icu_normalizer v2.1.1
+    Checking icu_properties v2.1.2
+    Checking rusty-fork v0.3.1
+    Checking criterion v0.5.1
+    Checking proptest v1.9.0
+    Checking rustls v0.23.35
+    Checking idna_adapter v1.2.1
+    Checking idna v1.1.0
+    Checking url v2.5.7
+    Checking tokio-util v0.7.17
+    Checking tower v0.5.2
+    Checking deadpool v0.12.3
+    Checking tokio-stream v0.1.17
+    Checking tokio-test v0.4.4
+    Checking tower-http v0.6.8
+    Checking h2 v0.4.12
+    Checking tokio-rustls v0.26.4
+    Checking hyper v1.8.1
+    Checking hyper-util v0.1.19
+    Checking hyper-rustls v0.27.7
+    Checking wiremock v0.6.5
+    Checking reqwest v0.12.28
+    Checking openlark-core v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-core)
+    Checking openlark-auth v0.1.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-auth)
+    Checking openlark-docs v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-docs)
+    Checking openlark-communication v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-communication)
+    Checking openlark-security v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-security)
+    Checking openlark-application v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-application)
+    Checking openlark-hr v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-hr)
+    Checking openlark-mail v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-mail)
+    Checking openlark-meeting v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-meeting)
+    Checking openlark-ai v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-ai)
+    Checking openlark-helpdesk v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-helpdesk)
+    Checking openlark-client v0.15.0-dev (/Users/zool/RustroverProjects/open-lark/crates/openlark-client)
+error: could not compile `openlark-security` (test "basic_tests") due to 15 previous errors; 1 warning emitted
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `openlark-docs` (lib test) due to 7 previous errors; 31 warnings emitted
+    Checking open-lark v0.15.0-dev (/Users/zool/RustroverProjects/open-lark)
+error: could not compile `openlark-docs` (test "test_api_access") due to 2 previous errors
+error: could not compile `openlark-docs` (example "ccm_sheet_quick_start") due to 6 previous errors; 1 warning emitted
+error: could not compile `openlark-docs` (example "ccm_sheet_batch_operations") due to 6 previous errors; 1 warning emitted
+error: could not compile `openlark-docs` (example "ccm_sheet_comprehensive_demo") due to 22 previous errors; 2 warnings emitted
+error: could not compile `open-lark` (test "performance_tests") due to 2 previous errors
+error: could not compile `open-lark` (example "send_message") due to 1 previous error
+error: could not compile `open-lark` (example "authentication") due to 8 previous errors
+error: could not compile `open-lark` (test "e2e_tests") due to 23 previous errors
+error: could not compile `open-lark` (test "integration_tests") due to 27 previous errors; 1 warning emitted

@@ -1,7 +1,7 @@
-/// Bitable 列出仪表盘
-///
-/// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-dashboard/list
-/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-dashboard/list
+//! 列出仪表盘
+//!
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-dashboard/list
+//! doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-dashboard/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -19,7 +19,6 @@ pub struct ListDashboardsRequest {
     app_token: String,
     page_size: Option<i32>,
     page_token: Option<String>,
-    user_id_type: Option<String>,
 }
 
 impl ListDashboardsRequest {
@@ -29,7 +28,6 @@ impl ListDashboardsRequest {
             app_token: String::new(),
             page_size: None,
             page_token: None,
-            user_id_type: None,
         }
     }
 
@@ -48,22 +46,23 @@ impl ListDashboardsRequest {
         self
     }
 
-    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
-        self.user_id_type = Some(user_id_type.into());
-        self
-    }
-
     pub async fn execute(self) -> SDKResult<ListDashboardsResponse> {
         validate_required!(self.app_token, "app_token 不能为空");
+        if let Some(page_size) = self.page_size {
+            if !(1..=500).contains(&page_size) {
+                return Err(openlark_core::error::validation_error(
+                    "page_size",
+                    "page_size 必须在 1~500 之间",
+                ));
+            }
+        }
 
         let api_endpoint = BitableApiV1::DashboardList(self.app_token);
         let mut api_request: ApiRequest<ListDashboardsResponse> =
             ApiRequest::get(&api_endpoint.to_url());
 
-        api_request =
-            api_request.query_opt("page_size", self.page_size.map(|v| v.min(100).to_string()));
+        api_request = api_request.query_opt("page_size", self.page_size.map(|v| v.to_string()));
         api_request = api_request.query_opt("page_token", self.page_token);
-        api_request = api_request.query_opt("user_id_type", self.user_id_type);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response
@@ -99,11 +98,6 @@ impl ListDashboardsRequestBuilder {
         self
     }
 
-    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
     pub fn build(self) -> ListDashboardsRequest {
         self.request
     }
@@ -112,17 +106,10 @@ impl ListDashboardsRequestBuilder {
 /// 列出仪表盘响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListDashboardsResponse {
-    pub dashboards: Vec<Dashboard>,
+    pub dashboards: Vec<super::Dashboard>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Dashboard {
-    pub block_id: String,
-    pub name: String,
+    pub has_more: bool,
 }
 
 impl ApiResponseTrait for ListDashboardsResponse {

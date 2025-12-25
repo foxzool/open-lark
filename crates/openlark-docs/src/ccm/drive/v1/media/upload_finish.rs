@@ -1,80 +1,71 @@
-/// 分片上传素材-完成上传
-///
-/// 触发完成上传。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/multipart-upload-media/upload_finish
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
+
+/// 分片上传素材-完成上传
+///
+/// 上传分片全部完成后，调用该接口触发完成上传。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_finish
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/multipart-upload-media/upload_finish
 use serde::{Deserialize, Serialize};
 
-/// 分片信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PartInfo {
-    /// 分片编号
-    pub part_number: i32,
-    /// ETag
-    pub etag: String,
-}
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
-/// 完成上传请求
+/// 分片上传素材-完成上传请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UploadFinishRequest {
+pub struct UploadFinishMediaRequest {
     #[serde(skip)]
     config: Config,
-    /// 上传事务ID
-    pub transaction_id: String,
-    /// 分片信息列表
-    pub parts: Vec<PartInfo>,
+    /// 分片上传事务 ID
+    pub upload_id: String,
+    /// 分片数量
+    pub block_num: i32,
 }
 
-impl UploadFinishRequest {
-    pub fn new(config: Config, transaction_id: impl Into<String>, parts: Vec<PartInfo>) -> Self {
+impl UploadFinishMediaRequest {
+    pub fn new(config: Config, upload_id: impl Into<String>, block_num: i32) -> Self {
         Self {
             config,
-            transaction_id: transaction_id.into(),
-            parts,
+            upload_id: upload_id.into(),
+            block_num,
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<UploadFinishResponse>> {
-        let url = "/open-apis/drive/v1/medias/upload_finish";
+    pub async fn execute(self) -> SDKResult<UploadFinishMediaResponse> {
+        if self.upload_id.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "upload_id",
+                "upload_id 不能为空",
+            ));
+        }
+        if self.block_num <= 0 {
+            return Err(openlark_core::error::validation_error(
+                "block_num",
+                "block_num 必须为正整数",
+            ));
+        }
 
-        let api_request: ApiRequest<UploadFinishResponse> = ApiRequest::post(url).json_body(&self);
+        let api_endpoint = DriveApi::UploadMediaFinish;
+        let request = ApiRequest::<UploadFinishMediaResponse>::post(&api_endpoint.to_url()).body(
+            serialize_params(&self, "分片上传素材-完成上传")?,
+        );
 
-        Transport::request(api_request, &self.config, None).await
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "分片上传素材-完成上传")
     }
 }
 
-/// 媒体文件上传完成信息
+/// 分片上传素材-完成上传响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UploadFinishInfo {
-    /// 文件token
+pub struct UploadFinishMediaResponse {
+    /// 新创建文件的 token
     pub file_token: String,
-    /// 文件名
-    pub name: String,
-    /// 文件类型
-    pub r#type: String,
-    /// 文件大小
-    pub size: i64,
-    /// 父文件夹token
-    pub parent_folder_token: String,
-    /// 创建时间
-    pub create_time: String,
-    /// 修改时间
-    pub modify_time: String,
 }
 
-/// 完成上传响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UploadFinishResponse {
-    /// 上传完成的文件信息
-    pub data: Option<UploadFinishInfo>,
-}
-
-impl ApiResponseTrait for UploadFinishResponse {
+impl ApiResponseTrait for UploadFinishMediaResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -85,39 +76,15 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_upload_finish_request() {
+    fn test_upload_finish_request_builder() {
         let config = Config::default();
-        let part_info = PartInfo {
-            part_number: 1,
-            etag: "etag_media_123456".to_string(),
-        };
-
-        let request = UploadFinishRequest::new(config, "txn_media_123456", vec![part_info]);
-
-        assert_eq!(request.transaction_id, "txn_media_123456");
-        assert_eq!(request.parts.len(), 1);
-        assert_eq!(request.parts[0].part_number, 1);
-    }
-
-    #[test]
-    fn test_upload_finish_info() {
-        let file_info = UploadFinishInfo {
-            file_token: "media_token".to_string(),
-            name: "uploaded_image.jpg".to_string(),
-            r#type: "image".to_string(),
-            size: 2048576, // 2MB
-            parent_folder_token: "parent_token".to_string(),
-            create_time: "2023-01-01T00:00:00Z".to_string(),
-            modify_time: "2023-01-01T00:00:00Z".to_string(),
-        };
-
-        assert_eq!(file_info.file_token, "media_token");
-        assert_eq!(file_info.name, "uploaded_image.jpg");
-        assert_eq!(file_info.size, 2048576);
+        let request = UploadFinishMediaRequest::new(config, "upload_id", 10);
+        assert_eq!(request.upload_id, "upload_id");
+        assert_eq!(request.block_num, 10);
     }
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(UploadFinishResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(UploadFinishMediaResponse::data_format(), ResponseFormat::Data);
     }
 }

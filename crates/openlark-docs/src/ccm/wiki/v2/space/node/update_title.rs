@@ -1,7 +1,8 @@
 /// 更新知识空间节点标题
 ///
 /// 更新知识空间中节点的标题。
-/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/updateTitle
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/update_title
+/// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/update_title
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,8 +11,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::WikiApiV2;
-use crate::wiki::v2::models::WikiSpaceNode;
+use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 更新知识空间节点标题请求
 pub struct UpdateWikiSpaceNodeTitleRequest {
@@ -28,11 +28,8 @@ pub struct UpdateWikiSpaceNodeTitleParams {
 }
 
 /// 更新知识空间节点标题响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UpdateWikiSpaceNodeTitleResponse {
-    /// 更新后的节点信息
-    pub data: Option<WikiSpaceNode>,
-}
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct UpdateWikiSpaceNodeTitleResponse {}
 
 impl ApiResponseTrait for UpdateWikiSpaceNodeTitleResponse {
     fn data_format() -> ResponseFormat {
@@ -64,7 +61,8 @@ impl UpdateWikiSpaceNodeTitleRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-nodes/updateTitle
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/update_title
+    /// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/update_title
     pub async fn execute(
         self,
         params: UpdateWikiSpaceNodeTitleParams,
@@ -79,18 +77,11 @@ impl UpdateWikiSpaceNodeTitleRequest {
             WikiApiV2::SpaceNodeUpdateTitle(self.space_id.clone(), self.node_token.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<UpdateWikiSpaceNodeTitleResponse> =
-            ApiRequest::put(&api_endpoint.to_url());
-
-        // 设置请求体
-        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
-            &params,
-        )?));
+        let api_request: ApiRequest<UpdateWikiSpaceNodeTitleResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新知识空间节点标题")?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "更新知识空间节点标题")
     }
 }

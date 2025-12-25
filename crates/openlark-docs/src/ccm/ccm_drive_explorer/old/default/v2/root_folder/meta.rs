@@ -1,12 +1,17 @@
+//! 获取我的空间（根文件夹）元数据
+//!
+//! docPath: /document/ukTMukTMukTM/ugTNzUjL4UzM14CO1MTN/get-root-folder-meta
+//! doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
+
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CcmDriveExplorerApiOld;
+use crate::common::{api_endpoints::CcmDriveExplorerApiOld, api_utils::*};
 
 /// 获取我的空间（根文件夹）元数据请求
 pub struct GetRootFolderMetaRequest {
@@ -21,17 +26,15 @@ impl GetRootFolderMetaRequest {
 
     /// 发送请求
     ///
-    /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
+    /// docPath: /document/ukTMukTMukTM/ugTNzUjL4UzM14CO1MTN/get-root-folder-meta
+    /// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
     pub async fn send(self) -> SDKResult<GetRootFolderMetaResponse> {
         let api_endpoint = CcmDriveExplorerApiOld::RootFolderMeta;
         let api_request: ApiRequest<GetRootFolderMetaResponse> =
             ApiRequest::get(&api_endpoint.to_url());
 
-        let response: Response<GetRootFolderMetaResponse> =
-            Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "获取我的空间（根文件夹）元数据")
     }
 }
 
@@ -43,7 +46,7 @@ pub struct GetRootFolderMetaResponse {
     /// id
     pub id: String,
     /// user_id
-    pub user_id: i64,
+    pub user_id: String,
 }
 
 impl ApiResponseTrait for GetRootFolderMetaResponse {

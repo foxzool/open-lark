@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, Response},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,15 +7,14 @@ use openlark_core::{
 /// 下载导出文件
 ///
 /// 下载导出的文件内容。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/export_task/download
-use serde::{Deserialize, Serialize};
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/export_task/download
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/export_task/download
 
 use crate::common::api_endpoints::DriveApi;
 
 /// 下载导出文件请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct DownloadExportRequest {
-    #[serde(skip)]
     config: Config,
     /// 文件token
     pub file_token: String,
@@ -29,25 +28,20 @@ impl DownloadExportRequest {
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<DownloadExportResponse>> {
+    /// 执行下载请求，返回二进制内容
+    pub async fn execute(self) -> SDKResult<Response<Vec<u8>>> {
+        if self.file_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "file_token",
+                "file_token 不能为空",
+            ));
+        }
+
         let api_endpoint = DriveApi::DownloadExportFile(self.file_token.clone());
 
-        let api_request = ApiRequest::<DownloadExportResponse>::get(&api_endpoint.to_url());
+        let api_request = ApiRequest::<Vec<u8>>::get(&api_endpoint.to_url());
 
         Transport::request(api_request, &self.config, None).await
-    }
-}
-
-/// 下载导出文件响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DownloadExportResponse {
-    /// 二进制内容由核心层处理
-    pub data: Option<serde_json::Value>,
-}
-
-impl ApiResponseTrait for DownloadExportResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
     }
 }
 
@@ -60,10 +54,5 @@ mod tests {
         let config = Config::default();
         let request = DownloadExportRequest::new(config, "file_token");
         assert_eq!(request.file_token, "file_token");
-    }
-
-    #[test]
-    fn test_response_trait() {
-        assert_eq!(DownloadExportResponse::data_format(), ResponseFormat::Data);
     }
 }

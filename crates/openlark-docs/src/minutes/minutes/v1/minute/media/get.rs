@@ -1,8 +1,8 @@
 /// 下载妙记音视频文件
 ///
 /// 下载妙记的音视频文件。
-/// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-media/get
-/// 文档参考：https://open.feishu.cn/document/minutes-v1/minute-media/get
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-media/get
+/// doc: https://open.feishu.cn/document/minutes-v1/minute-media/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -11,7 +11,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::minutes::v1::minute::models::MinuteMediaInfo;
+use crate::common::api_utils::*;
 
 /// 下载妙记音视频文件请求
 pub struct GetMinuteMediaRequest {
@@ -22,8 +22,8 @@ pub struct GetMinuteMediaRequest {
 /// 下载妙记音视频文件响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetMinuteMediaResponse {
-    /// 音视频文件信息
-    pub media_info: MinuteMediaInfo,
+    /// 妙记音视频文件下载链接（有效期 1 天）
+    pub download_url: String,
 }
 
 impl ApiResponseTrait for GetMinuteMediaResponse {
@@ -47,26 +47,24 @@ impl GetMinuteMediaRequest {
         self
     }
 
+    /// 发送请求
+    pub async fn send(self) -> SDKResult<GetMinuteMediaResponse> {
+        self.execute().await
+    }
+
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/minutes-v1/minute-media/get
+    /// doc: https://open.feishu.cn/document/minutes-v1/minute-media/get
     pub async fn execute(self) -> SDKResult<GetMinuteMediaResponse> {
-        // 验证必填字段
         validate_required!(self.minute_token, "妙记Token不能为空");
 
-        // 🚀 使用新的enum+builder系统生成API端点
-        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         use crate::common::api_endpoints::MinutesApiV1;
         let api_endpoint = MinutesApiV1::MediaGet(self.minute_token.clone());
 
-        // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<GetMinuteMediaResponse> =
             ApiRequest::get(&api_endpoint.to_url());
 
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "下载妙记音视频文件")
     }
 }

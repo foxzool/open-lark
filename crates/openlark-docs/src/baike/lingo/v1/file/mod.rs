@@ -14,6 +14,7 @@ pub use upload::*;
 /// 文件管理服务
 #[derive(Debug, Clone)]
 pub struct FileService {
+    #[allow(dead_code)]
     config: Config,
 }
 

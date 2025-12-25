@@ -1,16 +1,17 @@
 /// 取消云文档事件订阅
 ///
 /// 该接口**仅支持文档拥有者**取消订阅自己文档的通知事件，可订阅的文档类型为**旧版文档**、**新版文档**、**电子表格**和**多维表格**。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/event/delete_subscribe
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/delete_subscribe
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/event/delete_subscribe
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 取消云文档事件订阅请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -34,11 +35,19 @@ impl DeleteSubscribeRequest {
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<DeleteSubscribeResponse>> {
+    pub async fn execute(self) -> SDKResult<DeleteSubscribeResponse> {
+        if self.file_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "file_token",
+                "file_token 不能为空",
+            ));
+        }
+
         let api_endpoint = DriveApi::DeleteFileSubscribe(self.file_token.clone());
         let request = ApiRequest::<DeleteSubscribeResponse>::delete(&api_endpoint.to_url());
 
-        Transport::request(request, &self.config, None).await
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "取消云文档事件订阅")
     }
 }
 

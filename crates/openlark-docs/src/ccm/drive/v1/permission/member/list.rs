@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,10 +7,11 @@ use openlark_core::{
 /// 获取云文档协作者
 ///
 /// 获取文件或文件夹的协作者列表
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/list
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/list
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/list
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 获取协作者列表请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -61,7 +62,19 @@ impl ListPermissionMembersRequest {
         self
     }
 
-    pub async fn execute(self) -> SDKResult<Response<ListPermissionMembersResponse>> {
+    pub async fn execute(self) -> SDKResult<ListPermissionMembersResponse> {
+        if self.token.is_empty() {
+            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+        }
+        if let Some(page_size) = self.page_size {
+            if page_size <= 0 {
+                return Err(openlark_core::error::validation_error(
+                    "page_size",
+                    "page_size 必须大于 0",
+                ));
+            }
+        }
+
         let api_endpoint = DriveApi::ListPermissionMembers(self.token.clone());
 
         let mut api_request =
@@ -77,7 +90,8 @@ impl ListPermissionMembersRequest {
             api_request = api_request.query("type", r#type);
         }
 
-        Transport::request(api_request, &self.config, None).await
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "获取云文档协作者")
     }
 }
 
@@ -102,18 +116,14 @@ pub struct PermissionMember {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListPermissionMembersResponse {
     /// 协作者列表
-    pub data: Option<PermissionMembersData>,
-}
-
-/// 权限成员数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PermissionMembersData {
-    /// 协作者列表
-    pub items: Option<Vec<PermissionMember>>,
+    #[serde(default)]
+    pub items: Vec<PermissionMember>,
     /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否有更多
-    pub has_more: Option<bool>,
+    #[serde(default)]
+    pub has_more: bool,
 }
 
 impl ApiResponseTrait for ListPermissionMembersResponse {

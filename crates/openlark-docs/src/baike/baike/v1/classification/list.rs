@@ -1,62 +1,74 @@
 //! 获取词典分类
 //!
-//! doc: https://open.feishu.cn/document/server-docs/baike-v1/classification/list
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/classification/list
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+use crate::common::api_endpoints::BaikeApiV1;
+use super::super::models::ClassificationItem;
+
+/// 获取词典分类请求
 pub struct ListClassificationRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
+    config: Config,
+    page_size: Option<i32>,
+    page_token: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+impl ListClassificationRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            page_size: None,
+            page_token: None,
+        }
+    }
+
+    /// 分页大小（默认 20）
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    /// 分页 token
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.page_token = Some(page_token.into());
+        self
+    }
+
+    pub async fn send(self) -> SDKResult<ListClassificationResponse> {
+        let mut api_request: ApiRequest<ListClassificationResponse> =
+            ApiRequest::get(&BaikeApiV1::ClassificationList.to_url());
+        if let Some(page_size) = self.page_size {
+            api_request = api_request.query("page_size", page_size.to_string());
+        }
+        if let Some(page_token) = &self.page_token {
+            api_request = api_request.query("page_token", page_token);
+        }
+
+        let response: Response<ListClassificationResponse> =
+            Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
+
+/// 获取词典分类响应（data）
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ListClassificationResponse {
-    pub items: Vec<Classification>,
+    pub items: Vec<ClassificationItem>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    pub has_more: bool,
-    pub total: i32,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Classification {
-    pub id: String,
-    pub name: String,
-    pub father_id: String,
 }
 
 impl ApiResponseTrait for ListClassificationResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
-    }
-}
-
-#[derive(Debug, Default)]
-pub struct ListClassificationBuilder {
-    api_req: ApiRequest<ListClassificationRequest>,
-}
-
-impl ListClassificationBuilder {
-    pub fn new() -> Self {
-        let mut builder = Self::default();
-        builder.api_req.method = openlark_core::api::HttpMethod::Get;
-        builder.api_req.url =
-            "https://open.feishu.cn/open-apis/baike/v1/classifications".to_string();
-        builder.api_req.body = None;
-        builder
-    }
-
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }

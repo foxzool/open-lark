@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,10 +7,13 @@ use openlark_core::{
 /// 添加协作者
 ///
 /// 为文件或文件夹添加协作者权限
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/create
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/create
+/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-member/create
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
+
+use super::models::MemberInfo;
 
 /// 添加协作者请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -25,13 +28,11 @@ pub struct CreatePermissionMemberRequest {
     pub r#type: String,
 }
 
-/// 成员信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MemberInfo {
-    /// 用户ID
-    pub user_id: String,
-    /// 用户类型
-    pub user_type: String,
+#[derive(Debug, Clone, Serialize)]
+struct CreatePermissionMemberRequestBody {
+    member: MemberInfo,
+    #[serde(rename = "type")]
+    r#type: String,
 }
 
 impl CreatePermissionMemberRequest {
@@ -56,36 +57,51 @@ impl CreatePermissionMemberRequest {
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<CreatePermissionMemberResponse>> {
+    pub async fn execute(self) -> SDKResult<CreatePermissionMemberResponse> {
+        if self.token.is_empty() {
+            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+        }
+        if self.member.user_id.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "member.user_id",
+                "user_id 不能为空",
+            ));
+        }
+        if self.member.user_type.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "member.user_type",
+                "user_type 不能为空",
+            ));
+        }
+        if self.r#type.is_empty() {
+            return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        }
+
         let api_endpoint = DriveApi::CreatePermissionMember(self.token.clone());
 
-        let api_request = ApiRequest::<CreatePermissionMemberResponse>::post(
-            &api_endpoint.to_url(),
-        )
-        .body(serde_json::json!({
-            "member": self.member,
-            "type": self.r#type
-        }));
+        let api_request = ApiRequest::<CreatePermissionMemberResponse>::post(&api_endpoint.to_url())
+            .body(serialize_params(
+                &CreatePermissionMemberRequestBody {
+                member: self.member,
+                r#type: self.r#type,
+                },
+                "增加协作者权限",
+            )?);
 
-        Transport::request(api_request, &self.config, None).await
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "增加协作者权限")
     }
 }
 
 /// 协作者响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreatePermissionMemberResponse {
-    /// 协作者信息
-    pub data: Option<PermissionMemberData>,
-}
-
-/// 权限成员数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PermissionMemberData {
     /// 成员ID
     pub member_id: String,
     /// 用户ID
     pub user_id: String,
     /// 权限类型
+    #[serde(rename = "type")]
     pub r#type: String,
     /// 创建时间
     pub create_time: i64,
@@ -128,7 +144,7 @@ mod tests {
 
     #[test]
     fn test_permission_member_data_structure() {
-        let permission_data = PermissionMemberData {
+        let permission_data = CreatePermissionMemberResponse {
             member_id: "member_id".to_string(),
             user_id: "user_id".to_string(),
             r#type: "admin".to_string(),
