@@ -1,6 +1,7 @@
-/// Bitable 删除视图API
+/// Bitable 删除视图
 ///
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/view/delete
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-view/delete
+/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/delete
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -9,24 +10,18 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-// 从 patch 模块导入 View 类型
-use super::patch::View;
-
 /// 删除视图请求
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct DeleteViewRequest {
     /// 配置信息
     config: Config,
-    api_request: ApiRequest<DeleteViewResponse>,
     /// 多维表格的 app_token
     app_token: String,
     /// 数据表的 table_id
     table_id: String,
     /// 视图的 view_id
     view_id: String,
-    /// 用户 ID 类型
-    user_id_type: Option<String>,
 }
 
 impl DeleteViewRequest {
@@ -34,11 +29,9 @@ impl DeleteViewRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            api_request: ApiRequest::delete(""),
             app_token: String::new(),
             table_id: String::new(),
             view_id: String::new(),
-            user_id_type: None,
         }
     }
 
@@ -57,12 +50,6 @@ impl DeleteViewRequest {
     /// 设置视图ID
     pub fn view_id(mut self, view_id: String) -> Self {
         self.view_id = view_id;
-        self
-    }
-
-    /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.user_id_type = Some(user_id_type);
         self
     }
 
@@ -91,13 +78,7 @@ impl DeleteViewRequest {
         );
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<DeleteViewResponse> =
-            ApiRequest::delete(&api_endpoint.to_url());
-
-        // 构建查询参数
-        if let Some(ref user_id_type) = self.user_id_type {
-            api_request = api_request.query("user_id_type", user_id_type);
-        }
+        let api_request: ApiRequest<DeleteViewResponse> = ApiRequest::delete(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
@@ -138,12 +119,6 @@ impl DeleteViewRequestBuilder {
         self
     }
 
-    /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
     /// 构建请求
     pub fn build(self) -> DeleteViewRequest {
         self.request
@@ -152,10 +127,7 @@ impl DeleteViewRequestBuilder {
 
 /// 删除视图响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct DeleteViewResponse {
-    /// 视图信息
-    pub data: View,
-}
+pub struct DeleteViewResponse {}
 
 impl ApiResponseTrait for DeleteViewResponse {
     fn data_format() -> ResponseFormat {

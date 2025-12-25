@@ -1,16 +1,17 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 /// 创建导入任务
 ///
-/// 创建一个导入任务，将文件导入到云空间。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/import_task/create
+/// 创建导入任务，支持导入为新版文档、电子表格、多维表格以及旧版文档（异步接口）。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/create
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/import_task/create
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 创建导入任务请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -24,9 +25,10 @@ pub struct CreateImportTaskRequest {
     /// 目标类型
     pub r#type: String,
     /// 文件名
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_name: Option<String>,
     /// 目录token
-    pub point: Option<Point>,
+    pub point: Point,
 }
 
 /// 目标目录
@@ -38,12 +40,23 @@ pub struct Point {
     pub mount_key: String,
 }
 
+impl Point {
+    /// 创建挂载点（挂载到云空间，mount_type 固定为 1）
+    pub fn new(mount_key: impl Into<String>) -> Self {
+        Self {
+            mount_type: 1,
+            mount_key: mount_key.into(),
+        }
+    }
+}
+
 impl CreateImportTaskRequest {
     pub fn new(
         config: Config,
         file_extension: impl Into<String>,
         file_token: impl Into<String>,
         r#type: impl Into<String>,
+        point: Point,
     ) -> Self {
         Self {
             config,
@@ -51,7 +64,7 @@ impl CreateImportTaskRequest {
             file_token: file_token.into(),
             r#type: r#type.into(),
             file_name: None,
-            point: None,
+            point,
         }
     }
 
@@ -60,24 +73,44 @@ impl CreateImportTaskRequest {
         self
     }
 
-    pub fn point(mut self, point: Point) -> Self {
-        self.point = Some(point);
-        self
-    }
+    pub async fn execute(self) -> SDKResult<CreateImportTaskResponse> {
+        if self.file_extension.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "file_extension",
+                "file_extension 不能为空",
+            ));
+        }
+        let file_token_len = self.file_token.as_bytes().len();
+        if file_token_len == 0 || file_token_len > 27 {
+            return Err(openlark_core::error::validation_error(
+                "file_token",
+                "file_token 长度必须在 1~27 字节之间",
+            ));
+        }
+        match self.r#type.as_str() {
+            "docx" | "sheet" | "bitable" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "type",
+                    "type 仅支持 docx/sheet/bitable",
+                ))
+            }
+        }
+        if self.point.mount_type != 1 {
+            return Err(openlark_core::error::validation_error(
+                "point.mount_type",
+                "point.mount_type 仅支持固定值 1（挂载到云空间）",
+            ));
+        }
 
-    pub async fn execute(self) -> SDKResult<Response<CreateImportTaskResponse>> {
         let api_endpoint = DriveApi::CreateImportTask;
 
-        let api_request = ApiRequest::<CreateImportTaskResponse>::post(&api_endpoint.to_url())
-            .body(serde_json::json!({
-                "file_extension": self.file_extension,
-                "file_token": self.file_token,
-                "type": self.r#type,
-                "file_name": self.file_name,
-                "point": self.point
-            }));
+        let api_request: ApiRequest<CreateImportTaskResponse> =
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(serialize_params(&self, "创建导入任务")?);
 
-        Transport::request(api_request, &self.config, None).await
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "创建导入任务")
     }
 }
 
@@ -85,7 +118,7 @@ impl CreateImportTaskRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateImportTaskResponse {
     /// 任务ticket
-    pub ticket: Option<String>,
+    pub ticket: String,
 }
 
 impl ApiResponseTrait for CreateImportTaskResponse {
@@ -101,8 +134,14 @@ mod tests {
     #[test]
     fn test_create_import_task_request_builder() {
         let config = Config::default();
-        let request = CreateImportTaskRequest::new(config, "pdf", "file_token", "sheet")
-            .file_name("test_file");
+        let request = CreateImportTaskRequest::new(
+            config,
+            "pdf",
+            "file_token",
+            "sheet",
+            Point::new("AbqrfuRTjlJEIJduwDwcnIabcef"),
+        )
+        .file_name("test_file");
 
         assert_eq!(request.file_extension, "pdf");
         assert_eq!(request.file_token, "file_token");
@@ -112,10 +151,7 @@ mod tests {
 
     #[test]
     fn test_point_structure() {
-        let point = Point {
-            mount_type: 1,
-            mount_key: "mount_key".to_string(),
-        };
+        let point = Point::new("mount_key");
 
         assert_eq!(point.mount_type, 1);
         assert_eq!(point.mount_key, "mount_key");

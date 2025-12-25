@@ -1,9 +1,10 @@
 /// 获取文档所有块
 ///
 /// 获取文档所有块的富文本内容并分页返回。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/list
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/list
+/// doc: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/list
 
-use crate::ccm::docx::common_types::BlockContent;
+use crate::ccm::docx::common_types::DocxBlock;
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -12,6 +13,8 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 /// 获取文档所有块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -22,45 +25,20 @@ pub struct GetDocumentBlocksParams {
     pub page_size: Option<u32>,
     /// 分页标记
     pub page_token: Option<String>,
-    /// 版本号（可选）
-    pub version: Option<u64>,
+    /// 文档版本号（可选，-1 表示最新版本）
+    pub document_revision_id: Option<i64>,
 }
 
 /// 获取文档所有块响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDocumentBlocksResponse {
     /// 块列表
-    pub data: Option<BlockListData>,
-}
-
-/// 块列表数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BlockListData {
-    /// 块列表
-    pub items: Vec<ExtendedBlockItem>,
+    #[serde(default)]
+    pub items: Vec<DocxBlock>,
     /// 分页信息
     pub page_token: Option<String>,
     /// 是否有更多
     pub has_more: Option<bool>,
-}
-
-/// 扩展的块项目（包含父块ID）
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ExtendedBlockItem {
-    /// 块ID
-    pub block_id: String,
-    /// 块类型
-    pub block_type: String,
-    /// 块内容
-    pub content: Option<BlockContent>,
-    /// 子块数量
-    pub children_count: Option<u32>,
-    /// 父块ID
-    pub parent_block_id: Option<String>,
-    /// 创建时间
-    pub create_time: Option<i64>,
-    /// 更新时间
-    pub update_time: Option<i64>,
 }
 
 impl ApiResponseTrait for GetDocumentBlocksResponse {
@@ -82,7 +60,7 @@ impl GetDocumentBlocksRequest {
 
     /// 执行请求
     ///
-    /// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/list
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/list
     pub async fn execute(
         self,
         params: GetDocumentBlocksParams,
@@ -104,14 +82,12 @@ impl GetDocumentBlocksRequest {
         if let Some(page_token) = params.page_token {
             api_request = api_request.query("page_token", &page_token);
         }
-        if let Some(version) = params.version {
-            api_request = api_request.query("version", &version.to_string());
+        if let Some(document_revision_id) = params.document_revision_id {
+            api_request = api_request.query("document_revision_id", &document_revision_id.to_string());
         }
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "获取文档所有块")
     }
 }

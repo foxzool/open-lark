@@ -1,8 +1,9 @@
-/// Bitable 创建数据表API
+/// Bitable 新增一个数据表
 ///
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/create
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table/create
+/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/create
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -13,27 +14,25 @@ use serde::{Deserialize, Serialize};
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateTableRequest {
-    api_request: ApiRequest<CreateTableResponse>,
+    /// 配置信息
+    config: Config,
     /// 多维表格的 app_token
     app_token: String,
     /// 数据表信息
     table: TableData,
-    /// 配置信息
-    config: Config,
-}
-
-/// 创建数据表数据
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct CreateTableData {
-    /// 数据表信息
-    pub table: TableData,
 }
 
 /// 创建数据表响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateTableResponse {
-    /// 创建数据表数据
-    pub data: CreateTableData,
+    /// 多维表格数据表的 ID
+    pub table_id: String,
+    /// 默认表格视图的 ID（仅在请求参数中填写了 `default_view_name` 或 `fields` 字段才会返回）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_view_id: Option<String>,
+    /// 数据表初始字段的 ID 列表（仅在请求参数中填写了 `fields` 字段才会返回）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_id_list: Option<Vec<String>>,
 }
 
 impl ApiResponseTrait for CreateTableResponse {
@@ -46,10 +45,9 @@ impl CreateTableRequest {
     /// 创建新增数据表请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::post(""), // 占位符，将在execute方法中使用enum+builder系统
+            config,
             app_token: String::new(),
             table: TableData::default(),
-            config,
         }
     }
 
@@ -80,6 +78,45 @@ impl CreateTableRequest {
             return Err(validation_error("name", "数据表名称长度不能超过100个字符"));
         }
 
+        // 名称不允许包含 `/ \\ ? * : [ ]`
+        let name = self.table.name.as_str();
+        if name.contains('/') {
+            return Err(validation_error("name", "数据表名称不能包含 '/'"));
+        }
+        if name.contains('\\') {
+            return Err(validation_error("name", "数据表名称不能包含 '\\\\'"));
+        }
+        if name.contains('?') {
+            return Err(validation_error("name", "数据表名称不能包含 '?'"));
+        }
+        if name.contains('*') {
+            return Err(validation_error("name", "数据表名称不能包含 '*'"));
+        }
+        if name.contains(':') {
+            return Err(validation_error("name", "数据表名称不能包含 ':'"));
+        }
+        if name.contains('[') || name.contains(']') {
+            return Err(validation_error("name", "数据表名称不能包含 '[' 或 ']'"));
+        }
+
+        // 如果传入了 default_view_name，则必须传入 fields
+        if self.table.default_view_name.is_some() && self.table.fields.is_none() {
+            return Err(validation_error(
+                "fields",
+                "当填写 default_view_name 时，必须同时填写 fields",
+            ));
+        }
+
+        // default_view_name 名称中不允许包含 [ ]
+        if let Some(ref default_view_name) = self.table.default_view_name {
+            if default_view_name.contains('[') || default_view_name.contains(']') {
+                return Err(validation_error(
+                    "default_view_name",
+                    "默认视图名称不能包含 '[' 或 ']'",
+                ));
+            }
+        }
+
         // 🚀 使用新的enum+builder系统生成API端点
         // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         use crate::common::api_endpoints::BitableApiV1;
@@ -89,8 +126,8 @@ impl CreateTableRequest {
         let request_body = CreateTableRequestBody { table: self.table };
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<CreateTableResponse> = ApiRequest::post(&api_endpoint.to_url())
-            .body(RequestData::Binary(serde_json::to_vec(&request_body)?));
+        let api_request: ApiRequest<CreateTableResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(&request_body)?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
@@ -187,6 +224,9 @@ pub struct TableField {
     /// 字段属性，不同字段类型对应不同的属性结构
     #[serde(skip_serializing_if = "Option::is_none")]
     pub property: Option<serde_json::Value>,
+    /// 字段描述
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<FieldDescription>,
 }
 
 impl TableField {
@@ -195,6 +235,7 @@ impl TableField {
             field_name: name.into(),
             field_type,
             property: None,
+            description: None,
         }
     }
 
@@ -219,6 +260,7 @@ impl TableField {
             field_name: name.into(),
             field_type: 3, // 单选
             property: Some(serde_json::json!({"options": options_value})),
+            description: None,
         }
     }
 
@@ -233,6 +275,7 @@ impl TableField {
             field_name: name.into(),
             field_type: 4, // 多选
             property: Some(serde_json::json!({"options": options_value})),
+            description: None,
         }
     }
 
@@ -247,4 +290,15 @@ impl TableField {
 #[allow(dead_code)]
 struct CreateTableRequestBody {
     table: TableData,
+}
+
+/// 字段描述（用于创建数据表时的字段初始描述）
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct FieldDescription {
+    /// 是否禁止同步到表单的问题描述
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_sync: Option<bool>,
+    /// 描述文本内容（支持换行）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
 }

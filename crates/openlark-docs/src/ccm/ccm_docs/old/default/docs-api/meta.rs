@@ -1,7 +1,8 @@
 /// 获取元数据
 ///
 /// 根据 token 获取各类文件的元数据。
-/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
+/// docPath: /document/ukTMukTMukTM/uMjN3UjLzYzN14yM2cTN
+/// doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -9,6 +10,8 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetMetaReq {
@@ -66,14 +69,34 @@ impl GetMetaRequest {
     }
 
     pub async fn send(self) -> SDKResult<GetMetaResponse> {
+        if self.req.request_docs.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "request_docs",
+                "request_docs 不能为空",
+            ));
+        }
+        for (idx, doc) in self.req.request_docs.iter().enumerate() {
+            if doc.docs_token.is_empty() {
+                return Err(openlark_core::error::validation_error(
+                    &format!("request_docs[{}].docs_token", idx),
+                    "docs_token 不能为空",
+                ));
+            }
+            if doc.docs_type.is_empty() {
+                return Err(openlark_core::error::validation_error(
+                    &format!("request_docs[{}].docs_type", idx),
+                    "docs_type 不能为空",
+                ));
+            }
+        }
+
         use crate::common::api_endpoints::CcmDocsApiOld;
 
         let api_request: ApiRequest<GetMetaResponse> =
-            ApiRequest::post(&CcmDocsApiOld::Meta.to_url()).body(serde_json::to_value(&self.req)?);
+            ApiRequest::post(&CcmDocsApiOld::Meta.to_url())
+                .body(serialize_params(&self.req, "获取元数据")?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+        extract_response_data(response, "获取元数据")
     }
 }

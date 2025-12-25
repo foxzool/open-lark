@@ -1,64 +1,81 @@
-/// 创建Lingo词条
-///
-/// 创建Lingo语言服务词条。
-/// docPath: https://open.feishu.cn/document/lingo-v1/entity/create
+//! 创建免审词条
+//!
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/create
+
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
-use crate::lingo::v1::LingoEntity;
+use crate::baike::lingo::v1::models::{Entity, EntityInput, UserIdType};
+use crate::common::api_endpoints::LingoApiV1;
 
-#[derive(Debug, serde::Deserialize)]
-pub struct CreateLingoEntityResponse {
-    pub data: Option<LingoEntity>,
+/// 创建免审词条响应（data）
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateEntityResp {
+    pub entity: Entity,
 }
 
-#[derive(Debug, serde::Serialize)]
-pub struct CreateLingoEntityParams {
-    pub title: String,
-    pub content: String,
-    pub entity_type: String,
-    pub tags: Option<Vec<String>>,
-    pub language: Option<String>,
-}
-
-impl ApiResponseTrait for CreateLingoEntityResponse {
+impl ApiResponseTrait for CreateEntityResp {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 创建Lingo词条
-///
-/// 创建Lingo语言服务词条。
-/// docPath: https://open.feishu.cn/document/lingo-v1/entity/create
-pub async fn create_lingo_entity(
-    config: &Config,
-    params: CreateLingoEntityParams,
-) -> SDKResult<LingoEntity> {
-    // 验证必填字段
-    validate_required_field("词条标题", Some(&params.title), "词条标题不能为空")?;
-    validate_required_field("词条内容", Some(&params.content), "词条内容不能为空")?;
-    validate_required_field("词条类型", Some(&params.entity_type), "词条类型不能为空")?;
+/// 创建免审词条请求
+pub struct CreateEntityRequest {
+    config: Config,
+    body: EntityInput,
+    repo_id: Option<String>,
+    user_id_type: Option<UserIdType>,
+}
 
-    // 使用enum+builder系统生成API端点
-    let api_endpoint = LingoApiV1::EntityCreate;
+impl CreateEntityRequest {
+    pub fn new(config: Config, body: EntityInput) -> Self {
+        Self {
+            config,
+            body,
+            repo_id: None,
+            user_id_type: None,
+        }
+    }
 
-    // 创建API请求
-    let api_request: ApiRequest<CreateLingoEntityResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建Lingo词条")?);
+    /// 词库 ID（不传默认创建至全员词库）
+    pub fn repo_id(mut self, repo_id: impl Into<String>) -> Self {
+        self.repo_id = Some(repo_id.into());
+        self
+    }
 
-    // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
-    let resp: CreateLingoEntityResponse = response.data.ok_or_else(|| {
-        openlark_core::error::validation_error("response_data", "Response data is missing")
-    })?;
+    /// 用户 ID 类型（query: user_id_type）
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
 
-    resp.data.ok_or_else(|| {
-        openlark_core::error::validation_error("entity_data", "Entity data is missing")
-    })
+    pub async fn send(self) -> SDKResult<CreateEntityResp> {
+        validate_required!(self.body.main_keys, "main_keys 不能为空");
+
+        let body = serde_json::to_value(&self.body).map_err(|e| {
+            openlark_core::error::serialization_error("序列化创建免审词条请求体失败", Some(e))
+        })?;
+
+        let mut api_request: ApiRequest<CreateEntityResp> =
+            ApiRequest::post(&LingoApiV1::EntityCreate.to_url()).body(body);
+        if let Some(repo_id) = &self.repo_id {
+            api_request = api_request.query("repo_id", repo_id);
+        }
+        if let Some(user_id_type) = &self.user_id_type {
+            api_request = api_request.query("user_id_type", user_id_type.as_str());
+        }
+
+        let response: Response<CreateEntityResp> =
+            Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
 }

@@ -4,6 +4,7 @@ pub mod batch_create;
 pub mod create;
 pub mod delete;
 pub mod list;
+pub mod models;
 pub mod transfer_owner;
 pub mod update;
 
@@ -13,5 +14,6 @@ pub use batch_create::*;
 pub use create::*;
 pub use delete::*;
 pub use list::*;
+pub use models::*;
 pub use transfer_owner::*;
 pub use update::*;

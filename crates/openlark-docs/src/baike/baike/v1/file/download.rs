@@ -1,49 +1,34 @@
 //! 下载图片
 //!
-//! doc: https://open.feishu.cn/document/server-docs/baike-v1/file/download
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/file/download
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
-use serde::{Deserialize, Serialize};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DownloadFileRequest {}
+use crate::common::api_endpoints::BaikeApiV1;
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DownloadFileResponse {}
-
-impl ApiResponseTrait for DownloadFileResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
-    }
-}
-
-#[derive(Debug, Default)]
-pub struct DownloadFileBuilder {
-    api_req: ApiRequest<DownloadFileRequest>,
+/// 下载图片请求
+pub struct DownloadFileRequest {
+    config: Config,
     file_token: String,
 }
 
-impl DownloadFileBuilder {
-    pub fn new(file_token: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.method = openlark_core::api::HttpMethod::Get;
-        builder.file_token = file_token.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/baike/v1/files/{}/download",
-            builder.file_token
-        );
-        builder.api_req.body = None;
-        builder
+impl DownloadFileRequest {
+    pub fn new(config: Config, file_token: impl Into<String>) -> Self {
+        Self {
+            config,
+            file_token: file_token.into(),
+        }
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    /// 下载原图，返回二进制内容
+    pub async fn send(self) -> SDKResult<Vec<u8>> {
+        validate_required!(self.file_token, "file_token 不能为空");
+
+        let api_request: ApiRequest<Vec<u8>> =
+            ApiRequest::get(&BaikeApiV1::FileDownload(self.file_token).to_url());
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }

@@ -1,7 +1,8 @@
 /// 移动行列
 ///
 /// 移动工作表中的行或列。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/move_dimension
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/move_dimension
+/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/move_dimension
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,7 +11,7 @@ use openlark_core::{
 };
 
 use super::super::models::*;
-use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
+use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 
 impl ApiResponseTrait for MoveDimensionResponse {
     fn data_format() -> ResponseFormat {
@@ -21,14 +22,17 @@ impl ApiResponseTrait for MoveDimensionResponse {
 /// 移动行列
 ///
 /// 移动工作表中的行或列。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/move_dimension
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/move_dimension
+/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/move_dimension
 pub async fn move_dimension(
     config: &Config,
     spreadsheet_token: &str,
+    sheet_id: &str,
     params: MoveDimensionParams,
 ) -> SDKResult<MoveDimensionResponse> {
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::MoveDimension(spreadsheet_token.to_string());
+    let api_endpoint =
+        SheetsApiV3::MoveDimension(spreadsheet_token.to_string(), sheet_id.to_string());
 
     // 创建API请求 - 使用类型安全的URL生成和标准化的参数序列化
     let api_request: ApiRequest<MoveDimensionResponse> =

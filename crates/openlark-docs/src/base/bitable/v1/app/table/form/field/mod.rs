@@ -5,14 +5,18 @@ pub mod patch;
 use openlark_core::config::Config;
 // 明确导出以避免模糊重导出
 pub use list::{
-    list_form_field_questions, FormFieldQuestion, ListFormFieldQuestionRequest,
+    FormFieldQuestion, ListFormFieldQuestionRequest, ListFormFieldQuestionRequestBuilder,
     ListFormFieldQuestionResponse,
 };
 pub use models::PatchFormFieldRequest;
+pub use patch::{
+    PatchFormFieldQuestionBuilder, PatchFormFieldQuestionRequest, PatchFormFieldQuestionResponse,
+    PatchedFormFieldQuestion,
+};
 
 /// 表单字段服务
 pub struct FormFieldService {
-    pub config: Config,
+    config: Config,
 }
 
 impl FormFieldService {
@@ -20,15 +24,15 @@ impl FormFieldService {
         Self { config }
     }
 
-    /// 列出表单问题
-    pub async fn list(
-        &self,
-        request: ListFormFieldQuestionRequest,
-        _option: Option<openlark_core::req_option::RequestOption>,
-    ) -> openlark_core::SDKResult<
-        crate::bitable::v1::app::table::form::field::list::ListFormFieldQuestionData,
-    > {
-        // 忽略 option 参数，因为它在请求结构体中已经处理了
-        request.execute(&self.config).await
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
+
+    pub fn list(&self) -> ListFormFieldQuestionRequestBuilder {
+        ListFormFieldQuestionRequestBuilder::new(self.config.clone())
+    }
+
+    pub fn patch(&self) -> PatchFormFieldQuestionBuilder {
+        PatchFormFieldQuestionBuilder::new(self.config.clone())
     }
 }

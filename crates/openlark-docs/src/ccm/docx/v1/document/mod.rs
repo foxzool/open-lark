@@ -13,15 +13,18 @@ use openlark_core::{
 };
 
 // 重新导出所有模块类型，解决名称冲突
-pub use create::{CreateDocumentRequest, DocumentData as CreatedDocumentData};
-pub use get::{DocumentData, GetDocumentParams, GetDocumentRequest, GetDocumentResponse};
+pub use convert::{ContentType, ConvertContentToBlocksParams, ConvertContentToBlocksRequest, ConvertContentToBlocksResponse};
+pub use create::{CreateDocumentParams, CreateDocumentRequest, CreateDocumentResponse, CreatedDocument};
+pub use get::{Document, GetDocumentRequest, GetDocumentResponse};
+pub use raw_content::{GetDocumentRawContentParams, GetDocumentRawContentRequest, GetDocumentRawContentResponse};
+pub use block::*;
 
 // 子模块
+mod convert;
 mod create;
 mod get;
-// mod convert;    // TODO: 实现文档转换
-// mod raw_content; // TODO: 实现原始内容获取
-// mod block;       // TODO: 实现区块管理
+mod raw_content;
+pub mod block;
 
 /// 文档服务
 ///
@@ -67,16 +70,12 @@ impl DocumentService {
     /// ```
     pub async fn create(
         &self,
-        request: CreateDocumentRequest,
+        params: CreateDocumentParams,
         option: Option<RequestOption>,
-    ) -> SDKResult<CreatedDocumentData> {
-        let response = create::create_document(request, &self.config, option).await?;
-        let resp_data = response
-            .data
-            .ok_or_else(|| validation_error("response_data", "Response data is missing"))?;
-        resp_data
-            .data
-            .ok_or_else(|| validation_error("data", "Document data is missing"))
+    ) -> SDKResult<CreatedDocument> {
+        let _ = option;
+        let data = CreateDocumentRequest::new(self.config.clone()).execute(params).await?;
+        Ok(data.document)
     }
 
     /// 获取文档信息
@@ -108,13 +107,11 @@ impl DocumentService {
     pub async fn get(
         &self,
         request: GetDocumentRequest,
-        params: GetDocumentParams,
         option: Option<RequestOption>,
-    ) -> SDKResult<DocumentData> {
-        let result = request.execute(params).await?;
-        result
-            .data
-            .ok_or_else(|| validation_error("response_data", "Response data is missing"))
+    ) -> SDKResult<Document> {
+        let _ = option;
+        let result = request.execute().await?;
+        Ok(result.document)
     }
 }
 

@@ -1,14 +1,17 @@
 //! 修改保护范围
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/modify-protection-scopes
+//! docPath: /document/ukTMukTMukTM/uUTM5YjL1ETO24SNxkjN
+//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/modify-protection-scopes
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 use crate::common::api_endpoints::CcmSheetApiOld;
 
@@ -58,14 +61,16 @@ pub async fn protected_range_batch_update(
     request: BatchUpdateProtectedRangeRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<BatchUpdateProtectedRangeResponse>> {
+) -> SDKResult<BatchUpdateProtectedRangeResponse> {
     let api_endpoint = CcmSheetApiOld::ProtectedRangeBatchUpdate(spreadsheet_token);
     let mut api_request: ApiRequest<BatchUpdateProtectedRangeResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_value(request)?);
+        ApiRequest::post(&api_endpoint.to_url())
+            .body(serialize_params(&request, "修改保护范围")?);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "修改保护范围")
 }

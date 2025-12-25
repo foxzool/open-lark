@@ -1,8 +1,9 @@
-/// Bitable 获取视图API
+/// Bitable 获取视图
 ///
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/view/get
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-view/get
+/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/get
 use openlark_core::{
-    api::ApiRequest,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -18,15 +19,12 @@ use super::patch::View;
 pub struct GetViewRequest {
     /// 配置信息
     config: Config,
-    api_request: ApiRequest<GetViewResponse>,
     /// 多维表格的 app_token
     app_token: String,
     /// 数据表的 table_id
     table_id: String,
     /// 视图的 view_id
     view_id: String,
-    /// 用户 ID 类型
-    user_id_type: Option<String>,
 }
 
 impl GetViewRequest {
@@ -34,11 +32,9 @@ impl GetViewRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            api_request: ApiRequest::get(""),
             app_token: String::new(),
             table_id: String::new(),
             view_id: String::new(),
-            user_id_type: None,
         }
     }
 
@@ -57,12 +53,6 @@ impl GetViewRequest {
     /// 设置视图ID
     pub fn view_id(mut self, view_id: String) -> Self {
         self.view_id = view_id;
-        self
-    }
-
-    /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.user_id_type = Some(user_id_type);
         self
     }
 
@@ -91,26 +81,13 @@ impl GetViewRequest {
         );
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<GetViewResponse> = ApiRequest::get(&api_endpoint.to_url());
-
-        // 设置查询参数
-        if let Some(ref user_id_type) = self.user_id_type {
-            api_request = api_request.query("user_id_type", user_id_type);
-        }
+        let api_request: ApiRequest<GetViewResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-
-        // 解析响应数据
-        let view_data: View = response
+        response
             .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析获取视图响应失败", "响应数据格式不正确"))?;
-
-        Ok(GetViewResponse {
-            view: view_data,
-            success: response.raw_response.is_success(),
-        })
+            .ok_or_else(|| validation_error("response", "响应数据为空"))
     }
 }
 
@@ -145,12 +122,6 @@ impl GetViewRequestBuilder {
         self
     }
 
-    /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
     /// 构建请求
     pub fn build(self) -> GetViewRequest {
         self.request
@@ -162,6 +133,10 @@ impl GetViewRequestBuilder {
 pub struct GetViewResponse {
     /// 视图信息
     pub view: View,
-    /// 操作结果
-    pub success: bool,
+}
+
+impl ApiResponseTrait for GetViewResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }

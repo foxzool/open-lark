@@ -1,15 +1,17 @@
 //! 批量删除条件格式
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-delete
+//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/conditionformat/condition-format-delete
+//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-delete
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_utils::*;
 use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -48,14 +50,16 @@ pub async fn batch_delete(
     request: BatchDeleteConditionFormatRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<BatchDeleteConditionFormatResponse>> {
+) -> SDKResult<BatchDeleteConditionFormatResponse> {
     let api_endpoint = CcmSheetApiOld::ConditionFormatsBatchDelete(spreadsheet_token);
     let mut api_request: ApiRequest<BatchDeleteConditionFormatResponse> =
-        ApiRequest::delete(&api_endpoint.to_url()).body(serde_json::to_value(request)?);
+        ApiRequest::delete(&api_endpoint.to_url())
+            .body(serialize_params(&request, "批量删除条件格式")?);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "批量删除条件格式")
 }

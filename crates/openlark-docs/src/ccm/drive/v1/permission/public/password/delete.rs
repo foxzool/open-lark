@@ -1,14 +1,17 @@
 /// 关闭云文档密码
 ///
 /// 该接口用于根据 filetoken 关闭云文档密码。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-public-password/delete
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-public-password/delete
+/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/permission-public-password/delete
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeletePermissionPublicPasswordRequest {
@@ -27,16 +30,20 @@ impl DeletePermissionPublicPasswordRequest {
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<DeletePermissionPublicPasswordResponse>> {
-        let url = format!(
-            "/open-apis/drive/v1/permissions/{}/public/password",
-            self.token
-        );
-        let mut api_request: ApiRequest<DeletePermissionPublicPasswordResponse> =
-            ApiRequest::delete(&url);
-        api_request = api_request.query("type", &self.r#type);
+    pub async fn execute(self) -> SDKResult<DeletePermissionPublicPasswordResponse> {
+        if self.token.is_empty() {
+            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+        }
+        if self.r#type.is_empty() {
+            return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        }
 
-        Transport::request(api_request, &self.config, None).await
+        let api_endpoint = DriveApi::DeletePublicPassword(self.token);
+        let api_request: ApiRequest<DeletePermissionPublicPasswordResponse> =
+            ApiRequest::delete(&api_endpoint.to_url()).query("type", self.r#type);
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "停用云文档密码")
     }
 }
 

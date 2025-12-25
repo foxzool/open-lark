@@ -1,6 +1,7 @@
-/// Bitable 列出字段API
+/// Bitable 列出字段
 ///
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/field/list
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-field/list
+/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -18,7 +19,6 @@ pub use super::create::Field;
 pub struct ListFieldRequest {
     /// 配置信息
     config: Config,
-    api_request: ApiRequest<ListFieldResponse>,
     /// 多维表格的 app_token
     app_token: String,
     /// 数据表的 table_id
@@ -31,8 +31,6 @@ pub struct ListFieldRequest {
     page_token: Option<String>,
     /// 分页大小
     page_size: Option<i32>,
-    /// 用户 ID 类型
-    user_id_type: Option<String>,
 }
 
 impl ListFieldRequest {
@@ -40,14 +38,12 @@ impl ListFieldRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            api_request: ApiRequest::get(""),
             app_token: String::new(),
             table_id: String::new(),
             view_id: None,
             text_field_as_array: None,
             page_token: None,
             page_size: None,
-            user_id_type: None,
         }
     }
 
@@ -84,12 +80,6 @@ impl ListFieldRequest {
     /// 设置分页大小
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size.min(100)); // 限制最大100
-        self
-    }
-
-    /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.user_id_type = Some(user_id_type);
         self
     }
 
@@ -136,10 +126,6 @@ impl ListFieldRequest {
 
         if let Some(page_size) = self.page_size {
             api_request = api_request.query("page_size", &page_size.to_string());
-        }
-
-        if let Some(ref user_id_type) = self.user_id_type {
-            api_request = api_request.query("user_id_type", user_id_type);
         }
 
         // 发送请求
@@ -199,36 +185,23 @@ impl ListFieldRequestBuilder {
         self
     }
 
-    /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
     /// 构建请求
     pub fn build(self) -> ListFieldRequest {
         self.request
     }
 }
 
-/// 列出字段数据
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ListFieldData {
-    /// 是否还有更多项
-    pub has_more: Option<bool>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 总数
-    pub total: Option<i32>,
-    /// 字段信息列表
-    pub items: Option<Vec<Field>>,
-}
-
 /// 列出字段响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListFieldResponse {
-    /// 字段列表数据
-    pub data: ListFieldData,
+    /// 是否还有更多项
+    pub has_more: bool,
+    /// 分页标记，当 has_more 为 true 时，会同时返回新的 page_token，否则不返回 page_token
+    pub page_token: Option<String>,
+    /// 总数
+    pub total: i32,
+    /// 字段信息
+    pub items: Vec<Field>,
 }
 
 impl ApiResponseTrait for ListFieldResponse {

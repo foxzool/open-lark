@@ -1,13 +1,16 @@
 //! 更新下拉列表设置
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/update-datavalidation
+//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/datavalidation/update-datavalidation
+//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/update-datavalidation
 
 use openlark_core::{
-    api::{ApiRequest, Response},
+    api::ApiRequest,
     config::Config,
     http::Transport,
     SDKResult,
 };
+
+use crate::common::api_utils::*;
 
 /// 更新下拉列表设置（PUT）
 ///
@@ -19,7 +22,7 @@ pub async fn update(
     data_validation_id: String,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<serde_json::Value>> {
+) -> SDKResult<serde_json::Value> {
     use crate::common::api_endpoints::CcmSheetApiOld;
 
     let api_endpoint =
@@ -31,5 +34,6 @@ pub async fn update(
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "更新下拉列表设置")
 }

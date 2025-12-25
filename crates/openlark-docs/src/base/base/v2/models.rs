@@ -1,12 +1,24 @@
 use serde::{Deserialize, Serialize};
 
-/// AppRole 自定义角色
-#[derive(Debug, Serialize, Deserialize)]
+/// Base v2 自定义角色（AppRole）
+///
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/list
+/// doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/list-2
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AppRole {
-    /// 角色ID，以 "custom_" 开头
+    /// 自定义权限的名字
+    pub role_name: String,
+    /// 数据表权限配置列表
+    ///
+    /// 注意：该字段结构较复杂（包含记录规则、字段权限等），此处按 JSON 透传。
+    #[serde(default)]
+    pub table_roles: Vec<serde_json::Value>,
+    /// 角色ID（以 "custom_" 开头）
+    pub role_id: String,
+    /// Block 权限配置列表（结构按 JSON 透传）
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_id: Option<String>,
-    /// 自定义角色的名字
+    pub block_roles: Option<Vec<serde_json::Value>>,
+    /// Base 规则（结构按 JSON 透传）
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_name: Option<String>,
+    pub base_rule: Option<serde_json::Value>,
 }

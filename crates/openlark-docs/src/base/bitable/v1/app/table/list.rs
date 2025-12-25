@@ -1,5 +1,6 @@
 /// Bitable 列出数据表API
 ///
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table/list
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -13,7 +14,6 @@ use serde::{Deserialize, Serialize};
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ListTablesRequest {
-    api_request: ApiRequest<ListTablesResponse>,
     /// 多维表格的 app_token
     app_token: String,
     /// 分页大小
@@ -28,7 +28,6 @@ impl ListTablesRequest {
     /// 创建列出数据表请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::get("/open-apis/bitable/v1/apps/:app_token/tables"),
             app_token: String::new(),
             page_size: None,
             page_token: None,
@@ -135,29 +134,31 @@ impl ListTablesRequestBuilder {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TableInfo {
     /// 数据表的ID
-    pub table_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_id: Option<String>,
     /// 数据表的版本号
-    pub revision: i32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision: Option<i32>,
     /// 数据表的名称
-    pub name: String,
-}
-
-/// 列出数据表数据
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ListTablesData {
-    /// 数据表列表
-    pub items: Option<Vec<TableInfo>>,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 是否有更多
-    pub has_more: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 /// 列出数据表响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListTablesResponse {
-    /// 列出数据表数据
-    pub data: ListTablesData,
+    /// 是否还有更多项
+    #[serde(default)]
+    pub has_more: bool,
+    /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 总数
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total: Option<i32>,
+    /// 数据表列表
+    #[serde(default)]
+    pub items: Vec<TableInfo>,
 }
 
 impl ApiResponseTrait for ListTablesResponse {

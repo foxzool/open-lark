@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,10 +7,11 @@ use openlark_core::{
 /// 上传文件（一次性上传）
 ///
 /// 上传指定文件到指定目录中，支持单次上传文件。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/upload_all
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_all
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/upload_all
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 上传文件请求
 #[derive(Debug)]
@@ -24,6 +25,8 @@ pub struct UploadAllRequest {
     pub parent_type: String,
     /// 文件大小
     pub size: usize,
+    /// 文件的 Adler-32 校验和
+    pub checksum: Option<String>,
     /// 文件内容
     pub file: Vec<u8>,
 }
@@ -57,11 +60,50 @@ impl UploadAllRequest {
             parent_node: parent_node.into(),
             parent_type: parent_type.into(),
             size,
+            checksum: None,
             file,
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<UploadAllResponse>> {
+    /// 设置文件校验和（Adler-32）
+    pub fn checksum(mut self, checksum: impl Into<String>) -> Self {
+        self.checksum = Some(checksum.into());
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<UploadAllResponse> {
+        let file_name_len = self.file_name.as_bytes().len();
+        if file_name_len == 0 || file_name_len > 250 {
+            return Err(openlark_core::error::validation_error(
+                "file_name",
+                "file_name 长度必须在 1~250 字节之间",
+            ));
+        }
+        if self.parent_type != "explorer" {
+            return Err(openlark_core::error::validation_error(
+                "parent_type",
+                "parent_type 仅支持固定值 explorer",
+            ));
+        }
+        if self.parent_node.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "parent_node",
+                "parent_node 不能为空",
+            ));
+        }
+        if self.size == 0 || self.size > 20 * 1024 * 1024 {
+            return Err(openlark_core::error::validation_error(
+                "size",
+                "size 必须在 1~20971520 字节之间",
+            ));
+        }
+        if self.file.len() != self.size {
+            return Err(openlark_core::error::validation_error(
+                "size",
+                "size 必须与 file 的实际长度一致",
+            ));
+        }
+
         let api_endpoint = DriveApi::UploadFile;
 
         // 构建 multipart 所需的元数据
@@ -71,6 +113,8 @@ impl UploadAllRequest {
             parent_type: String,
             parent_node: String,
             size: usize,
+            #[serde(skip_serializing_if = "Option::is_none")]
+            checksum: Option<String>,
         }
 
         let meta = UploadMeta {
@@ -78,6 +122,7 @@ impl UploadAllRequest {
             parent_type: self.parent_type,
             parent_node: self.parent_node,
             size: self.size,
+            checksum: self.checksum,
         };
 
         // 使用 json_body 传递元数据，使用 file_content 传递文件
@@ -86,7 +131,8 @@ impl UploadAllRequest {
             .json_body(&meta)
             .file_content(self.file);
 
-        Transport::request(request, &self.config, None).await
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "上传文件")
     }
 }
 

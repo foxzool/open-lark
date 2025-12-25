@@ -1,9 +1,10 @@
 /// 更新块的内容
 ///
 /// 更新指定块的内容。如果操作成功，接口将返回更新后的块的富文本内容。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/patch
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/patch
+/// doc: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/patch
 
-use crate::ccm::docx::common_types::BlockContent;
+use crate::ccm::docx::common_types::DocxBlock;
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -13,31 +14,26 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_utils::*;
+
 /// 更新块内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateDocumentBlockParams {
     /// 文档ID
+    #[serde(skip_serializing)]
     pub document_id: String,
     /// 块ID
+    #[serde(skip_serializing)]
     pub block_id: String,
-    /// 块内容
-    pub content: Option<BlockContent>,
+    /// 更新内容（按文档定义传入，例如 update_text_elements 等）
+    #[serde(flatten)]
+    pub update: serde_json::Value,
 }
 
 /// 更新块内容响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateDocumentBlockResponse {
-    /// 更新结果
-    pub data: Option<UpdatedBlockData>,
-}
-
-/// 更新的块数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UpdatedBlockData {
-    /// 块ID
-    pub block_id: String,
-    /// 更新后的内容
-    pub content: Option<BlockContent>,
+    pub block: DocxBlock,
 }
 
 impl ApiResponseTrait for UpdateDocumentBlockResponse {
@@ -70,8 +66,6 @@ impl UpdateDocumentBlockRequest {
         api_request = api_request.json_body(&params);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "更新块的内容")
     }
 }

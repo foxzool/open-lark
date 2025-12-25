@@ -1,38 +1,41 @@
-/// App_Workflow服务模块 - 简化实现
-use openlark_core::api::{ApiResponseTrait, ResponseFormat};
+/// 自动化流程模块
 use openlark_core::config::Config;
-use serde::{Deserialize, Serialize};
 
-// 导入子模块
 pub mod list;
 pub mod update;
 
-// 导出所有子模块内容，避免命名冲突
-// list模块中的Workflow与update模块冲突，使用重导出避免冲突
-pub use list::{ListWorkflowRequest, ListWorkflowResponse};
-pub use update::*;
+pub use list::{ListWorkflowRequest, ListWorkflowResponse, Workflow};
+pub use update::{UpdateWorkflowRequest, UpdateWorkflowResponse, WorkflowStatus};
 
-/// 简化的服务结构体
-pub struct SimpleService {}
-
-impl SimpleService {}
-#[derive(Debug, Deserialize, Serialize)]
-pub struct SimpleResponse;
-impl ApiResponseTrait for SimpleResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+/// 自动化流程服务
+#[derive(Debug, Clone)]
+pub struct AppWorkflowService {
+    config: Config,
 }
 
-/// App_Workflow服务
-pub struct AppWorkflowService {}
-
 impl AppWorkflowService {
-    pub fn new(_config: Config) -> Self {
-        Self {}
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// 列出自动化流程
+    pub fn list(&self, app_token: impl Into<String>) -> ListWorkflowRequest {
+        ListWorkflowRequest::new(self.config.clone()).app_token(app_token)
+    }
+
+    /// 更新自动化流程状态
+    pub fn update(
+        &self,
+        app_token: impl Into<String>,
+        workflow_id: impl Into<String>,
+        status: WorkflowStatus,
+    ) -> UpdateWorkflowRequest {
+        UpdateWorkflowRequest::new(self.config.clone())
+            .app_token(app_token)
+            .workflow_id(workflow_id)
+            .status(status)
     }
 }
 
 // Type alias for compatibility
 pub type ServiceType = AppWorkflowService;
-pub type ResponseType = SimpleResponse;

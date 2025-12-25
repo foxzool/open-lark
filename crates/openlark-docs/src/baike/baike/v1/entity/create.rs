@@ -1,114 +1,94 @@
 //! 创建免审词条
 //!
-//! doc: https://open.feishu.cn/document/server-docs/baike-v1/entity/create
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/create
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    validate_required,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::BaikeApiV1;
+use crate::baike::baike::v1::models::{Entity, OuterInfo, RelatedMeta, Term, UserIdType};
+
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct CreateEntityRequest {
+pub struct CreateEntityReq {
+    /// 词条名
     pub main_keys: Vec<Term>,
+    /// 别名
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aliases: Option<Vec<Term>>,
+    /// 纯文本格式词条释义（description 与 rich_text 至少有一个）
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 更多相关信息
     #[serde(skip_serializing_if = "Option::is_none")]
     pub related_meta: Option<RelatedMeta>,
+    /// 外部系统关联数据
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outer_info: Option<OuterInfo>,
+    /// 富文本格式
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rich_text: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Term {
-    pub key: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub display_status: Option<DisplayStatus>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DisplayStatus {
-    pub allow_highlight: bool,
-    pub allow_search: bool,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct RelatedMeta {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub users: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub chats: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub docs: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub oncalls: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub links: Option<Vec<String>>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct OuterInfo {
-    pub provider: String,
-    pub outer_id: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct CreateEntityResponse {
+/// 创建免审词条响应（data）
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct CreateEntityResp {
     pub entity: Entity,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Entity {
-    pub id: String,
-    pub main_keys: Vec<Term>,
-    pub aliases: Option<Vec<Term>>,
-    pub description: String,
-    pub creator: String,
-    pub create_time: i64,
-    pub updater: String,
-    pub update_time: i64,
-    pub related_meta: Option<RelatedMeta>,
-    pub outer_info: Option<OuterInfo>,
-    pub rich_text: Option<String>,
-    pub source: Option<i32>,
-}
-
-impl ApiResponseTrait for CreateEntityResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+impl ApiResponseTrait for CreateEntityResp {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct CreateEntityBuilder {
-    api_req: ApiRequest<CreateEntityRequest>,
+/// 创建免审词条请求
+pub struct CreateEntityRequest {
+    config: Config,
+    user_id_type: Option<UserIdType>,
+    req: CreateEntityReq,
 }
 
-impl CreateEntityBuilder {
-    pub fn new() -> Self {
-        let mut builder = Self::default();
-        builder.api_req.method = openlark_core::api::HttpMethod::Post;
-        builder.api_req.url = "https://open.feishu.cn/open-apis/baike/v1/entities".to_string();
-        builder.api_req.body = Some(CreateEntityRequest::default());
-        builder
-    }
-
-    pub fn main_keys(mut self, main_keys: Vec<Term>) -> Self {
-        if let Some(body) = &mut self.api_req.body {
-            body.main_keys = main_keys;
+impl CreateEntityRequest {
+    pub fn new(config: Config, req: CreateEntityReq) -> Self {
+        Self {
+            config,
+            user_id_type: None,
+            req,
         }
+    }
+
+    /// 设置用户 ID 类型（query: user_id_type）
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
+        self.user_id_type = Some(user_id_type);
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    pub async fn send(self) -> SDKResult<CreateEntityResp> {
+        validate_required!(self.req.main_keys, "main_keys 不能为空");
+        if self.req.description.as_deref().unwrap_or_default().is_empty()
+            && self.req.rich_text.as_deref().unwrap_or_default().is_empty()
+        {
+            return Err(openlark_core::error::CoreError::validation_msg(
+                "description 与 rich_text 至少填写一个",
+            ));
+        }
+
+        let mut api_request: ApiRequest<CreateEntityResp> =
+            ApiRequest::post(&BaikeApiV1::EntityCreate.to_url()).body(serde_json::to_value(&self.req)?);
+        if let Some(user_id_type) = &self.user_id_type {
+            api_request = api_request.query("user_id_type", user_id_type.as_str());
+        }
+
+        let response: Response<CreateEntityResp> =
+            Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }

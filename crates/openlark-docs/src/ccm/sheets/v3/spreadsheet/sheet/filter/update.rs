@@ -1,26 +1,29 @@
 /// 更新筛选
 ///
-/// 更新现有的数据筛选条件。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter/update
+/// 更新子表筛选范围中的列筛选条件。
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/update
+/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter/update
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-
-use super::{CreateFilterRequest, FilterData};
-use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
-
-// 导入序列化支持
 use serde::{Deserialize, Serialize};
 
-/// 更新筛选响应
+use super::Condition;
+use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
+
+/// 更新筛选请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UpdateFilterResponse {
-    /// 筛选信息
-    pub data: Option<FilterData>,
+pub struct UpdateFilterRequest {
+    pub col: String,
+    pub condition: Condition,
 }
+
+/// 更新筛选响应体 data（data 为 `{}`）
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct UpdateFilterResponse {}
 
 impl ApiResponseTrait for UpdateFilterResponse {
     fn data_format() -> ResponseFormat {
@@ -29,36 +32,18 @@ impl ApiResponseTrait for UpdateFilterResponse {
 }
 
 /// 更新筛选
-///
-/// 更新现有的数据筛选条件。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter/update
 pub async fn update_filter(
     config: &Config,
     spreadsheet_token: &str,
-    filter_id: &str,
-    params: CreateFilterRequest,
+    sheet_id: &str,
+    params: UpdateFilterRequest,
 ) -> SDKResult<UpdateFilterResponse> {
-    // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::UpdateFilter(spreadsheet_token.to_string());
-
-    // 创建API请求 - 使用类型安全的URL生成和标准化的参数序列化
-    let mut request_body = serde_json::json!({
-        "filter_view_id": filter_id
-    });
-
-    // 合并其他参数
-    if let Ok(params_obj) = serde_json::to_value(params) {
-        if let Some(params_map) = params_obj.as_object() {
-            for (key, value) in params_map {
-                request_body[key] = value.clone();
-            }
-        }
-    }
-
+    let api_endpoint =
+        SheetsApiV3::UpdateFilter(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<UpdateFilterResponse> =
-        ApiRequest::put(&api_endpoint.to_url()).body(request_body);
+        ApiRequest::put(&api_endpoint.to_url()).body(serialize_params(&params, "更新筛选")?);
 
-    // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "更新筛选")
 }
+

@@ -19,13 +19,14 @@ pub use delete::*;
 pub use get::*;
 pub use list::*;
 pub use update::*;
-// pub use r#match::*; // Generated: Module use not found
+pub use r#match::*;
 pub use highlight::*;
 pub use search::*;
 
 /// Lingo词条管理服务
 #[derive(Debug, Clone)]
 pub struct LingoEntityService {
+    #[allow(dead_code)]
     config: Config,
 }
 

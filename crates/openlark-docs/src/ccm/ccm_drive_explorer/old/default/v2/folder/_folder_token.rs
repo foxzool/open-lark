@@ -1,6 +1,7 @@
 //! 根据 folderToken 在该 folder 下创建文件夹。
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
+//! docPath: /document/ukTMukTMukTM/ukTNzUjL5UzM14SO1MTN
+//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
 
 pub mod children;
 pub mod meta;
@@ -8,24 +9,32 @@ pub use children::*;
 pub use meta::*;
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_utils::*;
+
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct CreateFolderReq {
-    pub name: String,
+    pub title: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct CreateFolderResponse {
-    pub data: Option<serde_json::Value>,
+/// 新建文件夹响应（data）
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct CreateFolderResp {
+    /// 文件夹 URL
+    pub url: String,
+    /// 修订版本号
+    pub revision: i32,
+    /// 文件夹 token
+    pub token: String,
 }
 
-impl ApiResponseTrait for CreateFolderResponse {
+impl ApiResponseTrait for CreateFolderResp {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -47,22 +56,22 @@ impl CreateFolderRequest {
         }
     }
 
-    pub fn name(mut self, name: impl ToString) -> Self {
-        self.req.name = name.to_string();
+    pub fn title(mut self, title: impl ToString) -> Self {
+        self.req.title = title.to_string();
         self
     }
 
-    pub async fn send(self) -> SDKResult<CreateFolderResponse> {
+    pub async fn send(self) -> SDKResult<CreateFolderResp> {
         use crate::common::api_endpoints::CcmDriveExplorerApiOld;
 
-        let api_request: ApiRequest<CreateFolderResponse> =
-            ApiRequest::post(&CcmDriveExplorerApiOld::Folder(self.folder_token).to_url())
-                .body(serde_json::to_value(&self.req)?);
+        validate_required!(self.folder_token, "folderToken 不能为空");
+        validate_required!(self.req.title, "title 不能为空");
 
-        let response: Response<CreateFolderResponse> =
-            Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+        let api_request: ApiRequest<CreateFolderResp> =
+            ApiRequest::post(&CcmDriveExplorerApiOld::Folder(self.folder_token).to_url())
+                .body(serialize_params(&self.req, "新建文件夹")?);
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "新建文件夹")
     }
 }

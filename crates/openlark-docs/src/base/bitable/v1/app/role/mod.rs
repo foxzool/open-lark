@@ -1,47 +1,59 @@
-/// App_Role服务模块 - 简化实现
-use openlark_core::api::{ApiResponseTrait, ResponseFormat};
-use serde::{Deserialize, Serialize};
+/// 自定义角色服务模块
+///
+/// 提供多维表格高级权限中自定义角色的创建、更新、删除、查询等能力。
+use openlark_core::config::Config;
 
-// 导入子模块
 pub mod create;
 pub mod delete;
 pub mod list;
 pub mod member;
+pub mod models;
 pub mod update;
 
 #[cfg(test)]
 mod tests;
 
-// 导出所有子模块内容，避免命名冲突
-pub use create::*;
-// delete模块中的类型与create模块冲突，使用重导出避免冲突
+pub use create::{CreateAppRoleRequest, CreateAppRoleRequestBuilder, CreateAppRoleResponse};
 pub use delete::{DeleteAppRoleRequest, DeleteAppRoleRequestBuilder, DeleteAppRoleResponse};
-// list模块中的类型与create模块冲突，使用重导出避免冲突
 pub use list::{ListAppRoleRequest, ListAppRoleRequestBuilder, ListAppRoleResponse};
-// update模块中的类型与create模块冲突，使用重导出避免冲突
 pub use member::*;
-pub use update::{
-    UpdateAppRoleRequest, UpdateAppRoleRequestBody, UpdateAppRoleRequestBuilder,
-    UpdateAppRoleResponse, UpdateBlockRole, UpdateRole, UpdateTableRole,
-};
+pub use models::{BlockRole, Role, TableRole};
+pub use update::{UpdateAppRoleRequest, UpdateAppRoleRequestBuilder, UpdateAppRoleResponse};
 
-/// 简化的服务结构体
-pub struct SimpleService {}
+// 兼容历史导出（在 app/mod.rs 中被引用）
+pub use create::CreateAppRoleRequestBody;
+pub use update::UpdateAppRoleRequestBody;
 
-impl SimpleService {}
-#[derive(Debug, Deserialize, Serialize)]
-pub struct SimpleResponse;
-impl ApiResponseTrait for SimpleResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+/// 角色服务
+pub struct AppRoleService {
+    config: Config,
+}
+
+impl AppRoleService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
+
+    pub fn create(&self) -> CreateAppRoleRequestBuilder {
+        CreateAppRoleRequestBuilder::new(self.config.clone())
+    }
+
+    pub fn update(&self) -> UpdateAppRoleRequestBuilder {
+        UpdateAppRoleRequestBuilder::new(self.config.clone())
+    }
+
+    pub fn delete(&self) -> DeleteAppRoleRequestBuilder {
+        DeleteAppRoleRequestBuilder::new(self.config.clone())
+    }
+
+    pub fn list(&self) -> ListAppRoleRequestBuilder {
+        ListAppRoleRequestBuilder::new(self.config.clone())
     }
 }
 
-/// AppRole服务
-pub struct AppRoleService {}
-
-impl AppRoleService {}
-
 // Type alias for compatibility
 pub type ServiceType = AppRoleService;
-pub type ResponseType = SimpleResponse;

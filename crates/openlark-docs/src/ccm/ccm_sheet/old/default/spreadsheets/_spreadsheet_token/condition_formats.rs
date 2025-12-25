@@ -1,6 +1,7 @@
 //! 批量获取条件格式
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-get
+//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/conditionformat/condition-format-get
+//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-get
 
 pub mod batch_create;
 pub mod batch_delete;
@@ -10,13 +11,14 @@ pub use batch_delete::*;
 pub use batch_update::*;
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_utils::*;
 use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -78,7 +80,7 @@ pub async fn condition_formats(
     request: GetConditionFormatRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<GetConditionFormatResponse>> {
+) -> SDKResult<GetConditionFormatResponse> {
     let api_endpoint = CcmSheetApiOld::ConditionFormats(spreadsheet_token);
     let mut api_request: ApiRequest<GetConditionFormatResponse> =
         ApiRequest::get(&api_endpoint.to_url()).query_opt("sheet_ids", request.sheet_ids);
@@ -87,5 +89,6 @@ pub async fn condition_formats(
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "批量获取条件格式")
 }

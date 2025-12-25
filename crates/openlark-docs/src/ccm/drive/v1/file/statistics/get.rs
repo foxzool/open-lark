@@ -1,7 +1,8 @@
 /// 获取文件统计信息
 ///
-/// 获取文件的访问、预览、下载等统计信息。
-/// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/statistics
+/// 获取文件统计信息，包括文档阅读人数、次数和点赞数。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-statistics/get
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,13 +11,15 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 获取文件统计信息请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetFileStatisticsRequest {
     /// 文件token
     pub file_token: String,
+    /// 文件类型
+    pub file_type: String,
 }
 
 impl GetFileStatisticsRequest {
@@ -24,18 +27,43 @@ impl GetFileStatisticsRequest {
     ///
     /// # 参数
     /// * `file_token` - 文件token
-    pub fn new(file_token: impl Into<String>) -> Self {
+    /// * `file_type` - 文件类型（doc/sheet/mindnote/bitable/wiki/file/docx）
+    pub fn new(file_token: impl Into<String>, file_type: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
+            file_type: file_type.into(),
         }
     }
 }
 
-/// 获取文件统计信息响应
+/// 文件统计信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FileStatistics {
+    /// 文档历史访问人数，同一用户（user_id）多次访问按一次计算
+    pub uv: i32,
+    /// 文档历史访问次数，同一用户（user_id）多次访问按多次计算，但同一用户在间隔在半小时内访问两次视为一次访问
+    pub pv: i32,
+    /// 文档历史点赞总数。`-1` 表示对应的文档类型不支持点赞
+    pub like_count: i32,
+    /// 时间戳（单位：秒）
+    pub timestamp: i32,
+    /// 今日新增文档访问人数
+    pub uv_today: i32,
+    /// 今日新增文档访问次数
+    pub pv_today: i32,
+    /// 今日新增文档点赞数
+    pub like_count_today: i32,
+}
+
+/// 获取文件统计信息响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetFileStatisticsResponse {
-    /// 文件统计信息
-    pub data: Option<FileStatistics>,
+    /// 文档 token
+    pub file_token: String,
+    /// 文档类型
+    pub file_type: String,
+    /// 文档统计信息
+    pub statistics: FileStatistics,
 }
 
 impl ApiResponseTrait for GetFileStatisticsResponse {
@@ -44,47 +72,33 @@ impl ApiResponseTrait for GetFileStatisticsResponse {
     }
 }
 
-/// 文件统计信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FileStatistics {
-    /// 文件token
-    pub file_token: String,
-    /// 总访问次数
-    pub total_visits: u32,
-    /// 今日访问次数
-    pub today_visits: u32,
-    /// 总预览次数
-    pub total_previews: u32,
-    /// 今日预览次数
-    pub today_previews: u32,
-    /// 总下载次数
-    pub total_downloads: u32,
-    /// 今日下载次数
-    pub today_downloads: u32,
-    /// 总评论数
-    pub total_comments: u32,
-    /// 总点赞数
-    pub total_likes: u32,
-    /// 最后访问时间
-    pub last_visit_time: Option<String>,
-    /// 最后预览时间
-    pub last_preview_time: Option<String>,
-    /// 最后下载时间
-    pub last_download_time: Option<String>,
-}
-
 /// 获取文件统计信息
 ///
-/// 获取文件的访问、预览、下载等统计信息。
-/// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/statistics
+/// 获取文件统计信息，包括文档阅读人数、次数和点赞数。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-statistics/get
 pub async fn get_file_statistics(
     request: GetFileStatisticsRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<GetFileStatisticsResponse>> {
+) -> SDKResult<GetFileStatisticsResponse> {
+    if request.file_token.is_empty() {
+        return Err(openlark_core::error::validation_error(
+            "file_token",
+            "file_token 不能为空",
+        ));
+    }
+    if request.file_type.is_empty() {
+        return Err(openlark_core::error::validation_error(
+            "file_type",
+            "file_type 不能为空",
+        ));
+    }
+
     // 创建API请求
     let url = DriveApi::GetFileStatistics(request.file_token.clone()).to_url();
     let mut api_request: ApiRequest<GetFileStatisticsResponse> = ApiRequest::get(&url);
+
+    api_request = api_request.query("file_type", &request.file_type);
 
     // 如果有请求选项，应用它们
     if let Some(opt) = option {
@@ -92,7 +106,8 @@ pub async fn get_file_statistics(
     }
 
     // 发送请求
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "获取文件统计信息")
 }
 
 #[cfg(test)]
@@ -101,34 +116,26 @@ mod tests {
 
     #[test]
     fn test_get_file_statistics_request_builder() {
-        let request = GetFileStatisticsRequest::new("file_token");
+        let request = GetFileStatisticsRequest::new("file_token", "doc");
         assert_eq!(request.file_token, "file_token");
+        assert_eq!(request.file_type, "doc");
     }
 
     #[test]
     fn test_file_statistics_structure() {
         let stats = FileStatistics {
-            file_token: "file_123".to_string(),
-            total_visits: 100,
-            today_visits: 5,
-            total_previews: 80,
-            today_previews: 3,
-            total_downloads: 20,
-            today_downloads: 2,
-            total_comments: 10,
-            total_likes: 15,
-            last_visit_time: Some("2023-01-01T00:00:00Z".to_string()),
-            last_preview_time: Some("2023-01-01T01:00:00Z".to_string()),
-            last_download_time: Some("2023-01-01T02:00:00Z".to_string()),
+            uv: 10,
+            pv: 15,
+            like_count: 2,
+            timestamp: 1627367349,
+            uv_today: 1,
+            pv_today: 1,
+            like_count_today: 1,
         };
 
-        assert_eq!(stats.file_token, "file_123");
-        assert_eq!(stats.total_visits, 100);
-        assert_eq!(stats.today_visits, 5);
-        assert_eq!(
-            stats.last_visit_time,
-            Some("2023-01-01T00:00:00Z".to_string())
-        );
+        assert_eq!(stats.uv, 10);
+        assert_eq!(stats.pv, 15);
+        assert_eq!(stats.like_count, 2);
     }
 
     #[test]

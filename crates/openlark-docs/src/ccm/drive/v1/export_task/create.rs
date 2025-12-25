@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,50 +7,92 @@ use openlark_core::{
 /// 创建导出任务
 ///
 /// 创建一个导出任务，将云文档导出为文件。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/export_task/create
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/export_task/create
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/export_task/create
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 创建导出任务请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateExportTaskRequest {
     #[serde(skip)]
     config: Config,
+    /// 将云文档导出为本地文件后，本地文件的扩展名
+    pub file_extension: String,
     /// 文件token
     pub token: String,
-    /// 导出文件类型
+    /// 要导出的云文档的类型
     pub r#type: String,
-    /// 子类型
-    pub sub_type: Option<String>,
+    /// 导出电子表格/多维表格为 CSV 时，需要传入工作表 ID 或数据表 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sub_id: Option<String>,
 }
 
 impl CreateExportTaskRequest {
-    pub fn new(config: Config, token: impl Into<String>, r#type: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        file_extension: impl Into<String>,
+        token: impl Into<String>,
+        r#type: impl Into<String>,
+    ) -> Self {
         Self {
             config,
+            file_extension: file_extension.into(),
             token: token.into(),
             r#type: r#type.into(),
-            sub_type: None,
+            sub_id: None,
         }
     }
 
-    pub fn sub_type(mut self, sub_type: impl Into<String>) -> Self {
-        self.sub_type = Some(sub_type.into());
+    pub fn sub_id(mut self, sub_id: impl Into<String>) -> Self {
+        self.sub_id = Some(sub_id.into());
         self
     }
 
-    pub async fn execute(self) -> SDKResult<Response<CreateExportTaskResponse>> {
+    pub async fn execute(self) -> SDKResult<CreateExportTaskResponse> {
+        let token_len = self.token.as_bytes().len();
+        if token_len == 0 || token_len > 27 {
+            return Err(openlark_core::error::validation_error(
+                "token",
+                "token 长度必须在 1~27 字节之间",
+            ));
+        }
+        match self.file_extension.as_str() {
+            "docx" | "pdf" | "xlsx" | "csv" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "file_extension",
+                    "file_extension 仅支持 docx/pdf/xlsx/csv",
+                ))
+            }
+        }
+        match self.r#type.as_str() {
+            "doc" | "docx" | "sheet" | "bitable" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "type",
+                    "type 仅支持 doc/docx/sheet/bitable",
+                ))
+            }
+        }
+        if self.file_extension == "csv" && (self.r#type == "sheet" || self.r#type == "bitable") {
+            if self.sub_id.as_deref().unwrap_or("").is_empty() {
+                return Err(openlark_core::error::validation_error(
+                    "sub_id",
+                    "导出 sheet/bitable 为 csv 时，sub_id 不能为空",
+                ));
+            }
+        }
+
         let api_endpoint = DriveApi::CreateExportTask;
 
-        let api_request = ApiRequest::<CreateExportTaskResponse>::post(&api_endpoint.to_url())
-            .body(serde_json::json!({
-                "token": self.token,
-                "type": self.r#type,
-                "sub_type": self.sub_type
-            }));
+        let api_request: ApiRequest<CreateExportTaskResponse> =
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(serialize_params(&self, "创建导出任务")?);
 
-        Transport::request(api_request, &self.config, None).await
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "创建导出任务")
     }
 }
 
@@ -58,7 +100,7 @@ impl CreateExportTaskRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateExportTaskResponse {
     /// 任务ticket
-    pub ticket: Option<String>,
+    pub ticket: String,
 }
 
 impl ApiResponseTrait for CreateExportTaskResponse {
@@ -74,11 +116,13 @@ mod tests {
     #[test]
     fn test_create_export_task_request_builder() {
         let config = Config::default();
-        let request = CreateExportTaskRequest::new(config, "file_token", "pdf").sub_type("param");
+        let request =
+            CreateExportTaskRequest::new(config, "csv", "file_token", "sheet").sub_id("6e5ed3");
 
+        assert_eq!(request.file_extension, "csv");
         assert_eq!(request.token, "file_token");
-        assert_eq!(request.r#type, "pdf");
-        assert_eq!(request.sub_type, Some("param".to_string()));
+        assert_eq!(request.r#type, "sheet");
+        assert_eq!(request.sub_id, Some("6e5ed3".to_string()));
     }
 
     #[test]

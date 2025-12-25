@@ -1,5 +1,6 @@
 /// Bitable 获取多维表格详情API
 ///
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/get
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -26,7 +27,7 @@ pub struct GetAppRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetAppResponse {
     /// 应用信息
-    pub data: App,
+    pub app: App,
 }
 
 impl ApiResponseTrait for GetAppResponse {

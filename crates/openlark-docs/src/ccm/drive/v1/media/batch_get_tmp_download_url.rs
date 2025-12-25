@@ -1,70 +1,103 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
+
 /// 获取素材临时下载链接
 ///
-/// 通过`file_tokens`获取素材临时下载链接，链接时效性是 24 小时，过期失效。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/batch_get_tmp_download_url
+/// 通过 file_tokens 获取素材临时下载链接，链接时效性是 24 小时，过期失效。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/batch_get_tmp_download_url
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/batch_get_tmp_download_url
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 获取素材临时下载链接请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct BatchGetTmpDownloadUrlRequest {
-    #[serde(skip)]
     config: Config,
-    /// 文件token列表
+    /// 素材文件的 token（一次最多 5 个）
     pub file_tokens: Vec<String>,
+    /// 拓展参数（如多维表格高级权限下载鉴权）
+    pub extra: Option<String>,
 }
 
 impl BatchGetTmpDownloadUrlRequest {
-    /// 创建获取素材临时下载链接请求
-    ///
-    /// # 参数
-    /// * `config` - 配置
-    /// * `file_tokens` - 文件token列表
     pub fn new(config: Config, file_tokens: Vec<String>) -> Self {
         Self {
             config,
             file_tokens,
+            extra: None,
         }
     }
 
-    /// 添加文件token
     pub fn add_file_token(mut self, file_token: impl Into<String>) -> Self {
         self.file_tokens.push(file_token.into());
         self
     }
 
-    pub async fn execute(self) -> SDKResult<Response<BatchGetTmpDownloadUrlResponse>> {
-        let api_endpoint = DriveApi::GetMediaTempDownloadUrls;
-        let request = ApiRequest::<BatchGetTmpDownloadUrlResponse>::get(&api_endpoint.to_url())
-            .query("file_tokens", &self.file_tokens.join(","));
+    pub fn extra(mut self, extra: impl Into<String>) -> Self {
+        self.extra = Some(extra.into());
+        self
+    }
 
-        Transport::request(request, &self.config, None).await
+    pub async fn execute(self) -> SDKResult<BatchGetTmpDownloadUrlResponse> {
+        if self.file_tokens.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "file_tokens",
+                "file_tokens 不能为空",
+            ));
+        }
+        if self.file_tokens.len() > 5 {
+            return Err(openlark_core::error::validation_error(
+                "file_tokens",
+                "file_tokens 一次最多传 5 个",
+            ));
+        }
+
+        let api_endpoint = DriveApi::GetMediaTempDownloadUrls;
+
+        // 该接口的 query 参数 file_tokens 支持重复传参（file_tokens=token1&file_tokens=token2...）。
+        // openlark-core 的 query 存储结构为 HashMap，无法表达重复 key，因此这里基于 endpoint 生成 URL 并手动拼接 query。
+        let mut query_pairs: Vec<String> = Vec::new();
+        for token in &self.file_tokens {
+            if token.is_empty() {
+                return Err(openlark_core::error::validation_error(
+                    "file_tokens",
+                    "file_tokens 不能包含空值",
+                ));
+            }
+            query_pairs.push(format!("file_tokens={}", urlencoding::encode(token)));
+        }
+        if let Some(extra) = &self.extra {
+            query_pairs.push(format!("extra={}", urlencoding::encode(extra)));
+        }
+
+        let url = format!("{}?{}", api_endpoint.to_url(), query_pairs.join("&"));
+        let request = ApiRequest::<BatchGetTmpDownloadUrlResponse>::get(url);
+
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "获取素材临时下载链接")
     }
 }
 
 /// 临时下载链接信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TmpDownloadUrlInfo {
-    /// 文件token
+    /// 素材的 token
     pub file_token: String,
-    /// 临时下载链接
+    /// 素材的临时下载链接
     pub tmp_download_url: String,
-    /// 过期时间
-    pub expire_time: i64,
 }
 
-/// 获取素材临时下载链接响应
+/// 获取素材临时下载链接响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchGetTmpDownloadUrlResponse {
-    /// 临时下载链接信息列表
-    pub data: Option<Vec<TmpDownloadUrlInfo>>,
+    /// 临时下载列表
+    #[serde(default)]
+    pub tmp_download_urls: Vec<TmpDownloadUrlInfo>,
 }
 
 impl ApiResponseTrait for BatchGetTmpDownloadUrlResponse {
@@ -83,10 +116,12 @@ mod tests {
         let request = BatchGetTmpDownloadUrlRequest::new(
             config,
             vec!["file_token_1".to_string(), "file_token_2".to_string()],
-        );
+        )
+        .extra("extra");
 
         assert_eq!(request.file_tokens.len(), 2);
         assert_eq!(request.file_tokens[0], "file_token_1");
+        assert_eq!(request.extra, Some("extra".to_string()));
     }
 
     #[test]
@@ -97,19 +132,6 @@ mod tests {
 
         assert_eq!(request.file_tokens.len(), 2);
         assert_eq!(request.file_tokens[1], "file_token_2");
-    }
-
-    #[test]
-    fn test_tmp_download_url_info_structure() {
-        let url_info = TmpDownloadUrlInfo {
-            file_token: "file_token".to_string(),
-            tmp_download_url: "https://example.com/download".to_string(),
-            expire_time: 1640995200,
-        };
-
-        assert_eq!(url_info.file_token, "file_token");
-        assert_eq!(url_info.tmp_download_url, "https://example.com/download");
-        assert_eq!(url_info.expire_time, 1640995200);
     }
 
     #[test]

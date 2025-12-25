@@ -1,48 +1,36 @@
 /// 创建筛选视图
 ///
-/// 根据传入的参数创建一个筛选视图。Id 和 名字可选，不填的话会默认生成；range 必填。
-/// Id 长度为10，由 0-9、a-z、A-Z 组合生成。名字长度不超过100。单个子表内的筛选视图个数不超过 150。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter_view/create
+/// 根据传入的参数创建一个筛选视图。
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view/create
+/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter_view/create
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-
-use serde_json::json;
-
-// 导入序列化支持
-use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
 use serde::{Deserialize, Serialize};
 
-/// 创建筛选视图请求
+use super::FilterView;
+use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
+
+/// 创建筛选视图请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFilterViewRequest {
-    /// 筛选视图ID，可选，不填会自动生成
+    /// 自定义筛选视图 ID，不传由系统生成
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_view_id: Option<String>,
-    /// 筛选视图名称，可选，长度不超过100
-    pub title: Option<String>,
-    /// 筛选范围，必填
+    /// 自定义筛选视图名称，不传由系统生成
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_view_name: Option<String>,
+    /// 筛选视图的筛选范围（文档中标注“否”，但实际必填）
     pub range: String,
 }
 
-/// 创建筛选视图响应
+/// 创建筛选视图响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFilterViewResponse {
-    /// 筛选视图信息
-    pub data: Option<FilterViewData>,
-}
-
-/// 筛选视图数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FilterViewData {
-    /// 筛选视图ID
-    pub filter_view_id: String,
-    /// 筛选视图标题
-    pub title: String,
-    /// 筛选范围
-    pub range: String,
+    pub filter_view: FilterView,
 }
 
 impl ApiResponseTrait for CreateFilterViewResponse {
@@ -52,24 +40,18 @@ impl ApiResponseTrait for CreateFilterViewResponse {
 }
 
 /// 创建筛选视图
-///
-/// 根据传入的参数创建一个筛选视图。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter_view/create
 pub async fn create_filter_view(
     config: &Config,
     spreadsheet_token: &str,
     sheet_id: &str,
     params: CreateFilterViewRequest,
 ) -> SDKResult<CreateFilterViewResponse> {
-    // 使用enum+builder系统生成API端点
     let api_endpoint =
-        CcmSheetApiOld::CreateFilterView(spreadsheet_token.to_string(), sheet_id.to_string());
-
-    // 创建API请求 - 使用类型安全的URL生成和标准化的参数序列化
+        SheetsApiV3::CreateFilterView(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<CreateFilterViewResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(json!(params));
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建筛选视图")?);
 
-    // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "创建筛选视图")
 }
+

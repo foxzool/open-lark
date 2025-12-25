@@ -16,7 +16,9 @@ pub use member::{
     create::{
         CreateWikiSpaceMemberParams, CreateWikiSpaceMemberRequest, CreateWikiSpaceMemberResponse,
     },
-    delete::{DeleteWikiSpaceMemberRequest, DeleteWikiSpaceMemberResponse},
+    delete::{
+        DeleteWikiSpaceMemberParams, DeleteWikiSpaceMemberRequest, DeleteWikiSpaceMemberResponse,
+    },
     list::{ListWikiSpaceMembersParams, ListWikiSpaceMembersRequest, ListWikiSpaceMembersResponse},
 };
 pub use node::{

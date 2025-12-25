@@ -209,7 +209,11 @@ impl<T> Response<T> {
 // 为常见类型实现ApiResponseTrait
 impl ApiResponseTrait for serde_json::Value {}
 impl ApiResponseTrait for String {}
-impl ApiResponseTrait for Vec<u8> {}
+impl ApiResponseTrait for Vec<u8> {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Binary
+    }
+}
 impl ApiResponseTrait for () {}
 
 // 类型别名，用于向后兼容

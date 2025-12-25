@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,10 +7,11 @@ use openlark_core::{
 /// 移除云文档协作者权限
 ///
 /// 移除文件或文件夹中指定协作者的权限
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/delete
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/delete
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/delete
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 移除协作者权限请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -38,27 +39,31 @@ impl DeletePermissionMemberRequest {
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<DeletePermissionMemberResponse>> {
+    pub async fn execute(self) -> SDKResult<DeletePermissionMemberResponse> {
+        if self.token.is_empty() {
+            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+        }
+        if self.member_id.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "member_id",
+                "member_id 不能为空",
+            ));
+        }
+
         let api_endpoint =
             DriveApi::DeletePermissionMember(self.token.clone(), self.member_id.clone());
 
         let api_request =
             ApiRequest::<DeletePermissionMemberResponse>::delete(&api_endpoint.to_url());
 
-        Transport::request(api_request, &self.config, None).await
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "移除云文档协作者权限")
     }
 }
 
 /// 移除协作者权限响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeletePermissionMemberResponse {
-    /// 操作结果
-    pub data: Option<DeleteResult>,
-}
-
-/// 删除结果
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeleteResult {
     /// 是否成功
     pub success: bool,
     /// 成员ID
@@ -86,7 +91,7 @@ mod tests {
 
     #[test]
     fn test_delete_result_structure() {
-        let delete_result = DeleteResult {
+        let delete_result = DeletePermissionMemberResponse {
             success: true,
             member_id: "member_id".to_string(),
         };

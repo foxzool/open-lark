@@ -1,6 +1,7 @@
-/// Bitable 删除字段API
+/// Bitable 删除字段
 ///
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/field/delete
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-field/delete
+/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/delete
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -9,24 +10,18 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 重用Field类型
-pub use super::create::Field;
-
 /// 删除字段请求
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct DeleteFieldRequest {
     /// 配置信息
     config: Config,
-    api_request: ApiRequest<DeleteFieldResponse>,
     /// 多维表格的 app_token
     app_token: String,
     /// 数据表的 table_id
     table_id: String,
     /// 字段的唯一标识符
     field_id: String,
-    /// 用户 ID 类型
-    user_id_type: Option<String>,
 }
 
 impl DeleteFieldRequest {
@@ -34,11 +29,9 @@ impl DeleteFieldRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            api_request: ApiRequest::delete(""),
             app_token: String::new(),
             table_id: String::new(),
             field_id: String::new(),
-            user_id_type: None,
         }
     }
 
@@ -57,12 +50,6 @@ impl DeleteFieldRequest {
     /// 设置字段ID
     pub fn field_id(mut self, field_id: String) -> Self {
         self.field_id = field_id;
-        self
-    }
-
-    /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.user_id_type = Some(user_id_type);
         self
     }
 
@@ -91,13 +78,7 @@ impl DeleteFieldRequest {
         );
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<DeleteFieldResponse> =
-            ApiRequest::delete(&api_endpoint.to_url());
-
-        // 构建查询参数
-        if let Some(ref user_id_type) = self.user_id_type {
-            api_request = api_request.query("user_id_type", user_id_type);
-        }
+        let api_request: ApiRequest<DeleteFieldResponse> = ApiRequest::delete(&api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
@@ -138,12 +119,6 @@ impl DeleteFieldRequestBuilder {
         self
     }
 
-    /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
     /// 构建请求
     pub fn build(self) -> DeleteFieldRequest {
         self.request
@@ -153,8 +128,10 @@ impl DeleteFieldRequestBuilder {
 /// 删除字段响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteFieldResponse {
-    /// 字段信息
-    pub data: Field,
+    /// 被删除的字段的 ID
+    pub field_id: String,
+    /// 是否删除
+    pub deleted: bool,
 }
 
 impl ApiResponseTrait for DeleteFieldResponse {

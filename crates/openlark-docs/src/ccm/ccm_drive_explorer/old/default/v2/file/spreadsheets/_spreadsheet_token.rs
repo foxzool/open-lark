@@ -1,7 +1,8 @@
-/// 删除Sheet
-///
-/// 根据 spreadsheetToken 删除对应的 sheet 文档。
-/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
+//! 删除 Sheet
+//!
+//! docPath: /document/ukTMukTMukTM/uUTNzUjL1UzM14SN1MTN/delete-sheet
+//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,62 +11,45 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CcmDriveExplorerApiOld;
+use crate::common::{api_endpoints::CcmDriveExplorerApiOld, api_utils::*};
 
-/// 删除Sheet请求参数
+/// 删除 Sheet 响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeleteSpreadsheetParams {
-    /// 电子表格token
-    #[serde(rename = "spreadsheet_token")]
-    pub spreadsheet_token: String,
+pub struct DeleteSpreadsheetResp {
+    /// 被删除的对象 id
+    pub id: String,
+    /// 是否成功
+    pub result: bool,
 }
 
-/// 删除Sheet响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeleteSpreadsheetResponse {
-    /// 删除结果
-    pub data: Option<serde_json::Value>,
-}
-
-impl ApiResponseTrait for DeleteSpreadsheetResponse {
+impl ApiResponseTrait for DeleteSpreadsheetResp {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 删除Sheet请求
+/// 删除 Sheet 请求
 pub struct DeleteSpreadsheetRequest {
     config: Config,
+    spreadsheet_token: String,
 }
 
 impl DeleteSpreadsheetRequest {
-    /// 创建删除Sheet请求
-    pub fn new(config: Config) -> Self {
-        Self { config }
+    pub fn new(config: Config, spreadsheet_token: impl Into<String>) -> Self {
+        Self {
+            config,
+            spreadsheet_token: spreadsheet_token.into(),
+        }
     }
 
-    /// 执行请求
-    ///
-    /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
-    pub async fn execute(
-        self,
-        params: DeleteSpreadsheetParams,
-    ) -> SDKResult<DeleteSpreadsheetResponse> {
-        // 验证必填字段
-        validate_required!(params.spreadsheet_token, "电子表格token不能为空");
+    pub async fn send(self) -> SDKResult<DeleteSpreadsheetResp> {
+        validate_required!(self.spreadsheet_token, "spreadsheetToken 不能为空");
 
-        // 使用enum+builder系统生成API端点
-        let api_endpoint =
-            CcmDriveExplorerApiOld::FileSpreadsheets(params.spreadsheet_token.clone());
+        let api_request: ApiRequest<DeleteSpreadsheetResp> = ApiRequest::delete(
+            &CcmDriveExplorerApiOld::FileSpreadsheets(self.spreadsheet_token).to_url(),
+        );
 
-        // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<DeleteSpreadsheetResponse> =
-            ApiRequest::delete(&api_endpoint.to_url());
-
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "删除Sheet")
     }
 }

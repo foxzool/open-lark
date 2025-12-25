@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,22 +7,24 @@ use openlark_core::{
 /// 移动文件或文件夹
 ///
 /// 将文件或者文件夹移动到用户云空间的其他位置。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/move
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/move
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/move
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 移动文件请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct MoveFileRequest {
     #[serde(skip)]
     config: Config,
-    /// 文件token
+    /// 需要移动的文件或文件夹 token
     pub file_token: String,
-    /// 目标文件夹token
-    pub parent_folder_token: String,
-    /// 新文件名称，可选，不传则使用原文件名
-    pub name: Option<String>,
+    /// 文件类型（必填）
+    #[serde(rename = "type")]
+    pub r#type: String,
+    /// 目标文件夹的 token
+    pub folder_token: String,
 }
 
 impl MoveFileRequest {
@@ -30,36 +32,74 @@ impl MoveFileRequest {
     ///
     /// # 参数
     /// * `config` - 配置
-    /// * `file_token` - 文件token
-    /// * `parent_folder_token` - 目标文件夹token
-    pub fn new(config: Config, file_token: impl Into<String>, parent_folder_token: impl Into<String>) -> Self {
+    /// * `file_token` - 需要移动的文件或文件夹 token
+    /// * `file_type` - 文件类型（file/docx/bitable/doc/sheet/mindnote/folder/slides）
+    /// * `folder_token` - 目标文件夹 token
+    pub fn new(
+        config: Config,
+        file_token: impl Into<String>,
+        file_type: impl Into<String>,
+        folder_token: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             file_token: file_token.into(),
-            parent_folder_token: parent_folder_token.into(),
-            name: None,
+            r#type: file_type.into(),
+            folder_token: folder_token.into(),
         }
     }
 
-    /// 设置文件名
-    pub fn name(mut self, name: impl Into<String>) -> Self {
-        self.name = Some(name.into());
-        self
-    }
+    pub async fn execute(self) -> SDKResult<MoveFileResponse> {
+        if self.file_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "file_token",
+                "file_token 不能为空",
+            ));
+        }
+        if self.r#type.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "type",
+                "type 不能为空",
+            ));
+        }
+        if self.folder_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "folder_token",
+                "folder_token 不能为空",
+            ));
+        }
 
-    pub async fn execute(self) -> SDKResult<Response<MoveFileResponse>> {
         let api_endpoint = DriveApi::MoveFile(self.file_token.clone());
-        let mut request = ApiRequest::<MoveFileResponse>::post(&api_endpoint.to_url());
-        
-        let mut body = serde_json::Map::new();
-        body.insert("parent_folder_token".to_string(), serde_json::Value::String(self.parent_folder_token.clone()));
-        if let Some(name) = &self.name {
-            body.insert("name".to_string(), serde_json::Value::String(name.clone()));
+        #[derive(Serialize)]
+        struct MoveFileBody {
+            #[serde(rename = "type")]
+            r#type: String,
+            folder_token: String,
         }
+        let request = ApiRequest::<MoveFileResponse>::post(&api_endpoint.to_url()).body(serialize_params(
+            &MoveFileBody {
+                r#type: self.r#type,
+                folder_token: self.folder_token,
+            },
+            "移动文件或文件夹",
+        )?);
 
-        request = request.json_body(&body);
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "移动文件或文件夹")
+    }
+}
 
-        Transport::request(request, &self.config, None).await
+/// 移动文件响应（data）
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MoveFileResponse {
+    /// 异步任务 ID，移动文件夹时返回
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+}
+
+impl ApiResponseTrait for MoveFileResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
@@ -70,44 +110,15 @@ mod tests {
     #[test]
     fn test_move_file_request_builder() {
         let config = Config::default();
-        let request = MoveFileRequest::new(config, "file_token", "folder_token");
+        let request = MoveFileRequest::new(config, "file_token", "file", "folder_token");
 
         assert_eq!(request.file_token, "file_token");
-        assert_eq!(request.parent_folder_token, "folder_token");
-        assert!(request.name.is_none());
-    }
-
-    #[test]
-    fn test_move_file_request_with_name() {
-        let config = Config::default();
-        let request = MoveFileRequest::new(config, "file_token", "folder_token")
-            .name("new_file_name");
-
-        assert_eq!(request.file_token, "file_token");
-        assert_eq!(request.parent_folder_token, "folder_token");
-        assert_eq!(request.name.unwrap(), "new_file_name");
-    }
-
-    #[test]
-    fn test_file_data_structure() {
-        let file_data = FileData {
-            file_token: "file_token".to_string(),
-            name: "test_file.txt".to_string(),
-            r#type: "file".to_string(),
-            create_time: 1640995200,
-            update_time: 1640995300,
-        };
-
-        assert_eq!(file_data.file_token, "file_token");
-        assert_eq!(file_data.name, "test_file.txt");
-        assert_eq!(file_data.r#type, "file");
+        assert_eq!(request.r#type, "file");
+        assert_eq!(request.folder_token, "folder_token");
     }
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            MoveFileResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(MoveFileResponse::data_format(), ResponseFormat::Data);
     }
 }

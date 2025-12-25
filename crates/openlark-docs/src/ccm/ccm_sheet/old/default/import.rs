@@ -1,15 +1,18 @@
 //! 导入表格
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/sheet-operation/import-spreadsheet
+//! docPath: /document/ukTMukTMukTM/uATO2YjLwkjN24CM5YjN
+//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/sheet-operation/import-spreadsheet
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+
+use crate::common::api_utils::*;
 
 use crate::common::api_endpoints::CcmSheetApiOld;
 
@@ -77,16 +80,23 @@ impl ImportRequest {
     }
 
     pub async fn send(self) -> SDKResult<ImportResp> {
+        if self.req.file_name.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "file_name",
+                "file_name 不能为空",
+            ));
+        }
+        if self.file.is_empty() {
+            return Err(openlark_core::error::validation_error("file", "file 不能为空"));
+        }
+
         // multipart: body 提供 file_name + 其它字段，file_content 提供真实文件 bytes
         let api_request: ApiRequest<ImportResp> =
             ApiRequest::post(&CcmSheetApiOld::Import.to_url())
-                .body(serde_json::to_value(&self.req)?)
+                .json_body(&self.req)
                 .file_content(self.file);
 
-        let response: Response<ImportResp> =
-            Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "导入表格")
     }
 }

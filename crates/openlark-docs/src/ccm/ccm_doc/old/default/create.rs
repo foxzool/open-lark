@@ -1,23 +1,26 @@
 //! 创建并初始化文档
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
+//! docPath: /document/ukTMukTMukTM/ugDM2YjL4AjN24COwYjN
+//! doc: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_utils::*;
 use crate::common::api_endpoints::CcmDocApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct CreateDocReq {
     /// 文档所在文件夹 token
-    #[serde(skip_serializing_if = "Option::is_none", rename = "folderToken")]
+    #[serde(skip_serializing_if = "Option::is_none", rename = "FolderToken")]
     pub folder_token: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// 初始内容（文档数据结构序列化后的字符串）
+    #[serde(skip_serializing_if = "Option::is_none", rename = "Content")]
     pub content: Option<String>,
 }
 
@@ -62,12 +65,10 @@ impl CreateDocRequest {
 
     pub async fn send(self) -> SDKResult<CreateDocResp> {
         let api_request: ApiRequest<CreateDocResp> =
-            ApiRequest::post(&CcmDocApiOld::Create.to_url()).body(serde_json::to_value(&self.req)?);
+            ApiRequest::post(&CcmDocApiOld::Create.to_url())
+                .body(serialize_params(&self.req, "创建旧版文档")?);
 
-        let response: Response<CreateDocResp> =
-            Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "创建旧版文档")
     }
 }

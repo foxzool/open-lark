@@ -1,15 +1,17 @@
 //! 读取单个范围
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
+//! docPath: /document/ukTMukTMukTM/ugTMzUjL4EzM14COxMTN
+//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_utils::*;
 use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -46,7 +48,7 @@ pub async fn values_range(
     request: GetValuesRangeRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<GetValuesRangeResponse>> {
+) -> SDKResult<GetValuesRangeResponse> {
     let api_endpoint = CcmSheetApiOld::ValuesRange(spreadsheet_token, range);
     let mut api_request: ApiRequest<GetValuesRangeResponse> =
         ApiRequest::get(&api_endpoint.to_url())
@@ -57,5 +59,6 @@ pub async fn values_range(
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "读取单个范围")
 }

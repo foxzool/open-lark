@@ -1,14 +1,17 @@
 /// 判断用户云文档权限
 ///
 /// 该接口用于根据 filetoken 判断当前登录用户是否具有某权限。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-member/auth
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/auth
+/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-member/auth
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 判断用户云文档权限请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -45,20 +48,25 @@ impl AuthPermissionMemberRequest {
         self
     }
 
-    pub async fn execute(self) -> SDKResult<Response<AuthPermissionMemberResponse>> {
-        let api_endpoint = format!(
-            "/open-apis/drive/v1/permissions/{}/members/auth",
-            self.token
-        );
+    pub async fn execute(self) -> SDKResult<AuthPermissionMemberResponse> {
+        if self.token.is_empty() {
+            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+        }
+        if self.r#type.is_empty() {
+            return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        }
 
-        let mut api_request = ApiRequest::<AuthPermissionMemberResponse>::get(&api_endpoint)
+        let api_endpoint = DriveApi::AuthPermissionMember(self.token.clone());
+
+        let mut api_request = ApiRequest::<AuthPermissionMemberResponse>::get(&api_endpoint.to_url())
             .query("type", &self.r#type);
 
         if let Some(user_id_type) = &self.user_id_type {
             api_request = api_request.query("user_id_type", user_id_type);
         }
 
-        Transport::request(api_request, &self.config, None).await
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "判断用户云文档权限")
     }
 }
 

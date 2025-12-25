@@ -12,6 +12,7 @@ pub use update::*;
 /// Lingo草稿服务
 #[derive(Debug, Clone)]
 pub struct LingoDraftService {
+    #[allow(dead_code)]
     config: Config,
 }
 

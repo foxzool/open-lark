@@ -1,14 +1,17 @@
 //! 获取旧版文档富文本内容
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/get-document
+//! docPath: /document/ukTMukTMukTM/uUDM2YjL1AjN24SNwYjN
+//! doc: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/get-document
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct GetDocContentReq {}
@@ -44,10 +47,7 @@ impl GetDocContentRequest {
 
         let api_request: ApiRequest<GetDocContentResponse> =
             ApiRequest::get(&CcmDocApiOld::Content(self.doc_token).to_url());
-        let response: Response<GetDocContentResponse> =
-            Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "获取旧版文档富文本内容")
     }
 }

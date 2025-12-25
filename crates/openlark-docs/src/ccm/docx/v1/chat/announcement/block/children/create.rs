@@ -1,9 +1,8 @@
 /// 在群公告中创建块
 ///
 /// 在指定块的子块列表中，新创建一批子块，并放置到指定位置。如果操作成功，接口将返回新创建子块的富文本内容。
-/// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/create
-use crate::ccm::docx::common_types::BlockContent;
-use crate::common::api_endpoints::DocxApiV1;
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/create
+/// doc: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/create
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -12,58 +11,30 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::ccm::docx::common_types::DocxBlock;
+use crate::common::{api_endpoints::DocxApiV1, api_utils::*};
+
 /// 在群公告中创建块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateChatAnnouncementBlockChildrenParams {
     /// 群聊ID
+    #[serde(skip_serializing)]
     pub chat_id: String,
     /// 父块ID
+    #[serde(skip_serializing)]
     pub block_id: String,
-    /// 新建的子块列表
-    pub children: Vec<NewBlock>,
-    /// 插入位置
-    pub location: Option<BlockLocation>,
-}
-
-/// 新建的块
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct NewBlock {
-    /// 块类型
-    pub block_type: i32,
-    /// 块内容
-    pub content: Option<BlockContent>,
-}
-
-/// 块位置
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BlockLocation {
-    /// 插入位置索引
+    /// 插入位置索引（可选，默认插入到末尾）
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub index: Option<i32>,
+    /// 新建的子块列表（按文档定义传入）
+    pub children: Vec<serde_json::Value>,
 }
 
-/// 在群公告中创建块响应
+/// 在群公告中创建块响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateChatAnnouncementBlockChildrenResponse {
-    /// 创建结果
-    pub data: Option<CreateResult>,
-}
-
-/// 创建结果
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateResult {
-    /// 创建成功的块列表
-    pub blocks: Option<Vec<CreatedBlock>>,
-}
-
-/// 创建的块
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreatedBlock {
-    /// 块ID
-    pub block_id: String,
-    /// 块类型
-    pub block_type: i32,
-    /// 块内容
-    pub content: Option<BlockContent>,
+    #[serde(default)]
+    pub children: Vec<DocxBlock>,
 }
 
 impl ApiResponseTrait for CreateChatAnnouncementBlockChildrenResponse {
@@ -85,33 +56,26 @@ impl CreateChatAnnouncementBlockChildrenRequest {
 
     /// 执行请求
     ///
-    /// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/create
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/create
     pub async fn execute(
         self,
         params: CreateChatAnnouncementBlockChildrenParams,
     ) -> SDKResult<CreateChatAnnouncementBlockChildrenResponse> {
-        // 验证必填字段
         validate_required!(params.chat_id, "群聊ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
         validate_required!(params.children, "子块列表不能为空");
 
-        // 构建API端点
         let api_endpoint = DocxApiV1::ChatAnnouncementBlockChildrenCreate(
             params.chat_id.clone(),
             params.block_id.clone(),
         );
 
-        // 创建API请求
-        let mut api_request: ApiRequest<CreateChatAnnouncementBlockChildrenResponse> =
-            ApiRequest::post(&api_endpoint.to_url());
+        let api_request: ApiRequest<CreateChatAnnouncementBlockChildrenResponse> =
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(serialize_params(&params, "在群公告中创建块")?);
 
-        // 设置请求体
-        api_request = api_request.json_body(&params);
-
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "在群公告中创建块")
     }
 }
+

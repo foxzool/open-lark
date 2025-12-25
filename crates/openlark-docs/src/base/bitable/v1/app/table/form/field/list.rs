@@ -1,167 +1,169 @@
-/// Bitable 列出表单字段API
+/// Bitable 列出表单问题
 ///
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/form/field/list
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-form-field/list
+/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/form/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::validation_error,
-    SDKResult,
+    error::{validation_error, SDKResult},
+    http::Transport,
 };
-
 use serde::{Deserialize, Serialize};
 
-/// 表单字段问题
+/// 表单问题项
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FormFieldQuestion {
-    /// 字段ID
     pub field_id: String,
-    /// 字段名称
-    pub field_name: String,
-    /// 字段类型
-    pub field_type: String,
-    /// 是否必填
-    pub required: Option<bool>,
-    /// 字段描述
+    pub title: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// 字段选项（用于单选、多选等）
-    pub options: Option<Vec<FormFieldOption>>,
-    /// 字段默认值
-    pub default_value: Option<serde_json::Value>,
-    /// 字段验证规则
-    pub validation: Option<FormFieldValidation>,
+    pub required: bool,
+    pub visible: bool,
 }
 
-/// 字段选项
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct FormFieldOption {
-    /// 选项ID
-    pub option_id: String,
-    /// 选项名称
-    pub name: String,
-    /// 选项值
-    pub value: Option<serde_json::Value>,
-}
-
-/// 字段验证规则
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct FormFieldValidation {
-    /// 是否必填
-    pub required: Option<bool>,
-    /// 最小长度
-    pub min_length: Option<i32>,
-    /// 最大长度
-    pub max_length: Option<i32>,
-    /// 正则表达式
-    pub pattern: Option<String>,
-}
-
-/// 列出表单字段请求
+/// 列出表单问题请求
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ListFormFieldQuestionRequest {
-    api_request: ApiRequest<ListFormFieldQuestionResponse>,
-    /// 应用token
+    config: Config,
     app_token: String,
-    /// 表格ID
     table_id: String,
-    /// 表单ID
     form_id: String,
-    /// 页面大小
     page_size: Option<i32>,
-    /// 分页标记
     page_token: Option<String>,
 }
 
-/// 列出表单字段响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListFormFieldQuestionResponse {
-    /// 表单字段列表
-    pub data: Option<ListFormFieldQuestionData>,
+impl ListFormFieldQuestionRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            app_token: String::new(),
+            table_id: String::new(),
+            form_id: String::new(),
+            page_size: None,
+            page_token: None,
+        }
+    }
+
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.app_token = app_token;
+        self
+    }
+
+    pub fn table_id(mut self, table_id: String) -> Self {
+        self.table_id = table_id;
+        self
+    }
+
+    pub fn form_id(mut self, form_id: String) -> Self {
+        self.form_id = form_id;
+        self
+    }
+
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    pub fn page_token(mut self, page_token: String) -> Self {
+        self.page_token = Some(page_token);
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<ListFormFieldQuestionResponse> {
+        if self.app_token.trim().is_empty() {
+            return Err(validation_error("app_token", "app_token 不能为空"));
+        }
+        if self.table_id.trim().is_empty() {
+            return Err(validation_error("table_id", "table_id 不能为空"));
+        }
+        if self.form_id.trim().is_empty() {
+            return Err(validation_error("form_id", "form_id 不能为空"));
+        }
+        if let Some(page_size) = self.page_size {
+            if page_size < 1 || page_size > 100 {
+                return Err(validation_error("page_size", "page_size 必须在 1~100 之间"));
+            }
+        }
+
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint = BitableApiV1::FormFieldList(
+            self.app_token.clone(),
+            self.table_id.clone(),
+            self.form_id.clone(),
+        );
+
+        let mut api_request: ApiRequest<ListFormFieldQuestionResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
+
+        if let Some(page_size) = self.page_size {
+            api_request = api_request.query("page_size", &page_size.to_string());
+        }
+        if let Some(page_token) = &self.page_token {
+            api_request = api_request.query("page_token", page_token);
+        }
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| validation_error("response", "响应数据为空"))
+    }
 }
 
-/// 列出表单字段数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListFormFieldQuestionData {
-    /// 表单字段列表
-    pub items: Option<Vec<FormFieldQuestion>>,
-    /// 分页标记
+/// 列出表单问题 Builder
+pub struct ListFormFieldQuestionRequestBuilder {
+    request: ListFormFieldQuestionRequest,
+}
+
+impl ListFormFieldQuestionRequestBuilder {
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: ListFormFieldQuestionRequest::new(config),
+        }
+    }
+
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.request = self.request.app_token(app_token);
+        self
+    }
+
+    pub fn table_id(mut self, table_id: String) -> Self {
+        self.request = self.request.table_id(table_id);
+        self
+    }
+
+    pub fn form_id(mut self, form_id: String) -> Self {
+        self.request = self.request.form_id(form_id);
+        self
+    }
+
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request = self.request.page_size(page_size);
+        self
+    }
+
+    pub fn page_token(mut self, page_token: String) -> Self {
+        self.request = self.request.page_token(page_token);
+        self
+    }
+
+    pub fn build(self) -> ListFormFieldQuestionRequest {
+        self.request
+    }
+}
+
+/// 列出表单问题响应（data）
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ListFormFieldQuestionResponse {
+    pub items: Vec<FormFieldQuestion>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    /// 是否有更多
-    pub has_more: Option<bool>,
+    pub has_more: bool,
+    pub total: i32,
 }
 
 impl ApiResponseTrait for ListFormFieldQuestionResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
-}
-
-impl ListFormFieldQuestionRequest {
-    /// 创建列出表单字段请求
-    pub fn new(app_token: String, table_id: String, form_id: String) -> Self {
-        let endpoint = format!(
-            "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/fields",
-            app_token, table_id, form_id
-        );
-        let api_request = ApiRequest::get(endpoint).header("Content-Type", "application/json");
-
-        Self {
-            api_request,
-            app_token,
-            table_id,
-            form_id,
-            page_size: None,
-            page_token: None,
-        }
-    }
-
-    /// 设置页面大小
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        self.page_size = Some(page_size);
-        self
-    }
-
-    /// 设置分页标记
-    pub fn page_token(mut self, page_token: String) -> Self {
-        self.page_token = Some(page_token);
-        self
-    }
-
-    /// 执行请求
-    pub async fn execute(self, config: &Config) -> SDKResult<ListFormFieldQuestionData> {
-        let mut request = self.api_request;
-
-        // 添加查询参数
-        let mut query_params = Vec::new();
-        if let Some(page_size) = self.page_size {
-            query_params.push(("page_size", page_size.to_string()));
-        }
-        if let Some(page_token) = self.page_token {
-            query_params.push(("page_token", page_token));
-        }
-
-        if !query_params.is_empty() {
-            request = request.query_params(query_params);
-        }
-
-        // 发送请求
-        let response: openlark_core::api::Response<ListFormFieldQuestionResponse> =
-            openlark_core::http::Transport::request(request, config, None).await?;
-
-        // 解析响应
-        let resp_data = response
-            .data
-            .ok_or_else(|| validation_error("response_data", "Response data is missing"))?;
-        resp_data
-            .data
-            .ok_or_else(|| validation_error("data", "List form field question data is missing"))
-    }
-}
-
-/// 列出表单字段
-pub fn list_form_field_questions(
-    app_token: String,
-    table_id: String,
-    form_id: String,
-) -> ListFormFieldQuestionRequest {
-    ListFormFieldQuestionRequest::new(app_token, table_id, form_id)
 }

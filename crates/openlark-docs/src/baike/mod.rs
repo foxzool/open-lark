@@ -34,7 +34,7 @@ impl BaikeService {
     }
 
     /// 获取baike项目v1服务
-    pub fn v1(&self) -> BaikeV1Service {
+    pub fn v1(&self) -> BaikeV1Service<'_> {
         BaikeV1Service::new(&self.config)
     }
 }

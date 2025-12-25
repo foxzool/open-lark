@@ -1,6 +1,6 @@
-/// Bitable V1 App Role Member 模块
+/// 自定义角色协作者（member）服务模块
 ///
-/// 提供多维表格应用角色成员管理功能，包括：
+/// 提供多维表格高级权限中自定义角色的协作者管理能力：
 /// - 新增协作者
 /// - 批量新增协作者
 /// - 列出协作者
@@ -15,25 +15,51 @@ pub mod delete;
 pub mod list;
 pub mod models;
 
-pub use batch_create::*;
-pub use batch_delete::*;
-pub use create::*;
-pub use list::*;
-pub use models::*;
+pub use batch_create::{
+    BatchCreateRoleMemberRequest, BatchCreateRoleMemberRequestBuilder, BatchCreateRoleMemberResponse,
+};
+pub use batch_delete::{
+    BatchDeleteRoleMemberRequest, BatchDeleteRoleMemberRequestBuilder, BatchDeleteRoleMemberResponse,
+};
+pub use create::{CreateRoleMemberRequest, CreateRoleMemberRequestBuilder, CreateRoleMemberResponse};
+pub use delete::{DeleteRoleMemberRequest, DeleteRoleMemberRequestBuilder, DeleteRoleMemberResponse};
+pub use list::{ListRoleMembersRequest, ListRoleMembersRequestBuilder, ListRoleMembersResponse};
+pub use models::{RoleMemberId, RoleMemberIdType, RoleMemberInfo, RoleMemberType};
 
-/// 角色成员管理服务
+/// 协作者服务
 pub struct RoleMemberService {
-    pub config: Config,
+    config: Config,
 }
 
 impl RoleMemberService {
-    /// 创建角色成员管理服务
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
-    /// 获取配置
     pub fn config(&self) -> &Config {
         &self.config
     }
+
+    pub fn create(&self) -> CreateRoleMemberRequestBuilder {
+        CreateRoleMemberRequestBuilder::new(self.config.clone())
+    }
+
+    pub fn batch_create(&self) -> BatchCreateRoleMemberRequestBuilder {
+        BatchCreateRoleMemberRequestBuilder::new(self.config.clone())
+    }
+
+    pub fn list(&self) -> ListRoleMembersRequestBuilder {
+        ListRoleMembersRequestBuilder::new(self.config.clone())
+    }
+
+    pub fn delete(&self) -> DeleteRoleMemberRequestBuilder {
+        DeleteRoleMemberRequestBuilder::new(self.config.clone())
+    }
+
+    pub fn batch_delete(&self) -> BatchDeleteRoleMemberRequestBuilder {
+        BatchDeleteRoleMemberRequestBuilder::new(self.config.clone())
+    }
 }
+
+// Type alias for compatibility
+pub type ServiceType = RoleMemberService;

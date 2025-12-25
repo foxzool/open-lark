@@ -1,8 +1,9 @@
-/// Bitable 创建记录API
+/// Bitable 新增记录
 ///
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/create
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-record/create
+/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/create
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
@@ -10,11 +11,12 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use super::models::Record;
+
 /// 创建记录请求
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateRecordRequest {
-    api_request: ApiRequest<CreateRecordResponse>,
     /// 多维表格的 app_token
     app_token: String,
     /// 数据表的 table_id
@@ -23,6 +25,8 @@ pub struct CreateRecordRequest {
     user_id_type: Option<String>,
     /// 操作的唯一标识，用于幂等的操作
     client_token: Option<String>,
+    /// 是否忽略一致性读写检查
+    ignore_consistency_check: Option<bool>,
     /// 记录数据
     fields: Value,
     /// 配置信息
@@ -33,11 +37,11 @@ impl CreateRecordRequest {
     /// 创建记录请求
     pub fn new(config: Config) -> Self {
         Self {
-            api_request: ApiRequest::post(""), // 占位符，将在execute方法中使用enum+builder系统
             app_token: String::new(),
             table_id: String::new(),
             user_id_type: None,
             client_token: None,
+            ignore_consistency_check: None,
             fields: Value::Object(Default::default()),
             config,
         }
@@ -67,6 +71,12 @@ impl CreateRecordRequest {
         self
     }
 
+    /// 是否忽略一致性读写检查
+    pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
+        self.ignore_consistency_check = Some(ignore_consistency_check);
+        self
+    }
+
     /// 设置记录数据
     pub fn fields(mut self, fields: Value) -> Self {
         self.fields = fields;
@@ -91,8 +101,7 @@ impl CreateRecordRequest {
             BitableApiV1::RecordCreate(self.app_token.clone(), self.table_id.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<CreateRecordResponse> =
-            ApiRequest::post(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<CreateRecordResponse> = ApiRequest::post(&api_endpoint.to_url());
 
         // 构建查询参数
         if let Some(ref user_id_type) = self.user_id_type {
@@ -103,13 +112,19 @@ impl CreateRecordRequest {
             api_request = api_request.query("client_token", client_token);
         }
 
+        if let Some(ignore_consistency_check) = self.ignore_consistency_check {
+            api_request = api_request.query(
+                "ignore_consistency_check",
+                &ignore_consistency_check.to_string(),
+            );
+        }
+
         // 构建请求体
         let request_body = CreateRecordRequestBody {
             fields: self.fields,
         };
 
-        // 设置请求体
-        api_request = api_request.body(RequestData::Binary(serde_json::to_vec(&request_body)?));
+        api_request = api_request.body(serde_json::to_vec(&request_body)?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
@@ -156,6 +171,12 @@ impl CreateRecordRequestBuilder {
         self
     }
 
+    /// 是否忽略一致性读写检查
+    pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
+        self.request = self.request.ignore_consistency_check(ignore_consistency_check);
+        self
+    }
+
     /// 设置记录数据
     pub fn fields(mut self, fields: Value) -> Self {
         self.request = self.request.fields(fields);
@@ -168,37 +189,17 @@ impl CreateRecordRequestBuilder {
     }
 }
 
-/// 记录信息
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct Record {
-    /// 记录ID
-    pub record_id: String,
-    /// 字段数据
-    pub fields: Value,
-    /// 创建时间
-    pub created_time: String,
-    /// 最后更新时间
-    pub last_modified_time: String,
-}
-
 /// 创建记录请求体（内部使用）
 #[derive(Serialize)]
 struct CreateRecordRequestBody {
     fields: Value,
 }
 
-/// 创建记录数据
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct CreateRecordData {
-    /// 记录信息
-    pub record: Record,
-}
-
 /// 创建记录响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateRecordResponse {
-    /// 创建记录数据
-    pub data: CreateRecordData,
+    /// 新增记录的内容
+    pub record: Record,
 }
 
 impl ApiResponseTrait for CreateRecordResponse {

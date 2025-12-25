@@ -28,7 +28,7 @@ impl LingoService {
     }
 
     /// 获取lingo项目v1服务
-    pub fn v1(&self) -> LingoV1Service {
+    pub fn v1(&self) -> LingoV1Service<'_> {
         LingoV1Service::new(&self.config)
     }
 }

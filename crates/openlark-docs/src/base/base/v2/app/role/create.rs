@@ -1,6 +1,6 @@
 //! 新增自定义角色
 //!
-//! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/create
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/create
 //! doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/create-2
 
 use crate::base::base::v2::models::AppRole;
@@ -11,6 +11,8 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 /// 新增自定义角色
 #[derive(Debug)]
@@ -24,9 +26,14 @@ pub struct Create {
 pub struct CreateReq {
     /// 自定义角色的名字
     pub role_name: String,
-    /// 角色ID，以 "custom_" 开头
+    /// 数据表权限配置列表（结构按 JSON 透传）
+    pub table_roles: Vec<serde_json::Value>,
+    /// Block 权限配置列表（结构按 JSON 透传）
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_id: Option<String>,
+    pub block_roles: Option<Vec<serde_json::Value>>,
+    /// Base 规则（结构按 JSON 透传）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_rule: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -42,7 +49,9 @@ impl Create {
             app_token: String::new(),
             req: CreateReq {
                 role_name: String::new(),
-                role_id: None,
+                table_roles: Vec::new(),
+                block_roles: None,
+                base_rule: None,
             },
         }
     }
@@ -59,9 +68,21 @@ impl Create {
         self
     }
 
-    /// 角色ID
-    pub fn role_id(mut self, role_id: impl Into<String>) -> Self {
-        self.req.role_id = Some(role_id.into());
+    /// 数据表权限配置列表（table_roles）
+    pub fn table_roles(mut self, table_roles: Vec<serde_json::Value>) -> Self {
+        self.req.table_roles = table_roles;
+        self
+    }
+
+    /// Block 权限配置列表（block_roles）
+    pub fn block_roles(mut self, block_roles: Vec<serde_json::Value>) -> Self {
+        self.req.block_roles = Some(block_roles);
+        self
+    }
+
+    /// Base 规则（base_rule）
+    pub fn base_rule(mut self, base_rule: serde_json::Value) -> Self {
+        self.req.base_rule = Some(base_rule);
         self
     }
 
@@ -73,13 +94,11 @@ impl Create {
         use crate::common::api_endpoints::BaseApiV2;
         let api_endpoint = BaseApiV2::RoleCreate(self.app_token);
 
-        let api_request: ApiRequest<CreateResp> =
-            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(&self.req)?);
+        let api_request: ApiRequest<CreateResp> = ApiRequest::post(&api_endpoint.to_url())
+            .body(serialize_params(&self.req, "新增自定义角色")?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+        extract_response_data(response, "新增自定义角色")
     }
 }
 

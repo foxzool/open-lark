@@ -1,14 +1,17 @@
 //! 获取表格元数据
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/obtain-spreadsheet-metadata
+//! docPath: /document/ukTMukTMukTM/uETMzUjLxEzM14SMxMTN
+//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/obtain-spreadsheet-metadata
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 use crate::common::api_endpoints::CcmSheetApiOld;
 
@@ -53,7 +56,7 @@ pub async fn metainfo(
     _request: GetSpreadsheetMetaRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<GetSpreadsheetMetaResponse>> {
+) -> SDKResult<GetSpreadsheetMetaResponse> {
     let api_endpoint = CcmSheetApiOld::Metainfo(spreadsheet_token);
     let mut api_request: ApiRequest<GetSpreadsheetMetaResponse> =
         ApiRequest::get(&api_endpoint.to_url());
@@ -62,5 +65,6 @@ pub async fn metainfo(
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "获取表格元数据")
 }

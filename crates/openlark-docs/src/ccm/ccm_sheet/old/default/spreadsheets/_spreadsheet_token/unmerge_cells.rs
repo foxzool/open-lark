@@ -1,14 +1,17 @@
 //! 拆分单元格
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/split-cells
+//! docPath: /document/ukTMukTMukTM/uATNzUjLwUzM14CM1MTN
+//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/split-cells
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 use crate::common::api_endpoints::CcmSheetApiOld;
 
@@ -34,14 +37,15 @@ pub async fn unmerge_cells(
     request: UnmergeCellsRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<UnmergeCellsResponse>> {
+) -> SDKResult<UnmergeCellsResponse> {
     let api_endpoint = CcmSheetApiOld::UnmergeCells(spreadsheet_token);
     let mut api_request: ApiRequest<UnmergeCellsResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_value(request)?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&request, "拆分单元格")?);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "拆分单元格")
 }

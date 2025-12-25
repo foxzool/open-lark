@@ -1,16 +1,17 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 文件分片上传预备
+/// 分片上传文件-预上传
 ///
-/// 发送初始化请求获取上传会话ID，用于大文件分片上传。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/upload_prepare
+/// 发送初始化请求，以获取上传事务 ID 和分片策略，为上传分片做准备。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_prepare
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_prepare
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 分片上传预备请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -19,33 +20,72 @@ pub struct UploadPrepareRequest {
     config: Config,
     /// 文件名
     pub file_name: String,
-    /// 父文件夹token
-    pub parent_folder_token: String,
+    /// 上传点的类型：固定为 explorer（云空间）
+    pub parent_type: String,
+    /// 云空间中文件夹的 token
+    pub parent_node: String,
     /// 文件大小（字节）
-    pub size: i64,
+    pub size: i32,
 }
 
 impl UploadPrepareRequest {
     pub fn new(
         config: Config,
         file_name: impl Into<String>,
-        parent_folder_token: impl Into<String>,
-        size: i64,
+        parent_node: impl Into<String>,
+        size: i32,
     ) -> Self {
         Self {
             config,
             file_name: file_name.into(),
-            parent_folder_token: parent_folder_token.into(),
+            parent_type: "explorer".to_string(),
+            parent_node: parent_node.into(),
             size,
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<UploadPrepareResponse>> {
+    /// 覆盖上传点类型（文档固定为 explorer，一般无需设置）
+    pub fn parent_type(mut self, parent_type: impl Into<String>) -> Self {
+        self.parent_type = parent_type.into();
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<UploadPrepareResponse> {
+        let file_name_len = self.file_name.as_bytes().len();
+        if file_name_len == 0 || file_name_len > 250 {
+            return Err(openlark_core::error::validation_error(
+                "file_name",
+                "file_name 长度必须在 1~250 字节之间",
+            ));
+        }
+        if self.parent_type != "explorer" {
+            return Err(openlark_core::error::validation_error(
+                "parent_type",
+                "parent_type 仅支持固定值 explorer",
+            ));
+        }
+        if self.parent_node.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "parent_node",
+                "parent_node 不能为空",
+            ));
+        }
+        if self.size < 0 {
+            return Err(openlark_core::error::validation_error(
+                "size",
+                "size 不能为负数",
+            ));
+        }
+
         let api_endpoint = DriveApi::UploadPrepare;
         let request =
-            ApiRequest::<UploadPrepareResponse>::post(&api_endpoint.to_url()).json_body(&self);
+            ApiRequest::<UploadPrepareResponse>::post(&api_endpoint.to_url()).body(serialize_params(
+                &self,
+                "分片上传文件-预上传",
+            )?);
 
-        Transport::request(request, &self.config, None).await
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "分片上传文件-预上传")
     }
 }
 
@@ -53,11 +93,11 @@ impl UploadPrepareRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UploadPrepareResponse {
     /// 上传会话ID
-    pub upload_id: Option<String>,
-    /// 分片大小
-    pub block_size: Option<i64>,
+    pub upload_id: String,
+    /// 分片大小（固定为 4MB）
+    pub block_size: i32,
     /// 分片数量
-    pub block_num: Option<i32>,
+    pub block_num: i32,
 }
 
 impl ApiResponseTrait for UploadPrepareResponse {
@@ -75,7 +115,7 @@ mod tests {
         let config = Config::default();
         let request = UploadPrepareRequest::new(config, "test.txt", "folder_token", 1024);
         assert_eq!(request.file_name, "test.txt");
-        assert_eq!(request.parent_folder_token, "folder_token");
+        assert_eq!(request.parent_node, "folder_token");
         assert_eq!(request.size, 1024);
     }
 }

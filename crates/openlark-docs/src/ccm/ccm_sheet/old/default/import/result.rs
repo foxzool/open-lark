@@ -1,14 +1,17 @@
 //! 查询导入结果
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/sheet-operation/query-import-results
+//! docPath: /document/ukTMukTMukTM/uETO2YjLxkjN24SM5YjN
+//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/sheet-operation/query-import-results
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct ImportResultRequest {
@@ -39,7 +42,7 @@ pub async fn result(
     request: ImportResultRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<ImportResultResponse>> {
+) -> SDKResult<ImportResultResponse> {
     use crate::common::api_endpoints::CcmSheetApiOld;
 
     let mut api_request: ApiRequest<ImportResultResponse> =
@@ -49,5 +52,6 @@ pub async fn result(
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "查询导入结果")
 }

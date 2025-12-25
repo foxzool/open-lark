@@ -1,15 +1,17 @@
 //! 读取多个范围
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-multiple-ranges
+//! docPath: /document/ukTMukTMukTM/ukTMzUjL5EzM14SOxMTN
+//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-multiple-ranges
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_utils::*;
 use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -47,7 +49,7 @@ pub async fn values_batch_get(
     request: BatchGetValuesRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<BatchGetValuesResponse>> {
+) -> SDKResult<BatchGetValuesResponse> {
     let api_endpoint = CcmSheetApiOld::ValuesBatchGet(spreadsheet_token);
     let mut api_request: ApiRequest<BatchGetValuesResponse> =
         ApiRequest::get(&api_endpoint.to_url())
@@ -59,5 +61,6 @@ pub async fn values_batch_get(
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "读取多个范围")
 }

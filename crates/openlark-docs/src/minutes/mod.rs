@@ -20,21 +20,24 @@ impl<'a> MinutesService<'a> {
 
     /// 获取妙记信息
     ///
-    /// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute/get
+    /// docPath: /document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute/get
+    /// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute/get
     pub fn get_minute(&self, minute_token: impl Into<String>) -> GetMinuteRequest {
         GetMinuteRequest::new(self.config.clone()).minute_token(minute_token)
     }
 
     /// 下载妙记音视频文件
     ///
-    /// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-media/get
+    /// docPath: /document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-media/get
+    /// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-media/get
     pub fn get_minute_media(&self, minute_token: impl Into<String>) -> GetMinuteMediaRequest {
         GetMinuteMediaRequest::new(self.config.clone()).minute_token(minute_token)
     }
 
     /// 获取妙记统计数据
     ///
-    /// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-statistics/get
+    /// docPath: /document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-statistics/get
+    /// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-statistics/get
     pub fn get_minute_statistics(
         &self,
         minute_token: impl Into<String>,
@@ -44,7 +47,8 @@ impl<'a> MinutesService<'a> {
 
     /// 导出妙记文字记录
     ///
-    /// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-transcript/get
+    /// docPath: /document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-transcript/get
+    /// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-transcript/get
     pub fn get_minute_transcript(
         &self,
         minute_token: impl Into<String>,

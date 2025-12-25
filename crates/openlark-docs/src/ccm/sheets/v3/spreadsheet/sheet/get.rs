@@ -1,7 +1,8 @@
 /// 获取工作表信息
 ///
 /// 获取指定工作表的详细信息。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/get
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/get
+/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,7 +11,7 @@ use openlark_core::{
 };
 
 use super::super::models::*;
-use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
+use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 
 impl ApiResponseTrait for GetSheetResponse {
     fn data_format() -> ResponseFormat {
@@ -21,23 +22,19 @@ impl ApiResponseTrait for GetSheetResponse {
 /// 获取工作表信息
 ///
 /// 获取指定工作表的详细信息。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/get
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/get
+/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/get
 pub async fn get_sheet(
     config: &Config,
     spreadsheet_token: &str,
     sheet_id: &str,
 ) -> SDKResult<GetSheetResponse> {
-    // 构建请求参数
-    let params = serde_json::json!({
-        "sheet_id": sheet_id
-    });
-
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::UpdateSheet(spreadsheet_token.to_string());
+    let api_endpoint =
+        SheetsApiV3::GetSheet(spreadsheet_token.to_string(), sheet_id.to_string());
 
     // 创建API请求 - 使用类型安全的URL生成和标准化的参数序列化
-    let api_request: ApiRequest<GetSheetResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(params);
+    let api_request: ApiRequest<GetSheetResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;

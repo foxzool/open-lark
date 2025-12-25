@@ -1,63 +1,88 @@
-/// 获取词典分类
-///
-/// 获取飞书词典当前分类。
-/// docPath: https://open.feishu.cn/document/lingo-v1/classification/list
+//! 获取词典分类
+//!
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/classification/list
+
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
+use crate::baike::lingo::v1::models::Classification;
+use crate::common::api_endpoints::LingoApiV1;
 
-#[derive(Debug, serde::Deserialize)]
-pub struct ListClassificationResponse {
-    pub data: Option<ClassificationData>,
+/// 获取词典分类响应（data）
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListClassificationResp {
+    /// 分类列表
+    pub items: Vec<Classification>,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 是否还有更多项
+    pub has_more: bool,
 }
 
-#[derive(Debug, serde::Deserialize)]
-pub struct ClassificationData {
-    pub classifications: Vec<ClassificationItem>,
-}
-
-#[derive(Debug, serde::Deserialize)]
-pub struct ClassificationItem {
-    pub classification_id: String,
-    pub name: String,
-    pub level: i32,
-    pub parent_id: Option<String>,
-    pub children: Option<Vec<ClassificationItem>>,
-}
-
-impl ApiResponseTrait for ListClassificationResponse {
+impl ApiResponseTrait for ListClassificationResp {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 获取词典分类
-///
-/// 获取飞书词典当前分类。
-/// docPath: https://open.feishu.cn/document/lingo-v1/classification/list
-pub async fn list_classification(config: &Config) -> SDKResult<Vec<ClassificationItem>> {
-    // 使用enum+builder系统生成API端点
-    let api_endpoint = LingoApiV1::ClassificationList;
+/// 获取词典分类请求
+pub struct ListClassificationRequest {
+    config: Config,
+    page_size: Option<i32>,
+    page_token: Option<String>,
+    repo_id: Option<String>,
+}
 
-    // 创建API请求
-    let api_request: ApiRequest<ListClassificationResponse> =
-        ApiRequest::get(&api_endpoint.to_url());
+impl ListClassificationRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            page_size: None,
+            page_token: None,
+            repo_id: None,
+        }
+    }
 
-    // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
-    let resp: ListClassificationResponse = response.data.ok_or_else(|| {
-        openlark_core::error::validation_error("response_data", "Response data is missing")
-    })?;
+    /// 分页大小（默认 20，范围 1~500）
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
 
-    resp.data.map(|data| data.classifications).ok_or_else(|| {
-        openlark_core::error::validation_error(
-            "classification_data",
-            "Classification data is missing",
-        )
-    })
+    /// 分页标记
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.page_token = Some(page_token.into());
+        self
+    }
+
+    /// 词库ID（不传默认全员词库）
+    pub fn repo_id(mut self, repo_id: impl Into<String>) -> Self {
+        self.repo_id = Some(repo_id.into());
+        self
+    }
+
+    pub async fn send(self) -> SDKResult<ListClassificationResp> {
+        let mut api_request: ApiRequest<ListClassificationResp> =
+            ApiRequest::get(&LingoApiV1::ClassificationList.to_url());
+        if let Some(page_size) = self.page_size {
+            api_request = api_request.query("page_size", &page_size.to_string());
+        }
+        if let Some(page_token) = &self.page_token {
+            api_request = api_request.query("page_token", page_token);
+        }
+        if let Some(repo_id) = &self.repo_id {
+            api_request = api_request.query("repo_id", repo_id);
+        }
+
+        let response: Response<ListClassificationResp> =
+            Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
 }

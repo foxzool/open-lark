@@ -1,10 +1,11 @@
 /// 更新订阅状态
 ///
-/// 根据订阅ID更新订阅状态
-/// docPath: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/patch
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-subscription/patch
+/// doc: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/patch
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::ApiRequest,
     config::Config,
+    error::validation_error,
     http::Transport,
     SDKResult,
 };
@@ -12,124 +13,82 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
+use super::models::Subscription;
+
 /// 更新订阅状态请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchSubscriptionRequest {
-    /// 文件token
+    /// 文件 token
     pub file_token: String,
-    /// 订阅ID
+    /// 订阅 ID
     pub subscription_id: String,
-    /// 操作类型
-    pub action: String,
+    /// 是否订阅
+    pub is_subscribe: bool,
+    /// 文档类型（必填）
+    pub file_type: String,
 }
 
 impl PatchSubscriptionRequest {
-    /// 创建更新订阅状态请求
-    ///
-    /// # 参数
-    /// * `file_token` - 文件token
-    /// * `subscription_id` - 订阅ID
-    /// * `action` - 操作类型，可选值：enable（启用）、disable（禁用）
     pub fn new(
         file_token: impl Into<String>,
         subscription_id: impl Into<String>,
-        action: impl Into<String>,
+        is_subscribe: bool,
+        file_type: impl Into<String>,
     ) -> Self {
         Self {
             file_token: file_token.into(),
             subscription_id: subscription_id.into(),
-            action: action.into(),
+            is_subscribe,
+            file_type: file_type.into(),
         }
     }
 }
 
-/// 更新订阅状态响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PatchSubscriptionResponse {
-    /// 订阅信息
-    pub subscription: SubscriptionInfo,
+#[derive(Debug, Serialize)]
+struct PatchSubscriptionRequestBody {
+    is_subscribe: bool,
+    file_type: String,
 }
 
-/// 订阅信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SubscriptionInfo {
-    /// 订阅ID
-    pub subscription_id: String,
-    /// 订阅类型
-    pub subscription_type: String,
-    /// 订阅状态
-    pub status: String,
-    /// 订阅者信息
-    pub subscriber: SubscriberInfo,
-    /// 文件token
-    pub file_token: String,
-    /// 创建时间
-    pub create_time: String,
-    /// 更新时间
-    pub update_time: String,
-}
-
-/// 订阅者信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SubscriberInfo {
-    /// 用户ID
-    pub user_id: String,
-    /// 用户名称
-    pub name: String,
-    /// 用户类型
-    pub user_type: String,
-}
-
-impl ApiResponseTrait for PatchSubscriptionResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
+pub type PatchSubscriptionResponse = Subscription;
 
 /// 更新订阅状态
-///
-/// 根据订阅ID更新订阅状态
-/// docPath: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/patch
 pub async fn patch_subscription(
     request: PatchSubscriptionRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<PatchSubscriptionResponse>> {
-    // 构建请求体
-    let body = serde_json::json!({
-        "action": request.action
-    });
+) -> SDKResult<PatchSubscriptionResponse> {
+    if request.file_token.trim().is_empty() {
+        return Err(validation_error("file_token", "file_token 不能为空"));
+    }
+    if request.subscription_id.trim().is_empty() {
+        return Err(validation_error(
+            "subscription_id",
+            "subscription_id 不能为空",
+        ));
+    }
+    if request.file_type.trim().is_empty() {
+        return Err(validation_error("file_type", "file_type 不能为空"));
+    }
 
-    // 创建API请求
+    let api_endpoint = DriveApi::UpdateFileSubscription(
+        request.file_token.clone(),
+        request.subscription_id.clone(),
+    );
+
     let mut api_request: ApiRequest<PatchSubscriptionResponse> =
-        ApiRequest::patch(&format!("/open-apis/drive/v1/files/{}/subscriptions/{}",
-            request.file_token, request.subscription_id))
-            .body(body);
+        ApiRequest::patch(&api_endpoint.to_url()).body(serialize_params(
+            &PatchSubscriptionRequestBody {
+                is_subscribe: request.is_subscribe,
+                file_type: request.file_type,
+            },
+            "更新订阅状态",
+        )?);
 
-    // 如果有请求选项，应用它们
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);
     }
 
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_patch_subscription_request_builder() {
-        let request = PatchSubscriptionRequest::new("file_token", "subscription_123", "enable");
-
-        assert_eq!(request.file_token, "file_token");
-        assert_eq!(request.subscription_id, "subscription_123");
-        assert_eq!(request.action, "enable");
-    }
-
-    #[test]
-    fn test_response_trait() {
-        assert_eq!(PatchSubscriptionResponse::data_format(), ResponseFormat::Data);
-    }
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "更新订阅状态")
 }

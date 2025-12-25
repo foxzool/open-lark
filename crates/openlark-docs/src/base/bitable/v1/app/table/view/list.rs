@@ -1,6 +1,7 @@
-/// Bitable 列出视图API
+/// Bitable 列出视图
 ///
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/view/list
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-view/list
+/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -18,7 +19,6 @@ use super::patch::View;
 pub struct ListViewsRequest {
     /// 配置信息
     config: Config,
-    api_request: ApiRequest<ListViewsResponse>,
     /// 多维表格的 app_token
     app_token: String,
     /// 数据表的 table_id
@@ -36,7 +36,6 @@ impl ListViewsRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            api_request: ApiRequest::get(""),
             app_token: String::new(),
             table_id: String::new(),
             user_id_type: None,
@@ -175,23 +174,18 @@ impl ListViewsRequestBuilder {
 /// 列出视图响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListViewsResponse {
-    /// 视图列表数据
-    pub data: ListViewsData,
+    /// 视图信息
+    pub items: Vec<View>,
+    /// 分页标记，当 has_more 为 true 时，会同时返回新的 page_token，否则不返回 page_token
+    pub page_token: Option<String>,
+    /// 是否还有更多项
+    pub has_more: bool,
+    /// 总数
+    pub total: i32,
 }
 
 impl ApiResponseTrait for ListViewsResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
-}
-
-/// 列出视图数据
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ListViewsData {
-    /// 是否还有更多项
-    pub has_more: bool,
-    /// 分页标记
-    pub page_token: Option<String>,
-    /// 视图信息列表
-    pub items: Vec<View>,
 }

@@ -1,83 +1,88 @@
 //! 获取词条详情
 //!
-//! doc: https://open.feishu.cn/document/server-docs/baike-v1/entity/get
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/get
 
-use super::create::*;
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    validate_required,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct GetEntityRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub outer_id: Option<String>,
-}
+use crate::common::api_endpoints::BaikeApiV1;
+use crate::baike::baike::v1::models::{Entity, UserIdType};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct GetEntityResponse {
+/// 获取词条详情响应（data）
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GetEntityResp {
     pub entity: Entity,
 }
 
-impl ApiResponseTrait for GetEntityResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+impl ApiResponseTrait for GetEntityResp {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct GetEntityBuilder {
-    api_req: ApiRequest<GetEntityRequest>,
+/// 获取词条详情请求
+pub struct GetEntityRequest {
+    config: Config,
     entity_id: String,
+    provider: Option<String>,
+    outer_id: Option<String>,
+    user_id_type: Option<UserIdType>,
 }
 
-impl GetEntityBuilder {
-    pub fn new(entity_id: impl ToString) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.method = openlark_core::api::HttpMethod::Get;
-        builder.entity_id = entity_id.to_string();
-        builder.api_req.url = format!(
-            "https://open.feishu.cn/open-apis/baike/v1/entities/{}",
-            builder.entity_id
-        );
-        builder.api_req.body = None;
-        builder
+impl GetEntityRequest {
+    pub fn new(config: Config, entity_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            entity_id: entity_id.into(),
+            provider: None,
+            outer_id: None,
+            user_id_type: None,
+        }
     }
 
-    pub fn provider(mut self, provider: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req
-                .url
-                .push_str(&format!("&provider={}", provider.to_string()));
-        } else {
-            self.api_req
-                .url
-                .push_str(&format!("?provider={}", provider.to_string()));
-        }
+    /// 外部系统（可选）
+    pub fn provider(mut self, provider: impl Into<String>) -> Self {
+        self.provider = Some(provider.into());
         self
     }
 
-    pub fn outer_id(mut self, outer_id: impl ToString) -> Self {
-        if self.api_req.url.contains('?') {
-            self.api_req
-                .url
-                .push_str(&format!("&outer_id={}", outer_id.to_string()));
-        } else {
-            self.api_req
-                .url
-                .push_str(&format!("?outer_id={}", outer_id.to_string()));
-        }
+    /// 外部系统词条唯一 ID（可选）
+    pub fn outer_id(mut self, outer_id: impl Into<String>) -> Self {
+        self.outer_id = Some(outer_id.into());
         self
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    /// 用户 ID 类型（query: user_id_type）
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
+
+    pub async fn send(self) -> SDKResult<GetEntityResp> {
+        validate_required!(self.entity_id, "entity_id 不能为空");
+
+        let mut api_request: ApiRequest<GetEntityResp> =
+            ApiRequest::get(&BaikeApiV1::EntityGet(self.entity_id).to_url());
+        if let Some(provider) = &self.provider {
+            api_request = api_request.query("provider", provider);
+        }
+        if let Some(outer_id) = &self.outer_id {
+            api_request = api_request.query("outer_id", outer_id);
+        }
+        if let Some(user_id_type) = &self.user_id_type {
+            api_request = api_request.query("user_id_type", user_id_type.as_str());
+        }
+
+        let response: Response<GetEntityResp> =
+            Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }

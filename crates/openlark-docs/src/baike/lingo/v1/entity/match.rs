@@ -1,73 +1,99 @@
-/// 精准搜索词条
-///
-/// 将关键词与词条名、别名精准匹配，并返回对应的词条 ID。
-/// docPath: https://open.feishu.cn/document/lingo-v1/entity/match
+//! 精准搜索词条
+//!
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/match
+
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
+use serde::{Deserialize, Serialize};
+use serde_repr::{Deserialize_repr, Serialize_repr};
 
-use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
+use crate::common::api_endpoints::LingoApiV1;
 
-#[derive(Debug, serde::Deserialize)]
-pub struct MatchEntityResponse {
-    pub data: Option<MatchData>,
+/// 匹配字段（schema: TermType）
+#[derive(Debug, Clone, Copy, Serialize_repr, Deserialize_repr, PartialEq, Eq)]
+#[repr(i32)]
+pub enum TermType {
+    /// 词条名
+    MainKey = 0,
+    /// 全称
+    FullName = 1,
+    /// 别名
+    Alias = 2,
 }
 
-#[derive(Debug, serde::Deserialize)]
-pub struct MatchData {
-    pub matches: Vec<EntityMatch>,
-}
-
-#[derive(Debug, serde::Deserialize)]
-pub struct EntityMatch {
+/// 匹配结果项（match_info）
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MatchInfo {
+    /// 词条 ID
     pub entity_id: String,
-    pub title: String,
-    pub aliases: Vec<String>,
-    pub match_score: f64,
+    /// 匹配中的字段
+    #[serde(rename = "type")]
+    pub term_type: TermType,
 }
 
-#[derive(Debug, serde::Serialize)]
-pub struct MatchEntityParams {
-    pub keyword: String,
-    pub repo_id: Option<String>,
-    pub page_size: Option<i32>,
-    pub page_token: Option<String>,
+/// 精准搜索词条响应（data）
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MatchEntityResp {
+    /// 搜索结果
+    pub results: Vec<MatchInfo>,
 }
 
-impl ApiResponseTrait for MatchEntityResponse {
+impl ApiResponseTrait for MatchEntityResp {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 精准搜索词条
-///
-/// 将关键词与词条名、别名精准匹配，并返回对应的词条 ID。
-/// docPath: https://open.feishu.cn/document/lingo-v1/entity/match
-pub async fn match_entity(
-    config: &Config,
-    params: MatchEntityParams,
-) -> SDKResult<Vec<EntityMatch>> {
-    // 验证必填字段
-    validate_required_field("关键词", Some(&params.keyword), "关键词不能为空")?;
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MatchEntityBody {
+    /// 搜索关键词，将与词条名、别名进行精准匹配
+    pub word: String,
+}
 
-    // 使用enum+builder系统生成API端点
-    let api_endpoint = LingoApiV1::EntityMatch;
+/// 精准搜索词条请求
+pub struct MatchEntityRequest {
+    config: Config,
+    repo_id: Option<String>,
+    body: MatchEntityBody,
+}
 
-    // 创建API请求
-    let api_request: ApiRequest<MatchEntityResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "精准搜索词条")?);
+impl MatchEntityRequest {
+    pub fn new(config: Config, word: impl Into<String>) -> Self {
+        Self {
+            config,
+            repo_id: None,
+            body: MatchEntityBody { word: word.into() },
+        }
+    }
 
-    // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
-    let resp: MatchEntityResponse = response.data.ok_or_else(|| {
-        openlark_core::error::validation_error("response_data", "Response data is missing")
-    })?;
+    /// 词库ID（不传时默认在全员词库内搜索）
+    pub fn repo_id(mut self, repo_id: impl Into<String>) -> Self {
+        self.repo_id = Some(repo_id.into());
+        self
+    }
 
-    resp.data.map(|data| data.matches).ok_or_else(|| {
-        openlark_core::error::validation_error("match_data", "Match data is missing")
-    })
+    pub async fn send(self) -> SDKResult<MatchEntityResp> {
+        validate_required!(self.body.word, "word 不能为空");
+
+        let body = serde_json::to_value(&self.body).map_err(|e| {
+            openlark_core::error::serialization_error("序列化精准搜索词条请求体失败", Some(e))
+        })?;
+
+        let mut api_request: ApiRequest<MatchEntityResp> =
+            ApiRequest::post(&LingoApiV1::EntityMatch.to_url()).body(body);
+        if let Some(repo_id) = &self.repo_id {
+            api_request = api_request.query("repo_id", repo_id);
+        }
+
+        let response: Response<MatchEntityResp> =
+            Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
 }

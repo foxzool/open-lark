@@ -1,6 +1,7 @@
-/// Bitable 删除数据表API
+/// Bitable 删除一个数据表
 ///
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/delete
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table/delete
+/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/delete
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -14,7 +15,6 @@ use serde::{Deserialize, Serialize};
 pub struct DeleteTableRequest {
     /// 配置信息
     config: Config,
-    api_request: ApiRequest<DeleteTableResponse>,
     /// 多维表格的 app_token
     app_token: String,
     /// 数据表的 table_id
@@ -23,10 +23,7 @@ pub struct DeleteTableRequest {
 
 /// 删除数据表响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct DeleteTableResponse {
-    /// 操作结果
-    pub data: bool,
-}
+pub struct DeleteTableResponse {}
 
 impl ApiResponseTrait for DeleteTableResponse {
     fn data_format() -> ResponseFormat {
@@ -39,7 +36,6 @@ impl DeleteTableRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            api_request: ApiRequest::delete(""),
             app_token: String::new(),
             table_id: String::new(),
         }

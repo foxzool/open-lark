@@ -1,96 +1,70 @@
-/// Minutes API 数据模型
-use openlark_core::api::ApiResponseTrait;
-use openlark_core::api::ResponseFormat;
+//! Minutes API 数据模型
+//!
+//! 注意：该模块仅存放模型定义，不视为 API 文件。
+
 use serde::{Deserialize, Serialize};
 
-/// 妙记基础信息
+/// 用户 ID 类型（用于 query 参数 `user_id_type`）
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum UserIdType {
+    OpenId,
+    UnionId,
+    UserId,
+}
+
+impl UserIdType {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            UserIdType::OpenId => "open_id",
+            UserIdType::UnionId => "union_id",
+            UserIdType::UserId => "user_id",
+        }
+    }
+}
+
+/// 妙记基本信息（对应响应体 `data.minute`）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MinuteInfo {
+    /// 妙记 token
+    pub token: String,
+    /// 所有者 ID
+    pub owner_id: String,
+    /// 妙记创建时间 timestamp（ms 级别，字符串）
+    pub create_time: String,
     /// 妙记标题
-    pub title: Option<String>,
-    /// 封面图片URL
-    pub cover_url: Option<String>,
-    /// 音频时长（秒）
-    pub duration: Option<i64>,
-    /// 创建时间
-    pub create_time: Option<String>,
-    /// 拥有者ID
-    pub owner_id: Option<String>,
-    /// 妙记URL
-    pub url: Option<String>,
+    pub title: String,
+    /// 妙记封面链接
+    pub cover: String,
+    /// 妙记时长（ms 级别，字符串）
+    pub duration: String,
+    /// 妙记链接
+    pub url: String,
 }
 
-impl ApiResponseTrait for MinuteInfo {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 妙记音视频文件信息
+/// 妙记音视频文件下载信息（对应响应体 `data.download_url`）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MinuteMediaInfo {
-    /// 音频文件下载URL
-    pub audio_url: Option<String>,
-    /// 视频文件下载URL
-    pub video_url: Option<String>,
-    /// 文件大小（字节）
-    pub file_size: Option<i64>,
-    /// 文件格式
-    pub format: Option<String>,
+    /// 音视频文件下载链接（有效期 1 天）
+    pub download_url: String,
 }
 
-impl ApiResponseTrait for MinuteMediaInfo {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 妙记文字记录
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MinuteTranscript {
-    /// 完整文字记录
-    pub content: Option<String>,
-    /// 语言类型
-    pub language: Option<String>,
-    /// 文字记录格式
-    pub format: Option<String>,
-    /// 段落列表
-    pub paragraphs: Option<Vec<TranscriptParagraph>>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TranscriptParagraph {
-    /// 段落内容
-    pub content: String,
-    /// 开始时间（毫秒）
-    pub start_time: i64,
-    /// 结束时间（毫秒）
-    pub end_time: i64,
-    /// 说话人
-    pub speaker: Option<String>,
-}
-
-impl ApiResponseTrait for MinuteTranscript {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 妙记统计数据
+/// 妙记统计数据（对应响应体 `data.statistics`）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MinuteStatistics {
-    /// 访问次数（PV）
-    pub pv: Option<i64>,
-    /// 访问用户数（UV）
-    pub uv: Option<i64>,
-    /// 访问过的用户ID列表
-    pub user_ids: Option<Vec<String>>,
-    /// 访问时间戳列表
-    pub user_timestamps: Option<Vec<i64>>,
+    /// 用户浏览数
+    pub user_view_count: String,
+    /// 页面浏览数量
+    pub page_view_count: String,
+    /// 用户浏览列表
+    pub user_view_list: Vec<UserViewDetail>,
 }
 
-impl ApiResponseTrait for MinuteStatistics {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+/// 用户浏览明细
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserViewDetail {
+    /// 用户 ID
+    pub user_id: String,
+    /// 用户的最近查看时间 timestamp（ms 级别，字符串）
+    pub view_time: String,
 }

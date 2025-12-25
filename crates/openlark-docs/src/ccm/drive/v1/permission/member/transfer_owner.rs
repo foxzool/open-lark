@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,10 +7,11 @@ use openlark_core::{
 /// 转移云文档所有者
 ///
 /// 将文件或文件夹的所有者转移给其他用户
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/transfer_owner
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/transfer_owner
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/transfer_owner
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 转移所有者请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -47,30 +48,48 @@ impl TransferOwnerRequest {
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<TransferOwnerResponse>> {
+    pub async fn execute(self) -> SDKResult<TransferOwnerResponse> {
+        if self.token.is_empty() {
+            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+        }
+        if self.to_user_id.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "to_user_id",
+                "to_user_id 不能为空",
+            ));
+        }
+        if self.to_user_type.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "to_user_type",
+                "to_user_type 不能为空",
+            ));
+        }
+
         let api_endpoint = DriveApi::TransferOwner(self.token.clone());
 
-        let api_request = ApiRequest::<TransferOwnerResponse>::post(&api_endpoint.to_url()).body(
-            serde_json::json!({
-                "to_user_id": self.to_user_id,
-                "to_user_type": self.to_user_type
-            }),
-        );
+        #[derive(Serialize)]
+        struct TransferOwnerBody {
+            to_user_id: String,
+            to_user_type: String,
+        }
 
-        Transport::request(api_request, &self.config, None).await
+        let api_request: ApiRequest<TransferOwnerResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(
+                &TransferOwnerBody {
+                    to_user_id: self.to_user_id,
+                    to_user_type: self.to_user_type,
+                },
+                "转移云文档所有者",
+            )?);
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "转移云文档所有者")
     }
 }
 
 /// 转移所有者响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TransferOwnerResponse {
-    /// 转移结果
-    pub data: Option<TransferResult>,
-}
-
-/// 转移结果
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TransferResult {
     /// 文件token
     pub token: String,
     /// 旧所有者
@@ -103,7 +122,7 @@ mod tests {
 
     #[test]
     fn test_transfer_result_structure() {
-        let transfer_result = TransferResult {
+        let transfer_result = TransferOwnerResponse {
             token: "file_token".to_string(),
             from_user_id: "old_user_id".to_string(),
             to_user_id: "new_user_id".to_string(),

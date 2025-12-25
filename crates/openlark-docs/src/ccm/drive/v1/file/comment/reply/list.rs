@@ -1,20 +1,25 @@
-use super::models::ReplyInfo;
-/// 获取回复列表
+/// 获取回复信息
 ///
-/// 该接口用于获取云文档中的某条评论的回复信息。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/Comment/list-2
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment-reply/list
+/// doc: https://open.feishu.cn/document/server-docs/docs/CommentAPI/list-2
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    error::validation_error,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
+
+use super::models::ReplyInfo;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListCommentReplyRequest {
     pub file_token: String,
     pub comment_id: String,
+    /// 云文档类型（必填）
     pub file_type: String,
     pub page_token: Option<String>,
     pub page_size: Option<i32>,
@@ -36,11 +41,28 @@ impl ListCommentReplyRequest {
             user_id_type: None,
         }
     }
+
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.page_token = Some(page_token.into());
+        self
+    }
+
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListCommentReplyResponse {
+    #[serde(default)]
     pub items: Vec<ReplyInfo>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     pub has_more: bool,
 }
@@ -54,24 +76,43 @@ impl ApiResponseTrait for ListCommentReplyResponse {
 pub async fn list_comment_reply(
     request: ListCommentReplyRequest,
     config: &Config,
-) -> SDKResult<Response<ListCommentReplyResponse>> {
-    let url = format!(
-        "/open-apis/drive/v1/files/{}/comments/{}/replies",
-        request.file_token, request.comment_id
-    );
-    let mut api_request: ApiRequest<ListCommentReplyResponse> = ApiRequest::get(&url);
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<ListCommentReplyResponse> {
+    if request.file_token.trim().is_empty() {
+        return Err(validation_error("file_token", "file_token 不能为空"));
+    }
+    if request.comment_id.trim().is_empty() {
+        return Err(validation_error("comment_id", "comment_id 不能为空"));
+    }
+    if request.file_type.trim().is_empty() {
+        return Err(validation_error("file_type", "file_type 不能为空"));
+    }
+    if let Some(page_size) = request.page_size {
+        if !(1..=100).contains(&page_size) {
+            return Err(validation_error("page_size", "page_size 必须在 1~100 之间"));
+        }
+    }
 
-    api_request = api_request.query_param("file_type", &request.file_type);
+    let api_endpoint =
+        DriveApi::ListCommentReplies(request.file_token.clone(), request.comment_id.clone());
+    let mut api_request: ApiRequest<ListCommentReplyResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-    if let Some(token) = request.page_token {
-        api_request = api_request.query_param("page_token", &token);
+    api_request = api_request.query("file_type", &request.file_type);
+
+    if let Some(token) = &request.page_token {
+        api_request = api_request.query("page_token", token);
     }
     if let Some(size) = request.page_size {
-        api_request = api_request.query_param("page_size", &size.to_string());
+        api_request = api_request.query("page_size", &size.to_string());
     }
-    if let Some(user_type) = request.user_id_type {
-        api_request = api_request.query_param("user_id_type", &user_type);
+    if let Some(user_id_type) = &request.user_id_type {
+        api_request = api_request.query("user_id_type", user_id_type);
     }
 
-    Transport::request(api_request, config, None).await
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
+    }
+
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "获取回复信息")
 }

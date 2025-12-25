@@ -1,10 +1,18 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
+
+/// 查询云文档事件订阅状态
+///
+/// 查询文件的订阅状态。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/get_subscribe
+/// doc: https://open.feishu.cn/document/docs/drive-v1/event/get_subscribe
 
 /// 获取文件的订阅状态请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -37,16 +45,23 @@ impl GetSubscribeRequest {
         self
     }
 
-    pub async fn execute(self) -> SDKResult<Response<GetSubscribeResponse>> {
-        let api_endpoint =
-            crate::common::api_endpoints::DriveApi::GetFileSubscribe(self.file_token.clone());
+    pub async fn execute(self) -> SDKResult<GetSubscribeResponse> {
+        if self.file_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "file_token",
+                "file_token 不能为空",
+            ));
+        }
+
+        let api_endpoint = DriveApi::GetFileSubscribe(self.file_token.clone());
         let mut request = ApiRequest::<GetSubscribeResponse>::get(&api_endpoint.to_url());
 
         if let Some(et) = &self.event_type {
             request = request.query("event_type", et);
         }
 
-        Transport::request(request, &self.config, None).await
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "查询云文档事件订阅状态")
     }
 }
 
