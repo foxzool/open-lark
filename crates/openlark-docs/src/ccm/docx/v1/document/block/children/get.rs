@@ -1,9 +1,11 @@
 /// 获取所有子块
 ///
 /// 获取文档中指定块的所有子块的富文本内容并分页返回。文档版本号可选。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get-2
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block-children/get
+/// doc: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get-2
 
 use crate::common::api_endpoints::DocxApiV1;
+use crate::common::api_utils::*;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -12,6 +14,8 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::ccm::docx::common_types::DocxBlock;
+
 /// 获取所有子块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDocumentBlockChildrenParams {
@@ -19,6 +23,8 @@ pub struct GetDocumentBlockChildrenParams {
     pub document_id: String,
     /// 父块ID
     pub block_id: String,
+    /// 文档版本号（可选，-1 表示最新版本）
+    pub document_revision_id: Option<i64>,
     /// 分页大小
     pub page_size: Option<u32>,
     /// 分页标记
@@ -29,27 +35,12 @@ pub struct GetDocumentBlockChildrenParams {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDocumentBlockChildrenResponse {
     /// 子块列表
-    pub data: Option<ChildrenListData>,
-}
-
-/// 子块列表数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ChildrenListData {
-    /// 子块列表
-    pub items: Vec<ChildBlockItem>,
+    #[serde(default)]
+    pub items: Vec<DocxBlock>,
     /// 分页信息
     pub page_token: Option<String>,
     /// 是否有更多
     pub has_more: Option<bool>,
-}
-
-/// 子块项目
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ChildBlockItem {
-    /// 块ID
-    pub block_id: String,
-    /// 块类型
-    pub block_type: String,
 }
 
 impl ApiResponseTrait for GetDocumentBlockChildrenResponse {
@@ -82,6 +73,10 @@ impl GetDocumentBlockChildrenRequest {
         let mut api_request: ApiRequest<GetDocumentBlockChildrenResponse> =
             ApiRequest::get(&api_endpoint.to_url());
 
+        if let Some(document_revision_id) = params.document_revision_id {
+            api_request =
+                api_request.query("document_revision_id", &document_revision_id.to_string());
+        }
         if let Some(page_size) = params.page_size {
             api_request = api_request.query("page_size", &page_size.to_string());
         }
@@ -90,8 +85,6 @@ impl GetDocumentBlockChildrenRequest {
         }
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "获取所有子块")
     }
 }

@@ -1,71 +1,48 @@
+/// 获取群公告基本信息
+///
+/// 此接口用于获取指定群聊的群公告基本信息。
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement/get
+/// doc: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/get
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
-/// 获取聊天公告
-///
-/// 此接口用于获取指定群聊的公告基本信息，包括公告内容、创建时间等。
-/// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/get
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 use crate::common::{api_endpoints::DocxApiV1, api_utils::*};
 
-/// 获取聊天公告请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// 获取群公告基本信息请求
 pub struct GetChatAnnouncementRequest {
-    /// 群聊ID
-    pub chat_id: String,
+    chat_id: String,
+    user_id_type: Option<String>,
+    config: Config,
 }
 
-impl GetChatAnnouncementRequest {
-    /// 创建获取聊天公告请求
-    ///
-    /// # 参数
-    /// * `chat_id` - 群聊ID
-    pub fn new(chat_id: impl Into<String>) -> Self {
-        Self {
-            chat_id: chat_id.into(),
-        }
-    }
-
-    /// 设置群聊ID
-    pub fn chat_id(mut self, chat_id: impl Into<String>) -> Self {
-        self.chat_id = chat_id.into();
-        self
-    }
-}
-
-/// 公告数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AnnouncementData {
-    /// 公告内容
-    pub content: String,
-    /// 创建时间
-    pub create_time: i64,
-    /// 更新时间
-    pub update_time: i64,
-    /// 创建者信息
-    pub creator: Option<UserInfo>,
-    /// 更新者信息
-    pub updater: Option<UserInfo>,
-}
-
-/// 用户信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UserInfo {
-    /// 用户ID
-    pub user_id: String,
-    /// 用户名称
-    pub name: String,
-}
-
-/// 获取聊天公告响应
+/// 获取群公告基本信息响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetChatAnnouncementResponse {
-    /// 公告信息
-    pub data: Option<AnnouncementData>,
+    pub revision_id: i64,
+    pub create_time: i64,
+    pub update_time: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modifier_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modifier_id_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub announcement_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time_v2: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_time_v2: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, serde_json::Value>,
 }
 
 impl ApiResponseTrait for GetChatAnnouncementResponse {
@@ -74,73 +51,44 @@ impl ApiResponseTrait for GetChatAnnouncementResponse {
     }
 }
 
-/// 获取聊天公告
-///
-/// 获取指定群聊的公告基本信息，包括公告内容、创建时间等。
-/// docPath: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/get
-pub async fn get_chat_announcement(
-    request: GetChatAnnouncementRequest,
-    config: &Config,
-    option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<GetChatAnnouncementResponse>> {
-    // 使用DocxApiV1枚举生成API端点
-    let api_endpoint = DocxApiV1::ChatAnnouncementGet(request.chat_id.clone());
-
-    // 创建API请求
-    let mut api_request: ApiRequest<GetChatAnnouncementResponse> =
-        ApiRequest::get(&api_endpoint.to_url());
-
-    // 如果有请求选项，应用它们
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
+impl GetChatAnnouncementRequest {
+    /// 创建获取群公告基本信息请求
+    pub fn new(config: Config) -> Self {
+        Self {
+            chat_id: String::new(),
+            user_id_type: None,
+            config,
+        }
     }
 
-    // 发送请求
-    Transport::request(api_request, config, None).await
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_get_chat_announcement_request_builder() {
-        let request = GetChatAnnouncementRequest::new("chat_id");
-
-        assert_eq!(request.chat_id, "chat_id");
+    /// 设置群聊 ID
+    pub fn chat_id(mut self, chat_id: impl Into<String>) -> Self {
+        self.chat_id = chat_id.into();
+        self
     }
 
-    #[test]
-    fn test_get_chat_announcement_request_with_id() {
-        let request = GetChatAnnouncementRequest::new("initial_id").chat_id("new_chat_id");
-
-        assert_eq!(request.chat_id, "new_chat_id");
+    /// 设置 user_id_type（可选）
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
     }
 
-    #[test]
-    fn test_announcement_data_structure() {
-        let user_info = UserInfo {
-            user_id: "user_id".to_string(),
-            name: "用户名".to_string(),
-        };
+    /// 执行请求
+    ///
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement/get
+    pub async fn execute(self) -> SDKResult<GetChatAnnouncementResponse> {
+        validate_required!(self.chat_id, "群聊ID不能为空");
 
-        let announcement_data = AnnouncementData {
-            content: "公告内容".to_string(),
-            create_time: 1640995200,
-            update_time: 1640995300,
-            creator: Some(user_info.clone()),
-            updater: Some(user_info),
-        };
+        let api_endpoint = DocxApiV1::ChatAnnouncementGet(self.chat_id.clone());
+        let mut api_request: ApiRequest<GetChatAnnouncementResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
-        assert_eq!(announcement_data.content, "公告内容");
-        assert_eq!(announcement_data.creator.as_ref().unwrap().name, "用户名");
-    }
+        if let Some(user_id_type) = self.user_id_type {
+            api_request = api_request.query("user_id_type", &user_id_type);
+        }
 
-    #[test]
-    fn test_response_trait() {
-        assert_eq!(
-            GetChatAnnouncementResponse::data_format(),
-            ResponseFormat::Data
-        );
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "获取群公告基本信息")
     }
 }
+

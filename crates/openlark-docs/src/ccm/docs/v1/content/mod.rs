@@ -8,9 +8,7 @@
 #[allow(non_snake_case)]
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::module_inception)]
-use openlark_core::{
-    api::Response, config::Config, error::validation_error, req_option::RequestOption, SDKResult,
-};
+use openlark_core::{config::Config, req_option::RequestOption, SDKResult};
 
 // 重新导出所有模块类型
 pub use get::*;
@@ -62,14 +60,8 @@ impl ContentService {
         &self,
         request: GetDocsContentRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<serde_json::Value> {
-        let response = get_docs_content(request, &self.config, option).await?;
-        let resp_data = response
-            .data
-            .ok_or_else(|| validation_error("response_data", "Response data is missing"))?;
-        resp_data
-            .data
-            .ok_or_else(|| validation_error("data", "Docs content data is missing"))
+    ) -> SDKResult<GetDocsContentResponse> {
+        get_docs_content(request, &self.config, option).await
     }
 }
 
@@ -134,9 +126,11 @@ mod tests {
 
     #[test]
     fn test_get_docs_content_builder() {
-        let request = GetDocsContentRequest::new("document_token");
+        let request = GetDocsContentRequest::new("document_token", "docx", "markdown");
 
-        assert_eq!(request.document_token, "document_token");
+        assert_eq!(request.doc_token, "document_token");
+        assert_eq!(request.doc_type, "docx");
+        assert_eq!(request.content_type, "markdown");
     }
 
     #[test]
@@ -145,7 +139,7 @@ mod tests {
         let service = create_test_service();
 
         // 验证可以访问所有服务方法
-        let _get_request = GetDocsContentRequest::new("document_token");
+        let _get_request = GetDocsContentRequest::new("document_token", "docx", "markdown");
 
         // 如果编译通过，说明模块结构正确
         assert!(true);

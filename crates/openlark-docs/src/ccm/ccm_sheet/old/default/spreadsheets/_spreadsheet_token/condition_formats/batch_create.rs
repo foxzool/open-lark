@@ -1,15 +1,17 @@
 //! 批量创建条件格式
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-set
+//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/conditionformat/condition-format-set
+//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-set
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_utils::*;
 use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -77,14 +79,16 @@ pub async fn batch_create(
     request: BatchCreateConditionFormatRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<BatchCreateConditionFormatResponse>> {
+) -> SDKResult<BatchCreateConditionFormatResponse> {
     let api_endpoint = CcmSheetApiOld::ConditionFormatsBatchCreate(spreadsheet_token);
     let mut api_request: ApiRequest<BatchCreateConditionFormatResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_value(request)?);
+        ApiRequest::post(&api_endpoint.to_url())
+            .body(serialize_params(&request, "批量创建条件格式")?);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "批量创建条件格式")
 }

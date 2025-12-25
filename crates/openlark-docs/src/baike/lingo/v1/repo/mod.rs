@@ -12,6 +12,7 @@ pub use list::*;
 /// 词库管理服务
 #[derive(Debug, Clone)]
 pub struct RepoService {
+    #[allow(dead_code)]
     config: Config,
 }
 

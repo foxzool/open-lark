@@ -1,14 +1,18 @@
 /// 更新云文档权限设置
 ///
 /// 该接口用于根据 token 更新云文档的权限设置。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/patch-2
+/// docPath: /document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/permission-public/patch
+/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/patch-2
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
+use super::models::PermissionPublic;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdatePermissionPublicRequest {
@@ -18,7 +22,8 @@ pub struct UpdatePermissionPublicRequest {
     pub comment_entity: Option<String>,
     pub share_entity: Option<String>,
     pub link_share_entity: Option<String>,
-    pub external_access_entity: Option<String>,
+    /// 是否允许内容被分享到组织外
+    pub external_access: Option<bool>,
     pub invite_external: Option<bool>,
 }
 
@@ -31,7 +36,7 @@ impl UpdatePermissionPublicRequest {
             comment_entity: None,
             share_entity: None,
             link_share_entity: None,
-            external_access_entity: None,
+            external_access: None,
             invite_external: None,
         }
     }
@@ -39,7 +44,7 @@ impl UpdatePermissionPublicRequest {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdatePermissionPublicResponse {
-    pub success: bool,
+    pub permission_public: PermissionPublic,
 }
 
 impl ApiResponseTrait for UpdatePermissionPublicResponse {
@@ -48,35 +53,50 @@ impl ApiResponseTrait for UpdatePermissionPublicResponse {
     }
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+struct UpdatePermissionPublicBody {
+    #[serde(rename = "type")]
+    type_: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    security_entity: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    comment_entity: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    share_entity: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    link_share_entity: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    external_access: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    invite_external: Option<bool>,
+}
+
 pub async fn update_permission_public(
     request: UpdatePermissionPublicRequest,
     config: &Config,
-) -> SDKResult<Response<UpdatePermissionPublicResponse>> {
-    let url = format!("/open-apis/drive/v2/permissions/{}/public", request.token);
-    let mut api_request: ApiRequest<UpdatePermissionPublicResponse> = ApiRequest::patch(&url);
-
-    let mut body = serde_json::Map::new();
-    body.insert("type".to_string(), serde_json::json!(request.r#type));
-    if let Some(v) = request.security_entity {
-        body.insert("security_entity".to_string(), serde_json::json!(v));
+) -> SDKResult<UpdatePermissionPublicResponse> {
+    if request.token.is_empty() {
+        return Err(openlark_core::error::validation_error("token", "token 不能为空"));
     }
-    if let Some(v) = request.comment_entity {
-        body.insert("comment_entity".to_string(), serde_json::json!(v));
-    }
-    if let Some(v) = request.share_entity {
-        body.insert("share_entity".to_string(), serde_json::json!(v));
-    }
-    if let Some(v) = request.link_share_entity {
-        body.insert("link_share_entity".to_string(), serde_json::json!(v));
-    }
-    if let Some(v) = request.external_access_entity {
-        body.insert("external_access_entity".to_string(), serde_json::json!(v));
-    }
-    if let Some(v) = request.invite_external {
-        body.insert("invite_external".to_string(), serde_json::json!(v));
+    if request.r#type.is_empty() {
+        return Err(openlark_core::error::validation_error("type", "type 不能为空"));
     }
 
-    api_request = api_request.body(serde_json::Value::Object(body));
+    let api_endpoint = DriveApi::UpdatePublicPermissionV2(request.token);
 
-    Transport::request(api_request, config, None).await
+    let body = UpdatePermissionPublicBody {
+        type_: request.r#type,
+        security_entity: request.security_entity,
+        comment_entity: request.comment_entity,
+        share_entity: request.share_entity,
+        link_share_entity: request.link_share_entity,
+        external_access: request.external_access,
+        invite_external: request.invite_external,
+    };
+
+    let api_request: ApiRequest<UpdatePermissionPublicResponse> =
+        ApiRequest::patch(&api_endpoint.to_url()).body(serialize_params(&body, "更新云文档权限设置")?);
+
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "更新云文档权限设置")
 }

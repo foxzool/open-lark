@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -8,67 +8,77 @@ use openlark_core::{
 ///
 /// 获取用户云空间中指定文件夹下的文件清单。清单类型包括文件、各种在线文档（文档、电子表格、多维表格、思维笔记）、文件夹和快捷方式。
 /// 该接口支持分页，但是不会递归的获取子文件夹的清单。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/list
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/list
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/list
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 获取文件夹中的文件清单请求
 #[derive(Debug)]
 pub struct ListFilesRequest {
     config: Config,
-    /// 文件夹token，不填则获取根目录
-    pub parent_folder_token: Option<String>,
-    /// 分页大小，默认50，最大1000
+    /// 文件夹 token，不填则获取根目录
+    pub folder_token: Option<String>,
+    /// 分页大小（1~200）。默认值为 100
     pub page_size: Option<i32>,
     /// 分页标记，第一页不填，后续页面使用上一页返回的page_token
     pub page_token: Option<String>,
-    /// 排序字段：name|modified_time|created_time|size
+    /// 排序方式（可选）：EditedTime | CreatedTime
     pub order_by: Option<String>,
-    /// 排序方向：asc|desc
+    /// 排序规则（可选）：ASC | DESC
     pub direction: Option<String>,
-    /// 搜索关键字
-    pub search_key: Option<String>,
-    /// 文件类型过滤
-    pub file_type: Option<String>,
+    /// 用户 ID 类型（可选）：open_id | union_id | user_id
+    pub user_id_type: Option<String>,
 }
 
 /// 文件信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FileInfo {
-    /// 文件token
-    pub file_token: String,
+    /// 文件 token
+    pub token: String,
     /// 文件名称
     pub name: String,
     /// 文件类型
     pub r#type: String,
-    /// 文件大小
-    pub size: i64,
-    /// 创建时间
-    pub created_time: String,
-    /// 修改时间
-    pub modified_time: String,
-    /// 创建者信息
-    pub creator: Option<serde_json::Value>,
-    /// 父文件夹token
-    pub parent_folder_token: String,
+    /// 父节点 token（文件夹 token）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_token: Option<String>,
+    /// 访问链接
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// 快捷方式信息（当 type=shortcut 时返回）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shortcut_info: Option<ShortcutInfo>,
+    /// 文件创建时间（秒级时间戳）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// 文件最近修改时间（秒级时间戳）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modified_time: Option<String>,
+    /// 文件所有者的 ID。ID 类型由查询参数中的 user_id_type 决定
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
+}
+
+/// 快捷方式信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShortcutInfo {
+    /// 快捷方式指向的原文件类型
+    pub target_type: String,
+    /// 快捷方式指向的原文件 token
+    pub target_token: String,
 }
 
 /// 获取文件夹中的文件清单响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListFilesResponse {
-    /// 文件列表信息
-    pub data: Option<ListFilesData>,
-}
-
-/// 文件列表数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ListFilesData {
-    /// 文件列表
+    /// 文件夹中的文件清单列表
     pub files: Vec<FileInfo>,
-    /// 分页token
-    pub page_token: Option<String>,
-    /// 是否有更多
+    /// 分页标记，当 has_more 为 true 时，会同时返回下一次遍历的 page_token，否则不返回
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// 是否还有更多项
     pub has_more: bool,
 }
 
@@ -82,18 +92,17 @@ impl ListFilesRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            parent_folder_token: None,
+            folder_token: None,
             page_size: None,
             page_token: None,
             order_by: None,
             direction: None,
-            search_key: None,
-            file_type: None,
+            user_id_type: None,
         }
     }
 
-    pub fn parent_folder_token(mut self, parent_folder_token: impl Into<String>) -> Self {
-        self.parent_folder_token = Some(parent_folder_token.into());
+    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
+        self.folder_token = Some(folder_token.into());
         self
     }
 
@@ -117,21 +126,25 @@ impl ListFilesRequest {
         self
     }
 
-    pub fn search_key(mut self, search_key: impl Into<String>) -> Self {
-        self.search_key = Some(search_key.into());
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
         self
     }
 
-    pub fn file_type(mut self, file_type: impl Into<String>) -> Self {
-        self.file_type = Some(file_type.into());
-        self
-    }
+    pub async fn execute(self) -> SDKResult<ListFilesResponse> {
+        if let Some(page_size) = self.page_size {
+            if !(1..=200).contains(&page_size) {
+                return Err(openlark_core::error::validation_error(
+                    "page_size",
+                    "page_size 必须在 1~200 之间",
+                ));
+            }
+        }
 
-    pub async fn execute(self) -> SDKResult<Response<ListFilesResponse>> {
         let api_endpoint = DriveApi::ListFiles;
         let mut request = ApiRequest::<ListFilesResponse>::get(&api_endpoint.to_url());
 
-        if let Some(token) = &self.parent_folder_token {
+        if let Some(token) = &self.folder_token {
             request = request.query("folder_token", token);
         }
         if let Some(size) = self.page_size {
@@ -146,13 +159,11 @@ impl ListFilesRequest {
         if let Some(direction) = &self.direction {
             request = request.query("direction", direction);
         }
-        if let Some(key) = &self.search_key {
-            request = request.query("search_key", key);
-        }
-        if let Some(t) = &self.file_type {
-            request = request.query("file_type", t);
+        if let Some(user_id_type) = &self.user_id_type {
+            request = request.query("user_id_type", user_id_type);
         }
 
-        Transport::request(request, &self.config, None).await
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "获取文件夹中的文件清单")
     }
 }

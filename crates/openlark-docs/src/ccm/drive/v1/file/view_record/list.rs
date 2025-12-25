@@ -1,7 +1,8 @@
 /// 获取文件查看记录
 ///
-/// 获取文件的查看记录列表，包括查看者、查看时间等信息。
-/// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/view_records
+/// 获取文件的访问记录列表。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-view_record/list
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-view_record/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,19 +11,21 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 获取文件查看记录请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetFileViewRecordsRequest {
     /// 文件token
     pub file_token: String,
-    /// 分页大小
-    pub page_size: Option<u32>,
-    /// 分页标记
+    /// 文件类型
+    pub file_type: String,
+    /// 分页大小（1~50）
+    pub page_size: i32,
+    /// 分页标记（可选）
     pub page_token: Option<String>,
-    /// 查看类型
-    pub view_type: Option<String>,
+    /// 返回的访问者 ID 的类型（默认 open_id）
+    pub viewer_id_type: Option<String>,
 }
 
 impl GetFileViewRecordsRequest {
@@ -30,19 +33,16 @@ impl GetFileViewRecordsRequest {
     ///
     /// # 参数
     /// * `file_token` - 文件token
-    pub fn new(file_token: impl Into<String>) -> Self {
+    /// * `file_type` - 文件类型（doc/docx/sheet/bitable/mindnote/wiki/file）
+    /// * `page_size` - 分页大小（1~50）
+    pub fn new(file_token: impl Into<String>, file_type: impl Into<String>, page_size: i32) -> Self {
         Self {
             file_token: file_token.into(),
-            page_size: None,
+            file_type: file_type.into(),
+            page_size,
             page_token: None,
-            view_type: None,
+            viewer_id_type: None,
         }
-    }
-
-    /// 设置分页大小
-    pub fn page_size(mut self, page_size: u32) -> Self {
-        self.page_size = Some(page_size);
-        self
     }
 
     /// 设置分页标记
@@ -51,18 +51,24 @@ impl GetFileViewRecordsRequest {
         self
     }
 
-    /// 设置查看类型
-    pub fn view_type(mut self, view_type: impl Into<String>) -> Self {
-        self.view_type = Some(view_type.into());
+    /// 设置访问者 ID 类型
+    pub fn viewer_id_type(mut self, viewer_id_type: impl Into<String>) -> Self {
+        self.viewer_id_type = Some(viewer_id_type.into());
         self
     }
 }
 
-/// 获取文件查看记录响应
+/// 获取文件访问记录响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetFileViewRecordsResponse {
-    /// 查看记录数据
-    pub data: Option<ViewRecordData>,
+    /// 访问记录列表
+    #[serde(default)]
+    pub items: Vec<ViewRecord>,
+    /// 分页标记，当 has_more 为 true 时返回
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 是否还有更多项
+    pub has_more: bool,
 }
 
 impl ApiResponseTrait for GetFileViewRecordsResponse {
@@ -71,91 +77,63 @@ impl ApiResponseTrait for GetFileViewRecordsResponse {
     }
 }
 
-/// 查看记录数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ViewRecordData {
-    /// 查看记录列表
-    pub view_records: Vec<ViewRecord>,
-    /// 是否有更多数据
-    pub has_more: bool,
-    /// 分页标记
-    pub page_token: Option<String>,
-}
-
-/// 查看记录
+/// 访问记录
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ViewRecord {
-    /// 记录ID
-    pub record_id: String,
-    /// 用户信息
-    pub user: UserInfo,
-    /// 查看时间
-    pub view_time: String,
-    /// 查看类型
-    pub view_type: String,
-    /// 查看时长（秒）
-    pub duration: Option<u32>,
-    /// IP地址
-    pub ip_address: Option<String>,
-    /// 设备信息
-    pub device_info: Option<DeviceInfo>,
-}
-
-/// 用户信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UserInfo {
-    /// 用户ID
-    pub user_id: String,
-    /// 用户名
-    pub name: String,
-    /// 邮箱
-    pub email: Option<String>,
-    /// 头像
-    pub avatar: Option<AvatarInfo>,
-}
-
-/// 头像信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AvatarInfo {
-    /// 头像URL
-    pub url: String,
-    /// 头像大小
-    pub size: Option<u32>,
-}
-
-/// 设备信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeviceInfo {
-    /// 设备类型
-    pub device_type: String,
-    /// 操作系统
-    pub os: String,
-    /// 浏览器
-    pub browser: Option<String>,
+    /// 访问者 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub viewer_id: Option<String>,
+    /// 访问者姓名
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// 访问者头像的 URL
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avatar_url: Option<String>,
+    /// 最近访问时间。Unix 时间戳，单位为秒
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_view_time: Option<String>,
 }
 
 /// 获取文件查看记录
 ///
-/// 获取文件的查看记录列表，包括查看者、查看时间等信息。
-/// docPath: https://open.feishu.cn/open-apis/drive/v1/files/:file_token/view_records
+/// 获取文件的访问记录列表。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-view_record/list
 pub async fn get_file_view_records(
     request: GetFileViewRecordsRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<GetFileViewRecordsResponse>> {
+) -> SDKResult<GetFileViewRecordsResponse> {
+    if request.file_token.is_empty() {
+        return Err(openlark_core::error::validation_error(
+            "file_token",
+            "file_token 不能为空",
+        ));
+    }
+    if request.file_type.is_empty() {
+        return Err(openlark_core::error::validation_error(
+            "file_type",
+            "file_type 不能为空",
+        ));
+    }
+    if !(1..=50).contains(&request.page_size) {
+        return Err(openlark_core::error::validation_error(
+            "page_size",
+            "page_size 必须在 1~50 之间",
+        ));
+    }
+
     // 创建API请求
     let url = DriveApi::ListFileViewRecords(request.file_token.clone()).to_url();
     let mut api_request: ApiRequest<GetFileViewRecordsResponse> = ApiRequest::get(&url);
 
     // 添加查询参数
-    if let Some(page_size) = request.page_size {
-        api_request = api_request.query_param("page_size", &page_size.to_string());
-    }
+    api_request = api_request.query("page_size", &request.page_size.to_string());
     if let Some(page_token) = &request.page_token {
-        api_request = api_request.query_param("page_token", page_token);
+        api_request = api_request.query("page_token", page_token);
     }
-    if let Some(view_type) = &request.view_type {
-        api_request = api_request.query_param("view_type", view_type);
+    api_request = api_request.query("file_type", &request.file_type);
+    if let Some(viewer_id_type) = &request.viewer_id_type {
+        api_request = api_request.query("viewer_id_type", viewer_id_type);
     }
 
     // 如果有请求选项，应用它们
@@ -164,7 +142,8 @@ pub async fn get_file_view_records(
     }
 
     // 发送请求
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "获取文件访问记录")
 }
 
 #[cfg(test)]
@@ -173,45 +152,28 @@ mod tests {
 
     #[test]
     fn test_get_file_view_records_request_builder() {
-        let request = GetFileViewRecordsRequest::new("file_token")
-            .page_size(20)
+        let request = GetFileViewRecordsRequest::new("file_token", "docx", 10)
             .page_token("token123")
-            .view_type("preview");
+            .viewer_id_type("open_id");
 
         assert_eq!(request.file_token, "file_token");
-        assert_eq!(request.page_size, Some(20));
+        assert_eq!(request.file_type, "docx");
+        assert_eq!(request.page_size, 10);
         assert_eq!(request.page_token, Some("token123".to_string()));
-        assert_eq!(request.view_type, Some("preview".to_string()));
+        assert_eq!(request.viewer_id_type, Some("open_id".to_string()));
     }
 
     #[test]
     fn test_view_record_structure() {
-        let user = UserInfo {
-            user_id: "user_123".to_string(),
-            name: "张三".to_string(),
-            email: Some("zhangsan@example.com".to_string()),
-            avatar: None,
-        };
-
-        let device_info = DeviceInfo {
-            device_type: "desktop".to_string(),
-            os: "Windows 10".to_string(),
-            browser: Some("Chrome".to_string()),
-        };
-
         let record = ViewRecord {
-            record_id: "record_456".to_string(),
-            user,
-            view_time: "2023-01-01T10:00:00Z".to_string(),
-            view_type: "preview".to_string(),
-            duration: Some(300),
-            ip_address: Some("192.168.1.1".to_string()),
-            device_info: Some(device_info),
+            viewer_id: Some("ou_xxx".to_string()),
+            name: Some("zhangsan".to_string()),
+            avatar_url: Some("https://foo.icon.com/xxxx".to_string()),
+            last_view_time: Some("1679284285".to_string()),
         };
 
-        assert_eq!(record.record_id, "record_456");
-        assert_eq!(record.view_type, "preview");
-        assert_eq!(record.duration, Some(300));
+        assert_eq!(record.name, Some("zhangsan".to_string()));
+        assert_eq!(record.last_view_time, Some("1679284285".to_string()));
     }
 
     #[test]

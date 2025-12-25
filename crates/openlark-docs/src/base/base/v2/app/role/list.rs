@@ -1,6 +1,6 @@
 //! 列出自定义角色
 //!
-//! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/list
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/list
 //! doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/list-2
 
 use crate::base::base::v2::models::AppRole;
@@ -11,6 +11,8 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 /// 列出自定义角色
 #[derive(Debug)]
@@ -83,9 +85,7 @@ impl List {
         api_request = api_request.query_opt("page_token", self.req.page_token);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+        extract_response_data(response, "列出自定义角色")
     }
 }
 

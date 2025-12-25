@@ -1,68 +1,121 @@
-/// 分片上传素材-上传分片
-///
-/// 上传对应的文件块。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/multipart-upload-media/upload_part
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
+
+/// 分片上传素材-上传分片
+///
+/// 根据预上传接口返回的 upload_id 和分片策略上传对应的素材分片。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_part
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/multipart-upload-media/upload_part
 use serde::{Deserialize, Serialize};
 
-/// 分片上传请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UploadPartRequest {
-    #[serde(skip)]
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
+
+/// 分片上传素材-上传分片请求
+#[derive(Debug)]
+pub struct UploadPartMediaRequest {
     config: Config,
-    /// 上传事务ID
-    pub transaction_id: String,
-    /// 分片编号
-    pub part_number: i32,
-    /// 分片数据（base64编码）
-    pub part_data: String,
-    /// 分片大小
-    pub part_size: i32,
+    /// 分片上传事务的 ID
+    pub upload_id: String,
+    /// 块号，从 0 开始计数
+    pub seq: i32,
+    /// 块大小（字节）
+    pub size: i32,
+    /// 素材文件的 Adler-32 校验和
+    pub checksum: Option<String>,
+    /// 素材文件分片的二进制内容
+    pub file: Vec<u8>,
 }
 
-impl UploadPartRequest {
+impl UploadPartMediaRequest {
     pub fn new(
         config: Config,
-        transaction_id: impl Into<String>,
-        part_number: i32,
-        part_data: impl Into<String>,
-        part_size: i32,
+        upload_id: impl Into<String>,
+        seq: i32,
+        size: i32,
+        file: Vec<u8>,
     ) -> Self {
         Self {
             config,
-            transaction_id: transaction_id.into(),
-            part_number,
-            part_data: part_data.into(),
-            part_size,
+            upload_id: upload_id.into(),
+            seq,
+            size,
+            checksum: None,
+            file,
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<UploadPartResponse>> {
-        let url = "/open-apis/drive/v1/medias/upload_part";
+    /// 设置分片校验和（Adler-32）
+    pub fn checksum(mut self, checksum: impl Into<String>) -> Self {
+        self.checksum = Some(checksum.into());
+        self
+    }
 
-        let api_request: ApiRequest<UploadPartResponse> = ApiRequest::post(url).json_body(&self);
+    pub async fn execute(self) -> SDKResult<UploadPartMediaResponse> {
+        if self.upload_id.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "upload_id",
+                "upload_id 不能为空",
+            ));
+        }
+        if self.seq < 0 {
+            return Err(openlark_core::error::validation_error(
+                "seq",
+                "seq 不能为负数",
+            ));
+        }
+        if self.size <= 0 {
+            return Err(openlark_core::error::validation_error(
+                "size",
+                "size 必须为正整数",
+            ));
+        }
+        if self.file.len() != self.size as usize {
+            return Err(openlark_core::error::validation_error(
+                "size",
+                "size 必须与 file 的实际长度一致",
+            ));
+        }
 
-        Transport::request(api_request, &self.config, None).await
+        let api_endpoint = DriveApi::UploadMediaPart;
+
+        // openlark-core 的 MultipartBuilder 需要从 json_body 中读取 file_name 来设置 multipart 的 file part filename，
+        // 该字段不会作为普通表单字段发送（MultipartBuilder 会跳过 file_name），因此不影响接口文档参数要求。
+        #[derive(Serialize)]
+        struct PartMeta {
+            file_name: String,
+            upload_id: String,
+            seq: i32,
+            size: i32,
+            #[serde(skip_serializing_if = "Option::is_none")]
+            checksum: Option<String>,
+        }
+
+        let meta = PartMeta {
+            file_name: format!("part-{}.bin", self.seq),
+            upload_id: self.upload_id,
+            seq: self.seq,
+            size: self.size,
+            checksum: self.checksum,
+        };
+
+        let request = ApiRequest::<UploadPartMediaResponse>::post(&api_endpoint.to_url())
+            .json_body(&meta)
+            .file_content(self.file);
+
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "分片上传素材-上传分片")
     }
 }
 
-/// 分片上传响应
+/// 分片上传素材-上传分片响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UploadPartResponse {
-    /// 分片编号
-    pub part_number: i32,
-    /// 上传状态
-    pub status: String,
-    /// ETag
-    pub etag: Option<String>,
-}
+pub struct UploadPartMediaResponse {}
 
-impl ApiResponseTrait for UploadPartResponse {
+impl ApiResponseTrait for UploadPartMediaResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -73,36 +126,20 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_upload_part_request() {
+    fn test_upload_part_request_builder() {
         let config = Config::default();
-        let request = UploadPartRequest::new(
-            config,
-            "txn_media_123456",
-            1,
-            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
-            67
-        );
+        let request = UploadPartMediaRequest::new(config, "upload_id", 0, 1024, vec![0; 1024])
+            .checksum("3248270248");
 
-        assert_eq!(request.transaction_id, "txn_media_123456");
-        assert_eq!(request.part_number, 1);
-        assert_eq!(request.part_size, 67);
-    }
-
-    #[test]
-    fn test_upload_part_response() {
-        let response = UploadPartResponse {
-            part_number: 1,
-            status: "completed".to_string(),
-            etag: Some("etag_media_123456".to_string()),
-        };
-
-        assert_eq!(response.part_number, 1);
-        assert_eq!(response.status, "completed");
-        assert_eq!(response.etag, Some("etag_media_123456".to_string()));
+        assert_eq!(request.upload_id, "upload_id");
+        assert_eq!(request.seq, 0);
+        assert_eq!(request.size, 1024);
+        assert_eq!(request.file.len(), 1024);
+        assert_eq!(request.checksum, Some("3248270248".to_string()));
     }
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(UploadPartResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(UploadPartMediaResponse::data_format(), ResponseFormat::Data);
     }
 }

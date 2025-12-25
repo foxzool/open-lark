@@ -1,209 +1,145 @@
-/// Bitable 批量删除角色成员API
+/// Bitable 批量删除协作者（自定义角色）
 ///
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/role/member/batchDelete
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-role-member/batch_delete
+/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/advanced-permission/app-role-member/batch_delete
 use openlark_core::{
-    api::ApiRequest,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{
-    BatchDeleteResultItemModel as ModelBatchDeleteResultItem,
-    BatchDeleteRoleMemberRequestModel as ModelBatchDeleteRequest,
-    BatchDeleteRoleMemberResponseModel as ModelBatchDeleteResponse,
-};
+use super::models::RoleMemberId;
 
-/// 批量删除角色成员请求
+/// 批量删除协作者请求
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct BatchDeleteRoleMemberRequest {
-    /// 配置信息
     config: Config,
-    api_request: ApiRequest<BatchDeleteRoleMemberResponse>,
-    /// 多维表格的 app_token
     app_token: String,
-    /// 角色的ID
     role_id: String,
-    /// 用户 ID 类型
-    user_id_type: Option<String>,
-    /// 成员ID列表
-    member_ids: Vec<String>,
+    member_list: Vec<RoleMemberId>,
 }
 
 impl BatchDeleteRoleMemberRequest {
-    /// 创建批量删除角色成员请求
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            api_request: ApiRequest::post("").header("Content-Type", "application/json"),
             app_token: String::new(),
             role_id: String::new(),
-            user_id_type: None,
-            member_ids: Vec::new(),
+            member_list: Vec::new(),
         }
     }
 
-    /// 设置应用 token
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置角色 ID
     pub fn role_id(mut self, role_id: String) -> Self {
         self.role_id = role_id;
         self
     }
 
-    /// 设置用户 ID 类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.user_id_type = Some(user_id_type);
+    pub fn member_list(mut self, member_list: Vec<RoleMemberId>) -> Self {
+        self.member_list = member_list;
         self
     }
 
-    /// 设置成员ID列表
-    pub fn member_ids(mut self, member_ids: Vec<String>) -> Self {
-        self.member_ids = member_ids;
+    pub fn add_member(mut self, member: RoleMemberId) -> Self {
+        self.member_list.push(member);
         self
     }
 
-    /// 添加成员ID
-    pub fn add_member_id(mut self, member_id: String) -> Self {
-        self.member_ids.push(member_id);
-        self
-    }
-
-    /// 执行请求
     pub async fn execute(self) -> SDKResult<BatchDeleteRoleMemberResponse> {
-        // 参数验证
         if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "应用token不能为空"));
+            return Err(validation_error("app_token", "app_token 不能为空"));
         }
-
         if self.role_id.trim().is_empty() {
-            return Err(validation_error("role_id", "角色ID不能为空"));
+            return Err(validation_error("role_id", "role_id 不能为空"));
+        }
+        if self.member_list.is_empty() {
+            return Err(validation_error("member_list", "member_list 不能为空"));
+        }
+        if self.member_list.len() > 100 {
+            return Err(validation_error("member_list", "member_list 最多 100 项"));
+        }
+        for (idx, item) in self.member_list.iter().enumerate() {
+            if item.id.trim().is_empty() {
+                return Err(validation_error(
+                    "member_list",
+                    &format!("第 {} 个成员的 id 不能为空", idx + 1),
+                ));
+            }
         }
 
-        if self.member_ids.is_empty() {
-            return Err(validation_error("member_ids", "成员ID列表不能为空"));
-        }
+        use crate::common::api_endpoints::BitableApiV1;
+        let api_endpoint =
+            BitableApiV1::RoleMemberBatchDelete(self.app_token.clone(), self.role_id.clone());
 
-        if self.member_ids.len() > 500 {
-            return Err(validation_error(
-                "member_ids",
-                "批量删除成员数量不能超过500个",
-            ));
-        }
+        let api_request: ApiRequest<BatchDeleteRoleMemberResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(
+                &BatchDeleteRoleMemberRequestBody {
+                    member_list: self.member_list,
+                },
+            )?);
 
-        // 构建完整的API URL
-        let api_url = format!(
-            "{}/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_delete",
-            self.config.base_url, self.app_token, self.role_id
-        );
-
-        // 构建请求体
-        let request_body = ModelBatchDeleteRequest {
-            member_ids: self.member_ids.clone(),
-        };
-
-        // 设置API URL和请求体
-        let mut api_request = self.api_request;
-        api_request.url = api_url;
-
-        // 设置查询参数
-        if let Some(user_id_type) = &self.user_id_type {
-            api_request = api_request.query("user_id_type", user_id_type);
-        }
-
-        api_request.body = Some(openlark_core::api::RequestData::Json(serde_json::to_value(
-            &request_body,
-        )?));
-
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-
-        // 解析响应
-        let response_data: ModelBatchDeleteResponse = response
+        response
             .data
-            .and_then(|data| serde_json::from_value(data).ok())
-            .ok_or_else(|| validation_error("解析批量删除成员数据失败", "响应数据格式不正确"))?;
-
-        // 转换为标准响应格式
-        let standard_response = BatchDeleteRoleMemberResponse {
-            results: response_data.results,
-            has_more: response_data.has_more,
-            page_token: response_data.page_token,
-            success: response.raw_response.is_success(),
-        };
-
-        Ok(standard_response)
+            .ok_or_else(|| validation_error("response", "响应数据为空"))
     }
 }
 
-/// 批量删除角色成员Builder
+/// 批量删除协作者 Builder
 pub struct BatchDeleteRoleMemberRequestBuilder {
     request: BatchDeleteRoleMemberRequest,
 }
 
 impl BatchDeleteRoleMemberRequestBuilder {
-    /// 创建Builder实例
     pub fn new(config: Config) -> Self {
         Self {
             request: BatchDeleteRoleMemberRequest::new(config),
         }
     }
 
-    /// 设置应用 token
     pub fn app_token(mut self, app_token: String) -> Self {
         self.request = self.request.app_token(app_token);
         self
     }
 
-    /// 设置角色 ID
     pub fn role_id(mut self, role_id: String) -> Self {
         self.request = self.request.role_id(role_id);
         self
     }
 
-    /// 设置用户 ID 类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
+    pub fn member_list(mut self, member_list: Vec<RoleMemberId>) -> Self {
+        self.request = self.request.member_list(member_list);
         self
     }
 
-    /// 设置成员ID列表
-    pub fn member_ids(mut self, member_ids: Vec<String>) -> Self {
-        self.request = self.request.member_ids(member_ids);
+    pub fn add_member(mut self, member: RoleMemberId) -> Self {
+        self.request = self.request.add_member(member);
         self
     }
 
-    /// 添加成员ID
-    pub fn add_member_id(mut self, member_id: String) -> Self {
-        self.request = self.request.add_member_id(member_id);
-        self
-    }
-
-    /// 构建请求
     pub fn build(self) -> BatchDeleteRoleMemberRequest {
         self.request
     }
 }
 
-/// 批量删除结果项
-pub type BatchDeleteResultItem = ModelBatchDeleteResultItem;
+#[derive(Serialize)]
+struct BatchDeleteRoleMemberRequestBody {
+    member_list: Vec<RoleMemberId>,
+}
 
-/// 批量删除角色成员响应
+/// 批量删除协作者响应（data 为 {}）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchDeleteRoleMemberResponse {
-    /// 批量操作结果
-    pub results: Vec<BatchDeleteResultItem>,
-    /// 是否有更多数据
-    pub has_more: bool,
-    /// 页面 token
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-    /// 操作结果
-    pub success: bool,
+pub struct BatchDeleteRoleMemberResponse {}
+
+impl ApiResponseTrait for BatchDeleteRoleMemberResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }

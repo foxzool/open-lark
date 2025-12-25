@@ -1,7 +1,8 @@
 /// 获取文档纯文本内容
 ///
 /// 获取文档的纯文本内容。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/raw_content
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/raw_content
+/// doc: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/raw_content
 
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
@@ -12,29 +13,22 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_utils::*;
+
 /// 获取文档纯文本内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDocumentRawContentParams {
     /// 文档ID
     pub document_id: String,
+    /// 语言（可选）
+    pub lang: Option<i32>,
 }
 
 /// 获取文档纯文本内容响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDocumentRawContentResponse {
     /// 文档内容
-    pub data: Option<DocumentRawContentData>,
-}
-
-/// 文档原始内容数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DocumentRawContentData {
-    /// 纯文本内容
     pub content: String,
-    /// 字符数
-    pub char_count: u64,
-    /// 字节数
-    pub byte_count: u64,
 }
 
 impl ApiResponseTrait for GetDocumentRawContentResponse {
@@ -56,7 +50,7 @@ impl GetDocumentRawContentRequest {
 
     /// 执行请求
     ///
-    /// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/raw_content
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/raw_content
     pub async fn execute(
         self,
         params: GetDocumentRawContentParams,
@@ -68,13 +62,15 @@ impl GetDocumentRawContentRequest {
         let api_endpoint = DocxApiV1::DocumentRawContent(params.document_id.clone());
 
         // 创建API请求
-        let api_request: ApiRequest<GetDocumentRawContentResponse> =
+        let mut api_request: ApiRequest<GetDocumentRawContentResponse> =
             ApiRequest::get(&api_endpoint.to_url());
+
+        if let Some(lang) = params.lang {
+            api_request = api_request.query("lang", &lang.to_string());
+        }
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "获取文档纯文本内容")
     }
 }

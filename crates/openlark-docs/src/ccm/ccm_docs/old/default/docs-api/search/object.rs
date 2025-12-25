@@ -1,7 +1,8 @@
 /// 搜索云文档
 ///
 /// 根据搜索条件进行文档搜索。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search
+/// docPath: /document/ukTMukTMukTM/ugDM4UjL4ADO14COwgTN
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -9,6 +10,8 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchObjectReq {
@@ -112,11 +115,9 @@ impl SearchObjectRequest {
 
         let api_request: ApiRequest<SearchObjectResponse> =
             ApiRequest::post(&CcmDocsApiOld::SearchObject.to_url())
-                .body(serde_json::to_value(&self.req)?);
+                .body(serialize_params(&self.req, "搜索云文档")?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+        extract_response_data(response, "搜索云文档")
     }
 }

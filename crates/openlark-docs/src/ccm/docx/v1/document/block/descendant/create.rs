@@ -1,10 +1,9 @@
 /// 创建嵌套块
 ///
-/// 在指定块的子块列表中，新创建一批有父子关系的子块，并放置到指定位置。如果操作成功，接口将返回新创建子块的富文本内容。当创建的子块中含有 GridColumn、TableCell、Callout 时其中至少需要包含一个子块 ，即内容为空时也需要填入一个空 Text Block 作为子块。
-/// docPath: https://open.feishu.cn/document/docs/docs/document-block/create-2
-
-use crate::ccm::docx::common_types::BlockContent;
-use crate::common::api_endpoints::DocxApiV1;
+/// 在指定块的子块列表中，新创建一批有父子关系的子块，并放置到指定位置。
+/// 如果操作成功，接口将返回新建块与临时 block_id 的映射关系。
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block-descendant/create
+/// doc: https://open.feishu.cn/document/docs/docs/document-block/create-2
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -13,62 +12,42 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::{api_endpoints::DocxApiV1, api_utils::*};
+
 /// 创建嵌套块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateDocumentBlockDescendantParams {
     /// 文档ID
+    #[serde(skip_serializing)]
     pub document_id: String,
     /// 父块ID
+    #[serde(skip_serializing)]
     pub block_id: String,
-    /// 新建的嵌套子块列表
-    pub children: Vec<NewNestedBlock>,
-    /// 插入位置
-    pub location: Option<BlockLocation>,
-}
+    /// 文档版本号（可选，-1 表示最新版本）
+    #[serde(skip_serializing)]
+    pub document_revision_id: Option<i64>,
 
-/// 新建的嵌套块
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct NewNestedBlock {
-    /// 块类型
-    pub block_type: i32,
-    /// 块内容
-    pub content: Option<BlockContent>,
-    /// 嵌套子块
-    pub children: Option<Vec<NewNestedBlock>>,
-}
-
-/// 块位置
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BlockLocation {
-    /// 插入位置索引
+    /// 插入位置索引（可选）
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub index: Option<i32>,
+    /// 需要插入的子块临时 ID 列表（顺序即插入顺序）
+    pub children_id: Vec<String>,
+    /// 以临时 ID 组织的嵌套块结构（按文档定义传入）
+    pub descendants: Vec<serde_json::Value>,
 }
 
-/// 创建嵌套块响应
+/// 创建嵌套块响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateDocumentBlockDescendantResponse {
-    /// 创建结果
-    pub data: Option<CreateResult>,
+    #[serde(default)]
+    pub block_id_relations: Vec<BlockIdRelation>,
 }
 
-/// 创建结果
+/// 临时 block_id 与实际 block_id 的映射关系
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateResult {
-    /// 创建成功的块列表
-    pub blocks: Option<Vec<CreatedNestedBlock>>,
-}
-
-/// 创建的嵌套块
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreatedNestedBlock {
-    /// 块ID
+pub struct BlockIdRelation {
     pub block_id: String,
-    /// 块类型
-    pub block_type: i32,
-    /// 块内容
-    pub content: Option<BlockContent>,
-    /// 子块
-    pub children: Option<Vec<CreatedNestedBlock>>,
+    pub temporary_block_id: String,
 }
 
 impl ApiResponseTrait for CreateDocumentBlockDescendantResponse {
@@ -93,19 +72,25 @@ impl CreateDocumentBlockDescendantRequest {
     ) -> SDKResult<CreateDocumentBlockDescendantResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
-        validate_required!(params.children, "嵌套子块列表不能为空");
+        validate_required!(params.children_id, "children_id不能为空");
+        validate_required!(params.descendants, "descendants不能为空");
 
         let api_endpoint = DocxApiV1::DocumentBlockDescendantCreate(
             params.document_id.clone(),
             params.block_id.clone(),
         );
+
         let mut api_request: ApiRequest<CreateDocumentBlockDescendantResponse> =
-            ApiRequest::post(&api_endpoint.to_url());
-        api_request = api_request.json_body(&params);
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(serialize_params(&params, "创建嵌套块")?);
+
+        if let Some(document_revision_id) = params.document_revision_id {
+            api_request =
+                api_request.query("document_revision_id", &document_revision_id.to_string());
+        }
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "创建嵌套块")
     }
 }
+

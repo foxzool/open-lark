@@ -1,35 +1,62 @@
 /// 创建文件快捷方式
 ///
 /// 创建文件快捷方式，用于访问云空间的文件。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create_shortcut
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_shortcut
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create_shortcut
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
-/// 创建文件快捷方式响应
+/// 创建文件快捷方式响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFileShortcutResponse {
-    /// 快捷方式信息
-    pub data: Option<FileShortcutData>,
+    /// 快捷方式
+    pub succ_shortcut_node: ShortcutNode,
 }
 
-/// 文件快捷方式数据
+/// 快捷方式文件信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FileShortcutData {
-    /// 文件token
-    pub file_token: String,
-    /// 快捷方式名称
+pub struct ShortcutNode {
+    /// 文件的 token
+    pub token: String,
+    /// 文件名
     pub name: String,
-    /// 快捷方式类型
-    pub shortcut_type: String,
-    /// 创建时间
-    pub create_time: String,
+    /// 文件类型，可选值参照请求体的 refer_type
+    #[serde(rename = "type")]
+    pub r#type: String,
+    /// 父文件夹的 token
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_token: Option<String>,
+    /// 访问链接
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// 快捷方式的源文件信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shortcut_info: Option<CreateShortcutInfo>,
+    /// 文件创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// 文件最近修改时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modified_time: Option<String>,
+    /// 文件所有者
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
+}
+
+/// 快捷方式的源文件信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateShortcutInfo {
+    /// 快捷方式对应的源文件类型，可选值参照请求体的 refer_type
+    pub target_type: String,
+    /// 快捷方式指向的源文件 token
+    pub target_token: String,
 }
 
 impl ApiResponseTrait for CreateFileShortcutResponse {
@@ -39,45 +66,84 @@ impl ApiResponseTrait for CreateFileShortcutResponse {
 }
 
 /// 创建文件快捷方式请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct CreateFileShortcutRequest {
     #[serde(skip)]
     config: Config,
-    /// 快捷方式名称
-    pub name: String,
-    /// 快捷方式类型
-    pub shortcut_type: String,
-    /// 目标文件token
-    pub file_token: String,
-    /// 父文件夹token
-    pub parent_folder_token: String,
+    /// 用户 ID 类型（默认 open_id）
+    #[serde(skip)]
+    pub user_id_type: Option<String>,
+    /// 目标父文件夹的 token
+    pub parent_token: String,
+    /// 源文件的信息
+    pub refer_entity: ReferEntity,
+}
+
+/// 源文件的信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ReferEntity {
+    /// 源文件的 token
+    pub refer_token: String,
+    /// 源文件的类型
+    pub refer_type: String,
 }
 
 impl CreateFileShortcutRequest {
     /// 创建新的请求实例
     pub fn new(
         config: Config,
-        name: impl Into<String>,
-        shortcut_type: impl Into<String>,
-        file_token: impl Into<String>,
-        parent_folder_token: impl Into<String>,
+        parent_token: impl Into<String>,
+        refer_token: impl Into<String>,
+        refer_type: impl Into<String>,
     ) -> Self {
         Self {
             config,
-            name: name.into(),
-            shortcut_type: shortcut_type.into(),
-            file_token: file_token.into(),
-            parent_folder_token: parent_folder_token.into(),
+            user_id_type: None,
+            parent_token: parent_token.into(),
+            refer_entity: ReferEntity {
+                refer_token: refer_token.into(),
+                refer_type: refer_type.into(),
+            },
         }
     }
 
-    /// 执行创建文件快捷方式操作
-    pub async fn execute(self) -> SDKResult<Response<CreateFileShortcutResponse>> {
-        let api_endpoint = DriveApi::CreateShortcut;
-        let request =
-            ApiRequest::<CreateFileShortcutResponse>::post(&api_endpoint.to_url()).json_body(&self);
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
 
-        Transport::request(request, &self.config, None).await
+    /// 执行创建文件快捷方式操作
+    pub async fn execute(self) -> SDKResult<CreateFileShortcutResponse> {
+        if self.parent_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "parent_token",
+                "parent_token 不能为空",
+            ));
+        }
+        if self.refer_entity.refer_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "refer_entity.refer_token",
+                "refer_token 不能为空",
+            ));
+        }
+        if self.refer_entity.refer_type.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "refer_entity.refer_type",
+                "refer_type 不能为空",
+            ));
+        }
+
+        let api_endpoint = DriveApi::CreateShortcut;
+        let mut request = ApiRequest::<CreateFileShortcutResponse>::post(&api_endpoint.to_url());
+
+        if let Some(user_id_type) = &self.user_id_type {
+            request = request.query("user_id_type", user_id_type);
+        }
+
+        request = request.body(serialize_params(&self, "创建文件快捷方式")?);
+
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "创建文件快捷方式")
     }
 }
 
@@ -88,18 +154,13 @@ mod tests {
     #[test]
     fn test_create_file_shortcut_request() {
         let config = Config::default();
-        let request = CreateFileShortcutRequest::new(
-            config,
-            "快捷方式名称",
-            "document",
-            "file_token_123",
-            "folder_token_456",
-        );
+        let request = CreateFileShortcutRequest::new(config, "fld_xxx", "dox_xxx", "docx")
+            .user_id_type("open_id");
 
-        assert_eq!(request.name, "快捷方式名称");
-        assert_eq!(request.shortcut_type, "document");
-        assert_eq!(request.file_token, "file_token_123");
-        assert_eq!(request.parent_folder_token, "folder_token_456");
+        assert_eq!(request.parent_token, "fld_xxx");
+        assert_eq!(request.refer_entity.refer_token, "dox_xxx");
+        assert_eq!(request.refer_entity.refer_type, "docx");
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
 
     #[test]

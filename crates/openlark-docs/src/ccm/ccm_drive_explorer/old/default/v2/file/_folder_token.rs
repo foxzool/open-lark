@@ -1,7 +1,10 @@
-/// 新建文件
-///
-/// 根据 folderToken 创建 Doc、 Sheet 或 Bitable 。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
+//! 新建文件
+//!
+//! 根据 folderToken 创建 Doc、 Sheet 或 Bitable。
+//!
+//! docPath: /document/ukTMukTMukTM/uQTNzUjL0UzM14CN1MTN
+//! doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,45 +13,39 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CcmDriveExplorerApiOld;
+use crate::common::{api_endpoints::CcmDriveExplorerApiOld, api_utils::*};
 
-/// 新建文件请求参数
+/// 新建文件类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateFileParams {
-    /// 父文件夹token
-    #[serde(rename = "folder_token")]
-    pub folder_token: String,
-    /// 文件类型，可选值：doc、sheet、bitable、mindnote
-    #[serde(rename = "doc_type")]
-    pub doc_type: String,
-    /// 文件标题，长度限制：1-100字符
-    pub title: String,
+#[serde(rename_all = "snake_case")]
+pub enum CreateFileType {
+    /// 电子表格
+    Sheet,
+    /// 多维表格
+    Bitable,
 }
 
-/// 新建文件响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateFileResponse {
-    /// 文件信息
-    pub data: Option<FileInfo>,
-}
-
-/// 文件信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FileInfo {
-    /// 文件token
-    #[serde(rename = "doc_token")]
-    pub doc_token: String,
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct CreateFileReq {
     /// 文件标题
     pub title: String,
-    /// 文件类型
-    #[serde(rename = "doc_type")]
-    pub doc_type: String,
-    /// 预览URL
-    #[serde(rename = "preview_url")]
-    pub preview_url: Option<String>,
+    /// 文件类型（不传默认创建 doc）
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    pub type_: Option<CreateFileType>,
 }
 
-impl ApiResponseTrait for CreateFileResponse {
+/// 新建文件响应（data）
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct CreateFileResp {
+    /// 文件 URL
+    pub url: String,
+    /// 文件 token
+    pub token: String,
+    /// 修订版本号
+    pub revision: i32,
+}
+
+impl ApiResponseTrait for CreateFileResp {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -57,41 +54,46 @@ impl ApiResponseTrait for CreateFileResponse {
 /// 新建文件请求
 pub struct CreateFileRequest {
     config: Config,
+    folder_token: String,
+    req: CreateFileReq,
 }
 
 impl CreateFileRequest {
-    /// 创建新建文件请求
-    pub fn new(config: Config) -> Self {
-        Self { config }
+    pub fn new(config: Config, folder_token: impl Into<String>) -> Self {
+        Self {
+            config,
+            folder_token: folder_token.into(),
+            req: CreateFileReq::default(),
+        }
     }
 
-    /// 执行请求
-    ///
-    /// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
-    pub async fn execute(self, params: CreateFileParams) -> SDKResult<CreateFileResponse> {
-        // 验证必填字段
-        validate_required!(params.folder_token, "父文件夹token不能为空");
-        validate_required!(params.doc_type, "文件类型不能为空");
-        validate_required!(params.title, "文件标题不能为空");
+    /// 文件标题
+    pub fn title(mut self, title: impl Into<String>) -> Self {
+        self.req.title = title.into();
+        self
+    }
 
-        // 使用enum+builder系统生成API端点
-        let api_endpoint = CcmDriveExplorerApiOld::File(params.folder_token.clone());
+    /// 指定创建 Sheet
+    pub fn sheet(mut self) -> Self {
+        self.req.type_ = Some(CreateFileType::Sheet);
+        self
+    }
 
-        // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<CreateFileResponse> = ApiRequest::post(
-            &api_endpoint.to_url(),
-        )
-        .body(serde_json::to_value(params).map_err(|e| {
-            openlark_core::error::validation_error(
-                "参数序列化失败",
-                &format!("无法序列化请求参数: {}", e),
-            )
-        })?);
+    /// 指定创建 Bitable
+    pub fn bitable(mut self) -> Self {
+        self.req.type_ = Some(CreateFileType::Bitable);
+        self
+    }
 
-        // 发送请求
+    pub async fn send(self) -> SDKResult<CreateFileResp> {
+        validate_required!(self.folder_token, "folderToken 不能为空");
+        validate_required!(self.req.title, "title 不能为空");
+
+        let api_request: ApiRequest<CreateFileResp> =
+            ApiRequest::post(&CcmDriveExplorerApiOld::File(self.folder_token).to_url())
+                .body(serialize_params(&self.req, "新建文件")?);
+
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "新建文件")
     }
 }

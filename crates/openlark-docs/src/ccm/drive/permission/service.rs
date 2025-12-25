@@ -1,4 +1,4 @@
-/// Drive Permission API 服务实现
+/// Drive Permission 服务实现（非 API 文件）
 ///
 /// 提供权限管理相关的API服务，包括：
 /// - 权限验证

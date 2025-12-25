@@ -1,5 +1,6 @@
 /// Bitable 创建多维表格API
 ///
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/create
 /// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/create
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -28,7 +29,7 @@ pub struct CreateAppRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateAppResponse {
     /// 应用信息
-    pub data: App,
+    pub app: App,
 }
 
 impl ApiResponseTrait for CreateAppResponse {

@@ -1,14 +1,17 @@
 //! 获取保护范围
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/obtain-protection-scopes
+//! docPath: /document/ukTMukTMukTM/uQTM5YjL0ETO24CNxkjN
+//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/retrieve-protection-scopes
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 use crate::common::api_endpoints::CcmSheetApiOld;
 
@@ -50,7 +53,14 @@ pub async fn protected_range_batch_get(
     request: BatchGetProtectedRangeRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<BatchGetProtectedRangeResponse>> {
+) -> SDKResult<BatchGetProtectedRangeResponse> {
+    if request.protectIds.is_empty() {
+        return Err(openlark_core::error::validation_error(
+            "protectIds",
+            "protectIds 不能为空",
+        ));
+    }
+
     let api_endpoint = CcmSheetApiOld::ProtectedRangeBatchGet(spreadsheet_token);
     let mut api_request: ApiRequest<BatchGetProtectedRangeResponse> =
         ApiRequest::get(&api_endpoint.to_url()).query("protectIds", request.protectIds.join(","));
@@ -59,5 +69,6 @@ pub async fn protected_range_batch_get(
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "获取保护范围")
 }

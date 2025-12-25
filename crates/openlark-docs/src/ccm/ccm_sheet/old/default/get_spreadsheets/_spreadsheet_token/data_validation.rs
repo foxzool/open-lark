@@ -1,14 +1,17 @@
 //! 查询下拉列表设置
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/query-datavalidation
+//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/datavalidation/query-datavalidation
+//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/query-datavalidation
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 use crate::common::api_endpoints::CcmSheetApiOld;
 
@@ -54,7 +57,7 @@ pub async fn data_validation(
     request: QueryDataValidationRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<QueryDataValidationResponse>> {
+) -> SDKResult<QueryDataValidationResponse> {
     let api_endpoint = CcmSheetApiOld::DataValidation(spreadsheet_token);
     let mut api_request: ApiRequest<QueryDataValidationResponse> =
         ApiRequest::get(&api_endpoint.to_url())
@@ -65,5 +68,6 @@ pub async fn data_validation(
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "查询下拉列表设置")
 }

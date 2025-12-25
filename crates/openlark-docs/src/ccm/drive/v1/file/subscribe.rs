@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,10 +7,11 @@ use openlark_core::{
 /// 订阅文件更新
 ///
 /// 订阅文件的更新通知
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/event/subscribe
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/subscribe
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/event/subscribe
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 订阅文件请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -43,7 +44,14 @@ impl SubscribeFileRequest {
         self
     }
 
-    pub async fn execute(self) -> SDKResult<Response<SubscribeFileResponse>> {
+    pub async fn execute(self) -> SDKResult<SubscribeFileResponse> {
+        if self.file_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "file_token",
+                "file_token 不能为空",
+            ));
+        }
+
         let api_endpoint = DriveApi::SubscribeFile(self.file_token.clone());
         let mut request = ApiRequest::<SubscribeFileResponse>::post(&api_endpoint.to_url());
 
@@ -51,20 +59,14 @@ impl SubscribeFileRequest {
             request = request.query("event_type", et);
         }
 
-        Transport::request(request, &self.config, None).await
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "订阅云文档事件")
     }
 }
 
 /// 订阅文件响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SubscribeFileResponse {
-    /// 订阅结果
-    pub data: Option<SubscribeData>,
-}
-
-/// 订阅数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SubscribeData {
     /// 是否订阅成功
     pub subscribed: bool,
     /// 文件token
@@ -91,7 +93,7 @@ mod tests {
 
     #[test]
     fn test_subscribe_data_structure() {
-        let subscribe_data = SubscribeData {
+        let subscribe_data = SubscribeFileResponse {
             subscribed: true,
             file_token: "file_token".to_string(),
         };

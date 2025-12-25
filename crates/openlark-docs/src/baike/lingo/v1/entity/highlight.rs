@@ -1,73 +1,86 @@
-/// 词条高亮
-///
-/// 传入一句话，智能识别句中对应的词条，并返回词条位置和 entity_id，可在外部系统中快速实现词条智能高亮。
-/// docPath: https://open.feishu.cn/document/lingo-v1/entity/highlight
+//! 词条高亮
+//!
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/highlight
+
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
+use crate::common::api_endpoints::LingoApiV1;
 
-#[derive(Debug, serde::Deserialize)]
-pub struct HighlightEntityResponse {
-    pub data: Option<HighlightData>,
+/// 词条所在位置（span）
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Span {
+    /// 关键词开始位置，从 0 开始计数（utf-8）
+    pub start: i32,
+    /// 关键词结束位置，从 0 开始计数（utf-8）
+    pub end: i32,
 }
 
-#[derive(Debug, serde::Deserialize)]
-pub struct HighlightData {
-    pub highlights: Vec<EntityHighlight>,
+/// 识别到的词条信息（phrase）
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Phrase {
+    /// 识别到的关键词
+    pub name: String,
+    /// 对应的词条 ID
+    pub entity_ids: Vec<String>,
+    /// 词条所在位置
+    pub span: Span,
 }
 
-#[derive(Debug, serde::Deserialize)]
-pub struct EntityHighlight {
-    pub entity_id: String,
-    pub title: String,
-    pub start_pos: i32,
-    pub end_pos: i32,
-    pub matched_text: String,
+/// 词条高亮响应（data）
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct HighlightEntityResp {
+    /// 识别到的词条信息
+    pub phrases: Vec<Phrase>,
 }
 
-#[derive(Debug, serde::Serialize)]
-pub struct HighlightEntityParams {
-    pub text: String,
-    pub repo_id: Option<String>,
-    pub max_highlights: Option<i32>,
-}
-
-impl ApiResponseTrait for HighlightEntityResponse {
+impl ApiResponseTrait for HighlightEntityResp {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 词条高亮
-///
-/// 传入一句话，智能识别句中对应的词条，并返回词条位置和 entity_id，可在外部系统中快速实现词条智能高亮。
-/// docPath: https://open.feishu.cn/document/lingo-v1/entity/highlight
-pub async fn highlight_entity(
-    config: &Config,
-    params: HighlightEntityParams,
-) -> SDKResult<Vec<EntityHighlight>> {
-    // 验证必填字段
-    validate_required_field("文本", Some(&params.text), "文本不能为空")?;
+/// 词条高亮请求体
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct HighlightEntityBody {
+    /// 需要识别词条的内容（不超过 1000 字）
+    pub text: String,
+}
 
-    // 使用enum+builder系统生成API端点
-    let api_endpoint = LingoApiV1::EntityHighlight;
+/// 词条高亮请求
+pub struct HighlightEntityRequest {
+    config: Config,
+    body: HighlightEntityBody,
+}
 
-    // 创建API请求
-    let api_request: ApiRequest<HighlightEntityResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "词条高亮")?);
+impl HighlightEntityRequest {
+    pub fn new(config: Config, text: impl Into<String>) -> Self {
+        Self {
+            config,
+            body: HighlightEntityBody { text: text.into() },
+        }
+    }
 
-    // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
-    let resp: HighlightEntityResponse = response.data.ok_or_else(|| {
-        openlark_core::error::validation_error("response_data", "Response data is missing")
-    })?;
+    pub async fn send(self) -> SDKResult<HighlightEntityResp> {
+        validate_required!(self.body.text, "text 不能为空");
 
-    resp.data.map(|data| data.highlights).ok_or_else(|| {
-        openlark_core::error::validation_error("highlight_data", "Highlight data is missing")
-    })
+        let body = serde_json::to_value(&self.body).map_err(|e| {
+            openlark_core::error::serialization_error("序列化词条高亮请求体失败", Some(e))
+        })?;
+
+        let api_request: ApiRequest<HighlightEntityResp> =
+            ApiRequest::post(&LingoApiV1::EntityHighlight.to_url()).body(body);
+
+        let response: Response<HighlightEntityResp> =
+            Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
 }

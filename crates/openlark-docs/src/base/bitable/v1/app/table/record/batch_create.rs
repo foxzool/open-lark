@@ -1,179 +1,179 @@
-/// Bitable 批量创建数据记录API
+/// Bitable 新增多条记录
 ///
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/record/batchCreate
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-record/batch_create
+/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch_create
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::SDKResult,
+    error::{validation_error, SDKResult},
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
-/// 批量创建数据记录请求
+use super::models::Record;
+
+/// 批量新增记录请求
 #[allow(dead_code)]
+#[derive(Debug, Clone)]
 pub struct BatchCreateRecordRequest {
-    api_request: ApiRequest<BatchCreateRecordResponse>,
     config: Config,
     app_token: String,
     table_id: String,
-    records: Vec<Record>,
-}
-
-impl Default for BatchCreateRecordRequest {
-    fn default() -> Self {
-        Self {
-            api_request: ApiRequest::post("https://open.feishu.cn/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_create"),
-            config: Config::default(),
-            app_token: String::new(),
-            table_id: String::new(),
-            records: Vec::new(),
-        }
-    }
+    user_id_type: Option<String>,
+    client_token: Option<String>,
+    ignore_consistency_check: Option<bool>,
+    records: Vec<CreateRecordItem>,
 }
 
 impl BatchCreateRecordRequest {
     pub fn new(config: Config) -> Self {
-        let mut request = Self::default();
-        request.config = config;
-        request
+        Self {
+            config,
+            app_token: String::new(),
+            table_id: String::new(),
+            user_id_type: None,
+            client_token: None,
+            ignore_consistency_check: None,
+            records: Vec::new(),
+        }
     }
 
-    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
-        self.app_token = app_token.into();
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.app_token = app_token;
         self
     }
 
-    pub fn table_id(mut self, table_id: impl Into<String>) -> Self {
-        self.table_id = table_id.into();
+    pub fn table_id(mut self, table_id: String) -> Self {
+        self.table_id = table_id;
         self
     }
 
-    pub fn records(mut self, records: Vec<Record>) -> Self {
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
+
+    pub fn client_token(mut self, client_token: String) -> Self {
+        self.client_token = Some(client_token);
+        self
+    }
+
+    pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
+        self.ignore_consistency_check = Some(ignore_consistency_check);
+        self
+    }
+
+    pub fn records(mut self, records: Vec<CreateRecordItem>) -> Self {
         self.records = records;
         self
     }
 
     pub async fn execute(self) -> SDKResult<BatchCreateRecordResponse> {
-        // 参数验证
         if self.app_token.trim().is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "app_token",
-                "应用token不能为空",
-            ));
+            return Err(validation_error("app_token", "app_token 不能为空"));
         }
-
         if self.table_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "table_id",
-                "数据表ID不能为空",
-            ));
+            return Err(validation_error("table_id", "table_id 不能为空"));
         }
-
         if self.records.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "records",
-                "记录列表不能为空",
-            ));
+            return Err(validation_error("records", "records 不能为空"));
+        }
+        if self.records.len() > 500 {
+            return Err(validation_error("records", "单次最多新增 500 条记录"));
         }
 
-        // 🚀 使用新的enum+builder系统生成API端点
-        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         use crate::common::api_endpoints::BitableApiV1;
         let api_endpoint =
             BitableApiV1::RecordBatchCreate(self.app_token.clone(), self.table_id.clone());
 
-        // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<BatchCreateRecordResponse> =
-            ApiRequest::post(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<BatchCreateRecordResponse> = ApiRequest::post(&api_endpoint.to_url())
+            .body(serde_json::to_vec(&BatchCreateRecordRequestBody {
+                records: self.records,
+            })?);
 
-        // 构建请求体
-        let body = serde_json::json!({
-            "records": self.records
-        });
+        api_request = api_request.query_opt("user_id_type", self.user_id_type);
+        api_request = api_request.query_opt("client_token", self.client_token);
+        api_request = api_request.query_opt(
+            "ignore_consistency_check",
+            self.ignore_consistency_check.map(|v| v.to_string()),
+        );
 
-        // 设置请求体
-        let api_request = api_request.body(RequestData::Binary(serde_json::to_vec(&body)?));
-
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        response
+            .data
+            .ok_or_else(|| validation_error("response", "响应数据为空"))
     }
 }
 
-/// 数据记录
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct Record {
-    pub fields: serde_json::Value,
-}
-
-/// 批量创建记录数据
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchCreateRecordData {
-    /// 创建的记录列表
-    pub records: Vec<BatchCreateRecordResult>,
-    /// 记录总数
-    pub total: i32,
-}
-
-/// 批量创建记录响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchCreateRecordResponse {
-    /// 批量创建记录数据
-    pub data: BatchCreateRecordData,
-}
-
-/// 批量创建记录结果
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchCreateRecordResult {
-    pub record_id: String,
-    pub fields: serde_json::Value,
-    pub created_time: String,
-}
-
-impl ApiResponseTrait for BatchCreateRecordResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 批量创建记录请求构建器
+/// 批量新增记录 Builder
 pub struct BatchCreateRecordRequestBuilder {
     request: BatchCreateRecordRequest,
 }
 
-impl Default for BatchCreateRecordRequestBuilder {
-    fn default() -> Self {
+impl BatchCreateRecordRequestBuilder {
+    pub fn new(config: Config) -> Self {
         Self {
-            request: BatchCreateRecordRequest::default(),
+            request: BatchCreateRecordRequest::new(config),
         }
     }
-}
 
-impl BatchCreateRecordRequestBuilder {
-    pub fn new(app_token: impl Into<String>) -> Self {
-        let mut builder = Self::default();
-        builder.request.app_token = app_token.into();
-        builder
-    }
-
-    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
-        self.request.app_token = app_token.into();
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.request = self.request.app_token(app_token);
         self
     }
 
-    pub fn table_id(mut self, table_id: impl Into<String>) -> Self {
-        self.request.table_id = table_id.into();
+    pub fn table_id(mut self, table_id: String) -> Self {
+        self.request = self.request.table_id(table_id);
         self
     }
 
-    pub fn records(mut self, records: Vec<Record>) -> Self {
-        self.request.records = records;
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.request = self.request.user_id_type(user_id_type);
+        self
+    }
+
+    pub fn client_token(mut self, client_token: String) -> Self {
+        self.request = self.request.client_token(client_token);
+        self
+    }
+
+    pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
+        self.request = self.request.ignore_consistency_check(ignore_consistency_check);
+        self
+    }
+
+    pub fn records(mut self, records: Vec<CreateRecordItem>) -> Self {
+        self.request = self.request.records(records);
         self
     }
 
     pub fn build(self) -> BatchCreateRecordRequest {
         self.request
+    }
+}
+
+/// 新增记录条目
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CreateRecordItem {
+    /// 记录字段
+    pub fields: Value,
+}
+
+#[derive(Serialize)]
+struct BatchCreateRecordRequestBody {
+    records: Vec<CreateRecordItem>,
+}
+
+/// 批量新增记录响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct BatchCreateRecordResponse {
+    /// 创建的记录列表
+    pub records: Vec<Record>,
+}
+
+impl ApiResponseTrait for BatchCreateRecordResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }

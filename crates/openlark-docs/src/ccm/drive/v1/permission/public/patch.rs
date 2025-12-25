@@ -1,72 +1,100 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
+
 /// 更新云文档权限设置
 ///
-/// 更新文件或文件夹的公开权限设置
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-public/patch
+/// 更新指定云文档的公共访问与协作权限设置。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-public/patch
+/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/patch
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
-/// 更新公开权限设置请求
+use super::models::PermissionPublic;
+
+/// 更新云文档权限设置请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UpdatePublicPermissionRequest {
-    #[serde(skip)]
+pub struct PermissionPublicRequest {
+    /// 是否允许内容被分享到组织外
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_access: Option<bool>,
+    /// 谁可以复制内容、创建副本、打印、下载
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_entity: Option<String>,
+    /// 谁可以评论
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment_entity: Option<String>,
+    /// 谁可以查看、添加、移除协作者
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_entity: Option<String>,
+    /// 链接分享设置
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_share_entity: Option<String>,
+    /// 是否允许非「可管理权限」的人分享到组织外
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invite_external: Option<bool>,
+}
+
+/// 更新云文档权限设置请求
+#[derive(Debug, Clone)]
+pub struct PatchPublicPermissionRequest {
     config: Config,
-    /// 文件token
+    /// 云文档 token
     pub token: String,
-    /// 权限设置
-    pub setting: PermissionSetting,
-}
-
-/// 权限设置
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PermissionSetting {
-    /// 是否公开
-    pub public: bool,
-    /// 权限类型
+    /// 云文档类型（需要与 token 匹配）
     pub r#type: String,
+    /// 权限设置
+    pub permission_public_request: PermissionPublicRequest,
 }
 
-impl UpdatePublicPermissionRequest {
-    /// 创建更新公开权限设置请求
-    ///
-    /// # 参数
-    /// * `config` - 配置
-    /// * `token` - 文件token
-    /// * `setting` - 权限设置
-    pub fn new(config: Config, token: impl Into<String>, setting: PermissionSetting) -> Self {
+impl PatchPublicPermissionRequest {
+    pub fn new(
+        config: Config,
+        token: impl Into<String>,
+        r#type: impl Into<String>,
+        permission_public_request: PermissionPublicRequest,
+    ) -> Self {
         Self {
             config,
             token: token.into(),
-            setting,
+            r#type: r#type.into(),
+            permission_public_request,
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<UpdatePublicPermissionResponse>> {
-        let api_endpoint = DriveApi::UpdatePublicPermission(self.token.clone());
+    pub async fn execute(self) -> SDKResult<PatchPublicPermissionResponse> {
+        if self.token.is_empty() {
+            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+        }
+        if self.r#type.is_empty() {
+            return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        }
 
-        let api_request = ApiRequest::<UpdatePublicPermissionResponse>::patch(&api_endpoint.to_url())
-            .body(serde_json::json!({
-                "setting": self.setting
-            }));
+        let api_endpoint = DriveApi::UpdatePublicPermission(self.token);
+        let request = ApiRequest::<PatchPublicPermissionResponse>::patch(&api_endpoint.to_url())
+            .query("type", self.r#type)
+            .body(serialize_params(
+                &self.permission_public_request,
+                "更新云文档权限设置",
+            )?);
 
-        Transport::request(api_request, &self.config, None).await
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "更新云文档权限设置")
     }
 }
 
-/// 更新权限设置响应
+/// 更新云文档权限设置响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UpdatePublicPermissionResponse {
-    /// 更新后的权限设置
-    pub data: Option<PermissionSetting>,
+pub struct PatchPublicPermissionResponse {
+    /// 本次更新后的文档权限设置
+    pub permission_public: PermissionPublic,
 }
 
-impl ApiResponseTrait for UpdatePublicPermissionResponse {
+impl ApiResponseTrait for PatchPublicPermissionResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -77,39 +105,24 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_update_public_permission_request_builder() {
+    fn test_patch_public_permission_request_builder() {
         let config = Config::default();
-        let setting = PermissionSetting {
-            public: true,
-            r#type: "anyone_with_link".to_string(),
+        let body = PermissionPublicRequest {
+            external_access: Some(true),
+            security_entity: Some("anyone_can_view".to_string()),
+            comment_entity: Some("anyone_can_view".to_string()),
+            share_entity: Some("anyone".to_string()),
+            link_share_entity: Some("tenant_readable".to_string()),
+            invite_external: Some(true),
         };
 
-        let request = UpdatePublicPermissionRequest::new(config, "file_token", setting);
-
-        assert_eq!(request.token, "file_token");
-        assert!(request.setting.public);
-        assert_eq!(request.setting.r#type, "anyone_with_link");
-    }
-
-    #[test]
-    fn test_permission_setting_structure() {
-        let setting = PermissionSetting {
-            public: true,
-            r#type: "anyone_with_link".to_string(),
-            share_url: None,
-            password_protected: false,
-            password_info: None,
-        };
-
-        assert!(setting.public);
-        assert_eq!(setting.r#type, "anyone_with_link");
+        let request = PatchPublicPermissionRequest::new(config, "doc_token", "docx", body);
+        assert_eq!(request.token, "doc_token");
+        assert_eq!(request.r#type, "docx");
     }
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            UpdatePublicPermissionResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(PatchPublicPermissionResponse::data_format(), ResponseFormat::Data);
     }
 }

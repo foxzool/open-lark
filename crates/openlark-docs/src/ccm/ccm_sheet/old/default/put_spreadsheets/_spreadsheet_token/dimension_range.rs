@@ -1,14 +1,17 @@
 //! 更新行列
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/update-rows-or-columns
+//! docPath: /document/ukTMukTMukTM/uYjMzUjL2IzM14iNyMTN
+//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/update-rows-or-columns
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 use crate::common::api_endpoints::CcmSheetApiOld;
 
@@ -42,14 +45,15 @@ pub async fn dimension_range(
     request: UpdateDimensionRangeRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<Response<UpdateDimensionRangeResponse>> {
+) -> SDKResult<UpdateDimensionRangeResponse> {
     let api_endpoint = CcmSheetApiOld::DimensionRangeUpdate(spreadsheet_token);
     let mut api_request: ApiRequest<UpdateDimensionRangeResponse> =
-        ApiRequest::put(&api_endpoint.to_url()).body(serde_json::to_value(request)?);
+        ApiRequest::put(&api_endpoint.to_url()).body(serialize_params(&request, "更新行列")?);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);
     }
 
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "更新行列")
 }

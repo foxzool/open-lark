@@ -11,6 +11,7 @@ use crate::{
     SDKResult,
 };
 use serde::Deserialize;
+use std::any::Any;
 
 /// 改进的响应处理器，解决双重解析问题
 /// 使用 #[serde(flatten)] 和高级 Serde 特性简化反序列化
@@ -243,7 +244,7 @@ impl ImprovedResponseHandler {
         tracker.parsing_complete();
 
         // 获取二进制数据
-        let _bytes = match response.bytes().await {
+        let bytes = match response.bytes().await {
             Ok(bytes) => {
                 let byte_vec = bytes.to_vec();
                 tracing::debug!("Binary response received: {} bytes", byte_vec.len());
@@ -256,10 +257,21 @@ impl ImprovedResponseHandler {
             }
         };
 
-        // 对于二进制响应，我们无法自动创建T类型的数据
-        // 因为from_binary不是ApiResponseTrait的方法
-        // 这里返回None，让调用者处理二进制数据
-        let data = None;
+        // 二进制响应：目前仅对 `Vec<u8>` / `String` 做直接承载，其它类型返回 None。
+        // 约定：当业务侧需要二进制内容时，将响应类型定义为 `Vec<u8>`（并使用 ResponseFormat::Binary）。
+        let data: Option<T> = {
+            let any: Box<dyn Any> = if std::any::TypeId::of::<T>() == std::any::TypeId::of::<Vec<u8>>() {
+                Box::new(bytes)
+            } else if std::any::TypeId::of::<T>() == std::any::TypeId::of::<String>() {
+                let s = String::from_utf8_lossy(&bytes).to_string();
+                Box::new(s)
+            } else {
+                // 其它类型目前不做自动解析
+                Box::new(())
+            };
+
+            any.downcast::<T>().ok().map(|boxed| *boxed)
+        };
 
         tracker.success();
         Ok(BaseResponse {

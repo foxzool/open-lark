@@ -1,14 +1,18 @@
 /// 获取云文档权限设置
 ///
 /// 该接口用于根据 token 获取云文档的权限设置。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/get-2
+/// docPath: /document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/permission-public/get
+/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/get-2
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
+use super::models::PermissionPublic;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetPermissionPublicRequest {
@@ -27,12 +31,7 @@ impl GetPermissionPublicRequest {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetPermissionPublicResponse {
-    pub security_entity: Option<String>,
-    pub comment_entity: Option<String>,
-    pub share_entity: Option<String>,
-    pub link_share_entity: Option<String>,
-    pub external_access_entity: Option<String>,
-    pub invite_external: Option<bool>,
+    pub permission_public: PermissionPublic,
 }
 
 impl ApiResponseTrait for GetPermissionPublicResponse {
@@ -44,10 +43,18 @@ impl ApiResponseTrait for GetPermissionPublicResponse {
 pub async fn get_permission_public(
     request: GetPermissionPublicRequest,
     config: &Config,
-) -> SDKResult<Response<GetPermissionPublicResponse>> {
-    let url = format!("/open-apis/drive/v2/permissions/{}/public", request.token);
-    let mut api_request: ApiRequest<GetPermissionPublicResponse> = ApiRequest::get(&url);
-    api_request = api_request.query_param("type", &request.r#type);
+) -> SDKResult<GetPermissionPublicResponse> {
+    if request.token.is_empty() {
+        return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+    }
+    if request.r#type.is_empty() {
+        return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+    }
 
-    Transport::request(api_request, config, None).await
+    let api_endpoint = DriveApi::GetPublicPermissionV2(request.token);
+    let api_request: ApiRequest<GetPermissionPublicResponse> =
+        ApiRequest::get(&api_endpoint.to_url()).query("type", &request.r#type);
+
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "获取云文档权限设置")
 }

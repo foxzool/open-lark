@@ -1,6 +1,6 @@
 //! 更新自定义角色
 //!
-//! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/update
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/update
 //! doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/update-2
 
 use crate::base::base::v2::models::AppRole;
@@ -11,6 +11,8 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 /// 更新自定义角色
 #[derive(Debug)]
@@ -25,6 +27,14 @@ pub struct Update {
 pub struct UpdateReq {
     /// 自定义角色的名字
     pub role_name: String,
+    /// 数据表权限配置列表（结构按 JSON 透传）
+    pub table_roles: Vec<serde_json::Value>,
+    /// Block 权限配置列表（结构按 JSON 透传）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_roles: Option<Vec<serde_json::Value>>,
+    /// Base 规则（结构按 JSON 透传）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_rule: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -41,6 +51,9 @@ impl Update {
             role_id: String::new(),
             req: UpdateReq {
                 role_name: String::new(),
+                table_roles: Vec::new(),
+                block_roles: None,
+                base_rule: None,
             },
         }
     }
@@ -63,6 +76,24 @@ impl Update {
         self
     }
 
+    /// 数据表权限配置列表（table_roles）
+    pub fn table_roles(mut self, table_roles: Vec<serde_json::Value>) -> Self {
+        self.req.table_roles = table_roles;
+        self
+    }
+
+    /// Block 权限配置列表（block_roles）
+    pub fn block_roles(mut self, block_roles: Vec<serde_json::Value>) -> Self {
+        self.req.block_roles = Some(block_roles);
+        self
+    }
+
+    /// Base 规则（base_rule）
+    pub fn base_rule(mut self, base_rule: serde_json::Value) -> Self {
+        self.req.base_rule = Some(base_rule);
+        self
+    }
+
     pub async fn send(self) -> SDKResult<UpdateResp> {
         validate_required!(self.app_token, "app_token 不能为空");
         validate_required!(self.role_id, "role_id 不能为空");
@@ -71,13 +102,11 @@ impl Update {
         use crate::common::api_endpoints::BaseApiV2;
         let api_endpoint = BaseApiV2::RoleUpdate(self.app_token, self.role_id);
 
-        let api_request: ApiRequest<UpdateResp> =
-            ApiRequest::put(&api_endpoint.to_url()).body(serde_json::to_vec(&self.req)?);
+        let api_request: ApiRequest<UpdateResp> = ApiRequest::put(&api_endpoint.to_url())
+            .body(serialize_params(&self.req, "更新自定义角色")?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+        extract_response_data(response, "更新自定义角色")
     }
 }
 
