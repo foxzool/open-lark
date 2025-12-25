@@ -1,16 +1,17 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 完成分片上传
+/// 分片上传文件-完成上传
 ///
-/// 完成文件分片上传。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/upload_finish
+/// 上传分片全部完成后，调用该接口触发完成上传。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_finish
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_finish
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 完成分片上传请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -32,12 +33,29 @@ impl UploadFinishRequest {
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<UploadFinishResponse>> {
+    pub async fn execute(self) -> SDKResult<UploadFinishResponse> {
+        if self.upload_id.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "upload_id",
+                "upload_id 不能为空",
+            ));
+        }
+        if self.block_num <= 0 {
+            return Err(openlark_core::error::validation_error(
+                "block_num",
+                "block_num 必须为正整数",
+            ));
+        }
+
         let api_endpoint = DriveApi::UploadFinish;
         let request =
-            ApiRequest::<UploadFinishResponse>::post(&api_endpoint.to_url()).json_body(&self);
+            ApiRequest::<UploadFinishResponse>::post(&api_endpoint.to_url()).body(serialize_params(
+                &self,
+                "分片上传文件-完成上传",
+            )?);
 
-        Transport::request(request, &self.config, None).await
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "分片上传文件-完成上传")
     }
 }
 
@@ -45,7 +63,7 @@ impl UploadFinishRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UploadFinishResponse {
     /// 文件token
-    pub file_token: Option<String>,
+    pub file_token: String,
 }
 
 impl ApiResponseTrait for UploadFinishResponse {

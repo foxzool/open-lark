@@ -1,7 +1,8 @@
 /// 获取块的内容
 ///
 /// 指定块的 block id 获取指定块的富文本内容数据。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/get
+/// doc: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -11,8 +12,9 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::ccm::docx::common_types::BlockContent;
+use crate::ccm::docx::common_types::DocxBlock;
 use crate::common::api_endpoints::DocxApiV1;
+use crate::common::api_utils::*;
 
 /// 获取块内容请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -21,32 +23,14 @@ pub struct GetDocumentBlockParams {
     pub document_id: String,
     /// 块ID
     pub block_id: String,
+    /// 文档版本号（可选，-1 表示最新版本）
+    pub document_revision_id: Option<i64>,
 }
 
 /// 获取块内容响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDocumentBlockResponse {
-    /// 块信息
-    pub data: Option<BlockData>,
-}
-
-/// 块数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BlockData {
-    /// 块ID
-    pub block_id: String,
-    /// 块类型
-    pub block_type: String,
-    /// 块内容
-    pub content: Option<BlockContent>,
-    /// 子块数量
-    pub children_count: Option<u32>,
-    /// 父块ID
-    pub parent_block_id: Option<String>,
-    /// 创建时间
-    pub create_time: Option<i64>,
-    /// 更新时间
-    pub update_time: Option<i64>,
+    pub block: DocxBlock,
 }
 
 impl ApiResponseTrait for GetDocumentBlockResponse {
@@ -74,12 +58,15 @@ impl GetDocumentBlockRequest {
 
         let api_endpoint =
             DocxApiV1::DocumentBlockGet(params.document_id.clone(), params.block_id.clone());
-        let api_request: ApiRequest<GetDocumentBlockResponse> =
+        let mut api_request: ApiRequest<GetDocumentBlockResponse> =
             ApiRequest::get(&api_endpoint.to_url());
 
+        if let Some(document_revision_id) = params.document_revision_id {
+            api_request =
+                api_request.query("document_revision_id", &document_revision_id.to_string());
+        }
+
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "获取块的内容")
     }
 }

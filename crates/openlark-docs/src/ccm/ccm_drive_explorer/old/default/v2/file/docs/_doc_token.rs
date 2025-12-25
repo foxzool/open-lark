@@ -1,7 +1,8 @@
-/// 删除Doc
-///
-/// 根据 docToken 删除对应的 Docs 文档。
-/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
+//! 删除 Doc
+//!
+//! docPath: /document/ukTMukTMukTM/uATM2UjLwEjN14CMxYTN
+//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,57 +11,44 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CcmDriveExplorerApiOld;
+use crate::common::{api_endpoints::CcmDriveExplorerApiOld, api_utils::*};
 
-/// 删除Doc请求参数
+/// 删除 Doc 响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeleteDocParams {
-    /// 文档token
-    #[serde(rename = "doc_token")]
-    pub doc_token: String,
+pub struct DeleteDocResp {
+    /// 被删除的对象 id
+    pub id: String,
+    /// 是否成功
+    pub result: bool,
 }
 
-/// 删除Doc响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeleteDocResponse {
-    /// 删除结果
-    pub data: Option<serde_json::Value>,
-}
-
-impl ApiResponseTrait for DeleteDocResponse {
+impl ApiResponseTrait for DeleteDocResp {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// 删除Doc请求
+/// 删除 Doc 请求
 pub struct DeleteDocRequest {
     config: Config,
+    doc_token: String,
 }
 
 impl DeleteDocRequest {
-    /// 创建删除Doc请求
-    pub fn new(config: Config) -> Self {
-        Self { config }
+    pub fn new(config: Config, doc_token: impl Into<String>) -> Self {
+        Self {
+            config,
+            doc_token: doc_token.into(),
+        }
     }
 
-    /// 执行请求
-    ///
-    /// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
-    pub async fn execute(self, params: DeleteDocParams) -> SDKResult<DeleteDocResponse> {
-        // 验证必填字段
-        validate_required!(params.doc_token, "文档token不能为空");
+    pub async fn send(self) -> SDKResult<DeleteDocResp> {
+        validate_required!(self.doc_token, "docToken 不能为空");
 
-        // 使用enum+builder系统生成API端点
-        let api_endpoint = CcmDriveExplorerApiOld::FileDocs(params.doc_token.clone());
+        let api_request: ApiRequest<DeleteDocResp> =
+            ApiRequest::delete(&CcmDriveExplorerApiOld::FileDocs(self.doc_token).to_url());
 
-        // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<DeleteDocResponse> = ApiRequest::delete(&api_endpoint.to_url());
-
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "删除Doc")
     }
 }

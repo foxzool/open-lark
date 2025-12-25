@@ -1,84 +1,68 @@
 //! 精准搜索词条
 //!
-//!
-//!
-//! [官方文档](https://open.feishu.cn/document/server-docs/baike-v1/entity/match)
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/match
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, RequestBuilder, Send},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
-    error::Error,
-    response::Response,
+    http::Transport,
+    validate_required,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-/// 精准搜索词条
-#[derive(Debug)]
-pub struct Match {
-    config: Config,
-    req: MatchReq,
-}
+use crate::common::api_endpoints::BaikeApiV1;
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct MatchReq {
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct MatchEntityReq {
     /// 搜索关键词，将与词条名、别名进行精准匹配
     pub word: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct MatchResp {
-    /// 匹配结果
-    pub results: Vec<MatchResult>,
+/// 精准搜索词条响应（data）
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct MatchEntityResp {
+    pub results: Vec<MatchEntityResult>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct MatchResult {
-    /// 词条 ID
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct MatchEntityResult {
     pub entity_id: String,
-    /// 词条名
-    pub main_keys: Vec<TermKey>,
-    /// 别名
-    pub aliases: Vec<TermKey>,
+    /// 匹配类型（文档示例为 int，如 0）
+    #[serde(rename = "type")]
+    pub type_: i32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct TermKey {
-    /// 名称的值
-    pub key: String,
-    /// 名称的展示状态
-    pub display_status: DisplayStatus,
+impl ApiResponseTrait for MatchEntityResp {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct DisplayStatus {
-    /// 对应名称是否在词条卡片允许展示
-    pub allow: bool,
-    /// 对应名称是否在词条卡片不允许展示
-    pub deny: bool,
+/// 精准搜索词条请求
+pub struct MatchEntityRequest {
+    config: Config,
+    req: MatchEntityReq,
 }
 
-impl Match {
-    pub fn new(config: Config) -> Self {
+impl MatchEntityRequest {
+    pub fn new(config: Config, word: impl Into<String>) -> Self {
         Self {
             config,
-            req: MatchReq {
-                word: String::new(),
-            },
+            req: MatchEntityReq { word: word.into() },
         }
     }
 
-    /// 搜索关键词
-    pub fn word(mut self, word: impl Into<String>) -> Self {
-        self.req.word = word.into();
-        self
-    }
+    pub async fn send(self) -> SDKResult<MatchEntityResp> {
+        validate_required!(self.req.word, "word 不能为空");
 
-    pub async fn send(self) -> Result<Response<MatchResp>, Error> {
-        let url = format!("{}/open-apis/baike/v1/entities/match", self.config.base_url);
-        let request = ApiRequest::post(&url).body(&self.req);
-        let response = RequestBuilder::new(self.config, request).send().await?;
-        Ok(response)
+        let api_request: ApiRequest<MatchEntityResp> =
+            ApiRequest::post(&BaikeApiV1::EntityMatch.to_url()).body(serde_json::to_value(&self.req)?);
+
+        let response: Response<MatchEntityResp> =
+            Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
-
-impl ApiResponseTrait for MatchResp {}

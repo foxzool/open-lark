@@ -1,7 +1,8 @@
 /// 获取任务结果
 ///
 /// 该方法用于获取wiki异步任务的结果。
-/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/get
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/task/get
+/// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -11,11 +12,12 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use super::super::models::WikiTask;
-use crate::common::api_endpoints::WikiApiV2;
+use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 获取任务结果请求
 pub struct GetWikiTaskRequest {
     task_id: String,
+    task_type: Option<String>,
     config: Config,
 }
 
@@ -23,7 +25,7 @@ pub struct GetWikiTaskRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetWikiTaskResponse {
     /// 任务信息
-    pub data: Option<WikiTask>,
+    pub task: Option<WikiTask>,
 }
 
 impl ApiResponseTrait for GetWikiTaskResponse {
@@ -37,6 +39,7 @@ impl GetWikiTaskRequest {
     pub fn new(config: Config) -> Self {
         Self {
             task_id: String::new(),
+            task_type: None,
             config,
         }
     }
@@ -47,9 +50,16 @@ impl GetWikiTaskRequest {
         self
     }
 
+    /// 设置任务类型（可选，例如 move）
+    pub fn task_type(mut self, task_type: impl Into<String>) -> Self {
+        self.task_type = Some(task_type.into());
+        self
+    }
+
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/get
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/task/get
+    /// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/get
     pub async fn execute(self) -> SDKResult<GetWikiTaskResponse> {
         // 验证必填字段
         validate_required!(self.task_id, "任务ID不能为空");
@@ -58,12 +68,14 @@ impl GetWikiTaskRequest {
         let api_endpoint = WikiApiV2::TaskGet(self.task_id.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<GetWikiTaskResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<GetWikiTaskResponse> = ApiRequest::get(&api_endpoint.to_url());
+
+        if let Some(task_type) = self.task_type {
+            api_request = api_request.query("task_type", &task_type);
+        }
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "获取任务结果")
     }
 }

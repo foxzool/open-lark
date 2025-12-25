@@ -1,24 +1,27 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, Response},
     config::Config,
     http::Transport,
     SDKResult,
 };
+
 /// 下载素材
 ///
-/// 下载媒体素材。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/download
-use serde::{Deserialize, Serialize};
-
+/// 下载各种类型文档中的素材（如电子表格图片、附件等），支持通过 Range 分片下载。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/download
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/download
 use crate::common::api_endpoints::DriveApi;
 
 /// 下载素材请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug)]
 pub struct DownloadMediaRequest {
-    #[serde(skip)]
     config: Config,
-    /// 媒体token
+    /// 素材文件 token
     pub file_token: String,
+    /// 拓展参数（如多维表格高级权限下载鉴权）
+    pub extra: Option<String>,
+    /// Range HTTP header（可选），示例：bytes=0-1024
+    pub range: Option<String>,
 }
 
 impl DownloadMediaRequest {
@@ -26,27 +29,41 @@ impl DownloadMediaRequest {
         Self {
             config,
             file_token: file_token.into(),
+            extra: None,
+            range: None,
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<DownloadMediaResponse>> {
+    pub fn extra(mut self, extra: impl Into<String>) -> Self {
+        self.extra = Some(extra.into());
+        self
+    }
+
+    pub fn range(mut self, range: impl Into<String>) -> Self {
+        self.range = Some(range.into());
+        self
+    }
+
+    /// 执行下载请求，返回二进制内容
+    pub async fn execute(self) -> SDKResult<Response<Vec<u8>>> {
+        if self.file_token.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "file_token",
+                "file_token 不能为空",
+            ));
+        }
+
         let api_endpoint = DriveApi::DownloadMedia(self.file_token.clone());
-        let request = ApiRequest::<DownloadMediaResponse>::get(&api_endpoint.to_url());
+        let mut request = ApiRequest::<Vec<u8>>::get(&api_endpoint.to_url()).query_opt(
+            "extra",
+            self.extra,
+        );
+
+        if let Some(r) = self.range {
+            request = request.header("Range", &r);
+        }
 
         Transport::request(request, &self.config, None).await
-    }
-}
-
-/// 下载素材响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DownloadMediaResponse {
-    /// 二进制内容由核心层处理
-    pub data: Option<serde_json::Value>,
-}
-
-impl ApiResponseTrait for DownloadMediaResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
     }
 }
 
@@ -57,12 +74,13 @@ mod tests {
     #[test]
     fn test_download_media_request() {
         let config = Config::default();
-        let request = DownloadMediaRequest::new(config, "media_token");
-        assert_eq!(request.file_token, "media_token");
-    }
+        let request = DownloadMediaRequest::new(config, "media_token")
+            .extra("extra")
+            .range("bytes=0-100");
 
-    #[test]
-    fn test_response_trait() {
-        assert_eq!(DownloadMediaResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(request.file_token, "media_token");
+        assert_eq!(request.extra, Some("extra".to_string()));
+        assert_eq!(request.range, Some("bytes=0-100".to_string()));
     }
 }
+

@@ -1,5 +1,5 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
@@ -7,10 +7,11 @@ use openlark_core::{
 /// 更新协作者权限
 ///
 /// 更新文件或文件夹中指定协作者的权限
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/update
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/update
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/update
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 更新协作者权限请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -47,36 +48,49 @@ impl UpdatePermissionMemberRequest {
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<UpdatePermissionMemberResponse>> {
+    pub async fn execute(self) -> SDKResult<UpdatePermissionMemberResponse> {
+        if self.token.is_empty() {
+            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+        }
+        if self.member_id.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "member_id",
+                "member_id 不能为空",
+            ));
+        }
+        if self.r#type.is_empty() {
+            return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        }
+
         let api_endpoint =
             DriveApi::UpdatePermissionMember(self.token.clone(), self.member_id.clone());
 
-        let api_request = ApiRequest::<UpdatePermissionMemberResponse>::patch(
-            &api_endpoint.to_url(),
-        )
-        .body(serde_json::json!({
-            "type": self.r#type
-        }));
+        #[derive(Serialize)]
+        struct UpdatePermissionMemberBody {
+            #[serde(rename = "type")]
+            r#type: String,
+        }
 
-        Transport::request(api_request, &self.config, None).await
+        let api_request: ApiRequest<UpdatePermissionMemberResponse> =
+            ApiRequest::put(&api_endpoint.to_url()).body(serialize_params(
+                &UpdatePermissionMemberBody { r#type: self.r#type },
+                "更新协作者权限",
+            )?);
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "更新协作者权限")
     }
 }
 
 /// 更新协作者权限响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdatePermissionMemberResponse {
-    /// 更新后的协作者信息
-    pub data: Option<PermissionMemberData>,
-}
-
-/// 权限成员数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PermissionMemberData {
     /// 成员ID
     pub member_id: String,
     /// 用户ID
     pub user_id: String,
     /// 权限类型
+    #[serde(rename = "type")]
     pub r#type: String,
     /// 更新时间
     pub update_time: i64,
@@ -105,7 +119,7 @@ mod tests {
 
     #[test]
     fn test_permission_member_data_structure() {
-        let permission_data = PermissionMemberData {
+        let permission_data = UpdatePermissionMemberResponse {
             member_id: "member_id".to_string(),
             user_id: "user_id".to_string(),
             r#type: "editor".to_string(),

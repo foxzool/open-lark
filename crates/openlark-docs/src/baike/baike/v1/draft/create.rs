@@ -1,50 +1,103 @@
 //! 创建草稿
 //!
-//! doc: https://open.feishu.cn/document/server-docs/baike-v1/draft/create
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/draft/create
 
-use super::super::entity::*;
-use openlark_core::api::{ApiRequest, ApiResponseTrait, LarkAPIError, RequestBuilder};
-use openlark_core::constants::AccessTokenType;
-use openlark_core::req_option::RequestOption;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    validate_required,
+    SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct CreateDraftRequest {
-    pub entity: Entity,
-}
+use crate::common::api_endpoints::BaikeApiV1;
+use crate::baike::baike::v1::models::{Entity, OuterInfo, RelatedMeta, Term, UserIdType};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct CreateDraftResponse {
+pub struct CreateDraftReq {
+    /// 词条 ID（更新已有词条时填写）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// 词条名
+    pub main_keys: Vec<Term>,
+    /// 别名
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aliases: Option<Vec<Term>>,
+    /// 纯文本格式词条释义（description 与 rich_text 至少有一个）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// 更多相关信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub related_meta: Option<RelatedMeta>,
+    /// 外部系统关联数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outer_info: Option<OuterInfo>,
+    /// 富文本格式
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rich_text: Option<String>,
+}
+
+/// 创建草稿响应（data）
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct CreateDraftResp {
+    pub draft: Draft,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Draft {
     pub draft_id: String,
     pub entity: Entity,
 }
 
-impl ApiResponseTrait for CreateDraftResponse {
-    fn data_format() -> openlark_core::api::ResponseFormat {
-        openlark_core::api::ResponseFormat::Data
+impl ApiResponseTrait for CreateDraftResp {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
-#[derive(Debug, Default)]
-pub struct CreateDraftBuilder {
-    api_req: ApiRequest<CreateDraftRequest>,
+/// 创建草稿请求
+pub struct CreateDraftRequest {
+    config: Config,
+    user_id_type: Option<UserIdType>,
+    req: CreateDraftReq,
 }
 
-impl CreateDraftBuilder {
-    pub fn new(entity: Entity) -> Self {
-        let mut builder = Self::default();
-        builder.api_req.method = openlark_core::api::HttpMethod::Post;
-        builder.api_req.url = "https://open.feishu.cn/open-apis/baike/v1/drafts".to_string();
-        builder.api_req.body = Some(CreateDraftRequest { entity });
-        builder
+impl CreateDraftRequest {
+    pub fn new(config: Config, req: CreateDraftReq) -> Self {
+        Self {
+            config,
+            user_id_type: None,
+            req,
+        }
     }
 
-    pub fn build(
-        self,
-        config: &openlark_core::config::Config,
-        option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
-        let mut req = self.api_req;
-        req.build(AccessTokenType::Tenant, config, option)
+    /// 设置用户 ID 类型（query: user_id_type）
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
+
+    pub async fn send(self) -> SDKResult<CreateDraftResp> {
+        validate_required!(self.req.main_keys, "main_keys 不能为空");
+        if self.req.description.as_deref().unwrap_or_default().is_empty()
+            && self.req.rich_text.as_deref().unwrap_or_default().is_empty()
+        {
+            return Err(openlark_core::error::CoreError::validation_msg(
+                "description 与 rich_text 至少填写一个",
+            ));
+        }
+
+        let mut api_request: ApiRequest<CreateDraftResp> =
+            ApiRequest::post(&BaikeApiV1::DraftCreate.to_url()).body(serde_json::to_value(&self.req)?);
+        if let Some(user_id_type) = &self.user_id_type {
+            api_request = api_request.query("user_id_type", user_id_type.as_str());
+        }
+
+        let response: Response<CreateDraftResp> =
+            Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }

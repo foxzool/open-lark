@@ -4,7 +4,7 @@
 ///
 /// 通过 file_token 下载原图片。
 use openlark_core::{
-    api::{ApiRequest, Response},
+    api::ApiRequest,
     config::Config,
     constants::AccessTokenType,
     error::SDKResult,

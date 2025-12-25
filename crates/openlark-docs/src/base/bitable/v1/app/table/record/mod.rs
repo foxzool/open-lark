@@ -12,6 +12,7 @@ pub mod create;
 pub mod delete;
 pub mod get;
 pub mod list;
+pub mod models;
 pub mod search;
 pub mod update;
 
@@ -26,10 +27,11 @@ pub use batch_get::{BatchGetRecordRequest, BatchGetRecordRequestBuilder, BatchGe
 pub use batch_update::{
     BatchUpdateRecordRequest, BatchUpdateRecordRequestBuilder, BatchUpdateRecordResponse,
 };
-pub use create::{CreateRecordRequest, CreateRecordRequestBuilder, CreateRecordResponse, Record};
+pub use create::{CreateRecordRequest, CreateRecordRequestBuilder, CreateRecordResponse};
 pub use delete::{DeleteRecordRequest, DeleteRecordRequestBuilder, DeleteRecordResponse};
 pub use get::{GetRecordRequest, GetRecordRequestBuilder, GetRecordResponse};
 pub use list::{ListRecordRequest, ListRecordRequestBuilder, ListRecordResponse};
+pub use models::{Person, Record};
 pub use search::{SearchRecordRequest, SearchRecordRequestBuilder, SearchRecordResponse};
 pub use update::{UpdateRecordRequest, UpdateRecordRequestBuilder, UpdateRecordResponse};
 

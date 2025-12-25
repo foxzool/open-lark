@@ -65,14 +65,9 @@ impl AnnouncementService {
         &self,
         request: GetChatAnnouncementRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<AnnouncementData> {
-        let response = get_chat_announcement(request, &self.config, option).await?;
-        let resp_data = response
-            .data
-            .ok_or_else(|| validation_error("response_data", "Response data is missing"))?;
-        resp_data
-            .data
-            .ok_or_else(|| validation_error("data", "Announcement data is missing"))
+    ) -> SDKResult<GetChatAnnouncementResponse> {
+        let _ = option;
+        request.execute().await
     }
 }
 

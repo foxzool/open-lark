@@ -1,7 +1,8 @@
 /// 获取知识空间信息
 ///
 /// 此接口用于根据知识空间ID来查询知识空间的信息。
-/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/get
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get
+/// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -11,7 +12,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use super::super::models::WikiSpace;
-use crate::common::api_endpoints::WikiApiV2;
+use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 获取知识空间信息请求
 pub struct GetWikiSpaceRequest {
@@ -23,7 +24,7 @@ pub struct GetWikiSpaceRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetWikiSpaceResponse {
     /// 知识空间信息
-    pub data: Option<WikiSpace>,
+    pub space: Option<WikiSpace>,
 }
 
 impl ApiResponseTrait for GetWikiSpaceResponse {
@@ -49,7 +50,8 @@ impl GetWikiSpaceRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/get
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get
+    /// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/get
     pub async fn execute(self) -> SDKResult<GetWikiSpaceResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
@@ -62,8 +64,6 @@ impl GetWikiSpaceRequest {
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "获取知识空间信息")
     }
 }

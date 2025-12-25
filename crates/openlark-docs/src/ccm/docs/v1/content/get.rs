@@ -1,74 +1,55 @@
 /// 获取云文档内容
 ///
-/// 此接口用于获取指定云文档的详细内容，包括文档结构、文本内容等。
-/// docPath: https://open.feishu.cn/document/docs/docs-v1/get
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/docs-v1/content/get
+/// doc: https://open.feishu.cn/document/docs/docs-v1/get
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DocsApiV1, api_utils::*};
 
-use serde_json::json;
-
 /// 获取云文档内容请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDocsContentRequest {
-    /// 文档Token
-    pub document_token: String,
+    /// 文档 Token
+    pub doc_token: String,
+    /// 文档类型
+    pub doc_type: String,
+    /// 导出内容类型
+    pub content_type: String,
+    /// 语言（可选）
+    pub lang: Option<String>,
 }
 
 impl GetDocsContentRequest {
-    /// 创建获取云文档内容请求
-    ///
-    /// # 参数
-    /// * `document_token` - 文档Token
-    pub fn new(document_token: impl Into<String>) -> Self {
+    pub fn new(
+        doc_token: impl Into<String>,
+        doc_type: impl Into<String>,
+        content_type: impl Into<String>,
+    ) -> Self {
         Self {
-            document_token: document_token.into(),
+            doc_token: doc_token.into(),
+            doc_type: doc_type.into(),
+            content_type: content_type.into(),
+            lang: None,
         }
     }
 
-    /// 设置文档Token
-    pub fn document_token(mut self, document_token: impl Into<String>) -> Self {
-        self.document_token = document_token.into();
+    pub fn lang(mut self, lang: impl Into<String>) -> Self {
+        self.lang = Some(lang.into());
         self
     }
 }
 
-/// 文档内容信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DocsContent {
-    /// 文档Token
-    pub document_token: String,
-    /// 文档标题
-    pub title: String,
-    /// 文档类型
-    pub obj_type: String,
-    /// 文档内容
-    pub content: serde_json::Value,
-    /// 文档结构
-    pub structure: Option<serde_json::Value>,
-    /// 文本内容（纯文本）
-    pub text_content: Option<String>,
-    /// 创建时间
-    pub create_time: String,
-    /// 更新时间
-    pub update_time: String,
-    /// 创建者信息
-    pub creator: Option<serde_json::Value>,
-    /// 更新者信息
-    pub modifier: Option<serde_json::Value>,
-}
-
-/// 获取云文档内容响应
+/// 获取云文档内容响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDocsContentResponse {
-    /// 文档内容信息
-    pub data: Option<serde_json::Value>,
+    pub content: String,
 }
 
 impl ApiResponseTrait for GetDocsContentResponse {
@@ -78,28 +59,29 @@ impl ApiResponseTrait for GetDocsContentResponse {
 }
 
 /// 获取云文档内容
-///
-/// 获取指定云文档的详细内容，包括文档结构、文本内容等。
-/// docPath: https://open.feishu.cn/document/docs/docs-v1/get
 pub async fn get_docs_content(
     request: GetDocsContentRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
-) -> SDKResult<openlark_core::api::Response<GetDocsContentResponse>> {
-    // 使用DocsApiV1枚举生成API端点
+) -> SDKResult<GetDocsContentResponse> {
+    validate_required!(request.doc_token, "doc_token 不能为空");
+    validate_required!(request.doc_type, "doc_type 不能为空");
+    validate_required!(request.content_type, "content_type 不能为空");
+
     let api_endpoint = DocsApiV1::ContentGet;
 
-    // 创建API请求
-    let mut api_request: ApiRequest<GetDocsContentResponse> =
-        ApiRequest::get(&api_endpoint.to_url()).query("document_token", &request.document_token);
+    let mut api_request: ApiRequest<GetDocsContentResponse> = ApiRequest::get(&api_endpoint.to_url())
+        .query("doc_token", &request.doc_token)
+        .query("doc_type", &request.doc_type)
+        .query("content_type", &request.content_type)
+        .query_opt("lang", request.lang);
 
-    // 如果有请求选项，应用它们
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);
     }
 
-    // 发送请求
-    Transport::request(api_request, config, None).await
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "获取云文档内容")
 }
 
 #[cfg(test)]
@@ -108,30 +90,18 @@ mod tests {
 
     #[test]
     fn test_get_docs_content_request_builder() {
-        let request = GetDocsContentRequest::new("doc_token");
+        let request = GetDocsContentRequest::new("doc_token", "docx", "markdown");
 
-        assert_eq!(request.document_token, "doc_token");
+        assert_eq!(request.doc_token, "doc_token");
+        assert_eq!(request.doc_type, "docx");
+        assert_eq!(request.content_type, "markdown");
+        assert!(request.lang.is_none());
     }
 
     #[test]
-    fn test_get_docs_content_request_with_token() {
-        let request = GetDocsContentRequest::new("initial_token").document_token("new_token");
-
-        assert_eq!(request.document_token, "new_token");
-    }
-
-    #[test]
-    fn test_docs_content_structure() {
-        let content = serde_json::json!({
-            "document_token": "doc_token",
-            "title": "文档标题",
-            "content": {
-                "elements": []
-            }
-        });
-
-        assert!(content.get("document_token").is_some());
-        assert!(content.get("title").is_some());
+    fn test_get_docs_content_request_with_lang() {
+        let request = GetDocsContentRequest::new("doc_token", "docx", "markdown").lang("zh");
+        assert_eq!(request.lang.unwrap(), "zh");
     }
 
     #[test]

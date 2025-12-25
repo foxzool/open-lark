@@ -13,6 +13,9 @@ pub struct ReplyInfo {
     pub create_time: i64,
     /// 更新时间
     pub update_time: i64,
+    /// 其他内容（图片 token 等）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra: Option<ReplyExtra>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -28,6 +31,12 @@ pub struct ReplyElement {
     pub text_run: Option<TextRun>,
     pub docs_link: Option<DocsLink>,
     pub person: Option<Person>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ReplyExtra {
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub image_list: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

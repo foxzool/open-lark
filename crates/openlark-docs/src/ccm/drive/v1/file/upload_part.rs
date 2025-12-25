@@ -1,16 +1,17 @@
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 上传分片
+/// 分片上传文件-上传分片
 ///
-/// 上传文件分片数据。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/upload_part
+/// 根据预上传接口返回的 upload_id 和分片策略上传对应的文件分片。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_part
+/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_part
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::DriveApi;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 上传分片请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -22,10 +23,13 @@ pub struct UploadPartRequest {
     /// 分片序号
     pub seq: i32,
     /// 分片大小
-    pub size: i64,
+    pub size: i32,
+    /// 分片的 Adler-32 校验和
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub checksum: Option<String>,
     /// 分片数据
     #[serde(skip)]
-    pub data: Vec<u8>,
+    pub file: Vec<u8>,
 }
 
 impl UploadPartRequest {
@@ -33,48 +37,79 @@ impl UploadPartRequest {
         config: Config,
         upload_id: impl Into<String>,
         seq: i32,
-        size: i64,
-        data: Vec<u8>,
+        size: i32,
+        file: Vec<u8>,
     ) -> Self {
         Self {
             config,
             upload_id: upload_id.into(),
             seq,
             size,
-            data,
+            checksum: None,
+            file,
         }
     }
 
-    pub async fn execute(self) -> SDKResult<Response<UploadPartResponse>> {
+    /// 设置分片校验和（Adler-32）
+    pub fn checksum(mut self, checksum: impl Into<String>) -> Self {
+        self.checksum = Some(checksum.into());
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<UploadPartResponse> {
+        if self.seq < 0 {
+            return Err(openlark_core::error::validation_error(
+                "seq",
+                "seq 不能为负数",
+            ));
+        }
+        if self.size <= 0 {
+            return Err(openlark_core::error::validation_error(
+                "size",
+                "size 必须为正整数",
+            ));
+        }
+        if self.file.len() != self.size as usize {
+            return Err(openlark_core::error::validation_error(
+                "size",
+                "size 必须与 file 的实际长度一致",
+            ));
+        }
+
         let api_endpoint = DriveApi::UploadPart;
 
-        // Metadata for JSON body
+        // openlark-core 的 MultipartBuilder 需要从 json_body 中读取 file_name 来设置 multipart 的 file part filename，
+        // 该字段不会作为普通表单字段发送（MultipartBuilder 会跳过 file_name），因此不影响接口文档参数要求。
         #[derive(Serialize)]
         struct PartMeta {
+            file_name: String,
             upload_id: String,
             seq: i32,
-            size: i64,
+            size: i32,
+            #[serde(skip_serializing_if = "Option::is_none")]
+            checksum: Option<String>,
         }
 
         let meta = PartMeta {
+            file_name: format!("part-{}.bin", self.seq),
             upload_id: self.upload_id,
             seq: self.seq,
             size: self.size,
+            checksum: self.checksum,
         };
 
         let request = ApiRequest::<UploadPartResponse>::post(&api_endpoint.to_url())
             .json_body(&meta)
-            .file_content(self.data);
+            .file_content(self.file);
 
-        Transport::request(request, &self.config, None).await
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "分片上传文件-上传分片")
     }
 }
 
 /// 上传分片响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UploadPartResponse {
-    /// 是否成功
-    pub success: Option<bool>,
 }
 
 impl ApiResponseTrait for UploadPartResponse {
@@ -94,6 +129,6 @@ mod tests {
         assert_eq!(request.upload_id, "upload_id");
         assert_eq!(request.seq, 1);
         assert_eq!(request.size, 1024);
-        assert_eq!(request.data.len(), 1024);
+        assert_eq!(request.file.len(), 1024);
     }
 }

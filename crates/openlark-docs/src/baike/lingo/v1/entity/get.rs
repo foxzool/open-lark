@@ -1,40 +1,88 @@
-/// 获取词条详情
-///
-/// 通过词条 ID 拉取对应的词条详情信息。
-/// docPath: https://open.feishu.cn/document/lingo-v1/entity/get
+//! 获取词条详情
+//!
+//! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/get
+
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::LingoApiV1, api_utils::*};
-use crate::lingo::v1::LingoEntity;
+use crate::baike::lingo::v1::models::{Entity, UserIdType};
+use crate::common::api_endpoints::LingoApiV1;
 
-#[derive(Debug, serde::Deserialize)]
-pub struct LingoEntityResponse {
-    pub data: Option<LingoEntity>,
+/// 获取词条详情响应（data）
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetEntityResp {
+    pub entity: Entity,
 }
 
-impl ApiResponseTrait for LingoEntityResponse {
+impl ApiResponseTrait for GetEntityResp {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-/// Lingo词条get
-pub async fn get_entity(config: &Config) -> SDKResult<LingoEntity> {
-    let api_endpoint = LingoApiV1::EntityCreate;
+/// 获取词条详情请求
+pub struct GetEntityRequest {
+    config: Config,
+    entity_id: String,
+    provider: Option<String>,
+    outer_id: Option<String>,
+    user_id_type: Option<UserIdType>,
+}
 
-    let api_request: ApiRequest<LingoEntityResponse> = ApiRequest::get(&api_endpoint.to_url());
+impl GetEntityRequest {
+    pub fn new(config: Config, entity_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            entity_id: entity_id.into(),
+            provider: None,
+            outer_id: None,
+            user_id_type: None,
+        }
+    }
 
-    let response = Transport::request(api_request, config, None).await?;
-    let resp: LingoEntityResponse = response.data.ok_or_else(|| {
-        openlark_core::error::validation_error("response_data", "Response data is missing")
-    })?;
+    /// 外部系统（可选）
+    pub fn provider(mut self, provider: impl Into<String>) -> Self {
+        self.provider = Some(provider.into());
+        self
+    }
 
-    resp.data.ok_or_else(|| {
-        openlark_core::error::validation_error("entity_data", "Entity data is missing")
-    })
+    /// 词条在外部系统中对应的唯一 ID（可选）
+    pub fn outer_id(mut self, outer_id: impl Into<String>) -> Self {
+        self.outer_id = Some(outer_id.into());
+        self
+    }
+
+    /// 用户 ID 类型（query: user_id_type）
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
+
+    pub async fn send(self) -> SDKResult<GetEntityResp> {
+        validate_required!(self.entity_id, "entity_id 不能为空");
+
+        let mut api_request: ApiRequest<GetEntityResp> =
+            ApiRequest::get(&LingoApiV1::EntityGet(self.entity_id).to_url());
+        if let Some(provider) = &self.provider {
+            api_request = api_request.query("provider", provider);
+        }
+        if let Some(outer_id) = &self.outer_id {
+            api_request = api_request.query("outer_id", outer_id);
+        }
+        if let Some(user_id_type) = &self.user_id_type {
+            api_request = api_request.query("user_id_type", user_id_type.as_str());
+        }
+
+        let response: Response<GetEntityResp> =
+            Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
 }

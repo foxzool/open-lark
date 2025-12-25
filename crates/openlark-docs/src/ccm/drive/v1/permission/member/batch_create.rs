@@ -1,14 +1,19 @@
 /// 批量增加协作者权限
 ///
 /// 批量为文件或文件夹添加协作者权限
-/// docPath: https://open.feishu.cn/document/docs/permission/permission-member/batch_create
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/batch_create
+/// doc: https://open.feishu.cn/document/docs/permission/permission-member/batch_create
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
+
+use super::models::MemberPermission;
 
 /// 批量增加协作者权限请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -22,23 +27,11 @@ pub struct BatchCreatePermissionMemberRequest {
     /// 是否发送通知
     pub notify: Option<bool>,
 }
-
-/// 成员权限信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MemberPermission {
-    /// 成员信息
-    pub member: MemberInfo,
-    /// 权限类型
-    pub r#type: String,
-}
-
-/// 成员信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MemberInfo {
-    /// 用户ID
-    pub user_id: String,
-    /// 用户类型
-    pub user_type: String,
+#[derive(Debug, Serialize)]
+struct BatchCreatePermissionMemberBody {
+    members: Vec<MemberPermission>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    notify: Option<bool>,
 }
 
 impl BatchCreatePermissionMemberRequest {
@@ -63,52 +56,50 @@ impl BatchCreatePermissionMemberRequest {
         self
     }
 
-    pub async fn execute(self) -> SDKResult<Response<BatchCreatePermissionMemberResponse>> {
-        let api_endpoint = format!(
-            "/open-apis/drive/v1/permissions/{}/members/batch_create",
-            self.token
-        );
-
-        let mut body = serde_json::json!({
-            "members": self.members
-        });
-
-        if let Some(notify) = self.notify {
-            body["notify"] = serde_json::json!(notify);
+    pub async fn execute(self) -> SDKResult<BatchCreatePermissionMemberResponse> {
+        if self.token.is_empty() {
+            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+        }
+        if self.members.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "members",
+                "members 不能为空",
+            ));
+        }
+        for member in &self.members {
+            if member.member.user_id.is_empty() {
+                return Err(openlark_core::error::validation_error(
+                    "members.member.user_id",
+                    "user_id 不能为空",
+                ));
+            }
+            if member.member.user_type.is_empty() {
+                return Err(openlark_core::error::validation_error(
+                    "members.member.user_type",
+                    "user_type 不能为空",
+                ));
+            }
+            if member.r#type.is_empty() {
+                return Err(openlark_core::error::validation_error(
+                    "members.type",
+                    "type 不能为空",
+                ));
+            }
         }
 
-        let api_request =
-            ApiRequest::<BatchCreatePermissionMemberResponse>::post(&api_endpoint).body(body);
+        let api_endpoint = DriveApi::BatchCreatePermissionMember(self.token.clone());
 
-        Transport::request(api_request, &self.config, None).await
-    }
-}
+        let body = BatchCreatePermissionMemberBody {
+            members: self.members,
+            notify: self.notify,
+        };
 
-impl MemberPermission {
-    /// 创建成员权限
-    ///
-    /// # 参数
-    /// * `member` - 成员信息
-    /// * `type` - 权限类型
-    pub fn new(member: MemberInfo, r#type: impl Into<String>) -> Self {
-        Self {
-            member,
-            r#type: r#type.into(),
-        }
-    }
-}
+        let api_request: ApiRequest<BatchCreatePermissionMemberResponse> =
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(serialize_params(&body, "批量增加协作者权限")?);
 
-impl MemberInfo {
-    /// 创建成员信息
-    ///
-    /// # 参数
-    /// * `user_id` - 用户ID
-    /// * `user_type` - 用户类型
-    pub fn new(user_id: impl Into<String>, user_type: impl Into<String>) -> Self {
-        Self {
-            user_id: user_id.into(),
-            user_type: user_type.into(),
-        }
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "批量增加协作者权限")
     }
 }
 

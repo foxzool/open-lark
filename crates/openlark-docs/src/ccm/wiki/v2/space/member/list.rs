@@ -1,7 +1,8 @@
 /// 获取知识空间成员列表
 ///
 /// 获取知识空间的成员列表。
-/// 文档参考：https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/list
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-member/list
+/// doc: https://open.feishu.cn/document/docs/wiki-v2/space-member/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,7 +11,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::WikiApiV2;
+use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 use crate::wiki::v2::models::WikiSpaceMember;
 
 /// 获取知识空间成员列表请求
@@ -32,7 +33,8 @@ pub struct ListWikiSpaceMembersParams {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListWikiSpaceMembersResponse {
     /// 成员列表
-    pub data: Option<Vec<WikiSpaceMember>>,
+    #[serde(default)]
+    pub members: Vec<WikiSpaceMember>,
     /// 分页信息
     pub page_token: Option<String>,
     /// 是否有更多数据
@@ -62,7 +64,8 @@ impl ListWikiSpaceMembersRequest {
 
     /// 执行请求
     ///
-    /// API文档: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/list
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-member/list
+    /// doc: https://open.feishu.cn/document/docs/wiki-v2/space-member/list
     pub async fn execute(
         self,
         params: Option<ListWikiSpaceMembersParams>,
@@ -89,8 +92,6 @@ impl ListWikiSpaceMembersRequest {
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
-        })
+        extract_response_data(response, "获取知识空间成员列表")
     }
 }

@@ -1,6 +1,6 @@
 /// Bitable 获取表单API
 ///
-/// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-form/get
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-form/get
 /// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/form/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -9,6 +9,8 @@ use openlark_core::{
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
+
+use super::models::Form;
 
 /// 获取表单请求
 #[allow(dead_code)]
@@ -110,34 +112,11 @@ impl GetFormRequestBuilder {
     }
 }
 
-/// 表单结构
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct Form {
-    /// 表单ID
-    pub form_id: String,
-    /// 表单名称
-    pub name: String,
-    /// 表单项列表
-    pub items: Option<Vec<FormItem>>,
-}
-
-/// 表单项
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct FormItem {
-    /// 字段名称
-    pub field_name: String,
-    /// 字段类型
-    pub field_type: String,
-    /// 是否必填
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub required: Option<bool>,
-}
-
 /// 获取表单响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetFormResponse {
-    /// 表单信息
-    pub form: Option<Form>,
+    /// 表单元数据
+    pub form: Form,
 }
 
 impl ApiResponseTrait for GetFormResponse {
