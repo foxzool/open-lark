@@ -52,6 +52,10 @@ pub const IM_V1_BATCH_MESSAGES: &str = "/open-apis/im/v1/batch_messages";
 /// 话题消息相关接口
 pub const IM_V1_THREADS: &str = "/open-apis/im/v1/threads";
 
+/// IM Pin 消息 v1
+/// 群内 Pin 消息管理
+pub const IM_V1_PINS: &str = "/open-apis/im/v1/pins";
+
 /// IM图片资源 v1
 /// 上传/下载图片
 pub const IM_V1_IMAGES: &str = "/open-apis/im/v1/images";
@@ -67,6 +71,25 @@ pub const IM_V2_MESSAGES: &str = "/open-apis/im/v2/messages";
 /// IM聊天管理 v2
 /// 增强版聊天功能
 pub const IM_V2_CHATS: &str = "/open-apis/im/v2/chats";
+
+/// IM URL 预览 v2
+pub const IM_V2_URL_PREVIEWS_BATCH_UPDATE: &str = "/open-apis/im/v2/url_previews/batch_update";
+
+/// IM 应用消息流卡片 v2
+pub const IM_V2_APP_FEED_CARD: &str = "/open-apis/im/v2/app_feed_card";
+pub const IM_V2_APP_FEED_CARD_BATCH: &str = "/open-apis/im/v2/app_feed_card/batch";
+
+/// IM 消息流卡片 v2
+pub const IM_V2_FEED_CARDS: &str = "/open-apis/im/v2/feed_cards";
+
+/// IM 消息流卡片按钮 v2
+pub const IM_V2_CHAT_BUTTON: &str = "/open-apis/im/v2/chat_button";
+
+/// IM 租户标签与群绑定关系 v2
+pub const IM_V2_BIZ_ENTITY_TAG_RELATION: &str = "/open-apis/im/v2/biz_entity_tag_relation";
+
+/// IM 租户标签 v2
+pub const IM_V2_TAGS: &str = "/open-apis/im/v2/tags";
 
 // ==================== Mail (邮件服务) v1 ====================
 // 邮件系统 - 邮件组管理、邮箱事件、文件夹和消息
