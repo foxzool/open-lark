@@ -48,6 +48,14 @@ pub const IM_V1_CHATS: &str = "/open-apis/im/v1/chats";
 /// 批量消息发送和处理
 pub const IM_V1_BATCH_MESSAGES: &str = "/open-apis/im/v1/batch_messages";
 
+/// IM图片资源 v1
+/// 上传/下载图片
+pub const IM_V1_IMAGES: &str = "/open-apis/im/v1/images";
+
+/// IM文件资源 v1
+/// 上传/下载文件
+pub const IM_V1_FILES: &str = "/open-apis/im/v1/files";
+
 /// IM消息管理 v2
 /// 增强版消息功能
 pub const IM_V2_MESSAGES: &str = "/open-apis/im/v2/messages";
