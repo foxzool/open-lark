@@ -1,7 +1,9 @@
-/// 创建文件快捷方式
-///
-/// 创建文件快捷方式，用于访问云空间的文件。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_shortcut
+//! 创建文件快捷方式
+//!
+//! 创建文件快捷方式，用于访问云空间的文件。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create_shortcut
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
