@@ -1,15 +1,16 @@
+//! 下载素材
+//!
+//! 下载各种类型文档中的素材（如电子表格图片、附件等），支持通过 Range 分片下载。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/download
+
+use crate::common::api_endpoints::DriveApi;
 use openlark_core::{
     api::{ApiRequest, Response},
     config::Config,
     http::Transport,
     SDKResult,
 };
-
-/// 下载素材
-///
-/// 下载各种类型文档中的素材（如电子表格图片、附件等），支持通过 Range 分片下载。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/download
-use crate::common::api_endpoints::DriveApi;
 
 /// 下载素材请求
 #[derive(Debug)]

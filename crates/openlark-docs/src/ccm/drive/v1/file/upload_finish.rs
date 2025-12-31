@@ -1,13 +1,15 @@
+//! 分片上传文件-完成上传
+//!
+//! 上传分片全部完成后，调用该接口触发完成上传。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_finish
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 分片上传文件-完成上传
-///
-/// 上传分片全部完成后，调用该接口触发完成上传。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_finish
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
