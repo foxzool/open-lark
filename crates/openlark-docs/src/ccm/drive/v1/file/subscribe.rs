@@ -1,13 +1,15 @@
+//! 订阅云文档事件
+//!
+//! 订阅文件的更新通知。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/event/subscribe
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 订阅文件更新
-///
-/// 订阅文件的更新通知
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/subscribe
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
