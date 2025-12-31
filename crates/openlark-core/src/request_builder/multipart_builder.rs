@@ -41,11 +41,25 @@ impl MultipartBuilder {
         // 兼容两种用法：
         // - "__file_name": 仅用于设置 multipart 文件名，不作为表单字段发送
         // - "file_name": 既是表单字段，也可作为 multipart 文件名
-        let file_name = form_obj
-            .get("__file_name")
-            .and_then(|v| v.as_str())
-            .or_else(|| form_obj.get("file_name").and_then(|v| v.as_str()))
-            .map(|v| v.to_string());
+        let file_name = match form_obj.get("__file_name") {
+            Some(Value::String(s)) => Some(s.to_string()),
+            Some(Value::Null) | None => match form_obj.get("file_name") {
+                Some(Value::String(s)) => Some(s.to_string()),
+                Some(Value::Null) | None => None,
+                Some(_) => {
+                    return Err(validation_error(
+                        "file_name",
+                        "file_name must be a string when provided",
+                    ));
+                }
+            },
+            Some(_) => {
+                return Err(validation_error(
+                    "file_name",
+                    "__file_name must be a string when provided",
+                ));
+            }
+        };
 
         let mut file_part = multipart::Part::bytes(file_data.to_vec());
         if let Some(name) = file_name {
@@ -273,7 +287,7 @@ mod tests {
         let file_data = b"file content";
 
         let result = MultipartBuilder::add_file_part(form, &form_data, file_data);
-        assert!(result.is_err());
+        assert!(result.is_ok());
     }
 
     #[test]
@@ -288,7 +302,7 @@ mod tests {
         assert!(result.is_err());
 
         if let Err(LarkAPIError::Validation { message, .. }) = result {
-            assert!(message.contains("Missing file_name"));
+            assert!(message.contains("file_name must be a string"));
         }
     }
 
