@@ -217,8 +217,14 @@ impl RetryMiddleware {
 
         let started_at = Instant::now();
         let mut last_error = None;
+        let max_attempts = self.config.default_strategy.max_retries();
 
-        for attempt in 1..=self.config.default_strategy.max_retries() {
+        // 允许用户配置为 0：表示不重试（只执行一次），避免 1..=0 导致循环为空并在结尾 unwrap panic。
+        if max_attempts == 0 {
+            return operation().await;
+        }
+
+        for attempt in 1..=max_attempts {
             let result = operation().await;
 
             match result {
