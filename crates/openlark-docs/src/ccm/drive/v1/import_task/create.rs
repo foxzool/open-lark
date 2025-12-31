@@ -1,13 +1,15 @@
+//! 创建导入任务
+//!
+//! 创建导入任务，支持导入为新版文档、电子表格、多维表格以及旧版文档（异步接口）。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/import_task/create
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 创建导入任务
-///
-/// 创建导入任务，支持导入为新版文档、电子表格、多维表格以及旧版文档（异步接口）。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/create
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

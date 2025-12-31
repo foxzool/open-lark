@@ -1,13 +1,15 @@
+//! 移除云文档协作者权限
+//!
+//! 移除文件或文件夹中指定协作者的权限。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-member/delete
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 移除云文档协作者权限
-///
-/// 移除文件或文件夹中指定协作者的权限
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/delete
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

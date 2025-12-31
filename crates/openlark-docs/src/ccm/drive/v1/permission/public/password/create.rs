@@ -1,14 +1,15 @@
+//! 启用云文档密码
+//!
+//! 为云文档启用密码保护功能（平台自动生成密码）。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/permission-public-password/create
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-
-/// 启用云文档密码
-///
-/// 为云文档启用密码保护功能（平台自动生成密码）。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-public-password/create
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

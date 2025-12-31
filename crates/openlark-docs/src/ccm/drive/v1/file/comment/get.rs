@@ -1,6 +1,7 @@
-/// 获取全文评论
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/get
+//! 获取全文评论
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/get
+
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 use serde::{Deserialize, Serialize};
 

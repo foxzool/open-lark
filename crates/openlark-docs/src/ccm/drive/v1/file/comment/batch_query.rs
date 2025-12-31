@@ -1,6 +1,7 @@
-/// 批量获取评论
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/batch_query
+//! 批量获取评论
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/batch_query
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

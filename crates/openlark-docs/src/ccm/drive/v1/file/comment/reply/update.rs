@@ -1,6 +1,7 @@
-/// 更新回复的内容
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment-reply/update
+//! 更新回复的内容
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/update
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

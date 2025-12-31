@@ -1,13 +1,15 @@
+//! 更新协作者权限
+//!
+//! 更新文件或文件夹中指定协作者的权限。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-member/update
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 更新协作者权限
-///
-/// 更新文件或文件夹中指定协作者的权限
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/update
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

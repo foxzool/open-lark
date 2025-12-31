@@ -1,9 +1,10 @@
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+//! 获取文档版本列表
+//!
+//! 获取指定源文档的版本文档列表。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-version/list
 
-/// 获取文档版本列表
-///
-/// 获取指定源文档的版本文档列表。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/list
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 use super::models::ListFileVersionsData;

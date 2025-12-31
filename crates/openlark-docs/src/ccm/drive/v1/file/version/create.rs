@@ -1,9 +1,10 @@
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+//! 创建文档版本
+//!
+//! 为源文档创建版本文档。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-version/create
 
-/// 创建文档版本
-///
-/// 为源文档创建版本文档。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/create
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 use serde::Serialize;
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

@@ -1,13 +1,15 @@
+//! 转移云文档所有者
+//!
+//! 将文件或文件夹的所有者转移给其他用户。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-member/transfer_owner
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 转移云文档所有者
-///
-/// 将文件或文件夹的所有者转移给其他用户
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/transfer_owner
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

@@ -1,6 +1,7 @@
-/// 解决/恢复评论
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/patch
+//! 解决/恢复评论
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/patch
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

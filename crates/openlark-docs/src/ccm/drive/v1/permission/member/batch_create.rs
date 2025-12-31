@@ -1,7 +1,9 @@
-/// 批量增加协作者权限
-///
-/// 批量为文件或文件夹添加协作者权限
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/batch_create
+//! 批量增加协作者权限
+//!
+//! 批量为文件或文件夹添加协作者权限。
+//!
+//! docPath: https://open.feishu.cn/document/docs/permission/permission-member/batch_create
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

@@ -1,6 +1,7 @@
-/// 创建订阅
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-subscription/create
+//! 创建订阅
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/create
+
 use openlark_core::{
     api::ApiRequest, config::Config, error::validation_error, http::Transport, SDKResult,
 };

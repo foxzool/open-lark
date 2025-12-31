@@ -1,12 +1,13 @@
+//! 获取云文档所有评论
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/list
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 获取云文档所有评论
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/list
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

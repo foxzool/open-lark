@@ -1,7 +1,9 @@
-/// 关闭云文档密码
-///
-/// 该接口用于根据 filetoken 关闭云文档密码。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-public-password/delete
+//! 停用云文档密码
+//!
+//! 该接口用于根据 filetoken 停用云文档密码。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/permission-public-password/delete
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
