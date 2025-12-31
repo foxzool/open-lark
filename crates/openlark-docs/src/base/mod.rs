@@ -1,3 +1,5 @@
+#![allow(clippy::module_inception)]
+
 // base bizTag 下包含 base 与 bitable 两个 project（CSV 的 meta.Project）
 #[cfg(feature = "base")]
 pub mod base;

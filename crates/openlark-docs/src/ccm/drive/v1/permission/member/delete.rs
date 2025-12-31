@@ -74,7 +74,10 @@ impl DeletePermissionMemberRequest {
 
     pub async fn execute(self) -> SDKResult<DeletePermissionMemberResponse> {
         if self.token.is_empty() {
-            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "token",
+                "token 不能为空",
+            ));
         }
         if self.member_id.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -165,10 +168,11 @@ impl DeletePermissionMemberRequest {
             perm_type: self.perm_type,
         };
 
-        let api_request = ApiRequest::<DeletePermissionMemberResponse>::delete(&api_endpoint.to_url())
-            .query("type", &self.file_type)
-            .query("member_type", &self.member_type)
-            .body(serialize_params(&body, "移除云文档协作者权限")?);
+        let api_request =
+            ApiRequest::<DeletePermissionMemberResponse>::delete(&api_endpoint.to_url())
+                .query("type", &self.file_type)
+                .query("member_type", &self.member_type)
+                .body(serialize_params(&body, "移除云文档协作者权限")?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "移除云文档协作者权限")
@@ -192,14 +196,9 @@ mod tests {
     #[test]
     fn test_delete_permission_member_request_builder() {
         let config = Config::default();
-        let request = DeletePermissionMemberRequest::new(
-            config,
-            "file_token",
-            "member_id",
-            "docx",
-            "openid",
-        )
-        .perm_type("container");
+        let request =
+            DeletePermissionMemberRequest::new(config, "file_token", "member_id", "docx", "openid")
+                .perm_type("container");
 
         assert_eq!(request.token, "file_token");
         assert_eq!(request.member_id, "member_id");

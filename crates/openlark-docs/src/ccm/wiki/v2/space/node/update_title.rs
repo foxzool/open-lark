@@ -78,7 +78,8 @@ impl UpdateWikiSpaceNodeTitleRequest {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<UpdateWikiSpaceNodeTitleResponse> =
-            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新知识空间节点标题")?);
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(serialize_params(&params, "更新知识空间节点标题")?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

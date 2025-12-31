@@ -102,7 +102,10 @@ impl CreatePermissionMemberRequest {
 
     pub async fn execute(self) -> SDKResult<CreatePermissionMemberResponse> {
         if self.token.is_empty() {
-            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "token",
+                "token 不能为空",
+            ));
         }
         if self.file_type.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -143,7 +146,10 @@ impl CreatePermissionMemberRequest {
             ));
         }
         if self.perm.is_empty() {
-            return Err(openlark_core::error::validation_error("perm", "perm 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "perm",
+                "perm 不能为空",
+            ));
         }
         match self.perm.as_str() {
             "view" | "edit" | "full_access" => {}

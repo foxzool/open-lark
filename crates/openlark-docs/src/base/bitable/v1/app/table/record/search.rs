@@ -104,15 +104,15 @@ impl SearchRecordRequest {
         }
 
         use crate::common::api_endpoints::BitableApiV1;
-        let api_endpoint = BitableApiV1::RecordSearch(self.app_token.clone(), self.table_id.clone());
+        let api_endpoint =
+            BitableApiV1::RecordSearch(self.app_token.clone(), self.table_id.clone());
 
         let mut api_request: ApiRequest<SearchRecordResponse> =
             ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(&self.body)?);
 
         api_request = api_request.query_opt("user_id_type", self.user_id_type);
         api_request = api_request.query_opt("page_token", self.page_token);
-        api_request =
-            api_request.query_opt("page_size", self.page_size.map(|v| v.to_string()));
+        api_request = api_request.query_opt("page_size", self.page_size.map(|v| v.to_string()));
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response

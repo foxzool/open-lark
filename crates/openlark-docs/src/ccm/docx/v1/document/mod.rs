@@ -13,18 +13,25 @@ use openlark_core::{
 };
 
 // 重新导出所有模块类型，解决名称冲突
-pub use convert::{ContentType, ConvertContentToBlocksParams, ConvertContentToBlocksRequest, ConvertContentToBlocksResponse};
-pub use create::{CreateDocumentParams, CreateDocumentRequest, CreateDocumentResponse, CreatedDocument};
-pub use get::{Document, GetDocumentRequest, GetDocumentResponse};
-pub use raw_content::{GetDocumentRawContentParams, GetDocumentRawContentRequest, GetDocumentRawContentResponse};
 pub use block::*;
+pub use convert::{
+    ContentType, ConvertContentToBlocksParams, ConvertContentToBlocksRequest,
+    ConvertContentToBlocksResponse,
+};
+pub use create::{
+    CreateDocumentParams, CreateDocumentRequest, CreateDocumentResponse, CreatedDocument,
+};
+pub use get::{Document, GetDocumentRequest, GetDocumentResponse};
+pub use raw_content::{
+    GetDocumentRawContentParams, GetDocumentRawContentRequest, GetDocumentRawContentResponse,
+};
 
 // 子模块
+pub mod block;
 mod convert;
 mod create;
 mod get;
 mod raw_content;
-pub mod block;
 
 /// 文档服务
 ///
@@ -74,7 +81,9 @@ impl DocumentService {
         option: Option<RequestOption>,
     ) -> SDKResult<CreatedDocument> {
         let _ = option;
-        let data = CreateDocumentRequest::new(self.config.clone()).execute(params).await?;
+        let data = CreateDocumentRequest::new(self.config.clone())
+            .execute(params)
+            .await?;
         Ok(data.document)
     }
 
@@ -176,12 +185,13 @@ mod tests {
 
     #[test]
     fn test_create_document_builder() {
-        let request = CreateDocumentRequest::new()
-            .title("文档标题")
-            .folder_token("folder_token");
+        let params = CreateDocumentParams {
+            title: Some("文档标题".to_string()),
+            folder_token: Some("folder_token".to_string()),
+        };
 
-        assert_eq!(request.title, Some("文档标题".to_string()));
-        assert_eq!(request.folder_token, Some("folder_token".to_string()));
+        assert_eq!(params.title.as_deref(), Some("文档标题"));
+        assert_eq!(params.folder_token.as_deref(), Some("folder_token"));
     }
 
     #[test]
@@ -190,28 +200,20 @@ mod tests {
             .app_id("id")
             .app_secret("secret")
             .build();
-        let request = GetDocumentRequest::new(config);
-        let params = GetDocumentParams {
-            document_id: "document_token".to_string(),
-            with_content: None,
-        };
-        assert_eq!(params.document_id, "document_token");
+        let _request = GetDocumentRequest::new(config).document_id("document_token");
     }
 
     #[test]
     fn test_module_structure() {
         // 这个测试验证模块结构的完整性
-        let service = create_test_service();
+        let _service = create_test_service();
 
         // 验证可以访问所有服务方法
-        let _create_request = CreateDocumentRequest::new();
         let config = openlark_core::config::Config::builder()
             .app_id("id")
             .app_secret("secret")
             .build();
+        let _create_request = CreateDocumentRequest::new(config.clone());
         let _get_request = GetDocumentRequest::new(config);
-
-        // 如果编译通过，说明模块结构正确
-        assert!(true);
     }
 }

@@ -5,8 +5,8 @@ pub mod patch;
 
 pub use field::*;
 pub use get::*;
-use openlark_core::config::Config;
 pub use models::*;
+use openlark_core::config::Config;
 pub use patch::*;
 
 /// 表单服务

@@ -34,10 +34,16 @@ impl UpdatePermissionPublicPasswordRequest {
 
     pub async fn execute(self) -> SDKResult<UpdatePermissionPublicPasswordResponse> {
         if self.token.is_empty() {
-            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "token",
+                "token 不能为空",
+            ));
         }
         if self.r#type.is_empty() {
-            return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "type",
+                "type 不能为空",
+            ));
         }
         match self.r#type.as_str() {
             "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "mindnote" | "minutes"
@@ -57,8 +63,9 @@ impl UpdatePermissionPublicPasswordRequest {
         }
 
         let api_endpoint = DriveApi::UpdatePublicPassword(self.token);
-        let request = ApiRequest::<UpdatePermissionPublicPasswordResponse>::put(&api_endpoint.to_url())
-            .query("type", self.r#type);
+        let request =
+            ApiRequest::<UpdatePermissionPublicPasswordResponse>::put(&api_endpoint.to_url())
+                .query("type", self.r#type);
 
         let response = Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "刷新云文档密码")

@@ -117,8 +117,7 @@ impl UploadPartRequest {
 
 /// 上传分片响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UploadPartResponse {
-}
+pub struct UploadPartResponse {}
 
 impl ApiResponseTrait for UploadPartResponse {
     fn data_format() -> ResponseFormat {

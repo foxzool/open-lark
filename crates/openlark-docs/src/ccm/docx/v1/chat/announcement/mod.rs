@@ -133,12 +133,13 @@ mod tests {
     #[test]
     fn test_module_structure() {
         // 这个测试验证模块结构的完整性
-        let service = create_test_service();
+        let _service = create_test_service();
 
         // 验证可以访问所有服务方法
-        let _get_request = GetChatAnnouncementRequest::new("announcement_id");
-
-        // 如果编译通过，说明模块结构正确
-        assert!(true);
+        let config = openlark_core::config::Config::builder()
+            .app_id("id")
+            .app_secret("secret")
+            .build();
+        let _get_request = GetChatAnnouncementRequest::new(config).chat_id("chat_id");
     }
 }

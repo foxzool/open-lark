@@ -30,7 +30,11 @@ pub struct ListFileLikesRequest {
 }
 
 impl ListFileLikesRequest {
-    pub fn new(config: Config, file_token: impl Into<String>, file_type: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        file_token: impl Into<String>,
+        file_type: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             file_token: file_token.into(),

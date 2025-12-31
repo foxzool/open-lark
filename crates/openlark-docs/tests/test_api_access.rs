@@ -1,6 +1,6 @@
-/// 测试API访问
-//
-/// 这个文件用于验证base和bitable模块的API是否可以正确访问
+//! 测试 API 访问
+//!
+//! 这个文件用于验证 base 和 bitable 模块的 API 是否可以正确访问。
 
 #[cfg(test)]
 mod tests {
@@ -18,8 +18,7 @@ mod tests {
         let v2_service = base_service.v2();
 
         // 测试角色服务访问
-        let role_service = v2_service.role_service();
-        assert!(!role_service.config().app_id.is_empty());
+        let _role_service = v2_service.app().role();
     }
 
     #[test]
@@ -54,8 +53,10 @@ mod tests {
         // 测试Base API: 新增自定义角色
         let _create_role = base_service
             .v2()
-            .role_service()
-            .create_role_builder("app_token", "test_role");
+            .app()
+            .role()
+            .create()
+            .app_token("app_token");
 
         // 测试Bitable API: 创建多维表格
         let _create_app = bitable_service.v1().app().create_builder("test_app");

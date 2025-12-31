@@ -12,7 +12,6 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 ///
 /// 查询文件的订阅状态。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/get_subscribe
-
 /// 获取文件的订阅状态请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetSubscribeRequest {
@@ -33,7 +32,11 @@ impl GetSubscribeRequest {
     /// * `config` - 配置
     /// * `file_token` - 文件token
     /// * `file_type` - 文件类型（doc/docx/sheet/bitable/file/folder/slides）
-    pub fn new(config: Config, file_token: impl Into<String>, file_type: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        file_token: impl Into<String>,
+        file_type: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             file_token: file_token.into(),

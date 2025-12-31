@@ -39,13 +39,13 @@ impl DriveService {
         &self.config
     }
 
-    /// 获取V1版本API
+    // 获取V1版本API
     // TODO: 实现DriveV1Service
     // pub fn v1(&self) -> crate::ccm::drive::v1::DriveV1Service {
     //     crate::ccm::drive::v1::DriveV1Service::new(self.config.clone())
     // }
 
-    /// 获取V2版本API
+    // 获取V2版本API
     // TODO: 实现DriveV2Service
     // pub fn v2(&self) -> crate::ccm::drive::v2::DriveV2Service {
     //     crate::ccm::drive::v2::DriveV2Service::new(self.config.clone())
@@ -59,12 +59,12 @@ impl DriveService {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::DriveService;
+    use openlark_core::config::Config;
 
     #[test]
     fn test_drive_service_creation() {
-        // This is a placeholder test
-        // In a real implementation, you would create a mock client
-        // and test the DriveService functionality
+        let service = DriveService::new(Config::default());
+        assert!(!service.config().base_url.is_empty());
     }
 }

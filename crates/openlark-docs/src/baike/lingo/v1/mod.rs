@@ -3,7 +3,6 @@
 /// Lingo语言服务 v1
 ///
 /// 提供智能语言处理功能。
-
 use openlark_core::config::Config;
 
 // 导出子模块
@@ -61,7 +60,11 @@ impl<'a> LingoV1Service<'a> {
 
     /// 更新草稿（返回请求对象，可继续设置 query 参数）
     /// docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/draft/update
-    pub fn update_draft(&self, draft_id: impl Into<String>, body: DraftUpdateEntityInput) -> UpdateDraftRequest {
+    pub fn update_draft(
+        &self,
+        draft_id: impl Into<String>,
+        body: DraftUpdateEntityInput,
+    ) -> UpdateDraftRequest {
         UpdateDraftRequest::new(self.config.clone(), draft_id, body)
     }
 
@@ -74,7 +77,11 @@ impl<'a> LingoV1Service<'a> {
 
     /// 更新免审词条
     /// docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/update
-    pub fn update_entity(&self, entity_id: impl Into<String>, body: EntityInput) -> UpdateEntityRequest {
+    pub fn update_entity(
+        &self,
+        entity_id: impl Into<String>,
+        body: EntityInput,
+    ) -> UpdateEntityRequest {
         UpdateEntityRequest::new(self.config.clone(), entity_id, body)
     }
 

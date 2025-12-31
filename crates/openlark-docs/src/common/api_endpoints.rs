@@ -1,6 +1,6 @@
-/// API端点定义
-///
-/// 提供类型安全的API端点管理，替代字符串拼接方式。
+//! API端点定义
+//!
+//! 提供类型安全的API端点管理，替代字符串拼接方式。
 
 /// Base API V2 端点枚举
 #[derive(Debug, Clone, PartialEq)]
@@ -649,7 +649,10 @@ impl WikiApiV2 {
                 format!("/open-apis/wiki/v2/spaces/{}/members", space_id)
             }
             WikiApiV2::SpaceMemberDelete(space_id, member_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}/members/{}", space_id, member_id)
+                format!(
+                    "/open-apis/wiki/v2/spaces/{}/members/{}",
+                    space_id, member_id
+                )
             }
             WikiApiV2::SpaceNodeMove(space_id, node_token) => {
                 format!(
@@ -2092,14 +2095,12 @@ impl SheetsApiV3 {
     pub fn to_url(&self) -> String {
         match self {
             SheetsApiV3::CreateSpreadsheet => "/open-apis/sheets/v3/spreadsheets".to_string(),
-            SheetsApiV3::GetSpreadsheet(spreadsheet_token) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}",
-                spreadsheet_token
-            ),
-            SheetsApiV3::PatchSpreadsheet(spreadsheet_token) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}",
-                spreadsheet_token
-            ),
+            SheetsApiV3::GetSpreadsheet(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}", spreadsheet_token)
+            }
+            SheetsApiV3::PatchSpreadsheet(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}", spreadsheet_token)
+            }
 
             SheetsApiV3::QuerySheets(spreadsheet_token) => format!(
                 "/open-apis/sheets/v3/spreadsheets/{}/sheets/query",
@@ -2140,22 +2141,43 @@ impl SheetsApiV3 {
             ),
             SheetsApiV3::GetFilterView(spreadsheet_token, sheet_id, filter_view_id)
             | SheetsApiV3::PatchFilterView(spreadsheet_token, sheet_id, filter_view_id)
-            | SheetsApiV3::DeleteFilterView(spreadsheet_token, sheet_id, filter_view_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
-                spreadsheet_token, sheet_id, filter_view_id
-            ),
+            | SheetsApiV3::DeleteFilterView(spreadsheet_token, sheet_id, filter_view_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
+                    spreadsheet_token, sheet_id, filter_view_id
+                )
+            }
 
-            SheetsApiV3::CreateFilterCondition(spreadsheet_token, sheet_id, filter_view_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions",
-                spreadsheet_token, sheet_id, filter_view_id
-            ),
-            SheetsApiV3::QueryFilterConditions(spreadsheet_token, sheet_id, filter_view_id) => format!(
+            SheetsApiV3::CreateFilterCondition(spreadsheet_token, sheet_id, filter_view_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions",
+                    spreadsheet_token, sheet_id, filter_view_id
+                )
+            }
+            SheetsApiV3::QueryFilterConditions(spreadsheet_token, sheet_id, filter_view_id) => {
+                format!(
                 "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/query",
                 spreadsheet_token, sheet_id, filter_view_id
-            ),
-            SheetsApiV3::GetFilterCondition(spreadsheet_token, sheet_id, filter_view_id, condition_id)
-            | SheetsApiV3::UpdateFilterCondition(spreadsheet_token, sheet_id, filter_view_id, condition_id)
-            | SheetsApiV3::DeleteFilterCondition(spreadsheet_token, sheet_id, filter_view_id, condition_id) => format!(
+            )
+            }
+            SheetsApiV3::GetFilterCondition(
+                spreadsheet_token,
+                sheet_id,
+                filter_view_id,
+                condition_id,
+            )
+            | SheetsApiV3::UpdateFilterCondition(
+                spreadsheet_token,
+                sheet_id,
+                filter_view_id,
+                condition_id,
+            )
+            | SheetsApiV3::DeleteFilterCondition(
+                spreadsheet_token,
+                sheet_id,
+                filter_view_id,
+                condition_id,
+            ) => format!(
                 "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/{}",
                 spreadsheet_token, sheet_id, filter_view_id, condition_id
             ),
@@ -2170,10 +2192,12 @@ impl SheetsApiV3 {
             ),
             SheetsApiV3::GetFloatImage(spreadsheet_token, sheet_id, float_image_id)
             | SheetsApiV3::PatchFloatImage(spreadsheet_token, sheet_id, float_image_id)
-            | SheetsApiV3::DeleteFloatImage(spreadsheet_token, sheet_id, float_image_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
-                spreadsheet_token, sheet_id, float_image_id
-            ),
+            | SheetsApiV3::DeleteFloatImage(spreadsheet_token, sheet_id, float_image_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
+                    spreadsheet_token, sheet_id, float_image_id
+                )
+            }
         }
     }
 }

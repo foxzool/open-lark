@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::BaikeApiV1;
 use crate::baike::baike::v1::models::{Entity, OuterInfo, RelatedMeta, Term, UserIdType};
+use crate::common::api_endpoints::BaikeApiV1;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct CreateEntityReq {
@@ -97,7 +96,12 @@ impl CreateEntityRequest {
                 }
             }
         }
-        if self.req.description.as_deref().unwrap_or_default().is_empty()
+        if self
+            .req
+            .description
+            .as_deref()
+            .unwrap_or_default()
+            .is_empty()
             && self.req.rich_text.as_deref().unwrap_or_default().is_empty()
         {
             return Err(openlark_core::error::CoreError::validation_msg(
@@ -106,7 +110,8 @@ impl CreateEntityRequest {
         }
 
         let mut api_request: ApiRequest<CreateEntityResp> =
-            ApiRequest::post(&BaikeApiV1::EntityCreate.to_url()).body(serde_json::to_value(&self.req)?);
+            ApiRequest::post(&BaikeApiV1::EntityCreate.to_url())
+                .body(serde_json::to_value(&self.req)?);
         if let Some(user_id_type) = &self.user_id_type {
             api_request = api_request.query("user_id_type", user_id_type.as_str());
         }

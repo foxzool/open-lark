@@ -16,13 +16,19 @@ pub mod list;
 pub mod models;
 
 pub use batch_create::{
-    BatchCreateRoleMemberRequest, BatchCreateRoleMemberRequestBuilder, BatchCreateRoleMemberResponse,
+    BatchCreateRoleMemberRequest, BatchCreateRoleMemberRequestBuilder,
+    BatchCreateRoleMemberResponse,
 };
 pub use batch_delete::{
-    BatchDeleteRoleMemberRequest, BatchDeleteRoleMemberRequestBuilder, BatchDeleteRoleMemberResponse,
+    BatchDeleteRoleMemberRequest, BatchDeleteRoleMemberRequestBuilder,
+    BatchDeleteRoleMemberResponse,
 };
-pub use create::{CreateRoleMemberRequest, CreateRoleMemberRequestBuilder, CreateRoleMemberResponse};
-pub use delete::{DeleteRoleMemberRequest, DeleteRoleMemberRequestBuilder, DeleteRoleMemberResponse};
+pub use create::{
+    CreateRoleMemberRequest, CreateRoleMemberRequestBuilder, CreateRoleMemberResponse,
+};
+pub use delete::{
+    DeleteRoleMemberRequest, DeleteRoleMemberRequestBuilder, DeleteRoleMemberResponse,
+};
 pub use list::{ListRoleMembersRequest, ListRoleMembersRequestBuilder, ListRoleMembersResponse};
 pub use models::{RoleMemberId, RoleMemberIdType, RoleMemberInfo, RoleMemberType};
 

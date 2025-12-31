@@ -80,7 +80,10 @@ impl UpdateWorkflowRequest {
         validate_required!(self.workflow_id, "workflow_id 不能为空");
 
         let api_endpoint = BitableApiV1::WorkflowUpdate(self.app_token, self.workflow_id);
-        let body = serde_json::to_value(&UpdateWorkflowBody { status: self.status }).map_err(|e| {
+        let body = serde_json::to_value(&UpdateWorkflowBody {
+            status: self.status,
+        })
+        .map_err(|e| {
             openlark_core::error::serialization_error("序列化更新自动化流程请求体失败", Some(e))
         })?;
 

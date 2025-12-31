@@ -6,13 +6,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_utils::*;
 use crate::common::api_endpoints::CcmSheetApiOld;
+use crate::common::api_utils::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct BatchUpdateValuesRequest {

@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -65,7 +64,8 @@ pub async fn import(
     }
 
     let mut api_request: ApiRequest<ImportResp> =
-        ApiRequest::post(&CcmSheetApiOld::Import.to_url()).body(serialize_params(&request, "导入表格")?);
+        ApiRequest::post(&CcmSheetApiOld::Import.to_url())
+            .body(serialize_params(&request, "导入表格")?);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

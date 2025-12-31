@@ -1,31 +1,31 @@
-/// Drive Permission API模块
-///
-/// 提供云空间文件权限管理相关的功能，包括：
-/// - 协作者权限验证
-/// - 所有者转移
-/// - 公共权限设置获取
-///
-/// # 示例
-///
-/// ```rust
-/// use openlark_docs::ccm::drive::permission::{PermissionService, CheckMemberPermissionRequest};
-///
-/// let service = PermissionService::new(config);
-///
-/// // 检查用户权限
-/// let response = service
-///     .check_member_permission_builder()
-///     .file_token("token_xxx")
-///     .permission("view")
-///     .user_id("user_xxx")
-///     .user_id_type("open_id")
-///     .execute(&service)
-///     .await?;
-///
-/// if response.permitted.unwrap_or(false) {
-///     println!("用户有权限");
-/// }
-/// ```
+//! Drive Permission API模块
+//!
+//! 提供云空间文件权限管理相关的功能，包括：
+//! - 协作者权限验证
+//! - 所有者转移
+//! - 公共权限设置获取
+//!
+//! # 示例
+//!
+//! ```rust
+//! use openlark_docs::ccm::drive::permission::{CheckMemberPermissionRequest, PermissionService};
+//!
+//! let service = PermissionService::new(config);
+//!
+//! // 检查用户权限
+//! let response = service
+//!     .check_member_permission_builder()
+//!     .file_token("token_xxx")
+//!     .permission("view")
+//!     .user_id("user_xxx")
+//!     .user_id_type("open_id")
+//!     .execute(&service)
+//!     .await?;
+//!
+//! if response.permitted.unwrap_or(false) {
+//!     println!("用户有权限");
+//! }
+//! ```
 
 /// 数据模型定义
 pub mod models;
@@ -36,7 +36,9 @@ pub use models::*;
 use serde_json::Value;
 use std::collections::HashMap;
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validation_error, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validation_error, SDKResult,
+};
 
 /// Drive Permission API服务
 #[derive(Debug, Clone)]
@@ -231,6 +233,12 @@ impl CheckMemberPermissionRequestBuilder {
     }
 }
 
+impl Default for CheckMemberPermissionRequestBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 pub struct TransferOwnerRequestBuilder {
     request: TransferOwnerRequest,
 }
@@ -266,6 +274,12 @@ impl TransferOwnerRequestBuilder {
     }
 }
 
+impl Default for TransferOwnerRequestBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 pub struct GetPublicPermissionRequestBuilder {
     request: GetPublicPermissionRequest,
 }
@@ -289,6 +303,12 @@ impl GetPublicPermissionRequestBuilder {
         service: &PermissionService,
     ) -> SDKResult<GetPublicPermissionResponse> {
         service.get_public_permission(&self.request).await
+    }
+}
+
+impl Default for GetPublicPermissionRequestBuilder {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

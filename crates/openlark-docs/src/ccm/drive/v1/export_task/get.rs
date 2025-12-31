@@ -39,7 +39,7 @@ impl GetExportTaskRequest {
                 "ticket 不能为空",
             ));
         }
-        let token_len = self.token.as_bytes().len();
+        let token_len = self.token.len();
         if token_len == 0 || token_len > 27 {
             return Err(openlark_core::error::validation_error(
                 "token",

@@ -50,7 +50,7 @@ impl CreateExportTaskRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CreateExportTaskResponse> {
-        let token_len = self.token.as_bytes().len();
+        let token_len = self.token.len();
         if token_len == 0 || token_len > 27 {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -86,20 +86,20 @@ impl CreateExportTaskRequest {
                 ))
             }
         }
-        if self.file_extension == "csv" && (self.r#type == "sheet" || self.r#type == "bitable") {
-            if self.sub_id.as_deref().unwrap_or("").is_empty() {
-                return Err(openlark_core::error::validation_error(
-                    "sub_id",
-                    "导出 sheet/bitable 为 csv 时，sub_id 不能为空",
-                ));
-            }
+        if self.file_extension == "csv"
+            && (self.r#type == "sheet" || self.r#type == "bitable")
+            && self.sub_id.as_deref().unwrap_or("").is_empty()
+        {
+            return Err(openlark_core::error::validation_error(
+                "sub_id",
+                "导出 sheet/bitable 为 csv 时，sub_id 不能为空",
+            ));
         }
 
         let api_endpoint = DriveApi::CreateExportTask;
 
         let api_request: ApiRequest<CreateExportTaskResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serialize_params(&self, "创建导出任务")?);
+            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&self, "创建导出任务")?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "创建导出任务")

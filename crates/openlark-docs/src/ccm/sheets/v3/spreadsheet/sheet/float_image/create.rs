@@ -51,7 +51,8 @@ pub async fn create_float_image(
     sheet_id: &str,
     params: CreateFloatImageRequest,
 ) -> SDKResult<CreateFloatImageResponse> {
-    let api_endpoint = SheetsApiV3::CreateFloatImage(spreadsheet_token.to_string(), sheet_id.to_string());
+    let api_endpoint =
+        SheetsApiV3::CreateFloatImage(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<CreateFloatImageResponse> =
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建浮动图片")?);
 

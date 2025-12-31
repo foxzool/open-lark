@@ -62,8 +62,8 @@ impl CreateDocumentRequest {
     /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/create
     pub async fn execute(self, params: CreateDocumentParams) -> SDKResult<CreateDocumentResponse> {
         let api_endpoint = DocxApiV1::DocumentCreate;
-        let api_request: ApiRequest<CreateDocumentResponse> = ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "创建文档")?);
+        let api_request: ApiRequest<CreateDocumentResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建文档")?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "创建文档")

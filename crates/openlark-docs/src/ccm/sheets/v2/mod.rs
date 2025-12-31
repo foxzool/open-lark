@@ -1,23 +1,23 @@
-/// Sheets电子表格服务 v2 (Legacy)
-///
-/// ⚠️ **已弃用** - 这是飞书电子表格v2版本的历史实现。
-///
-/// **推荐使用**: 请使用v3版本的API，位于 `../v3/` 目录。
-///
-/// v2版本的API将在未来版本中移除，建议迁移到v3版本以获得更好的性能和功能支持。
-///
-/// # 迁移指南
-///
-/// - v2 `dimension_operations` → v3 `data_operation/*`
-/// - v2 `merge_cells` → v3 `data_operation/merge_cells`
-/// - v2 `image_write` → v3 `float_image/*`
-/// - v2 `protected_ranges` → v3 `filter_view/condition/*`
-///
-/// # 注意事项
-///
-/// 1. 这些API不被计入27个sheets v3新API
-/// 2. 仅用于历史兼容性维护
-/// 3. 新项目应直接使用v3 API
+//! Sheets电子表格服务 v2（Legacy）
+//!
+//! ⚠️ **已弃用** - 这是飞书电子表格 v2 版本的历史实现。
+//!
+//! **推荐使用**: 请使用 v3 版本的 API，位于 `../v3/` 目录。
+//!
+//! v2 版本的 API 将在未来版本中移除，建议迁移到 v3 版本以获得更好的性能和功能支持。
+//!
+//! # 迁移指南
+//!
+//! - v2 `dimension_operations` → v3 `data_operation/*`
+//! - v2 `merge_cells` → v3 `data_operation/merge_cells`
+//! - v2 `image_write` → v3 `float_image/*`
+//! - v2 `protected_ranges` → v3 `filter_view/condition/*`
+//!
+//! # 注意事项
+//!
+//! 1. 这些 API 不被计入 27 个 sheets v3 新 API
+//! 2. 仅用于历史兼容性维护
+//! 3. 新项目应直接使用 v3 API
 // pub mod batch_range_read; // Generated: Module file not found
 // pub mod batch_read; // Generated: Module file not found
 // pub mod batch_read_ranges; // Generated: Module file not found
@@ -47,9 +47,7 @@
 
 // 暂时注释掉模糊的重导出以避免警告
 // 模块中的服务可以直接通过完整路径访问
-use openlark_core::{
-    api::ApiRequest, config::Config, constants::AccessTokenType, http::Transport, SDKResult,
-};
+use openlark_core::config::Config;
 
 /// Sheets电子表格服务 v2版本
 ///
@@ -62,6 +60,11 @@ impl SheetsV2Service {
     /// 创建Sheets v2服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+
+    /// 获取配置引用（避免 `config` 字段被认为未使用）
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 }
 

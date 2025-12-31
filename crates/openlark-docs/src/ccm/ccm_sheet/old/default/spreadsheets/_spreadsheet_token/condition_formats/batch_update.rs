@@ -6,13 +6,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_utils::*;
 use crate::common::api_endpoints::CcmSheetApiOld;
+use crate::common::api_utils::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct BatchUpdateConditionFormatRequest {
@@ -107,14 +106,23 @@ pub async fn batch_update(
     ];
     for (idx, item) in request.sheet_condition_formats.iter().enumerate() {
         if item.sheet_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error("sheet_id", "sheet_id 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "sheet_id",
+                "sheet_id 不能为空",
+            ));
         }
         if item.cf_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error("cf_id", "cf_id 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "cf_id",
+                "cf_id 不能为空",
+            ));
         }
         if let Some(ranges) = item.condition_format.ranges.as_ref() {
             if ranges.is_empty() {
-                return Err(openlark_core::error::validation_error("ranges", "ranges 不能为空"));
+                return Err(openlark_core::error::validation_error(
+                    "ranges",
+                    "ranges 不能为空",
+                ));
             }
             if ranges.iter().any(|r| r.trim().is_empty()) {
                 return Err(openlark_core::error::validation_error(
@@ -142,7 +150,10 @@ pub async fn batch_update(
         }
         if let Some(attrs) = item.condition_format.attrs.as_ref() {
             if attrs.is_empty() {
-                return Err(openlark_core::error::validation_error("attrs", "attrs 不能为空"));
+                return Err(openlark_core::error::validation_error(
+                    "attrs",
+                    "attrs 不能为空",
+                ));
             }
             for attr in attrs.iter() {
                 if let Some(op) = attr.operator.as_deref() {

@@ -225,8 +225,5 @@ mod tests {
     fn test_module_structure() {
         // 这个测试验证模块结构的完整性
         let _service = create_test_service();
-
-        // 如果编译通过，说明模块结构正确
-        assert!(true);
     }
 }

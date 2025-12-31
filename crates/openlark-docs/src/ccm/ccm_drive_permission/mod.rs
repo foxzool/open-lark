@@ -136,8 +136,5 @@ mod tests {
 
         // 验证可以访问所有服务
         let _permission_service = service.permission();
-
-        // 如果编译通过，说明模块结构正确
-        assert!(true);
     }
 }

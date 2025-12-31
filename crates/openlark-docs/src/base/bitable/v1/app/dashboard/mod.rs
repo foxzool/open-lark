@@ -16,7 +16,7 @@ pub use list::*;
 use openlark_core::config::Config;
 
 /// 仪表盘信息
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct Dashboard {
     /// 仪表盘ID
     pub block_id: String,
@@ -42,23 +42,8 @@ pub struct Dashboard {
     pub permissions: Option<Vec<Permission>>,
 }
 
-impl Default for Dashboard {
-    fn default() -> Self {
-        Self {
-            block_id: String::new(),
-            name: String::new(),
-            description: None,
-            url: None,
-            create_time: None,
-            update_time: None,
-            creator: None,
-            permissions: None,
-        }
-    }
-}
-
 /// 创建者信息
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct Creator {
     /// 用户ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -71,18 +56,8 @@ pub struct Creator {
     pub avatar: Option<String>,
 }
 
-impl Default for Creator {
-    fn default() -> Self {
-        Self {
-            user_id: None,
-            name: None,
-            avatar: None,
-        }
-    }
-}
-
 /// 权限信息
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct Permission {
     /// 权限类型
     pub permission_type: String,
@@ -90,16 +65,6 @@ pub struct Permission {
     pub entity: String,
     /// 权限值
     pub value: String,
-}
-
-impl Default for Permission {
-    fn default() -> Self {
-        Self {
-            permission_type: String::new(),
-            entity: String::new(),
-            value: String::new(),
-        }
-    }
 }
 
 /// AppDashboard v1版本服务

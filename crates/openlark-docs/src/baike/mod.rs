@@ -1,3 +1,5 @@
+#![allow(clippy::module_inception)]
+
 /// 知识库服务模块
 ///
 /// 提供企业知识库、Wiki管理功能。包含baike和lingo两个项目。

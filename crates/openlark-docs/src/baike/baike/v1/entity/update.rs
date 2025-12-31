@@ -7,8 +7,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -99,7 +98,12 @@ impl UpdateEntityRequest {
                 }
             }
         }
-        if self.req.description.as_deref().unwrap_or_default().is_empty()
+        if self
+            .req
+            .description
+            .as_deref()
+            .unwrap_or_default()
+            .is_empty()
             && self.req.rich_text.as_deref().unwrap_or_default().is_empty()
         {
             return Err(openlark_core::error::CoreError::validation_msg(

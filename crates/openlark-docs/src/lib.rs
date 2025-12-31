@@ -1,55 +1,58 @@
 #![warn(clippy::all)]
-
+#![allow(clippy::manual_range_contains)]
+#![allow(clippy::needless_borrows_for_generic_args)]
+#![allow(ambiguous_glob_reexports)]
+#![allow(hidden_glob_reexports)]
 // #![deny(missing_docs)] // 暂时禁用，在开发阶段
 
-/// # OpenLark 文档服务模块
-///
-/// 飞书开放平台云文档服务模块，提供文档、表格、知识库等API访问能力。
-///
-/// ## 功能模块
-///
-/// - **ccm**: 云内容管理（174 APIs）- 文档、表格、知识库、云盘
-///   - **ccm_doc**: 旧版文档（6 APIs）
-///   - **ccm_docs**: 云文档管理（2 APIs）
-///   - **ccm_drive_explorer**: 云盘浏览器（8 APIs）
-///   - **ccm_drive_permission**: 云文档权限（3 APIs）
-///   - **ccm_sheet**: 表格（33 APIs）
-///   - **docs**: 文档内容（1 API）
-///   - **docx**: 新版文档块与群公告（19 APIs）
-///   - **drive**: 云空间文件（59 APIs）
-///   - **sheets**: 表格（27 APIs）
-///   - **wiki**: Wiki（16 APIs）
-/// - **base**: 基础服务（3 APIs）
-/// - **bitable**: 多维表格（46 APIs）
-/// - **baike**: 百科（13 APIs）
-/// - **lingo**: 词典（14 APIs）
-/// - **minutes**: 妙记（4 APIs）
-///
-/// ## 快速开始
-///
-/// ```rust
-/// use openlark_docs::DocsService;
-/// use openlark_core::config::Config;
-///
-/// let config = Config::builder()
-///     .app_id("app_id")
-///     .app_secret("app_secret")
-///     .build();
-/// let docs = DocsService::new(config);
-///
-/// // 基础服务使用
-/// let config_ref = docs.config();
-/// println!("App ID: {}", config_ref.app_id);
-/// ```
-///
-/// ## 特性
-///
-/// - ✅ **290 APIs全覆盖** - 飞书云文档服务完整实现
-/// - ✅ **类型安全** - 强类型请求/响应结构
-/// - ✅ **异步支持** - 基于tokio的异步API
-/// - ✅ **版本化API** - 支持v1/v2/v3/v4多版本API
-/// - ✅ **构建器模式** - 流畅的API调用体验
-/// - ✅ **标准架构** - 严格按照bizTag/project/version/resource/name.rs模式组织
+//! # OpenLark 文档服务模块
+//!
+//! 飞书开放平台云文档服务模块，提供文档、表格、知识库等 API 访问能力。
+//!
+//! ## 功能模块
+//!
+//! - **ccm**: 云内容管理（174 APIs）- 文档、表格、知识库、云盘
+//!   - **ccm_doc**: 旧版文档（6 APIs）
+//!   - **ccm_docs**: 云文档管理（2 APIs）
+//!   - **ccm_drive_explorer**: 云盘浏览器（8 APIs）
+//!   - **ccm_drive_permission**: 云文档权限（3 APIs）
+//!   - **ccm_sheet**: 表格（33 APIs）
+//!   - **docs**: 文档内容（1 API）
+//!   - **docx**: 新版文档块与群公告（19 APIs）
+//!   - **drive**: 云空间文件（59 APIs）
+//!   - **sheets**: 表格（27 APIs）
+//!   - **wiki**: Wiki（16 APIs）
+//! - **base**: 基础服务（3 APIs）
+//! - **bitable**: 多维表格（46 APIs）
+//! - **baike**: 百科（13 APIs）
+//! - **lingo**: 词典（14 APIs）
+//! - **minutes**: 妙记（4 APIs）
+//!
+//! ## 快速开始
+//!
+//! ```rust
+//! use openlark_core::config::Config;
+//! use openlark_docs::DocsService;
+//!
+//! let config = Config::builder()
+//!     .app_id("app_id")
+//!     .app_secret("app_secret")
+//!     .build();
+//! let docs = DocsService::new(config);
+//!
+//! // 基础服务使用
+//! let config_ref = docs.config();
+//! println!("App ID: {}", config_ref.app_id);
+//! ```
+//!
+//! ## 特性
+//!
+//! - ✅ **254 APIs 全覆盖** - 飞书云文档服务完整实现
+//! - ✅ **类型安全** - 强类型请求/响应结构
+//! - ✅ **异步支持** - 基于 tokio 的异步 API
+//! - ✅ **版本化 API** - 支持 v1/v2/v3/v4 多版本 API
+//! - ✅ **构建器模式** - 流畅的 API 调用体验
+//! - ✅ **标准架构** - 严格按照 bizTag/project/version/resource/name.rs 模式组织
 
 // Include macros first - 对所有功能都启用宏
 #[macro_use]

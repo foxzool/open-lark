@@ -89,7 +89,8 @@ pub async fn patch_comment(
         ));
     }
     super::validate_comment_file_type_for_list_like(&request.file_type)?;
-    let api_endpoint = DriveApi::PatchComment(request.file_token.clone(), request.comment_id.clone());
+    let api_endpoint =
+        DriveApi::PatchComment(request.file_token.clone(), request.comment_id.clone());
 
     let mut api_request: ApiRequest<PatchCommentResponse> =
         ApiRequest::patch(&api_endpoint.to_url()).body(serialize_params(
@@ -122,7 +123,7 @@ mod tests {
 
         assert_eq!(request.file_token, "file_token");
         assert_eq!(request.comment_id, "comment_123");
-        assert_eq!(request.is_solved, true);
+        assert!(request.is_solved);
         assert_eq!(request.file_type, "docx");
     }
 

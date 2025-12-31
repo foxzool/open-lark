@@ -39,7 +39,10 @@ impl DeleteFileRequest {
             ));
         }
         if self.r#type.is_empty() {
-            return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "type",
+                "type 不能为空",
+            ));
         }
         match self.r#type.as_str() {
             "file" | "docx" | "bitable" | "folder" | "doc" | "sheet" | "mindnote" | "shortcut"

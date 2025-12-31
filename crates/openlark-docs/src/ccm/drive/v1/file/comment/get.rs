@@ -1,12 +1,7 @@
 /// 获取全文评论
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/get
-use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

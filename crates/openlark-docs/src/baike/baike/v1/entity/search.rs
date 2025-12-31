@@ -124,7 +124,7 @@ impl SearchEntityRequest {
         if let Some(sources) = &self.req.sources {
             for (idx, source) in sources.iter().enumerate() {
                 match source {
-                    1 | 2 | 3 | 4 => {}
+                    1..=4 => {}
                     _ => {
                         return Err(openlark_core::error::validation_error(
                             &format!("sources[{}]", idx),
@@ -146,7 +146,8 @@ impl SearchEntityRequest {
         }
 
         let mut api_request: ApiRequest<SearchEntityResponse> =
-            ApiRequest::post(&BaikeApiV1::EntitySearch.to_url()).body(serde_json::to_value(&self.req)?);
+            ApiRequest::post(&BaikeApiV1::EntitySearch.to_url())
+                .body(serde_json::to_value(&self.req)?);
 
         if let Some(page_size) = self.page_size {
             api_request = api_request.query("page_size", page_size.to_string());

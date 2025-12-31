@@ -49,7 +49,8 @@ impl DeleteAppRoleRequest {
         use crate::common::api_endpoints::BitableApiV1;
         let api_endpoint = BitableApiV1::RoleDelete(self.app_token, self.role_id);
 
-        let api_request: ApiRequest<DeleteAppRoleResponse> = ApiRequest::delete(&api_endpoint.to_url());
+        let api_request: ApiRequest<DeleteAppRoleResponse> =
+            ApiRequest::delete(&api_endpoint.to_url());
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response

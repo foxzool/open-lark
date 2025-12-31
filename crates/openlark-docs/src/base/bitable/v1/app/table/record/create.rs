@@ -101,7 +101,8 @@ impl CreateRecordRequest {
             BitableApiV1::RecordCreate(self.app_token.clone(), self.table_id.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<CreateRecordResponse> = ApiRequest::post(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<CreateRecordResponse> =
+            ApiRequest::post(&api_endpoint.to_url());
 
         // 构建查询参数
         if let Some(ref user_id_type) = self.user_id_type {
@@ -173,7 +174,9 @@ impl CreateRecordRequestBuilder {
 
     /// 是否忽略一致性读写检查
     pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
-        self.request = self.request.ignore_consistency_check(ignore_consistency_check);
+        self.request = self
+            .request
+            .ignore_consistency_check(ignore_consistency_check);
         self
     }
 

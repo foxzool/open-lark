@@ -79,19 +79,25 @@ impl BatchGetRecordRequest {
             return Err(validation_error("record_ids", "record_ids 不能为空"));
         }
         if self.record_ids.len() > 100 {
-            return Err(validation_error("record_ids", "单次最多批量获取 100 条记录"));
+            return Err(validation_error(
+                "record_ids",
+                "单次最多批量获取 100 条记录",
+            ));
         }
 
         use crate::common::api_endpoints::BitableApiV1;
-        let api_endpoint = BitableApiV1::RecordBatchGet(self.app_token.clone(), self.table_id.clone());
+        let api_endpoint =
+            BitableApiV1::RecordBatchGet(self.app_token.clone(), self.table_id.clone());
 
-        let api_request: ApiRequest<BatchGetRecordResponse> =
-            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(&BatchGetRecordRequestBody {
-                record_ids: self.record_ids,
-                user_id_type: self.user_id_type,
-                with_shared_url: self.with_shared_url,
-                automatic_fields: self.automatic_fields,
-            })?);
+        let api_request: ApiRequest<BatchGetRecordResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_vec(&BatchGetRecordRequestBody {
+            record_ids: self.record_ids,
+            user_id_type: self.user_id_type,
+            with_shared_url: self.with_shared_url,
+            automatic_fields: self.automatic_fields,
+        })?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response

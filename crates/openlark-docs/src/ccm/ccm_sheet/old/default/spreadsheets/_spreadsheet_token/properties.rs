@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -60,8 +59,7 @@ pub async fn properties(
 
     let api_endpoint = CcmSheetApiOld::Properties(spreadsheet_token);
     let mut api_request: ApiRequest<UpdateSpreadsheetPropertiesResponse> =
-        ApiRequest::put(&api_endpoint.to_url())
-            .body(serialize_params(&request, "更新表格属性")?);
+        ApiRequest::put(&api_endpoint.to_url()).body(serialize_params(&request, "更新表格属性")?);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

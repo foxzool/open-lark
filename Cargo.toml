@@ -211,32 +211,6 @@ mockall = { workspace = true }
 name = "open_lark"
 path = "src/lib.rs"
 
-# === 共享库 ===
-[[example]]
-name = "common"
-path = "examples/common/mod.rs"
-crate-type = ["lib"]
-
-
-# === 01_入门指南 (Getting Started) ===
-# 基础设置和认证
-[[example]]
-name = "client_setup"
-path = "examples/01_getting_started/client_setup.rs"
-required-features = ["client"]
-
-[[example]]
-name = "authentication"
-path = "examples/01_getting_started/authentication.rs"
-# 认证服务现在默认启用，无需功能标志
-
-# === 02_核心功能 (Core Features) ===
-# 通讯服务示例
-[[example]]
-name = "send_message"
-path = "examples/02_core_features/communication/send_message.rs"
-required-features = ["communication"]
-
 [features]
 default = ["core-services"]
 

@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -79,7 +78,9 @@ pub async fn dimension_range(
             "单次操作不超过 5000 行或列",
         ));
     }
-    if request.dimensionProperties.visible.is_none() && request.dimensionProperties.fixedSize.is_none() {
+    if request.dimensionProperties.visible.is_none()
+        && request.dimensionProperties.fixedSize.is_none()
+    {
         return Err(openlark_core::error::validation_error(
             "dimensionProperties",
             "dimensionProperties 至少填写 visible 或 fixedSize",

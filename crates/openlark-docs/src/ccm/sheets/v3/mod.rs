@@ -1,8 +1,8 @@
 #![allow(ambiguous_glob_reexports)]
 
-/// Sheets电子表格服务 v3
-///
-/// 提供飞书电子表格v3版本的完整管理功能。
+//! Sheets电子表格服务 v3
+//!
+//! 提供飞书电子表格 v3 版本的完整管理功能。
 
 // ============================================================================
 // 统一类型定义
@@ -36,10 +36,6 @@ pub mod spreadsheet;
 // pub mod spreadsheet_create; // Generated: Module file not found
 // pub mod spreadsheet_info; // Generated: Module file not found
 
-// 集成测试
-#[cfg(test)]
-// mod integration_test; // Generated: Module file not found
-
 // 重新导出所有服务类型
 // pub use charts::*; // Generated: Module use not found
 // pub use comments::*; // Generated: Module use not found
@@ -69,6 +65,11 @@ impl SheetsService {
     /// 创建新的 Sheets 服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+
+    /// 获取配置引用（避免 `config` 字段被认为未使用）
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 }
 

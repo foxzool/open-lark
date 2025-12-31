@@ -1090,7 +1090,7 @@ mod tests {
         ctx.add_context("endpoint", "/user");
         ctx.set_request_id("req-1");
 
-        let err = CoreError::network(std::io::Error::new(std::io::ErrorKind::Other, "boom"), ctx);
+        let err = CoreError::network(std::io::Error::other("boom"), ctx);
 
         let rec = err.record();
         assert_eq!(rec.code, ErrorCode::NetworkConnectionFailed);

@@ -71,7 +71,7 @@ impl<'de> Deserialize<'de> for ReadSingleRangeResponse {
             let values = v.get("values").and_then(|vals| vals.as_array()).map(|arr| {
                 arr.iter()
                     .filter_map(|row| row.as_array())
-                    .map(|row| row.iter().map(|val| val.clone()).collect::<Vec<_>>())
+                    .map(|row| row.to_vec())
                     .collect::<Vec<_>>()
             });
 
@@ -155,7 +155,7 @@ impl<'de> Deserialize<'de> for ReadMultipleRangesResponse {
         let value_ranges = raw_value
             .get("value_ranges")
             .and_then(|vals| vals.as_array())
-            .map(|arr| {
+            .and_then(|arr| {
                 let mut ranges = vec![];
                 for v in arr {
                     // 手动解析每个 ValueRange
@@ -170,7 +170,7 @@ impl<'de> Deserialize<'de> for ReadMultipleRangesResponse {
                     let values = v.get("values").and_then(|vals| vals.as_array()).map(|arr| {
                         arr.iter()
                             .filter_map(|row| row.as_array())
-                            .map(|row| row.iter().map(|val| val.clone()).collect::<Vec<_>>())
+                            .map(|row| row.to_vec())
                             .collect::<Vec<_>>()
                     });
 
@@ -187,8 +187,7 @@ impl<'de> Deserialize<'de> for ReadMultipleRangesResponse {
                 } else {
                     None
                 }
-            })
-            .flatten();
+            });
 
         Ok(ReadMultipleRangesResponse {
             value_ranges,

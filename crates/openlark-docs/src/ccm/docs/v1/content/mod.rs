@@ -136,12 +136,9 @@ mod tests {
     #[test]
     fn test_module_structure() {
         // 这个测试验证模块结构的完整性
-        let service = create_test_service();
+        let _service = create_test_service();
 
         // 验证可以访问所有服务方法
         let _get_request = GetDocsContentRequest::new("document_token", "docx", "markdown");
-
-        // 如果编译通过，说明模块结构正确
-        assert!(true);
     }
 }

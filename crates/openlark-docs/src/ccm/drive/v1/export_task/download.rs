@@ -1,15 +1,14 @@
+/// 下载导出文件
+///
+/// 下载导出的文件内容。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/export_task/download
+use crate::common::api_endpoints::DriveApi;
 use openlark_core::{
     api::{ApiRequest, Response},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 下载导出文件
-///
-/// 下载导出的文件内容。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/export_task/download
-
-use crate::common::api_endpoints::DriveApi;
 
 /// 下载导出文件请求
 #[derive(Debug, Clone)]

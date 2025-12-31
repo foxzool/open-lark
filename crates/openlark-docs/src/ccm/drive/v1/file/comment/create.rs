@@ -1,9 +1,5 @@
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    error::validation_error,
-    http::Transport,
-    SDKResult,
+    api::ApiRequest, config::Config, error::validation_error, http::Transport, SDKResult,
 };
 /// 添加全文评论
 ///
@@ -67,7 +63,10 @@ pub async fn create_comment(
     }
     super::validate_comment_file_type_for_create(&request.file_type)?;
     if request.reply_list.replies.is_empty() {
-        return Err(validation_error("reply_list", "reply_list.replies 不能为空"));
+        return Err(validation_error(
+            "reply_list",
+            "reply_list.replies 不能为空",
+        ));
     }
 
     let api_endpoint = DriveApi::CreateComment(request.file_token.clone());

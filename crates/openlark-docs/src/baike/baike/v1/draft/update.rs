@@ -7,13 +7,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::BaikeApiV1;
 use crate::baike::baike::v1::models::{RelatedMeta, Term, UserIdType};
+use crate::common::api_endpoints::BaikeApiV1;
 
 use super::create::Draft;
 
@@ -102,7 +101,12 @@ impl UpdateDraftRequest {
                 }
             }
         }
-        if self.req.description.as_deref().unwrap_or_default().is_empty()
+        if self
+            .req
+            .description
+            .as_deref()
+            .unwrap_or_default()
+            .is_empty()
             && self.req.rich_text.as_deref().unwrap_or_default().is_empty()
         {
             return Err(openlark_core::error::CoreError::validation_msg(

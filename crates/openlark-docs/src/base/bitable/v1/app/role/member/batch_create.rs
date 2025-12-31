@@ -78,12 +78,12 @@ impl BatchCreateRoleMemberRequest {
         let api_endpoint =
             BitableApiV1::RoleMemberBatchCreate(self.app_token.clone(), self.role_id.clone());
 
-        let api_request: ApiRequest<BatchCreateRoleMemberResponse> =
-            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(
-                &BatchCreateRoleMemberRequestBody {
-                    member_list: self.member_list,
-                },
-            )?);
+        let api_request: ApiRequest<BatchCreateRoleMemberResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_vec(&BatchCreateRoleMemberRequestBody {
+            member_list: self.member_list,
+        })?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response

@@ -79,7 +79,8 @@ impl CreateDocumentBlockChildrenRequest {
             ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建块")?);
 
         if let Some(document_revision_id) = params.document_revision_id {
-            api_request = api_request.query("document_revision_id", &document_revision_id.to_string());
+            api_request =
+                api_request.query("document_revision_id", &document_revision_id.to_string());
         }
 
         let response = Transport::request(api_request, &self.config, None).await?;

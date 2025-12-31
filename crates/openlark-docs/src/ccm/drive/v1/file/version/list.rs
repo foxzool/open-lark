@@ -1,9 +1,4 @@
-use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 /// 获取文档版本列表
 ///

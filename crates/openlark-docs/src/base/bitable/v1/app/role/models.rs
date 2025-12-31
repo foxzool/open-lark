@@ -62,4 +62,3 @@ pub struct Role {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_roles: Option<Vec<BlockRole>>,
 }
-

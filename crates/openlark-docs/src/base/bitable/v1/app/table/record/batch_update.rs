@@ -80,10 +80,12 @@ impl BatchUpdateRecordRequest {
         let api_endpoint =
             BitableApiV1::RecordBatchUpdate(self.app_token.clone(), self.table_id.clone());
 
-        let mut api_request: ApiRequest<BatchUpdateRecordResponse> = ApiRequest::post(&api_endpoint.to_url())
-            .body(serde_json::to_vec(&BatchUpdateRecordRequestBody {
-                records: self.records,
-            })?);
+        let mut api_request: ApiRequest<BatchUpdateRecordResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_vec(&BatchUpdateRecordRequestBody {
+            records: self.records,
+        })?);
 
         api_request = api_request.query_opt("user_id_type", self.user_id_type);
         api_request = api_request.query_opt(
@@ -126,7 +128,9 @@ impl BatchUpdateRecordRequestBuilder {
     }
 
     pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
-        self.request = self.request.ignore_consistency_check(ignore_consistency_check);
+        self.request = self
+            .request
+            .ignore_consistency_check(ignore_consistency_check);
         self
     }
 

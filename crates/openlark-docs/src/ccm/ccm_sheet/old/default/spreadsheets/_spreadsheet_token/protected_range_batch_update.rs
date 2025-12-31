@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -100,7 +99,10 @@ pub async fn protected_range_batch_update(
         }
         if let Some(dimension) = req.dimension.as_ref() {
             if dimension.sheetId.trim().is_empty() {
-                return Err(openlark_core::error::validation_error("sheetId", "sheetId 不能为空"));
+                return Err(openlark_core::error::validation_error(
+                    "sheetId",
+                    "sheetId 不能为空",
+                ));
             }
             if let Some(major_dimension) = dimension.majorDimension.as_deref() {
                 if major_dimension != "ROWS" && major_dimension != "COLUMNS" {
@@ -133,11 +135,7 @@ pub async fn protected_range_batch_update(
         }
 
         if let Some(editors) = req.editors.as_ref() {
-            for member in editors
-                .addEditors
-                .iter()
-                .chain(editors.delEditors.iter())
-            {
+            for member in editors.addEditors.iter().chain(editors.delEditors.iter()) {
                 if member.memberId.trim().is_empty() {
                     return Err(openlark_core::error::validation_error(
                         &format!("requests[{}].editors.memberId", idx),
@@ -161,8 +159,7 @@ pub async fn protected_range_batch_update(
 
     let api_endpoint = CcmSheetApiOld::ProtectedRangeBatchUpdate(spreadsheet_token);
     let mut api_request: ApiRequest<BatchUpdateProtectedRangeResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&request, "修改保护范围")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&request, "修改保护范围")?);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

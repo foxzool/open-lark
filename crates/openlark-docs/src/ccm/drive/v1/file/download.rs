@@ -1,15 +1,14 @@
+/// 下载文件
+///
+/// 使用该接口可以下载在云空间目录下的文件（不含飞书文档/电子表格/多维表格等在线文档）。
+/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/download
+use crate::common::api_endpoints::DriveApi;
 use openlark_core::{
     api::{ApiRequest, Response},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 下载文件
-///
-/// 使用该接口可以下载在云空间目录下的文件（不含飞书文档/电子表格/多维表格等在线文档）。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/download
-
-use crate::common::api_endpoints::DriveApi;
 
 /// 下载文件请求
 #[derive(Debug)]

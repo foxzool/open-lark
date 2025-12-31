@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use openlark_core::api::ApiResponseTrait;
+use serde::{Deserialize, Serialize};
 
 /// 版本文档信息（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -65,7 +65,7 @@ impl UploadAllMediaRequest {
         self
     }
 
-pub async fn execute(self) -> SDKResult<UploadAllMediaResponse> {
+    pub async fn execute(self) -> SDKResult<UploadAllMediaResponse> {
         let file_name_len = self.file_name.chars().count();
         if file_name_len == 0 || file_name_len > 250 {
             return Err(openlark_core::error::validation_error(

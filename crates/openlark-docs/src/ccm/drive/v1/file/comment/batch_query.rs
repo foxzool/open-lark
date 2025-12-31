@@ -29,7 +29,11 @@ pub struct BatchQueryCommentRequest {
 }
 
 impl BatchQueryCommentRequest {
-    pub fn new(file_token: impl Into<String>, file_type: impl Into<String>, comment_ids: Vec<String>) -> Self {
+    pub fn new(
+        file_token: impl Into<String>,
+        file_type: impl Into<String>,
+        comment_ids: Vec<String>,
+    ) -> Self {
         Self {
             file_token: file_token.into(),
             file_type: file_type.into(),

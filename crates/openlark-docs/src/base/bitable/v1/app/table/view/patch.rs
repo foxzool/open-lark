@@ -141,7 +141,10 @@ impl PatchViewRequest {
                 return Err(validation_error("view_name", "视图名称不能为空"));
             }
             if view_name.len() > 100 {
-                return Err(validation_error("view_name", "视图名称长度不能超过100个字符"));
+                return Err(validation_error(
+                    "view_name",
+                    "视图名称长度不能超过100个字符",
+                ));
             }
             if view_name.contains('[') || view_name.contains(']') {
                 return Err(validation_error("view_name", "视图名称不能包含 '[' 或 ']'"));

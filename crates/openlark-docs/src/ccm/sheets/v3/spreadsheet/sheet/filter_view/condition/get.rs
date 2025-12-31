@@ -39,7 +39,8 @@ pub async fn get_filter_condition(
         filter_view_id.to_string(),
         condition_id.to_string(),
     );
-    let api_request: ApiRequest<GetFilterConditionResponse> = ApiRequest::get(&api_endpoint.to_url());
+    let api_request: ApiRequest<GetFilterConditionResponse> =
+        ApiRequest::get(&api_endpoint.to_url());
 
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取筛选条件")

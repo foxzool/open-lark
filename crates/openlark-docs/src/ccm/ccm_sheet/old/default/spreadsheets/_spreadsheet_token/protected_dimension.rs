@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -91,7 +90,10 @@ pub async fn protected_dimension(
     let mut need_user_id_type = false;
     for (idx, item) in request.addProtectedDimension.iter().enumerate() {
         if item.dimension.sheetId.trim().is_empty() {
-            return Err(openlark_core::error::validation_error("sheetId", "sheetId 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "sheetId",
+                "sheetId 不能为空",
+            ));
         }
 
         if let Some(major_dimension) = item.dimension.majorDimension.as_deref() {
@@ -144,8 +146,7 @@ pub async fn protected_dimension(
 
     let api_endpoint = CcmSheetApiOld::ProtectedDimension(spreadsheet_token);
     let mut api_request: ApiRequest<AddProtectedDimensionResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&request, "增加保护范围")?);
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&request, "增加保护范围")?);
 
     if let Some(user_id_type) = request.user_id_type.as_deref() {
         api_request = api_request.query("user_id_type", user_id_type);
