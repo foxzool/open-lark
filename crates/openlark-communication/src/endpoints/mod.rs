@@ -215,6 +215,9 @@ pub const CONTACT_V3_GROUP: &str = "/open-apis/contact/v3/group";
 pub const CONTACT_V3_GROUP_SIMPLELIST: &str = "/open-apis/contact/v3/group/simplelist";
 pub const CONTACT_V3_GROUP_MEMBER_BELONG: &str = "/open-apis/contact/v3/group/member_belong";
 
+/// Contact 企业自定义用户字段 v3
+pub const CONTACT_V3_CUSTOM_ATTRS: &str = "/open-apis/contact/v3/custom_attrs";
+
 /// Contact 用户 v3
 pub const CONTACT_V3_USERS: &str = "/open-apis/contact/v3/users";
 pub const CONTACT_V3_USER: &str = "/open-apis/contact/v3/users/{}";
