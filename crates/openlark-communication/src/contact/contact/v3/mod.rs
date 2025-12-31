@@ -4,6 +4,7 @@
 
 pub mod scope;
 pub mod department;
+pub mod custom_attr;
 pub mod functional_role;
 pub mod group;
 pub mod user;
