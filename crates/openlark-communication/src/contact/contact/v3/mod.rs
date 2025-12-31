@@ -10,3 +10,7 @@ pub mod group;
 pub mod employee_type_enum;
 pub mod user;
 pub mod unit;
+pub mod job_level;
+pub mod job_family;
+pub mod job_title;
+pub mod work_city;
