@@ -1,7 +1,6 @@
 //! 更新草稿
 //!
-//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/draft/update
-//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/draft/update
+//! docPath: https://open.feishu.cn/document/server-docs/baike-v1/draft/update
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},

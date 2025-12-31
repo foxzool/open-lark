@@ -1,7 +1,6 @@
 //! 获取词典分类
 //!
-//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/classification/list
-//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/classification/list
+//! docPath: https://open.feishu.cn/document/server-docs/baike-v1/classification/list
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},

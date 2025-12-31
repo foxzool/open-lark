@@ -1,7 +1,6 @@
 //! 提取潜在的词条
 //!
-//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/extract
-//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/extract
+//! docPath: https://open.feishu.cn/document/server-docs/baike-v1/entity/extract
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},

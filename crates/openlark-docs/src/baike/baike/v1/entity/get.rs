@@ -1,7 +1,6 @@
 //! 获取词条详情
 //!
-//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/get
-//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/get
+//! docPath: https://open.feishu.cn/document/server-docs/baike-v1/entity/get
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
