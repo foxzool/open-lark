@@ -84,11 +84,14 @@ impl AppDashboardService {
     /// # 示例
     ///
     /// ```rust
-    /// use open_lark::prelude::*;
-    /// use open_lark::service::cloud_docs::bitable::v1::app_dashboard::AppDashboardService;
+    /// use openlark_core::config::Config;
+    /// use openlark_docs::base::bitable::v1::app::dashboard::AppDashboardService;
     ///
-    /// let config = openlark_core::config::Config::new(app_id, app_secret);
-    /// let service = AppDashboardService::new(config);
+    /// let config = Config::builder()
+    ///     .app_id("app_id")
+    ///     .app_secret("app_secret")
+    ///     .build();
+    /// let _service = AppDashboardService::new(config);
     /// ```
     pub fn new(config: Config) -> Self {
         Self { config }

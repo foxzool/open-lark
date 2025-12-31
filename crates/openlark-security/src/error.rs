@@ -31,7 +31,12 @@ impl SecurityErrorBuilder {
         ctx.add_context("device_id", device_id.into());
         ctx.add_context("operation", "device_lookup");
 
-        validation_error("device_id", "设备未找到，请检查设备ID是否正确")
+        CoreError::Validation {
+            field: "device_id".into(),
+            message: "设备未找到，请检查设备ID是否正确".to_string(),
+            code: ErrorCode::ValidationError,
+            ctx: Box::new(ctx),
+        }
     }
 
     /// 设备连接失败
@@ -182,7 +187,11 @@ impl SecurityErrorBuilder {
         }
         ctx.add_context("operation", "compliance_check");
 
-        business_error(format!("合规检查失败: {}", reason_str))
+        CoreError::Business {
+            message: format!("合规检查失败: {}", reason_str),
+            code: ErrorCode::BusinessError,
+            ctx: Box::new(ctx),
+        }
     }
 
     /// 审计日志写入失败

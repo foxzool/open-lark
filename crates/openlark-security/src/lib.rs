@@ -32,7 +32,7 @@
 //!         .send()
 //!         .await?;
 //!
-//!     println!("用户数量: {}", users.data.len());
+//!     println!("用户数量: {}", users.users.len());
 //!     Ok(())
 //! }
 //! ```

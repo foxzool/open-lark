@@ -32,7 +32,7 @@
 //!
 //! ```rust
 //! use openlark_core::config::Config;
-//! use openlark_docs::DocsService;
+//! use openlark_docs::service::DocsService;
 //!
 //! let config = Config::builder()
 //!     .app_id("app_id")
