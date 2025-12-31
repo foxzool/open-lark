@@ -1,7 +1,7 @@
-/// Bitable 更新字段
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-field/update
-/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-field/update
+//! Bitable 更新字段
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/update
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

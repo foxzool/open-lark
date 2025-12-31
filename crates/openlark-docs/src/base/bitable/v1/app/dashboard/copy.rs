@@ -1,7 +1,6 @@
 //! 复制仪表盘
 //!
-//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-dashboard/copy
-//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-dashboard/copy
+//! docPath: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-dashboard/copy
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

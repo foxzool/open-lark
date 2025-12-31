@@ -1,7 +1,7 @@
-/// Bitable 批量删除协作者（自定义角色）
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-role-member/batch_delete
-/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-role-member/batch_delete
+//! Bitable 批量删除协作者（自定义角色）
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-role-member/batch_delete
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

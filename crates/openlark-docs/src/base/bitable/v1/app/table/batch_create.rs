@@ -1,7 +1,7 @@
-/// Bitable 批量新增数据表
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table/batch_create
-/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table/batch_create
+//! Bitable 批量新增数据表
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/batch_create
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

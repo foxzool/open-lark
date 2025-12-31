@@ -1,7 +1,7 @@
-/// Bitable 列出视图
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-view/list
-/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-view/list
+//! Bitable 列出视图
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/list
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
