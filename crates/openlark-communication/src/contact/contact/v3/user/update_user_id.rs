@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
-    contact::contact::v3::user::create::UserResponse,
+    common::models::EmptyData,
     contact::contact::v3::user::models::UserIdType,
     endpoints::CONTACT_V3_USERS,
 };
@@ -54,12 +54,12 @@ impl UpdateUserIdRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/contact-v3/user/update_user_id
-    pub async fn execute(self, body: UpdateUserIdBody) -> SDKResult<UserResponse> {
+    pub async fn execute(self, body: UpdateUserIdBody) -> SDKResult<EmptyData> {
         validate_required!(self.user_id, "user_id 不能为空");
         validate_required!(body.new_user_id, "new_user_id 不能为空");
 
         // url: PATCH:/open-apis/contact/v3/users/:user_id/update_user_id
-        let mut req: ApiRequest<UserResponse> =
+        let mut req: ApiRequest<EmptyData> =
             ApiRequest::patch(format!(
                 "{}/{}/update_user_id",
                 CONTACT_V3_USERS, self.user_id
