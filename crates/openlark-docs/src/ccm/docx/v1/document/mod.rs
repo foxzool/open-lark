@@ -65,15 +65,21 @@ impl DocumentService {
     ///
     /// # 示例
     /// ```rust,no_run
-    /// use open_lark::service::cloud_docs::docx::v1::document::{DocumentService, CreateDocumentRequest};
+    /// use openlark_core::config::Config;
+    /// use openlark_docs::ccm::docx::v1::document::{CreateDocumentParams, DocumentService};
     ///
+    /// let config = Config::builder()
+    ///     .app_id("app_id")
+    ///     .app_secret("app_secret")
+    ///     .build();
     /// let service = DocumentService::new(config);
-    /// let request = CreateDocumentRequest::new()
-    ///     .title("新文档标题")
-    ///     .folder_token("folder_token");
+    /// let params = CreateDocumentParams {
+    ///     title: Some("新文档标题".to_string()),
+    ///     folder_token: Some("folder_token".to_string()),
+    /// };
     ///
-    /// let response = service.create(request, None).await?;
-    /// println!("文档创建成功，ID: {}", response.document_id);
+    /// // 这里只演示构建 Future，不发起网络请求
+    /// let _future = service.create(params, None);
     /// ```
     pub async fn create(
         &self,
@@ -101,17 +107,18 @@ impl DocumentService {
     ///
     /// # 示例
     /// ```rust,no_run
-    /// use open_lark::service::cloud_docs::docx::v1::document::{DocumentService, GetDocumentRequest, GetDocumentParams};
+    /// use openlark_core::config::Config;
+    /// use openlark_docs::ccm::docx::v1::document::{DocumentService, GetDocumentRequest};
     ///
-    /// let service = DocumentService::new(config);
-    /// let request = GetDocumentRequest::new(config.clone());
-    /// let params = GetDocumentParams {
-    ///     document_id: "document_token".to_string(),
-    ///     with_content: Some(true),
-    /// };
+    /// let config = Config::builder()
+    ///     .app_id("app_id")
+    ///     .app_secret("app_secret")
+    ///     .build();
+    /// let service = DocumentService::new(config.clone());
+    /// let request = GetDocumentRequest::new(config).document_id("document_id");
     ///
-    /// let response = service.get(request, params, None).await?;
-    /// println!("文档标题: {}", response.title);
+    /// // 这里只演示构建 Future，不发起网络请求
+    /// let _future = service.get(request, None);
     /// ```
     pub async fn get(
         &self,
