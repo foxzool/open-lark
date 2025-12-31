@@ -4,7 +4,7 @@
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
 
-use crate::common::api_utils::extract_response_data;
+use crate::{common::api_utils::extract_response_data, endpoints::CALENDAR_V4_CALENDARS};
 
 /// 解绑会议群请求
 pub struct DeleteMeetingChatRequest {
@@ -43,12 +43,11 @@ impl DeleteMeetingChatRequest {
 
         // url: DELETE:/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/meeting_chat
         let req: ApiRequest<serde_json::Value> = ApiRequest::delete(format!(
-            "/open-apis/calendar/v4/calendars/{}/events/{}/meeting_chat",
-            self.calendar_id, self.event_id
+            "{}/{}/events/{}/meeting_chat",
+            CALENDAR_V4_CALENDARS, self.calendar_id, self.event_id
         ));
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "解绑会议群")
     }
 }
-
