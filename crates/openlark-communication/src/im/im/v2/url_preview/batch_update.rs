@@ -1,0 +1,42 @@
+//! 更新 URL 预览
+//!
+//! docPath: https://open.feishu.cn/document/im-v1/url_preview/batch_update
+
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+
+use crate::{
+    common::{api_utils::{extract_response_data, serialize_params}, models::EmptyData},
+    endpoints::IM_V2_URL_PREVIEWS_BATCH_UPDATE,
+    im::im::v2::url_preview::models::BatchUpdateUrlPreviewBody,
+};
+
+/// 更新 URL 预览请求
+pub struct BatchUpdateUrlPreviewRequest {
+    config: Config,
+}
+
+impl BatchUpdateUrlPreviewRequest {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// 执行请求
+    ///
+    /// docPath: https://open.feishu.cn/document/im-v1/url_preview/batch_update
+    pub async fn execute(self, body: BatchUpdateUrlPreviewBody) -> SDKResult<EmptyData> {
+        if body.preview_tokens.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "preview_tokens 不能为空".to_string(),
+                "preview_tokens 至少需要 1 个".to_string(),
+            ));
+        }
+
+        // url: POST:/open-apis/im/v2/url_previews/batch_update
+        let req: ApiRequest<EmptyData> = ApiRequest::post(IM_V2_URL_PREVIEWS_BATCH_UPDATE)
+            .body(serialize_params(&body, "更新 URL 预览")?);
+
+        let resp = Transport::request(req, &self.config, None).await?;
+        extract_response_data(resp, "更新 URL 预览")
+    }
+}
+

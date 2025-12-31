@@ -6,3 +6,4 @@ pub mod image;
 pub mod file;
 pub mod chat;
 pub mod thread;
+pub mod pin;
