@@ -2,7 +2,7 @@
 ///
 /// 此接口用于获取有权限访问的知识空间列表。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/list
-/// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/list
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -55,7 +55,7 @@ impl ListWikiSpacesRequest {
     /// 执行请求
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/list
-    /// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/list
+    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/list
     pub async fn execute(
         self,
         params: Option<ListWikiSpacesParams>,

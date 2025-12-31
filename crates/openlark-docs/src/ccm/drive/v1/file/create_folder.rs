@@ -2,7 +2,6 @@
 ///
 /// 在用户云空间的指定文件夹中创建一个新的空文件夹。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_folder
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/create_folder
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -28,11 +27,9 @@ pub struct CreateFolderRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFolderResponse {
     /// 新建的文件夹的 token
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub token: Option<String>,
+    pub token: String,
     /// 新建的文件夹的 URL 链接
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub url: Option<String>,
+    pub url: String,
 }
 
 impl ApiResponseTrait for CreateFolderResponse {

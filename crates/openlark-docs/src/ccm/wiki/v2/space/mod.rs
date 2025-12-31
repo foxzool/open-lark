@@ -26,7 +26,7 @@ pub use node::{
     create::{CreateWikiSpaceNodeParams, CreateWikiSpaceNodeRequest, CreateWikiSpaceNodeResponse},
     list::{ListWikiSpaceNodesParams, ListWikiSpaceNodesRequest, ListWikiSpaceNodesResponse},
     move_docs_to_wiki::{MoveDocsToWikiParams, MoveDocsToWikiRequest, MoveDocsToWikiResponse},
-    move_node::{MoveWikiSpaceNodeParams, MoveWikiSpaceNodeRequest, MoveWikiSpaceNodeResponse},
+    r#move::{MoveWikiSpaceNodeParams, MoveWikiSpaceNodeRequest, MoveWikiSpaceNodeResponse},
     update_title::{
         UpdateWikiSpaceNodeTitleParams, UpdateWikiSpaceNodeTitleRequest,
         UpdateWikiSpaceNodeTitleResponse,

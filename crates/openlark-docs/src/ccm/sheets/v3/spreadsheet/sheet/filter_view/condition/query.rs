@@ -2,7 +2,6 @@
 ///
 /// 查询一个筛选视图的所有筛选条件，返回筛选视图的筛选范围内的筛选条件。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/query
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter_view/spreadsheet-sheet-filter_view-condition/query
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -44,4 +43,3 @@ pub async fn query_filter_conditions(
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "查询筛选条件")
 }
-

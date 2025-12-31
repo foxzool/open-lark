@@ -1,7 +1,7 @@
 /// Bitable 更新视图
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-view/patch
-/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/patch
+/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-view/patch
 use crate::common::api_endpoints::BitableApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

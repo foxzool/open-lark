@@ -2,7 +2,8 @@
 ///
 /// 移动知识空间中的节点。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move
-/// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/move
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move
+/// 注意：该 API 的 meta.name 为 move（Rust 关键字），模块通过 `r#move` 暴露。
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -68,7 +69,7 @@ impl MoveWikiSpaceNodeRequest {
     /// 执行请求
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move
-    /// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/move
+    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move
     pub async fn execute(
         self,
         params: MoveWikiSpaceNodeParams,

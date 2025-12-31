@@ -1,7 +1,7 @@
 //! 根据 filetoken 获取文档的公共设置。
 //!
 //! docPath: /document/ukTMukTMukTM/uITM3YjLyEzN24iMxcjN
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/get-document-sharing-settings-v2
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uITM3YjLyEzN24iMxcjN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

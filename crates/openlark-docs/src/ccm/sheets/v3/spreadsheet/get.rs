@@ -2,7 +2,6 @@
 ///
 /// 获取指定电子表格的详细信息，包括基本属性和配置。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -23,7 +22,6 @@ impl ApiResponseTrait for GetSpreadsheetResponse {
 ///
 /// 获取指定电子表格的详细信息，包括基本属性和配置。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/get
 pub async fn get_spreadsheet(
     config: &Config,
     spreadsheet_token: &str,

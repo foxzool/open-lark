@@ -2,7 +2,6 @@
 ///
 /// 根据传入的参数创建一张浮动图片。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-float_image/create
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/create
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -59,4 +58,3 @@ pub async fn create_float_image(
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "创建浮动图片")
 }
-

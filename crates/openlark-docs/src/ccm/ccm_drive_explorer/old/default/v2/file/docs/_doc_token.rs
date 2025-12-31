@@ -1,7 +1,7 @@
 //! 删除 Doc
 //!
 //! docPath: /document/ukTMukTMukTM/uATM2UjLwEjN14CMxYTN
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uATM2UjLwEjN14CMxYTN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

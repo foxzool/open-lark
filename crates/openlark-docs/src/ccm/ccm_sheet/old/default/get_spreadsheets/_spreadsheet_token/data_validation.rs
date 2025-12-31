@@ -1,12 +1,14 @@
 //! 查询下拉列表设置
 //!
 //! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/datavalidation/query-datavalidation
-//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/query-datavalidation
+
+use std::collections::HashMap;
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -17,32 +19,34 @@ use crate::common::api_endpoints::CcmSheetApiOld;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct QueryDataValidationRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub range: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub dataValidationType: Option<String>,
+    pub range: String,
+    pub dataValidationType: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct QueryDataValidationResponse {
     pub spreadsheetToken: String,
-    pub dataValidations: Vec<DataValidation>,
+    pub sheetId: String,
     pub revision: i32,
+    #[serde(default)]
+    pub dataValidations: Vec<DataValidation>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct DataValidation {
-    pub dataValidationId: i32,
+    #[serde(default)]
+    pub ranges: Vec<String>,
     pub dataValidationType: String,
+    #[serde(default)]
     pub conditionValues: Vec<String>,
     pub options: Option<DataValidationOptions>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct DataValidationOptions {
-    pub multipleValues: bool,
-    pub highlightValidData: bool,
-    pub colors: Vec<String>,
+    pub multipleValues: Option<bool>,
+    pub highlightValidData: Option<bool>,
+    pub colorValueMap: Option<HashMap<String, String>>,
 }
 
 impl ApiResponseTrait for QueryDataValidationResponse {
@@ -58,11 +62,26 @@ pub async fn data_validation(
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<QueryDataValidationResponse> {
+    validate_required!(spreadsheet_token, "spreadsheet_token 不能为空");
+    validate_required!(request.range, "range 不能为空");
+    if !request.range.contains('!') {
+        return Err(openlark_core::error::validation_error(
+            "range",
+            "range 格式必须包含 sheetId（形如 <sheetId>!A1:A10）",
+        ));
+    }
+    if request.dataValidationType != "list" {
+        return Err(openlark_core::error::validation_error(
+            "dataValidationType",
+            "dataValidationType 必须为 list",
+        ));
+    }
+
     let api_endpoint = CcmSheetApiOld::DataValidation(spreadsheet_token);
     let mut api_request: ApiRequest<QueryDataValidationResponse> =
         ApiRequest::get(&api_endpoint.to_url())
-            .query_opt("range", request.range)
-            .query_opt("dataValidationType", request.dataValidationType);
+            .query("range", request.range)
+            .query("dataValidationType", request.dataValidationType);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

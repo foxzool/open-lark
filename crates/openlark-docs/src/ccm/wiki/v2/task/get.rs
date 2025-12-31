@@ -2,7 +2,7 @@
 ///
 /// 该方法用于获取wiki异步任务的结果。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/task/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/get
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/task/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -59,7 +59,7 @@ impl GetWikiTaskRequest {
     /// 执行请求
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/task/get
-    /// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/get
+    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/task/get
     pub async fn execute(self) -> SDKResult<GetWikiTaskResponse> {
         // 验证必填字段
         validate_required!(self.task_id, "任务ID不能为空");

@@ -1,7 +1,6 @@
 /// 创建订阅
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-subscription/create
-/// doc: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/create
 use openlark_core::{
     api::ApiRequest,
     config::Config,
@@ -83,8 +82,26 @@ pub async fn create_file_subscription(
             "subscription_type 不能为空",
         ));
     }
+    match request.subscription_type.as_str() {
+        "comment_update" => {}
+        _ => {
+            return Err(validation_error(
+                "subscription_type",
+                "subscription_type 仅支持 comment_update",
+            ));
+        }
+    }
     if request.file_type.trim().is_empty() {
         return Err(validation_error("file_type", "file_type 不能为空"));
+    }
+    match request.file_type.as_str() {
+        "doc" | "docx" | "wiki" => {}
+        _ => {
+            return Err(validation_error(
+                "file_type",
+                "file_type 仅支持 doc/docx/wiki",
+            ));
+        }
     }
 
     let api_endpoint = DriveApi::CreateFileSubscription(request.file_token.clone());

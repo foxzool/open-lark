@@ -5,33 +5,45 @@ use openlark_core::api::ApiResponseTrait;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FileVersionInfo {
     /// 版本文档的标题
-    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     /// 版本文档的版本标识
-    pub version: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
     /// 当前版本对应的源文档的 token
-    pub parent_token: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_token: Option<String>,
     /// 版本文档的所有者的 ID
-    pub owner_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
     /// 版本文档的创建者的 ID
-    pub creator_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creator_id: Option<String>,
     /// 版本文档的创建时间（Unix 时间戳，单位秒）
-    pub create_time: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<String>,
     /// 版本文档的更新时间（创建版本时可能不返回）
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 版本文档的状态
-    pub status: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
     /// 版本文档的类型
-    pub obj_type: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub obj_type: Option<String>,
     /// 源文档的类型
-    pub parent_type: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_type: Option<String>,
 }
 
 /// 获取文件版本列表响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListFileVersionsData {
     /// 版本文档列表
+    #[serde(default)]
     pub items: Vec<FileVersionInfo>,
     /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否还有更多项
     pub has_more: bool,

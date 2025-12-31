@@ -8,7 +8,6 @@ use openlark_core::{
 ///
 /// 创建一个导出任务，将云文档导出为文件。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/export_task/create
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/export_task/create
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -73,6 +72,17 @@ impl CreateExportTaskRequest {
                 return Err(openlark_core::error::validation_error(
                     "type",
                     "type 仅支持 doc/docx/sheet/bitable",
+                ))
+            }
+        }
+        // 文档约束：不同云文档类型支持的导出格式不同
+        match (self.r#type.as_str(), self.file_extension.as_str()) {
+            ("doc" | "docx", "docx" | "pdf") => {}
+            ("sheet" | "bitable", "xlsx" | "csv") => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "file_extension",
+                    "file_extension 与 type 不匹配：doc/docx 仅支持 docx/pdf；sheet/bitable 仅支持 xlsx/csv",
                 ))
             }
         }

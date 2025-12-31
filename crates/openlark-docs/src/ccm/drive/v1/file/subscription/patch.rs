@@ -1,7 +1,6 @@
 /// 更新订阅状态
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-subscription/patch
-/// doc: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/patch
 use openlark_core::{
     api::ApiRequest,
     config::Config,
@@ -69,6 +68,15 @@ pub async fn patch_subscription(
     }
     if request.file_type.trim().is_empty() {
         return Err(validation_error("file_type", "file_type 不能为空"));
+    }
+    match request.file_type.as_str() {
+        "doc" | "docx" | "wiki" => {}
+        _ => {
+            return Err(validation_error(
+                "file_type",
+                "file_type 仅支持 doc/docx/wiki",
+            ));
+        }
     }
 
     let api_endpoint = DriveApi::UpdateFileSubscription(

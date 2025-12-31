@@ -1,7 +1,6 @@
 /// 更新回复的内容
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment-reply/update
-/// doc: https://open.feishu.cn/document/server-docs/docs/CommentAPI/update
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -89,6 +88,7 @@ pub async fn update_reply(
     if request.file_type.trim().is_empty() {
         return Err(validation_error("file_type", "file_type 不能为空"));
     }
+    super::super::validate_comment_file_type_for_list_like(&request.file_type)?;
 
     let api_endpoint = DriveApi::UpdateCommentReply(
         request.file_token.clone(),

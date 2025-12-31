@@ -2,7 +2,6 @@
 ///
 /// 该接口用于根据 token 获取云文档的权限设置。
 /// docPath: /document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/permission-public/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/get-2
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -31,7 +30,8 @@ impl GetPermissionPublicRequest {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetPermissionPublicResponse {
-    pub permission_public: PermissionPublic,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permission_public: Option<PermissionPublic>,
 }
 
 impl ApiResponseTrait for GetPermissionPublicResponse {

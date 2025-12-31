@@ -1,7 +1,7 @@
 /// Bitable 更新多条记录
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-record/batch_update
-/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch_update
+/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-record/batch_update
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

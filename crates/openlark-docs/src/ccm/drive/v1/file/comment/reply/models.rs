@@ -4,15 +4,19 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ReplyInfo {
     /// 回复ID
-    pub reply_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reply_id: Option<String>,
     /// 回复内容
     pub content: ReplyContent,
     /// 回复者信息
-    pub user_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
     /// 创建时间
-    pub create_time: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<i64>,
     /// 更新时间
-    pub update_time: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_time: Option<i64>,
     /// 其他内容（图片 token 等）
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra: Option<ReplyExtra>,

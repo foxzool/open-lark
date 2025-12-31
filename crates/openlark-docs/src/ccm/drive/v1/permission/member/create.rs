@@ -8,31 +8,44 @@ use openlark_core::{
 ///
 /// 为文件或文件夹添加协作者权限
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/create
-/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-member/create
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
-use super::models::MemberInfo;
+use super::models::PermissionMember;
 
 /// 添加协作者请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct CreatePermissionMemberRequest {
-    #[serde(skip)]
     config: Config,
     /// 文件token
     pub token: String,
-    /// 成员信息
-    pub member: MemberInfo,
-    /// 权限类型
-    pub r#type: String,
+    /// 云文档类型（query 参数 `type`，需要与 token 匹配）
+    pub file_type: String,
+    /// 是否发送通知（query 参数 `need_notification`，默认 false）
+    pub need_notification: Option<bool>,
+
+    /// 协作者 ID 类型，与 member_id 对应
+    pub member_type: String,
+    /// 协作者 ID
+    pub member_id: String,
+    /// 权限角色
+    pub perm: String,
+    /// 权限角色类型（默认 container）
+    pub perm_type: Option<String>,
+    /// 协作者类型（仅当 member_type 为 wikispaceid 时必填）
+    pub member_kind: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]
 struct CreatePermissionMemberRequestBody {
-    member: MemberInfo,
-    #[serde(rename = "type")]
-    r#type: String,
+    member_type: String,
+    member_id: String,
+    perm: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    perm_type: Option<String>,
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    r#type: Option<String>,
 }
 
 impl CreatePermissionMemberRequest {
@@ -41,52 +54,166 @@ impl CreatePermissionMemberRequest {
     /// # 参数
     /// * `config` - 配置
     /// * `token` - 文件token
-    /// * `member` - 成员信息
-    /// * `type` - 权限类型
+    /// * `file_type` - 云文档类型（query 参数 `type`）
+    /// * `member_type` - 协作者 ID 类型
+    /// * `member_id` - 协作者 ID
+    /// * `perm` - 权限角色
     pub fn new(
         config: Config,
         token: impl Into<String>,
-        member: MemberInfo,
-        r#type: impl Into<String>,
+        file_type: impl Into<String>,
+        member_type: impl Into<String>,
+        member_id: impl Into<String>,
+        perm: impl Into<String>,
     ) -> Self {
         Self {
             config,
             token: token.into(),
-            member,
-            r#type: r#type.into(),
+            file_type: file_type.into(),
+            need_notification: None,
+            member_type: member_type.into(),
+            member_id: member_id.into(),
+            perm: perm.into(),
+            perm_type: None,
+            member_kind: None,
         }
+    }
+
+    /// 设置是否发送通知（默认 false）
+    pub fn need_notification(mut self, need_notification: bool) -> Self {
+        self.need_notification = Some(need_notification);
+        self
+    }
+
+    /// 设置权限角色类型（默认 container，知识库文档有效）
+    pub fn perm_type(mut self, perm_type: impl Into<String>) -> Self {
+        self.perm_type = Some(perm_type.into());
+        self
+    }
+
+    /// 设置协作者类型
+    ///
+    /// **注意**：当 `member_type` 为 `wikispaceid` 时必填，且必须在
+    /// `wiki_space_member`、`wiki_space_viewer`、`wiki_space_editor` 中选择。
+    pub fn member_kind(mut self, member_kind: impl Into<String>) -> Self {
+        self.member_kind = Some(member_kind.into());
+        self
     }
 
     pub async fn execute(self) -> SDKResult<CreatePermissionMemberResponse> {
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error("token", "token 不能为空"));
         }
-        if self.member.user_id.is_empty() {
+        if self.file_type.is_empty() {
             return Err(openlark_core::error::validation_error(
-                "member.user_id",
-                "user_id 不能为空",
+                "file_type",
+                "file_type 不能为空",
             ));
         }
-        if self.member.user_type.is_empty() {
+        match self.file_type.as_str() {
+            "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "folder" | "mindnote"
+            | "minutes" | "slides" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "file_type",
+                    "file_type 必须为 doc/sheet/file/wiki/bitable/docx/folder/mindnote/minutes/slides",
+                ));
+            }
+        }
+        if self.member_type.is_empty() {
             return Err(openlark_core::error::validation_error(
-                "member.user_type",
-                "user_type 不能为空",
+                "member_type",
+                "member_type 不能为空",
             ));
         }
-        if self.r#type.is_empty() {
-            return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        match self.member_type.as_str() {
+            "email" | "openid" | "unionid" | "openchat" | "opendepartmentid" | "userid"
+            | "groupid" | "wikispaceid" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "member_type",
+                    "member_type 必须为 email/openid/unionid/openchat/opendepartmentid/userid/groupid/wikispaceid",
+                ));
+            }
+        }
+        if self.member_id.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "member_id",
+                "member_id 不能为空",
+            ));
+        }
+        if self.perm.is_empty() {
+            return Err(openlark_core::error::validation_error("perm", "perm 不能为空"));
+        }
+        match self.perm.as_str() {
+            "view" | "edit" | "full_access" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "perm",
+                    "perm 必须为 view/edit/full_access",
+                ));
+            }
+        }
+        if self.file_type == "minutes" && self.perm == "full_access" {
+            return Err(openlark_core::error::validation_error(
+                "perm",
+                "当 file_type=minutes 时，不支持 full_access",
+            ));
+        }
+        if let Some(perm_type) = &self.perm_type {
+            match perm_type.as_str() {
+                "container" | "single_page" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "perm_type",
+                        "perm_type 必须为 container/single_page",
+                    ));
+                }
+            }
+        }
+        if let Some(member_kind) = &self.member_kind {
+            match member_kind.as_str() {
+                "user" | "chat" | "department" | "group" | "wiki_space_member"
+                | "wiki_space_viewer" | "wiki_space_editor" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "type",
+                        "type 必须为 user/chat/department/group/wiki_space_member/wiki_space_viewer/wiki_space_editor",
+                    ));
+                }
+            }
+        }
+        if self.member_type == "wikispaceid" {
+            match self.member_kind.as_deref() {
+                Some("wiki_space_member" | "wiki_space_viewer" | "wiki_space_editor") => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "type",
+                        "当 member_type=wikispaceid 时，type 必须为 wiki_space_member/wiki_space_viewer/wiki_space_editor",
+                    ));
+                }
+            }
         }
 
         let api_endpoint = DriveApi::CreatePermissionMember(self.token.clone());
 
-        let api_request = ApiRequest::<CreatePermissionMemberResponse>::post(&api_endpoint.to_url())
-            .body(serialize_params(
-                &CreatePermissionMemberRequestBody {
-                member: self.member,
-                r#type: self.r#type,
-                },
-                "增加协作者权限",
-            )?);
+        let mut api_request =
+            ApiRequest::<CreatePermissionMemberResponse>::post(&api_endpoint.to_url())
+                .query("type", &self.file_type);
+
+        if let Some(need_notification) = self.need_notification {
+            api_request = api_request.query("need_notification", need_notification.to_string());
+        }
+
+        let body = CreatePermissionMemberRequestBody {
+            member_type: self.member_type,
+            member_id: self.member_id,
+            perm: self.perm,
+            perm_type: self.perm_type,
+            r#type: self.member_kind,
+        };
+
+        api_request = api_request.body(serialize_params(&body, "增加协作者权限")?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "增加协作者权限")
@@ -96,15 +223,8 @@ impl CreatePermissionMemberRequest {
 /// 协作者响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreatePermissionMemberResponse {
-    /// 成员ID
-    pub member_id: String,
-    /// 用户ID
-    pub user_id: String,
-    /// 权限类型
-    #[serde(rename = "type")]
-    pub r#type: String,
-    /// 创建时间
-    pub create_time: i64,
+    /// 本次新增的协作者信息
+    pub member: PermissionMember,
 }
 
 impl ApiResponseTrait for CreatePermissionMemberResponse {
@@ -120,40 +240,25 @@ mod tests {
     #[test]
     fn test_create_permission_member_request_builder() {
         let config = Config::default();
-        let member = MemberInfo {
-            user_id: "user_id".to_string(),
-            user_type: "user".to_string(),
-        };
 
-        let request = CreatePermissionMemberRequest::new(config, "file_token", member, "admin");
+        let request = CreatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "docx",
+            "openid",
+            "ou_xxx",
+            "view",
+        )
+        .need_notification(false)
+        .perm_type("container");
 
         assert_eq!(request.token, "file_token");
-        assert_eq!(request.r#type, "admin");
-    }
-
-    #[test]
-    fn test_member_info_structure() {
-        let member = MemberInfo {
-            user_id: "user_id".to_string(),
-            user_type: "user".to_string(),
-        };
-
-        assert_eq!(member.user_id, "user_id");
-        assert_eq!(member.user_type, "user");
-    }
-
-    #[test]
-    fn test_permission_member_data_structure() {
-        let permission_data = CreatePermissionMemberResponse {
-            member_id: "member_id".to_string(),
-            user_id: "user_id".to_string(),
-            r#type: "admin".to_string(),
-            create_time: 1640995200,
-        };
-
-        assert_eq!(permission_data.member_id, "member_id");
-        assert_eq!(permission_data.user_id, "user_id");
-        assert_eq!(permission_data.r#type, "admin");
+        assert_eq!(request.file_type, "docx");
+        assert_eq!(request.member_type, "openid");
+        assert_eq!(request.member_id, "ou_xxx");
+        assert_eq!(request.perm, "view");
+        assert_eq!(request.need_notification, Some(false));
+        assert_eq!(request.perm_type, Some("container".to_string()));
     }
 
     #[test]

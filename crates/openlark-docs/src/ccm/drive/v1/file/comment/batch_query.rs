@@ -1,7 +1,6 @@
 /// 批量获取评论
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/batch_query
-/// doc: https://open.feishu.cn/document/server-docs/docs/CommentAPI/batch_query
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -75,6 +74,7 @@ pub async fn batch_query_comment(
     if request.file_type.trim().is_empty() {
         return Err(validation_error("file_type", "file_type 不能为空"));
     }
+    super::validate_comment_file_type_for_list_like(&request.file_type)?;
     if request.comment_ids.is_empty() {
         return Err(validation_error("comment_ids", "comment_ids 不能为空"));
     }

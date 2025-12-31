@@ -2,7 +2,7 @@
 ///
 /// 根据 token 获取各类文件的元数据。
 /// docPath: /document/ukTMukTMukTM/uMjN3UjLzYzN14yM2cTN
-/// doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/obtain-metadata
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uMjN3UjLzYzN14yM2cTN
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -26,6 +26,7 @@ pub struct RequestDoc {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetMetaResponse {
+    #[serde(default)]
     pub docs_metas: Vec<DocsMeta>,
 }
 
@@ -73,6 +74,12 @@ impl GetMetaRequest {
             return Err(openlark_core::error::validation_error(
                 "request_docs",
                 "request_docs 不能为空",
+            ));
+        }
+        if self.req.request_docs.len() > 200 {
+            return Err(openlark_core::error::validation_error(
+                "request_docs",
+                "request_docs 一次不超过 200 个",
             ));
         }
         for (idx, doc) in self.req.request_docs.iter().enumerate() {
