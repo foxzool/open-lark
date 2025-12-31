@@ -1,7 +1,6 @@
 //! 更新自定义角色
 //!
-//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/update
-//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/update
+//! docPath: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/update-2
 
 use crate::base::base::v2::models::AppRole;
 use openlark_core::{
