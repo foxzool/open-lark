@@ -1,6 +1,7 @@
 //! 上传图片
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/file/upload
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/file/upload
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -14,7 +15,8 @@ use serde::{Deserialize, Serialize};
 /// 上传图片响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct UploadFileResponse {
-    pub file_token: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_token: Option<String>,
 }
 
 impl ApiResponseTrait for UploadFileResponse {
@@ -46,16 +48,46 @@ impl UploadFileRequest {
         use crate::common::api_endpoints::BaikeApiV1;
         validate_required!(self.name, "name 不能为空");
         validate_required!(self.file, "file 不能为空");
+        let name_len = self.name.chars().count();
+        if !(1..=100).contains(&name_len) {
+            return Err(openlark_core::error::validation_error(
+                "name",
+                "name 长度必须在 1~100 字符之间",
+            ));
+        }
+        // 文档：图片格式仅支持 icon、bmp、gif、png、jpeg、webp
+        if let Some(ext) = self.name.rsplit('.').next() {
+            let ext = ext.to_ascii_lowercase();
+            let allowed = ["icon", "ico", "bmp", "gif", "png", "jpeg", "jpg", "webp"];
+            if !allowed.contains(&ext.as_str()) {
+                return Err(openlark_core::error::validation_error(
+                    "name",
+                    "文件格式仅支持 icon/bmp/gif/png/jpeg/webp",
+                ));
+            }
+        } else {
+            return Err(openlark_core::error::validation_error(
+                "name",
+                "name 必须包含文件扩展名",
+            ));
+        }
+        // 文档：大小在 3KB-10MB
+        let size = self.file.len();
+        if size < 3 * 1024 || size > 10 * 1024 * 1024 {
+            return Err(openlark_core::error::validation_error(
+                "file",
+                "file 大小必须在 3KB~10MB 之间",
+            ));
+        }
 
         // multipart/form-data：
         // - name：文档要求的文件名称字段
         // - file：二进制文件内容（由 core 层 MultipartBuilder 处理）
-        // - file_name：仅用于设置 multipart 的文件名（不会作为表单字段发送）
+        // - __file_name：仅用于设置 multipart 的文件名（不会作为表单字段发送）
         let name = self.name;
-        let file_name = name.clone();
         let body = serde_json::json!({
             "name": name,
-            "file_name": file_name,
+            "__file_name": name,
         });
 
         let api_request: ApiRequest<UploadFileResponse> =

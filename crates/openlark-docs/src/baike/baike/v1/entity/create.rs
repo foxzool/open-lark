@@ -1,6 +1,7 @@
 //! 创建免审词条
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/create
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/create
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -38,7 +39,8 @@ pub struct CreateEntityReq {
 /// 创建免审词条响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CreateEntityResp {
-    pub entity: Entity,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity: Option<Entity>,
 }
 
 impl ApiResponseTrait for CreateEntityResp {
@@ -71,6 +73,30 @@ impl CreateEntityRequest {
 
     pub async fn send(self) -> SDKResult<CreateEntityResp> {
         validate_required!(self.req.main_keys, "main_keys 不能为空");
+        if self.req.main_keys.len() > 1 {
+            return Err(openlark_core::error::validation_error(
+                "main_keys",
+                "main_keys 最大长度为 1",
+            ));
+        }
+        for (idx, term) in self.req.main_keys.iter().enumerate() {
+            if term.key.trim().is_empty() {
+                return Err(openlark_core::error::validation_error(
+                    &format!("main_keys[{}].key", idx),
+                    "key 不能为空",
+                ));
+            }
+        }
+        if let Some(aliases) = &self.req.aliases {
+            for (idx, term) in aliases.iter().enumerate() {
+                if term.key.trim().is_empty() {
+                    return Err(openlark_core::error::validation_error(
+                        &format!("aliases[{}].key", idx),
+                        "key 不能为空",
+                    ));
+                }
+            }
+        }
         if self.req.description.as_deref().unwrap_or_default().is_empty()
             && self.req.rich_text.as_deref().unwrap_or_default().is_empty()
         {

@@ -13,7 +13,7 @@ pub mod models;
 pub mod v1;
 
 // 重新导出服务和v1版本
-pub use v1::{BaikeV1Service, LingoV1Service};
+pub use v1::BaikeV1Service;
 
 /// Baike 知识库服务（兼容旧接口）
 #[derive(Debug, Clone)]

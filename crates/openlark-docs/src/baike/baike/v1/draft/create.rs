@@ -1,6 +1,7 @@
 //! 创建草稿
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/draft/create
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/draft/create
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -41,7 +42,8 @@ pub struct CreateDraftReq {
 /// 创建草稿响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CreateDraftResp {
-    pub draft: Draft,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub draft: Option<Draft>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -80,6 +82,30 @@ impl CreateDraftRequest {
 
     pub async fn send(self) -> SDKResult<CreateDraftResp> {
         validate_required!(self.req.main_keys, "main_keys 不能为空");
+        if self.req.main_keys.len() > 1 {
+            return Err(openlark_core::error::validation_error(
+                "main_keys",
+                "main_keys 最大长度为 1",
+            ));
+        }
+        for (idx, term) in self.req.main_keys.iter().enumerate() {
+            if term.key.trim().is_empty() {
+                return Err(openlark_core::error::validation_error(
+                    &format!("main_keys[{}].key", idx),
+                    "key 不能为空",
+                ));
+            }
+        }
+        if let Some(aliases) = &self.req.aliases {
+            for (idx, term) in aliases.iter().enumerate() {
+                if term.key.trim().is_empty() {
+                    return Err(openlark_core::error::validation_error(
+                        &format!("aliases[{}].key", idx),
+                        "key 不能为空",
+                    ));
+                }
+            }
+        }
         if self.req.description.as_deref().unwrap_or_default().is_empty()
             && self.req.rich_text.as_deref().unwrap_or_default().is_empty()
         {

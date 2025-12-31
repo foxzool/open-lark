@@ -1,6 +1,7 @@
 //! 上传图片
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/upload
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/upload
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -17,7 +18,8 @@ use crate::common::api_endpoints::LingoApiV1;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UploadFileResp {
     /// 文件 token
-    pub file_token: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_token: Option<String>,
 }
 
 impl ApiResponseTrait for UploadFileResp {
@@ -52,12 +54,11 @@ impl UploadFileRequest {
         // multipart/form-data：
         // - name：文档要求的文件名称字段
         // - file：二进制文件内容（由 core 层 MultipartBuilder 处理）
-        // - file_name：仅用于设置 multipart 的文件名（不会作为表单字段发送）
+        // - __file_name：仅用于设置 multipart 的文件名（不会作为表单字段发送）
         let name = self.name;
-        let file_name = name.clone();
         let body = serde_json::json!({
             "name": name,
-            "file_name": file_name,
+            "__file_name": name,
         });
 
         let api_request: ApiRequest<UploadFileResp> =

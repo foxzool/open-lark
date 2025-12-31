@@ -1,6 +1,7 @@
 //! 精准搜索词条
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/match
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/match
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -30,16 +31,19 @@ pub enum TermType {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MatchInfo {
     /// 词条 ID
-    pub entity_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_id: Option<String>,
     /// 匹配中的字段
     #[serde(rename = "type")]
-    pub term_type: TermType,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub term_type: Option<TermType>,
 }
 
 /// 精准搜索词条响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MatchEntityResp {
     /// 搜索结果
+    #[serde(default)]
     pub results: Vec<MatchInfo>,
 }
 
