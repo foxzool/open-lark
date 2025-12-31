@@ -1,8 +1,9 @@
-/// 添加知识空间成员
-///
-/// 为知识空间添加成员。
-/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-member/create
-/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-member/create
+//! 添加知识空间成员
+//!
+//! 为知识空间添加成员。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/create
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -68,9 +69,6 @@ impl CreateWikiSpaceMemberRequest {
     }
 
     /// 执行请求
-    ///
-    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-member/create
-    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-member/create
     pub async fn execute(
         self,
         params: CreateWikiSpaceMemberParams,
