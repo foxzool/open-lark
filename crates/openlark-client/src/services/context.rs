@@ -45,6 +45,6 @@ impl ServiceContext {
         let guard = self.extensions.read().expect("lock poisoned");
         guard
             .get(name)
-            .and_then(|arc_any| arc_any.clone().downcast::<T>().ok().map(|arc| arc))
+            .and_then(|arc_any| arc_any.clone().downcast::<T>().ok())
     }
 }

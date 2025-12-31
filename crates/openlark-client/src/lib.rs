@@ -233,7 +233,6 @@
 //#![deny(missing_docs)]  // 暂时禁用以完成基本编译
 // openlark-client 仍处于快速迭代阶段：为了保证工作区 `just lint`（`-D warnings`）可通过，
 // 这里对 WIP 代码放宽 lint，避免未完成的占位实现阻塞其它稳定 crate 的质量门禁。
-#![allow(clippy::all)]
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
@@ -621,7 +620,7 @@ pub mod utils {
 
         // 检查超时设置
         if let Ok(timeout_str) = env::var("OPENLARK_TIMEOUT") {
-            if let Err(_) = timeout_str.parse::<u64>() {
+            if timeout_str.parse::<u64>().is_err() {
                 return with_context(
                     Err(validation_error(
                         "OPENLARK_TIMEOUT",
@@ -919,6 +918,12 @@ pub mod utils {
             self.issues.iter().any(|issue| {
                 issue.category.contains("环境变量") || issue.category.contains("功能依赖")
             })
+        }
+    }
+
+    impl Default for SystemDiagnostics {
+        fn default() -> Self {
+            Self::new()
         }
     }
 
