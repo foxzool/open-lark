@@ -61,7 +61,8 @@ impl ListAppRoleRequest {
         use crate::common::api_endpoints::BitableApiV1;
         let api_endpoint = BitableApiV1::RoleList(self.app_token.clone());
 
-        let mut api_request: ApiRequest<ListAppRoleResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<ListAppRoleResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
         api_request = api_request.query_opt("page_token", self.page_token);
         api_request = api_request.query_opt("page_size", self.page_size.map(|v| v.to_string()));
 

@@ -50,7 +50,8 @@ pub async fn get_subscription(
     let api_endpoint =
         DriveApi::GetFileSubscription(request.file_token.clone(), request.subscription_id.clone());
 
-    let mut api_request: ApiRequest<GetSubscriptionResponse> = ApiRequest::get(&api_endpoint.to_url());
+    let mut api_request: ApiRequest<GetSubscriptionResponse> =
+        ApiRequest::get(&api_endpoint.to_url());
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

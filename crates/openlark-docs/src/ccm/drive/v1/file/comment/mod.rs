@@ -18,7 +18,9 @@ pub use reply::*;
 // 仅导出高层模型，避免与 reply/models.rs 的类型名冲突（TextRun/DocsLink/Person 等）
 pub use models::{Comment, CreateCommentReply, CreateCommentReplyList};
 
-pub(crate) fn validate_comment_file_type_for_list_like(file_type: &str) -> openlark_core::SDKResult<()> {
+pub(crate) fn validate_comment_file_type_for_list_like(
+    file_type: &str,
+) -> openlark_core::SDKResult<()> {
     match file_type {
         "doc" | "docx" | "sheet" | "file" | "slides" => Ok(()),
         _ => Err(openlark_core::error::validation_error(
@@ -38,7 +40,9 @@ pub(crate) fn validate_comment_file_type_for_get(file_type: &str) -> openlark_co
     }
 }
 
-pub(crate) fn validate_comment_file_type_for_create(file_type: &str) -> openlark_core::SDKResult<()> {
+pub(crate) fn validate_comment_file_type_for_create(
+    file_type: &str,
+) -> openlark_core::SDKResult<()> {
     match file_type {
         "doc" | "docx" => Ok(()),
         _ => Err(openlark_core::error::validation_error(

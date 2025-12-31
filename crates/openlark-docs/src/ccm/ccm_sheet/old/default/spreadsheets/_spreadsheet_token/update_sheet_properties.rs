@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -135,11 +134,7 @@ pub async fn update_sheet_properties(
                 ));
             }
 
-            if protect
-                .userIDs
-                .as_ref()
-                .is_some_and(|ids| !ids.is_empty())
-            {
+            if protect.userIDs.as_ref().is_some_and(|ids| !ids.is_empty()) {
                 need_user_id_type = true;
             }
         }

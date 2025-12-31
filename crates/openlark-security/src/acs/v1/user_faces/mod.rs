@@ -151,7 +151,7 @@ impl UpdateUserFaceBuilder {
                 .map_err(|e| {
                     openlark_core::error::validation_error(
                         "mime_type",
-                        &format!("Invalid mime type: {}", e),
+                        format!("Invalid mime type: {}", e),
                     )
                 })?,
         );

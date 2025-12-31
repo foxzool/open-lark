@@ -20,4 +20,3 @@ pub struct Form {
     /// 是否限制每人只可提交一次
     pub submit_limit_once: bool,
 }
-

@@ -67,10 +67,16 @@ impl PatchPublicPermissionRequest {
 
     pub async fn execute(self) -> SDKResult<PatchPublicPermissionResponse> {
         if self.token.is_empty() {
-            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "token",
+                "token 不能为空",
+            ));
         }
         if self.r#type.is_empty() {
-            return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "type",
+                "type 不能为空",
+            ));
         }
         match self.r#type.as_str() {
             "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "mindnote" | "minutes"
@@ -148,9 +154,7 @@ impl PatchPublicPermissionRequest {
                 ));
             }
             if matches!(
-                self.permission_public_request
-                    .link_share_entity
-                    .as_deref(),
+                self.permission_public_request.link_share_entity.as_deref(),
                 Some("anyone_readable" | "anyone_editable")
             ) {
                 return Err(openlark_core::error::validation_error(
@@ -209,6 +213,9 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(PatchPublicPermissionResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            PatchPublicPermissionResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

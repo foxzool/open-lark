@@ -99,10 +99,14 @@ impl GetRecordRequest {
         }
 
         use crate::common::api_endpoints::BitableApiV1;
-        let api_endpoint =
-            BitableApiV1::RecordGet(self.app_token.clone(), self.table_id.clone(), self.record_id);
+        let api_endpoint = BitableApiV1::RecordGet(
+            self.app_token.clone(),
+            self.table_id.clone(),
+            self.record_id,
+        );
 
-        let mut api_request: ApiRequest<GetRecordResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<GetRecordResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         api_request = api_request.query_opt(
             "text_field_as_array",

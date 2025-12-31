@@ -171,11 +171,13 @@ mod tests {
 
     #[test]
     fn test_password_limits() {
-        assert_eq!(password_limits::MIN_LENGTH, 8);
-        assert_eq!(password_limits::MAX_LENGTH, 128);
-        assert!(password_limits::REQUIRE_DIGIT);
-        assert!(password_limits::REQUIRE_LOWERCASE);
-        assert!(password_limits::REQUIRE_UPPERCASE);
-        assert!(password_limits::REQUIRE_SPECIAL_CHAR);
+        const {
+            assert!(password_limits::MIN_LENGTH == 8);
+            assert!(password_limits::MAX_LENGTH == 128);
+            assert!(password_limits::REQUIRE_DIGIT);
+            assert!(password_limits::REQUIRE_LOWERCASE);
+            assert!(password_limits::REQUIRE_UPPERCASE);
+            assert!(password_limits::REQUIRE_SPECIAL_CHAR);
+        };
     }
 }

@@ -16,7 +16,7 @@ pub use models::models_docx;
 // 重新导出常用类型，方便其他模块使用
 pub use common_types::*;
 
-/// API服务实现
+// API服务实现
 // pub mod services;
 
 /// v1版本API
@@ -55,12 +55,12 @@ impl DocxService {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::DocxService;
+    use openlark_core::config::Config;
 
     #[test]
     fn test_docx_service_creation() {
-        // This is a placeholder test
-        // In a real implementation, you would create a mock client
-        // and test the DocxService functionality
+        let service = DocxService::new(Config::default());
+        assert!(!service.config().base_url.is_empty());
     }
 }

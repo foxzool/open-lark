@@ -48,8 +48,8 @@ pub async fn create_filter_condition(
         sheet_id.to_string(),
         filter_view_id.to_string(),
     );
-    let api_request: ApiRequest<CreateFilterConditionResponse> = ApiRequest::post(&api_endpoint.to_url())
-        .body(serialize_params(&params, "创建筛选条件")?);
+    let api_request: ApiRequest<CreateFilterConditionResponse> =
+        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建筛选条件")?);
 
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "创建筛选条件")

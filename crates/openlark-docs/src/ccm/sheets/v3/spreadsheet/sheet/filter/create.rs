@@ -38,7 +38,8 @@ pub async fn create_filter(
     sheet_id: &str,
     params: CreateFilterRequest,
 ) -> SDKResult<CreateFilterResponse> {
-    let api_endpoint = SheetsApiV3::CreateFilter(spreadsheet_token.to_string(), sheet_id.to_string());
+    let api_endpoint =
+        SheetsApiV3::CreateFilter(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<CreateFilterResponse> =
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建筛选")?);
 

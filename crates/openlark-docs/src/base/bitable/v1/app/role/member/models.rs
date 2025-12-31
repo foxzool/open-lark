@@ -4,21 +4,16 @@
 use serde::{Deserialize, Serialize};
 
 /// 协作者 ID 类型（用于请求参数与批量成员列表）
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Default)]
 #[serde(rename_all = "snake_case")]
 pub enum RoleMemberIdType {
+    #[default]
     OpenId,
     UnionId,
     UserId,
     ChatId,
     DepartmentId,
     OpenDepartmentId,
-}
-
-impl Default for RoleMemberIdType {
-    fn default() -> Self {
-        Self::OpenId
-    }
 }
 
 /// 协作者类型（列表响应）

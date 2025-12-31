@@ -7,8 +7,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -66,7 +65,12 @@ impl CreateEntityRequest {
             .as_deref()
             .unwrap_or_default()
             .is_empty()
-            && self.body.rich_text.as_deref().unwrap_or_default().is_empty()
+            && self
+                .body
+                .rich_text
+                .as_deref()
+                .unwrap_or_default()
+                .is_empty()
         {
             return Err(openlark_core::error::CoreError::validation_msg(
                 "description 与 rich_text 至少填写一个",

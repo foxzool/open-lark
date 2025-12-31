@@ -43,7 +43,8 @@ impl GetMinuteMediaRequest {
         }
 
         let api_endpoint = MinutesApiV1::MediaGet(minute_token);
-        let api_request: ApiRequest<GetMinuteMediaResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let api_request: ApiRequest<GetMinuteMediaResponse> =
+            ApiRequest::get(&api_endpoint.to_url());
 
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "下载妙记音视频文件")

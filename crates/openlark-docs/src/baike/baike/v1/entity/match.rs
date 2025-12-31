@@ -7,8 +7,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -68,7 +67,8 @@ impl MatchEntityRequest {
         }
 
         let api_request: ApiRequest<MatchEntityResp> =
-            ApiRequest::post(&BaikeApiV1::EntityMatch.to_url()).body(serde_json::to_value(&self.req)?);
+            ApiRequest::post(&BaikeApiV1::EntityMatch.to_url())
+                .body(serde_json::to_value(&self.req)?);
 
         let response: Response<MatchEntityResp> =
             Transport::request(api_request, &self.config, None).await?;

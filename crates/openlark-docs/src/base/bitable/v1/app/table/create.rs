@@ -169,7 +169,7 @@ impl CreateTableRequestBuilder {
 }
 
 /// 数据表数据
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct TableData {
     /// 数据表名称
     pub name: String,
@@ -179,16 +179,6 @@ pub struct TableData {
     /// 数据表初始字段
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<Vec<TableField>>,
-}
-
-impl Default for TableData {
-    fn default() -> Self {
-        Self {
-            name: String::new(),
-            default_view_name: None,
-            fields: None,
-        }
-    }
 }
 
 impl TableData {

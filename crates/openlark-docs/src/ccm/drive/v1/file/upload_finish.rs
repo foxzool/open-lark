@@ -47,11 +47,8 @@ impl UploadFinishRequest {
         }
 
         let api_endpoint = DriveApi::UploadFinish;
-        let request =
-            ApiRequest::<UploadFinishResponse>::post(&api_endpoint.to_url()).body(serialize_params(
-                &self,
-                "分片上传文件-完成上传",
-            )?);
+        let request = ApiRequest::<UploadFinishResponse>::post(&api_endpoint.to_url())
+            .body(serialize_params(&self, "分片上传文件-完成上传")?);
 
         let response = Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "分片上传文件-完成上传")

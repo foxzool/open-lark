@@ -17,11 +17,11 @@ pub mod update;
 pub use create::*;
 pub use delete::*;
 pub use get::*;
-pub use list::*;
-pub use update::*;
-pub use r#match::*;
 pub use highlight::*;
+pub use list::*;
+pub use r#match::*;
 pub use search::*;
+pub use update::*;
 
 /// Lingo词条管理服务
 #[derive(Debug, Clone)]

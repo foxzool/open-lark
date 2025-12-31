@@ -79,7 +79,7 @@ impl CreateImportTaskRequest {
                 "file_extension 不能为空",
             ));
         }
-        let file_token_len = self.file_token.as_bytes().len();
+        let file_token_len = self.file_token.len();
         if file_token_len == 0 || file_token_len > 27 {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -105,8 +105,7 @@ impl CreateImportTaskRequest {
         let api_endpoint = DriveApi::CreateImportTask;
 
         let api_request: ApiRequest<CreateImportTaskResponse> =
-            ApiRequest::post(&api_endpoint.to_url())
-                .body(serialize_params(&self, "创建导入任务")?);
+            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&self, "创建导入任务")?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "创建导入任务")

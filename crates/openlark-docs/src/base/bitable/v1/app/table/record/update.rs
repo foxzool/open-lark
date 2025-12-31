@@ -88,10 +88,12 @@ impl UpdateRecordRequest {
             self.record_id,
         );
 
-        let mut api_request: ApiRequest<UpdateRecordResponse> =
-            ApiRequest::put(&api_endpoint.to_url()).body(serde_json::to_vec(&UpdateRecordRequestBody {
-                fields: self.fields,
-            })?);
+        let mut api_request: ApiRequest<UpdateRecordResponse> = ApiRequest::put(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_vec(&UpdateRecordRequestBody {
+            fields: self.fields,
+        })?);
 
         api_request = api_request.query_opt("user_id_type", self.user_id_type);
         api_request = api_request.query_opt(
@@ -139,7 +141,9 @@ impl UpdateRecordRequestBuilder {
     }
 
     pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
-        self.request = self.request.ignore_consistency_check(ignore_consistency_check);
+        self.request = self
+            .request
+            .ignore_consistency_check(ignore_consistency_check);
         self
     }
 

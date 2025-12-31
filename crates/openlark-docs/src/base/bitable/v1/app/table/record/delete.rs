@@ -57,9 +57,11 @@ impl DeleteRecordRequest {
         }
 
         use crate::common::api_endpoints::BitableApiV1;
-        let api_endpoint = BitableApiV1::RecordDelete(self.app_token, self.table_id, self.record_id);
+        let api_endpoint =
+            BitableApiV1::RecordDelete(self.app_token, self.table_id, self.record_id);
 
-        let api_request: ApiRequest<DeleteRecordResponse> = ApiRequest::delete(&api_endpoint.to_url());
+        let api_request: ApiRequest<DeleteRecordResponse> =
+            ApiRequest::delete(&api_endpoint.to_url());
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response

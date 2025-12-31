@@ -201,17 +201,19 @@ mod tests {
 
     #[test]
     fn test_validate_message_limits() {
-        assert!(message_limits::MAX_TEXT_LENGTH > 0);
-        assert!(message_limits::MAX_RICH_TEXT_LENGTH > 0);
-        assert!(message_limits::MAX_CARD_JSON_LENGTH > 0);
-        assert!(message_limits::MAX_IMAGE_SIZE > 0);
-        assert!(message_limits::MAX_FILE_SIZE > 0);
-        assert!(message_limits::MAX_VIDEO_SIZE > 0);
-        assert!(message_limits::MAX_AUDIO_SIZE > 0);
-        assert!(!message_limits::SUPPORTED_IMAGE_FORMATS.is_empty());
-        assert!(!message_limits::SUPPORTED_FILE_FORMATS.is_empty());
-        assert!(!message_limits::SUPPORTED_VIDEO_FORMATS.is_empty());
-        assert!(!message_limits::SUPPORTED_AUDIO_FORMATS.is_empty());
+        const {
+            assert!(message_limits::MAX_TEXT_LENGTH > 0);
+            assert!(message_limits::MAX_RICH_TEXT_LENGTH > 0);
+            assert!(message_limits::MAX_CARD_JSON_LENGTH > 0);
+            assert!(message_limits::MAX_IMAGE_SIZE > 0);
+            assert!(message_limits::MAX_FILE_SIZE > 0);
+            assert!(message_limits::MAX_VIDEO_SIZE > 0);
+            assert!(message_limits::MAX_AUDIO_SIZE > 0);
+            assert!(!message_limits::SUPPORTED_IMAGE_FORMATS.is_empty());
+            assert!(!message_limits::SUPPORTED_FILE_FORMATS.is_empty());
+            assert!(!message_limits::SUPPORTED_VIDEO_FORMATS.is_empty());
+            assert!(!message_limits::SUPPORTED_AUDIO_FORMATS.is_empty());
+        };
     }
 
     #[test]

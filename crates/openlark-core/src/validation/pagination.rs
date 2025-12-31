@@ -194,11 +194,13 @@ mod tests {
 
     #[test]
     fn test_pagination_limits() {
-        assert!(pagination_limits::MIN_PAGE_SIZE > 0);
-        assert!(pagination_limits::MAX_PAGE_SIZE > pagination_limits::MIN_PAGE_SIZE);
-        assert!(pagination_limits::DEFAULT_PAGE_SIZE >= pagination_limits::MIN_PAGE_SIZE);
-        assert!(pagination_limits::DEFAULT_PAGE_SIZE <= pagination_limits::MAX_PAGE_SIZE);
-        assert!(pagination_limits::MAX_PAGE_TOKEN_LENGTH > 0);
-        assert!(!pagination_limits::PAGE_TOKEN_REGEX.is_empty());
+        const {
+            assert!(pagination_limits::MIN_PAGE_SIZE > 0);
+            assert!(pagination_limits::MAX_PAGE_SIZE > pagination_limits::MIN_PAGE_SIZE);
+            assert!(pagination_limits::DEFAULT_PAGE_SIZE >= pagination_limits::MIN_PAGE_SIZE);
+            assert!(pagination_limits::DEFAULT_PAGE_SIZE <= pagination_limits::MAX_PAGE_SIZE);
+            assert!(pagination_limits::MAX_PAGE_TOKEN_LENGTH > 0);
+            assert!(!pagination_limits::PAGE_TOKEN_REGEX.is_empty());
+        };
     }
 }

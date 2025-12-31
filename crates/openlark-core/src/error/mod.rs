@@ -191,11 +191,13 @@ mod tests {
 
     #[test]
     fn test_capabilities() {
-        assert!(capabilities::CORE_ERROR);
-        assert!(capabilities::ERROR_CONTEXT);
-        assert!(!capabilities::BUILDER_PATTERN);
-        assert!(capabilities::ERROR_ANALYSIS);
-        assert!(!capabilities::LEGACY_COMPATIBILITY);
+        const {
+            assert!(capabilities::CORE_ERROR);
+            assert!(capabilities::ERROR_CONTEXT);
+            assert!(!capabilities::BUILDER_PATTERN);
+            assert!(capabilities::ERROR_ANALYSIS);
+            assert!(!capabilities::LEGACY_COMPATIBILITY);
+        };
     }
 
     #[test]

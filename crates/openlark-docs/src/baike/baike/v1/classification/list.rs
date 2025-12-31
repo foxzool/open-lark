@@ -11,8 +11,8 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::BaikeApiV1;
 use super::super::models::ClassificationItem;
+use crate::common::api_endpoints::BaikeApiV1;
 
 /// 获取词典分类请求
 pub struct ListClassificationRequest {

@@ -1,9 +1,4 @@
-use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 /// 创建文档版本
 ///
@@ -58,7 +53,10 @@ impl CreateFileVersionRequest {
             ));
         }
         if self.name.is_empty() {
-            return Err(openlark_core::error::validation_error("name", "name 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "name",
+                "name 不能为空",
+            ));
         }
         if self.name.chars().count() > 1024 {
             return Err(openlark_core::error::validation_error(
