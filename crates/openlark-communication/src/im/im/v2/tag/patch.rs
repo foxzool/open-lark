@@ -1,0 +1,45 @@
+//! 修改标签
+//!
+//! docPath: https://open.feishu.cn/document/tenant-tag/patch
+
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+
+use crate::{common::api_utils::{extract_response_data, serialize_params}, endpoints::IM_V2_TAGS};
+
+/// 修改标签请求
+pub struct PatchTagRequest {
+    config: Config,
+    tag_id: String,
+}
+
+impl PatchTagRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            tag_id: String::new(),
+        }
+    }
+
+    /// 标签 ID（路径参数）
+    pub fn tag_id(mut self, tag_id: impl Into<String>) -> Self {
+        self.tag_id = tag_id.into();
+        self
+    }
+
+    /// 执行请求
+    ///
+    /// 说明：该接口请求体字段较多，建议直接按文档构造 JSON 传入。
+    ///
+    /// docPath: https://open.feishu.cn/document/tenant-tag/patch
+    pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+        validate_required!(self.tag_id, "tag_id 不能为空");
+
+        // url: PATCH:/open-apis/im/v2/tags/:tag_id
+        let req: ApiRequest<serde_json::Value> = ApiRequest::patch(format!("{}/{}", IM_V2_TAGS, self.tag_id))
+            .body(serialize_params(&body, "修改标签")?);
+
+        let resp = Transport::request(req, &self.config, None).await?;
+        extract_response_data(resp, "修改标签")
+    }
+}
+

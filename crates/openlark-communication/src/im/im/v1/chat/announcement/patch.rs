@@ -1,0 +1,61 @@
+//! 更新群公告信息
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/group/chat-announcement/patch
+
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+
+use crate::{
+    common::{
+        api_utils::{extract_response_data, serialize_params},
+        models::EmptyData,
+    },
+    endpoints::IM_V1_CHATS,
+    im::im::v1::chat::announcement::models::PatchChatAnnouncementBody,
+};
+
+/// 更新群公告信息请求
+pub struct PatchChatAnnouncementRequest {
+    config: Config,
+    chat_id: String,
+}
+
+impl PatchChatAnnouncementRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            chat_id: String::new(),
+        }
+    }
+
+    /// 群 ID（路径参数）
+    pub fn chat_id(mut self, chat_id: impl Into<String>) -> Self {
+        self.chat_id = chat_id.into();
+        self
+    }
+
+    /// 执行请求
+    ///
+    /// docPath: https://open.feishu.cn/document/server-docs/group/chat-announcement/patch
+    pub async fn execute(self, body: PatchChatAnnouncementBody) -> SDKResult<EmptyData> {
+        validate_required!(self.chat_id, "chat_id 不能为空");
+        validate_required!(body.revision, "revision 不能为空");
+
+        if body.requests.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "requests 不能为空".to_string(),
+                "公告内容 requests 不可为空".to_string(),
+            ));
+        }
+
+        // url: PATCH:/open-apis/im/v1/chats/:chat_id/announcement
+        let req: ApiRequest<EmptyData> = ApiRequest::patch(format!(
+            "{}/{}/announcement",
+            IM_V1_CHATS, self.chat_id
+        ))
+        .body(serialize_params(&body, "更新群公告信息")?);
+
+        let resp = Transport::request(req, &self.config, None).await?;
+        extract_response_data(resp, "更新群公告信息")
+    }
+}
+
