@@ -7,4 +7,5 @@ pub mod department;
 pub mod custom_attr;
 pub mod functional_role;
 pub mod group;
+pub mod employee_type_enum;
 pub mod user;

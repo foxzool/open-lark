@@ -218,6 +218,9 @@ pub const CONTACT_V3_GROUP_MEMBER_BELONG: &str = "/open-apis/contact/v3/group/me
 /// Contact 企业自定义用户字段 v3
 pub const CONTACT_V3_CUSTOM_ATTRS: &str = "/open-apis/contact/v3/custom_attrs";
 
+/// Contact 人员类型 v3
+pub const CONTACT_V3_EMPLOYEE_TYPE_ENUMS: &str = "/open-apis/contact/v3/employee_type_enums";
+
 /// Contact 用户 v3
 pub const CONTACT_V3_USERS: &str = "/open-apis/contact/v3/users";
 pub const CONTACT_V3_USER: &str = "/open-apis/contact/v3/users/{}";
