@@ -93,9 +93,6 @@ impl CcmSheetV2 {
 /// 数据模型定义
 pub mod models;
 
-/// API服务实现
-pub mod services;
-
 /// Old版本API (v2)
 pub mod old;
 
