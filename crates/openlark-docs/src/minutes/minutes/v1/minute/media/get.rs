@@ -1,3 +1,7 @@
+//! 下载妙记音视频文件
+//!
+//! docPath: https://open.feishu.cn/document/minutes-v1/minute-media/get
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -8,10 +12,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::MinutesApiV1, api_utils::*};
 
-/// 下载妙记音视频文件
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-media/get
-/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-media/get
 #[derive(Debug, Clone)]
 pub struct GetMinuteMediaRequest {
     config: Config,
