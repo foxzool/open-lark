@@ -1,13 +1,15 @@
+//! 分片上传文件-预上传
+//!
+//! 发送初始化请求，以获取上传事务 ID 和分片策略，为上传分片做准备。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_prepare
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 分片上传文件-预上传
-///
-/// 发送初始化请求，以获取上传事务 ID 和分片策略，为上传分片做准备。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_prepare
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
