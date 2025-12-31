@@ -1,6 +1,7 @@
-/// 获取回复信息
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment-reply/list
+//! 获取回复信息
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/list-2
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

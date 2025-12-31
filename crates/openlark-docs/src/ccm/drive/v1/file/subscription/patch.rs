@@ -1,6 +1,7 @@
-/// 更新订阅状态
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-subscription/patch
+//! 更新订阅状态
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/patch
+
 use openlark_core::{
     api::ApiRequest, config::Config, error::validation_error, http::Transport, SDKResult,
 };

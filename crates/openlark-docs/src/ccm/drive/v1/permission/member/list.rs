@@ -1,13 +1,15 @@
+//! 获取云文档协作者
+//!
+//! 获取文件或文件夹的协作者列表。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-member/list
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 获取云文档协作者
-///
-/// 获取文件或文件夹的协作者列表
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/list
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

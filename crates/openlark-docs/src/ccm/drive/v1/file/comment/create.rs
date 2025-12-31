@@ -1,9 +1,10 @@
+//! 添加全文评论
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/create
+
 use openlark_core::{
     api::ApiRequest, config::Config, error::validation_error, http::Transport, SDKResult,
 };
-/// 添加全文评论
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/create
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

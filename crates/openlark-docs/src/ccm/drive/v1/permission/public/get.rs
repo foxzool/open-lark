@@ -1,14 +1,15 @@
+//! 获取云文档权限设置
+//!
+//! 获取指定云文档的公共访问与协作权限设置。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/get
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-
-/// 获取云文档权限设置
-///
-/// 获取指定云文档的公共访问与协作权限设置。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-public/get
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

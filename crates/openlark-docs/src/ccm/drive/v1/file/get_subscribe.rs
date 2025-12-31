@@ -1,3 +1,9 @@
+//! 查询云文档事件订阅状态
+//!
+//! 查询文件的订阅状态。
+//!
+//! docPath: https://open.feishu.cn/document/docs/drive-v1/event/get_subscribe
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -8,10 +14,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
-/// 查询云文档事件订阅状态
-///
-/// 查询文件的订阅状态。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/get_subscribe
 /// 获取文件的订阅状态请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetSubscribeRequest {
