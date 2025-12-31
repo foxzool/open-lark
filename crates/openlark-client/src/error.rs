@@ -133,7 +133,7 @@ pub fn rate_limit_error(retry_after: Option<u64>) -> Error {
     openlark_core::error::rate_limit_error(
         100,
         Duration::from_secs(60),
-        retry_after.map(|s| Duration::from_secs(s)),
+        retry_after.map(Duration::from_secs),
     )
 }
 
@@ -631,17 +631,17 @@ impl<'a> ErrorAnalyzer<'a> {
             report.push_str(&format!("  请求ID: {}\n", request_id));
         }
 
-        report.push_str("\n");
+        report.push('\n');
 
         // 错误消息
         report.push_str("💬 错误消息:\n");
-        report.push_str(&format!("  技术消息: {}\n", self.error.to_string()));
+        report.push_str(&format!("  技术消息: {}\n", self.error));
         report.push_str(&format!(
             "  用户消息: {}\n",
             self.error.user_message().unwrap_or("未知错误")
         ));
 
-        report.push_str("\n");
+        report.push('\n');
 
         // 建议和恢复步骤
         report.push_str("💡 建议:\n");
@@ -652,7 +652,7 @@ impl<'a> ErrorAnalyzer<'a> {
             report.push_str(&format!("  {}. {}\n", i + 1, step));
         }
 
-        report.push_str("\n");
+        report.push('\n');
 
         // 上下文信息
         if self.error.context().context_len() > 0 {
@@ -660,7 +660,7 @@ impl<'a> ErrorAnalyzer<'a> {
             for (key, value) in self.error.context().all_context() {
                 report.push_str(&format!("  {}: {}\n", key, value));
             }
-            report.push_str("\n");
+            report.push('\n');
         }
 
         // 时间戳

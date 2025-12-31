@@ -388,6 +388,36 @@ impl LogLevel {
     }
 }
 
+/// 🔄 服务生命周期特征
+///
+/// 定义服务的启动、停止和健康检查生命周期管理
+#[async_trait]
+pub trait ServiceLifecycle: Send + Sync {
+    /// 🚀 启动服务
+    async fn start(&self) -> Result<()> {
+        tracing::info!("服务启动");
+        Ok(())
+    }
+
+    /// 🛑 停止服务
+    async fn stop(&self) -> Result<()> {
+        tracing::info!("服务停止");
+        Ok(())
+    }
+
+    /// 🔄 重启服务
+    async fn restart(&self) -> Result<()> {
+        tracing::info!("服务重启");
+        self.stop().await?;
+        self.start().await
+    }
+
+    /// ✅ 健康检查
+    async fn health_check(&self) -> Result<bool> {
+        Ok(true)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -508,35 +538,5 @@ mod tests {
         let metadata = service.metadata();
         assert_eq!(metadata.name, "test_service");
         assert_eq!(metadata.version, "1.0.0");
-    }
-}
-
-/// 🔄 服务生命周期特征
-///
-/// 定义服务的启动、停止和健康检查生命周期管理
-#[async_trait]
-pub trait ServiceLifecycle: Send + Sync {
-    /// 🚀 启动服务
-    async fn start(&self) -> Result<()> {
-        tracing::info!("服务启动");
-        Ok(())
-    }
-
-    /// 🛑 停止服务
-    async fn stop(&self) -> Result<()> {
-        tracing::info!("服务停止");
-        Ok(())
-    }
-
-    /// 🔄 重启服务
-    async fn restart(&self) -> Result<()> {
-        tracing::info!("服务重启");
-        self.stop().await?;
-        self.start().await
-    }
-
-    /// ✅ 健康检查
-    async fn health_check(&self) -> Result<bool> {
-        Ok(true)
     }
 }

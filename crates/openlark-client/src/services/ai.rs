@@ -140,14 +140,14 @@ impl<'a> AIService<'a> {
         );
 
         // TODO: 实际API调用
+        let id = uuid::Uuid::new_v4().to_string();
+        let url = format!("https://example.com/mock-image-{}.png", &id[..8]);
+
         Ok(ImageGenerationResponse {
             id: "mock_image_id".to_string(),
             object: "image".to_string(),
             created: chrono::Utc::now().timestamp() as u64,
-            url: format!(
-                "https://example.com/mock-image-{}.png",
-                uuid::Uuid::new_v4().to_string()[..8].to_string()
-            ),
+            url,
             size: size.to_string(),
             revised_prompt: Some(prompt.to_string()),
         })
