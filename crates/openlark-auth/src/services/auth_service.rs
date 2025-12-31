@@ -19,22 +19,21 @@ use openlark_core::config::Config;
 /// use openlark_auth::AuthService;
 /// use openlark_core::config::Config;
 ///
-/// #[tokio::main]
-/// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let config = Config::from_env()?;
-///     let auth_service = AuthService::new(config);
+/// let config = Config::builder()
+///     .app_id("your_app_id")
+///     .app_secret("your_app_secret")
+///     .base_url("https://open.feishu.cn")
+///     .build();
+/// let auth_service = AuthService::new(config);
 ///
-///     // 获取自建应用的访问令牌
-///     let token = auth_service.v3()
-///         .app_access_token_internal()
-///         .app_id("your_app_id")
-///         .app_secret("your_app_secret")
-///         .send()
-///         .await?;
+/// // 构建「自建应用获取 app_access_token」请求（这里只演示构建，不发送网络请求）
+/// let _builder = auth_service
+///     .v3()
+///     .app_access_token_internal()
+///     .app_id("your_app_id")
+///     .app_secret("your_app_secret");
 ///
-///     println!("App Access Token: {}", token.app_access_token);
-///     Ok(())
-/// }
+/// // 真正发送请求需要配合 `openlark_core::http::Transport` 进行请求执行。
 /// ```
 #[derive(Debug, Clone)]
 pub struct AuthService {
@@ -54,7 +53,7 @@ impl AuthService {
     /// use openlark_auth::AuthService;
     /// use openlark_core::config::Config;
     ///
-    /// let config = Config::from_env()?;
+    /// let config = Config::default();
     /// let auth_service = AuthService::new(config);
     /// ```
     pub fn new(config: Config) -> Self {
@@ -79,7 +78,9 @@ impl AuthService {
     ///
     /// ```rust
     /// use openlark_auth::AuthService;
+    /// use openlark_core::config::Config;
     ///
+    /// let config = Config::default();
     /// let auth_service = AuthService::new(config);
     /// let v3_service = auth_service.v3();
     /// ```
