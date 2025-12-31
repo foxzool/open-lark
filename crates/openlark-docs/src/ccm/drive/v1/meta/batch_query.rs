@@ -1,13 +1,15 @@
+//! 批量获取文件元数据
+//!
+//! 批量获取文件元数据信息。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/batch_query
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 批量获取文件元数据
-///
-/// 批量获取文件元数据信息。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/meta/batch_query
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
