@@ -1,7 +1,7 @@
-/// Bitable 获取多维表格详情API
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/get
-/// API文档: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/get
+//! Bitable 获取多维表格详情API
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

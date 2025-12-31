@@ -1,7 +1,7 @@
-/// Bitable 更新多维表格API
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/update
-/// API文档: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/update
+//! Bitable 更新多维表格API
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/update
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
