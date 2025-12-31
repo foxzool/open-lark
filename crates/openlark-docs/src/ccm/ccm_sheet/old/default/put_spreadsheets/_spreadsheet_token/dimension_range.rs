@@ -1,6 +1,6 @@
 //! 更新行列
 //!
-//! docPath: /document/ukTMukTMukTM/uYjMzUjL2IzM14iNyMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/update-rows-or-columns
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

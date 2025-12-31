@@ -1,6 +1,6 @@
 //! 修改保护范围
 //!
-//! docPath: /document/ukTMukTMukTM/uUTM5YjL1ETO24SNxkjN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/modify-protection-scopes
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

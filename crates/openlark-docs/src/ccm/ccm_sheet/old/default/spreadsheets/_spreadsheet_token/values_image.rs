@@ -1,6 +1,6 @@
 //! 写入图片
 //!
-//! docPath: /document/ukTMukTMukTM/uUDNxYjL1QTM24SN0EjN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-images
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

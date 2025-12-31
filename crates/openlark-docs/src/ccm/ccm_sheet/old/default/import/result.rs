@@ -1,6 +1,6 @@
 //! 查询导入结果
 //!
-//! docPath: /document/ukTMukTMukTM/uETO2YjLxkjN24SM5YjN
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/sheet-operation/query-import-results
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

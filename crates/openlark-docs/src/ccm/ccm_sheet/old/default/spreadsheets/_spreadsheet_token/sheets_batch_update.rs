@@ -1,6 +1,6 @@
 //! 操作工作表
 //!
-//! docPath: /document/ukTMukTMukTM/uYTMzUjL2EzM14iNxMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/operate-sheets
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

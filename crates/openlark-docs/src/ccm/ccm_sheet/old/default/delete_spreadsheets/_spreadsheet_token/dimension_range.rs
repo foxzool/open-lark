@@ -1,6 +1,6 @@
 //! 删除行列
 //!
-//! docPath: /document/ukTMukTMukTM/ucjMzUjL3IzM14yNyMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/-delete-rows-or-columns
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

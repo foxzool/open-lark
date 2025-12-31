@@ -1,6 +1,6 @@
 //! 批量设置单元格样式
 //!
-//! docPath: /document/ukTMukTMukTM/uAzMzUjLwMzM14CMzMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/batch-set-cell-style
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

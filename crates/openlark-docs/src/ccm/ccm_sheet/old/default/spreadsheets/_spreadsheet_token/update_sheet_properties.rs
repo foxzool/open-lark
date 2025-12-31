@@ -1,6 +1,6 @@
 //! 更新工作表属性
 //!
-//! docPath: /document/ukTMukTMukTM/ugjMzUjL4IzM14COyMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/update-sheet-properties
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

@@ -1,6 +1,6 @@
 //! 更新表格属性
 //!
-//! docPath: /document/ukTMukTMukTM/ucTMzUjL3EzM14yNxMTN
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/update-spreadsheet-properties
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

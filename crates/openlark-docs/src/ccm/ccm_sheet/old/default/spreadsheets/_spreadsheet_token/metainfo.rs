@@ -1,6 +1,6 @@
 //! 获取表格元数据
 //!
-//! docPath: /document/ukTMukTMukTM/uETMzUjLxEzM14SMxMTN
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/obtain-spreadsheet-metadata
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

@@ -1,6 +1,6 @@
 //! 批量获取条件格式
 //!
-//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/conditionformat/condition-format-get
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-get
 
 pub mod batch_create;
 pub mod batch_delete;

@@ -1,6 +1,6 @@
 //! 插入数据
 //!
-//! docPath: /document/ukTMukTMukTM/uIjMzUjLyIzM14iMyMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/prepend-data
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

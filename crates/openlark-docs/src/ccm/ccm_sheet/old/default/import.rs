@@ -1,6 +1,6 @@
 //! 导入表格
 //!
-//! docPath: /document/ukTMukTMukTM/uATO2YjLwkjN24CM5YjN
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/sheet-operation/import-spreadsheet
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
