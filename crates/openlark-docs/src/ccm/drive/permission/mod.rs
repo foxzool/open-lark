@@ -7,23 +7,33 @@
 //!
 //! # 示例
 //!
-//! ```rust
-//! use openlark_docs::ccm::drive::permission::{CheckMemberPermissionRequest, PermissionService};
+//! ```rust,no_run
+//! use openlark_core::config::Config;
+//! use openlark_docs::ccm::drive::permission::PermissionService;
 //!
-//! let service = PermissionService::new(config);
+//! #[tokio::main]
+//! async fn main() -> openlark_core::SDKResult<()> {
+//!     let config = Config::builder()
+//!         .app_id("app_id")
+//!         .app_secret("app_secret")
+//!         .build();
+//!     let service = PermissionService::new(config);
 //!
-//! // 检查用户权限
-//! let response = service
-//!     .check_member_permission_builder()
-//!     .file_token("token_xxx")
-//!     .permission("view")
-//!     .user_id("user_xxx")
-//!     .user_id_type("open_id")
-//!     .execute(&service)
-//!     .await?;
+//!     // 检查用户权限
+//!     let response = service
+//!         .check_member_permission_builder()
+//!         .file_token("token_xxx")
+//!         .permission("view")
+//!         .user_id("user_xxx")
+//!         .user_id_type("open_id")
+//!         .execute(&service)
+//!         .await?;
 //!
-//! if response.permitted.unwrap_or(false) {
-//!     println!("用户有权限");
+//!     if response.permitted.unwrap_or(false) {
+//!         println!("用户有权限");
+//!     }
+//!
+//!     Ok(())
 //! }
 //! ```
 

@@ -48,8 +48,16 @@ pub fn validate_required_field<T: AsRef<str>>(
 ///
 /// # 使用示例
 /// ```rust
-/// api_url!("/open-apis/doc/v2/{}", doc_token)
-/// api_url!("/open-apis/sheets/v2/spreadsheets/{}/values", spreadsheet_token)
+/// use openlark_docs::api_url;
+///
+/// let doc_token = "doc_token";
+/// let spreadsheet_token = "spreadsheet_token";
+///
+/// let doc_url = api_url!("/open-apis/doc/v2/{}", doc_token);
+/// let sheet_url = api_url!("/open-apis/sheets/v2/spreadsheets/{}/values", spreadsheet_token);
+///
+/// assert!(doc_url.contains(doc_token));
+/// assert!(sheet_url.contains(spreadsheet_token));
 /// ```
 #[macro_export]
 macro_rules! api_url {
