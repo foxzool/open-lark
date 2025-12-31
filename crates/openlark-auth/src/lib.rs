@@ -19,34 +19,40 @@
 //!
 //! ## 快速开始
 //!
-//! ```rust
+//! ```rust,no_run
 //! use openlark_auth::{AuthService, AuthenService, OAuthService};
-//! use openlark_core::Config;
+//! use openlark_core::config::Config;
 //!
-//! #[tokio::main]
-//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     let config = Config::from_env()?;
+//! let config = Config::builder()
+//!     .app_id("your_app_id")
+//!     .app_secret("your_app_secret")
+//!     .base_url("https://open.feishu.cn")
+//!     .build();
 //!
-//!     // 企业自建应用认证
-//!     let auth_service = AuthService::new(config.clone());
-//!     let token = auth_service.v3()
+//! // 企业自建应用认证（这里只演示构建请求，不发送网络请求）
+//! let auth_service = AuthService::new(config.clone());
+//! let _token_builder = auth_service
+//!     .v3()
 //!         .app_access_token_internal()
 //!         .app_id("your_app_id")
-//!         .app_secret("your_app_secret")
-//!         .send()
-//!         .await?;
+//!         .app_secret("your_app_secret");
 //!
-//!     // 用户认证
-//!     let authen_service = AuthenService::new(config.clone());
-//!     let user_info = authen_service.v1()
+//! // 用户认证（这里只演示构建请求，不发送网络请求）
+//! let authen_service = AuthenService::new(config.clone());
+//! let _user_info_builder = authen_service
+//!     .v1()
 //!         .user_info()
 //!         .get()
-//!         .user_access_token("user_token")
-//!         .send()
-//!         .await?;
+//!         .user_access_token("user_token");
 //!
-//!     Ok(())
-//! }
+//! // OAuth（构建授权链接）
+//! let oauth_service = OAuthService::new(config);
+//! let _auth_url = oauth_service
+//!     .old()
+//!     .authorization()
+//!     .app_id("your_app_id")
+//!     .redirect_uri("https://example.com/callback")
+//!     .build_url();
 //! ```
 
 pub mod api;

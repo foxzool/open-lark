@@ -128,7 +128,14 @@ where
     T: serde::de::DeserializeOwned,
 {
     if response.raw_response.code == 0 {
-        Ok(response.data.as_ref().unwrap())
+        response.data.as_ref().ok_or_else(|| {
+            openlark_core::error::api_error(
+                response.raw_response.code as u16,
+                endpoint.clone(),
+                "响应数据为空",
+                response.raw_response.request_id.clone(),
+            )
+        })
     } else {
         Err(create_auth_error(
             response.raw_response.code,
@@ -148,7 +155,14 @@ where
     T: serde::de::DeserializeOwned,
 {
     if response.raw_response.code == 0 {
-        Ok(response.data.unwrap())
+        response.data.ok_or_else(|| {
+            openlark_core::error::api_error(
+                response.raw_response.code as u16,
+                endpoint.clone(),
+                "响应数据为空",
+                response.raw_response.request_id.clone(),
+            )
+        })
     } else {
         Err(create_auth_error(
             response.raw_response.code,

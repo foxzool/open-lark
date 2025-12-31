@@ -18,21 +18,22 @@ use openlark_core::config::Config;
 /// use openlark_auth::OAuthService;
 /// use openlark_core::config::Config;
 ///
-/// #[tokio::main]
-/// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let config = Config::from_env()?;
-///     let oauth_service = OAuthService::new(config);
+/// let config = Config::builder()
+///     .app_id("your_app_id")
+///     .app_secret("your_app_secret")
+///     .base_url("https://open.feishu.cn")
+///     .build();
+/// let oauth_service = OAuthService::new(config);
 ///
-///     // 构建授权链接
-///     let auth_url = oauth_service.old()
-///         .authorization()
-///         .app_id("your_app_id")
-///         .redirect_uri("https://your-app.com/callback")
-///         .build_url();
+/// // 构建授权链接
+/// let auth_url = oauth_service
+///     .old()
+///     .authorization()
+///     .app_id("your_app_id")
+///     .redirect_uri("https://your-app.com/callback")
+///     .build_url();
 ///
-///     println!("授权链接: {}", auth_url);
-///     Ok(())
-/// }
+/// println!("授权链接: {}", auth_url);
 /// ```
 #[derive(Debug, Clone)]
 pub struct OAuthService {
@@ -52,7 +53,7 @@ impl OAuthService {
     /// use openlark_auth::OAuthService;
     /// use openlark_core::config::Config;
     ///
-    /// let config = Config::from_env()?;
+    /// let config = Config::default();
     /// let oauth_service = OAuthService::new(config);
     /// ```
     pub fn new(config: Config) -> Self {
@@ -73,7 +74,9 @@ impl OAuthService {
     ///
     /// ```rust
     /// use openlark_auth::OAuthService;
+    /// use openlark_core::config::Config;
     ///
+    /// let config = Config::default();
     /// let oauth_service = OAuthService::new(config);
     /// let old_service = oauth_service.old();
     /// ```
