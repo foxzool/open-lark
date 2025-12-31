@@ -1,12 +1,12 @@
 //! 更新表格属性
 //!
 //! docPath: /document/ukTMukTMukTM/ucTMzUjL3EzM14yNxMTN
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/update-spreadsheet-properties
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -22,13 +22,12 @@ pub struct UpdateSpreadsheetPropertiesRequest {
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SpreadsheetProperties {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub title: Option<String>,
+    pub title: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct UpdateSpreadsheetPropertiesResponse {
-    pub spreadsheet_token: String,
+    pub spreadsheetToken: String,
     pub title: String,
 }
 
@@ -45,6 +44,20 @@ pub async fn properties(
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<UpdateSpreadsheetPropertiesResponse> {
+    validate_required!(spreadsheet_token, "spreadsheet_token 不能为空");
+    if request.properties.title.trim().is_empty() {
+        return Err(openlark_core::error::validation_error(
+            "title",
+            "title 不能为空",
+        ));
+    }
+    if request.properties.title.chars().count() > 100 {
+        return Err(openlark_core::error::validation_error(
+            "title",
+            "title 最大长度 100 个字符",
+        ));
+    }
+
     let api_endpoint = CcmSheetApiOld::Properties(spreadsheet_token);
     let mut api_request: ApiRequest<UpdateSpreadsheetPropertiesResponse> =
         ApiRequest::put(&api_endpoint.to_url())

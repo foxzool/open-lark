@@ -38,7 +38,7 @@ impl ApiResponseTrait for GetPublicPermissionResponse {
 /// 判断协作者是否有某权限
 ///
 /// 根据filetoken判断当前登录用户是否具有某权限。
-/// docPath: /document/ukTMukTMukTM/uYzN3UjL2czN14iN3cTN
+/// docPath: /document/server-docs/historic-version/docs/drive/permission/querying-if-a-collaborator-has-a-specific-permission
 /// doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/querying-if-a-collaborator-has-a-specific-permission
 pub async fn check_member_permission(
     config: &Config,
@@ -64,7 +64,7 @@ pub async fn check_member_permission(
 /// 转移拥有者
 ///
 /// 根据文档信息和用户信息转移文档的所有者。
-/// docPath: /document/ukTMukTMukTM/uQzNzUjL0czM14CN3MTN
+/// docPath: /document/server-docs/historic-version/docs/drive/permission/transfer-ownership
 /// doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/transfer-ownership
 pub async fn transfer_owner(
     config: &Config,
@@ -91,7 +91,7 @@ pub async fn transfer_owner(
 /// 获取云文档权限设置V2
 ///
 /// 根据filetoken获取文档的公共设置。
-/// docPath: /document/ukTMukTMukTM/uITM3YjLyEzN24iMxcjN
+/// docPath: /document/server-docs/historic-version/docs/drive/permission/get-document-sharing-settings-v2
 /// doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/get-document-sharing-settings-v2
 pub async fn get_public_permission(
     config: &Config,

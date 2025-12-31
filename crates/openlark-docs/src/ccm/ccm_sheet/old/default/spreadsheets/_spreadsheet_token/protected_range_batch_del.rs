@@ -1,12 +1,12 @@
 //! 删除保护范围
 //!
 //! docPath: /document/ukTMukTMukTM/uYTM5YjL2ETO24iNxkjN
-//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/delete-protection-scopes
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -22,6 +22,7 @@ pub struct BatchDelProtectedRangeRequest {
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct BatchDelProtectedRangeResponse {
+    #[serde(default)]
     pub delProtectIds: Vec<String>,
 }
 
@@ -38,10 +39,17 @@ pub async fn protected_range_batch_del(
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<BatchDelProtectedRangeResponse> {
+    validate_required!(spreadsheet_token, "spreadsheet_token 不能为空");
     if request.protectIds.is_empty() {
         return Err(openlark_core::error::validation_error(
             "protectIds",
             "protectIds 不能为空",
+        ));
+    }
+    if request.protectIds.len() > 10 {
+        return Err(openlark_core::error::validation_error(
+            "protectIds",
+            "protectIds 单次最多 10 个",
         ));
     }
 

@@ -2,7 +2,7 @@
 ///
 /// 复制知识空间中的节点。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/copy
-/// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/copy
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/copy
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -70,7 +70,7 @@ impl CopyWikiSpaceNodeRequest {
     /// 执行请求
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/copy
-    /// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/copy
+    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/copy
     pub async fn execute(
         self,
         params: CopyWikiSpaceNodeParams,

@@ -1,7 +1,7 @@
 /// Bitable 列出数据表API
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table/list
-/// API文档: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/table/list
+/// API文档: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

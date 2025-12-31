@@ -1,7 +1,7 @@
 //! 删除 Sheet
 //!
 //! docPath: /document/ukTMukTMukTM/uUTNzUjL1UzM14SN1MTN/delete-sheet
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uUTNzUjL1UzM14SN1MTN/delete-sheet
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

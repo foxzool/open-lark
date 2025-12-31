@@ -2,7 +2,6 @@
 ///
 /// 该接口用于根据 filetoken 关闭云文档密码。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-public-password/delete
-/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/permission-public-password/delete
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -36,6 +35,22 @@ impl DeletePermissionPublicPasswordRequest {
         }
         if self.r#type.is_empty() {
             return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        }
+        match self.r#type.as_str() {
+            "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "mindnote" | "minutes"
+            | "slides" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "type",
+                    "type 必须为 doc/sheet/file/wiki/bitable/docx/mindnote/minutes/slides",
+                ));
+            }
+        }
+        if self.r#type == "minutes" {
+            return Err(openlark_core::error::validation_error(
+                "type",
+                "type=minutes 暂不支持停用云文档密码",
+            ));
         }
 
         let api_endpoint = DriveApi::DeletePublicPassword(self.token);

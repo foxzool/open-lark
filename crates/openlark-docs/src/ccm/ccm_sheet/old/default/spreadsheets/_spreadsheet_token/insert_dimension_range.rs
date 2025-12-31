@@ -1,12 +1,12 @@
 //! 插入行列
 //!
 //! docPath: /document/ukTMukTMukTM/uQjMzUjL0IzM14CNyMTN
-//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/insert-rows-or-columns
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -45,6 +45,45 @@ pub async fn insert_dimension_range(
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<InsertDimensionRangeResponse> {
+    validate_required!(spreadsheet_token, "spreadsheet_token 不能为空");
+    validate_required!(request.dimension.sheetId, "sheetId 不能为空");
+    validate_required!(request.dimension.majorDimension, "majorDimension 不能为空");
+    if request.dimension.majorDimension != "ROWS" && request.dimension.majorDimension != "COLUMNS" {
+        return Err(openlark_core::error::validation_error(
+            "majorDimension",
+            "majorDimension 必须为 ROWS 或 COLUMNS",
+        ));
+    }
+    if request.dimension.startIndex < 0 {
+        return Err(openlark_core::error::validation_error(
+            "startIndex",
+            "startIndex 必须 >= 0",
+        ));
+    }
+    if request.dimension.endIndex <= request.dimension.startIndex {
+        return Err(openlark_core::error::validation_error(
+            "endIndex",
+            "endIndex 必须 > startIndex",
+        ));
+    }
+    if request.dimension.endIndex - request.dimension.startIndex > 5000 {
+        return Err(openlark_core::error::validation_error(
+            "endIndex",
+            "单次操作不超过 5000 行或列",
+        ));
+    }
+    if let Some(inherit_style) = request.inheritStyle.as_deref() {
+        if !inherit_style.is_empty()
+            && inherit_style != "BEFORE"
+            && inherit_style != "AFTER"
+        {
+            return Err(openlark_core::error::validation_error(
+                "inheritStyle",
+                "inheritStyle 仅支持 BEFORE 或 AFTER（或不传/传空表示不继承）",
+            ));
+        }
+    }
+
     let api_endpoint = CcmSheetApiOld::InsertDimensionRange(spreadsheet_token);
     let mut api_request: ApiRequest<InsertDimensionRangeResponse> =
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&request, "插入行列")?);

@@ -2,7 +2,6 @@
 ///
 /// 根据 float_image_id 获取对应浮动图片的信息。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-float_image/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -43,4 +42,3 @@ pub async fn get_float_image(
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取浮动图片")
 }
-

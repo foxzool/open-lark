@@ -56,7 +56,7 @@ impl ApiResponseTrait for UpdateSpreadsheetResponse {
 /// 获取表格信息
 ///
 /// 根据 spreadsheetToken 获取表格的详细信息，包括工作表信息。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/get-spreadsheet
+/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/get-spreadsheet
 pub async fn get_spreadsheet(
     config: &Config,
     spreadsheet_token: &str,
@@ -80,7 +80,7 @@ pub async fn get_spreadsheet(
 /// 创建表格
 ///
 /// 创建新的电子表格，支持指定标题和文件夹位置。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/create-spreadsheet
+/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/create-spreadsheet
 pub async fn create_spreadsheet(
     config: &Config,
     params: CreateSpreadsheetParams,
@@ -103,7 +103,7 @@ pub async fn create_spreadsheet(
 /// 更新表格
 ///
 /// 根据 spreadsheetToken 更新表格的基本信息，如标题。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/update-spreadsheet
+/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/update-spreadsheet
 pub async fn update_spreadsheet(
     config: &Config,
     spreadsheet_token: &str,

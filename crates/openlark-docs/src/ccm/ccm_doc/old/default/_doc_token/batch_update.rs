@@ -1,12 +1,13 @@
 //! 编辑旧版文档内容
 //!
 //! docPath: /document/ukTMukTMukTM/uYDM2YjL2AjN24iNwYjN
-//! doc: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/batch-update-document
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uYDM2YjL2AjN24iNwYjN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -66,12 +67,14 @@ impl BatchUpdateDocRequestBuilder {
     }
 
     pub async fn send(self) -> SDKResult<BatchUpdateDocResponse> {
+        validate_required!(self.doc_token, "doc_token 不能为空");
         if self.req.revision < 0 {
             return Err(openlark_core::error::validation_error(
                 "revision",
                 "revision 必须 >= 0",
             ));
         }
+        validate_required!(self.req.requests, "Requests 不能为空");
 
         use crate::common::api_endpoints::CcmDocApiOld;
 

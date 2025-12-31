@@ -1,16 +1,15 @@
 //! 导入表格
 //!
 //! docPath: /document/ukTMukTMukTM/uATO2YjLwkjN24CM5YjN
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/sheets/sheet-operation/import-spreadsheet
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 use crate::common::api_utils::*;
 
@@ -19,18 +18,16 @@ use crate::common::api_endpoints::CcmSheetApiOld;
 pub mod result;
 pub use result::*;
 
-/// 导入表格请求体（multipart 的表单字段）
-///
-/// 注意：`openlark-core` 的 multipart 构建器会读取该 JSON 对象中的 `file_name` 字段，
-/// 并将二进制文件作为 `file` part 上传。
+/// 导入表格请求体
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ImportReq {
-    /// 文件名（必填）
-    pub file_name: String,
-
-    /// 其它字段：不同历史版本/场景下字段可能存在差异，允许透传扩展字段。
-    #[serde(flatten)]
-    pub extra: HashMap<String, serde_json::Value>,
+    /// 需要导入的文件数据（字节数组），支持 xlsx、csv，最大不超过 20MB
+    pub file: Vec<u8>,
+    /// 文件名（带拓展名），导入后 sheet 标题会去掉拓展名
+    pub name: String,
+    /// 导入的文件夹 token，不传默认导入到根目录
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folderToken: Option<String>,
 }
 
 /// 导入表格响应（返回导入 ticket，后续可用 `import/result` 查询导入结果）
@@ -45,58 +42,35 @@ impl ApiResponseTrait for ImportResp {
     }
 }
 
-/// 导入表格请求
-pub struct ImportRequest {
-    config: Config,
-    file: Vec<u8>,
-    req: ImportReq,
-}
-
-impl ImportRequest {
-    pub fn new(config: Config) -> Self {
-        Self {
-            config,
-            file: Vec::new(),
-            req: ImportReq::default(),
-        }
+/// 导入表格
+pub async fn import(
+    request: ImportReq,
+    config: &Config,
+    option: Option<openlark_core::req_option::RequestOption>,
+) -> SDKResult<ImportResp> {
+    validate_required!(request.name, "name 不能为空");
+    validate_required!(request.file, "file 不能为空");
+    let name_lower = request.name.to_ascii_lowercase();
+    if !(name_lower.ends_with(".xlsx") || name_lower.ends_with(".csv")) {
+        return Err(openlark_core::error::validation_error(
+            "name",
+            "仅支持 xlsx、csv 格式",
+        ));
+    }
+    if request.file.len() > 20 * 1024 * 1024 {
+        return Err(openlark_core::error::validation_error(
+            "file",
+            "file 最大不超过 20MB",
+        ));
     }
 
-    /// 上传文件内容（必填）
-    pub fn file(mut self, file: Vec<u8>) -> Self {
-        self.file = file;
-        self
+    let mut api_request: ApiRequest<ImportResp> =
+        ApiRequest::post(&CcmSheetApiOld::Import.to_url()).body(serialize_params(&request, "导入表格")?);
+
+    if let Some(opt) = option {
+        api_request = api_request.request_option(opt);
     }
 
-    /// 文件名（必填）
-    pub fn file_name(mut self, file_name: impl Into<String>) -> Self {
-        self.req.file_name = file_name.into();
-        self
-    }
-
-    /// 透传额外字段（不同历史版本可能存在差异）
-    pub fn field(mut self, key: impl Into<String>, value: impl Into<serde_json::Value>) -> Self {
-        self.req.extra.insert(key.into(), value.into());
-        self
-    }
-
-    pub async fn send(self) -> SDKResult<ImportResp> {
-        if self.req.file_name.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "file_name",
-                "file_name 不能为空",
-            ));
-        }
-        if self.file.is_empty() {
-            return Err(openlark_core::error::validation_error("file", "file 不能为空"));
-        }
-
-        // multipart: body 提供 file_name + 其它字段，file_content 提供真实文件 bytes
-        let api_request: ApiRequest<ImportResp> =
-            ApiRequest::post(&CcmSheetApiOld::Import.to_url())
-                .json_body(&self.req)
-                .file_content(self.file);
-
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "导入表格")
-    }
+    let response = Transport::request(api_request, config, None).await?;
+    extract_response_data(response, "导入表格")
 }

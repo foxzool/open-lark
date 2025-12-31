@@ -63,7 +63,7 @@ impl ApiResponseTrait for DeleteSheetResponse {
 /// 添加工作表
 ///
 /// 根据 spreadsheetToken 在电子表格中添加新的工作表。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet/add-sheet
+/// docPath: /document/server-docs/docs/sheets-v3/sheet/add-sheet
 pub async fn add_sheet(
     config: &Config,
     spreadsheet_token: &str,
@@ -88,7 +88,7 @@ pub async fn add_sheet(
 /// 获取工作表信息
 ///
 /// 根据 spreadsheetToken 和 sheet_id 获取工作表的详细信息。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet/get-sheet
+/// docPath: /document/server-docs/docs/sheets-v3/sheet/get-sheet
 pub async fn get_sheet(
     config: &Config,
     spreadsheet_token: &str,
@@ -113,7 +113,7 @@ pub async fn get_sheet(
 /// 更新工作表
 ///
 /// 根据 spreadsheetToken 和 sheet_id 更新工作表的基本信息，如标题或位置。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet/update-sheet
+/// docPath: /document/server-docs/docs/sheets-v3/sheet/update-sheet
 pub async fn update_sheet(
     config: &Config,
     spreadsheet_token: &str,
@@ -138,7 +138,7 @@ pub async fn update_sheet(
 /// 删除工作表
 ///
 /// 根据 spreadsheetToken 和 sheet_id 删除指定的工作表。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet/delete-sheet
+/// docPath: /document/server-docs/docs/sheets-v3/sheet/delete-sheet
 pub async fn delete_sheet(
     config: &Config,
     spreadsheet_token: &str,

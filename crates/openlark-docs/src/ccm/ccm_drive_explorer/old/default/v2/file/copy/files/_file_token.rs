@@ -1,7 +1,7 @@
 //! 复制文档/表格
 //!
 //! docPath: /document/ukTMukTMukTM/uYTNzUjL2UzM14iN1MTN
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/copy-a-doc-or-sheet
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uYTNzUjL2UzM14iN1MTN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

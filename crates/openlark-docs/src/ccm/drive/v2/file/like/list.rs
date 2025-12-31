@@ -9,7 +9,6 @@ use openlark_core::{
 ///
 /// 获取指定云文档的点赞者列表。
 /// docPath: /document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/file-like/list
-/// doc: https://open.feishu.cn/document/docs/drive-v1/like/list
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -98,9 +97,11 @@ impl ListFileLikesRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FileLike {
     /// 用户 ID（与 user_id_type 一致）
-    pub user_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
     /// 用户最后点赞时间（秒级时间戳）
-    pub last_liked_time: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_liked_time: Option<String>,
     /// 用户名字（用户信息被脱敏时不返回）
     pub user_name: Option<String>,
     /// 用户英文名字（用户信息被脱敏时不返回）
@@ -108,16 +109,18 @@ pub struct FileLike {
     /// 用户头像（用户信息被脱敏时不返回）
     pub user_avatar_url: Option<String>,
     /// 用户信息是否脱敏
-    #[serde(default)]
-    pub user_is_desensitized: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_is_desensitized: Option<bool>,
 }
 
 /// 获取点赞者列表响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListFileLikesResponse {
     /// 云文档的点赞者列表
+    #[serde(default)]
     pub items: Vec<FileLike>,
     /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否还有更多项
     pub has_more: bool,
@@ -151,18 +154,18 @@ mod tests {
     #[test]
     fn test_like_info_structure() {
         let like = FileLike {
-            user_id: "ou_xxx".to_string(),
-            last_liked_time: "1690857821".to_string(),
+            user_id: Some("ou_xxx".to_string()),
+            last_liked_time: Some("1690857821".to_string()),
             user_name: Some("张三".to_string()),
             user_en_name: Some("San Zhang".to_string()),
             user_avatar_url: Some("https://foo.icon.com/xxxx".to_string()),
-            user_is_desensitized: false,
+            user_is_desensitized: Some(false),
         };
 
-        assert_eq!(like.user_id, "ou_xxx");
-        assert_eq!(like.last_liked_time, "1690857821");
+        assert_eq!(like.user_id.as_deref(), Some("ou_xxx"));
+        assert_eq!(like.last_liked_time.as_deref(), Some("1690857821"));
         assert_eq!(like.user_name.as_deref(), Some("张三"));
-        assert!(!like.user_is_desensitized);
+        assert_eq!(like.user_is_desensitized, Some(false));
     }
 
     #[test]

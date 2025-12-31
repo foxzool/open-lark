@@ -2,7 +2,7 @@
 ///
 /// 根据搜索条件进行文档搜索。
 /// docPath: /document/ukTMukTMukTM/ugDM4UjL4ADO14COwgTN
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/ugDM4UjL4ADO14COwgTN
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -15,20 +15,27 @@ use crate::common::api_utils::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchObjectReq {
+    /// 指定搜索的关键字
     pub search_key: Option<String>,
+    /// 指定搜索返回的文件数量。取值范围为 [0,50]
     pub count: Option<i32>,
+    /// 指定搜索的偏移量，最小为 0，且 offset + count < 200
     pub offset: Option<i32>,
+    /// 文件所有者的 Open ID
     pub owner_ids: Option<Vec<String>>,
+    /// 文件所在群的 ID
     pub chat_ids: Option<Vec<String>>,
+    /// 文件类型（doc/sheet/slides/bitable/mindnote/file）
     pub docs_types: Option<Vec<String>>,
-    pub docs_sort_type: Option<String>,
-    pub is_folder: Option<bool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchObjectResponse {
-    pub docs_entities: Option<Vec<DocsEntity>>,
-    pub total: Option<i32>,
+    #[serde(default)]
+    pub docs_entities: Vec<DocsEntity>,
+    #[serde(default)]
+    pub total: i32,
+    #[serde(default)]
     pub has_more: bool,
 }
 
@@ -64,8 +71,6 @@ impl SearchObjectRequest {
                 owner_ids: None,
                 chat_ids: None,
                 docs_types: None,
-                docs_sort_type: None,
-                is_folder: None,
             },
         }
     }
@@ -100,18 +105,38 @@ impl SearchObjectRequest {
         self
     }
 
-    pub fn docs_sort_type(mut self, docs_sort_type: impl Into<String>) -> Self {
-        self.req.docs_sort_type = Some(docs_sort_type.into());
-        self
-    }
-
-    pub fn is_folder(mut self, is_folder: bool) -> Self {
-        self.req.is_folder = Some(is_folder);
-        self
-    }
-
     pub async fn send(self) -> SDKResult<SearchObjectResponse> {
         use crate::common::api_endpoints::CcmDocsApiOld;
+        if self.req.search_key.as_deref().unwrap_or_default().is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "search_key",
+                "search_key 不能为空",
+            ));
+        }
+        if let Some(count) = self.req.count {
+            if !(0..=50).contains(&count) {
+                return Err(openlark_core::error::validation_error(
+                    "count",
+                    "count 必须在 [0,50] 范围内",
+                ));
+            }
+        }
+        if let Some(offset) = self.req.offset {
+            if offset < 0 {
+                return Err(openlark_core::error::validation_error(
+                    "offset",
+                    "offset 必须 >= 0",
+                ));
+            }
+        }
+        if let (Some(offset), Some(count)) = (self.req.offset, self.req.count) {
+            if offset + count >= 200 {
+                return Err(openlark_core::error::validation_error(
+                    "offset",
+                    "要求 offset + count < 200",
+                ));
+            }
+        }
 
         let api_request: ApiRequest<SearchObjectResponse> =
             ApiRequest::post(&CcmDocsApiOld::SearchObject.to_url())

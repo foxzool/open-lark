@@ -50,7 +50,7 @@ use super::{
     space::node::{
         copy::CopyWikiSpaceNodeRequest, create::CreateWikiSpaceNodeRequest,
         list::ListWikiSpaceNodesRequest, move_docs_to_wiki::MoveDocsToWikiRequest,
-        move_node::MoveWikiSpaceNodeRequest, update_title::UpdateWikiSpaceNodeTitleRequest,
+        r#move::MoveWikiSpaceNodeRequest, update_title::UpdateWikiSpaceNodeTitleRequest,
     },
     space::{
         create::CreateWikiSpaceRequest, get::GetWikiSpaceRequest, list::ListWikiSpacesRequest,

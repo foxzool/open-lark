@@ -3,7 +3,7 @@
 //! 根据 folderToken 创建 Doc、 Sheet 或 Bitable。
 //!
 //! docPath: /document/ukTMukTMukTM/uQTNzUjL0UzM14CN1MTN
-//! doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uQTNzUjL0UzM14CN1MTN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

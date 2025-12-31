@@ -9,12 +9,12 @@ use crate::minutes::v1::minute::transcript::get::GetMinuteTranscriptRequest;
 use openlark_core::config::Config;
 
 #[derive(Debug, Clone)]
-pub struct MinutesService<'a> {
-    config: &'a Config,
+pub struct MinutesService {
+    config: Config,
 }
 
-impl<'a> MinutesService<'a> {
-    pub fn new(config: &'a Config) -> Self {
+impl MinutesService {
+    pub fn new(config: Config) -> Self {
         Self { config }
     }
 

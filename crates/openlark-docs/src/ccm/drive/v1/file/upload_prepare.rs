@@ -8,7 +8,6 @@ use openlark_core::{
 ///
 /// 发送初始化请求，以获取上传事务 ID 和分片策略，为上传分片做准备。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_prepare
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_prepare
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -25,7 +24,7 @@ pub struct UploadPrepareRequest {
     /// 云空间中文件夹的 token
     pub parent_node: String,
     /// 文件大小（字节）
-    pub size: i32,
+    pub size: i64,
 }
 
 impl UploadPrepareRequest {
@@ -33,7 +32,7 @@ impl UploadPrepareRequest {
         config: Config,
         file_name: impl Into<String>,
         parent_node: impl Into<String>,
-        size: i32,
+        size: i64,
     ) -> Self {
         Self {
             config,
@@ -51,11 +50,11 @@ impl UploadPrepareRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UploadPrepareResponse> {
-        let file_name_len = self.file_name.as_bytes().len();
+        let file_name_len = self.file_name.chars().count();
         if file_name_len == 0 || file_name_len > 250 {
             return Err(openlark_core::error::validation_error(
                 "file_name",
-                "file_name 长度必须在 1~250 字节之间",
+                "file_name 长度必须在 1~250 字符之间",
             ));
         }
         if self.parent_type != "explorer" {

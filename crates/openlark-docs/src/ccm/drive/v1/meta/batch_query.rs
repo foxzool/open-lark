@@ -8,7 +8,6 @@ use openlark_core::{
 ///
 /// 批量获取文件元数据信息。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/meta/batch_query
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/batch_query
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -73,7 +72,8 @@ pub struct Meta {
     /// 最后编辑时间。UNIX 时间戳，单位为秒
     pub latest_modify_time: String,
     /// 文档访问链接
-    pub url: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
     /// 文档密级标签名称（需对应权限才返回）
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sec_label_name: Option<String>,
@@ -131,6 +131,16 @@ pub async fn batch_query(
                 "doc_type 不能为空",
             ));
         }
+        match doc.doc_type.as_str() {
+            "doc" | "sheet" | "bitable" | "mindnote" | "file" | "wiki" | "docx" | "folder"
+            | "synced_block" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "request_docs.doc_type",
+                    "doc_type 仅支持 doc/sheet/bitable/mindnote/file/wiki/docx/folder/synced_block",
+                ));
+            }
+        }
     }
 
     let api_endpoint = DriveApi::BatchQueryMetas;
@@ -139,6 +149,15 @@ pub async fn batch_query(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&request, "获取文件元数据")?);
 
     if let Some(user_id_type) = &request.user_id_type {
+        match user_id_type.as_str() {
+            "open_id" | "union_id" | "user_id" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "user_id_type",
+                    "user_id_type 仅支持 open_id/union_id/user_id",
+                ));
+            }
+        }
         api_request = api_request.query("user_id_type", user_id_type);
     }
 

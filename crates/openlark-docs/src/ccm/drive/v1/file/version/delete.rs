@@ -9,7 +9,6 @@ use openlark_core::{
 ///
 /// 删除指定源文档的指定版本。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/delete
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-version/delete
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

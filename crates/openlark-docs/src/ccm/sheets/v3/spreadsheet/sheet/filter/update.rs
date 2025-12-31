@@ -2,7 +2,6 @@
 ///
 /// 更新子表筛选范围中的列筛选条件。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/update
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter/update
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -46,4 +45,3 @@ pub async fn update_filter(
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "更新筛选")
 }
-

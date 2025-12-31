@@ -2,7 +2,7 @@
 ///
 /// 根据space_id更新知识空间公共设置。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-setting/update
-/// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-setting/update
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-setting/update
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -51,7 +51,7 @@ impl UpdateWikiSpaceSettingRequest {
     /// 执行请求
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-setting/update
-    /// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-setting/update
+    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-setting/update
     pub async fn execute(
         self,
         setting: WikiSpaceSetting,

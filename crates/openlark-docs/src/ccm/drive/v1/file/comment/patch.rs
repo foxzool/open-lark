@@ -1,7 +1,6 @@
 /// 解决/恢复评论
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/patch
-/// doc: https://open.feishu.cn/document/server-docs/docs/CommentAPI/patch
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -89,6 +88,7 @@ pub async fn patch_comment(
             "file_type 不能为空",
         ));
     }
+    super::validate_comment_file_type_for_list_like(&request.file_type)?;
     let api_endpoint = DriveApi::PatchComment(request.file_token.clone(), request.comment_id.clone());
 
     let mut api_request: ApiRequest<PatchCommentResponse> =

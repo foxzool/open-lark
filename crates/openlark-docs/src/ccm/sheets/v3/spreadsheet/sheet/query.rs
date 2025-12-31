@@ -2,7 +2,6 @@
 ///
 /// 查询指定电子表格中的所有工作表信息。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/query
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/query
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -23,7 +22,6 @@ impl ApiResponseTrait for QuerySheetResponse {
 ///
 /// 查询指定电子表格中的所有工作表信息。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/query
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/query
 pub async fn query_sheets(
     config: &Config,
     spreadsheet_token: &str,

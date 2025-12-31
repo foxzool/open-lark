@@ -2,7 +2,7 @@
 ///
 /// 获取文档最新版本号、标题等。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/get
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -85,7 +85,7 @@ impl GetDocumentRequest {
     /// 执行请求
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/get
-    /// doc: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/get
+    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/get
     pub async fn execute(self) -> SDKResult<GetDocumentResponse> {
         validate_required!(self.document_id, "文档ID不能为空");
 
@@ -96,4 +96,3 @@ impl GetDocumentRequest {
         extract_response_data(response, "获取文档基本信息")
     }
 }
-

@@ -8,7 +8,6 @@ use openlark_core::{
 ///
 /// 使用该接口可以下载在云空间目录下的文件（不含飞书文档/电子表格/多维表格等在线文档）。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/download
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/download/download
 
 use crate::common::api_endpoints::DriveApi;
 
@@ -53,7 +52,40 @@ impl DownloadFileRequest {
         let mut request = ApiRequest::<Vec<u8>>::get(&api_endpoint.to_url());
 
         if let Some(r) = self.range {
-            request = request.header("Range", &r);
+            // 文档约束：Range 形如 bytes=start-end（start/end 均为非负整数，end 可省略）
+            let r = r.trim();
+            if !r.starts_with("bytes=") {
+                return Err(openlark_core::error::validation_error(
+                    "range",
+                    "Range 必须以 bytes= 开头，例如 bytes=0-1023",
+                ));
+            }
+            let range_spec = &r["bytes=".len()..];
+            let (start, end) = range_spec.split_once('-').ok_or_else(|| {
+                openlark_core::error::validation_error(
+                    "range",
+                    "Range 格式错误，应为 bytes=start-end，例如 bytes=0-1023",
+                )
+            })?;
+            if start.trim().is_empty() {
+                return Err(openlark_core::error::validation_error(
+                    "range",
+                    "Range start 不能为空，例如 bytes=0-1023",
+                ));
+            }
+            if start.trim().parse::<u64>().is_err() {
+                return Err(openlark_core::error::validation_error(
+                    "range",
+                    "Range start 必须为非负整数",
+                ));
+            }
+            if !end.trim().is_empty() && end.trim().parse::<u64>().is_err() {
+                return Err(openlark_core::error::validation_error(
+                    "range",
+                    "Range end 必须为非负整数或为空（例如 bytes=0-）",
+                ));
+            }
+            request = request.header("Range", r);
         }
 
         Transport::request(request, &self.config, None).await

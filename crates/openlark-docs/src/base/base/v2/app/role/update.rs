@@ -1,7 +1,7 @@
 //! 更新自定义角色
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/update
-//! doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/update-2
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/update
 
 use crate::base::base::v2::models::AppRole;
 use openlark_core::{
@@ -28,7 +28,8 @@ pub struct UpdateReq {
     /// 自定义角色的名字
     pub role_name: String,
     /// 数据表权限配置列表（结构按 JSON 透传）
-    pub table_roles: Vec<serde_json::Value>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_roles: Option<Vec<serde_json::Value>>,
     /// Block 权限配置列表（结构按 JSON 透传）
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_roles: Option<Vec<serde_json::Value>>,
@@ -40,7 +41,8 @@ pub struct UpdateReq {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UpdateResp {
     /// 自定义角色
-    pub role: AppRole,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<AppRole>,
 }
 
 impl Update {
@@ -51,7 +53,7 @@ impl Update {
             role_id: String::new(),
             req: UpdateReq {
                 role_name: String::new(),
-                table_roles: Vec::new(),
+                table_roles: None,
                 block_roles: None,
                 base_rule: None,
             },
@@ -78,7 +80,7 @@ impl Update {
 
     /// 数据表权限配置列表（table_roles）
     pub fn table_roles(mut self, table_roles: Vec<serde_json::Value>) -> Self {
-        self.req.table_roles = table_roles;
+        self.req.table_roles = Some(table_roles);
         self
     }
 
@@ -98,6 +100,20 @@ impl Update {
         validate_required!(self.app_token, "app_token 不能为空");
         validate_required!(self.role_id, "role_id 不能为空");
         validate_required!(self.req.role_name, "role_name 不能为空");
+        if self.req.role_name.chars().count() > 100 {
+            return Err(openlark_core::error::validation_error(
+                "role_name",
+                "role_name 长度不能超过 100 字符",
+            ));
+        }
+        if let Some(table_roles) = &self.req.table_roles {
+            if table_roles.len() > 100 {
+                return Err(openlark_core::error::validation_error(
+                    "table_roles",
+                    "table_roles 长度不能超过 100",
+                ));
+            }
+        }
 
         use crate::common::api_endpoints::BaseApiV2;
         let api_endpoint = BaseApiV2::RoleUpdate(self.app_token, self.role_id);

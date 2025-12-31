@@ -61,7 +61,7 @@ impl ApiResponseTrait for DeleteFileResponse {
 /// 获取我的空间（根文件夹）元数据
 ///
 /// 获取 "我的空间" 的元信息。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta
+/// docPath: /document/server-docs/docs/drive-v1/folder/get-root-folder-meta
 pub async fn get_root_folder_meta(
     config: &Config,
 ) -> SDKResult<FolderMetaResponse> {
@@ -80,7 +80,7 @@ pub async fn get_root_folder_meta(
 /// 获取文件夹元数据
 ///
 /// 根据 folderToken 获取该文件夹的元信息。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta
+/// docPath: /document/server-docs/docs/drive-v1/folder/get-folder-meta
 pub async fn get_folder_meta(
     config: &Config,
     folder_token: &str,
@@ -103,7 +103,7 @@ pub async fn get_folder_meta(
 /// 新建文件
 ///
 /// 根据 folderToken 创建 Doc、Sheet 或 Bitable。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-online-document
+/// docPath: /document/server-docs/docs/drive-v1/file/create-online-document
 pub async fn create_file(
     config: &Config,
     folder_token: &str,
@@ -130,7 +130,7 @@ pub async fn create_file(
 /// 复制文档
 ///
 /// 根据文件 token 复制 Doc 或 Sheet 到目标文件夹中。
-/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/copy-a-doc-or-sheet
+/// docPath: /document/server-docs/historic-version/docs/drive/file/copy-a-doc-or-sheet
 pub async fn copy_file(
     config: &Config,
     file_token: &str,
@@ -156,7 +156,7 @@ pub async fn copy_file(
 /// 删除Doc
 ///
 /// 根据 docToken 删除对应的 Docs 文档。
-/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-a-doc
+/// docPath: /document/server-docs/historic-version/docs/drive/file/delete-a-doc
 pub async fn delete_doc(
     config: &Config,
     doc_token: &str,
@@ -179,7 +179,7 @@ pub async fn delete_doc(
 /// 删除Sheet
 ///
 /// 根据 spreadsheetToken 删除对应的 sheet 文档。
-/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/file/delete-sheet
+/// docPath: /document/server-docs/historic-version/docs/drive/file/delete-sheet
 pub async fn delete_sheet(
     config: &Config,
     spreadsheet_token: &str,
@@ -202,7 +202,7 @@ pub async fn delete_sheet(
 /// 获取文件夹下的文档清单
 ///
 /// 根据 folderToken 获取该文件夹的文档清单，如 doc、sheet、file、bitable、folder。
-/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/get-folder-children
+/// docPath: /document/server-docs/historic-version/docs/drive/folder/get-folder-children
 pub async fn get_folder_children(
     config: &Config,
     folder_token: &str,
@@ -230,7 +230,7 @@ pub async fn get_folder_children(
 /// 新建文件夹
 ///
 /// 根据 folderToken 在该 folder 下创建文件夹。
-/// docPath: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
+/// docPath: /document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
 pub async fn create_folder(
     config: &Config,
     folder_token: &str,

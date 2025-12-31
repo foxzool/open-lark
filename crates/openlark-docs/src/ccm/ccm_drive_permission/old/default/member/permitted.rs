@@ -1,7 +1,7 @@
 //! 判断协作者是否有某权限
 //!
 //! docPath: /document/ukTMukTMukTM/uYzN3UjL2czN14iN3cTN
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/querying-if-a-collaborator-has-a-specific-permission
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uYzN3UjL2czN14iN3cTN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

@@ -8,7 +8,6 @@ use openlark_core::{
 ///
 /// 根据预上传接口返回的 upload_id 和分片策略上传对应的文件分片。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_part
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_part
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -57,6 +56,12 @@ impl UploadPartRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UploadPartResponse> {
+        if self.upload_id.trim().is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "upload_id",
+                "upload_id 不能为空",
+            ));
+        }
         if self.seq < 0 {
             return Err(openlark_core::error::validation_error(
                 "seq",
@@ -69,6 +74,13 @@ impl UploadPartRequest {
                 "size 必须为正整数",
             ));
         }
+        // 平台固定以 4MB 大小进行分片（最后一片可小于 4MB）
+        if self.size > 4 * 1024 * 1024 {
+            return Err(openlark_core::error::validation_error(
+                "size",
+                "size 不能超过 4194304 字节(4MB)",
+            ));
+        }
         if self.file.len() != self.size as usize {
             return Err(openlark_core::error::validation_error(
                 "size",
@@ -78,11 +90,8 @@ impl UploadPartRequest {
 
         let api_endpoint = DriveApi::UploadPart;
 
-        // openlark-core 的 MultipartBuilder 需要从 json_body 中读取 file_name 来设置 multipart 的 file part filename，
-        // 该字段不会作为普通表单字段发送（MultipartBuilder 会跳过 file_name），因此不影响接口文档参数要求。
         #[derive(Serialize)]
         struct PartMeta {
-            file_name: String,
             upload_id: String,
             seq: i32,
             size: i32,
@@ -91,7 +100,6 @@ impl UploadPartRequest {
         }
 
         let meta = PartMeta {
-            file_name: format!("part-{}.bin", self.seq),
             upload_id: self.upload_id,
             seq: self.seq,
             size: self.size,

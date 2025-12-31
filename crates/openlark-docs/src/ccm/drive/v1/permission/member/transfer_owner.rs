@@ -8,22 +8,31 @@ use openlark_core::{
 ///
 /// 将文件或文件夹的所有者转移给其他用户
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/transfer_owner
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/transfer_owner
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 转移所有者请求
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct TransferOwnerRequest {
-    #[serde(skip)]
     config: Config,
     /// 文件token
     pub token: String,
-    /// 新所有者的用户ID
-    pub to_user_id: String,
-    /// 新所有者的用户类型
-    pub to_user_type: String,
+    /// 云文档类型（query 参数 `type`，需要与 token 匹配）
+    pub file_type: String,
+    /// 是否发送通知（query 参数 `need_notification`，默认 true）
+    pub need_notification: Option<bool>,
+    /// 是否移除旧所有者（query 参数 `remove_old_owner`，默认 false）
+    pub remove_old_owner: Option<bool>,
+    /// 旧所有者是否保留原位（query 参数 `stay_put`，默认 false）
+    pub stay_put: Option<bool>,
+    /// 旧所有者权限（query 参数 `old_owner_perm`，默认 full_access）
+    pub old_owner_perm: Option<String>,
+
+    /// 新所有者 ID 类型（request body 参数 `member_type`）
+    pub member_type: String,
+    /// 新所有者 ID（request body 参数 `member_id`）
+    pub member_id: String,
 }
 
 impl TransferOwnerRequest {
@@ -32,55 +41,136 @@ impl TransferOwnerRequest {
     /// # 参数
     /// * `config` - 配置
     /// * `token` - 文件token
-    /// * `to_user_id` - 新所有者的用户ID
-    /// * `to_user_type` - 新所有者的用户类型
+    /// * `file_type` - 云文档类型（query 参数 `type`）
+    /// * `member_type` - 新所有者 ID 类型（request body 参数 `member_type`）
+    /// * `member_id` - 新所有者 ID（request body 参数 `member_id`）
     pub fn new(
         config: Config,
         token: impl Into<String>,
-        to_user_id: impl Into<String>,
-        to_user_type: impl Into<String>,
+        file_type: impl Into<String>,
+        member_type: impl Into<String>,
+        member_id: impl Into<String>,
     ) -> Self {
         Self {
             config,
             token: token.into(),
-            to_user_id: to_user_id.into(),
-            to_user_type: to_user_type.into(),
+            file_type: file_type.into(),
+            need_notification: None,
+            remove_old_owner: None,
+            stay_put: None,
+            old_owner_perm: None,
+            member_type: member_type.into(),
+            member_id: member_id.into(),
         }
+    }
+
+    /// 设置是否发送通知（默认 true）
+    pub fn need_notification(mut self, need_notification: bool) -> Self {
+        self.need_notification = Some(need_notification);
+        self
+    }
+
+    /// 设置是否移除旧所有者（默认 false）
+    pub fn remove_old_owner(mut self, remove_old_owner: bool) -> Self {
+        self.remove_old_owner = Some(remove_old_owner);
+        self
+    }
+
+    /// 设置旧所有者是否保留原位（默认 false）
+    pub fn stay_put(mut self, stay_put: bool) -> Self {
+        self.stay_put = Some(stay_put);
+        self
+    }
+
+    /// 设置旧所有者权限（默认 full_access）
+    pub fn old_owner_perm(mut self, old_owner_perm: impl Into<String>) -> Self {
+        self.old_owner_perm = Some(old_owner_perm.into());
+        self
     }
 
     pub async fn execute(self) -> SDKResult<TransferOwnerResponse> {
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error("token", "token 不能为空"));
         }
-        if self.to_user_id.is_empty() {
+        if self.file_type.is_empty() {
             return Err(openlark_core::error::validation_error(
-                "to_user_id",
-                "to_user_id 不能为空",
+                "file_type",
+                "file_type 不能为空",
             ));
         }
-        if self.to_user_type.is_empty() {
+        match self.file_type.as_str() {
+            "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "folder" | "mindnote"
+            | "minutes" | "slides" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "file_type",
+                    "file_type 必须为 doc/sheet/file/wiki/bitable/docx/folder/mindnote/minutes/slides",
+                ));
+            }
+        }
+        if self.member_type.is_empty() {
             return Err(openlark_core::error::validation_error(
-                "to_user_type",
-                "to_user_type 不能为空",
+                "member_type",
+                "member_type 不能为空",
             ));
+        }
+        match self.member_type.as_str() {
+            "email" | "openid" | "userid" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "member_type",
+                    "member_type 必须为 email/openid/userid",
+                ));
+            }
+        }
+        if self.member_id.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "member_id",
+                "member_id 不能为空",
+            ));
+        }
+        if let Some(old_owner_perm) = &self.old_owner_perm {
+            match old_owner_perm.as_str() {
+                "view" | "edit" | "full_access" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "old_owner_perm",
+                        "old_owner_perm 必须为 view/edit/full_access",
+                    ));
+                }
+            }
         }
 
         let api_endpoint = DriveApi::TransferOwner(self.token.clone());
 
         #[derive(Serialize)]
         struct TransferOwnerBody {
-            to_user_id: String,
-            to_user_type: String,
+            member_type: String,
+            member_id: String,
         }
 
-        let api_request: ApiRequest<TransferOwnerResponse> =
-            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(
-                &TransferOwnerBody {
-                    to_user_id: self.to_user_id,
-                    to_user_type: self.to_user_type,
-                },
-                "转移云文档所有者",
-            )?);
+        let body = TransferOwnerBody {
+            member_type: self.member_type,
+            member_id: self.member_id,
+        };
+
+        let mut api_request: ApiRequest<TransferOwnerResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).query("type", &self.file_type);
+
+        if let Some(need_notification) = self.need_notification {
+            api_request = api_request.query("need_notification", need_notification.to_string());
+        }
+        if let Some(remove_old_owner) = self.remove_old_owner {
+            api_request = api_request.query("remove_old_owner", remove_old_owner.to_string());
+        }
+        if let Some(stay_put) = self.stay_put {
+            api_request = api_request.query("stay_put", stay_put.to_string());
+        }
+        if let Some(old_owner_perm) = &self.old_owner_perm {
+            api_request = api_request.query("old_owner_perm", old_owner_perm);
+        }
+
+        api_request = api_request.body(serialize_params(&body, "转移云文档所有者")?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "转移云文档所有者")
@@ -88,17 +178,8 @@ impl TransferOwnerRequest {
 }
 
 /// 转移所有者响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TransferOwnerResponse {
-    /// 文件token
-    pub token: String,
-    /// 旧所有者
-    pub from_user_id: String,
-    /// 新所有者
-    pub to_user_id: String,
-    /// 转移时间
-    pub transfer_time: i64,
-}
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct TransferOwnerResponse {}
 
 impl ApiResponseTrait for TransferOwnerResponse {
     fn data_format() -> ResponseFormat {
@@ -113,25 +194,16 @@ mod tests {
     #[test]
     fn test_transfer_owner_request_builder() {
         let config = Config::default();
-        let request = TransferOwnerRequest::new(config, "file_token", "new_user_id", "user");
+        let request = TransferOwnerRequest::new(config, "file_token", "docx", "openid", "ou_xxx")
+            .need_notification(true)
+            .remove_old_owner(false)
+            .stay_put(false)
+            .old_owner_perm("full_access");
 
         assert_eq!(request.token, "file_token");
-        assert_eq!(request.to_user_id, "new_user_id");
-        assert_eq!(request.to_user_type, "user");
-    }
-
-    #[test]
-    fn test_transfer_result_structure() {
-        let transfer_result = TransferOwnerResponse {
-            token: "file_token".to_string(),
-            from_user_id: "old_user_id".to_string(),
-            to_user_id: "new_user_id".to_string(),
-            transfer_time: 1640995200,
-        };
-
-        assert_eq!(transfer_result.token, "file_token");
-        assert_eq!(transfer_result.from_user_id, "old_user_id");
-        assert_eq!(transfer_result.to_user_id, "new_user_id");
+        assert_eq!(request.file_type, "docx");
+        assert_eq!(request.member_type, "openid");
+        assert_eq!(request.member_id, "ou_xxx");
     }
 
     #[test]

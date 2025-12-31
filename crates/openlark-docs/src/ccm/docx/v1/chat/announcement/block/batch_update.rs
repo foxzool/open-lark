@@ -2,7 +2,7 @@
 ///
 /// 批量更新群公告块的富文本内容。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/batch_update
-/// doc: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/batch_update
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/batch_update
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -77,4 +77,3 @@ impl BatchUpdateChatAnnouncementBlocksRequest {
         extract_response_data(response, "批量更新群公告块的内容")
     }
 }
-

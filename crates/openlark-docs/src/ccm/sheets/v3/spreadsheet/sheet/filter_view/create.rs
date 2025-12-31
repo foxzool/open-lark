@@ -2,7 +2,6 @@
 ///
 /// 根据传入的参数创建一个筛选视图。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view/create
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter_view/create
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -54,4 +53,3 @@ pub async fn create_filter_view(
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "创建筛选视图")
 }
-

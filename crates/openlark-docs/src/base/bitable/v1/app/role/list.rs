@@ -1,7 +1,7 @@
 /// Bitable 列出自定义角色
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-role/list
-/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/advanced-permission/app-role/list
+/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-role/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

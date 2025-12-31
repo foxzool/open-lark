@@ -85,7 +85,7 @@ impl ApiResponseTrait for ValuesImageResponse {
 /// 读取单个范围
 ///
 /// 根据 spreadsheetToken 和 range 读取表格单个范围的值，返回数据限制为10M。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
 pub async fn read_single_range(
     config: &Config,
     spreadsheet_token: &str,
@@ -112,7 +112,7 @@ pub async fn read_single_range(
 /// 读取多个范围
 ///
 /// 根据 spreadsheetToken 和 ranges 读取表格多个范围的值，返回数据限制为10M。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-multiple-ranges
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/reading-multiple-ranges
 pub async fn read_multiple_ranges(
     config: &Config,
     spreadsheet_token: &str,
@@ -146,7 +146,7 @@ pub async fn read_multiple_ranges(
 /// 写入单个范围
 ///
 /// 根据 spreadsheetToken 和 range 向单个范围写入数据，若范围内有数据，将被更新覆盖。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-data-to-a-single-range
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/write-data-to-a-single-range
 pub async fn write_single_range(
     config: &Config,
     spreadsheet_token: &str,
@@ -171,7 +171,7 @@ pub async fn write_single_range(
 /// 批量写入多个范围
 ///
 /// 根据 spreadsheetToken 和 range 向多个范围写入数据，若范围内有数据，将被更新覆盖。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-data-to-multiple-ranges
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/write-data-to-multiple-ranges
 pub async fn batch_write_ranges(
     config: &Config,
     spreadsheet_token: &str,
@@ -202,7 +202,7 @@ pub async fn batch_write_ranges(
 /// 追加数据
 ///
 /// 根据 spreadsheetToken 和 range 遇到空行则进行覆盖追加或新增行追加数据。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/append-data
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/append-data
 pub async fn append_values(
     config: &Config,
     spreadsheet_token: &str,
@@ -227,7 +227,7 @@ pub async fn append_values(
 /// 插入数据
 ///
 /// 根据 spreadsheetToken 和 range 向范围之前增加相应数据的行和相应的数据，相当于数组的插入操作。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/prepend-data
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/prepend-data
 pub async fn insert_values(
     config: &Config,
     spreadsheet_token: &str,
@@ -252,7 +252,7 @@ pub async fn insert_values(
 /// 写入图片
 ///
 /// 根据 spreadsheetToken 和 range 向指定范围写入图片，支持批量写入图片数据。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/writing-images-to-a-range
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/writing-images-to-a-range
 pub async fn values_image(
     config: &Config,
     spreadsheet_token: &str,

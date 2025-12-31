@@ -13,6 +13,7 @@ pub mod values_prepend;
 
 pub use insert_dimension_range::*;
 pub use merge_cells::*;
+pub use protected_dimension::*;
 pub use sheets_batch_update::*;
 pub use style::*;
 pub use styles_batch_update::*;

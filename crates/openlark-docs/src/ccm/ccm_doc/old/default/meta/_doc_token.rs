@@ -1,12 +1,13 @@
 //! 获取旧版文档元信息
 //!
 //! docPath: /document/ukTMukTMukTM/uczN3UjL3czN14yN3cTN
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-document-meta
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uczN3UjL3czN14yN3cTN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -90,6 +91,7 @@ impl GetDocMetaRequest {
 
     pub async fn send(self) -> SDKResult<GetDocMetaResponse> {
         use crate::common::api_endpoints::CcmDocApiOld;
+        validate_required!(self.doc_token, "doc_token 不能为空");
 
         let api_request: ApiRequest<GetDocMetaResponse> =
             ApiRequest::get(&CcmDocApiOld::Meta(self.doc_token).to_url());

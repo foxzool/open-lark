@@ -2,7 +2,6 @@
 ///
 /// 移动工作表中的行或列。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/move_dimension
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/move_dimension
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -23,7 +22,6 @@ impl ApiResponseTrait for MoveDimensionResponse {
 ///
 /// 移动工作表中的行或列。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/move_dimension
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/move_dimension
 pub async fn move_dimension(
     config: &Config,
     spreadsheet_token: &str,

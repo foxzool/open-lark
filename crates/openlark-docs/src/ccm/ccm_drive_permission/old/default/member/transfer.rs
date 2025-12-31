@@ -1,7 +1,7 @@
 //! 转移拥有者
 //!
 //! docPath: /document/ukTMukTMukTM/uQzNzUjL0czM14CN3MTN
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/permission/transfer-ownership
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uQzNzUjL0czM14CN3MTN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

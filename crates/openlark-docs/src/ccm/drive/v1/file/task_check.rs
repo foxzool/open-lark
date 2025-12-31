@@ -2,7 +2,6 @@
 ///
 /// 查询异步任务状态，用于获取长时间运行任务的执行结果。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/task_check
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/async-task/task_check
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -83,7 +82,7 @@ mod tests {
             status: "success".to_string(),
         };
 
-        assert_eq!(data.status, "success");
+        assert_eq!(data.status, "success".to_string());
     }
 
     #[test]

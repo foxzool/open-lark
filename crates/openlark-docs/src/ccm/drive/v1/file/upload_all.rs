@@ -8,7 +8,6 @@ use openlark_core::{
 ///
 /// 上传指定文件到指定目录中，支持单次上传文件。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_all
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/upload_all
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -72,11 +71,11 @@ impl UploadAllRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UploadAllResponse> {
-        let file_name_len = self.file_name.as_bytes().len();
+        let file_name_len = self.file_name.chars().count();
         if file_name_len == 0 || file_name_len > 250 {
             return Err(openlark_core::error::validation_error(
                 "file_name",
-                "file_name 长度必须在 1~250 字节之间",
+                "file_name 长度必须在 1~250 字符之间",
             ));
         }
         if self.parent_type != "explorer" {

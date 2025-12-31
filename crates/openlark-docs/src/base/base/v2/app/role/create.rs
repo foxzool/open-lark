@@ -1,7 +1,7 @@
 //! 新增自定义角色
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/create
-//! doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/create-2
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/create
 
 use crate::base::base::v2::models::AppRole;
 use openlark_core::{
@@ -39,7 +39,8 @@ pub struct CreateReq {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreateResp {
     /// 自定义角色
-    pub role: AppRole,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<AppRole>,
 }
 
 impl Create {
@@ -89,6 +90,24 @@ impl Create {
     pub async fn send(self) -> SDKResult<CreateResp> {
         validate_required!(self.app_token, "app_token 不能为空");
         validate_required!(self.req.role_name, "role_name 不能为空");
+        if self.req.role_name.chars().count() > 100 {
+            return Err(openlark_core::error::validation_error(
+                "role_name",
+                "role_name 长度不能超过 100 字符",
+            ));
+        }
+        if self.req.table_roles.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "table_roles",
+                "table_roles 不能为空",
+            ));
+        }
+        if self.req.table_roles.len() > 100 {
+            return Err(openlark_core::error::validation_error(
+                "table_roles",
+                "table_roles 长度不能超过 100",
+            ));
+        }
 
         // 使用类型安全的端点枚举生成路径
         use crate::common::api_endpoints::BaseApiV2;

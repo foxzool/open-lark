@@ -1,7 +1,7 @@
 //! 根据 folderToken 在该 folder 下创建文件夹。
 //!
 //! docPath: /document/ukTMukTMukTM/ukTNzUjL5UzM14SO1MTN
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/create-a-new-folder
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/ukTNzUjL5UzM14SO1MTN
 
 pub mod children;
 pub mod meta;

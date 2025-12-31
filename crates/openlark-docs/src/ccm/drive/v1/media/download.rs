@@ -9,7 +9,6 @@ use openlark_core::{
 ///
 /// 下载各种类型文档中的素材（如电子表格图片、附件等），支持通过 Range 分片下载。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/download
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/download
 use crate::common::api_endpoints::DriveApi;
 
 /// 下载素材请求
@@ -52,6 +51,14 @@ impl DownloadMediaRequest {
                 "file_token 不能为空",
             ));
         }
+        if let Some(range) = &self.range {
+            if !range.starts_with("bytes=") || !range.contains('-') {
+                return Err(openlark_core::error::validation_error(
+                    "range",
+                    "range 格式必须为 bytes=start-end（例如 bytes=0-1024）",
+                ));
+            }
+        }
 
         let api_endpoint = DriveApi::DownloadMedia(self.file_token.clone());
         let mut request = ApiRequest::<Vec<u8>>::get(&api_endpoint.to_url()).query_opt(
@@ -83,4 +90,3 @@ mod tests {
         assert_eq!(request.range, Some("bytes=0-100".to_string()));
     }
 }
-

@@ -63,7 +63,7 @@ impl ApiResponseTrait for DeleteFilterResponse {
 /// 创建筛选
 ///
 /// 根据 spreadsheetToken 和 range 在指定范围创建筛选。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/filter/create-filter
+/// docPath: /document/server-docs/docs/sheets-v3/filter/create-filter
 pub async fn create_filter(
     config: &Config,
     spreadsheet_token: &str,
@@ -88,7 +88,7 @@ pub async fn create_filter(
 /// 获取筛选
 ///
 /// 根据 spreadsheetToken 和 filter_id 获取筛选信息。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/filter/get-filter
+/// docPath: /document/server-docs/docs/sheets-v3/filter/get-filter
 pub async fn get_filter(
     config: &Config,
     spreadsheet_token: &str,
@@ -113,7 +113,7 @@ pub async fn get_filter(
 /// 更新筛选
 ///
 /// 根据 spreadsheetToken 和 filter_id 更新筛选条件。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/filter/update-filter
+/// docPath: /document/server-docs/docs/sheets-v3/filter/update-filter
 pub async fn update_filter(
     config: &Config,
     spreadsheet_token: &str,
@@ -138,7 +138,7 @@ pub async fn update_filter(
 /// 删除筛选
 ///
 /// 根据 spreadsheetToken 和 filter_id 删除筛选。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/filter/delete-filter
+/// docPath: /document/server-docs/docs/sheets-v3/filter/delete-filter
 pub async fn delete_filter(
     config: &Config,
     spreadsheet_token: &str,

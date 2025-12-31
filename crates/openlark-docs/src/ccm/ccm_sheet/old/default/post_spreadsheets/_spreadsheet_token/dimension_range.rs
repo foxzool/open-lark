@@ -1,12 +1,12 @@
 //! 增加行列
 //!
 //! docPath: /document/ukTMukTMukTM/uUjMzUjL1IzM14SNyMTN
-//! doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/add-rows-or-columns
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -46,6 +46,22 @@ pub async fn dimension_range(
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<AddDimensionRangeResponse> {
+    validate_required!(spreadsheet_token, "spreadsheet_token 不能为空");
+    validate_required!(request.dimension.sheetId, "sheetId 不能为空");
+    validate_required!(request.dimension.majorDimension, "majorDimension 不能为空");
+    if request.dimension.majorDimension != "ROWS" && request.dimension.majorDimension != "COLUMNS" {
+        return Err(openlark_core::error::validation_error(
+            "majorDimension",
+            "majorDimension 必须为 ROWS 或 COLUMNS",
+        ));
+    }
+    if request.dimension.length <= 0 || request.dimension.length > 5000 {
+        return Err(openlark_core::error::validation_error(
+            "length",
+            "length 取值范围为 (0,5000]",
+        ));
+    }
+
     let api_endpoint = CcmSheetApiOld::DimensionRange(spreadsheet_token);
     let mut api_request: ApiRequest<AddDimensionRangeResponse> =
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&request, "增加行列")?);

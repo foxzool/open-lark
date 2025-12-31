@@ -7,7 +7,6 @@ use openlark_core::{
 /// 获取云文档所有评论
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/list
-/// doc: https://open.feishu.cn/document/server-docs/docs/CommentAPI/list
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -80,6 +79,7 @@ impl ListCommentsRequest {
 /// 获取评论列表响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListCommentsResponse {
+    #[serde(default)]
     pub has_more: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -111,6 +111,7 @@ pub async fn list_comments(
             "file_type 不能为空",
         ));
     }
+    super::validate_comment_file_type_for_list_like(&request.file_type)?;
     let api_endpoint = DriveApi::ListFileComments(request.file_token.clone());
 
     let mut api_request: ApiRequest<ListCommentsResponse> = ApiRequest::get(&api_endpoint.to_url());

@@ -2,7 +2,7 @@
 ///
 /// 此接口用于根据知识空间ID来查询知识空间的信息。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/get
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -51,7 +51,7 @@ impl GetWikiSpaceRequest {
     /// 执行请求
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get
-    /// doc: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/get
+    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get
     pub async fn execute(self) -> SDKResult<GetWikiSpaceResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
