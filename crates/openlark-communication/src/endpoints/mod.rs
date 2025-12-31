@@ -207,6 +207,9 @@ pub const CONTACT_V3_DEPARTMENTS_SEARCH: &str = "/open-apis/contact/v3/departmen
 pub const CONTACT_V3_DEPARTMENTS_UNBIND_DEPARTMENT_CHAT: &str =
     "/open-apis/contact/v3/departments/unbind_department_chat";
 
+/// Contact 角色（functional role）v3
+pub const CONTACT_V3_FUNCTIONAL_ROLES: &str = "/open-apis/contact/v3/functional_roles";
+
 /// Contact 用户 v3
 pub const CONTACT_V3_USERS: &str = "/open-apis/contact/v3/users";
 pub const CONTACT_V3_USER: &str = "/open-apis/contact/v3/users/{}";
