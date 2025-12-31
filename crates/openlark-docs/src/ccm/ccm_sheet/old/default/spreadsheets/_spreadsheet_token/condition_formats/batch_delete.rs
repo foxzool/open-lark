@@ -1,6 +1,6 @@
 //! 批量删除条件格式
 //!
-//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/conditionformat/condition-format-delete
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-delete
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

@@ -1,6 +1,6 @@
 //! 合并单元格
 //!
-//! docPath: /document/ukTMukTMukTM/ukDNzUjL5QzM14SO0MTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/merge-cells
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

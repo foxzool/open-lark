@@ -1,6 +1,6 @@
 //! 更新下拉列表设置
 //!
-//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/datavalidation/update-datavalidation
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/update-datavalidation
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

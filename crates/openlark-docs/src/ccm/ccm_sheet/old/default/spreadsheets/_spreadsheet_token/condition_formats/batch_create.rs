@@ -1,6 +1,6 @@
 //! 批量创建条件格式
 //!
-//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/conditionformat/condition-format-set
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-set
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

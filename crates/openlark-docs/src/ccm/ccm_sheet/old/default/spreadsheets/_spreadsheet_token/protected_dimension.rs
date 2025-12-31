@@ -1,6 +1,6 @@
 //! 增加保护范围
 //!
-//! docPath: /document/ukTMukTMukTM/ugDNzUjL4QzM14CO0MTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/add-locked-cells
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

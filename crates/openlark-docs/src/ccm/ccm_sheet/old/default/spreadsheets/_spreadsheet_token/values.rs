@@ -1,6 +1,6 @@
 //! 向单个范围写入数据
 //!
-//! docPath: /document/ukTMukTMukTM/uAjMzUjLwIzM14CMyMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-data-to-a-single-range
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
