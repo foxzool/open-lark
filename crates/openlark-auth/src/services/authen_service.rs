@@ -18,22 +18,21 @@ use openlark_core::config::Config;
 /// use openlark_auth::AuthenService;
 /// use openlark_core::config::Config;
 ///
-/// #[tokio::main]
-/// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let config = Config::from_env()?;
-///     let authen_service = AuthenService::new(config);
+/// let config = Config::builder()
+///     .app_id("your_app_id")
+///     .app_secret("your_app_secret")
+///     .base_url("https://open.feishu.cn")
+///     .build();
+/// let authen_service = AuthenService::new(config);
 ///
-///     // 获取用户信息
-///     let user_info = authen_service.v1()
-///         .user_info()
-///         .get()
-///         .user_access_token("user_access_token")
-///         .send()
-///         .await?;
+/// // 构建「获取用户信息」请求（这里只演示构建，不发送网络请求）
+/// let _builder = authen_service
+///     .v1()
+///     .user_info()
+///     .get()
+///     .user_access_token("user_access_token");
 ///
-///     println!("用户信息: {:?}", user_info);
-///     Ok(())
-/// }
+/// // 真正发送请求需要配合 `openlark_core::http::Transport` 进行请求执行。
 /// ```
 #[derive(Debug, Clone)]
 pub struct AuthenService {
@@ -53,7 +52,7 @@ impl AuthenService {
     /// use openlark_auth::AuthenService;
     /// use openlark_core::config::Config;
     ///
-    /// let config = Config::from_env()?;
+    /// let config = Config::default();
     /// let authen_service = AuthenService::new(config);
     /// ```
     pub fn new(config: Config) -> Self {
@@ -78,7 +77,9 @@ impl AuthenService {
     ///
     /// ```rust
     /// use openlark_auth::AuthenService;
+    /// use openlark_core::config::Config;
     ///
+    /// let config = Config::default();
     /// let authen_service = AuthenService::new(config);
     /// let v1_service = authen_service.v1();
     /// ```
