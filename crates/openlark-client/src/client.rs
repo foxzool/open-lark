@@ -831,8 +831,9 @@ mod tests {
         // 测试配置错误时的认证操作
         let refresh_result = client.refresh_token().await;
         assert!(refresh_result.is_err());
-        assert!(refresh_result.clone().unwrap_err().is_config_error());
-        assert!(refresh_result.clone().unwrap_err().is_validation_error() == false);
+        let err = refresh_result.unwrap_err();
+        assert!(err.is_config_error());
+        assert!(!err.is_validation_error());
     }
 
     #[tokio::test]
@@ -911,7 +912,7 @@ mod tests {
             let inner_result = result.unwrap();
             assert!(inner_result.is_ok());
             let result_str = inner_result.unwrap();
-            assert!(result_str.len() > 0);
+            assert!(!result_str.is_empty());
         }
     }
 

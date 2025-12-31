@@ -21,7 +21,7 @@ pub fn topo_sort(nodes: &HashMap<String, Vec<String>>) -> Result<Vec<String>, Gr
         in_degree.entry(node).or_insert(0);
         for dep in deps {
             in_degree.entry(dep).or_insert(0);
-            adjacency.entry(dep).or_insert_with(Vec::new).push(node);
+            adjacency.entry(dep).or_default().push(node);
         }
     }
 
