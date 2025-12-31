@@ -8,19 +8,22 @@
 ///
 /// ## 功能模块
 ///
-/// - **ccm**: 云内容管理 (194 APIs) - 文档、表格、知识库、云盘
-///   - **ccm_doc**: 旧版文档 (6 APIs) - 文档管理相关
-///   - **ccm_docs**: 云文档内容管理 (2 APIs) - 文档搜索和元数据
-///   - **ccm_drive_explorer**: 云盘浏览器 (8 APIs) - 文件夹和文件操作
-///   - **ccm_drive_permission**: 文档权限管理 (3 APIs) - 权限控制和转移
-///   - **ccm_sheet**: 电子表格 (33 APIs) - 表格操作和管理
-///   - **docs**: 云文档内容管理 (1 API) - 文档内容获取
-///   - **docx**: 文档块管理 (19 APIs) - 群公告和文档块操作
-/// - **bitable**: 多维表格 (46 APIs) - 多维表格应用、数据表、视图管理
-/// - **base**: 基础服务 (3 APIs) - 基础操作和工具
-/// - **baike**: 知识库 (27 APIs) - 企业知识库、Wiki管理
-/// - **wiki**: Wiki知识库 (16 APIs) - 企业Wiki管理
-/// - **minutes**: 会议纪要 (4 APIs) - 会议记录管理
+/// - **ccm**: 云内容管理（174 APIs）- 文档、表格、知识库、云盘
+///   - **ccm_doc**: 旧版文档（6 APIs）
+///   - **ccm_docs**: 云文档管理（2 APIs）
+///   - **ccm_drive_explorer**: 云盘浏览器（8 APIs）
+///   - **ccm_drive_permission**: 云文档权限（3 APIs）
+///   - **ccm_sheet**: 表格（33 APIs）
+///   - **docs**: 文档内容（1 API）
+///   - **docx**: 新版文档块与群公告（19 APIs）
+///   - **drive**: 云空间文件（59 APIs）
+///   - **sheets**: 表格（27 APIs）
+///   - **wiki**: Wiki（16 APIs）
+/// - **base**: 基础服务（3 APIs）
+/// - **bitable**: 多维表格（46 APIs）
+/// - **baike**: 百科（13 APIs）
+/// - **lingo**: 词典（14 APIs）
+/// - **minutes**: 妙记（4 APIs）
 ///
 /// ## 快速开始
 ///
