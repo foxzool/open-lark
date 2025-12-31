@@ -34,7 +34,11 @@ impl GetFileViewRecordsRequest {
     /// * `file_token` - 文件token
     /// * `file_type` - 文件类型（doc/docx/sheet/bitable/mindnote/wiki/file）
     /// * `page_size` - 分页大小（1~50）
-    pub fn new(file_token: impl Into<String>, file_type: impl Into<String>, page_size: i32) -> Self {
+    pub fn new(
+        file_token: impl Into<String>,
+        file_type: impl Into<String>,
+        page_size: i32,
+    ) -> Self {
         Self {
             file_token: file_token.into(),
             file_type: file_type.into(),

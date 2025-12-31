@@ -141,7 +141,7 @@ impl ListDevicesBuilder {
             Err(api_error(
                 response.status().as_u16(),
                 "/acs/v1/devices",
-                &format!("HTTP: {}", response.status()),
+                format!("HTTP: {}", response.status()),
                 None,
             ))
         }

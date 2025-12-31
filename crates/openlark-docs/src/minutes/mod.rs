@@ -1,3 +1,5 @@
+#![allow(clippy::module_inception)]
+
 // 重新导出子模块
 pub mod minutes;
 pub use minutes::*;

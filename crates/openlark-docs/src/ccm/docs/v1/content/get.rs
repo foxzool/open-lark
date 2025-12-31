@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -70,11 +69,12 @@ pub async fn get_docs_content(
 
     let api_endpoint = DocsApiV1::ContentGet;
 
-    let mut api_request: ApiRequest<GetDocsContentResponse> = ApiRequest::get(&api_endpoint.to_url())
-        .query("doc_token", &request.doc_token)
-        .query("doc_type", &request.doc_type)
-        .query("content_type", &request.content_type)
-        .query_opt("lang", request.lang);
+    let mut api_request: ApiRequest<GetDocsContentResponse> =
+        ApiRequest::get(&api_endpoint.to_url())
+            .query("doc_token", &request.doc_token)
+            .query("doc_type", &request.doc_type)
+            .query("content_type", &request.content_type)
+            .query_opt("lang", request.lang);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

@@ -6,13 +6,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_utils::*;
 use crate::common::api_endpoints::CcmSheetApiOld;
+use crate::common::api_utils::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct UpdateValuesRequest {
@@ -77,8 +76,8 @@ pub async fn values(
     }
 
     let api_endpoint = CcmSheetApiOld::Values(spreadsheet_token);
-    let mut api_request: ApiRequest<UpdateValuesResponse> =
-        ApiRequest::put(&api_endpoint.to_url()).body(serialize_params(&request, "向单个范围写入数据")?);
+    let mut api_request: ApiRequest<UpdateValuesResponse> = ApiRequest::put(&api_endpoint.to_url())
+        .body(serialize_params(&request, "向单个范围写入数据")?);
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

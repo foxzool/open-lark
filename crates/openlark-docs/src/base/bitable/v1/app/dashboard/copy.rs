@@ -53,8 +53,10 @@ impl CopyDashboardRequest {
         validate_required!(self.name, "name 不能为空");
 
         let api_endpoint = BitableApiV1::DashboardCopy(self.app_token, self.block_id);
-        let api_request: ApiRequest<CopyDashboardResponse> = ApiRequest::post(&api_endpoint.to_url())
-            .body(serde_json::to_vec(&CopyDashboardRequestBody { name: self.name })?);
+        let api_request: ApiRequest<CopyDashboardResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(
+                &CopyDashboardRequestBody { name: self.name },
+            )?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response

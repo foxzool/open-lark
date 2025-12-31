@@ -3,7 +3,6 @@
 /// 批量更新块的富文本内容。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/batch_update
 /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/batch_update
-
 use crate::ccm::docx::common_types::DocxBlock;
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{

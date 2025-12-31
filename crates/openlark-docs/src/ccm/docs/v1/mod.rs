@@ -125,8 +125,5 @@ mod tests {
 
         // 验证可以访问所有服务
         let _content_service = service.content();
-
-        // 如果编译通过，说明模块结构正确
-        assert!(true);
     }
 }

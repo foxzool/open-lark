@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -152,4 +151,3 @@ pub async fn update(
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "更新下拉列表设置")
 }
-

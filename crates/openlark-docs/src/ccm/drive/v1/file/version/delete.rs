@@ -98,8 +98,8 @@ mod tests {
     #[test]
     fn test_delete_file_version_request_builder() {
         let config = Config::default();
-        let request =
-            DeleteFileVersionRequest::new(config, "file_token", "fnJfyX", "docx").user_id_type("open_id");
+        let request = DeleteFileVersionRequest::new(config, "file_token", "fnJfyX", "docx")
+            .user_id_type("open_id");
 
         assert_eq!(request.file_token, "file_token");
         assert_eq!(request.version_id, "fnJfyX");
@@ -109,6 +109,9 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(DeleteFileVersionResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            DeleteFileVersionResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

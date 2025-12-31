@@ -260,15 +260,16 @@ impl ImprovedResponseHandler {
         // 二进制响应：目前仅对 `Vec<u8>` / `String` 做直接承载，其它类型返回 None。
         // 约定：当业务侧需要二进制内容时，将响应类型定义为 `Vec<u8>`（并使用 ResponseFormat::Binary）。
         let data: Option<T> = {
-            let any: Box<dyn Any> = if std::any::TypeId::of::<T>() == std::any::TypeId::of::<Vec<u8>>() {
-                Box::new(bytes)
-            } else if std::any::TypeId::of::<T>() == std::any::TypeId::of::<String>() {
-                let s = String::from_utf8_lossy(&bytes).to_string();
-                Box::new(s)
-            } else {
-                // 其它类型目前不做自动解析
-                Box::new(())
-            };
+            let any: Box<dyn Any> =
+                if std::any::TypeId::of::<T>() == std::any::TypeId::of::<Vec<u8>>() {
+                    Box::new(bytes)
+                } else if std::any::TypeId::of::<T>() == std::any::TypeId::of::<String>() {
+                    let s = String::from_utf8_lossy(&bytes).to_string();
+                    Box::new(s)
+                } else {
+                    // 其它类型目前不做自动解析
+                    Box::new(())
+                };
 
             any.downcast::<T>().ok().map(|boxed| *boxed)
         };

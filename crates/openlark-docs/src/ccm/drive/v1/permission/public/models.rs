@@ -18,4 +18,3 @@ pub struct PermissionPublic {
     /// 节点是否已加锁（加锁后不再继承父级页面权限）
     pub lock_switch: Option<bool>,
 }
-

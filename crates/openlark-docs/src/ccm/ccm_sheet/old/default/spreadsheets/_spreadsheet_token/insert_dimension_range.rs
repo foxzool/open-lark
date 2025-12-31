@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -73,10 +72,7 @@ pub async fn insert_dimension_range(
         ));
     }
     if let Some(inherit_style) = request.inheritStyle.as_deref() {
-        if !inherit_style.is_empty()
-            && inherit_style != "BEFORE"
-            && inherit_style != "AFTER"
-        {
+        if !inherit_style.is_empty() && inherit_style != "BEFORE" && inherit_style != "AFTER" {
             return Err(openlark_core::error::validation_error(
                 "inheritStyle",
                 "inheritStyle 仅支持 BEFORE 或 AFTER（或不传/传空表示不继承）",

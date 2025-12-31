@@ -61,10 +61,8 @@ impl DownloadMediaRequest {
         }
 
         let api_endpoint = DriveApi::DownloadMedia(self.file_token.clone());
-        let mut request = ApiRequest::<Vec<u8>>::get(&api_endpoint.to_url()).query_opt(
-            "extra",
-            self.extra,
-        );
+        let mut request =
+            ApiRequest::<Vec<u8>>::get(&api_endpoint.to_url()).query_opt("extra", self.extra);
 
         if let Some(r) = self.range {
             request = request.header("Range", &r);

@@ -63,12 +63,12 @@ impl BatchDeleteRecordRequest {
         let api_endpoint =
             BitableApiV1::RecordBatchDelete(self.app_token.clone(), self.table_id.clone());
 
-        let api_request: ApiRequest<BatchDeleteRecordResponse> =
-            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(
-                &BatchDeleteRecordRequestBody {
-                    record_ids: self.record_ids,
-                },
-            )?);
+        let api_request: ApiRequest<BatchDeleteRecordResponse> = ApiRequest::post(
+            &api_endpoint.to_url(),
+        )
+        .body(serde_json::to_vec(&BatchDeleteRecordRequestBody {
+            record_ids: self.record_ids,
+        })?);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         response

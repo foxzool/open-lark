@@ -2,11 +2,7 @@
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-subscription/patch
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    error::validation_error,
-    http::Transport,
-    SDKResult,
+    api::ApiRequest, config::Config, error::validation_error, http::Transport, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

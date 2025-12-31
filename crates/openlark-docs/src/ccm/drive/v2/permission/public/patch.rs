@@ -10,8 +10,8 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::DriveApi, api_utils::*};
 use super::models::PermissionPublic;
+use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdatePermissionPublicRequest {
@@ -85,10 +85,16 @@ pub async fn update_permission_public(
     config: &Config,
 ) -> SDKResult<UpdatePermissionPublicResponse> {
     if request.token.is_empty() {
-        return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+        return Err(openlark_core::error::validation_error(
+            "token",
+            "token 不能为空",
+        ));
     }
     if request.r#type.is_empty() {
-        return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        return Err(openlark_core::error::validation_error(
+            "type",
+            "type 不能为空",
+        ));
     }
 
     let api_endpoint = DriveApi::UpdatePublicPermissionV2(request.token);
