@@ -419,7 +419,8 @@ impl WikiApiV1 {
     /// 生成对应的 URL
     pub fn to_url(&self) -> String {
         match self {
-            WikiApiV1::NodeSearch => "/open-apis/wiki/v1/nodes/search".to_string(),
+            // 注意：文档页展示的 HTTP URL 为 /open-apis/wiki/v2/nodes/search（该接口历史上曾以 v1 暴露）
+            WikiApiV1::NodeSearch => "/open-apis/wiki/v2/nodes/search".to_string(),
         }
     }
 }
