@@ -581,7 +581,8 @@ impl DocxApiV1 {
                     document_id, block_id
                 )
             }
-            DocxApiV1::DocumentConvert => "/open-apis/docx/v1/documents/blocks/convert".to_string(),
+            // 注意：该接口虽然归类在 docx-v1 文档下，但实际 HTTP URL 不包含 /v1
+            DocxApiV1::DocumentConvert => "/open-apis/docx/documents/blocks/convert".to_string(),
         }
     }
 }
@@ -1018,7 +1019,7 @@ pub enum CcmSheetApiOld {
     /// 创建数据验证规则
     DataValidationCreate(String), // spreadsheet_token
     /// 更新下拉列表设置（PUT）
-    DataValidationUpdate(String, String, String), // spreadsheet_token, sheet_id, data_validation_id
+    DataValidationUpdate(String, String), // spreadsheet_token, sheet_id
     /// 删除下拉列表设置（DELETE，按 range 删除）
     DataValidationDelete(String), // spreadsheet_token
     /// 读取单个范围 (V3)
@@ -1277,14 +1278,10 @@ impl CcmSheetApiOld {
                     spreadsheet_token
                 )
             }
-            CcmSheetApiOld::DataValidationUpdate(
-                spreadsheet_token,
-                sheet_id,
-                data_validation_id,
-            ) => {
+            CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}/{}",
-                    spreadsheet_token, sheet_id, data_validation_id
+                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}",
+                    spreadsheet_token, sheet_id
                 )
             }
             CcmSheetApiOld::DataValidationDelete(spreadsheet_token) => {
@@ -1700,7 +1697,10 @@ impl DriveApi {
                 format!("/open-apis/drive/v1/export_tasks/{}", ticket)
             }
             DriveApi::DownloadExportFile(file_token) => {
-                format!("/open-apis/drive/export_tasks/file/{}/download", file_token)
+                format!(
+                    "/open-apis/drive/v1/export_tasks/file/{}/download",
+                    file_token
+                )
             }
 
             // Media APIs

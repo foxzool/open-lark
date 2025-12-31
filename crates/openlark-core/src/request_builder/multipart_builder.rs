@@ -38,13 +38,19 @@ impl MultipartBuilder {
         form_obj: &serde_json::Map<String, Value>,
         file_data: &[u8],
     ) -> Result<multipart::Form, LarkAPIError> {
+        // 兼容两种用法：
+        // - "__file_name": 仅用于设置 multipart 文件名，不作为表单字段发送
+        // - "file_name": 既是表单字段，也可作为 multipart 文件名
         let file_name = form_obj
-            .get("file_name")
+            .get("__file_name")
             .and_then(|v| v.as_str())
-            .ok_or_else(|| validation_error("file_name", "Missing file_name in form data"))?
-            .to_string();
+            .or_else(|| form_obj.get("file_name").and_then(|v| v.as_str()))
+            .map(|v| v.to_string());
 
-        let file_part = multipart::Part::bytes(file_data.to_vec()).file_name(file_name);
+        let mut file_part = multipart::Part::bytes(file_data.to_vec());
+        if let Some(name) = file_name {
+            file_part = file_part.file_name(name);
+        }
 
         form = form.part("file", file_part);
         Ok(form)
@@ -56,8 +62,8 @@ impl MultipartBuilder {
         form_obj: &serde_json::Map<String, Value>,
     ) -> Result<multipart::Form, LarkAPIError> {
         for (key, value) in form_obj.iter() {
-            // 跳过 file_name 字段和 null 值
-            if key == "file_name" || value == &Value::Null {
+            // 跳过 __file_name 字段和 null 值
+            if key == "__file_name" || value == &Value::Null {
                 continue;
             }
 
@@ -120,12 +126,7 @@ mod tests {
         let req_builder = create_test_request_builder();
         let result = MultipartBuilder::build_multipart(req_builder, &body, file_data);
 
-        assert!(result.is_err());
-        if let Err(LarkAPIError::Validation { message, .. }) = result {
-            assert!(message.contains("Missing file_name"));
-        } else {
-            panic!("Expected BadRequest error");
-        }
+        assert!(result.is_ok());
     }
 
     #[test]
