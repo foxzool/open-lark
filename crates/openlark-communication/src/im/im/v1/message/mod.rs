@@ -12,6 +12,7 @@ pub mod models;
 pub mod patch;
 pub mod push_follow_up;
 pub mod read_users;
+pub mod resource;
 pub mod reply;
 pub mod urgent_app;
 pub mod urgent_phone;
