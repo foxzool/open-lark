@@ -1,35 +1,32 @@
-//! Open-Lark Placeholder Module
+#![warn(clippy::all)]
+#![allow(ambiguous_glob_reexports)]
+#![allow(hidden_glob_reexports)]
+#![allow(missing_docs)]
+
+//! # OpenLark 会议与日程服务模块
 //!
-//! 飞书相关功能接口。
+//! 飞书开放平台日历（calendar）、视频会议（vc）、会议室（meeting_room）相关 API。
+//!
+//! ## 模块与 API 数量（目标）
+//! - **calendar**：44 APIs
+//! - **vc**：56 APIs
+//! - **meeting_room**：17 APIs
+//!
+//! ## 目录结构约定
+//! 实现文件严格按 `src/bizTag/project/version/resource/name.rs` 组织，其中：
+//! - `resource` 内用 `.` 分割目录（例如 `calendar.event.attendee` => `calendar/event/attendee`）
+//! - 如 `meta.name` 内包含 `/`（历史接口），则按目录继续下沉（例如 `building/list` => `building/list.rs`）
 
-// 注意：legacy_client 已移除，请使用新的客户端架构
-// 当此模块完全实现时，应该使用 DefaultLarkClient 或相应的服务接口
+// Core modules
+pub mod common;
+pub mod endpoints;
 
-use openlark_core::SDKResult;
+// 业务模块（按 bizTag 组织）
+pub mod calendar;
+pub mod meeting_room;
+pub mod vc;
 
-/// 服务主入口 - 占位符实现
-///
-/// 此模块等待完全实现，需要使用新的客户端架构
-#[allow(dead_code)]
-pub struct WorkplaceWorkplaceService {
-    // 当实现时，这里应该使用新的客户端类型
-    // client: std::sync::Arc<DefaultLarkClient>,
-}
-
-impl Default for WorkplaceWorkplaceService {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl WorkplaceWorkplaceService {
-    /// 创建新的服务实例
-    pub fn new() -> Self {
-        Self {}
-    }
-
-    /// TODO: 实现核心接口
-    pub async fn core_functionality(&self) -> SDKResult<String> {
-        todo!("实现核心功能 - 需要迁移到新的客户端架构")
-    }
+/// Prelude 模块 - 常用导入
+pub mod prelude {
+    pub use openlark_core::{config::Config, SDKResult};
 }
