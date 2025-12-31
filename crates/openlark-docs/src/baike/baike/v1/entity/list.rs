@@ -1,6 +1,7 @@
 //! 获取词条列表
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/list
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/list
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -16,6 +17,7 @@ use crate::common::api_endpoints::BaikeApiV1;
 /// 获取词条列表响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ListEntityResp {
+    #[serde(default)]
     pub entities: Vec<Entity>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -68,6 +70,24 @@ impl ListEntityRequest {
     }
 
     pub async fn send(self) -> SDKResult<ListEntityResp> {
+        if let Some(page_size) = self.page_size {
+            if !(1..=100).contains(&page_size) {
+                return Err(openlark_core::error::validation_error(
+                    "page_size",
+                    "page_size 取值范围必须为 1~100",
+                ));
+            }
+        }
+        if let Some(provider) = &self.provider {
+            let len = provider.chars().count();
+            if !(2..=32).contains(&len) {
+                return Err(openlark_core::error::validation_error(
+                    "provider",
+                    "provider 长度必须在 2~32 字符之间",
+                ));
+            }
+        }
+
         let mut api_request: ApiRequest<ListEntityResp> =
             ApiRequest::get(&BaikeApiV1::EntityList.to_url());
         if let Some(page_size) = self.page_size {

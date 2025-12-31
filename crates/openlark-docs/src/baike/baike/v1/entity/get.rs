@@ -1,6 +1,7 @@
 //! 获取词条详情
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/get
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/get
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -17,7 +18,8 @@ use crate::baike::baike::v1::models::{Entity, UserIdType};
 /// 获取词条详情响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct GetEntityResp {
-    pub entity: Entity,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity: Option<Entity>,
 }
 
 impl ApiResponseTrait for GetEntityResp {
@@ -66,6 +68,40 @@ impl GetEntityRequest {
 
     pub async fn send(self) -> SDKResult<GetEntityResp> {
         validate_required!(self.entity_id, "entity_id 不能为空");
+
+        let using_outer = self.provider.is_some() || self.outer_id.is_some();
+        if using_outer {
+            if self.entity_id != "enterprise_0" {
+                return Err(openlark_core::error::validation_error(
+                    "entity_id",
+                    "当通过 provider + outer_id 获取词条时，entity_id 必须固定为 enterprise_0",
+                ));
+            }
+            if self.provider.is_none() || self.outer_id.is_none() {
+                return Err(openlark_core::error::validation_error(
+                    "provider/outer_id",
+                    "provider 与 outer_id 需同时传入",
+                ));
+            }
+        }
+        if let Some(provider) = &self.provider {
+            let len = provider.chars().count();
+            if !(2..=32).contains(&len) {
+                return Err(openlark_core::error::validation_error(
+                    "provider",
+                    "provider 长度必须在 2~32 字符之间",
+                ));
+            }
+        }
+        if let Some(outer_id) = &self.outer_id {
+            let len = outer_id.chars().count();
+            if !(1..=64).contains(&len) {
+                return Err(openlark_core::error::validation_error(
+                    "outer_id",
+                    "outer_id 长度必须在 1~64 字符之间",
+                ));
+            }
+        }
 
         let mut api_request: ApiRequest<GetEntityResp> =
             ApiRequest::get(&BaikeApiV1::EntityGet(self.entity_id).to_url());

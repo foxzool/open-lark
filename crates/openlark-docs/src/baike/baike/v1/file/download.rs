@@ -1,10 +1,12 @@
 //! 下载图片
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/file/download
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/file/download
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
 
 use crate::common::api_endpoints::BaikeApiV1;
+use crate::common::api_utils::*;
 
 /// 下载图片请求
 pub struct DownloadFileRequest {
@@ -27,8 +29,6 @@ impl DownloadFileRequest {
         let api_request: ApiRequest<Vec<u8>> =
             ApiRequest::get(&BaikeApiV1::FileDownload(self.file_token).to_url());
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+        extract_response_data(response, "下载图片")
     }
 }
