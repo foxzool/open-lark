@@ -1,6 +1,6 @@
 //! 读取多个范围
 //!
-//! docPath: /document/ukTMukTMukTM/ukTMzUjL5EzM14SOxMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-multiple-ranges
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

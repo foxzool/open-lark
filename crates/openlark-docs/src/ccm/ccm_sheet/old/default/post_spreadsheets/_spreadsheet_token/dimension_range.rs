@@ -1,6 +1,6 @@
 //! 增加行列
 //!
-//! docPath: /document/ukTMukTMukTM/uUjMzUjL1IzM14SNyMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-rowcol/add-rows-or-columns
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

@@ -1,6 +1,6 @@
 //! 设置下拉列表
 //!
-//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/datavalidation/set-dropdown
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/set-dropdown
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

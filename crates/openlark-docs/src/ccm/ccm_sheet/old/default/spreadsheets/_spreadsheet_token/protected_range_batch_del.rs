@@ -1,6 +1,6 @@
 //! 删除保护范围
 //!
-//! docPath: /document/ukTMukTMukTM/uYTM5YjL2ETO24iNxkjN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/delete-protection-scopes
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

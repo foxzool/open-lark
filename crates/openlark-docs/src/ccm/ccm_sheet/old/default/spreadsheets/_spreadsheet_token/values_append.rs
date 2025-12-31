@@ -1,6 +1,6 @@
 //! 追加数据
 //!
-//! docPath: /document/ukTMukTMukTM/uMjMzUjLzIzM14yMyMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/append-data
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
