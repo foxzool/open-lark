@@ -152,15 +152,21 @@ impl Client {
     //     crate::services::HireService::new(&self.config)
     // }
 
-    // #[cfg(feature = "hr")]  // hr 功能暂未启用
-    // pub fn hr(&self) -> crate::services::HRService<'_> {
-    //     crate::services::HRService::new(&self.config, &self.registry)
-    // }
+    /// 👥 访问 HR 服务
+    ///
+    /// 需要 `hr` feature
+    #[cfg(feature = "hr")]
+    pub fn hr(&self) -> crate::services::HRService<'_> {
+        crate::services::HRService::new(&self.config, &self.registry)
+    }
 
-    // #[cfg(feature = "ai")]  // ai 功能暂未启用
-    // pub fn ai(&self) -> crate::services::AIService<'_> {
-    //     crate::services::AIService::new(&self.config)
-    // }
+    /// 🤖 访问 AI 服务
+    ///
+    /// 需要 `ai` feature
+    #[cfg(feature = "ai")]
+    pub fn ai(&self) -> crate::services::AIService<'_> {
+        crate::services::AIService::new(&self.config)
+    }
 
     // #[cfg(feature = "people")]
     // pub fn people(&self) -> crate::services::PeopleService<'_> {
