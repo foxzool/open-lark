@@ -1,7 +1,6 @@
 //! 创建草稿
 //!
-//! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/draft/create
-//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/draft/create
+//! docPath: https://open.feishu.cn/document/lingo-v1/draft/create
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},

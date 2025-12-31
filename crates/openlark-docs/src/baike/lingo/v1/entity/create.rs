@@ -1,7 +1,6 @@
 //! 创建免审词条
 //!
-//! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/create
-//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/create
+//! docPath: https://open.feishu.cn/document/lingo-v1/entity/create
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
