@@ -53,13 +53,22 @@ impl AnnouncementService {
     ///
     /// # 示例
     /// ```rust,no_run
-    /// use open_lark::service::cloud_docs::docx::v1::chat::announcement::{AnnouncementService, GetChatAnnouncementRequest};
+    /// use openlark_core::config::Config;
+    /// use openlark_docs::ccm::docx::v1::chat::announcement::{
+    ///     AnnouncementService, GetChatAnnouncementRequest,
+    /// };
     ///
-    /// let service = AnnouncementService::new(config);
-    /// let request = GetChatAnnouncementRequest::new("announcement_id");
+    /// let config = Config::builder()
+    ///     .app_id("app_id")
+    ///     .app_secret("app_secret")
+    ///     .build();
+    /// let service = AnnouncementService::new(config.clone());
+    /// let request = GetChatAnnouncementRequest::new(config)
+    ///     .chat_id("chat_id")
+    ///     .user_id_type("open_id");
     ///
-    /// let response = service.get(request, None).await?;
-    /// println!("公告标题: {}", response.title);
+    /// // 这里只演示构建 Future，不发起网络请求
+    /// let _future = service.get(request, None);
     /// ```
     pub async fn get(
         &self,
