@@ -221,6 +221,12 @@ pub const CONTACT_V3_CUSTOM_ATTRS: &str = "/open-apis/contact/v3/custom_attrs";
 /// Contact 人员类型 v3
 pub const CONTACT_V3_EMPLOYEE_TYPE_ENUMS: &str = "/open-apis/contact/v3/employee_type_enums";
 
+/// Contact 单位 v3
+pub const CONTACT_V3_UNIT: &str = "/open-apis/contact/v3/unit";
+pub const CONTACT_V3_UNIT_BIND_DEPARTMENT: &str = "/open-apis/contact/v3/unit/bind_department";
+pub const CONTACT_V3_UNIT_UNBIND_DEPARTMENT: &str = "/open-apis/contact/v3/unit/unbind_department";
+pub const CONTACT_V3_UNIT_LIST_DEPARTMENT: &str = "/open-apis/contact/v3/unit/list_department";
+
 /// Contact 用户 v3
 pub const CONTACT_V3_USERS: &str = "/open-apis/contact/v3/users";
 pub const CONTACT_V3_USER: &str = "/open-apis/contact/v3/users/{}";
