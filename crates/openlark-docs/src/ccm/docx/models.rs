@@ -343,9 +343,7 @@ impl GetDocMetaRequest {
 
 /// Docx 模块公共类型（模型，不算 API）
 pub mod common_types {
-    //! Docx模块公共类型定义
-    //!
-    //! 统一管理docx相关API中使用的公共数据结构，避免重复定义。
+    // 统一管理 docx 相关 API 中使用的公共数据结构，避免重复定义。
     use serde::{Deserialize, Serialize};
     use std::collections::HashMap;
 
@@ -503,9 +501,7 @@ pub mod common_types {
 
 /// Docx API 数据模型（模型，不算 API）
 pub mod models_docx {
-    //! docx API 数据模型
-    //!
-    //! 定义文档(DOCX)操作API的数据结构。
+    // 定义文档（DOCX）操作 API 的数据结构。
     use crate::prelude::*;
     use serde::{Deserialize, Serialize};
 

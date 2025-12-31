@@ -81,7 +81,10 @@ impl CopyFileRequest {
         }
         // 文档说明：该参数为必填（请忽略必填列的“否”），为空会导致接口失败。
         if self.r#type.is_empty() {
-            return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "type",
+                "type 不能为空",
+            ));
         }
         if self.folder_token.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -112,7 +115,7 @@ impl CopyFileRequest {
             }
         }
 
-        let name_len = self.name.as_bytes().len();
+        let name_len = self.name.len();
         if name_len > 256 || name_len == 0 {
             return Err(openlark_core::error::validation_error(
                 "name",
@@ -250,11 +253,13 @@ mod tests {
     #[test]
     fn test_copy_file_request_with_extra() {
         let config = Config::default();
-        let request = CopyFileRequest::new(config, "file_token", "Demo copy", "docx", "folder_token")
-            .extra(vec![Property {
-                key: "target_type".to_string(),
-                value: "docx".to_string(),
-            }]);
+        let request =
+            CopyFileRequest::new(config, "file_token", "Demo copy", "docx", "folder_token").extra(
+                vec![Property {
+                    key: "target_type".to_string(),
+                    value: "docx".to_string(),
+                }],
+            );
 
         assert!(request.extra.is_some());
         assert_eq!(request.extra.unwrap().len(), 1);

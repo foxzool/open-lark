@@ -1141,7 +1141,7 @@ mod tests {
                 }
                 ValidationResult::Sanitized(_) => {
                     // Handle sanitized results as valid
-                    assert!(true); // Sanitized is acceptable
+                    // Sanitized is acceptable
                 } // ValidationResult::Warning(_) => {
                   //     // This should not happen - print debug info
                   //     panic!("Expected invalid format but got warning for: {}", birthday);

@@ -31,10 +31,16 @@ impl DeletePermissionPublicPasswordRequest {
 
     pub async fn execute(self) -> SDKResult<DeletePermissionPublicPasswordResponse> {
         if self.token.is_empty() {
-            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "token",
+                "token 不能为空",
+            ));
         }
         if self.r#type.is_empty() {
-            return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "type",
+                "type 不能为空",
+            ));
         }
         match self.r#type.as_str() {
             "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "mindnote" | "minutes"

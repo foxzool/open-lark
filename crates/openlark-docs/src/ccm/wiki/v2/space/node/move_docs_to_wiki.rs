@@ -76,7 +76,8 @@ impl MoveDocsToWikiRequest {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<MoveDocsToWikiResponse> =
-            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "移动云空间文档至知识空间")?);
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(serialize_params(&params, "移动云空间文档至知识空间")?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

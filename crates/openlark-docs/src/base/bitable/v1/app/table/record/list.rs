@@ -184,12 +184,19 @@ impl ListRecordRequest {
             api_request = api_request.query("field_names", serde_json::to_string(&field_names)?);
         }
 
-        api_request = api_request.query_opt("text_field_as_array", self.text_field_as_array.map(|v| v.to_string()));
+        api_request = api_request.query_opt(
+            "text_field_as_array",
+            self.text_field_as_array.map(|v| v.to_string()),
+        );
         api_request = api_request.query_opt("user_id_type", self.user_id_type);
-        api_request =
-            api_request.query_opt("display_formula_ref", self.display_formula_ref.map(|v| v.to_string()));
-        api_request =
-            api_request.query_opt("automatic_fields", self.automatic_fields.map(|v| v.to_string()));
+        api_request = api_request.query_opt(
+            "display_formula_ref",
+            self.display_formula_ref.map(|v| v.to_string()),
+        );
+        api_request = api_request.query_opt(
+            "automatic_fields",
+            self.automatic_fields.map(|v| v.to_string()),
+        );
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

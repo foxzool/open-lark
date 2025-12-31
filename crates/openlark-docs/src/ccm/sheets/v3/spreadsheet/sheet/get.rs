@@ -28,8 +28,7 @@ pub async fn get_sheet(
     sheet_id: &str,
 ) -> SDKResult<GetSheetResponse> {
     // 使用enum+builder系统生成API端点
-    let api_endpoint =
-        SheetsApiV3::GetSheet(spreadsheet_token.to_string(), sheet_id.to_string());
+    let api_endpoint = SheetsApiV3::GetSheet(spreadsheet_token.to_string(), sheet_id.to_string());
 
     // 创建API请求 - 使用类型安全的URL生成和标准化的参数序列化
     let api_request: ApiRequest<GetSheetResponse> = ApiRequest::get(&api_endpoint.to_url());

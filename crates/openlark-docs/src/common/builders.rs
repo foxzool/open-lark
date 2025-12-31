@@ -1,6 +1,6 @@
-/// 通用构建器模式模块
-///
-/// 提供统一的Builder模式实现，减少代码重复并保持API一致性。
+//! 通用构建器模式模块
+//!
+//! 提供统一的 Builder 模式实现，减少代码重复并保持 API 一致性。
 
 /// 实现API请求构建器的通用宏
 ///
@@ -11,7 +11,7 @@
 /// - `$field_type`: 字段类型
 ///
 /// # 示例
-/// ```rust
+/// ```rust,ignore
 /// impl_api_builder!(
 ///     DeleteRoleV2Builder,
 ///     DeleteRoleV2Request,
@@ -144,20 +144,11 @@ mod tests {
     use openlark_core::config::Config;
 
     // 测试结构体定义
-    struct TestRequest {
+    #[derive(Default)]
+    pub struct TestRequest {
         app_token: String,
         table_id: String,
         name: Option<String>,
-    }
-
-    impl Default for TestRequest {
-        fn default() -> Self {
-            Self {
-                app_token: String::new(),
-                table_id: String::new(),
-                name: None,
-            }
-        }
     }
 
     // 使用宏生成构建器
@@ -168,16 +159,6 @@ mod tests {
         table_id: String,
         name: Option<String>,
     );
-
-    impl TestRequest {
-        fn new(_config: Config) -> Self {
-            Self {
-                app_token: String::new(),
-                table_id: String::new(),
-                name: None,
-            }
-        }
-    }
 
     #[test]
     fn test_builder_macro() {
@@ -235,9 +216,10 @@ mod tests {
             name: "测试".to_string(),
             created_time: "2023-01-01".to_string(),
         };
+        let response = TestResponse { data };
 
-        assert_eq!(data.id, "123");
-        assert_eq!(data.name, "测试");
-        assert_eq!(data.created_time, "2023-01-01");
+        assert_eq!(response.data.id, "123");
+        assert_eq!(response.data.name, "测试");
+        assert_eq!(response.data.created_time, "2023-01-01");
     }
 }

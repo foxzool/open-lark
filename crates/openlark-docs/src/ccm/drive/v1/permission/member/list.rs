@@ -59,7 +59,10 @@ impl ListPermissionMembersRequest {
 
     pub async fn execute(self) -> SDKResult<ListPermissionMembersResponse> {
         if self.token.is_empty() {
-            return Err(openlark_core::error::validation_error("token", "token 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "token",
+                "token 不能为空",
+            ));
         }
         if self.file_type.is_empty() {
             return Err(openlark_core::error::validation_error(

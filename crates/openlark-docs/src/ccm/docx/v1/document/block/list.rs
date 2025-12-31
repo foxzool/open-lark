@@ -3,7 +3,6 @@
 /// 获取文档所有块的富文本内容并分页返回。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/list
 /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/list
-
 use crate::ccm::docx::common_types::DocxBlock;
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
@@ -83,7 +82,8 @@ impl GetDocumentBlocksRequest {
             api_request = api_request.query("page_token", &page_token);
         }
         if let Some(document_revision_id) = params.document_revision_id {
-            api_request = api_request.query("document_revision_id", &document_revision_id.to_string());
+            api_request =
+                api_request.query("document_revision_id", &document_revision_id.to_string());
         }
 
         // 发送请求

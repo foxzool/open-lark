@@ -77,11 +77,8 @@ impl UploadPrepareRequest {
         }
 
         let api_endpoint = DriveApi::UploadPrepare;
-        let request =
-            ApiRequest::<UploadPrepareResponse>::post(&api_endpoint.to_url()).body(serialize_params(
-                &self,
-                "分片上传文件-预上传",
-            )?);
+        let request = ApiRequest::<UploadPrepareResponse>::post(&api_endpoint.to_url())
+            .body(serialize_params(&self, "分片上传文件-预上传")?);
 
         let response = Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "分片上传文件-预上传")

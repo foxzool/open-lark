@@ -88,13 +88,15 @@ impl UploadPrepareMediaRequest {
             ));
         }
         if self.size < 0 {
-            return Err(openlark_core::error::validation_error("size", "size 不能为负数"));
+            return Err(openlark_core::error::validation_error(
+                "size",
+                "size 不能为负数",
+            ));
         }
 
         let api_endpoint = DriveApi::UploadMediaPrepare;
-        let request = ApiRequest::<UploadPrepareMediaResponse>::post(&api_endpoint.to_url()).body(
-            serialize_params(&self, "分片上传素材-预上传")?,
-        );
+        let request = ApiRequest::<UploadPrepareMediaResponse>::post(&api_endpoint.to_url())
+            .body(serialize_params(&self, "分片上传素材-预上传")?);
 
         let response = Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "分片上传素材-预上传")
@@ -141,6 +143,9 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(UploadPrepareMediaResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            UploadPrepareMediaResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

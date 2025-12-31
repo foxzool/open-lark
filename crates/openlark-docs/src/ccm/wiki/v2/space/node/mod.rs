@@ -2,8 +2,8 @@
 pub mod copy;
 pub mod create;
 pub mod list;
-pub mod move_docs_to_wiki;
 pub mod r#move;
+pub mod move_docs_to_wiki;
 pub mod update_title;
 
 // 导出所有子模块内容，避免命名冲突

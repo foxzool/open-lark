@@ -1,15 +1,9 @@
-use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 /// 获取文档版本信息
 ///
 /// 获取指定源文档的指定版本信息。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/get
-
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 use super::models::FileVersionInfo;
@@ -93,8 +87,8 @@ mod tests {
     #[test]
     fn test_get_file_version_request_builder() {
         let config = Config::default();
-        let request =
-            GetFileVersionRequest::new(config, "file_token", "fnJfyX", "docx").user_id_type("open_id");
+        let request = GetFileVersionRequest::new(config, "file_token", "fnJfyX", "docx")
+            .user_id_type("open_id");
 
         assert_eq!(request.file_token, "file_token");
         assert_eq!(request.version_id, "fnJfyX");

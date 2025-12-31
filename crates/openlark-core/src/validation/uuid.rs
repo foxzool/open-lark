@@ -396,9 +396,11 @@ mod tests {
 
     #[test]
     fn test_uuid_limits() {
-        assert!(uuid_limits::UUID_LENGTH > 0);
-        assert!(uuid_limits::MIN_SHORT_UUID_LENGTH > 0);
-        assert!(uuid_limits::MAX_SHORT_UUID_LENGTH > uuid_limits::MIN_SHORT_UUID_LENGTH);
-        assert!(uuid_limits::UUID_VERSION_MIN <= uuid_limits::UUID_VERSION_MAX);
+        const {
+            assert!(uuid_limits::UUID_LENGTH > 0);
+            assert!(uuid_limits::MIN_SHORT_UUID_LENGTH > 0);
+            assert!(uuid_limits::MAX_SHORT_UUID_LENGTH > uuid_limits::MIN_SHORT_UUID_LENGTH);
+            assert!(uuid_limits::UUID_VERSION_MIN <= uuid_limits::UUID_VERSION_MAX);
+        };
     }
 }

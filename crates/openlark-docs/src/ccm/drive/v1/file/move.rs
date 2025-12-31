@@ -84,13 +84,14 @@ impl MoveFileRequest {
             r#type: String,
             folder_token: String,
         }
-        let request = ApiRequest::<MoveFileResponse>::post(&api_endpoint.to_url()).body(serialize_params(
-            &MoveFileBody {
-                r#type: self.r#type,
-                folder_token: self.folder_token,
-            },
-            "移动文件或文件夹",
-        )?);
+        let request =
+            ApiRequest::<MoveFileResponse>::post(&api_endpoint.to_url()).body(serialize_params(
+                &MoveFileBody {
+                    r#type: self.r#type,
+                    folder_token: self.folder_token,
+                },
+                "移动文件或文件夹",
+            )?);
 
         let response = Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "移动文件或文件夹")

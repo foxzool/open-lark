@@ -174,8 +174,8 @@ mod tests {
         assert_eq!(request.page_token.unwrap(), "next_page_token");
         assert_eq!(request.user_id_type.unwrap(), "open_id");
         assert_eq!(request.file_type, "docx");
-        assert_eq!(request.is_whole.unwrap(), true);
-        assert_eq!(request.is_solved.unwrap(), false);
+        assert!(request.is_whole.unwrap());
+        assert!(!request.is_solved.unwrap());
     }
 
     #[test]

@@ -86,7 +86,8 @@ impl CreateWikiSpaceMemberRequest {
 
         // 创建API请求 - 使用类型安全的URL生成
         let mut api_request: ApiRequest<CreateWikiSpaceMemberResponse> =
-            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "添加知识空间成员")?);
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(serialize_params(&params, "添加知识空间成员")?);
 
         if let Some(need_notification) = self.need_notification {
             api_request = api_request.query("need_notification", &need_notification.to_string());

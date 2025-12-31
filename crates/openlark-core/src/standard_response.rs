@@ -142,7 +142,6 @@ mod tests {
                 // 如果不是DataError，至少确保是某种错误
                 println!("Actual error type: {:?}", other);
                 // 确实是错误，符合测试预期
-                assert!(true);
             }
         }
     }

@@ -6,13 +6,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_utils::*;
 use crate::common::api_endpoints::CcmSheetApiOld;
+use crate::common::api_utils::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct BatchCreateConditionFormatRequest {
@@ -98,7 +97,10 @@ pub async fn batch_create(
     }
     for (idx, item) in request.sheet_condition_formats.iter().enumerate() {
         if item.sheet_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error("sheet_id", "sheet_id 不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "sheet_id",
+                "sheet_id 不能为空",
+            ));
         }
         if item.condition_format.ranges.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -153,7 +155,10 @@ pub async fn batch_create(
                     openlark_core::error::validation_error("attrs", "attrs 不能为空")
                 })?;
                 if attrs.is_empty() {
-                    return Err(openlark_core::error::validation_error("attrs", "attrs 不能为空"));
+                    return Err(openlark_core::error::validation_error(
+                        "attrs",
+                        "attrs 不能为空",
+                    ));
                 }
             }
         }
@@ -181,14 +186,16 @@ pub async fn batch_create(
                         ));
                     }
                 }
-                if rule_type == "cellIs" && attr.formula.as_ref().map(|v| v.is_empty()).unwrap_or(true)
+                if rule_type == "cellIs"
+                    && attr.formula.as_ref().map(|v| v.is_empty()).unwrap_or(true)
                 {
                     return Err(openlark_core::error::validation_error(
                         "formula",
                         "rule_type 为 cellIs 时 formula 不能为空",
                     ));
                 }
-                if rule_type == "containsText" && attr.text.as_deref().unwrap_or("").trim().is_empty()
+                if rule_type == "containsText"
+                    && attr.text.as_deref().unwrap_or("").trim().is_empty()
                 {
                     return Err(openlark_core::error::validation_error(
                         "text",

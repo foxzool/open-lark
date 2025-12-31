@@ -107,7 +107,13 @@ impl SearchObjectRequest {
 
     pub async fn send(self) -> SDKResult<SearchObjectResponse> {
         use crate::common::api_endpoints::CcmDocsApiOld;
-        if self.req.search_key.as_deref().unwrap_or_default().is_empty() {
+        if self
+            .req
+            .search_key
+            .as_deref()
+            .unwrap_or_default()
+            .is_empty()
+        {
             return Err(openlark_core::error::validation_error(
                 "search_key",
                 "search_key 不能为空",

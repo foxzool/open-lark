@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -56,7 +55,10 @@ pub async fn data_validation(
 ) -> SDKResult<SetDataValidationResponse> {
     validate_required!(spreadsheet_token, "spreadsheet_token 不能为空");
     if request.range.trim().is_empty() {
-        return Err(openlark_core::error::validation_error("range", "range 不能为空"));
+        return Err(openlark_core::error::validation_error(
+            "range",
+            "range 不能为空",
+        ));
     }
     if !request.range.contains('!') {
         return Err(openlark_core::error::validation_error(

@@ -39,11 +39,7 @@ impl ApiResponseTrait for CreateFolderResponse {
 }
 
 impl CreateFolderRequest {
-    pub fn new(
-        config: Config,
-        name: impl Into<String>,
-        folder_token: impl Into<String>,
-    ) -> Self {
+    pub fn new(config: Config, name: impl Into<String>, folder_token: impl Into<String>) -> Self {
         Self {
             config,
             name: name.into(),
@@ -52,7 +48,7 @@ impl CreateFolderRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CreateFolderResponse> {
-        let name_len = self.name.as_bytes().len();
+        let name_len = self.name.len();
         if !(1..=256).contains(&name_len) {
             return Err(openlark_core::error::validation_error(
                 "name",
