@@ -1,6 +1,7 @@
 //! 获取词库列表
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/repo/list
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/repo/list
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -17,6 +18,7 @@ use crate::common::api_endpoints::LingoApiV1;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListRepoResp {
     /// 词库列表
+    #[serde(default)]
     pub items: Vec<Repo>,
 }
 

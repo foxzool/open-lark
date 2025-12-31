@@ -1,6 +1,7 @@
 //! 获取词典分类
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/classification/list
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/classification/list
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -42,6 +43,15 @@ impl ListClassificationRequest {
     }
 
     pub async fn send(self) -> SDKResult<ListClassificationResponse> {
+        if let Some(page_size) = self.page_size {
+            if !(1..=500).contains(&page_size) {
+                return Err(openlark_core::error::validation_error(
+                    "page_size",
+                    "page_size 取值范围必须为 1~500",
+                ));
+            }
+        }
+
         let mut api_request: ApiRequest<ListClassificationResponse> =
             ApiRequest::get(&BaikeApiV1::ClassificationList.to_url());
         if let Some(page_size) = self.page_size {
@@ -62,6 +72,7 @@ impl ListClassificationRequest {
 /// 获取词典分类响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ListClassificationResponse {
+    #[serde(default)]
     pub items: Vec<ClassificationItem>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,

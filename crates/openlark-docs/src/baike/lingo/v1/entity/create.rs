@@ -1,6 +1,7 @@
 //! 创建免审词条
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/create
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/create
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -17,7 +18,8 @@ use crate::common::api_endpoints::LingoApiV1;
 /// 创建免审词条响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateEntityResp {
-    pub entity: Entity,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity: Option<Entity>,
 }
 
 impl ApiResponseTrait for CreateEntityResp {
@@ -58,6 +60,18 @@ impl CreateEntityRequest {
 
     pub async fn send(self) -> SDKResult<CreateEntityResp> {
         validate_required!(self.body.main_keys, "main_keys 不能为空");
+        if self
+            .body
+            .description
+            .as_deref()
+            .unwrap_or_default()
+            .is_empty()
+            && self.body.rich_text.as_deref().unwrap_or_default().is_empty()
+        {
+            return Err(openlark_core::error::CoreError::validation_msg(
+                "description 与 rich_text 至少填写一个",
+            ));
+        }
 
         let body = serde_json::to_value(&self.body).map_err(|e| {
             openlark_core::error::serialization_error("序列化创建免审词条请求体失败", Some(e))

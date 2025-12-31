@@ -1,12 +1,12 @@
 //! 提取潜在的词条
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/extract
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/extract
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -18,6 +18,7 @@ pub struct ExtractEntityReqBody {
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct ExtractEntityResponse {
+    #[serde(default)]
     pub entity_word: Vec<ExtractedWord>,
 }
 
@@ -50,7 +51,14 @@ impl ExtractEntityRequest {
 
     pub async fn send(self) -> SDKResult<ExtractEntityResponse> {
         use crate::common::api_endpoints::BaikeApiV1;
-        validate_required!(self.req.text, "text 不能为空");
+        // 文档：text 非必填，但要求最大长度 128
+        let len = self.req.text.chars().count();
+        if len > 128 {
+            return Err(openlark_core::error::validation_error(
+                "text",
+                "text 最大长度不能超过 128 字符",
+            ));
+        }
 
         let api_request: ApiRequest<ExtractEntityResponse> =
             ApiRequest::post(&BaikeApiV1::EntityExtract.to_url())

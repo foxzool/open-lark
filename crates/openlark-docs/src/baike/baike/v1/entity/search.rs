@@ -1,6 +1,7 @@
 //! 模糊搜索词条
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/search
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/search
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -24,6 +25,7 @@ pub struct SearchEntityReqBody {
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SearchEntityResponse {
+    #[serde(default)]
     pub entities: Vec<Entity>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -102,6 +104,47 @@ impl SearchEntityRequest {
     }
 
     pub async fn send(self) -> SDKResult<SearchEntityResponse> {
+        if let Some(page_size) = self.page_size {
+            if !(1..=100).contains(&page_size) {
+                return Err(openlark_core::error::validation_error(
+                    "page_size",
+                    "page_size 取值范围必须为 1~100",
+                ));
+            }
+        }
+        if let Some(query) = &self.req.query {
+            let len = query.chars().count();
+            if !(1..=100).contains(&len) {
+                return Err(openlark_core::error::validation_error(
+                    "query",
+                    "query 长度必须在 1~100 字符之间",
+                ));
+            }
+        }
+        if let Some(sources) = &self.req.sources {
+            for (idx, source) in sources.iter().enumerate() {
+                match source {
+                    1 | 2 | 3 | 4 => {}
+                    _ => {
+                        return Err(openlark_core::error::validation_error(
+                            &format!("sources[{}]", idx),
+                            "sources 仅支持 1/2/3/4",
+                        ));
+                    }
+                }
+            }
+        }
+        if let Some(creators) = &self.req.creators {
+            for (idx, creator) in creators.iter().enumerate() {
+                if creator.trim().is_empty() {
+                    return Err(openlark_core::error::validation_error(
+                        &format!("creators[{}]", idx),
+                        "creators 不能包含空字符串",
+                    ));
+                }
+            }
+        }
+
         let mut api_request: ApiRequest<SearchEntityResponse> =
             ApiRequest::post(&BaikeApiV1::EntitySearch.to_url()).body(serde_json::to_value(&self.req)?);
 

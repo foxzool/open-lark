@@ -1,6 +1,7 @@
 //! 精准搜索词条
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/match
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/match
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -22,15 +23,18 @@ pub struct MatchEntityReq {
 /// 精准搜索词条响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MatchEntityResp {
+    #[serde(default)]
     pub results: Vec<MatchEntityResult>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MatchEntityResult {
-    pub entity_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_id: Option<String>,
     /// 匹配类型（文档示例为 int，如 0）
     #[serde(rename = "type")]
-    pub type_: i32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<i32>,
 }
 
 impl ApiResponseTrait for MatchEntityResp {
@@ -55,6 +59,13 @@ impl MatchEntityRequest {
 
     pub async fn send(self) -> SDKResult<MatchEntityResp> {
         validate_required!(self.req.word, "word 不能为空");
+        let len = self.req.word.chars().count();
+        if !(1..=100).contains(&len) {
+            return Err(openlark_core::error::validation_error(
+                "word",
+                "word 长度必须在 1~100 字符之间",
+            ));
+        }
 
         let api_request: ApiRequest<MatchEntityResp> =
             ApiRequest::post(&BaikeApiV1::EntityMatch.to_url()).body(serde_json::to_value(&self.req)?);

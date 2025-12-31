@@ -1,6 +1,7 @@
 //! 词条高亮
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/highlight
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/highlight
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -18,6 +19,7 @@ pub struct HighlightEntityReqBody {
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct HighlightEntityResponse {
+    #[serde(default)]
     pub phrases: Vec<Phrase>,
 }
 
@@ -57,6 +59,13 @@ impl HighlightEntityRequest {
     pub async fn send(self) -> SDKResult<HighlightEntityResponse> {
         use crate::common::api_endpoints::BaikeApiV1;
         validate_required!(self.req.text, "text 不能为空");
+        let len = self.req.text.chars().count();
+        if !(1..=1000).contains(&len) {
+            return Err(openlark_core::error::validation_error(
+                "text",
+                "text 长度必须在 1~1000 字符之间",
+            ));
+        }
 
         let api_request: ApiRequest<HighlightEntityResponse> =
             ApiRequest::post(&BaikeApiV1::EntityHighlight.to_url())

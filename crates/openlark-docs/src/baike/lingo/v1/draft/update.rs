@@ -1,6 +1,7 @@
 //! 更新草稿
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/draft/update
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/draft/update
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -17,7 +18,8 @@ use crate::common::api_endpoints::LingoApiV1;
 /// 更新草稿响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateDraftResp {
-    pub draft: Draft,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub draft: Option<Draft>,
 }
 
 impl ApiResponseTrait for UpdateDraftResp {
@@ -53,6 +55,18 @@ impl UpdateDraftRequest {
     pub async fn send(self) -> SDKResult<UpdateDraftResp> {
         validate_required!(self.draft_id, "draft_id 不能为空");
         validate_required!(self.body.main_keys, "main_keys 不能为空");
+        if self
+            .body
+            .description
+            .as_deref()
+            .unwrap_or_default()
+            .is_empty()
+            && self.body.rich_text.as_deref().unwrap_or_default().is_empty()
+        {
+            return Err(openlark_core::error::CoreError::validation_msg(
+                "description 与 rich_text 至少填写一个",
+            ));
+        }
 
         let body = serde_json::to_value(&self.body).map_err(|e| {
             openlark_core::error::serialization_error("序列化更新草稿请求体失败", Some(e))

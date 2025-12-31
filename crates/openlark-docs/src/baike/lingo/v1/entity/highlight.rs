@@ -1,6 +1,7 @@
 //! 词条高亮
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/highlight
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/highlight
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -37,6 +38,7 @@ pub struct Phrase {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct HighlightEntityResp {
     /// 识别到的词条信息
+    #[serde(default)]
     pub phrases: Vec<Phrase>,
 }
 
