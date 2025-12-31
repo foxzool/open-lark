@@ -22,7 +22,7 @@ use std::sync::Arc;
 ///
 /// # 示例
 /// ```rust,no_run
-/// use openlark_client::Client;
+/// use openlark_client::prelude::*;
 ///
 /// #[tokio::main]
 /// async fn main() -> Result<()> {
@@ -32,8 +32,9 @@ use std::sync::Arc;
 ///     // 发送消息（需要communication feature）
 ///     #[cfg(feature = "communication")]
 ///     {
-///         let result = client.communication()
-///             .send_text("user_id", "open_id", "Hello!")
+///         let result = client
+///             .communication()?
+///             .send_text_message("user_id", "open_id", "Hello!")
 ///             .await?;
 ///         println!("消息发送成功: {}", result.message_id);
 ///     }
@@ -64,7 +65,9 @@ impl Client {
     ///
     /// # 示例
     /// ```rust,no_run
-    /// let client = Client::from_env()?;
+    /// use openlark_client::Client;
+    ///
+    /// let _client = Client::from_env();
     /// ```
     pub fn from_env() -> Result<Self> {
         Self::builder().from_env().build()
@@ -420,14 +423,18 @@ impl LarkClient for Client {
 /// # 示例
 /// ```rust,no_run
 /// use openlark_client::Client;
+/// use openlark_client::Result;
 /// use std::time::Duration;
 ///
-/// let client = Client::builder()
-///     .app_id("your_app_id")
-///     .app_secret("your_app_secret")
-///     .base_url("https://open.feishu.cn")
-///     .timeout(Duration::from_secs(30))
-///     .build()?;
+/// fn main() -> Result<()> {
+///     let _client = Client::builder()
+///         .app_id("your_app_id")
+///         .app_secret("your_app_secret")
+///         .base_url("https://open.feishu.cn")
+///         .timeout(Duration::from_secs(30))
+///         .build()?;
+///     Ok(())
+/// }
 /// ```
 #[derive(Debug, Clone)]
 pub struct ClientBuilder {
