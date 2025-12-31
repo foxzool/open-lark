@@ -5,4 +5,5 @@
 pub mod scope;
 pub mod department;
 pub mod functional_role;
+pub mod group;
 pub mod user;
