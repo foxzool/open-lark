@@ -1,7 +1,6 @@
 //! 上传图片
 //!
-//! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/upload
-//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/upload
+//! docPath: https://open.feishu.cn/document/lingo-v1/file/upload
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
