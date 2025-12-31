@@ -199,6 +199,14 @@ pub const MOMENTS_V1_INTERACTION_SHARE: &str = "/open-apis/moments/v1/interactio
 /// Contact 权限范围 v3
 pub const CONTACT_V3_SCOPES: &str = "/open-apis/contact/v3/scopes";
 
+/// Contact 部门 v3
+pub const CONTACT_V3_DEPARTMENTS: &str = "/open-apis/contact/v3/departments";
+pub const CONTACT_V3_DEPARTMENTS_BATCH: &str = "/open-apis/contact/v3/departments/batch";
+pub const CONTACT_V3_DEPARTMENTS_PARENT: &str = "/open-apis/contact/v3/departments/parent";
+pub const CONTACT_V3_DEPARTMENTS_SEARCH: &str = "/open-apis/contact/v3/departments/search";
+pub const CONTACT_V3_DEPARTMENTS_UNBIND_DEPARTMENT_CHAT: &str =
+    "/open-apis/contact/v3/departments/unbind_department_chat";
+
 /// Contact 用户 v3
 pub const CONTACT_V3_USERS: &str = "/open-apis/contact/v3/users";
 pub const CONTACT_V3_USER: &str = "/open-apis/contact/v3/users/{}";

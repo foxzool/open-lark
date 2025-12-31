@@ -1,0 +1,106 @@
+//! 获取部门信息列表
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version//department/list
+
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+
+use crate::{
+    common::api_utils::extract_response_data,
+    contact::contact::v3::{
+        department::models::DepartmentListResponse,
+        user::models::{DepartmentIdType, UserIdType},
+    },
+    endpoints::CONTACT_V3_DEPARTMENTS,
+};
+
+/// 获取部门信息列表请求
+pub struct ListDepartmentsRequest {
+    config: Config,
+    user_id_type: Option<UserIdType>,
+    department_id_type: Option<DepartmentIdType>,
+    parent_department_id: Option<String>,
+    fetch_child: Option<bool>,
+    page_size: Option<i32>,
+    page_token: Option<String>,
+}
+
+impl ListDepartmentsRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            user_id_type: None,
+            department_id_type: None,
+            parent_department_id: None,
+            fetch_child: None,
+            page_size: None,
+            page_token: None,
+        }
+    }
+
+    /// 用户 ID 类型（查询参数，可选）
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
+
+    /// 部门 ID 类型（查询参数，可选）
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
+        self.department_id_type = Some(department_id_type);
+        self
+    }
+
+    /// 父部门 ID（查询参数，可选）
+    pub fn parent_department_id(mut self, parent_department_id: impl Into<String>) -> Self {
+        self.parent_department_id = Some(parent_department_id.into());
+        self
+    }
+
+    /// 是否递归获取子部门（查询参数，可选）
+    pub fn fetch_child(mut self, fetch_child: bool) -> Self {
+        self.fetch_child = Some(fetch_child);
+        self
+    }
+
+    /// 分页大小（查询参数，可选，默认 10，最大 50）
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    /// 分页标记（查询参数，可选）
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.page_token = Some(page_token.into());
+        self
+    }
+
+    /// 执行请求
+    ///
+    /// docPath: https://open.feishu.cn/document/server-docs/historic-version//department/list
+    pub async fn execute(self) -> SDKResult<DepartmentListResponse> {
+        // url: GET:/open-apis/contact/v3/departments
+        let mut req: ApiRequest<DepartmentListResponse> = ApiRequest::get(CONTACT_V3_DEPARTMENTS);
+
+        if let Some(user_id_type) = self.user_id_type {
+            req = req.query("user_id_type", user_id_type.as_str());
+        }
+        if let Some(department_id_type) = self.department_id_type {
+            req = req.query("department_id_type", department_id_type.as_str());
+        }
+        if let Some(parent_department_id) = self.parent_department_id {
+            req = req.query("parent_department_id", parent_department_id);
+        }
+        if let Some(fetch_child) = self.fetch_child {
+            req = req.query("fetch_child", fetch_child.to_string());
+        }
+        if let Some(page_size) = self.page_size {
+            req = req.query("page_size", page_size.to_string());
+        }
+        if let Some(page_token) = self.page_token {
+            req = req.query("page_token", page_token);
+        }
+
+        let resp = Transport::request(req, &self.config, None).await?;
+        extract_response_data(resp, "获取部门信息列表")
+    }
+}
+
