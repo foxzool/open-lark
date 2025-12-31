@@ -1,0 +1,87 @@
+//! 批量获取部门信息
+//!
+//! docPath: https://open.feishu.cn/document/contact-v3/department/batch
+
+use openlark_core::{
+    api::ApiRequest,
+    config::Config,
+    error,
+    http::Transport,
+    SDKResult,
+};
+
+use crate::{
+    common::api_utils::extract_response_data,
+    contact::contact::v3::{
+        department::models::BatchGetDepartmentsResponse,
+        user::models::{DepartmentIdType, UserIdType},
+    },
+    endpoints::CONTACT_V3_DEPARTMENTS_BATCH,
+};
+
+/// 批量获取部门信息请求
+pub struct BatchGetDepartmentsRequest {
+    config: Config,
+    department_ids: Vec<String>,
+    department_id_type: Option<DepartmentIdType>,
+    user_id_type: Option<UserIdType>,
+}
+
+impl BatchGetDepartmentsRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            department_ids: Vec::new(),
+            department_id_type: None,
+            user_id_type: None,
+        }
+    }
+
+    /// 追加一个部门 ID（查询参数 department_ids，可多次传递）
+    pub fn push_department_id(mut self, department_id: impl Into<String>) -> Self {
+        self.department_ids.push(department_id.into());
+        self
+    }
+
+    /// 部门 ID 类型（查询参数，可选）
+    pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
+        self.department_id_type = Some(department_id_type);
+        self
+    }
+
+    /// 用户 ID 类型（查询参数，可选）
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
+
+    /// 执行请求
+    ///
+    /// docPath: https://open.feishu.cn/document/contact-v3/department/batch
+    pub async fn execute(self) -> SDKResult<BatchGetDepartmentsResponse> {
+        if self.department_ids.is_empty() {
+            return Err(error::validation_error(
+                "department_ids 不能为空".to_string(),
+                "请至少传入 1 个 department_ids（最多 50 个）".to_string(),
+            ));
+        }
+
+        // url: GET:/open-apis/contact/v3/departments/batch
+        let mut req: ApiRequest<BatchGetDepartmentsResponse> =
+            ApiRequest::get(CONTACT_V3_DEPARTMENTS_BATCH);
+
+        for department_id in self.department_ids {
+            req = req.query("department_ids", department_id);
+        }
+        if let Some(department_id_type) = self.department_id_type {
+            req = req.query("department_id_type", department_id_type.as_str());
+        }
+        if let Some(user_id_type) = self.user_id_type {
+            req = req.query("user_id_type", user_id_type.as_str());
+        }
+
+        let resp = Transport::request(req, &self.config, None).await?;
+        extract_response_data(resp, "批量获取部门信息")
+    }
+}
+
