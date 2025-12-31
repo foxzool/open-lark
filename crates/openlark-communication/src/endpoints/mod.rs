@@ -194,6 +194,20 @@ pub const MOMENTS_V1_INTERACTION_LIKE: &str = "/open-apis/moments/v1/interaction
 pub const MOMENTS_V1_INTERACTION_COMMENT: &str = "/open-apis/moments/v1/interactions/comment";
 pub const MOMENTS_V1_INTERACTION_SHARE: &str = "/open-apis/moments/v1/interactions/share";
 
+// ==================== Contact (通讯录) v3 ====================
+
+/// Contact 权限范围 v3
+pub const CONTACT_V3_SCOPES: &str = "/open-apis/contact/v3/scopes";
+
+/// Contact 用户 v3
+pub const CONTACT_V3_USERS: &str = "/open-apis/contact/v3/users";
+pub const CONTACT_V3_USER: &str = "/open-apis/contact/v3/users/{}";
+pub const CONTACT_V3_USERS_BATCH: &str = "/open-apis/contact/v3/users/batch";
+pub const CONTACT_V3_USERS_FIND_BY_DEPARTMENT: &str = "/open-apis/contact/v3/users/find_by_department";
+pub const CONTACT_V3_USERS_BATCH_GET_ID: &str = "/open-apis/contact/v3/users/batch_get_id";
+pub const CONTACT_V3_USER_UPDATE_USER_ID: &str = "/open-apis/contact/v3/users/{}/update_user_id";
+pub const CONTACT_V3_USER_RESURRECT: &str = "/open-apis/contact/v3/users/{}/resurrect";
+
 // ==================== 兼容性别名 ====================
 
 /// 为保持向后兼容性，提供一些简短的别名
