@@ -1,0 +1,51 @@
+//! 删除单位
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/contact-v3/unit/delete
+
+use openlark_core::{
+    api::ApiRequest,
+    config::Config,
+    http::Transport,
+    validate_required, SDKResult,
+};
+
+use crate::{
+    common::{api_utils::extract_response_data, models::EmptyData},
+    endpoints::CONTACT_V3_UNIT,
+};
+
+/// 删除单位请求
+pub struct DeleteUnitRequest {
+    config: Config,
+    unit_id: String,
+}
+
+impl DeleteUnitRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            unit_id: String::new(),
+        }
+    }
+
+    /// 单位 ID（路径参数）
+    pub fn unit_id(mut self, unit_id: impl Into<String>) -> Self {
+        self.unit_id = unit_id.into();
+        self
+    }
+
+    /// 执行请求
+    ///
+    /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/unit/delete
+    pub async fn execute(self) -> SDKResult<EmptyData> {
+        validate_required!(self.unit_id, "unit_id 不能为空");
+
+        // url: DELETE:/open-apis/contact/v3/unit/:unit_id
+        let req: ApiRequest<EmptyData> =
+            ApiRequest::delete(format!("{}/{}", CONTACT_V3_UNIT, self.unit_id));
+
+        let resp = Transport::request(req, &self.config, None).await?;
+        extract_response_data(resp, "删除单位")
+    }
+}
+
