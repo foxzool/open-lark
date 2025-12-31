@@ -4,4 +4,5 @@
 
 pub mod scope;
 pub mod department;
+pub mod functional_role;
 pub mod user;
