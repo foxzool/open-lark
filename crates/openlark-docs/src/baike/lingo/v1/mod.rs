@@ -131,14 +131,14 @@ impl<'a> LingoV1Service<'a> {
     // ===== 文件管理 =====
     /// 上传图片
     /// docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/upload
-    /// doc: https://open.feishu.cn/document/lingo-v1/file/upload
+    /// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/upload
     pub fn upload_file(&self, name: impl Into<String>, file: Vec<u8>) -> UploadFileRequest {
         UploadFileRequest::new(self.config.clone(), name, file)
     }
 
     /// 下载图片（返回二进制 bytes）
     /// docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/download
-    /// doc: https://open.feishu.cn/document/lingo-v1/file/download
+    /// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/download
     pub fn download_file(&self, file_token: impl Into<String>) -> DownloadFileRequest {
         DownloadFileRequest::new(self.config.clone(), file_token)
     }

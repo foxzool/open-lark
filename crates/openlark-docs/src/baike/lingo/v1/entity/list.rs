@@ -1,6 +1,7 @@
 //! 获取词条列表
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/list
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/list
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -17,11 +18,14 @@ use crate::common::api_endpoints::LingoApiV1;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListEntityResp {
     /// 词条列表
+    #[serde(default)]
     pub entities: Vec<Entity>,
     /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否还有更多项
-    pub has_more: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_more: Option<bool>,
 }
 
 impl ApiResponseTrait for ListEntityResp {

@@ -1,6 +1,7 @@
 //! 获取词条详情
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/get
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/get
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
@@ -17,7 +18,8 @@ use crate::common::api_endpoints::LingoApiV1;
 /// 获取词条详情响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetEntityResp {
-    pub entity: Entity,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity: Option<Entity>,
 }
 
 impl ApiResponseTrait for GetEntityResp {
