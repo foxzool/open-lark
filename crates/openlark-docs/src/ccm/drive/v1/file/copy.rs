@@ -1,13 +1,15 @@
+//! 复制文件
+//!
+//! 将文件复制到用户云空间的其他文件夹中。不支持复制文件夹。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/copy
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-/// 复制文件
-///
-/// 将文件复制到用户云空间的其他文件夹中。不支持复制文件夹。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/copy
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
