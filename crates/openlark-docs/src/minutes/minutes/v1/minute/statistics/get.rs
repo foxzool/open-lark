@@ -1,3 +1,7 @@
+//! 获取妙记统计数据
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/minutes-v1/minute-statistics/get
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -8,10 +12,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::MinutesApiV1, api_utils::*};
 
-/// 获取妙记统计数据
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-statistics/get
-/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-statistics/get
 #[derive(Debug, Clone)]
 pub struct GetMinuteStatisticsRequest {
     config: Config,

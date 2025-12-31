@@ -1,3 +1,7 @@
+//! 导出妙记文字记录
+//!
+//! docPath: https://open.feishu.cn/document/minutes-v1/minute-transcript/get
+
 use openlark_core::{
     api::{ApiRequest, Response},
     config::Config,
@@ -7,10 +11,6 @@ use openlark_core::{
 
 use crate::common::api_endpoints::MinutesApiV1;
 
-/// 导出妙记文字记录
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-transcript/get
-/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/minutes-v1/minute-transcript/get
 #[derive(Debug, Clone)]
 pub struct GetMinuteTranscriptRequest {
     config: Config,
