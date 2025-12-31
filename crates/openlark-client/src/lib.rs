@@ -31,21 +31,11 @@
 //!     // 发送文本消息（需要 communication feature）
 //!     #[cfg(feature = "communication")]
 //!     {
-//!         let result = client.communication()
+//!         let result = client
+//!             .communication()?
 //!             .send_text_message("user_open_id", "open_id", "Hello!")
 //!             .await?;
 //!         println!("消息发送成功: {}", result.message_id);
-//!     }
-//!
-//!     // 获取员工列表（需要 hr feature）
-//!     #[cfg(feature = "hr")]
-//!     {
-//!         let employees = client.hr()
-//!             .list_employees(Some("open_id"), Some(50), None)
-//!             .await?;
-//!         for employee in employees.employees {
-//!             println!("员工: {} ({})", employee.name, employee.user_id);
-//!         }
 //!     }
 //!
 //!     Ok(())
@@ -58,13 +48,16 @@
 //! use openlark_client::prelude::*;
 //! use std::time::Duration;
 //!
-//! let client = Client::builder()
-//!     .app_id("your_app_id")
-//!     .app_secret("your_app_secret")
-//!     .base_url("https://open.feishu.cn")
-//!     .timeout(Duration::from_secs(30))
-//!     .enable_log(true)
-//!     .build()?;
+//! fn main() -> Result<()> {
+//!     let _client = Client::builder()
+//!         .app_id("your_app_id")
+//!         .app_secret("your_app_secret")
+//!         .base_url("https://open.feishu.cn")
+//!         .timeout(Duration::from_secs(30))
+//!         .enable_log(true)
+//!         .build()?;
+//!     Ok(())
+//! }
 //! ```
 //!
 //! ### 环境变量配置
@@ -100,27 +93,24 @@
 //! 每个启用功能都提供对应的服务访问器：
 //!
 //! ```rust,no_run
+//! use openlark_client::prelude::*;
+//!
+//! fn main() -> Result<()> {
 //! let client = Client::from_env()?;
 //!
 //! // 通讯服务（communication feature）
 //! #[cfg(feature = "communication")]
-//! let comm = client.communication();
-//!
-//! // HR 服务（hr feature）
-//! #[cfg(feature = "hr")]
-//! let hr = client.hr();
+//! let _comm = client.communication()?;
 //!
 //! // 文档服务（docs feature）
 //! #[cfg(feature = "docs")]
-//! let docs = client.docs();
-//!
-//! // AI 服务（ai feature）
-//! #[cfg(feature = "ai")]
-//! let ai = client.ai();
+//! let _docs = client.docs();
 //!
 //! // 认证服务（auth feature）
 //! #[cfg(feature = "auth")]
-//! let auth = client.auth();
+//! let _auth = client.auth();
+//! Ok(())
+//! }
 //! ```
 //!
 //! ## 高级用法
@@ -130,6 +120,7 @@
 //! ```rust,no_run
 //! use openlark_client::prelude::*;
 //!
+//! fn main() -> Result<()> {
 //! let client = Client::from_env()?;
 //! let registry = client.registry();
 //!
@@ -140,25 +131,27 @@
 //! if registry.has_service("communication") {
 //!     println!("通讯服务可用");
 //! }
+//! Ok(())
+//! }
 //! ```
 //!
 //! ### 自定义配置
 //!
 //! ```rust,no_run
 //! use openlark_client::prelude::*;
-//! use std::collections::HashMap;
 //! use std::time::Duration;
 //!
-//! let mut headers = HashMap::new();
-//! headers.insert("User-Agent".to_string(), "MyApp/1.0".to_string());
-//!
-//! let client = Client::builder()
-//!     .app_id("app_id")
-//!     .app_secret("app_secret")
-//!     .timeout(Duration::from_secs(60))
-//!     .retry_count(3)
-//!     .headers(headers)
-//!     .build()?;
+//! fn main() -> Result<()> {
+//!     let _client = Client::builder()
+//!         .app_id("app_id")
+//!         .app_secret("app_secret")
+//!         .base_url("https://open.feishu.cn")
+//!         .timeout(Duration::from_secs(60))
+//!         .retry_count(3)
+//!         .enable_log(true)
+//!         .build()?;
+//!     Ok(())
+//! }
 //! ```
 //!
 //! ## 错误处理
@@ -186,7 +179,7 @@
 //!         }
 //!
 //!         // 获取完整的错误分析报告
-//!         eprintln!("\n{}", error.detailed_report());
+//!         eprintln!("\n{}", ErrorAnalyzer::new(&error).detailed_report());
 //!
 //!         // 根据错误类型进行特定处理
 //!         if error.is_validation_error() {
@@ -209,7 +202,11 @@
 //! async fn send_message_with_error_handling() -> Result<()> {
 //!     let client = Client::from_env()?;
 //!
-//!     match client.communication().send_text_message("user_123", "open_id", "Hello!").await {
+//!     match client
+//!         .communication()?
+//!         .send_text_message("user_123", "open_id", "Hello!")
+//!         .await
+//!     {
 //!         Ok(response) => {
 //!             println!("消息发送成功: {}", response.message_id);
 //!             Ok(())
@@ -222,7 +219,10 @@
 //!             }
 //!
 //!             // 记录错误用于监控
-//!             tracing::error!("消息发送失败: {}", error.log_summary());
+//!             tracing::error!(
+//!                 "消息发送失败: {}",
+//!                 ErrorAnalyzer::new(&error).log_summary()
+//!             );
 //!
 //!             Err(error) // 返回原始错误给上层处理
 //!         }
@@ -391,8 +391,11 @@ pub type ConfigResult<T> = Result<T>;
 /// ```rust,no_run
 /// use openlark_client::prelude::*;
 ///
-/// let client = Client::from_env()?;
-/// let service_factory = ServiceFactory::new(client.config().clone())?;
+/// fn main() -> Result<()> {
+///     let client = Client::from_env()?;
+///     let _service_factory = ServiceFactory::new(client.config().clone())?;
+///     Ok(())
+/// }
 /// ```
 pub mod prelude {
     // ============================================================================
@@ -558,8 +561,8 @@ pub mod utils {
     /// - `Err(Error)`: 环境变量配置错误，包含详细的错误信息和恢复建议
     ///
     /// # 示例
-    /// ```rust
-    /// use openlark_client::utils;
+    /// ```rust,no_run
+    /// use openlark_client::{prelude::*, utils};
     ///
     /// match utils::check_env_config() {
     ///     Ok(()) => println!("环境变量配置正确"),
