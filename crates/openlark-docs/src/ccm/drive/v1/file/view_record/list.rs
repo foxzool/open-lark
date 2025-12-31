@@ -1,7 +1,9 @@
-/// 获取文件查看记录
-///
-/// 获取文件的访问记录列表。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-view_record/list
+//! 获取文件查看记录
+//!
+//! 获取文件的访问记录列表。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-view_record/list
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
