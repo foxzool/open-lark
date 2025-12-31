@@ -1,3 +1,9 @@
+//! 删除文件或文件夹
+//!
+//! 删除用户在云空间内的文件或者文件夹。文件或者文件夹被删除后，会进入用户回收站里。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/delete
+
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -5,10 +11,6 @@ use openlark_core::{
     http::Transport,
     SDKResult,
 };
-/// 删除文件或文件夹
-///
-/// 删除用户在云空间内的文件或者文件夹。文件或者文件夹被删除后，会进入用户回收站里。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/delete
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize)]
