@@ -10,7 +10,6 @@ use crate::{
 };
 use openlark_core::error::ErrorTrait;
 use std::collections::HashMap;
-use std::time::{SystemTime, UNIX_EPOCH};
 
 /// 📡 通讯服务 - 统一访问接口
 ///
@@ -82,9 +81,29 @@ impl<'a> CommunicationService<'a> {
     /// 返回发送消息的响应信息
     ///
     /// # 示例
-    /// ```rust
-    /// let response = service.send_text_message("user_123", "open_id", "Hello World!").await?;
-    /// println!("消息发送成功，ID: {}", response.message_id);
+    /// ```rust,no_run
+    /// use openlark_client::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() -> Result<()> {
+    ///     let client = Client::builder()
+    ///         .app_id("your_app_id")
+    ///         .app_secret("your_app_secret")
+    ///         .base_url("https://open.feishu.cn")
+    ///         .build()?;
+    ///
+    ///     // 需要启用 communication feature
+    ///     #[cfg(feature = "communication")]
+    ///     {
+    ///         let service = client.communication()?;
+    ///         let response = service
+    ///             .send_text_message("user_123", "open_id", "Hello World!")
+    ///             .await?;
+    ///         println!("消息发送成功，ID: {}", response.message_id);
+    ///     }
+    ///
+    ///     Ok(())
+    /// }
     /// ```
     pub async fn send_text_message(
         &self,
@@ -360,27 +379,6 @@ impl<'a> CommunicationService<'a> {
     ) -> Result<SendMessageResponse> {
         // 模拟网络延迟
         tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
-
-        // 模拟可能的错误情况（5%失败率）
-        // 使用系统时间戳作为简单的随机源
-        let timestamp = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap_or_default()
-            .as_secs();
-        if timestamp % 100 < 5 {
-            return with_operation_context(
-                Err(api_error(
-                    500,
-                    self.endpoints
-                        .get("send_message")
-                        .map_or("/unknown", |v| *v),
-                    "模拟API调用失败",
-                    Some("req_sim_001".to_string()),
-                )),
-                "simulate_send_message",
-                "CommunicationService",
-            );
-        }
 
         // 成功响应
         let response = SendMessageResponse {
