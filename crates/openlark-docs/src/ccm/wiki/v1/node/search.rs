@@ -1,8 +1,9 @@
-/// 搜索Wiki
-///
-/// 搜索Wiki，用户通过关键词查询Wiki，只能查找自己可见的wiki。
-/// docPath: /document/ukTMukTMukTM/uEzN0YjLxcDN24SM3QjN/search_wiki
-/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uEzN0YjLxcDN24SM3QjN/search_wiki
+//! 搜索 Wiki
+//!
+//! 搜索 Wiki，用户通过关键词查询 Wiki，只能查找自己可见的 Wiki。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/search_wiki
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -60,9 +61,6 @@ impl SearchWikiRequest {
     }
 
     /// 执行请求
-    ///
-    /// docPath: /document/ukTMukTMukTM/uEzN0YjLxcDN24SM3QjN/search_wiki
-    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uEzN0YjLxcDN24SM3QjN/search_wiki
     pub async fn execute(self, params: SearchWikiParams) -> SDKResult<SearchWikiResponse> {
         // 验证必填字段
         validate_required!(params.query, "搜索关键词不能为空");

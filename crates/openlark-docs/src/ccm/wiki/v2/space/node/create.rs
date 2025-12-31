@@ -1,8 +1,9 @@
-/// 创建知识空间节点
-///
-/// 此接口用于在知识节点里创建节点到指定位置。
-/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/create
-/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/create
+//! 创建知识空间节点
+//!
+//! 此接口用于在知识节点里创建节点到指定位置。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/create
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -64,9 +65,6 @@ impl CreateWikiSpaceNodeRequest {
     }
 
     /// 执行请求
-    ///
-    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/create
-    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/create
     pub async fn execute(
         self,
         params: CreateWikiSpaceNodeParams,

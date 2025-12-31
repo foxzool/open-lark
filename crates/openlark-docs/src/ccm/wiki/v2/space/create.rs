@@ -1,8 +1,9 @@
-/// 创建知识空间
-///
-/// 此接口用于创建知识空间。
-/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/create
-/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/create
+//! 创建知识空间
+//!
+//! 此接口用于创建知识空间。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/create
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -49,9 +50,6 @@ impl CreateWikiSpaceRequest {
     }
 
     /// 执行请求
-    ///
-    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/create
-    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/create
     pub async fn execute(
         self,
         params: CreateWikiSpaceParams,

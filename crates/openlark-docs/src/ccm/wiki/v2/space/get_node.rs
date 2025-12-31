@@ -1,8 +1,9 @@
-/// 获取知识空间节点信息
-///
-/// 获取知识空间节点信息。
-/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get_node
-/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get_node
+//! 获取知识空间节点信息
+//!
+//! 获取知识空间节点信息。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/get_node
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -48,9 +49,6 @@ impl GetWikiSpaceNodeRequest {
     }
 
     /// 执行请求
-    ///
-    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get_node
-    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get_node
     pub async fn execute(
         self,
         params: GetWikiSpaceNodeParams,

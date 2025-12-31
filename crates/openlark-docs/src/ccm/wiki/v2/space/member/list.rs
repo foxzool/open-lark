@@ -1,8 +1,9 @@
-/// 获取知识空间成员列表
-///
-/// 获取知识空间的成员列表。
-/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-member/list
-/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-member/list
+//! 获取知识空间成员列表
+//!
+//! 获取知识空间的成员列表。
+//!
+//! docPath: https://open.feishu.cn/document/docs/wiki-v2/space-member/list
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -63,9 +64,6 @@ impl ListWikiSpaceMembersRequest {
     }
 
     /// 执行请求
-    ///
-    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-member/list
-    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-member/list
     pub async fn execute(
         self,
         params: Option<ListWikiSpaceMembersParams>,
