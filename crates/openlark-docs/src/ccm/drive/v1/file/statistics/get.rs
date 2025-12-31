@@ -1,7 +1,9 @@
-/// 获取文件统计信息
-///
-/// 获取文件统计信息，包括文档阅读人数、次数和点赞数。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-statistics/get
+//! 获取文件统计信息
+//!
+//! 获取文件统计信息，包括文档阅读人数、次数和点赞数。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/get
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
