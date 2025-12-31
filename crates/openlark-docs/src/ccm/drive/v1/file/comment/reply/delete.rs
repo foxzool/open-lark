@@ -1,6 +1,7 @@
-/// 删除回复
-///
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment-reply/delete
+//! 删除回复
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/delete
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

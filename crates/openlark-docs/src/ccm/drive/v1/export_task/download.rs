@@ -1,7 +1,9 @@
-/// 下载导出文件
-///
-/// 下载导出的文件内容。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/export_task/download
+//! 下载导出文件
+//!
+//! 下载导出的文件内容。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/export_task/download
+
 use crate::common::api_endpoints::DriveApi;
 use openlark_core::{
     api::{ApiRequest, Response},

@@ -1,14 +1,15 @@
+//! 删除文档版本
+//!
+//! 删除指定源文档的指定版本。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-version/delete
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-
-/// 删除文档版本
-///
-/// 删除指定源文档的指定版本。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/delete
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

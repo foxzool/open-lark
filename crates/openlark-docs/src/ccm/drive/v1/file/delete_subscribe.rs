@@ -1,7 +1,9 @@
-/// 取消云文档事件订阅
-///
-/// 该接口**仅支持文档拥有者**取消订阅自己文档的通知事件，可订阅的文档类型为**旧版文档**、**新版文档**、**电子表格**和**多维表格**。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/delete_subscribe
+//! 取消云文档事件订阅
+//!
+//! 该接口**仅支持文档拥有者**取消订阅自己文档的通知事件，可订阅的文档类型为**旧版文档**、**新版文档**、**电子表格**和**多维表格**。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/event/delete_subscribe
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
