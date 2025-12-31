@@ -1,6 +1,6 @@
 //! 查询下拉列表设置
 //!
-//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/datavalidation/query-datavalidation
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/query-datavalidation
 
 use std::collections::HashMap;
 

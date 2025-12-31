@@ -1,6 +1,6 @@
 //! 批量更新数据
 //!
-//! docPath: /document/ukTMukTMukTM/uEjMzUjLxIzM14SMyMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-data-to-multiple-ranges
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

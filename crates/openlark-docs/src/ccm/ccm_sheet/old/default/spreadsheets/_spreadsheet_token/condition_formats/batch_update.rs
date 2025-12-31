@@ -1,6 +1,6 @@
 //! 批量更新条件格式
 //!
-//! docPath: /document/ukTMukTMukTM/uATMzUjLwEzM14CMxMTN/conditionformat/condition-format-update
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-update
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

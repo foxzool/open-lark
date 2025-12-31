@@ -1,6 +1,6 @@
 //! 获取保护范围
 //!
-//! docPath: /document/ukTMukTMukTM/uQTM5YjL0ETO24CNxkjN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/retrieve-protection-scopes
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

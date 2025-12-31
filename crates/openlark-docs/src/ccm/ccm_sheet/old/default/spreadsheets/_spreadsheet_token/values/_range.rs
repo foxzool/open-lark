@@ -1,6 +1,6 @@
 //! 读取单个范围
 //!
-//! docPath: /document/ukTMukTMukTM/ugTMzUjL4EzM14COxMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

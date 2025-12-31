@@ -1,6 +1,6 @@
 //! 设置单元格样式
 //!
-//! docPath: /document/ukTMukTMukTM/ukjMzUjL5IzM14SOyMTN
+//! docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/set-cell-style
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
