@@ -1,7 +1,6 @@
 //! 词条高亮
 //!
-//! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/highlight
-//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/highlight
+//! docPath: https://open.feishu.cn/document/server-docs/baike-v1/entity/highlight
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
