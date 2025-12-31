@@ -4,7 +4,7 @@
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
 
-use crate::common::api_utils::extract_response_data;
+use crate::{common::api_utils::extract_response_data, endpoints::CALENDAR_V4_CALENDARS};
 
 /// 创建会议纪要请求
 pub struct CreateMeetingMinuteRequest {
@@ -43,12 +43,11 @@ impl CreateMeetingMinuteRequest {
 
         // url: POST:/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/meeting_minute
         let req: ApiRequest<serde_json::Value> = ApiRequest::post(format!(
-            "/open-apis/calendar/v4/calendars/{}/events/{}/meeting_minute",
-            self.calendar_id, self.event_id
+            "{}/{}/events/{}/meeting_minute",
+            CALENDAR_V4_CALENDARS, self.calendar_id, self.event_id
         ));
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "创建会议纪要")
     }
 }
-
