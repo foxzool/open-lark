@@ -45,6 +45,8 @@ pub mod common;
 pub mod endpoints;
 
 // 业务模块（按 bizTag 组织）
+pub mod contact;
+pub mod im;
 pub mod moments;
 
 // 重新导出端点常量，方便外部使用
