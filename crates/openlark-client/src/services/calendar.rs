@@ -32,3 +32,9 @@ impl CalendarService {
         &self.config
     }
 }
+
+impl Default for CalendarService {
+    fn default() -> Self {
+        Self::new()
+    }
+}

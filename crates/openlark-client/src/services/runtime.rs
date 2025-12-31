@@ -55,7 +55,7 @@ impl ServiceRuntime {
     /// 拓扑化初始化+启动
     pub async fn bootstrap(&self) -> Result<()> {
         let graph = self.build_graph();
-        let ordered = graph::topo_sort(&graph).map_err(|e| map_graph_error(e))?;
+        let ordered = graph::topo_sort(&graph).map_err(map_graph_error)?;
 
         for name in ordered {
             let provider = self
@@ -177,9 +177,11 @@ mod tests {
 
     #[tokio::test]
     async fn bootstrap_registers_auth_service() {
-        let mut config = Config::default();
-        config.app_id = "test_app".into();
-        config.app_secret = "test_secret".into();
+        let config = Config {
+            app_id: "test_app".into(),
+            app_secret: "test_secret".into(),
+            ..Default::default()
+        };
 
         let runtime = build_runtime_with_defaults(config);
 
