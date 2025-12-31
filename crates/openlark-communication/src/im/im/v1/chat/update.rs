@@ -1,0 +1,64 @@
+//! 更新群信息
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/group/chat/update-2
+
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+
+use crate::{
+    common::{
+        api_utils::{extract_response_data, serialize_params},
+        models::EmptyData,
+    },
+    endpoints::IM_V1_CHATS,
+    im::im::v1::message::models::UserIdType,
+};
+
+/// 更新群信息请求
+pub struct UpdateChatRequest {
+    config: Config,
+    chat_id: String,
+    user_id_type: Option<UserIdType>,
+}
+
+impl UpdateChatRequest {
+    pub fn new(config: Config) -> Self {
+        Self {
+            config,
+            chat_id: String::new(),
+            user_id_type: None,
+        }
+    }
+
+    /// 群 ID（路径参数）
+    pub fn chat_id(mut self, chat_id: impl Into<String>) -> Self {
+        self.chat_id = chat_id.into();
+        self
+    }
+
+    /// 用户 ID 类型（查询参数，可选，默认 open_id）
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
+
+    /// 执行请求
+    ///
+    /// 说明：该接口请求体字段较多，建议直接按文档构造 JSON 传入。
+    ///
+    /// docPath: https://open.feishu.cn/document/server-docs/group/chat/update-2
+    pub async fn execute(self, body: serde_json::Value) -> SDKResult<EmptyData> {
+        validate_required!(self.chat_id, "chat_id 不能为空");
+
+        // url: PUT:/open-apis/im/v1/chats/:chat_id
+        let mut req: ApiRequest<EmptyData> = ApiRequest::put(format!("{}/{}", IM_V1_CHATS, self.chat_id))
+            .body(serialize_params(&body, "更新群信息")?);
+
+        if let Some(user_id_type) = self.user_id_type {
+            req = req.query("user_id_type", user_id_type.as_str());
+        }
+
+        let resp = Transport::request(req, &self.config, None).await?;
+        extract_response_data(resp, "更新群信息")
+    }
+}
+
