@@ -1,8 +1,9 @@
-/// 更新知识空间节点标题
-///
-/// 更新知识空间中节点的标题。
-/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/update_title
-/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/update_title
+//! 更新知识空间节点标题
+//!
+//! 更新知识空间中节点的标题。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/update_title
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -60,9 +61,6 @@ impl UpdateWikiSpaceNodeTitleRequest {
     }
 
     /// 执行请求
-    ///
-    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/update_title
-    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/update_title
     pub async fn execute(
         self,
         params: UpdateWikiSpaceNodeTitleParams,

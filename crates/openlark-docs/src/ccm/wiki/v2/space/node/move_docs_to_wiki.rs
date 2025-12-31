@@ -1,8 +1,9 @@
-/// 移动云空间文档至知识空间
-///
-/// 该接口允许移动云空间文档至知识空间，并挂载在指定位置。
-/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move_docs_to_wiki
-/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move_docs_to_wiki
+//! 移动云空间文档至知识空间
+//!
+//! 该接口允许移动云空间文档至知识空间，并挂载在指定位置。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/move_docs_to_wiki
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -61,9 +62,6 @@ impl MoveDocsToWikiRequest {
     }
 
     /// 执行请求
-    ///
-    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move_docs_to_wiki
-    /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move_docs_to_wiki
     pub async fn execute(self, params: MoveDocsToWikiParams) -> SDKResult<MoveDocsToWikiResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
