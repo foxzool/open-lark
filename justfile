@@ -16,22 +16,22 @@ lint:
 # Run tests
 test:
   @echo "🧪 Running tests..."
-  cargo test --all-features
+  cargo test --workspace --all-features
 
 # Build project
 build:
   @echo "🔨 Building project..."
-  cargo build --all-features
+  cargo build --workspace --all-features
 
 # Build release
 build-release:
   @echo "🚀 Building release..."
-  cargo build --release --all-features
+  cargo build --workspace --release --all-features
 
 # Generate documentation
 docs:
   @echo "📚 Generating documentation..."
-  cargo doc --all-features --no-deps
+  cargo doc --workspace --all-features --no-deps
 
 # Run coverage tests (requires cargo-llvm-cov)
 coverage:
