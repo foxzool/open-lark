@@ -1,7 +1,6 @@
 //! 更新免审词条
 //!
-//! docPath: /document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/update
-//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/update
+//! docPath: https://open.feishu.cn/document/lingo-v1/entity/update
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
