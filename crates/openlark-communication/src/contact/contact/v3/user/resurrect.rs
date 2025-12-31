@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
-    contact::contact::v3::user::create::UserResponse,
+    common::models::EmptyData,
     contact::contact::v3::user::models::{DepartmentIdType, UserIdType},
     endpoints::CONTACT_V3_USERS,
 };
@@ -73,11 +73,11 @@ impl ResurrectUserRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/resurrect
-    pub async fn execute(self, body: ResurrectUserBody) -> SDKResult<UserResponse> {
+    pub async fn execute(self, body: ResurrectUserBody) -> SDKResult<EmptyData> {
         validate_required!(self.user_id, "user_id 不能为空");
 
         // url: POST:/open-apis/contact/v3/users/:user_id/resurrect
-        let mut req: ApiRequest<UserResponse> =
+        let mut req: ApiRequest<EmptyData> =
             ApiRequest::post(format!("{}/{}/resurrect", CONTACT_V3_USERS, self.user_id))
                 .body(serialize_params(&body, "恢复已删除用户")?);
 
