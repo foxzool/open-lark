@@ -1,7 +1,6 @@
 /// 获取全文评论
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/CommentAPI/get
 use openlark_core::{
     api::ApiRequest,
     config::Config,
@@ -74,6 +73,7 @@ pub async fn get_comment(
             "file_type 不能为空",
         ));
     }
+    super::validate_comment_file_type_for_get(&request.file_type)?;
 
     let api_endpoint = DriveApi::GetComment(request.file_token.clone(), request.comment_id.clone());
 

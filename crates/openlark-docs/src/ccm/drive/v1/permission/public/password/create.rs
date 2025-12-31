@@ -9,7 +9,6 @@ use openlark_core::{
 ///
 /// 为云文档启用密码保护功能（平台自动生成密码）。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-public-password/create
-/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/permission-public-password/create
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -39,6 +38,22 @@ impl CreatePermissionPublicPasswordRequest {
         }
         if self.r#type.is_empty() {
             return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        }
+        match self.r#type.as_str() {
+            "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "mindnote" | "minutes"
+            | "slides" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "type",
+                    "type 必须为 doc/sheet/file/wiki/bitable/docx/mindnote/minutes/slides",
+                ));
+            }
+        }
+        if self.r#type == "minutes" {
+            return Err(openlark_core::error::validation_error(
+                "type",
+                "type=minutes 暂不支持启用云文档密码",
+            ));
         }
 
         let api_endpoint = DriveApi::CreatePublicPassword(self.token);

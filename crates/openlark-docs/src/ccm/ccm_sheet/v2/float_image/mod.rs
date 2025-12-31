@@ -63,7 +63,7 @@ impl ApiResponseTrait for DeleteFloatImageResponse {
 /// 创建浮图
 ///
 /// 根据 spreadsheetToken 创建浮图，在工作表中插入浮动图片。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/float-image/create-float-image
+/// docPath: /document/server-docs/docs/sheets-v3/float-image/create-float-image
 pub async fn create_float_image(
     config: &Config,
     spreadsheet_token: &str,
@@ -90,7 +90,7 @@ pub async fn create_float_image(
 /// 获取浮图
 ///
 /// 根据 spreadsheetToken 和 float_image_id 获取浮图信息。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/float-image/get-float-image
+/// docPath: /document/server-docs/docs/sheets-v3/float-image/get-float-image
 pub async fn get_float_image(
     config: &Config,
     spreadsheet_token: &str,
@@ -121,7 +121,7 @@ pub async fn get_float_image(
 /// 更新浮图
 ///
 /// 根据 spreadsheetToken 和 float_image_id 更新浮图位置和属性。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/float-image/update-float-image
+/// docPath: /document/server-docs/docs/sheets-v3/float-image/update-float-image
 pub async fn update_float_image(
     config: &Config,
     spreadsheet_token: &str,
@@ -151,7 +151,7 @@ pub async fn update_float_image(
 /// 删除浮图
 ///
 /// 根据 spreadsheetToken 和 float_image_id 删除浮图。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/float-image/delete-float-image
+/// docPath: /document/server-docs/docs/sheets-v3/float-image/delete-float-image
 pub async fn delete_float_image(
     config: &Config,
     spreadsheet_token: &str,

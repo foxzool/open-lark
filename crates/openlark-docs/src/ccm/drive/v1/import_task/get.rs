@@ -8,7 +8,6 @@ use openlark_core::{
 ///
 /// 获取导入任务的执行状态。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/import_task/get
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -51,14 +50,16 @@ impl GetImportTaskRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetImportTaskResponse {
     /// 导入结果
-    pub result: ImportTaskResult,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<ImportTaskResult>,
 }
 
 /// 导入任务结果
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ImportTaskResult {
     /// 导入任务 ID
-    pub ticket: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ticket: Option<String>,
     /// 导入的在线云文档类型（docx/sheet/bitable）
     pub r#type: String,
     /// 任务状态

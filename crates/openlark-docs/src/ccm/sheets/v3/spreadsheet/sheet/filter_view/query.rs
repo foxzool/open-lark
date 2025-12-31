@@ -2,7 +2,6 @@
 ///
 /// 查询子表内所有的筛选视图基本信息，包括 id、name 和 range。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view/query
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter_view/query
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -39,4 +38,3 @@ pub async fn query_filter_views(
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "查询筛选视图")
 }
-

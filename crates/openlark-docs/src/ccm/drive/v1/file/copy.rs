@@ -8,7 +8,6 @@ use openlark_core::{
 ///
 /// 将文件复制到用户云空间的其他文件夹中。不支持复制文件夹。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/copy
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/copy
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -25,11 +24,11 @@ pub struct CopyFileRequest {
     pub user_id_type: Option<String>,
     /// 复制的新文件的名称（最大 256 字节）
     pub name: String,
+    /// 目标文件夹的 token
+    pub folder_token: String,
     /// 被复制的源文件的类型。必须与 file_token 对应的源文件实际类型一致
     #[serde(rename = "type")]
     pub r#type: String,
-    /// 目标文件夹的 token
-    pub folder_token: String,
     /// 自定义请求附加参数，用于实现特殊的复制语义
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra: Option<Vec<Property>>,
@@ -56,8 +55,8 @@ impl CopyFileRequest {
             file_token: file_token.into(),
             user_id_type: None,
             name: name.into(),
-            r#type: file_type.into(),
             folder_token: folder_token.into(),
+            r#type: file_type.into(),
             extra: None,
         }
     }
@@ -80,6 +79,7 @@ impl CopyFileRequest {
                 "file_token 不能为空",
             ));
         }
+        // 文档说明：该参数为必填（请忽略必填列的“否”），为空会导致接口失败。
         if self.r#type.is_empty() {
             return Err(openlark_core::error::validation_error("type", "type 不能为空"));
         }
@@ -90,12 +90,51 @@ impl CopyFileRequest {
             ));
         }
 
+        match self.r#type.as_str() {
+            "file" | "doc" | "sheet" | "bitable" | "docx" | "mindnote" | "slides" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "type",
+                    "type 仅支持 file/doc/sheet/bitable/docx/mindnote/slides",
+                ));
+            }
+        }
+
+        if let Some(user_id_type) = &self.user_id_type {
+            match user_id_type.as_str() {
+                "open_id" | "union_id" | "user_id" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "user_id_type",
+                        "user_id_type 仅支持 open_id/union_id/user_id",
+                    ));
+                }
+            }
+        }
+
         let name_len = self.name.as_bytes().len();
         if name_len > 256 || name_len == 0 {
             return Err(openlark_core::error::validation_error(
                 "name",
                 "name 长度必须在 1~256 字节之间",
             ));
+        }
+
+        if let Some(extra) = &self.extra {
+            for (idx, prop) in extra.iter().enumerate() {
+                if prop.key.trim().is_empty() {
+                    return Err(openlark_core::error::validation_error(
+                        &format!("extra[{}].key", idx),
+                        "key 不能为空",
+                    ));
+                }
+                if prop.value.trim().is_empty() {
+                    return Err(openlark_core::error::validation_error(
+                        &format!("extra[{}].value", idx),
+                        "value 不能为空",
+                    ));
+                }
+            }
         }
 
         let api_endpoint = DriveApi::CopyFile(self.file_token.clone());
@@ -198,7 +237,8 @@ mod tests {
     #[test]
     fn test_copy_file_request_builder() {
         let config = Config::default();
-        let request = CopyFileRequest::new(config, "file_token", "Demo copy", "docx", "folder_token");
+        let request =
+            CopyFileRequest::new(config, "file_token", "Demo copy", "docx", "folder_token");
 
         assert_eq!(request.file_token, "file_token");
         assert_eq!(request.name, "Demo copy");

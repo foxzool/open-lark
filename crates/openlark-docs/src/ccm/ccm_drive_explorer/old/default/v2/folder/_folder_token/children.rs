@@ -1,7 +1,7 @@
 //! 获取文件夹下的文件清单
 //!
 //! docPath: /document/ukTMukTMukTM/uEjNzUjLxYzM14SM2MTN
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/drive/folder/get-folder-children
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uEjNzUjLxYzM14SM2MTN
 
 use std::collections::HashMap;
 

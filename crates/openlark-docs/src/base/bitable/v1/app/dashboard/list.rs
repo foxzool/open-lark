@@ -1,7 +1,7 @@
 //! 列出仪表盘
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-dashboard/list
-//! doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-dashboard/list
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-dashboard/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

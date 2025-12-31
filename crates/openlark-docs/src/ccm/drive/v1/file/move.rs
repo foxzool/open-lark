@@ -8,7 +8,6 @@ use openlark_core::{
 ///
 /// 将文件或者文件夹移动到用户云空间的其他位置。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/move
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/move
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -61,6 +60,15 @@ impl MoveFileRequest {
                 "type",
                 "type 不能为空",
             ));
+        }
+        match self.r#type.as_str() {
+            "file" | "docx" | "bitable" | "doc" | "sheet" | "mindnote" | "folder" | "slides" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "type",
+                    "type 仅支持 file/docx/bitable/doc/sheet/mindnote/folder/slides",
+                ));
+            }
         }
         if self.folder_token.is_empty() {
             return Err(openlark_core::error::validation_error(

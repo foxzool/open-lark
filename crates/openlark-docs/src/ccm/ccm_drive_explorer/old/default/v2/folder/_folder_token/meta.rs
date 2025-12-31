@@ -1,7 +1,7 @@
 //! 获取文件夹元数据
 //!
 //! docPath: /document/ukTMukTMukTM/uAjNzUjLwYzM14CM2MTN
-//! doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uAjNzUjLwYzM14CM2MTN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

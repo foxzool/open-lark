@@ -1,7 +1,7 @@
 /// Bitable 更新数据表
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table/patch
-/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/patch
+/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table/patch
 ///
 /// 说明：
 /// - 该接口用于更新数据表的基本信息（当前主要是更新数据表名称）。

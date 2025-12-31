@@ -1,7 +1,7 @@
 //! 列出自定义角色
 //!
 //! docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/list
-//! doc: https://open.feishu.cn/document/docs/bitable-v1/advanced-permission/app-role/list-2
+//! doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/advanced-permission/base-v2/app-role/list
 
 use crate::base::base::v2::models::AppRole;
 use openlark_core::{
@@ -35,13 +35,16 @@ pub struct ListReq {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ListResp {
     /// 角色列表
+    #[serde(default)]
     pub items: Vec<AppRole>,
     /// 分页标记
     pub page_token: Option<String>,
     /// 是否还有更多
-    pub has_more: Option<bool>,
+    #[serde(default)]
+    pub has_more: bool,
     /// 总数
-    pub total: Option<i32>,
+    #[serde(default)]
+    pub total: i32,
 }
 
 impl List {
@@ -76,6 +79,14 @@ impl List {
 
     pub async fn send(self) -> SDKResult<ListResp> {
         validate_required!(self.app_token, "app_token 不能为空");
+        if let Some(page_size) = self.req.page_size {
+            if page_size <= 0 {
+                return Err(openlark_core::error::validation_error(
+                    "page_size",
+                    "page_size 必须为正整数",
+                ));
+            }
+        }
 
         use crate::common::api_endpoints::BaseApiV2;
         let api_endpoint = BaseApiV2::RoleList(self.app_token);

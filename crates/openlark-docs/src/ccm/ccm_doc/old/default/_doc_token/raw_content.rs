@@ -1,12 +1,13 @@
 //! 获取旧版文档纯文本内容
 //!
 //! docPath: /document/ukTMukTMukTM/ukzNzUjL5czM14SO3MTN
-//! doc: https://open.feishu.cn/document/server-docs/docs/docs/docs/content/obtain-document-content
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/ukzNzUjL5czM14SO3MTN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -43,6 +44,7 @@ impl GetDocRawContentRequest {
 
     pub async fn send(self) -> SDKResult<GetDocRawContentResponse> {
         use crate::common::api_endpoints::CcmDocApiOld;
+        validate_required!(self.doc_token, "doc_token 不能为空");
 
         let api_request: ApiRequest<GetDocRawContentResponse> =
             ApiRequest::get(&CcmDocApiOld::RawContent(self.doc_token).to_url());

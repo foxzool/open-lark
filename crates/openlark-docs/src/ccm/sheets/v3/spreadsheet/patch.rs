@@ -2,7 +2,6 @@
 ///
 /// 更新电子表格的基本信息，如标题、时区、语言等。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/patch
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/patch
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -23,7 +22,6 @@ impl ApiResponseTrait for UpdateSpreadsheetResponse {
 ///
 /// 更新电子表格的基本信息，如标题、时区、语言等。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/patch
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/patch
 pub async fn update_spreadsheet(
     config: &Config,
     spreadsheet_token: &str,

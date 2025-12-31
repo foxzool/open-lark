@@ -1,7 +1,6 @@
 /// 获取订阅状态
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-subscription/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/get
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 use serde::{Deserialize, Serialize};
 
@@ -16,20 +15,13 @@ pub struct GetSubscriptionRequest {
     pub file_token: String,
     /// 订阅 ID
     pub subscription_id: String,
-    /// 文档类型（必填）
-    pub file_type: String,
 }
 
 impl GetSubscriptionRequest {
-    pub fn new(
-        file_token: impl Into<String>,
-        subscription_id: impl Into<String>,
-        file_type: impl Into<String>,
-    ) -> Self {
+    pub fn new(file_token: impl Into<String>, subscription_id: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
             subscription_id: subscription_id.into(),
-            file_type: file_type.into(),
         }
     }
 }
@@ -54,18 +46,11 @@ pub async fn get_subscription(
             "subscription_id 不能为空",
         ));
     }
-    if request.file_type.trim().is_empty() {
-        return Err(openlark_core::error::validation_error(
-            "file_type",
-            "file_type 不能为空",
-        ));
-    }
 
     let api_endpoint =
         DriveApi::GetFileSubscription(request.file_token.clone(), request.subscription_id.clone());
 
-    let mut api_request: ApiRequest<GetSubscriptionResponse> =
-        ApiRequest::get(&api_endpoint.to_url()).query("file_type", &request.file_type);
+    let mut api_request: ApiRequest<GetSubscriptionResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     if let Some(opt) = option {
         api_request = api_request.request_option(opt);

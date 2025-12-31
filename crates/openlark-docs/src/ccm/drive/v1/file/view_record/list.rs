@@ -2,7 +2,6 @@
 ///
 /// 获取文件的访问记录列表。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-view_record/list
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-view_record/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -81,23 +80,18 @@ impl ApiResponseTrait for GetFileViewRecordsResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ViewRecord {
     /// 访问者 ID
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub viewer_id: Option<String>,
+    pub viewer_id: String,
     /// 访问者姓名
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
     /// 访问者头像的 URL
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub avatar_url: Option<String>,
+    pub avatar_url: String,
     /// 最近访问时间。Unix 时间戳，单位为秒
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_view_time: Option<String>,
+    pub last_view_time: String,
 }
 
 /// 获取文件查看记录
 ///
 /// 获取文件的访问记录列表。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-view_record/list
 pub async fn get_file_view_records(
     request: GetFileViewRecordsRequest,
     config: &Config,
@@ -114,6 +108,15 @@ pub async fn get_file_view_records(
             "file_type",
             "file_type 不能为空",
         ));
+    }
+    match request.file_type.as_str() {
+        "doc" | "docx" | "sheet" | "bitable" | "mindnote" | "wiki" | "file" => {}
+        _ => {
+            return Err(openlark_core::error::validation_error(
+                "file_type",
+                "file_type 仅支持 doc/docx/sheet/bitable/mindnote/wiki/file",
+            ));
+        }
     }
     if !(1..=50).contains(&request.page_size) {
         return Err(openlark_core::error::validation_error(
@@ -133,6 +136,15 @@ pub async fn get_file_view_records(
     }
     api_request = api_request.query("file_type", &request.file_type);
     if let Some(viewer_id_type) = &request.viewer_id_type {
+        match viewer_id_type.as_str() {
+            "user_id" | "union_id" | "open_id" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "viewer_id_type",
+                    "viewer_id_type 仅支持 user_id/union_id/open_id",
+                ));
+            }
+        }
         api_request = api_request.query("viewer_id_type", viewer_id_type);
     }
 
@@ -166,14 +178,14 @@ mod tests {
     #[test]
     fn test_view_record_structure() {
         let record = ViewRecord {
-            viewer_id: Some("ou_xxx".to_string()),
-            name: Some("zhangsan".to_string()),
-            avatar_url: Some("https://foo.icon.com/xxxx".to_string()),
-            last_view_time: Some("1679284285".to_string()),
+            viewer_id: "ou_xxx".to_string(),
+            name: "zhangsan".to_string(),
+            avatar_url: "https://foo.icon.com/xxxx".to_string(),
+            last_view_time: "1679284285".to_string(),
         };
 
-        assert_eq!(record.name, Some("zhangsan".to_string()));
-        assert_eq!(record.last_view_time, Some("1679284285".to_string()));
+        assert_eq!(record.name, "zhangsan".to_string());
+        assert_eq!(record.last_view_time, "1679284285".to_string());
     }
 
     #[test]

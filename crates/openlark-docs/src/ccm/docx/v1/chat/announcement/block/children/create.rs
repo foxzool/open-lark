@@ -2,7 +2,7 @@
 ///
 /// 在指定块的子块列表中，新创建一批子块，并放置到指定位置。如果操作成功，接口将返回新创建子块的富文本内容。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/create
-/// doc: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement-block/create
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/create
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -78,4 +78,3 @@ impl CreateChatAnnouncementBlockChildrenRequest {
         extract_response_data(response, "在群公告中创建块")
     }
 }
-

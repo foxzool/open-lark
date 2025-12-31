@@ -2,7 +2,6 @@
 ///
 /// 在筛选视图的筛选范围的某一列创建筛选条件。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/create
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter_view/spreadsheet-sheet-filter_view-condition/create
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -55,4 +54,3 @@ pub async fn create_filter_condition(
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "创建筛选条件")
 }
-

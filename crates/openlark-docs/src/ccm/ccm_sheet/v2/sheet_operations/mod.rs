@@ -84,7 +84,7 @@ impl ApiResponseTrait for UnmergeCellsResponse {
 /// 删除范围
 ///
 /// 根据 spreadsheetToken 和 range 删除指定范围的行列。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-operations/deleting-ranges
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/deleting-ranges
 pub async fn delete_range(
     config: &Config,
     spreadsheet_token: &str,
@@ -109,7 +109,7 @@ pub async fn delete_range(
 /// 插入行列
 ///
 /// 根据 spreadsheetToken 和 range 在指定位置插入空行或空列。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-operations/inserting-blank-rows-or-columns
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/inserting-blank-rows-or-columns
 pub async fn insert_dimension(
     config: &Config,
     spreadsheet_token: &str,
@@ -134,7 +134,7 @@ pub async fn insert_dimension(
 /// 移动行列
 ///
 /// 根据 spreadsheetToken 将指定范围的行或列移动到新位置。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-operations/moving-rows-or-columns
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/moving-rows-or-columns
 pub async fn move_dimension(
     config: &Config,
     spreadsheet_token: &str,
@@ -159,7 +159,7 @@ pub async fn move_dimension(
 /// 替换范围
 ///
 /// 根据 spreadsheetToken 和 range 替换指定范围的内容。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-operations/replacing-a-range
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/replacing-a-range
 pub async fn replace_range(
     config: &Config,
     spreadsheet_token: &str,
@@ -184,7 +184,7 @@ pub async fn replace_range(
 /// 查找替换
 ///
 /// 根据 spreadsheetToken 和 range 在指定范围内查找并替换内容。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-operations/finding-and-replacing-values
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/finding-and-replacing-values
 pub async fn find_replace(
     config: &Config,
     spreadsheet_token: &str,
@@ -210,7 +210,7 @@ pub async fn find_replace(
 /// 合并单元格
 ///
 /// 根据 spreadsheetToken 和 range 合并指定范围的单元格。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-operations/merging-cells
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/merging-cells
 pub async fn merge_cells(
     config: &Config,
     spreadsheet_token: &str,
@@ -235,7 +235,7 @@ pub async fn merge_cells(
 /// 取消合并单元格
 ///
 /// 根据 spreadsheetToken 和 range 取消合并指定范围的单元格。
-/// docPath: https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-operations/unmerging-cells
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/unmerging-cells
 pub async fn unmerge_cells(
     config: &Config,
     spreadsheet_token: &str,

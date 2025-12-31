@@ -9,7 +9,6 @@ use openlark_core::{
 ///
 /// 为源文档创建版本文档。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/create
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-version/create
 use serde::Serialize;
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

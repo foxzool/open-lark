@@ -1,7 +1,7 @@
 /// Bitable 删除自定义角色
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-role/delete
-/// doc: https://open.feishu.cn/document/server-docs/docs/bitable-v1/advanced-permission/app-role/delete
+/// doc: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-role/delete
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

@@ -2,7 +2,7 @@
 ///
 /// 获取群公告所有块的富文本内容并分页返回。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/list
-/// doc: https://open.feishu.cn/document/group/upgraded-group-announcement/chat-announcement/list
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/list
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -81,4 +81,3 @@ impl GetChatAnnouncementBlocksRequest {
         extract_response_data(response, "获取群公告所有块")
     }
 }
-

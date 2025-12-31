@@ -2,7 +2,6 @@
 ///
 /// 获取筛选视图某列的筛选条件信息。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter_view/spreadsheet-sheet-filter_view-condition/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -45,4 +44,3 @@ pub async fn get_filter_condition(
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取筛选条件")
 }
-

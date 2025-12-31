@@ -2,7 +2,6 @@
 ///
 /// 获取文件统计信息，包括文档阅读人数、次数和点赞数。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-statistics/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -75,7 +74,6 @@ impl ApiResponseTrait for GetFileStatisticsResponse {
 /// 获取文件统计信息
 ///
 /// 获取文件统计信息，包括文档阅读人数、次数和点赞数。
-/// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-statistics/get
 pub async fn get_file_statistics(
     request: GetFileStatisticsRequest,
     config: &Config,
@@ -92,6 +90,15 @@ pub async fn get_file_statistics(
             "file_type",
             "file_type 不能为空",
         ));
+    }
+    match request.file_type.as_str() {
+        "doc" | "sheet" | "mindnote" | "bitable" | "wiki" | "file" | "docx" => {}
+        _ => {
+            return Err(openlark_core::error::validation_error(
+                "file_type",
+                "file_type 仅支持 doc/sheet/mindnote/bitable/wiki/file/docx",
+            ));
+        }
     }
 
     // 创建API请求
