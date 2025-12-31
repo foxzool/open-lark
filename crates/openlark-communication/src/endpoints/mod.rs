@@ -210,6 +210,11 @@ pub const CONTACT_V3_DEPARTMENTS_UNBIND_DEPARTMENT_CHAT: &str =
 /// Contact 角色（functional role）v3
 pub const CONTACT_V3_FUNCTIONAL_ROLES: &str = "/open-apis/contact/v3/functional_roles";
 
+/// Contact 用户组 v3
+pub const CONTACT_V3_GROUP: &str = "/open-apis/contact/v3/group";
+pub const CONTACT_V3_GROUP_SIMPLELIST: &str = "/open-apis/contact/v3/group/simplelist";
+pub const CONTACT_V3_GROUP_MEMBER_BELONG: &str = "/open-apis/contact/v3/group/member_belong";
+
 /// Contact 用户 v3
 pub const CONTACT_V3_USERS: &str = "/open-apis/contact/v3/users";
 pub const CONTACT_V3_USER: &str = "/open-apis/contact/v3/users/{}";
