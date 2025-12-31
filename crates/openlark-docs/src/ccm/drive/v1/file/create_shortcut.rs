@@ -2,7 +2,6 @@
 ///
 /// 创建文件快捷方式，用于访问云空间的文件。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_shortcut
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create_shortcut
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -31,23 +30,17 @@ pub struct ShortcutNode {
     #[serde(rename = "type")]
     pub r#type: String,
     /// 父文件夹的 token
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub parent_token: Option<String>,
+    pub parent_token: String,
     /// 访问链接
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub url: Option<String>,
+    pub url: String,
     /// 快捷方式的源文件信息
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub shortcut_info: Option<CreateShortcutInfo>,
+    pub shortcut_info: CreateShortcutInfo,
     /// 文件创建时间
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_time: Option<String>,
+    pub created_time: String,
     /// 文件最近修改时间
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub modified_time: Option<String>,
+    pub modified_time: String,
     /// 文件所有者
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub owner_id: Option<String>,
+    pub owner_id: String,
 }
 
 /// 快捷方式的源文件信息
@@ -131,6 +124,26 @@ impl CreateFileShortcutRequest {
                 "refer_entity.refer_type",
                 "refer_type 不能为空",
             ));
+        }
+        match self.refer_entity.refer_type.as_str() {
+            "file" | "docx" | "bitable" | "doc" | "sheet" | "mindnote" | "slides" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "refer_entity.refer_type",
+                    "refer_type 仅支持 file/docx/bitable/doc/sheet/mindnote/slides",
+                ));
+            }
+        }
+        if let Some(user_id_type) = &self.user_id_type {
+            match user_id_type.as_str() {
+                "open_id" | "union_id" | "user_id" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "user_id_type",
+                        "user_id_type 仅支持 open_id/union_id/user_id",
+                    ));
+                }
+            }
         }
 
         let api_endpoint = DriveApi::CreateShortcut;

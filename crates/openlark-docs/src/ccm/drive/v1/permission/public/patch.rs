@@ -9,7 +9,6 @@ use openlark_core::{
 ///
 /// 更新指定云文档的公共访问与协作权限设置。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-public/patch
-/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/patch
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -72,6 +71,93 @@ impl PatchPublicPermissionRequest {
         }
         if self.r#type.is_empty() {
             return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        }
+        match self.r#type.as_str() {
+            "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "mindnote" | "minutes"
+            | "slides" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "type",
+                    "type 必须为 doc/sheet/file/wiki/bitable/docx/mindnote/minutes/slides",
+                ));
+            }
+        }
+
+        if let Some(security_entity) = &self.permission_public_request.security_entity {
+            match security_entity.as_str() {
+                "anyone_can_view" | "anyone_can_edit" | "only_full_access" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "security_entity",
+                        "security_entity 必须为 anyone_can_view/anyone_can_edit/only_full_access",
+                    ));
+                }
+            }
+        }
+        if let Some(comment_entity) = &self.permission_public_request.comment_entity {
+            match comment_entity.as_str() {
+                "anyone_can_view" | "anyone_can_edit" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "comment_entity",
+                        "comment_entity 必须为 anyone_can_view/anyone_can_edit",
+                    ));
+                }
+            }
+        }
+        if let Some(share_entity) = &self.permission_public_request.share_entity {
+            match share_entity.as_str() {
+                "anyone" | "same_tenant" | "only_full_access" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "share_entity",
+                        "share_entity 必须为 anyone/same_tenant/only_full_access",
+                    ));
+                }
+            }
+        }
+        if let Some(link_share_entity) = &self.permission_public_request.link_share_entity {
+            match link_share_entity.as_str() {
+                "tenant_readable" | "tenant_editable" | "anyone_readable" | "anyone_editable"
+                | "closed" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "link_share_entity",
+                        "link_share_entity 必须为 tenant_readable/tenant_editable/anyone_readable/anyone_editable/closed",
+                    ));
+                }
+            }
+        }
+        if self.r#type == "wiki" {
+            if self.permission_public_request.external_access.is_some() {
+                return Err(openlark_core::error::validation_error(
+                    "external_access",
+                    "当 type=wiki 时不支持 external_access",
+                ));
+            }
+            if self.permission_public_request.share_entity.is_some() {
+                return Err(openlark_core::error::validation_error(
+                    "share_entity",
+                    "当 type=wiki 时不支持 share_entity",
+                ));
+            }
+            if self.permission_public_request.invite_external.is_some() {
+                return Err(openlark_core::error::validation_error(
+                    "invite_external",
+                    "当 type=wiki 时不支持 invite_external",
+                ));
+            }
+            if matches!(
+                self.permission_public_request
+                    .link_share_entity
+                    .as_deref(),
+                Some("anyone_readable" | "anyone_editable")
+            ) {
+                return Err(openlark_core::error::validation_error(
+                    "link_share_entity",
+                    "当 type=wiki 时不支持 anyone_readable/anyone_editable",
+                ));
+            }
         }
 
         let api_endpoint = DriveApi::UpdatePublicPermission(self.token);

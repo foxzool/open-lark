@@ -2,7 +2,7 @@
 ///
 /// 获取文档中指定块的所有子块的富文本内容并分页返回。文档版本号可选。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block-children/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get-2
+/// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block-children/get
 
 use crate::common::api_endpoints::DocxApiV1;
 use crate::common::api_utils::*;

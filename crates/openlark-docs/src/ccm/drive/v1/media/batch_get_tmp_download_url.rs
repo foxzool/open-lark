@@ -9,7 +9,6 @@ use openlark_core::{
 ///
 /// 通过 file_tokens 获取素材临时下载链接，链接时效性是 24 小时，过期失效。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/batch_get_tmp_download_url
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/batch_get_tmp_download_url
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

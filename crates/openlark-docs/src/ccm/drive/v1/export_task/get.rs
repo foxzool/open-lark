@@ -8,7 +8,6 @@ use openlark_core::{
 ///
 /// 获取导出任务的执行状态。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/export_task/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/export_task/get
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -62,7 +61,8 @@ impl GetExportTaskRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetExportTaskResponse {
     /// 导出任务结果
-    pub result: ExportTaskResult,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<ExportTaskResult>,
 }
 
 /// 导出任务结果

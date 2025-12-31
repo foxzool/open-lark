@@ -8,7 +8,6 @@ use openlark_core::{
 ///
 /// 上传分片全部完成后，调用该接口触发完成上传。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_finish
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_finish
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};

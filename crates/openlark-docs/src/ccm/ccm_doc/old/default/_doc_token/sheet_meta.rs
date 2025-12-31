@@ -1,12 +1,13 @@
 //! 获取旧版文档中的电子表格元数据
 //!
 //! docPath: /document/ukTMukTMukTM/uADOzUjLwgzM14CM4MTN
-//! doc: https://open.feishu.cn/document/server-docs/historic-version/docs/document/obtain-sheet-meta-info-in-doc
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/uADOzUjLwgzM14CM4MTN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -22,6 +23,7 @@ pub struct GetDocSheetMetaResponse {
     #[serde(rename = "spreadsheetToken")]
     pub spreadsheet_token: String,
     /// doc 下的 sheet 列表
+    #[serde(default)]
     pub sheets: Vec<DocSheetMeta>,
 }
 
@@ -65,6 +67,7 @@ impl GetDocSheetMetaRequest {
 
     pub async fn send(self) -> SDKResult<GetDocSheetMetaResponse> {
         use crate::common::api_endpoints::CcmDocApiOld;
+        validate_required!(self.doc_token, "doc_token 不能为空");
 
         let api_request: ApiRequest<GetDocSheetMetaResponse> =
             ApiRequest::get(&CcmDocApiOld::SheetMeta(self.doc_token).to_url());

@@ -2,7 +2,6 @@
 ///
 /// 更新筛选视图的名字或者筛选范围。
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view/patch
-/// doc: https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter_view/patch
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -54,4 +53,3 @@ pub async fn update_filter_view(
     let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "更新筛选视图")
 }
-

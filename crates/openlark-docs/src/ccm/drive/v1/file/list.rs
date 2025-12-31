@@ -9,7 +9,6 @@ use openlark_core::{
 /// 获取用户云空间中指定文件夹下的文件清单。清单类型包括文件、各种在线文档（文档、电子表格、多维表格、思维笔记）、文件夹和快捷方式。
 /// 该接口支持分页，但是不会递归的获取子文件夹的清单。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/list
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/list
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -22,7 +21,7 @@ pub struct ListFilesRequest {
     pub folder_token: Option<String>,
     /// 分页大小（1~200）。默认值为 100
     pub page_size: Option<i32>,
-    /// 分页标记，第一页不填，后续页面使用上一页返回的page_token
+    /// 分页标记，第一页不填；后续页面使用上一页返回的 `next_page_token` 作为本次的 `page_token`
     pub page_token: Option<String>,
     /// 排序方式（可选）：EditedTime | CreatedTime
     pub order_by: Option<String>,
@@ -75,7 +74,7 @@ pub struct ShortcutInfo {
 pub struct ListFilesResponse {
     /// 文件夹中的文件清单列表
     pub files: Vec<FileInfo>,
-    /// 分页标记，当 has_more 为 true 时，会同时返回下一次遍历的 page_token，否则不返回
+    /// 下一页分页标记。当 has_more 为 true 时会返回
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
     /// 是否还有更多项
@@ -132,12 +131,68 @@ impl ListFilesRequest {
     }
 
     pub async fn execute(self) -> SDKResult<ListFilesResponse> {
+        // 不填写或填空字符串表示根目录；根目录不支持分页
+        let is_root = self
+            .folder_token
+            .as_deref()
+            .map(|t| t.trim().is_empty())
+            .unwrap_or(true);
+
+        if is_root {
+            if self.page_size.is_some() {
+                return Err(openlark_core::error::validation_error(
+                    "page_size",
+                    "获取根目录清单时不支持分页，请勿传入 page_size",
+                ));
+            }
+            if self.page_token.is_some() {
+                return Err(openlark_core::error::validation_error(
+                    "page_token",
+                    "获取根目录清单时不支持分页，请勿传入 page_token",
+                ));
+            }
+        }
+
         if let Some(page_size) = self.page_size {
             if !(1..=200).contains(&page_size) {
                 return Err(openlark_core::error::validation_error(
                     "page_size",
                     "page_size 必须在 1~200 之间",
                 ));
+            }
+        }
+
+        if let Some(order_by) = &self.order_by {
+            match order_by.as_str() {
+                "EditedTime" | "CreatedTime" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "order_by",
+                        "order_by 仅支持 EditedTime/CreatedTime",
+                    ));
+                }
+            }
+        }
+        if let Some(direction) = &self.direction {
+            match direction.as_str() {
+                "ASC" | "DESC" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "direction",
+                        "direction 仅支持 ASC/DESC",
+                    ));
+                }
+            }
+        }
+        if let Some(user_id_type) = &self.user_id_type {
+            match user_id_type.as_str() {
+                "open_id" | "union_id" | "user_id" => {}
+                _ => {
+                    return Err(openlark_core::error::validation_error(
+                        "user_id_type",
+                        "user_id_type 仅支持 open_id/union_id/user_id",
+                    ));
+                }
             }
         }
 

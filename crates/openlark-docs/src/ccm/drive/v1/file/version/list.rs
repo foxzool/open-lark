@@ -9,7 +9,6 @@ use openlark_core::{
 ///
 /// 获取指定源文档的版本文档列表。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/list
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-version/list
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 use super::models::ListFileVersionsData;

@@ -9,7 +9,6 @@ use openlark_core::{
 ///
 /// 获取指定云文档的公共访问与协作权限设置。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-public/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/permission/permission-public/get
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -41,6 +40,16 @@ impl GetPublicPermissionRequest {
         }
         if self.r#type.is_empty() {
             return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        }
+        match self.r#type.as_str() {
+            "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "mindnote" | "minutes"
+            | "slides" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "type",
+                    "type 必须为 doc/sheet/file/wiki/bitable/docx/mindnote/minutes/slides",
+                ));
+            }
         }
 
         let api_endpoint = DriveApi::GetPublicPermission(self.token);

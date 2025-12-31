@@ -1,7 +1,6 @@
 /// 获取回复信息
 ///
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment-reply/list
-/// doc: https://open.feishu.cn/document/server-docs/docs/CommentAPI/list-2
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -87,6 +86,7 @@ pub async fn list_comment_reply(
     if request.file_type.trim().is_empty() {
         return Err(validation_error("file_type", "file_type 不能为空"));
     }
+    super::super::validate_comment_file_type_for_list_like(&request.file_type)?;
     if let Some(page_size) = request.page_size {
         if !(1..=100).contains(&page_size) {
             return Err(validation_error("page_size", "page_size 必须在 1~100 之间"));

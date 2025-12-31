@@ -1,7 +1,7 @@
 //! 创建并初始化文档
 //!
 //! docPath: /document/ukTMukTMukTM/ugDM2YjL4AjN24COwYjN
-//! doc: https://open.feishu.cn/document/server-docs/docs/docs/docs/apiRef/create-document
+//! doc: https://open.feishu.cn/document/ukTMukTMukTM/ugDM2YjL4AjN24COwYjN
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

@@ -9,7 +9,6 @@ use openlark_core::{
 ///
 /// 删除用户在云空间内的文件或者文件夹。文件或者文件夹被删除后，会进入用户回收站里。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/delete
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/delete
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize)]
@@ -41,6 +40,16 @@ impl DeleteFileRequest {
         }
         if self.r#type.is_empty() {
             return Err(openlark_core::error::validation_error("type", "type 不能为空"));
+        }
+        match self.r#type.as_str() {
+            "file" | "docx" | "bitable" | "folder" | "doc" | "sheet" | "mindnote" | "shortcut"
+            | "slides" => {}
+            _ => {
+                return Err(openlark_core::error::validation_error(
+                    "type",
+                    "type 仅支持 file/docx/bitable/folder/doc/sheet/mindnote/shortcut/slides",
+                ));
+            }
         }
 
         let api_endpoint = DriveApi::DeleteFile(self.file_token);

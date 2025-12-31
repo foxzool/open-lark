@@ -9,7 +9,6 @@ use openlark_core::{
 ///
 /// 获取指定源文档的指定版本信息。
 /// docPath: /document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/get
-/// doc: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-version/get
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
