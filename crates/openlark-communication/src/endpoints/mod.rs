@@ -227,6 +227,18 @@ pub const CONTACT_V3_UNIT_BIND_DEPARTMENT: &str = "/open-apis/contact/v3/unit/bi
 pub const CONTACT_V3_UNIT_UNBIND_DEPARTMENT: &str = "/open-apis/contact/v3/unit/unbind_department";
 pub const CONTACT_V3_UNIT_LIST_DEPARTMENT: &str = "/open-apis/contact/v3/unit/list_department";
 
+/// Contact 职级 v3
+pub const CONTACT_V3_JOB_LEVELS: &str = "/open-apis/contact/v3/job_levels";
+
+/// Contact 序列 v3
+pub const CONTACT_V3_JOB_FAMILIES: &str = "/open-apis/contact/v3/job_families";
+
+/// Contact 职务 v3
+pub const CONTACT_V3_JOB_TITLES: &str = "/open-apis/contact/v3/job_titles";
+
+/// Contact 工作城市 v3
+pub const CONTACT_V3_WORK_CITIES: &str = "/open-apis/contact/v3/work_cities";
+
 /// Contact 用户 v3
 pub const CONTACT_V3_USERS: &str = "/open-apis/contact/v3/users";
 pub const CONTACT_V3_USER: &str = "/open-apis/contact/v3/users/{}";
