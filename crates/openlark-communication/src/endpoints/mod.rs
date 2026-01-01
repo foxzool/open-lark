@@ -229,6 +229,14 @@ pub const MOMENTS_V1_INTERACTION_LIKE: &str = "/open-apis/moments/v1/interaction
 pub const MOMENTS_V1_INTERACTION_COMMENT: &str = "/open-apis/moments/v1/interactions/comment";
 pub const MOMENTS_V1_INTERACTION_SHARE: &str = "/open-apis/moments/v1/interactions/share";
 
+// ==================== User/Search（用户与搜索） ====================
+
+/// 搜索用户
+pub const SEARCH_V1_USER: &str = "/open-apis/search/v1/user";
+
+/// 查询应用管理员列表
+pub const USER_V4_APP_ADMIN_USER_LIST: &str = "/open-apis/user/v4/app_admin_user/list";
+
 // ==================== Contact (通讯录) v1/v2（历史版本） ====================
 
 /// Contact 应用管理员管理范围 v1（历史版本）
