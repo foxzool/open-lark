@@ -1,6 +1,5 @@
 //! 用户（user）
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/field-overview
 
 pub mod batch;
 pub mod batch_get_id;
