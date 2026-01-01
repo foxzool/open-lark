@@ -1,6 +1,6 @@
 //! 获取部门信息列表
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/historic-version/department/list
+//! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/list
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
@@ -75,7 +75,7 @@ impl ListDepartmentsRequest {
 
     /// 执行请求
     ///
-    /// docPath: https://open.feishu.cn/document/server-docs/historic-version/department/list
+    /// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/list
     pub async fn execute(self) -> SDKResult<DepartmentListResponse> {
         // url: GET:/open-apis/contact/v3/departments
         let mut req: ApiRequest<DepartmentListResponse> = ApiRequest::get(CONTACT_V3_DEPARTMENTS);
