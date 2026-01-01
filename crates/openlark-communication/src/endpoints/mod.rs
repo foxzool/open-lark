@@ -229,6 +229,23 @@ pub const MOMENTS_V1_INTERACTION_LIKE: &str = "/open-apis/moments/v1/interaction
 pub const MOMENTS_V1_INTERACTION_COMMENT: &str = "/open-apis/moments/v1/interactions/comment";
 pub const MOMENTS_V1_INTERACTION_SHARE: &str = "/open-apis/moments/v1/interactions/share";
 
+// ==================== Contact (通讯录) v1/v2（历史版本） ====================
+
+/// Contact 应用管理员管理范围 v1（历史版本）
+pub const CONTACT_V1_USER_ADMIN_SCOPE_GET: &str = "/open-apis/contact/v1/user/admin_scope/get";
+
+/// Contact 批量新增用户 v2（历史版本）
+pub const CONTACT_V2_USER_BATCH_ADD: &str = "/open-apis/contact/v2/user/batch_add";
+
+/// Contact 批量新增部门 v2（历史版本）
+pub const CONTACT_V2_DEPARTMENT_BATCH_ADD: &str = "/open-apis/contact/v2/department/batch_add";
+
+/// Contact 查询批量任务执行状态 v2（历史版本）
+pub const CONTACT_V2_TASK_GET: &str = "/open-apis/contact/v2/task/get";
+
+/// Contact 获取角色列表 v2（历史版本）
+pub const CONTACT_V2_ROLE_LIST: &str = "/open-apis/contact/v2/role/list";
+
 // ==================== Contact (通讯录) v3 ====================
 
 /// Contact 权限范围 v3
@@ -278,7 +295,8 @@ pub const CONTACT_V3_WORK_CITIES: &str = "/open-apis/contact/v3/work_cities";
 pub const CONTACT_V3_USERS: &str = "/open-apis/contact/v3/users";
 pub const CONTACT_V3_USER: &str = "/open-apis/contact/v3/users/{}";
 pub const CONTACT_V3_USERS_BATCH: &str = "/open-apis/contact/v3/users/batch";
-pub const CONTACT_V3_USERS_FIND_BY_DEPARTMENT: &str = "/open-apis/contact/v3/users/find_by_department";
+pub const CONTACT_V3_USERS_FIND_BY_DEPARTMENT: &str =
+    "/open-apis/contact/v3/users/find_by_department";
 pub const CONTACT_V3_USERS_BATCH_GET_ID: &str = "/open-apis/contact/v3/users/batch_get_id";
 pub const CONTACT_V3_USER_UPDATE_USER_ID: &str = "/open-apis/contact/v3/users/{}/update_user_id";
 pub const CONTACT_V3_USER_RESURRECT: &str = "/open-apis/contact/v3/users/{}/resurrect";

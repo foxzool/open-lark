@@ -1,6 +1,5 @@
 //! 部门（department）
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/contact-v3/department/resources
 
 pub mod batch;
 pub mod children;
