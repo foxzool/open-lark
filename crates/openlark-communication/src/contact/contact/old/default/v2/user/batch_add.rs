@@ -4,7 +4,10 @@
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
-use crate::common::api_utils::{extract_response_data, serialize_params};
+use crate::{
+    common::api_utils::{extract_response_data, serialize_params},
+    endpoints::CONTACT_V2_USER_BATCH_ADD,
+};
 
 /// 批量新增用户请求
 pub struct BatchAddUsersRequest {
@@ -21,9 +24,8 @@ impl BatchAddUsersRequest {
     /// docPath: https://open.feishu.cn/document/server-docs/historic-version//import-api/batch-add-users
     pub async fn execute(self, params: serde_json::Value) -> SDKResult<serde_json::Value> {
         // url: POST:/open-apis/contact/v2/user/batch_add
-        let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post("/open-apis/contact/v2/user/batch_add")
-                .body(serialize_params(&params, "批量新增用户")?);
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(CONTACT_V2_USER_BATCH_ADD)
+            .body(serialize_params(&params, "批量新增用户")?);
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "批量新增用户")
     }

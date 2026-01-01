@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
-use crate::common::api_utils::extract_response_data;
+use crate::{common::api_utils::extract_response_data, endpoints::CONTACT_V2_TASK_GET};
 
 /// 查询批量任务执行状态请求
 pub struct GetBatchTaskRequest {
@@ -33,8 +33,7 @@ impl GetBatchTaskRequest {
     /// docPath: https://open.feishu.cn/document/server-docs/historic-version//import-api/query-the-execution-status-of-a-batch-task
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/contact/v2/task/get
-        let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::get("/open-apis/contact/v2/task/get");
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(CONTACT_V2_TASK_GET);
         for (k, v) in self.query {
             req = req.query(k, v);
         }
