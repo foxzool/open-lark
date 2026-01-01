@@ -1,6 +1,6 @@
 //! 批量新增用户
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/historic-version//import-api/batch-add-users
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/import-api/batch-add-users
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
@@ -21,7 +21,7 @@ impl BatchAddUsersRequest {
 
     /// 执行请求
     ///
-    /// docPath: https://open.feishu.cn/document/server-docs/historic-version//import-api/batch-add-users
+    /// docPath: https://open.feishu.cn/document/server-docs/historic-version/import-api/batch-add-users
     pub async fn execute(self, params: serde_json::Value) -> SDKResult<serde_json::Value> {
         // url: POST:/open-apis/contact/v2/user/batch_add
         let req: ApiRequest<serde_json::Value> = ApiRequest::post(CONTACT_V2_USER_BATCH_ADD)

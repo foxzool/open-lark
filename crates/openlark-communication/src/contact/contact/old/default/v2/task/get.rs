@@ -1,6 +1,6 @@
 //! 查询批量任务执行状态
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/historic-version//import-api/query-the-execution-status-of-a-batch-task
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version/import-api/query-the-execution-status-of-a-batch-task
 
 use std::collections::HashMap;
 
@@ -30,7 +30,7 @@ impl GetBatchTaskRequest {
 
     /// 执行请求
     ///
-    /// docPath: https://open.feishu.cn/document/server-docs/historic-version//import-api/query-the-execution-status-of-a-batch-task
+    /// docPath: https://open.feishu.cn/document/server-docs/historic-version/import-api/query-the-execution-status-of-a-batch-task
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/contact/v2/task/get
         let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(CONTACT_V2_TASK_GET);
