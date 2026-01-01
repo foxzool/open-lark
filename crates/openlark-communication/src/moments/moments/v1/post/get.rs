@@ -12,7 +12,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_utils::extract_response_data;
+use crate::{common::api_utils::extract_response_data, endpoints::MOMENTS_V1_POST_GET};
 
 /// 查询帖子信息响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -74,8 +74,8 @@ impl GetPostRequest {
         validate_required!(self.post_id, "post_id 不能为空");
 
         // url: GET:/open-apis/moments/v1/posts/:post_id
-        let mut req: ApiRequest<GetPostResponse> =
-            ApiRequest::get(format!("/open-apis/moments/v1/posts/{}", self.post_id));
+        let url = MOMENTS_V1_POST_GET.replace("{post_id}", &self.post_id);
+        let mut req: ApiRequest<GetPostResponse> = ApiRequest::get(url);
 
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", &user_id_type);
