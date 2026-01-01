@@ -1,6 +1,6 @@
 //! 获取角色列表
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/historic-version/user/obtain-a-role-list
+//! docPath: https://open.feishu.cn/document/ukTMukTMukTM/uYzMwUjL2MDM14iNzATN
 
 use std::collections::HashMap;
 
@@ -30,7 +30,7 @@ impl ListRolesRequest {
 
     /// 执行请求
     ///
-    /// docPath: https://open.feishu.cn/document/server-docs/historic-version/user/obtain-a-role-list
+    /// docPath: https://open.feishu.cn/document/ukTMukTMukTM/uYzMwUjL2MDM14iNzATN
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/contact/v2/role/list
         let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(CONTACT_V2_ROLE_LIST);
