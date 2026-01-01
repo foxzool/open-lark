@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
-use crate::common::api_utils::extract_response_data;
+use crate::{common::api_utils::extract_response_data, endpoints::USER_V4_APP_ADMIN_USER_LIST};
 
 /// 查询应用管理员列表请求
 pub struct ListAppAdminUsersRequest {
@@ -32,8 +32,7 @@ impl ListAppAdminUsersRequest {
     /// docPath: https://open.feishu.cn/document/server-docs/application-v6/admin/query-app-administrator-list
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/user/v4/app_admin_user/list
-        let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::get("/open-apis/user/v4/app_admin_user/list");
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(USER_V4_APP_ADMIN_USER_LIST);
         for (k, v) in self.query {
             req = req.query(k, v);
         }
