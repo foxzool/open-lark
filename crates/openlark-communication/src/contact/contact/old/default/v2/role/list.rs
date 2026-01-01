@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
-use crate::common::api_utils::extract_response_data;
+use crate::{common::api_utils::extract_response_data, endpoints::CONTACT_V2_ROLE_LIST};
 
 /// 获取角色列表请求
 pub struct ListRolesRequest {
@@ -33,8 +33,7 @@ impl ListRolesRequest {
     /// docPath: https://open.feishu.cn/document/server-docs/historic-version//user/obtain-a-role-list
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/contact/v2/role/list
-        let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::get("/open-apis/contact/v2/role/list");
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(CONTACT_V2_ROLE_LIST);
         for (k, v) in self.query {
             req = req.query(k, v);
         }
