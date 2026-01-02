@@ -119,8 +119,8 @@ impl Client {
     ///
     /// 需要 `docs` feature
     #[cfg(feature = "docs")]
-    pub fn docs(&self) -> crate::services::DocsService<'_> {
-        crate::services::DocsService::new(&self.config)
+    pub fn docs(&self) -> crate::services::DocsService {
+        crate::services::DocsService::new(self.config.as_ref())
     }
 
     /// 📊 访问多维表格服务
