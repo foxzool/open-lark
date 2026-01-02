@@ -1,6 +1,6 @@
 //! 获取消息中的资源文件
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/im-v1/message/get-2
+//! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get
 
 use openlark_core::{api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult};
 
@@ -60,7 +60,7 @@ impl GetMessageResourceRequest {
 
     /// 执行请求（返回二进制内容）
     ///
-    /// docPath: https://open.feishu.cn/document/server-docs/im-v1/message/get-2
+    /// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get
     pub async fn execute(self) -> SDKResult<Vec<u8>> {
         validate_required!(self.message_id, "message_id 不能为空");
         validate_required!(self.file_key, "file_key 不能为空");
@@ -82,4 +82,3 @@ impl GetMessageResourceRequest {
         extract_response_data(resp, "获取消息中的资源文件")
     }
 }
-
