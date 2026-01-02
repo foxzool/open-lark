@@ -1,6 +1,6 @@
 //! 更新用户所有信息
 //!
-//! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/update
+//! docPath: https://open.feishu.cn/document/server-docs/historic-version//user/update
 
 use openlark_core::{
     api::ApiRequest,
@@ -56,7 +56,7 @@ impl UpdateUserRequest {
     ///
     /// 说明：该接口请求体字段较多，建议直接按文档构造 JSON 传入。
     ///
-    /// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/update
+    /// docPath: https://open.feishu.cn/document/server-docs/historic-version//user/update
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<UserResponse> {
         validate_required!(self.user_id, "user_id 不能为空");
 
