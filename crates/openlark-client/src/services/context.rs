@@ -33,7 +33,7 @@ impl ServiceContext {
     where
         T: Any + Send + Sync,
     {
-        let mut guard = self.extensions.write().expect("lock poisoned");
+        let mut guard = self.extensions.write().unwrap_or_else(|e| e.into_inner());
         guard.insert(name.into(), Arc::new(ext));
     }
 
@@ -42,7 +42,7 @@ impl ServiceContext {
     where
         T: Any + Send + Sync,
     {
-        let guard = self.extensions.read().expect("lock poisoned");
+        let guard = self.extensions.read().unwrap_or_else(|e| e.into_inner());
         guard
             .get(name)
             .and_then(|arc_any| arc_any.clone().downcast::<T>().ok())
