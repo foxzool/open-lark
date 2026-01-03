@@ -194,7 +194,10 @@ impl DefaultServiceRegistry {
 
         // 设置功能标志
         {
-            let flags = registry.feature_flags.write().unwrap();
+            let flags = registry
+                .feature_flags
+                .write()
+                .unwrap_or_else(|e| e.into_inner());
             for (flag, enabled) in config.feature_flags {
                 let _ = flags.set_flag(&flag, FlagValue::Bool(enabled));
             }
