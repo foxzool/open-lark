@@ -12,9 +12,7 @@ pub mod primary;
 pub mod primarys;
 pub mod search;
 pub mod subscribe;
-pub mod subscription;
 pub mod unsubscribe;
-pub mod unsubscription;
 
 pub mod acl;
 pub mod event;
