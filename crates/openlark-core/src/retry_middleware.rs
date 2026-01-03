@@ -265,7 +265,9 @@ impl RetryMiddleware {
         }
 
         // 返回最后一个错误
-        Err(last_error.unwrap())
+        Err(last_error.unwrap_or_else(|| {
+            crate::error::validation_error("retry", "重试执行未产生任何错误")
+        }))
     }
 
     /// 检查是否应该重试
@@ -377,7 +379,7 @@ impl RetryMiddlewareWithStats {
 
     /// 获取统计信息
     pub fn get_stats(&self) -> RetryStats {
-        let stats = self.stats.lock().unwrap();
+        let stats = self.stats.lock().unwrap_or_else(|e| e.into_inner());
         RetryStats {
             total_attempts: stats.total_attempts,
             successful_attempts: stats.successful_attempts,

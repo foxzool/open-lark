@@ -145,19 +145,27 @@ impl EventDispatcherHandler {
         if context.schema.is_some() {
             // 解析 v2 事件
             context.schema = Some("p2".to_string());
-            context
-                .type_
-                .clone_from(&context.header.as_ref().unwrap().event_type);
-            context
-                .token
-                .clone_from(&context.header.as_ref().unwrap().token)
+            let header = context
+                .header
+                .as_ref()
+                .ok_or_else(|| anyhow::anyhow!("missing event header for v2 event"))?;
+            context.type_ = header.event_type.clone();
+            context.token = header.token.clone();
         } else if context.uuid.is_some() {
             // 解析 v1 事件
             context.schema = Some("p1".to_string());
             context.type_ = context.event.get("type").map(|v| v.to_string());
         }
 
-        let handler_name = format!("{}.{}", context.schema.unwrap(), context.type_.unwrap());
+        let schema = context
+            .schema
+            .clone()
+            .ok_or_else(|| anyhow::anyhow!("missing event schema"))?;
+        let type_ = context
+            .type_
+            .clone()
+            .ok_or_else(|| anyhow::anyhow!("missing event type"))?;
+        let handler_name = format!("{}.{}", schema, type_);
         self.emit(&handler_name, &payload)
     }
 }
