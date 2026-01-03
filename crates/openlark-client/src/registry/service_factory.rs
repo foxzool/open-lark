@@ -90,9 +90,11 @@ pub struct ServiceInstanceManager {
 
 impl std::fmt::Debug for ServiceInstanceManager {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let instances = self.instances.read().unwrap_or_else(|e| e.into_inner());
+        let factories = self.factories.read().unwrap_or_else(|e| e.into_inner());
         f.debug_struct("ServiceInstanceManager")
-            .field("instances_count", &self.instances.read().unwrap().len())
-            .field("factories_count", &self.factories.read().unwrap().len())
+            .field("instances_count", &instances.len())
+            .field("factories_count", &factories.len())
             .field("config", &self.config)
             .finish()
     }
@@ -127,7 +129,7 @@ impl ServiceInstanceManager {
 
     /// 注册服务工厂
     pub fn register_factory(&self, service_name: &str, factory: Arc<dyn ServiceFactory>) {
-        let mut factories = self.factories.write().unwrap();
+        let mut factories = self.factories.write().unwrap_or_else(|e| e.into_inner());
         factories.insert(service_name.to_string(), factory);
     }
 
@@ -139,7 +141,7 @@ impl ServiceInstanceManager {
     ) -> FactoryResult<Box<dyn std::any::Any + Send + Sync>> {
         // 检查是否已有实例（单例模式）
         {
-            let instances = self.instances.read().unwrap();
+            let instances = self.instances.read().unwrap_or_else(|e| e.into_inner());
             if metadata.status == ServiceStatus::Running {
                 if let Some(instance) = instances.get(&metadata.name) {
                     return Ok(self.clone_instance(instance));
@@ -159,7 +161,7 @@ impl ServiceInstanceManager {
     ) -> FactoryResult<Box<dyn std::any::Any + Send + Sync>> {
         // 在 async 调用前获取工厂，避免 await_holding_lock
         let factory = {
-            let factories = self.factories.read().unwrap();
+            let factories = self.factories.read().unwrap_or_else(|e| e.into_inner());
             factories
                 .get(&metadata.name)
                 .ok_or_else(|| FactoryError::UnsupportedService {
@@ -190,7 +192,7 @@ impl ServiceInstanceManager {
                 singleton: true,
             };
 
-            let mut instances = self.instances.write().unwrap();
+            let mut instances = self.instances.write().unwrap_or_else(|e| e.into_inner());
             instances.insert(metadata.name.clone(), service_instance);
         }
 
@@ -216,7 +218,7 @@ impl ServiceInstanceManager {
 
     /// 获取服务统计信息
     pub fn get_service_stats(&self) -> HashMap<String, ServiceStats> {
-        let instances = self.instances.read().unwrap();
+        let instances = self.instances.read().unwrap_or_else(|e| e.into_inner());
         instances
             .iter()
             .map(|(name, instance)| {
@@ -234,7 +236,7 @@ impl ServiceInstanceManager {
 
     /// 清理未使用的实例
     pub fn cleanup_unused_instances(&self, timeout_seconds: u64) {
-        let mut instances = self.instances.write().unwrap();
+        let mut instances = self.instances.write().unwrap_or_else(|e| e.into_inner());
         let cutoff_time = chrono::Utc::now() - chrono::Duration::seconds(timeout_seconds as i64);
 
         instances.retain(|_, instance| instance.last_accessed > cutoff_time || instance.singleton);
