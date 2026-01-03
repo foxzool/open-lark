@@ -195,14 +195,14 @@ impl FeatureFlagManager {
 
     /// 注册功能标志
     pub fn register_flag(&self, metadata: FlagMetadata) -> FeatureResult<()> {
-        let mut flags = self.flags.write().unwrap();
+        let mut flags = self.flags.write().unwrap_or_else(|e| e.into_inner());
         flags.insert(metadata.name.clone(), metadata);
         Ok(())
     }
 
     /// 设置功能标志值
     pub fn set_flag(&self, name: &str, value: FlagValue) -> FeatureResult<()> {
-        let mut flags = self.flags.write().unwrap();
+        let mut flags = self.flags.write().unwrap_or_else(|e| e.into_inner());
         let flag = flags
             .get_mut(name)
             .ok_or_else(|| FeatureFlagError::FlagNotFound {
@@ -248,7 +248,7 @@ impl FeatureFlagManager {
 
     /// 获取功能标志值
     pub fn get_flag(&self, name: &str) -> FeatureResult<FlagValue> {
-        let flags = self.flags.read().unwrap();
+        let flags = self.flags.read().unwrap_or_else(|e| e.into_inner());
         let flag = flags
             .get(name)
             .ok_or_else(|| FeatureFlagError::FlagNotFound {
@@ -272,7 +272,7 @@ impl FeatureFlagManager {
         }
 
         // 检查用户分段
-        let segments = self.user_segments.read().unwrap();
+        let segments = self.user_segments.read().unwrap_or_else(|e| e.into_inner());
         for (_, segment) in segments.iter() {
             if self.user_matches_segment(user_id, segment) {
                 // 如果用户匹配分段，使用分段的权重决定
@@ -300,13 +300,13 @@ impl FeatureFlagManager {
 
     /// 获取所有功能标志
     pub fn list_flags(&self) -> Vec<FlagMetadata> {
-        let flags = self.flags.read().unwrap();
+        let flags = self.flags.read().unwrap_or_else(|e| e.into_inner());
         flags.values().cloned().collect()
     }
 
     /// 获取指定组的功能标志
     pub fn list_flags_by_group(&self, group: &str) -> Vec<FlagMetadata> {
-        let flags = self.flags.read().unwrap();
+        let flags = self.flags.read().unwrap_or_else(|e| e.into_inner());
         flags
             .values()
             .filter(|flag| flag.group.as_ref().is_some_and(|g| g == group))
@@ -316,7 +316,7 @@ impl FeatureFlagManager {
 
     /// 锁定功能标志
     pub fn lock_flag(&self, name: &str) -> FeatureResult<()> {
-        let mut flags = self.flags.write().unwrap();
+        let mut flags = self.flags.write().unwrap_or_else(|e| e.into_inner());
         let flag = flags
             .get_mut(name)
             .ok_or_else(|| FeatureFlagError::FlagNotFound {
@@ -329,7 +329,7 @@ impl FeatureFlagManager {
 
     /// 解锁功能标志
     pub fn unlock_flag(&self, name: &str) -> FeatureResult<()> {
-        let mut flags = self.flags.write().unwrap();
+        let mut flags = self.flags.write().unwrap_or_else(|e| e.into_inner());
         let flag = flags
             .get_mut(name)
             .ok_or_else(|| FeatureFlagError::FlagNotFound {
@@ -342,7 +342,7 @@ impl FeatureFlagManager {
 
     /// 添加用户分段
     pub fn add_user_segment(&self, segment: UserSegment) {
-        let mut segments = self.user_segments.write().unwrap();
+        let mut segments = self.user_segments.write().unwrap_or_else(|e| e.into_inner());
         segments.insert(segment.name.clone(), segment);
     }
 
