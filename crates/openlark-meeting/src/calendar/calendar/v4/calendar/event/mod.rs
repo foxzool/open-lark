@@ -9,8 +9,6 @@ pub mod list;
 pub mod patch;
 pub mod reply;
 pub mod search;
-pub mod subscription;
-pub mod unsubscription;
 
 pub mod attendee;
 pub mod meeting_chat;
