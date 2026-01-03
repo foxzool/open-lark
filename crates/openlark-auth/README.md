@@ -243,19 +243,46 @@ assert!(!token_info.needs_refresh(30)); // 30分钟内不需要刷新
 
 ```rust
 // 响应字段包括：
-// - user_id: 用户唯一标识
-// - open_id: 用户开放ID
-// - union_id: 用户联合ID
+// 用户身份信息
+// - open_id: 用户Open ID（应用级别）
+// - union_id: 用户Union ID（跨应用）
+// - user_id: 用户ID（系统内部）
+//
+// 基本信息
 // - name: 用户姓名
-// - email: 用户邮箱
-// - mobile: 用户手机号
-// - avatar_url: 头像URL
-// - status: 用户状态
-// - department_ids: 部门ID列表
-// - position: 职位
-// - employee_no: 员工编号
-// - nickname: 昵称
-// - gender: 性别
+// - en_name: 用户英文名/昵称
+//
+// 联系方式
+// - email: 用户个人邮箱地址
+// - enterprise_email: 用户企业邮箱地址
+// - mobile: 用户手机号码
+//
+// 头像信息
+// - avatar_url: 用户头像URL（单一链接）
+// - avatar: 用户头像对象（多尺寸）
+//   - avatar_72: 72x72像素头像
+//   - avatar_240: 240x240像素头像
+//   - avatar_640: 640x640像素头像
+//   - avatar_origin: 原始尺寸头像
+//
+// 组织信息
+// - tenant_key: 租户密钥
+// - employee_no: 员工工号
+// - department_ids: 用户所属部门ID列表
+// - group_ids: 用户所属群组ID列表
+// - positions: 用户职位信息列表
+//
+// 状态信息
+// - status: 用户状态对象
+//   - is_activated: 是否已激活
+//   - is_joined: 是否已加入企业
+//   - is_reserved: 是否为预留用户
+//   - is_exited: 是否已离职
+//
+// 扩展信息
+// - dingtalk_user_id: 钉钉用户ID
+// - enterprise_extension: 企业扩展属性对象
+// - custom_attrs: 用户自定义属性列表
 ```
 
 ## 错误处理
