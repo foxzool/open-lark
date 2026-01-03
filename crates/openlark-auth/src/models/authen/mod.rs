@@ -24,11 +24,13 @@ pub struct UserInfo {
     pub user_id: Option<String>,
     /// 用户名
     pub name: Option<String>,
-    /// 用户昵称
+    /// 用户英文名/昵称
     pub en_name: Option<String>,
-    /// 用户邮箱
+    /// 用户个人邮箱地址
     pub email: Option<String>,
-    /// 用户手机号
+    /// 用户企业邮箱地址
+    pub enterprise_email: Option<String>,
+    /// 用户手机号码
     pub mobile: Option<String>,
     /// 用户头像URL
     pub avatar_url: Option<String>,
@@ -204,6 +206,7 @@ impl PartialEq for UserInfo {
             && self.name == other.name
             && self.en_name == other.en_name
             && self.email == other.email
+            && self.enterprise_email == other.enterprise_email
             && self.mobile == other.mobile
             && self.avatar_url == other.avatar_url
             && self.avatar == other.avatar
@@ -339,6 +342,7 @@ mod tests {
             name: Some("测试用户".to_string()),
             en_name: Some("Test User".to_string()),
             email: Some("test@example.com".to_string()),
+            enterprise_email: Some("test@company.com".to_string()),
             mobile: Some("13800138000".to_string()),
             avatar_url: Some("https://example.com/avatar.jpg".to_string()),
             avatar: None,
@@ -387,5 +391,50 @@ mod tests {
         let json = serde_json::to_string(&avatar).unwrap();
         assert!(json.contains("72.jpg"));
         assert!(json.contains("240.jpg"));
+    }
+
+    #[test]
+    fn test_user_info_with_enterprise_email() {
+        // 测试包含企业邮箱的用户信息
+        let user_info = UserInfo {
+            open_id: "test_open_id".to_string(),
+            union_id: Some("test_union_id".to_string()),
+            user_id: Some("test_user_id".to_string()),
+            name: Some("测试用户".to_string()),
+            en_name: Some("Test User".to_string()),
+            email: Some("test@example.com".to_string()),
+            enterprise_email: Some("test@company.com".to_string()),
+            mobile: Some("13800138000".to_string()),
+            avatar_url: Some("https://example.com/avatar.jpg".to_string()),
+            avatar: None,
+            status: None,
+            department_ids: None,
+            group_ids: None,
+            positions: None,
+            employee_no: None,
+            dingtalk_user_id: None,
+            enterprise_extension: None,
+            custom_attrs: None,
+            tenant_key: None,
+        };
+
+        // 序列化
+        let json = serde_json::to_string(&user_info).unwrap();
+        assert!(json.contains("enterprise_email"));
+        assert!(json.contains("test@company.com"));
+
+        // 反序列化
+        let deserialized: UserInfo = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.enterprise_email, Some("test@company.com".to_string()));
+
+        // 测试没有企业邮箱的情况
+        let user_info_no_enterprise_email = UserInfo {
+            enterprise_email: None,
+            ..user_info
+        };
+
+        let json_no_enterprise = serde_json::to_string(&user_info_no_enterprise_email).unwrap();
+        let deserialized_no_enterprise: UserInfo = serde_json::from_str(&json_no_enterprise).unwrap();
+        assert!(deserialized_no_enterprise.enterprise_email.is_none());
     }
 }
