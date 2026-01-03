@@ -382,7 +382,7 @@ impl ErrorLogger for DefaultErrorLogger {
 
         // 存储日志
         {
-            let mut logs = self.logs.lock().unwrap();
+            let mut logs = self.logs.lock().unwrap_or_else(|e| e.into_inner());
             logs.push(entry);
 
             // 限制日志数量
@@ -393,7 +393,7 @@ impl ErrorLogger for DefaultErrorLogger {
     }
 
     async fn get_logs(&self, limit: usize) -> Vec<LogEntry> {
-        let logs = self.logs.lock().unwrap();
+        let logs = self.logs.lock().unwrap_or_else(|e| e.into_inner());
         logs.iter()
             .rev()
             .take(limit)
@@ -431,17 +431,17 @@ impl DefaultMetricsCollector {
 #[async_trait::async_trait]
 impl MetricsCollector for DefaultMetricsCollector {
     async fn record_metrics(&self, event: &ErrorEvent) {
-        let mut metrics = self.metrics.lock().unwrap();
+        let mut metrics = self.metrics.lock().unwrap_or_else(|e| e.into_inner());
         metrics.record_error(event);
     }
 
     async fn get_statistics(&self, time_range: Duration) -> ErrorStatistics {
-        let metrics = self.metrics.lock().unwrap();
+        let metrics = self.metrics.lock().unwrap_or_else(|e| e.into_inner());
         metrics.get_statistics(time_range)
     }
 
     async fn get_trend(&self, duration: Duration) -> ErrorTrend {
-        let metrics = self.metrics.lock().unwrap();
+        let metrics = self.metrics.lock().unwrap_or_else(|e| e.into_inner());
         metrics.get_trend(duration)
     }
 }
@@ -523,7 +523,7 @@ impl AlertManager for DefaultAlertManager {
 
         // 收集需要触发的规则，避免跨await持有锁
         let rules_to_trigger: Vec<AlertRule> = {
-            let rules = self.rules.lock().unwrap();
+            let rules = self.rules.lock().unwrap_or_else(|e| e.into_inner());
             rules.iter().filter(|rule| rule.should_trigger(event)).cloned().collect()
         };
 
@@ -533,7 +533,7 @@ impl AlertManager for DefaultAlertManager {
     }
 
     fn add_rule(&self, rule: AlertRule) {
-        let mut rules = self.rules.lock().unwrap();
+        let mut rules = self.rules.lock().unwrap_or_else(|e| e.into_inner());
         rules.push(rule);
     }
 }

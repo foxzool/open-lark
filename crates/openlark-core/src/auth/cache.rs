@@ -318,7 +318,7 @@ impl MemoryTokenCache {
         cache: &Arc<RwLock<HashMap<String, CacheEntry>>>,
         stats: &Arc<RwLock<CacheStats>>,
     ) {
-        let mut cache_guard = cache.write().unwrap();
+        let mut cache_guard = cache.write().unwrap_or_else(|e| e.into_inner());
         let before_size = cache_guard.len();
 
         // 移除过期条目
@@ -328,7 +328,7 @@ impl MemoryTokenCache {
 
         // 更新统计信息
         if before_size != after_size {
-            let mut stats_guard = stats.write().unwrap();
+            let mut stats_guard = stats.write().unwrap_or_else(|e| e.into_inner());
             stats_guard.cleanups += 1;
             stats_guard.current_size = after_size;
         }
@@ -347,7 +347,7 @@ impl MemoryTokenCache {
         let key_owned = key.to_string();
 
         // 直接执行而不是spawn，确保操作立即完成（修复测试问题）
-        let mut cache_guard = cache.write().unwrap();
+        let mut cache_guard = cache.write().unwrap_or_else(|e| e.into_inner());
         let ttl = Duration::from_secs(token.expires_in_seconds());
 
         let entry = CacheEntry::new(token, ttl);
@@ -381,12 +381,12 @@ impl MemoryTokenCache {
 
         // 首先使用读锁进行快速查找
         {
-            let cache_guard = cache.read().unwrap();
+            let cache_guard = cache.read().unwrap_or_else(|e| e.into_inner());
             if let Some(entry) = cache_guard.get(key) {
                 if entry.is_expired() {
                     // 缓存过期，直接清理（修复测试问题）
                     drop(cache_guard);
-                    let mut cache_guard = cache.write().unwrap();
+                    let mut cache_guard = cache.write().unwrap_or_else(|e| e.into_inner());
                     cache_guard.remove(key);
                     return None;
                 } else {
@@ -405,7 +405,7 @@ impl MemoryTokenCache {
         let cache = self.cache.clone();
         let stats = self.stats.clone();
 
-        let mut cache_guard = cache.write().unwrap();
+        let mut cache_guard = cache.write().unwrap_or_else(|e| e.into_inner());
         let entry = cache_guard.remove(key);
 
         if entry.is_some() {
@@ -422,7 +422,7 @@ impl MemoryTokenCache {
         let cache = self.cache.clone();
         let stats = self.stats.clone();
 
-        let mut cache_guard = cache.write().unwrap();
+        let mut cache_guard = cache.write().unwrap_or_else(|e| e.into_inner());
         cache_guard.clear();
 
         if let Ok(mut stats_guard) = stats.try_write() {
@@ -434,20 +434,20 @@ impl MemoryTokenCache {
 
     /// 获取缓存大小
     pub async fn size(&self) -> usize {
-        let cache = self.cache.read().unwrap();
+        let cache = self.cache.read().unwrap_or_else(|e| e.into_inner());
         cache.len()
     }
 
     /// 获取统计信息
     pub async fn stats(&self) -> CacheStats {
-        let stats = self.stats.read().unwrap();
+        let stats = self.stats.read().unwrap_or_else(|e| e.into_inner());
         stats.clone()
     }
 
     /// 验证缓存一致性
     pub async fn validate(&self) -> Result<usize, String> {
-        let cache = self.cache.read().unwrap();
-        let stats = self.stats.read().unwrap();
+        let cache = self.cache.read().unwrap_or_else(|e| e.into_inner());
+        let stats = self.stats.read().unwrap_or_else(|e| e.into_inner());
 
         let cache_size = cache.len();
         let stats_size = stats.current_size;
@@ -502,7 +502,7 @@ impl TokenStorage for MemoryTokenCache {
     }
 
     async fn list(&self, prefix: Option<&str>) -> Result<Vec<String>, Box<dyn std::error::Error>> {
-        let cache = self.cache.read().unwrap();
+        let cache = self.cache.read().unwrap_or_else(|e| e.into_inner());
         let keys: Vec<String> = cache
             .keys()
             .filter(|k| prefix.is_none_or(|p| k.starts_with(p)))

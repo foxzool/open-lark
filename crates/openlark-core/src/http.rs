@@ -161,7 +161,9 @@ fn validate_token_type(
     access_token_types: &[AccessTokenType],
     option: &RequestOption,
 ) -> Result<(), LarkAPIError> {
-    if !access_token_types.is_empty() {
+    // 未指定可用 token 类型时，不做额外校验。
+    // 旧实现误将“非空”作为提前返回条件，并在空列表时访问 [0] 导致 panic。
+    if access_token_types.is_empty() {
         return Ok(());
     }
 
@@ -202,6 +204,21 @@ fn determine_token_type(
 
         return AccessTokenType::None;
     }
+
+    // 缓存开启但未指定 token 类型时，退回到“按显式传入的 token”推断，避免空列表 panic。
+    if access_token_types.is_empty() {
+        if !option.user_access_token.is_empty() {
+            return AccessTokenType::User;
+        }
+        if !option.tenant_access_token.is_empty() || !option.tenant_key.is_empty() {
+            return AccessTokenType::Tenant;
+        }
+        if !option.app_access_token.is_empty() {
+            return AccessTokenType::App;
+        }
+        return AccessTokenType::None;
+    }
+
     let mut accessible_token_type_set: HashSet<AccessTokenType> = HashSet::new();
     let mut access_token_type = access_token_types[0];
 
@@ -365,14 +382,13 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "index out of bounds")]
-    fn test_validate_token_type_empty_list_bug() {
+    fn test_validate_token_type_empty_list_no_panic() {
         let empty_types: Vec<AccessTokenType> = vec![];
         let option = RequestOption::default();
 
-        // This demonstrates the bug in validate_token_type - it will panic
-        // due to accessing index 0 on empty list
-        let _ = validate_token_type(&empty_types, &option);
+        // 空列表不应 panic，且不做额外校验。
+        let result = validate_token_type(&empty_types, &option);
+        assert!(result.is_ok());
     }
 
     #[test]
@@ -380,7 +396,7 @@ mod test {
         let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
         let option = RequestOption::default();
 
-        // Non-empty list should return Ok immediately without validation
+        // 列表非空时应进行校验（当前仅对 Tenant/App 的 token 冲突做约束）
         let result = validate_token_type(&types, &option);
         assert!(result.is_ok());
     }
@@ -393,9 +409,8 @@ mod test {
             ..Default::default()
         };
 
-        // Non-empty list returns Ok immediately, so this passes despite mismatch
         let result = validate_token_type(&types, &option);
-        assert!(result.is_ok());
+        assert!(result.is_err());
     }
 
     #[test]
@@ -406,9 +421,8 @@ mod test {
             ..Default::default()
         };
 
-        // Non-empty list returns Ok immediately, so this passes despite mismatch
         let result = validate_token_type(&types, &option);
-        assert!(result.is_ok());
+        assert!(result.is_err());
     }
 
     #[test]
@@ -692,12 +706,10 @@ mod test {
     // Additional comprehensive tests for better coverage
 
     #[test]
-    fn test_validate_token_type_empty_list_early_return() {
-        // This test verifies the early return logic when list is NOT empty
+    fn test_validate_token_type_non_empty_list_ok() {
         let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
         let option = RequestOption::default();
 
-        // Should return Ok immediately due to non-empty list
         let result = validate_token_type(&types, &option);
         assert!(result.is_ok());
     }
@@ -933,15 +945,12 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "index out of bounds")]
-    fn test_determine_token_type_empty_types_list_panics() {
-        // Note: This documents a bug in the current implementation
-        // When cache is enabled and types list is empty, it panics on types[0]
+    fn test_determine_token_type_empty_types_list_no_panic() {
         let types: Vec<AccessTokenType> = vec![];
         let option = RequestOption::default();
 
-        // This will panic due to accessing types[0] on empty list when cache enabled
-        let _token_type = determine_token_type(&types, &option, true);
+        let token_type = determine_token_type(&types, &option, true);
+        assert_eq!(token_type, AccessTokenType::None);
     }
 
     #[test]
@@ -1006,18 +1015,13 @@ mod test {
 
     #[test]
     fn test_validate_token_type_with_mismatched_tokens_simulation() {
-        // This test documents what SHOULD happen vs what actually happens
-        // The current implementation has a bug where it returns Ok(()) early
-        // when the list is non-empty, bypassing the validation logic
-
-        let types = vec![AccessTokenType::Tenant]; // Single element to avoid early return
+        // types 与 option 中显式 token 类型不匹配时，应返回错误（避免静默放过错误 token）。
+        let types = vec![AccessTokenType::Tenant];
         let mut option = RequestOption::default();
         option.user_access_token = "user_token".to_string(); // Mismatch!
 
-        // This SHOULD fail but currently passes due to early return bug
         let result = validate_token_type(&types, &option);
-        // Documenting current (buggy) behavior
-        assert!(result.is_ok());
+        assert!(result.is_err());
     }
 
     #[test]

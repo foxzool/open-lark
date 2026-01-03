@@ -219,8 +219,9 @@ impl ErrorBuilder {
     }
 
     pub fn operation(mut self, op: impl Into<String>) -> Self {
-        self.operation = Some(op.into());
-        self.ctx.set_operation(self.operation.clone().unwrap());
+        let op = op.into();
+        self.operation = Some(op.clone());
+        self.ctx.set_operation(op);
         self
     }
 
