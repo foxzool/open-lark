@@ -3,14 +3,19 @@
 API 验证脚本
 
 对比 CSV 文件中的 API 列表与实际代码实现，生成完成度报告。
+
+命名规范：src/bizTag/meta.project/meta.version/meta.resource/meta.name.rs
+- meta.resource 中的 '.' 转换为 '/' 作为子目录
+- meta.name 中的 '/' 转换为 '/' 作为子目录
+- meta.name 中的 ':' 替换为 '_'
 """
 
 import csv
 import os
 import re
 from pathlib import Path
-from typing import Dict, List, Tuple, Set
-from dataclasses import dataclass, field
+from typing import Dict, List, Set
+from dataclasses import dataclass
 from collections import defaultdict
 
 
@@ -77,121 +82,54 @@ class APIValidator:
         print(f"✅ 解析完成，共 {len(self.apis)} 个 API")
 
     def _generate_expected_file_path(self, api: APIInfo) -> str:
-        """根据 API 信息生成预期的文件路径"""
-
-        # 提取 HTTP 方法和路径
-        match = re.match(r'(\w+):(.+)', api.url)
-        if not match:
-            return ""
-
-        method = match.group(1)
-        path = match.group(2)
-
-        # 根据不同的业务标签和项目生成路径
+        """
+        根据 API 信息生成预期的文件路径
+        
+        Strict 命名规范：src/bizTag/meta.project/meta.version/meta.resource/meta.name.rs
+        
+        处理规则：
+        1. meta.resource 中的 '.' 转换为 '/'
+        2. meta.name 中的 '/' 转换为 '/'（作为子目录）
+        3. meta.name 中的 ':' 替换为 '_'（路径参数）
+        4. 文件名使用 meta.name 的最后部分
+        """
+        
+        # 根据 bizTag 确定基础路径
         if api.biz_tag == 'calendar':
-            # calendar/calendar/v4/{resource}/{operation}.rs
-            operation = self._get_operation_from_url(method, path, api.meta_name)
-            # meta.Resource 可能是 "calendar" 或 "calendar.event" 或 "calendar.acl"
-            # 需要将点号替换为斜杠
-            resource_path = api.meta_resource.replace('.', '/')
-            return f"calendar/calendar/v4/{resource_path}/{operation}.rs"
-
+            base = f"calendar/{api.meta_project}"
         elif api.biz_tag == 'vc':
-            # vc/vc/v1/{resource}/{operation}.rs
-            operation = self._get_operation_from_url(method, path, api.meta_name)
-            # meta.Resource 可能包含嵌套路径，如 "meeting.recording" -> "meeting/recording"
-            resource_path = api.meta_resource.replace('.', '/')
-            return f"vc/vc/v1/{resource_path}/{operation}.rs"
-
+            base = f"vc/{api.meta_project}"
         elif api.biz_tag == 'meeting_room':
-            # meeting_room/vc_meeting/old/default/{resource}/{operation}.rs
-            # 对于 meeting_room，meta.Name 格式为 "building/create"，"room/list" 等
-            # 需要从 meta.Name 中提取资源和操作
-            name_parts = api.meta_name.split('/')
-            if len(name_parts) >= 2:
-                resource = name_parts[0].lower()
-                operation = name_parts[1].lower()
-                return f"meeting_room/vc_meeting/old/default/{resource}/{operation}.rs"
-
-            # 回退到从 URL 提取
-            operation = self._get_operation_from_url(method, path, api.meta_name, old_version=True)
-            return f"meeting_room/vc_meeting/old/default/{operation}.rs"
-
-        return ""
-
-    def _get_operation_from_url(self, method: str, path: str, meta_name: str = "", old_version: bool = False) -> str:
-        """从 URL 提取操作类型"""
-
-        # 如果 meta_name 存在且不是通用名称，直接使用 meta_name 作为操作名
-        # 'default' 是唯一需要跳过的通用名称，'list' 和 'query' 都是有效的操作名
-        if meta_name and meta_name.lower() != 'default':
-            operation = meta_name.lower()
-
-            # 特殊处理某些操作名
-            special_mappings = {
-                'batch': 'batch_get',
-                'primarys': 'primarys',
-                'mget': 'mget',
-                'primary': 'primary',
-                'subscription': 'subscription',
-                'unsubscription': 'unsubscription',
-                'instance_view': 'instance_view',
-                'instances': 'instances',
-                'reply': 'reply',
-                'batch_delete': 'batch_delete',
-                'meeting_chat': 'meeting_chat',
-                'meeting_minute': 'meeting_minute',
-                'chat_member': 'chat_member',
-            }
-
-            if operation in special_mappings:
-                return special_mappings[operation]
-
-            # 根据方法推断操作类型（只在 meta_name 没有明确操作名时）
-            # 注意：list, search 等操作名应该直接使用，不根据方法推断
-            if operation not in ['list', 'search', 'query', 'primary', 'primarys', 'mget']:
-                if method == 'POST' and not old_version:
-                    return 'create'
-                elif method == 'GET' and not old_version:
-                    return 'get'
-
-            return operation
-
-        # 移除路径参数，例如 :calendar_id
-        path = re.sub(r'/:[^/]+', '', path)
-
-        # 分割路径
-        parts = [p for p in path.split('/') if p]
-
-        # 获取最后一个部分作为操作
-        if parts:
-            operation = parts[-1].lower()
-
-            # 特殊映射
-            if operation == 'primarys':
-                return 'primarys'
-            elif operation == 'mget':
-                return 'mget'
-            elif operation == 'primary':
-                return 'primary'
-            elif operation == 'calendars':
-                return method.lower() if method.lower() in ['post', 'get'] else 'list'
-            elif operation == 'subscription':
-                return 'subscription'
-            elif operation == 'unsubscription':
-                return 'unsubscription'
-            elif method == 'POST' and not old_version:
-                return 'create'
-            elif method == 'GET' and not old_version:
-                return 'get'
-            elif method == 'PATCH':
-                return 'patch'
-            elif method == 'DELETE':
-                return 'delete'
-
-            return operation
-
-        return ""
+            base = f"meeting_room/{api.meta_project}"
+        else:
+            # 其他 bizTag 使用通用格式
+            base = f"{api.biz_tag}/{api.meta_project}"
+        
+        # 处理 meta.version
+        version = api.meta_version
+        
+        # 处理 meta.resource：将 '.' 替换为 '/'
+        resource_path = api.meta_resource.replace('.', '/')
+        
+        # 处理 meta.name：
+        # 1. 将 '/' 转换为 '/'（保持为子目录分隔符）
+        # 2. 将 ':' 替换为 '_'（处理路径参数）
+        name_path = api.meta_name.replace(':', '_')
+        
+        # 如果 meta.name 包含 '/'，则创建子目录
+        if '/' in name_path:
+            # 例如: "building/list" -> "building/list.rs"
+            # 例如: "summary/batch_get" -> "summary/batch_get.rs"
+            name_with_path = name_path.replace('/', '/')
+        else:
+            # 简单名称，直接使用
+            name_with_path = name_path
+        
+        # 构建完整路径
+        # src/bizTag/project/version/resource/name.rs
+        full_path = f"{base}/{version}/{resource_path}/{name_with_path}.rs"
+        
+        return full_path
 
     def scan_implementations(self):
         """扫描实际实现的文件"""
@@ -209,7 +147,10 @@ class APIValidator:
 
                     # 将路径分隔符转换为 /
                     rel_path = rel_path.replace('\\', '/')
-                    self.implemented_files.add(rel_path)
+
+                    # 排除 lib.rs 和 common 目录下的文件
+                    if not rel_path.startswith('lib.rs') and not rel_path.startswith('common/'):
+                        self.implemented_files.add(rel_path)
 
         print(f"✅ 扫描完成，找到 {len(self.implemented_files)} 个实现文件")
 
@@ -242,7 +183,8 @@ class APIValidator:
             f.write("# API 验证报告\n\n")
             f.write(f"**生成时间**: {self._get_timestamp()}\n")
             f.write(f"**CSV 文件**: {self.csv_path}\n")
-            f.write(f"**源码目录**: {self.src_path}\n\n")
+            f.write(f"**源码目录**: {self.src_path}\n")
+            f.write(f"**命名规范**: `src/bizTag/meta.project/meta.version/meta.resource/meta.name.rs`\n\n")
 
             # 总体统计
             f.write("## 一、总体统计\n\n")
@@ -303,7 +245,7 @@ class APIValidator:
 
                 f.write("\n")
 
-            # 完成 API 列表
+            # 已实现的 API 列表
             f.write("## 五、已实现的 API\n\n")
 
             implemented_by_module = defaultdict(list)
@@ -353,7 +295,7 @@ def main():
     """主函数"""
     import argparse
 
-    parser = argparse.ArgumentParser(description='API 验证脚本')
+    parser = argparse.ArgumentParser(description='API 验证脚本（基于 strict 命名规范）')
     parser.add_argument('--csv', default='api_list_export.csv',
                        help='CSV 文件路径 (默认: api_list_export.csv)')
     parser.add_argument('--src', default='crates/openlark-meeting/src',
@@ -366,7 +308,7 @@ def main():
     args = parser.parse_args()
 
     print("=" * 60)
-    print("🚀 API 验证工具")
+    print("🚀 API 验证工具（Strict 命名规范）")
     print("=" * 60)
     print()
 
