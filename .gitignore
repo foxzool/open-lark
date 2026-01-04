@@ -139,7 +139,12 @@ feature_architecture_analysis.md
 *.temp
 /temp/
 /tmp/
-/.playwright-browsers/
-/.claude/
-crates/openlark-meeting/VALIDATION_REPORT.md
+ /.playwright-browsers/
+ /.claude/
+
+# OpenLark Meeting crate - temporary reports
+crates/openlark-meeting/*_REPORT.md
+crates/openlark-meeting/*_PLAN.md
+crates/openlark-meeting/*_PROGRESS.md
+crates/openlark-meeting/API_LIST.md
 crates/openlark-meeting/report.md
