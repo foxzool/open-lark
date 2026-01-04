@@ -16,7 +16,7 @@
    src/bizTag/meta.project/meta.version/meta.resource/meta.name.rs
 ```
 
-架构参考  @ARCHITECTURE.md .正确的使用Error 、client、 request、 response, end_points调用
+架构参考 @ARCHITECTURE.md。正确使用 Error、Client、Request、Response、end_points 调用。
 
 ## 构建、测试与开发命令
 
