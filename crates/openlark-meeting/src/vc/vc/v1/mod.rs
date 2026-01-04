@@ -11,6 +11,7 @@ pub mod reserve;
 pub mod reserve_config;
 pub mod resource_reservation_list;
 pub mod room;
+pub mod room_config;
 pub mod room_level;
 pub mod scope_config;
 
