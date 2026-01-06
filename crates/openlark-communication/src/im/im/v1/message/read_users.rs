@@ -2,11 +2,12 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/message/read_users
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
-    common::api_utils::extract_response_data,
-    endpoints::IM_V1_MESSAGES,
+    common::api_utils::extract_response_data, endpoints::IM_V1_MESSAGES,
     im::im::v1::message::models::UserIdType,
 };
 
@@ -61,10 +62,8 @@ impl ReadMessageUsersRequest {
         validate_required!(self.message_id, "message_id 不能为空");
 
         // url: GET:/open-apis/im/v1/messages/:message_id/read_users
-        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(format!(
-            "{}/{}/read_users",
-            IM_V1_MESSAGES, self.message_id
-        ));
+        let mut req: ApiRequest<serde_json::Value> =
+            ApiRequest::get(format!("{}/{}/read_users", IM_V1_MESSAGES, self.message_id));
 
         // 文档虽标注必填，但同时给出默认值 open_id，这里采用默认值以降低使用成本。
         let user_id_type = self.user_id_type.unwrap_or(UserIdType::OpenId);
@@ -81,4 +80,3 @@ impl ReadMessageUsersRequest {
         extract_response_data(resp, "查询消息已读信息")
     }
 }
-

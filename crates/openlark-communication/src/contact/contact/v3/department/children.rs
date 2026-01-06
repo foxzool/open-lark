@@ -94,4 +94,3 @@ impl ListDepartmentChildrenRequest {
         extract_response_data(resp, "获取子部门列表")
     }
 }
-

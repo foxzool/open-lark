@@ -21,4 +21,3 @@ impl ApiResponseTrait for BatchMessageReadUserResponse {
         ResponseFormat::Data
     }
 }
-

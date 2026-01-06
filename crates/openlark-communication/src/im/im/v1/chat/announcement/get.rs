@@ -2,12 +2,16 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat-announcement/get
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::extract_response_data,
     endpoints::IM_V1_CHATS,
-    im::im::v1::{chat::announcement::models::GetChatAnnouncementResponse, message::models::UserIdType},
+    im::im::v1::{
+        chat::announcement::models::GetChatAnnouncementResponse, message::models::UserIdType,
+    },
 };
 
 /// 获取群公告信息请求
@@ -45,10 +49,8 @@ impl GetChatAnnouncementRequest {
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: GET:/open-apis/im/v1/chats/:chat_id/announcement
-        let mut req: ApiRequest<GetChatAnnouncementResponse> = ApiRequest::get(format!(
-            "{}/{}/announcement",
-            IM_V1_CHATS, self.chat_id
-        ));
+        let mut req: ApiRequest<GetChatAnnouncementResponse> =
+            ApiRequest::get(format!("{}/{}/announcement", IM_V1_CHATS, self.chat_id));
 
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());
@@ -58,4 +60,3 @@ impl GetChatAnnouncementRequest {
         extract_response_data(resp, "获取群公告信息")
     }
 }
-

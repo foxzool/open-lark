@@ -2,13 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/contact-v3/department/batch
 
-use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    error,
-    http::Transport,
-    SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, error, http::Transport, SDKResult};
 
 use crate::{
     common::api_utils::extract_response_data,
@@ -84,4 +78,3 @@ impl BatchGetDepartmentsRequest {
         extract_response_data(resp, "批量获取部门信息")
     }
 }
-

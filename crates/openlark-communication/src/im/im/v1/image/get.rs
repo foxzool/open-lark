@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/image/get
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{common::api_utils::extract_response_data, endpoints::IM_V1_IMAGES};
 
@@ -33,10 +35,10 @@ impl GetImageRequest {
         validate_required!(self.image_key, "image_key 不能为空");
 
         // url: GET:/open-apis/im/v1/images/:image_key
-        let req: ApiRequest<Vec<u8>> = ApiRequest::get(format!("{}/{}", IM_V1_IMAGES, self.image_key));
+        let req: ApiRequest<Vec<u8>> =
+            ApiRequest::get(format!("{}/{}", IM_V1_IMAGES, self.image_key));
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "下载图片")
     }
 }
-

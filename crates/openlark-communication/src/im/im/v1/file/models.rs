@@ -14,4 +14,3 @@ impl ApiResponseTrait for CreateFileResponse {
         ResponseFormat::Data
     }
 }
-

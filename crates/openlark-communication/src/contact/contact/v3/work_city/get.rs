@@ -2,12 +2,13 @@
 //!
 //! docPath: https://open.feishu.cn/document/contact-v3/work_city/get
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::extract_response_data,
-    contact::contact::v3::work_city::models::WorkCityResponse,
-    endpoints::CONTACT_V3_WORK_CITIES,
+    contact::contact::v3::work_city::models::WorkCityResponse, endpoints::CONTACT_V3_WORK_CITIES,
 };
 
 /// 获取单个工作城市信息请求
@@ -44,4 +45,3 @@ impl GetWorkCityRequest {
         extract_response_data(resp, "获取单个工作城市信息")
     }
 }
-

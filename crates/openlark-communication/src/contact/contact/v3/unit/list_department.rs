@@ -3,10 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/unit/list_department
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 
 use crate::{
@@ -84,4 +81,3 @@ impl ListUnitDepartmentsRequest {
         extract_response_data(resp, "获取单位绑定的部门列表")
     }
 }
-

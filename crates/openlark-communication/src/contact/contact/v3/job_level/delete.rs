@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/job_level/delete
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::{api_utils::extract_response_data, models::EmptyData},
@@ -43,4 +45,3 @@ impl DeleteJobLevelRequest {
         extract_response_data(resp, "删除职级")
     }
 }
-

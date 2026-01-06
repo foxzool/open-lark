@@ -49,4 +49,3 @@ impl UpdateChatButtonRequest {
         extract_response_data(resp, "更新消息流卡片按钮")
     }
 }
-
