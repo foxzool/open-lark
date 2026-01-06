@@ -84,38 +84,61 @@ class APIValidator:
     def _generate_expected_file_path(self, api: APIInfo) -> str:
         """
         根据 API 信息生成预期的文件路径
-        
-        Strict 命名规范：src/bizTag/meta.project/meta.version/meta.resource/meta.name.rs
-        
-        处理规则：
-        1. meta.resource 中的 '.' 转换为 '/'
-        2. meta.name 中的 '/' 转换为 '/'（作为子目录）
-        3. meta.name 中的 ':' 替换为 '_'（路径参数）
-        4. 文件名使用 meta.name 的最后部分
+
+        实际命名规范（基于 crates/openlark-meeting 结构）：
+        1. base/bizTag/version/resource/name.rs
+        2. 当 meta.project == bizTag 时，省略 project 层级
+        3. 当 meta.version == "old" 且 meta.resource == "default" 时，省略这两个层级
+        4. meta.resource 中的 '.' 转换为 '/'
+        5. meta.name 中的 '/' 转换为 '/'（作为子目录）
+        6. meta.name 中的 ':' 替换为 '_'（路径参数）
         """
-        
+
+        # 特殊规则 1: meeting_room 的 old/default 组合完全省略
+        if api.biz_tag == 'meeting_room' and api.meta_version == 'old' and api.meta_resource == 'default':
+            # 直接使用 meta.name 作为路径
+            name_path = api.meta_name.replace(':', '_')
+            if '/' in name_path:
+                name_with_path = name_path.replace('/', '/')
+            else:
+                name_with_path = name_path
+            return f"meeting_room/{name_with_path}.rs"
+
         # 根据 bizTag 确定基础路径
         if api.biz_tag == 'calendar':
-            base = f"calendar/{api.meta_project}"
+            # 特殊规则 2: 当 meta.project == bizTag 时，省略 project 层级
+            if api.meta_project == 'calendar':
+                base = "calendar"
+            else:
+                base = f"calendar/{api.meta_project}"
         elif api.biz_tag == 'vc':
-            base = f"vc/{api.meta_project}"
+            # 特殊规则 2: 当 meta.project == bizTag 时，省略 project 层级
+            if api.meta_project == 'vc':
+                base = "vc"
+            else:
+                base = f"vc/{api.meta_project}"
         elif api.biz_tag == 'meeting_room':
-            base = f"meeting_room/{api.meta_project}"
+            # meeting_room 的 project 可能是 vc_meeting，需要判断
+            # 这里我们假设如果 project 是 'vc_meeting' 则省略
+            if api.meta_project == 'vc_meeting':
+                base = "meeting_room"
+            else:
+                base = f"meeting_room/{api.meta_project}"
         else:
             # 其他 bizTag 使用通用格式
             base = f"{api.biz_tag}/{api.meta_project}"
-        
+
         # 处理 meta.version
         version = api.meta_version
-        
+
         # 处理 meta.resource：将 '.' 替换为 '/'
         resource_path = api.meta_resource.replace('.', '/')
-        
+
         # 处理 meta.name：
         # 1. 将 '/' 转换为 '/'（保持为子目录分隔符）
         # 2. 将 ':' 替换为 '_'（处理路径参数）
         name_path = api.meta_name.replace(':', '_')
-        
+
         # 如果 meta.name 包含 '/'，则创建子目录
         if '/' in name_path:
             # 例如: "building/list" -> "building/list.rs"
@@ -124,11 +147,11 @@ class APIValidator:
         else:
             # 简单名称，直接使用
             name_with_path = name_path
-        
+
         # 构建完整路径
-        # src/bizTag/project/version/resource/name.rs
+        # base/version/resource/name.rs
         full_path = f"{base}/{version}/{resource_path}/{name_with_path}.rs"
-        
+
         return full_path
 
     def scan_implementations(self):
