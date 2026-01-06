@@ -2,11 +2,12 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat-member/is_in_chat
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
-    common::api_utils::extract_response_data,
-    endpoints::IM_V1_CHATS,
+    common::api_utils::extract_response_data, endpoints::IM_V1_CHATS,
     im::im::v1::chat::members::models::IsInChatResponse,
 };
 
@@ -46,4 +47,3 @@ impl IsInChatRequest {
         extract_response_data(resp, "判断用户或机器人是否在群里")
     }
 }
-

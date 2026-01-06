@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/batch_message/delete
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::{api_utils::extract_response_data, models::EmptyData},
@@ -36,11 +38,12 @@ impl DeleteBatchMessageRequest {
         validate_required!(self.batch_message_id, "batch_message_id 不能为空");
 
         // url: DELETE:/open-apis/im/v1/batch_messages/:batch_message_id
-        let req: ApiRequest<EmptyData> =
-            ApiRequest::delete(format!("{}/{}", IM_V1_BATCH_MESSAGES, self.batch_message_id));
+        let req: ApiRequest<EmptyData> = ApiRequest::delete(format!(
+            "{}/{}",
+            IM_V1_BATCH_MESSAGES, self.batch_message_id
+        ));
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "批量撤回消息")
     }
 }
-

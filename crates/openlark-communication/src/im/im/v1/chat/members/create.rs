@@ -2,12 +2,16 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat-member/create
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
     endpoints::IM_V1_CHATS,
-    im::im::v1::chat::members::models::{CreateChatMembersBody, CreateChatMembersResponse, MemberIdType, SucceedType},
+    im::im::v1::chat::members::models::{
+        CreateChatMembersBody, CreateChatMembersResponse, MemberIdType, SucceedType,
+    },
 };
 
 /// 将用户或机器人拉入群聊请求
@@ -49,7 +53,10 @@ impl CreateChatMembersRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat-member/create
-    pub async fn execute(self, body: CreateChatMembersBody) -> SDKResult<CreateChatMembersResponse> {
+    pub async fn execute(
+        self,
+        body: CreateChatMembersBody,
+    ) -> SDKResult<CreateChatMembersResponse> {
         validate_required!(self.chat_id, "chat_id 不能为空");
         if body.id_list.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -59,11 +66,9 @@ impl CreateChatMembersRequest {
         }
 
         // url: POST:/open-apis/im/v1/chats/:chat_id/members
-        let mut req: ApiRequest<CreateChatMembersResponse> = ApiRequest::post(format!(
-            "{}/{}/members",
-            IM_V1_CHATS, self.chat_id
-        ))
-        .body(serialize_params(&body, "将用户或机器人拉入群聊")?);
+        let mut req: ApiRequest<CreateChatMembersResponse> =
+            ApiRequest::post(format!("{}/{}/members", IM_V1_CHATS, self.chat_id))
+                .body(serialize_params(&body, "将用户或机器人拉入群聊")?);
 
         if let Some(member_id_type) = self.member_id_type {
             req = req.query("member_id_type", member_id_type.as_str());
@@ -76,4 +81,3 @@ impl CreateChatMembersRequest {
         extract_response_data(resp, "将用户或机器人拉入群聊")
     }
 }
-

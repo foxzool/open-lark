@@ -7,4 +7,3 @@ use serde::{Deserialize, Serialize};
 pub struct TabIdsBody {
     pub tab_ids: Vec<String>,
 }
-

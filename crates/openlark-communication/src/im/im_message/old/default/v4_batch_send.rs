@@ -32,4 +32,3 @@ impl BatchSendMessagesRequest {
         extract_response_data(resp, "批量发送消息")
     }
 }
-

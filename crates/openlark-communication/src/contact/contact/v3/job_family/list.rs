@@ -67,4 +67,3 @@ impl ListJobFamiliesRequest {
         extract_response_data(resp, "获取租户序列列表")
     }
 }
-

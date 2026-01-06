@@ -34,7 +34,10 @@ impl BotTimeSentiveRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/im-v2/groups-bots/bot_time_sentive
-    pub async fn execute(self, body: FeedCardTimeSensitiveBody) -> SDKResult<FeedCardActionResponse> {
+    pub async fn execute(
+        self,
+        body: FeedCardTimeSensitiveBody,
+    ) -> SDKResult<FeedCardActionResponse> {
         if body.user_ids.is_empty() {
             return Err(error::validation_error(
                 "user_ids 不能为空".to_string(),
@@ -49,15 +52,12 @@ impl BotTimeSentiveRequest {
         })?;
 
         // url: PATCH:/open-apis/im/v2/feed_cards/bot_time_sentive
-        let req: ApiRequest<FeedCardActionResponse> = ApiRequest::patch(format!(
-            "{}/bot_time_sentive",
-            IM_V2_FEED_CARDS
-        ))
-        .query("user_id_type", user_id_type.as_str())
-        .body(serialize_params(&body, "机器人单聊即时提醒")?);
+        let req: ApiRequest<FeedCardActionResponse> =
+            ApiRequest::patch(format!("{}/bot_time_sentive", IM_V2_FEED_CARDS))
+                .query("user_id_type", user_id_type.as_str())
+                .body(serialize_params(&body, "机器人单聊即时提醒")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "机器人单聊即时提醒")
     }
 }
-

@@ -5,7 +5,10 @@
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 use crate::{
-    common::{api_utils::{extract_response_data, serialize_params}, models::EmptyData},
+    common::{
+        api_utils::{extract_response_data, serialize_params},
+        models::EmptyData,
+    },
     endpoints::IM_V2_URL_PREVIEWS_BATCH_UPDATE,
     im::im::v2::url_preview::models::BatchUpdateUrlPreviewBody,
 };
@@ -39,4 +42,3 @@ impl BatchUpdateUrlPreviewRequest {
         extract_response_data(resp, "更新 URL 预览")
     }
 }
-

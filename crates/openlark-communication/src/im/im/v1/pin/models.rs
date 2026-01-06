@@ -46,4 +46,3 @@ impl ApiResponseTrait for ListPinsResponse {
         ResponseFormat::Data
     }
 }
-

@@ -28,4 +28,3 @@ pub struct PatchChatAnnouncementBody {
     pub revision: String,
     pub requests: Vec<String>,
 }
-

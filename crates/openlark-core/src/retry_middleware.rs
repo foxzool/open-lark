@@ -265,9 +265,8 @@ impl RetryMiddleware {
         }
 
         // 返回最后一个错误
-        Err(last_error.unwrap_or_else(|| {
-            crate::error::validation_error("retry", "重试执行未产生任何错误")
-        }))
+        Err(last_error
+            .unwrap_or_else(|| crate::error::validation_error("retry", "重试执行未产生任何错误")))
     }
 
     /// 检查是否应该重试

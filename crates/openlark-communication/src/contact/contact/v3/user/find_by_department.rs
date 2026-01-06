@@ -75,8 +75,9 @@ impl FindUsersByDepartmentRequest {
         })?;
 
         // url: GET:/open-apis/contact/v3/users/find_by_department
-        let mut req: ApiRequest<ListUsersResponse> = ApiRequest::get(CONTACT_V3_USERS_FIND_BY_DEPARTMENT)
-            .query("department_id", department_id);
+        let mut req: ApiRequest<ListUsersResponse> =
+            ApiRequest::get(CONTACT_V3_USERS_FIND_BY_DEPARTMENT)
+                .query("department_id", department_id);
 
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());
@@ -95,4 +96,3 @@ impl FindUsersByDepartmentRequest {
         extract_response_data(resp, "获取部门直属用户列表")
     }
 }
-

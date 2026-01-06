@@ -78,4 +78,3 @@ impl ListChatsRequest {
         extract_response_data(resp, "获取用户或机器人所在的群列表")
     }
 }
-

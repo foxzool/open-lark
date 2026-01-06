@@ -5,11 +5,7 @@
 use std::collections::HashMap;
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    error,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -117,4 +113,3 @@ impl CreateDepartmentRequest {
         extract_response_data(resp, "创建部门")
     }
 }
-

@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     error,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -55,7 +54,10 @@ impl SendEphemeralCardRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/message-card/send-message-cards-that-are-only-visible-to-certain-people
-    pub async fn execute(self, body: SendEphemeralCardBody) -> SDKResult<SendEphemeralCardResponse> {
+    pub async fn execute(
+        self,
+        body: SendEphemeralCardBody,
+    ) -> SDKResult<SendEphemeralCardResponse> {
         validate_required!(body.chat_id, "chat_id 不能为空");
         validate_required!(body.msg_type, "msg_type 不能为空");
 
@@ -67,11 +69,10 @@ impl SendEphemeralCardRequest {
         }
 
         // url: POST:/open-apis/ephemeral/v1/send
-        let req: ApiRequest<SendEphemeralCardResponse> =
-            ApiRequest::post(EPHEMERAL_V1_SEND).body(serialize_params(&body, "发送仅特定人可见的消息卡片")?);
+        let req: ApiRequest<SendEphemeralCardResponse> = ApiRequest::post(EPHEMERAL_V1_SEND)
+            .body(serialize_params(&body, "发送仅特定人可见的消息卡片")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "发送仅特定人可见的消息卡片")
     }
 }
-

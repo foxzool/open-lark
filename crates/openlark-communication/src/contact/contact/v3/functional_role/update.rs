@@ -3,15 +3,15 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role/update
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    common::{api_utils::{extract_response_data, serialize_params}, models::EmptyData},
+    common::{
+        api_utils::{extract_response_data, serialize_params},
+        models::EmptyData,
+    },
     endpoints::CONTACT_V3_FUNCTIONAL_ROLES,
 };
 
@@ -56,4 +56,3 @@ impl UpdateFunctionalRoleRequest {
         extract_response_data(resp, "修改角色名称")
     }
 }
-

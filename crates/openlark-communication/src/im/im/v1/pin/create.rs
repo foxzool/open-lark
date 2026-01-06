@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/pin/create
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
@@ -34,4 +36,3 @@ impl CreatePinRequest {
         extract_response_data(resp, "Pin 消息")
     }
 }
-

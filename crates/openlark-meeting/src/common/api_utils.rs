@@ -18,7 +18,10 @@ pub fn extract_response_data<T>(
 }
 
 /// 标准化参数序列化错误处理
-pub fn serialize_params<T: serde::Serialize>(params: &T, context: &str) -> SDKResult<serde_json::Value> {
+pub fn serialize_params<T: serde::Serialize>(
+    params: &T,
+    context: &str,
+) -> SDKResult<serde_json::Value> {
     serde_json::to_value(params).map_err(|e| {
         error::validation_error(
             format!("{}参数序列化失败", context),
@@ -26,4 +29,3 @@ pub fn serialize_params<T: serde::Serialize>(params: &T, context: &str) -> SDKRe
         )
     })
 }
-

@@ -3,10 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/job_family/create
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -55,4 +52,3 @@ impl CreateJobFamilyRequest {
         extract_response_data(resp, "创建序列")
     }
 }
-

@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/tenant-tag/get
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{common::api_utils::extract_response_data, endpoints::IM_V2_BIZ_ENTITY_TAG_RELATION};
 
@@ -50,4 +52,3 @@ impl GetBizEntityTagRelationRequest {
         extract_response_data(resp, "查询实体与标签的绑定关系")
     }
 }
-

@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/job_family/update
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -67,4 +69,3 @@ impl UpdateJobFamilyRequest {
         extract_response_data(resp, "更新序列")
     }
 }
-

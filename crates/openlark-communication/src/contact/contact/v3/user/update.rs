@@ -3,10 +3,7 @@
 //! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/update
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 
 use crate::{

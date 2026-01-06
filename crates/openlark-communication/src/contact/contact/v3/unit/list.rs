@@ -6,8 +6,7 @@ use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult}
 
 use crate::{
     common::api_utils::extract_response_data,
-    contact::contact::v3::unit::models::ListUnitsResponse,
-    endpoints::CONTACT_V3_UNIT,
+    contact::contact::v3::unit::models::ListUnitsResponse, endpoints::CONTACT_V3_UNIT,
 };
 
 /// 获取单位列表请求
@@ -56,4 +55,3 @@ impl ListUnitsRequest {
         extract_response_data(resp, "获取单位列表")
     }
 }
-

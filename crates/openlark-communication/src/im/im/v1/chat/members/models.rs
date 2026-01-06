@@ -123,4 +123,3 @@ impl ApiResponseTrait for IsInChatResponse {
         ResponseFormat::Data
     }
 }
-

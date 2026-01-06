@@ -83,15 +83,12 @@ impl UrgentAppRequest {
         })?;
 
         // url: PATCH:/open-apis/im/v1/messages/:message_id/urgent_app
-        let req: ApiRequest<UrgentAppResponse> = ApiRequest::patch(format!(
-            "{}/{}/urgent_app",
-            IM_V1_MESSAGES, self.message_id
-        ))
-        .query("user_id_type", user_id_type.as_str())
-        .body(serialize_params(&body, "发送应用内加急")?);
+        let req: ApiRequest<UrgentAppResponse> =
+            ApiRequest::patch(format!("{}/{}/urgent_app", IM_V1_MESSAGES, self.message_id))
+                .query("user_id_type", user_id_type.as_str())
+                .body(serialize_params(&body, "发送应用内加急")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "发送应用内加急")
     }
 }
-

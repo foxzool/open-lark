@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat/link
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -57,14 +59,11 @@ impl GetChatLinkRequest {
         };
 
         // url: POST:/open-apis/im/v1/chats/:chat_id/link
-        let req: ApiRequest<GetChatLinkResponse> = ApiRequest::post(format!(
-            "{}/{}/link",
-            IM_V1_CHATS, self.chat_id
-        ))
-        .body(serialize_params(&body, "获取群分享链接")?);
+        let req: ApiRequest<GetChatLinkResponse> =
+            ApiRequest::post(format!("{}/{}/link", IM_V1_CHATS, self.chat_id))
+                .body(serialize_params(&body, "获取群分享链接")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "获取群分享链接")
     }
 }
-

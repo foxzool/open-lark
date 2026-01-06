@@ -3,10 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/group-member/remove
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -50,7 +47,11 @@ impl RemoveGroupMemberRequest {
     /// 说明：该接口目前仅支持 `member_type=user`。
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/group-member/remove
-    pub async fn execute(self, member_id_type: UserIdType, member_id: impl Into<String>) -> SDKResult<EmptyData> {
+    pub async fn execute(
+        self,
+        member_id_type: UserIdType,
+        member_id: impl Into<String>,
+    ) -> SDKResult<EmptyData> {
         validate_required!(self.group_id, "group_id 不能为空");
         let member_id = member_id.into();
         validate_required!(member_id, "member_id 不能为空");
@@ -71,4 +72,3 @@ impl RemoveGroupMemberRequest {
         extract_response_data(resp, "移除用户组成员")
     }
 }
-

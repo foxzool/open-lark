@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/im-v1/message/push_follow_up
 
-use openlark_core::{api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -77,4 +79,3 @@ impl PushFollowUpRequest {
         extract_response_data(resp, "添加跟随气泡")
     }
 }
-

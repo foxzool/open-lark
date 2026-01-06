@@ -7,8 +7,7 @@ use openlark_core::{api::ApiRequest, config::Config, error, http::Transport, SDK
 use crate::{
     common::api_utils::extract_response_data,
     contact::contact::v3::group::models::MemberBelongGroupsResponse,
-    contact::contact::v3::user::models::UserIdType,
-    endpoints::CONTACT_V3_GROUP_MEMBER_BELONG,
+    contact::contact::v3::user::models::UserIdType, endpoints::CONTACT_V3_GROUP_MEMBER_BELONG,
 };
 
 /// 查询用户所属用户组请求
