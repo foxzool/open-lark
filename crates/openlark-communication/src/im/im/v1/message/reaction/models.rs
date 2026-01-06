@@ -52,4 +52,3 @@ impl ApiResponseTrait for ListMessageReactionsResponse {
         ResponseFormat::Data
     }
 }
-

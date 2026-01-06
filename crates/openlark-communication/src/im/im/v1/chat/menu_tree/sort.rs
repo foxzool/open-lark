@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat-menu_tree/sort
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
@@ -43,14 +45,11 @@ impl SortChatMenuTreeRequest {
         }
 
         // url: POST:/open-apis/im/v1/chats/:chat_id/menu_tree/sort
-        let req: ApiRequest<serde_json::Value> = ApiRequest::post(format!(
-            "{}/{}/menu_tree/sort",
-            IM_V1_CHATS, self.chat_id
-        ))
-        .body(serialize_params(&body, "排序群菜单")?);
+        let req: ApiRequest<serde_json::Value> =
+            ApiRequest::post(format!("{}/{}/menu_tree/sort", IM_V1_CHATS, self.chat_id))
+                .body(serialize_params(&body, "排序群菜单")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "排序群菜单")
     }
 }
-

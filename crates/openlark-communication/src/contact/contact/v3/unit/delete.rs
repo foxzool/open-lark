@@ -3,10 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/unit/delete
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 
 use crate::{
@@ -48,4 +45,3 @@ impl DeleteUnitRequest {
         extract_response_data(resp, "删除单位")
     }
 }
-

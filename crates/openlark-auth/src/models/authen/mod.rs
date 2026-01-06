@@ -425,7 +425,10 @@ mod tests {
 
         // 反序列化
         let deserialized: UserInfo = serde_json::from_str(&json).unwrap();
-        assert_eq!(deserialized.enterprise_email, Some("test@company.com".to_string()));
+        assert_eq!(
+            deserialized.enterprise_email,
+            Some("test@company.com".to_string())
+        );
 
         // 测试没有企业邮箱的情况
         let user_info_no_enterprise_email = UserInfo {
@@ -434,7 +437,8 @@ mod tests {
         };
 
         let json_no_enterprise = serde_json::to_string(&user_info_no_enterprise_email).unwrap();
-        let deserialized_no_enterprise: UserInfo = serde_json::from_str(&json_no_enterprise).unwrap();
+        let deserialized_no_enterprise: UserInfo =
+            serde_json::from_str(&json_no_enterprise).unwrap();
         assert!(deserialized_no_enterprise.enterprise_email.is_none());
     }
 }

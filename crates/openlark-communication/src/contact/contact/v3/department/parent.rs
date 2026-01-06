@@ -97,4 +97,3 @@ impl GetDepartmentParentsRequest {
         extract_response_data(resp, "获取父部门信息")
     }
 }
-

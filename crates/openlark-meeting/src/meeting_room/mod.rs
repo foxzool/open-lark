@@ -1,9 +1,9 @@
-//! 会议室（meeting_room）
-//!
-//! 按 bizTag=meeting_room 组织的 API 实现。
+//! meeting_room default（历史版本资源）
 
-#![allow(clippy::module_inception)]
-
-// 先按 meta.Project 建目录，后续逐个补齐
-pub mod vc_meeting;
-
+pub mod building;
+pub mod country;
+pub mod district;
+pub mod freebusy;
+pub mod instance;
+pub mod room;
+pub mod summary;

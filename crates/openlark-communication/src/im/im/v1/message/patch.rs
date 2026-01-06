@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/message-card/patch
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
@@ -49,4 +51,3 @@ impl PatchMessageCardRequest {
         extract_response_data(resp, "更新已发送的消息卡片")
     }
 }
-

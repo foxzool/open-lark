@@ -2,12 +2,12 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat-member/me_join
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
-    common::api_utils::extract_response_data,
-    common::models::EmptyData,
-    endpoints::IM_V1_CHATS,
+    common::api_utils::extract_response_data, common::models::EmptyData, endpoints::IM_V1_CHATS,
 };
 
 /// 用户或机器人主动加入群聊请求
@@ -44,4 +44,3 @@ impl MeJoinChatMembersRequest {
         extract_response_data(resp, "用户或机器人主动加入群聊")
     }
 }
-

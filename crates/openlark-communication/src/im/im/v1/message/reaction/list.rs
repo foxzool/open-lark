@@ -2,14 +2,15 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/message-reaction/list
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::extract_response_data,
     endpoints::IM_V1_MESSAGES,
     im::im::v1::{
-        message::models::UserIdType,
-        message::reaction::models::ListMessageReactionsResponse,
+        message::models::UserIdType, message::reaction::models::ListMessageReactionsResponse,
     },
 };
 
@@ -72,10 +73,8 @@ impl ListMessageReactionsRequest {
         validate_required!(self.message_id, "message_id 不能为空");
 
         // url: GET:/open-apis/im/v1/messages/:message_id/reactions
-        let mut req: ApiRequest<ListMessageReactionsResponse> = ApiRequest::get(format!(
-            "{}/{}/reactions",
-            IM_V1_MESSAGES, self.message_id
-        ));
+        let mut req: ApiRequest<ListMessageReactionsResponse> =
+            ApiRequest::get(format!("{}/{}/reactions", IM_V1_MESSAGES, self.message_id));
 
         if let Some(reaction_type) = self.reaction_type {
             req = req.query("reaction_type", reaction_type);
@@ -94,4 +93,3 @@ impl ListMessageReactionsRequest {
         extract_response_data(resp, "获取消息表情回复")
     }
 }
-

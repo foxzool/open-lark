@@ -342,7 +342,10 @@ impl FeatureFlagManager {
 
     /// 添加用户分段
     pub fn add_user_segment(&self, segment: UserSegment) {
-        let mut segments = self.user_segments.write().unwrap_or_else(|e| e.into_inner());
+        let mut segments = self
+            .user_segments
+            .write()
+            .unwrap_or_else(|e| e.into_inner());
         segments.insert(segment.name.clone(), segment);
     }
 

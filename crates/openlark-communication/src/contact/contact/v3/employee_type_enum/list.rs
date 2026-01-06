@@ -57,4 +57,3 @@ impl ListEmployeeTypeEnumsRequest {
         extract_response_data(resp, "查询人员类型")
     }
 }
-

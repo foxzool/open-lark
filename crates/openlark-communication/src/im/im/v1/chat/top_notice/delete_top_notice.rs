@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat/delete_top_notice
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::{api_utils::extract_response_data, models::EmptyData},
@@ -45,4 +47,3 @@ impl DeleteTopNoticeRequest {
         extract_response_data(resp, "撤销群置顶")
     }
 }
-

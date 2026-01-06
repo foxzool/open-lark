@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat-tab/sort_tabs
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
@@ -54,4 +56,3 @@ impl SortChatTabsRequest {
         extract_response_data(resp, "会话标签页排序")
     }
 }
-

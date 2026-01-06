@@ -3,10 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/department/patch
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 
 use crate::{
@@ -78,4 +75,3 @@ impl PatchDepartmentRequest {
         extract_response_data(resp, "修改部门部分信息")
     }
 }
-

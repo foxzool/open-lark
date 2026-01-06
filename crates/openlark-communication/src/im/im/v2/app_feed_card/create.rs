@@ -37,8 +37,8 @@ impl CreateAppFeedCardRequest {
     /// docPath: https://open.feishu.cn/document/im-v2/app_feed_card/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         // url: POST:/open-apis/im/v2/app_feed_card
-        let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(IM_V2_APP_FEED_CARD).body(serialize_params(&body, "创建应用消息流卡片")?);
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::post(IM_V2_APP_FEED_CARD)
+            .body(serialize_params(&body, "创建应用消息流卡片")?);
 
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());
@@ -48,4 +48,3 @@ impl CreateAppFeedCardRequest {
         extract_response_data(resp, "创建应用消息流卡片")
     }
 }
-

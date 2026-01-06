@@ -83,15 +83,12 @@ impl UrgentSmsRequest {
         })?;
 
         // url: PATCH:/open-apis/im/v1/messages/:message_id/urgent_sms
-        let req: ApiRequest<UrgentSmsResponse> = ApiRequest::patch(format!(
-            "{}/{}/urgent_sms",
-            IM_V1_MESSAGES, self.message_id
-        ))
-        .query("user_id_type", user_id_type.as_str())
-        .body(serialize_params(&body, "发送短信加急")?);
+        let req: ApiRequest<UrgentSmsResponse> =
+            ApiRequest::patch(format!("{}/{}/urgent_sms", IM_V1_MESSAGES, self.message_id))
+                .query("user_id_type", user_id_type.as_str())
+                .body(serialize_params(&body, "发送短信加急")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "发送短信加急")
     }
 }
-

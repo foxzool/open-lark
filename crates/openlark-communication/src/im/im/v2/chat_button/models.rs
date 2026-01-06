@@ -23,4 +23,3 @@ impl ApiResponseTrait for ChatButtonUpdateResponse {
         ResponseFormat::Data
     }
 }
-

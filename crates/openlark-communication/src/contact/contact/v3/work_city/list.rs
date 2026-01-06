@@ -56,4 +56,3 @@ impl ListWorkCitiesRequest {
         extract_response_data(resp, "获取租户工作城市列表")
     }
 }
-

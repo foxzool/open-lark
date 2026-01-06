@@ -16,4 +16,3 @@ impl ApiResponseTrait for EmptyData {
         ResponseFormat::Data
     }
 }
-

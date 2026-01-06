@@ -48,4 +48,3 @@ impl DeleteAppFeedCardsRequest {
         extract_response_data(resp, "删除应用消息流卡片")
     }
 }
-

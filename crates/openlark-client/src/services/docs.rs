@@ -56,4 +56,3 @@ mod tests {
         assert_eq!(service.core_config().base_url(), config.base_url);
     }
 }
-

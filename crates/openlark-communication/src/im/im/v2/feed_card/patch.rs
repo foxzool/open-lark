@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/im-v2/groups-bots/patch
 
-use openlark_core::{api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
@@ -42,7 +44,10 @@ impl PatchFeedCardRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/im-v2/groups-bots/patch
-    pub async fn execute(self, body: FeedCardTimeSensitiveBody) -> SDKResult<FeedCardActionResponse> {
+    pub async fn execute(
+        self,
+        body: FeedCardTimeSensitiveBody,
+    ) -> SDKResult<FeedCardActionResponse> {
         validate_required!(self.feed_card_id, "feed_card_id 不能为空");
         if body.user_ids.is_empty() {
             return Err(error::validation_error(
@@ -58,15 +63,12 @@ impl PatchFeedCardRequest {
         })?;
 
         // url: PATCH:/open-apis/im/v2/feed_cards/:feed_card_id
-        let req: ApiRequest<FeedCardActionResponse> = ApiRequest::patch(format!(
-            "{}/{}",
-            IM_V2_FEED_CARDS, self.feed_card_id
-        ))
-        .query("user_id_type", user_id_type.as_str())
-        .body(serialize_params(&body, "即时提醒")?);
+        let req: ApiRequest<FeedCardActionResponse> =
+            ApiRequest::patch(format!("{}/{}", IM_V2_FEED_CARDS, self.feed_card_id))
+                .query("user_id_type", user_id_type.as_str())
+                .body(serialize_params(&body, "即时提醒")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "即时提醒")
     }
 }
-

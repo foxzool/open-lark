@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat/delete
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::{api_utils::extract_response_data, models::EmptyData},
@@ -36,10 +38,10 @@ impl DeleteChatRequest {
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: DELETE:/open-apis/im/v1/chats/:chat_id
-        let req: ApiRequest<EmptyData> = ApiRequest::delete(format!("{}/{}", IM_V1_CHATS, self.chat_id));
+        let req: ApiRequest<EmptyData> =
+            ApiRequest::delete(format!("{}/{}", IM_V1_CHATS, self.chat_id));
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "解散群")
     }
 }
-

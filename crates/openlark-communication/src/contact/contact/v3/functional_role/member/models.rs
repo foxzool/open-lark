@@ -104,4 +104,3 @@ impl ApiResponseTrait for BatchDeleteMembersResponse {
         ResponseFormat::Data
     }
 }
-

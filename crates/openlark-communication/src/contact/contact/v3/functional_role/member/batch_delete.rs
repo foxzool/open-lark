@@ -8,8 +8,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
     contact::contact::v3::{
-        functional_role::member::models::BatchDeleteMembersResponse,
-        user::models::UserIdType,
+        functional_role::member::models::BatchDeleteMembersResponse, user::models::UserIdType,
     },
     endpoints::CONTACT_V3_FUNCTIONAL_ROLES,
 };
@@ -52,7 +51,10 @@ impl BatchDeleteRoleMembersRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role-member/batch_delete
-    pub async fn execute(self, body: BatchDeleteMembersBody) -> SDKResult<BatchDeleteMembersResponse> {
+    pub async fn execute(
+        self,
+        body: BatchDeleteMembersBody,
+    ) -> SDKResult<BatchDeleteMembersResponse> {
         openlark_core::validate_required!(self.role_id, "role_id 不能为空");
 
         // url: PATCH:/open-apis/contact/v3/functional_roles/:role_id/members/batch_delete
@@ -70,4 +72,3 @@ impl BatchDeleteRoleMembersRequest {
         extract_response_data(resp, "删除角色下的成员")
     }
 }
-

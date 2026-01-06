@@ -3,10 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/unit/unbind_department
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -53,4 +50,3 @@ impl UnbindDepartmentRequest {
         extract_response_data(resp, "解除部门与单位的绑定关系")
     }
 }
-

@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat-announcement/patch
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::{
@@ -48,14 +50,11 @@ impl PatchChatAnnouncementRequest {
         }
 
         // url: PATCH:/open-apis/im/v1/chats/:chat_id/announcement
-        let req: ApiRequest<EmptyData> = ApiRequest::patch(format!(
-            "{}/{}/announcement",
-            IM_V1_CHATS, self.chat_id
-        ))
-        .body(serialize_params(&body, "更新群公告信息")?);
+        let req: ApiRequest<EmptyData> =
+            ApiRequest::patch(format!("{}/{}/announcement", IM_V1_CHATS, self.chat_id))
+                .body(serialize_params(&body, "更新群公告信息")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "更新群公告信息")
     }
 }
-

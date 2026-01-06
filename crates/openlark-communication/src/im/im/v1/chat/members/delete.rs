@@ -2,12 +2,16 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat-member/delete
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
     endpoints::IM_V1_CHATS,
-    im::im::v1::chat::members::models::{DeleteChatMembersBody, DeleteChatMembersResponse, MemberIdType},
+    im::im::v1::chat::members::models::{
+        DeleteChatMembersBody, DeleteChatMembersResponse, MemberIdType,
+    },
 };
 
 /// 将用户或机器人移出群聊请求
@@ -41,7 +45,10 @@ impl DeleteChatMembersRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat-member/delete
-    pub async fn execute(self, body: DeleteChatMembersBody) -> SDKResult<DeleteChatMembersResponse> {
+    pub async fn execute(
+        self,
+        body: DeleteChatMembersBody,
+    ) -> SDKResult<DeleteChatMembersResponse> {
         validate_required!(self.chat_id, "chat_id 不能为空");
         if body.id_list.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -51,11 +58,9 @@ impl DeleteChatMembersRequest {
         }
 
         // url: DELETE:/open-apis/im/v1/chats/:chat_id/members
-        let mut req: ApiRequest<DeleteChatMembersResponse> = ApiRequest::delete(format!(
-            "{}/{}/members",
-            IM_V1_CHATS, self.chat_id
-        ))
-        .body(serialize_params(&body, "将用户或机器人移出群聊")?);
+        let mut req: ApiRequest<DeleteChatMembersResponse> =
+            ApiRequest::delete(format!("{}/{}/members", IM_V1_CHATS, self.chat_id))
+                .body(serialize_params(&body, "将用户或机器人移出群聊")?);
 
         if let Some(member_id_type) = self.member_id_type {
             req = req.query("member_id_type", member_id_type.as_str());
@@ -65,4 +70,3 @@ impl DeleteChatMembersRequest {
         extract_response_data(resp, "将用户或机器人移出群聊")
     }
 }
-

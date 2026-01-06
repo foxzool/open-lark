@@ -61,4 +61,3 @@ impl ApiResponseTrait for ListWorkCitiesResponse {
         ResponseFormat::Data
     }
 }
-

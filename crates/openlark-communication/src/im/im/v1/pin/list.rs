@@ -2,9 +2,14 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/pin/list
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
-use crate::{common::api_utils::extract_response_data, endpoints::IM_V1_PINS, im::im::v1::pin::models::ListPinsResponse};
+use crate::{
+    common::api_utils::extract_response_data, endpoints::IM_V1_PINS,
+    im::im::v1::pin::models::ListPinsResponse,
+};
 
 /// 获取群内 Pin 消息请求
 pub struct ListPinsRequest {
@@ -65,7 +70,8 @@ impl ListPinsRequest {
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: GET:/open-apis/im/v1/pins
-        let mut req: ApiRequest<ListPinsResponse> = ApiRequest::get(IM_V1_PINS).query("chat_id", self.chat_id);
+        let mut req: ApiRequest<ListPinsResponse> =
+            ApiRequest::get(IM_V1_PINS).query("chat_id", self.chat_id);
 
         if let Some(start_time) = self.start_time {
             req = req.query("start_time", start_time);
@@ -84,4 +90,3 @@ impl ListPinsRequest {
         extract_response_data(resp, "获取群内 Pin 消息")
     }
 }
-

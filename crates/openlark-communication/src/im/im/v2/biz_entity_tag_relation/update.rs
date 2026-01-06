@@ -2,10 +2,15 @@
 //!
 //! docPath: https://open.feishu.cn/document/tenant-tag/update
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
-    common::{api_utils::{extract_response_data, serialize_params}, models::EmptyData},
+    common::{
+        api_utils::{extract_response_data, serialize_params},
+        models::EmptyData,
+    },
     endpoints::IM_V2_BIZ_ENTITY_TAG_RELATION,
     im::im::v2::biz_entity_tag_relation::models::BizEntityTagRelationBody,
 };
@@ -35,4 +40,3 @@ impl UpdateBizEntityTagRelationRequest {
         extract_response_data(resp, "解绑标签与群")
     }
 }
-

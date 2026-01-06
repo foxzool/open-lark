@@ -2,11 +2,12 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/message/get
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
-    common::api_utils::extract_response_data,
-    endpoints::IM_V1_MESSAGES,
+    common::api_utils::extract_response_data, endpoints::IM_V1_MESSAGES,
     im::im::v1::message::models::UserIdType,
 };
 

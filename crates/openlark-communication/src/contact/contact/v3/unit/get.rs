@@ -3,15 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/unit/get
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 
 use crate::{
-    common::api_utils::extract_response_data,
-    contact::contact::v3::unit::models::GetUnitResponse,
+    common::api_utils::extract_response_data, contact::contact::v3::unit::models::GetUnitResponse,
     endpoints::CONTACT_V3_UNIT,
 };
 
@@ -49,4 +45,3 @@ impl GetUnitRequest {
         extract_response_data(resp, "获取单位信息")
     }
 }
-

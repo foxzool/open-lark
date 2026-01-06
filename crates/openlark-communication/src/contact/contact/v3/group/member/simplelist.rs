@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/group-member/simplelist
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::extract_response_data,
@@ -91,4 +93,3 @@ impl SimpleListGroupMembersRequest {
         extract_response_data(resp, "查询用户组成员列表")
     }
 }
-

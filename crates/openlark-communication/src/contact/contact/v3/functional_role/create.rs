@@ -3,10 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role/create
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -35,7 +32,10 @@ impl CreateFunctionalRoleRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role/create
-    pub async fn execute(self, body: CreateFunctionalRoleBody) -> SDKResult<CreateFunctionalRoleResponse> {
+    pub async fn execute(
+        self,
+        body: CreateFunctionalRoleBody,
+    ) -> SDKResult<CreateFunctionalRoleResponse> {
         validate_required!(body.role_name, "role_name 不能为空");
 
         // url: POST:/open-apis/contact/v3/functional_roles
@@ -46,4 +46,3 @@ impl CreateFunctionalRoleRequest {
         extract_response_data(resp, "创建角色")
     }
 }
-

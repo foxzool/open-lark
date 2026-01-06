@@ -3,10 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role-member/scopes
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -65,7 +62,10 @@ impl PatchRoleMembersScopesRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role-member/scopes
-    pub async fn execute(self, body: PatchMembersScopesBody) -> SDKResult<PatchMembersScopesResponse> {
+    pub async fn execute(
+        self,
+        body: PatchMembersScopesBody,
+    ) -> SDKResult<PatchMembersScopesResponse> {
         validate_required!(self.role_id, "role_id 不能为空");
         if body.members.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -98,4 +98,3 @@ impl PatchRoleMembersScopesRequest {
         extract_response_data(resp, "批量设置角色成员管理范围")
     }
 }
-

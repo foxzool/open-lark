@@ -14,6 +14,28 @@
 //!
 //! ## 目录结构约定
 //! 实现文件严格按 `src/bizTag/project/version/resource/name.rs` 组织，其中：
+//! - `bizTag`: 业务标签（calendar、vc、meeting_room）
+//! - `project`: 项目标识（如 v4、v1）
+//! - `resource`: 资源名称（如 calendar、meeting、room）
+//! - `name`: 操作名称（如 get、list、create）
+//!
+//! ### 目录结构示例
+//! ```text
+//! src/
+//! ├── calendar/v4/              # 日历 v4 API
+//! │   ├── calendar/
+//! │   ├── freebusy/
+//! │   └── setting/
+//! ├── vc/v1/                    # 视频会议 v1 API
+//! │   ├── meeting/
+//! │   ├── room/
+//! │   └── reserve/
+//! └── meeting_room/             # 会议室历史版本 API
+//!     ├── room/
+//!     ├── building/
+//!     └── instance/
+//! ```
+//!
 //! - `resource` 内用 `.` 分割目录（例如 `calendar.event.attendee` => `calendar/event/attendee`）
 //! - 如 `meta.name` 内包含 `/`（历史接口），则按目录继续下沉（例如 `building/list` => `building/list.rs`）
 

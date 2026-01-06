@@ -90,4 +90,3 @@ impl ListCustomAttrsRequest {
         extract_response_data(resp, "获取企业自定义用户字段")
     }
 }
-

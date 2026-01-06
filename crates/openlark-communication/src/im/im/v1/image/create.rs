@@ -58,7 +58,10 @@ impl CreateImageRequest {
         if let Some(file_name) = self.file_name {
             // 仅用于 multipart 文件名，不作为字段发送
             if let Some(obj) = body.as_object_mut() {
-                obj.insert("__file_name".to_string(), serde_json::Value::String(file_name));
+                obj.insert(
+                    "__file_name".to_string(),
+                    serde_json::Value::String(file_name),
+                );
             }
         }
 
@@ -71,4 +74,3 @@ impl CreateImageRequest {
         extract_response_data(resp, "上传图片")
     }
 }
-

@@ -3,10 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/group-member/add
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -53,7 +50,11 @@ impl AddGroupMemberRequest {
     /// 说明：该接口目前仅支持 `member_type=user`。
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/group-member/add
-    pub async fn execute(self, member_id_type: UserIdType, member_id: impl Into<String>) -> SDKResult<EmptyData> {
+    pub async fn execute(
+        self,
+        member_id_type: UserIdType,
+        member_id: impl Into<String>,
+    ) -> SDKResult<EmptyData> {
         validate_required!(self.group_id, "group_id 不能为空");
         let member_id = member_id.into();
         validate_required!(member_id, "member_id 不能为空");
@@ -64,14 +65,11 @@ impl AddGroupMemberRequest {
             member_id_type: member_id_type.as_str().to_string(),
             member_id,
         };
-        let req: ApiRequest<EmptyData> = ApiRequest::post(format!(
-            "{}/{}/member/add",
-            CONTACT_V3_GROUP, self.group_id
-        ))
-        .body(serialize_params(&body, "添加用户组成员")?);
+        let req: ApiRequest<EmptyData> =
+            ApiRequest::post(format!("{}/{}/member/add", CONTACT_V3_GROUP, self.group_id))
+                .body(serialize_params(&body, "添加用户组成员")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "添加用户组成员")
     }
 }
-

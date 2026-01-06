@@ -68,4 +68,3 @@ impl SimpleListGroupsRequest {
         extract_response_data(resp, "查询用户组列表")
     }
 }
-

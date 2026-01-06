@@ -3,15 +3,15 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/group/patch
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    common::{api_utils::{extract_response_data, serialize_params}, models::EmptyData},
+    common::{
+        api_utils::{extract_response_data, serialize_params},
+        models::EmptyData,
+    },
     contact::contact::v3::user::models::{DepartmentIdType, UserIdType},
     endpoints::CONTACT_V3_GROUP,
 };

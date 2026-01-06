@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat/update-2
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::{
@@ -50,8 +52,9 @@ impl UpdateChatRequest {
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: PUT:/open-apis/im/v1/chats/:chat_id
-        let mut req: ApiRequest<EmptyData> = ApiRequest::put(format!("{}/{}", IM_V1_CHATS, self.chat_id))
-            .body(serialize_params(&body, "更新群信息")?);
+        let mut req: ApiRequest<EmptyData> =
+            ApiRequest::put(format!("{}/{}", IM_V1_CHATS, self.chat_id))
+                .body(serialize_params(&body, "更新群信息")?);
 
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());
@@ -61,4 +64,3 @@ impl UpdateChatRequest {
         extract_response_data(resp, "更新群信息")
     }
 }
-

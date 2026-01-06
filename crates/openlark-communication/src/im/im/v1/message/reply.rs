@@ -2,10 +2,15 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/message/reply
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
-use crate::{common::api_utils::{extract_response_data, serialize_params}, endpoints::IM_V1_MESSAGES};
+use crate::{
+    common::api_utils::{extract_response_data, serialize_params},
+    endpoints::IM_V1_MESSAGES,
+};
 
 /// 回复消息请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -51,11 +56,9 @@ impl ReplyMessageRequest {
         validate_required!(body.content, "content 不能为空");
 
         // url: POST:/open-apis/im/v1/messages/:message_id/reply
-        let req: ApiRequest<serde_json::Value> = ApiRequest::post(format!(
-            "{}/{}/reply",
-            IM_V1_MESSAGES, self.message_id
-        ))
-        .body(serialize_params(&body, "回复消息")?);
+        let req: ApiRequest<serde_json::Value> =
+            ApiRequest::post(format!("{}/{}/reply", IM_V1_MESSAGES, self.message_id))
+                .body(serialize_params(&body, "回复消息")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "回复消息")

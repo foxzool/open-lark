@@ -3,15 +3,15 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/department/unbind_department_chat
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    common::{api_utils::{extract_response_data, serialize_params}, models::EmptyData},
+    common::{
+        api_utils::{extract_response_data, serialize_params},
+        models::EmptyData,
+    },
     contact::contact::v3::user::models::DepartmentIdType,
     endpoints::CONTACT_V3_DEPARTMENTS_UNBIND_DEPARTMENT_CHAT,
 };
@@ -61,4 +61,3 @@ impl UnbindDepartmentChatRequest {
         extract_response_data(resp, "部门群转为普通群")
     }
 }
-

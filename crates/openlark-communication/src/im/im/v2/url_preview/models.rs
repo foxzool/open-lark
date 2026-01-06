@@ -9,4 +9,3 @@ pub struct BatchUpdateUrlPreviewBody {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_ids: Option<Vec<String>>,
 }
-

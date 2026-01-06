@@ -3,10 +3,7 @@
 //! docPath: https://open.feishu.cn/document/contact-v3/user/update_user_id
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -59,12 +56,11 @@ impl UpdateUserIdRequest {
         validate_required!(body.new_user_id, "new_user_id 不能为空");
 
         // url: PATCH:/open-apis/contact/v3/users/:user_id/update_user_id
-        let mut req: ApiRequest<EmptyData> =
-            ApiRequest::patch(format!(
-                "{}/{}/update_user_id",
-                CONTACT_V3_USERS, self.user_id
-            ))
-                .body(serialize_params(&body, "更新用户 ID")?);
+        let mut req: ApiRequest<EmptyData> = ApiRequest::patch(format!(
+            "{}/{}/update_user_id",
+            CONTACT_V3_USERS, self.user_id
+        ))
+        .body(serialize_params(&body, "更新用户 ID")?);
 
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());

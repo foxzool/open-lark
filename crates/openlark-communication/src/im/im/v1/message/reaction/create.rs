@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/message-reaction/create
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
@@ -35,17 +37,17 @@ impl CreateMessageReactionRequest {
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/message-reaction/create
     pub async fn execute(self, body: CreateMessageReactionBody) -> SDKResult<MessageReaction> {
         validate_required!(self.message_id, "message_id 不能为空");
-        validate_required!(body.reaction_type.emoji_type, "reaction_type.emoji_type 不能为空");
+        validate_required!(
+            body.reaction_type.emoji_type,
+            "reaction_type.emoji_type 不能为空"
+        );
 
         // url: POST:/open-apis/im/v1/messages/:message_id/reactions
-        let req: ApiRequest<MessageReaction> = ApiRequest::post(format!(
-            "{}/{}/reactions",
-            IM_V1_MESSAGES, self.message_id
-        ))
-        .body(serialize_params(&body, "添加消息表情回复")?);
+        let req: ApiRequest<MessageReaction> =
+            ApiRequest::post(format!("{}/{}/reactions", IM_V1_MESSAGES, self.message_id))
+                .body(serialize_params(&body, "添加消息表情回复")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "添加消息表情回复")
     }
 }
-

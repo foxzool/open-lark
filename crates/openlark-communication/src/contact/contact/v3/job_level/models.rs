@@ -67,4 +67,3 @@ impl ApiResponseTrait for ListJobLevelsResponse {
         ResponseFormat::Data
     }
 }
-

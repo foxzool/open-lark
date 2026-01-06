@@ -2,12 +2,11 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/batch_message/get_progress
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
-
-use crate::{
-    common::api_utils::extract_response_data,
-    endpoints::IM_V1_BATCH_MESSAGES,
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
+
+use crate::{common::api_utils::extract_response_data, endpoints::IM_V1_BATCH_MESSAGES};
 
 /// 查询批量消息整体进度请求
 pub struct GetBatchMessageProgressRequest {
@@ -45,4 +44,3 @@ impl GetBatchMessageProgressRequest {
         extract_response_data(resp, "查询批量消息整体进度")
     }
 }
-

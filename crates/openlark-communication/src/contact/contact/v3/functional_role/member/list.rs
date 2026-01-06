@@ -7,8 +7,7 @@ use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult}
 use crate::{
     common::api_utils::extract_response_data,
     contact::contact::v3::{
-        functional_role::member::models::ListMembersResponse,
-        user::models::UserIdType,
+        functional_role::member::models::ListMembersResponse, user::models::UserIdType,
     },
     endpoints::CONTACT_V3_FUNCTIONAL_ROLES,
 };
@@ -83,4 +82,3 @@ impl ListRoleMembersRequest {
         extract_response_data(resp, "查询角色下的所有成员信息")
     }
 }
-

@@ -2,12 +2,13 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/job_level/get
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::extract_response_data,
-    contact::contact::v3::job_level::models::JobLevelResponse,
-    endpoints::CONTACT_V3_JOB_LEVELS,
+    contact::contact::v3::job_level::models::JobLevelResponse, endpoints::CONTACT_V3_JOB_LEVELS,
 };
 
 /// 获取单个职级信息请求
@@ -44,4 +45,3 @@ impl GetJobLevelRequest {
         extract_response_data(resp, "获取单个职级信息")
     }
 }
-
