@@ -89,4 +89,3 @@ impl ApiResponseTrait for ListUnitDepartmentsResponse {
         ResponseFormat::Data
     }
 }
-

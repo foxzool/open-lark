@@ -56,4 +56,3 @@ impl ListJobTitlesRequest {
         extract_response_data(resp, "获取租户职务列表")
     }
 }
-

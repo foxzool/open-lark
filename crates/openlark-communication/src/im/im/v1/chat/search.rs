@@ -5,8 +5,7 @@
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 use crate::{
-    common::api_utils::extract_response_data,
-    endpoints::IM_V1_CHATS,
+    common::api_utils::extract_response_data, endpoints::IM_V1_CHATS,
     im::im::v1::message::models::UserIdType,
 };
 
@@ -59,7 +58,8 @@ impl SearchChatsRequest {
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat/search
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/im/v1/chats/search
-        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(format!("{}/search", IM_V1_CHATS));
+        let mut req: ApiRequest<serde_json::Value> =
+            ApiRequest::get(format!("{}/search", IM_V1_CHATS));
 
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());

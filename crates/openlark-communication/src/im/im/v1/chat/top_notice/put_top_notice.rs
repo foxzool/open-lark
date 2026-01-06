@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat/put_top_notice
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::{
@@ -51,4 +53,3 @@ impl PutTopNoticeRequest {
         extract_response_data(resp, "更新群置顶")
     }
 }
-

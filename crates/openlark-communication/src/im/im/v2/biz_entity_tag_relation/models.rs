@@ -10,4 +10,3 @@ pub struct BizEntityTagRelationBody {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_ids: Option<Vec<String>>,
 }
-

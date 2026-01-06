@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/im-v1/message/forward-2
 
-use openlark_core::{api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -67,12 +69,10 @@ impl ForwardThreadRequest {
         })?;
 
         // url: POST:/open-apis/im/v1/threads/:thread_id/forward
-        let mut req: ApiRequest<serde_json::Value> = ApiRequest::post(format!(
-            "{}/{}/forward",
-            IM_V1_THREADS, self.thread_id
-        ))
-        .query("receive_id_type", receive_id_type.as_str())
-        .body(serialize_params(&body, "转发话题")?);
+        let mut req: ApiRequest<serde_json::Value> =
+            ApiRequest::post(format!("{}/{}/forward", IM_V1_THREADS, self.thread_id))
+                .query("receive_id_type", receive_id_type.as_str())
+                .body(serialize_params(&body, "转发话题")?);
 
         if let Some(uuid) = self.uuid {
             req = req.query("uuid", uuid);
@@ -82,4 +82,3 @@ impl ForwardThreadRequest {
         extract_response_data(resp, "转发话题")
     }
 }
-

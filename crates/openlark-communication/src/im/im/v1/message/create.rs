@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/message/create
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -52,12 +54,12 @@ impl CreateMessageRequest {
         validate_required!(body.receive_id, "receive_id 不能为空");
         validate_required!(body.msg_type, "msg_type 不能为空");
         validate_required!(body.content, "content 不能为空");
-        let receive_id_type =
-            self.receive_id_type
-                .ok_or_else(|| openlark_core::error::validation_error(
-                    "receive_id_type 不能为空".to_string(),
-                    "发送消息需要指定 receive_id_type".to_string(),
-                ))?;
+        let receive_id_type = self.receive_id_type.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "receive_id_type 不能为空".to_string(),
+                "发送消息需要指定 receive_id_type".to_string(),
+            )
+        })?;
 
         // url: POST:/open-apis/im/v1/messages
         let req: ApiRequest<serde_json::Value> = ApiRequest::post(IM_V1_MESSAGES)
@@ -68,4 +70,3 @@ impl CreateMessageRequest {
         extract_response_data(resp, "发送消息")
     }
 }
-

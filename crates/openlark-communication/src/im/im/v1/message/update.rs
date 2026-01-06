@@ -2,10 +2,15 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/message/update
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
-use crate::{common::api_utils::{extract_response_data, serialize_params}, endpoints::IM_V1_MESSAGES};
+use crate::{
+    common::api_utils::{extract_response_data, serialize_params},
+    endpoints::IM_V1_MESSAGES,
+};
 
 /// 编辑消息请求体（仅支持 text/post）
 #[derive(Debug, Clone, Serialize, Deserialize)]

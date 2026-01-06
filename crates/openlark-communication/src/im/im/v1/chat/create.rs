@@ -70,4 +70,3 @@ impl CreateChatRequest {
         extract_response_data(resp, "创建群")
     }
 }
-

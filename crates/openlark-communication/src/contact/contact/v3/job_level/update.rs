@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/job_level/update
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -57,14 +59,11 @@ impl UpdateJobLevelRequest {
         validate_required!(self.job_level_id, "job_level_id 不能为空");
 
         // url: PUT:/open-apis/contact/v3/job_levels/:job_level_id
-        let req: ApiRequest<JobLevelResponse> = ApiRequest::put(format!(
-            "{}/{}",
-            CONTACT_V3_JOB_LEVELS, self.job_level_id
-        ))
-        .body(serialize_params(&body, "更新职级")?);
+        let req: ApiRequest<JobLevelResponse> =
+            ApiRequest::put(format!("{}/{}", CONTACT_V3_JOB_LEVELS, self.job_level_id))
+                .body(serialize_params(&body, "更新职级")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "更新职级")
     }
 }
-

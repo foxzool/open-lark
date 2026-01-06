@@ -23,4 +23,3 @@ impl ApiResponseTrait for ChatManagersResponse {
         ResponseFormat::Data
     }
 }
-

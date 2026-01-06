@@ -37,8 +37,8 @@ impl UpdateAppFeedCardsRequest {
     /// docPath: https://open.feishu.cn/document/im-v2/app_feed_card/update
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         // url: PUT:/open-apis/im/v2/app_feed_card/batch
-        let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::put(IM_V2_APP_FEED_CARD_BATCH).body(serialize_params(&body, "更新应用消息流卡片")?);
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::put(IM_V2_APP_FEED_CARD_BATCH)
+            .body(serialize_params(&body, "更新应用消息流卡片")?);
 
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());
@@ -48,4 +48,3 @@ impl UpdateAppFeedCardsRequest {
         extract_response_data(resp, "更新应用消息流卡片")
     }
 }
-

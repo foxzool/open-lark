@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/employee_type_enum/update
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -44,7 +46,10 @@ impl UpdateEmployeeTypeEnumRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/employee_type_enum/update
-    pub async fn execute(self, body: UpdateEmployeeTypeEnumBody) -> SDKResult<EmployeeTypeEnumResponse> {
+    pub async fn execute(
+        self,
+        body: UpdateEmployeeTypeEnumBody,
+    ) -> SDKResult<EmployeeTypeEnumResponse> {
         validate_required!(self.enum_id, "enum_id 不能为空");
         validate_required!(body.content, "content 不能为空");
 
@@ -59,4 +64,3 @@ impl UpdateEmployeeTypeEnumRequest {
         extract_response_data(resp, "更新人员类型")
     }
 }
-

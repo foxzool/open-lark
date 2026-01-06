@@ -52,4 +52,3 @@ impl ApiResponseTrait for GetChatLinkResponse {
         ResponseFormat::Data
     }
 }
-

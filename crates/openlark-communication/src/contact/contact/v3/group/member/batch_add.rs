@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/group-member/batch_add
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -48,7 +50,10 @@ impl BatchAddGroupMembersRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/group-member/batch_add
-    pub async fn execute(self, body: BatchAddGroupMembersBody) -> SDKResult<BatchAddGroupMembersResponse> {
+    pub async fn execute(
+        self,
+        body: BatchAddGroupMembersBody,
+    ) -> SDKResult<BatchAddGroupMembersResponse> {
         validate_required!(self.group_id, "group_id 不能为空");
         if body.members.is_empty() {
             return Err(openlark_core::error::validation_error(

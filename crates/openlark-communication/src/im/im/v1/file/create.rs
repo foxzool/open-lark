@@ -3,11 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/file/create
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    error,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -41,7 +37,11 @@ impl CreateFileRequest {
     /// 说明：该接口为 multipart 上传，请传入文件元信息 + 文件二进制内容。
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/file/create
-    pub async fn execute(self, body: CreateFileBody, file_bytes: Vec<u8>) -> SDKResult<CreateFileResponse> {
+    pub async fn execute(
+        self,
+        body: CreateFileBody,
+        file_bytes: Vec<u8>,
+    ) -> SDKResult<CreateFileResponse> {
         validate_required!(body.file_type, "file_type 不能为空");
         validate_required!(body.file_name, "file_name 不能为空");
         if file_bytes.is_empty() {

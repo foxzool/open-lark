@@ -7,4 +7,3 @@ use serde::{Deserialize, Serialize};
 pub struct ChatMenuTopLevelIdsBody {
     pub chat_menu_top_level_ids: Vec<String>,
 }
-

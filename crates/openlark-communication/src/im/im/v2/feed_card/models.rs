@@ -30,4 +30,3 @@ impl ApiResponseTrait for FeedCardActionResponse {
         ResponseFormat::Data
     }
 }
-

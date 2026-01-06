@@ -4,7 +4,10 @@
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
-use crate::{common::api_utils::{extract_response_data, serialize_params}, endpoints::IM_V2_TAGS};
+use crate::{
+    common::api_utils::{extract_response_data, serialize_params},
+    endpoints::IM_V2_TAGS,
+};
 
 /// 创建标签请求
 pub struct CreateTagRequest {
@@ -30,4 +33,3 @@ impl CreateTagRequest {
         extract_response_data(resp, "创建标签")
     }
 }
-

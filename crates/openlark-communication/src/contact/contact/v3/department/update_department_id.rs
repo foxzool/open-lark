@@ -3,15 +3,15 @@
 //! docPath: https://open.feishu.cn/document/contact-v3/department/update_department_id
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    common::{api_utils::{extract_response_data, serialize_params}, models::EmptyData},
+    common::{
+        api_utils::{extract_response_data, serialize_params},
+        models::EmptyData,
+    },
     contact::contact::v3::user::models::DepartmentIdType,
     endpoints::CONTACT_V3_DEPARTMENTS,
 };
@@ -72,4 +72,3 @@ impl UpdateDepartmentIdRequest {
         extract_response_data(resp, "更新部门 ID")
     }
 }
-

@@ -94,4 +94,3 @@ impl UrgentPhoneRequest {
         extract_response_data(resp, "发送电话加急")
     }
 }
-

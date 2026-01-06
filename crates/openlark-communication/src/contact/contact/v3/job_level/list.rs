@@ -67,4 +67,3 @@ impl ListJobLevelsRequest {
         extract_response_data(resp, "获取租户职级列表")
     }
 }
-

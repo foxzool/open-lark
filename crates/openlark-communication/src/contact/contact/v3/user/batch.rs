@@ -94,4 +94,3 @@ impl BatchGetUsersRequest {
         extract_response_data(resp, "批量获取用户信息")
     }
 }
-

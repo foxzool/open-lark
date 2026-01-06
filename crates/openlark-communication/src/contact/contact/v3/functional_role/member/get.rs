@@ -3,17 +3,13 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role-member/get
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 
 use crate::{
     common::api_utils::extract_response_data,
     contact::contact::v3::{
-        functional_role::member::models::GetMemberResponse,
-        user::models::UserIdType,
+        functional_role::member::models::GetMemberResponse, user::models::UserIdType,
     },
     endpoints::CONTACT_V3_FUNCTIONAL_ROLES,
 };
@@ -75,4 +71,3 @@ impl GetRoleMemberRequest {
         extract_response_data(resp, "查询角色下某个成员的管理范围")
     }
 }
-
