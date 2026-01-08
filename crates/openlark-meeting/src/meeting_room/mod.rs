@@ -6,4 +6,7 @@ pub mod district;
 pub mod freebusy;
 pub mod instance;
 pub mod room;
+pub mod service;
 pub mod summary;
+
+pub use service::MeetingRoomService;
