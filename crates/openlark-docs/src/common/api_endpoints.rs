@@ -1023,7 +1023,7 @@ pub enum CcmSheetApiOld {
     /// 创建数据验证规则
     DataValidationCreate(String), // spreadsheet_token
     /// 更新下拉列表设置（PUT）
-    DataValidationUpdate(String, String), // spreadsheet_token, sheet_id
+    DataValidationUpdate(String, String, String), // spreadsheet_token, sheet_id, data_validation_id
     /// 删除下拉列表设置（DELETE，按 range 删除）
     DataValidationDelete(String), // spreadsheet_token
     /// 读取单个范围 (V3)
@@ -1282,10 +1282,10 @@ impl CcmSheetApiOld {
                     spreadsheet_token
                 )
             }
-            CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id) => {
+            CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id, data_validation_id) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}",
-                    spreadsheet_token, sheet_id
+                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}/{}",
+                    spreadsheet_token, sheet_id, data_validation_id
                 )
             }
             CcmSheetApiOld::DataValidationDelete(spreadsheet_token) => {
