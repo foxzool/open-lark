@@ -8,34 +8,83 @@
 - **vc**：视频会议功能 API
 - **meeting_room**：会议室历史版本 API
 
-## 目录结构约定
+## 目录结构说明
 
-实现文件严格按 `src/bizTag/project/version/resource/name.rs` 组织，其中：
+**重要**：本 crate (`openlark-meeting`) 是一个 **workspace aggregator**，所有功能模块代码都来自其他独立的 crate（通过 feature 控制）。
 
-- `bizTag`: 业务标签（calendar、vc、meeting_room）
-- `project`: 项目标识（如 v4、v1）
-- `resource`: 资源名称（如 calendar、meeting、room）
-- `name`: 操作名称（如 get、list、create）
+### 实际的模块组织
 
-### 目录结构示例
+所有业务模块代码都存储在独立的 crate 中：
+- **视频会议模块**：`openlark-vc` crate
+- **日历模块**：`openlark-calendar` crate
+- **会议室模块**：`openlark-meeting-room` crate
+
+### Feature 控制
+
+本 crate 通过 Cargo.toml 的 feature 标志控制模块的启用：
+
+```toml
+[features]
+# 默认配置 - 包含视频会议和日历功能
+default = ["vc", "calendar"]
+
+# 完整配置 - 包含所有功能
+full = ["vc", "calendar", "meeting-room"]
+
+# 视频会议功能
+vc = ["vc-v1"]
+
+# 日历功能
+calendar = ["calendar-v4"]
+
+# 会议室功能（历史版本）
+meeting-room = ["meeting-room-v1"]
+```
+
+### 目录结构示例（workspace 架构）
+
+由于是 workspace 架构，各模块的代码在各自独立的 crate 中组织。例如：
 
 ```text
-src/
-├── calendar/v4/              # 日历 v4 API
-│   ├── calendar/
-│   ├── freebusy/
-│   ├── setting/
-│   └── timeoff_event/
-├── vc/v1/                    # 视频会议 v1 API
-│   ├── meeting/
-│   ├── room/
-│   ├── reserve/
+# 仓库根目录
+/Users/zool/RustroverProjects/open-lark/
+├── crates/
+│   ├── openlark-core/           # 核心基础设施
+│   ├── openlark-vc/           # 视频会议模块
+│   ├── openlark-calendar/       # 日历模块
+│   ├── openlark-meeting-room/  # 会议室模块
+│   └── openlark-meeting/        # 本 crate（workspace aggregator）
+│       └── src/lib.rs           # 统一导出入口
+
+# 各个模块的内部结构示例
+# crates/openlark-vc/src/
+├── src/
+│   ├── vc/
+│   │   └── v1/
+│   │       ├── meeting/
+│   │       ├── room/
+│   │       └── reserve/
 │   └── ...
-└── meeting_room/             # 会议室历史版本 API
-    ├── room/
-    ├── building/
-    └── instance/
 ```
+
+### 功能模块说明
+
+本 crate 通过以下 feature 提供三个主要功能：
+
+1. **视频会议（vc）**
+   - 通过 `features = ["vc"]` 启用
+   - API 版本：v1
+   - 主要功能：会议室管理、会议管理、预约管理
+
+2. **日历（calendar）**
+   - 通过 `features = ["calendar"]` 启用
+   - API 版本：v4
+   - 主要功能：日历管理、日程管理
+
+3. **会议室（meeting-room）**
+   - 通过 `features = ["meeting-room"]` 启用
+   - 历史版本 API
+   - 主要功能：会议室管理、建筑管理
 
 - `resource` 内用 `.` 分割目录（例如 `calendar.event.attendee` => `calendar/event/attendee`）
 - 如 `meta.name` 内包含 `/`（历史接口），则按目录继续下沉（例如 `building/list` => `building/list.rs`）

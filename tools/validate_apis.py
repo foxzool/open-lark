@@ -164,8 +164,14 @@ class APIValidator:
             dirs[:] = [d for d in dirs if not d.startswith('.') and d != '__pycache__']
 
             for file in files:
-                # 排除非 API 文件：mod.rs（模块声明）、models.rs（数据模型）、macros.rs（宏定义）
-                if file.endswith('.rs') and file not in ('mod.rs', 'models.rs', 'macros.rs'):
+                # 排除非 API 文件：
+                # - mod.rs（模块声明）
+                # - models.rs（数据模型）
+                # - macros.rs（宏定义）
+                # - service.rs（服务入口/Fluent Interface）
+                # - responses.rs（响应类型定义）
+                exclude_files = ('mod.rs', 'models.rs', 'macros.rs', 'service.rs', 'responses.rs')
+                if file.endswith('.rs') and file not in exclude_files:
                     # 获取相对路径
                     full_path = os.path.join(root, file)
                     rel_path = os.path.relpath(full_path, self.src_path)
