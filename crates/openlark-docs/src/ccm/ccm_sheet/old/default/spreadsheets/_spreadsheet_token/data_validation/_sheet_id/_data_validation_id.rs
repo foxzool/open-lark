@@ -52,12 +52,14 @@ impl ApiResponseTrait for UpdateDataValidationResponse {
 pub async fn update(
     spreadsheet_token: String,
     sheet_id: String,
+    data_validation_id: String,
     mut request: UpdateDataValidationRequest,
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<UpdateDataValidationResponse> {
     validate_required!(spreadsheet_token, "spreadsheet_token 不能为空");
     validate_required!(sheet_id, "sheet_id 不能为空");
+    validate_required!(data_validation_id, "data_validation_id 不能为空");
 
     if request.ranges.is_empty() {
         return Err(openlark_core::error::validation_error(
@@ -139,7 +141,7 @@ pub async fn update(
         }
     }
 
-    let api_endpoint = CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id);
+    let api_endpoint = CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id, data_validation_id);
     let mut api_request: ApiRequest<UpdateDataValidationResponse> =
         ApiRequest::put(&api_endpoint.to_url())
             .body(serialize_params(&request, "更新下拉列表设置")?);

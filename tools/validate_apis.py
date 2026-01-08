@@ -47,6 +47,34 @@ class APIValidator:
         self.missing_apis: List[APIInfo] = []
         self.extra_files: Set[str] = set()
 
+    @staticmethod
+    def _camel_to_snake(name: str) -> str:
+        """将 camelCase/PascalCase 转为 snake_case（尽量兼容缩写）。"""
+        if not name:
+            return name
+        # 先处理缩写边界："HTTPServer" -> "HTTP_Server"
+        s1 = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", name)
+        # 再处理常规边界："dataValidation" -> "data_Validation"
+        s2 = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1)
+        return s2.lower()
+
+    def _normalize_name_path(self, name_path: str) -> str:
+        """
+        将 meta.name 转为仓库当前实际使用的文件/目录命名风格：
+        - 将 '#': `post#spreadsheets` -> `post_spreadsheets`
+        - 将每个 path segment 做 snake_case：`dataValidation` -> `data_validation`
+        - 对路径参数（已被 ':' 替换为 '_'）也做 snake_case：`_docToken` -> `_doc_token`
+        """
+        name_path = name_path.replace("#", "_")
+        segments = [s for s in name_path.split("/") if s]
+        normalized: List[str] = []
+        for seg in segments:
+            if seg.startswith("_") and len(seg) > 1:
+                normalized.append("_" + self._camel_to_snake(seg[1:]))
+            else:
+                normalized.append(self._camel_to_snake(seg))
+        return "/".join(normalized)
+
     def parse_csv(self):
         """解析 CSV 文件"""
         print(f"📄 读取 CSV 文件: {self.csv_path}")
@@ -98,6 +126,7 @@ class APIValidator:
         if api.biz_tag == 'meeting_room' and api.meta_version == 'old' and api.meta_resource == 'default':
             # 直接使用 meta.name 作为路径
             name_path = api.meta_name.replace(':', '_')
+            name_path = self._normalize_name_path(name_path)
             if '/' in name_path:
                 name_with_path = name_path.replace('/', '/')
             else:
@@ -139,6 +168,7 @@ class APIValidator:
         # 2. 将 '/' 转换为 '/'（保持为子目录分隔符）
         # 3. 将 ':' 替换为 '_'（处理路径参数）
         name_path = api.meta_name.replace(':', '_').rstrip('/')
+        name_path = self._normalize_name_path(name_path)
 
         # 如果 meta.name 包含 '/'，则创建子目录
         if '/' in name_path:
