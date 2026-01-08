@@ -7,3 +7,12 @@ pub mod list;
 pub mod mget;
 pub mod patch;
 pub mod search;
+
+// 导出所有模块内容
+pub use create::*;
+pub use delete::*;
+pub use get::*;
+pub use list::*;
+pub use mget::*;
+pub use patch::*;
+pub use search::*;
