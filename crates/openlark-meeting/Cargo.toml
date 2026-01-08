@@ -6,6 +6,31 @@ authors.workspace = true
 license.workspace = true
 description = "openlark-meeting module for OpenLark SDK"
 
+[features]
+# 默认配置 - 包含视频会议和日历功能
+default = ["vc", "calendar"]
+
+# 完整配置 - 包含所有功能
+full = ["vc", "calendar", "meeting-room"]
+
+# 视频会议功能
+vc = ["vc-v1"]
+
+# 日历功能
+calendar = ["calendar-v4"]
+
+# 会议室功能（历史版本）
+meeting-room = ["meeting-room-v1"]
+
+# VC v1 API
+vc-v1 = []
+
+# Calendar v4 API
+calendar-v4 = []
+
+# Meeting Room v1 API
+meeting-room-v1 = []
+
 [dependencies]
 openlark-core = { workspace = true }
 tokio = { workspace = true }
@@ -14,3 +39,5 @@ serde_json = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 async-trait = { workspace = true }
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
