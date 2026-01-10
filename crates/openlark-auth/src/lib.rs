@@ -59,10 +59,12 @@ pub mod api;
 pub mod common;
 pub mod models;
 pub mod services;
+pub mod token_provider;
 pub mod utils;
 
 // 重新导出核心类型，方便用户使用
 pub use services::{AuthService, AuthenService, OAuthService};
+pub use token_provider::AuthTokenProvider;
 
 // 重新导出常用模型
 pub use models::{auth::*, authen::*, oauth::*};
@@ -75,7 +77,7 @@ pub type AuthResult<T> = openlark_core::SDKResult<T>;
 
 /// 认证模块的预导入，包含最常用的类型和特征
 pub mod prelude {
-    pub use crate::{AuthResult, AuthService, AuthenService, OAuthService};
+    pub use crate::{AuthResult, AuthService, AuthTokenProvider, AuthenService, OAuthService};
 
     // 重新导出API服务类
     pub use crate::api::{

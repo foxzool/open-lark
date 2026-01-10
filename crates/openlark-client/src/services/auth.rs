@@ -60,8 +60,14 @@ pub struct AuthService {
 
 impl AuthService {
     /// 创建新的认证服务实例
-    pub fn new(_config: &Config) -> Self {
-        let core_config = openlark_core::config::Config::default();
+    pub fn new(config: &Config) -> Self {
+        let core_config = openlark_core::config::Config::builder()
+            .app_id(config.app_id.clone())
+            .app_secret(config.app_secret.clone())
+            .base_url(config.base_url.clone())
+            .req_timeout(config.timeout)
+            .header(config.headers.clone())
+            .build();
 
         Self {
             config: core_config,
@@ -425,5 +431,32 @@ impl Service for AuthService {
 
     fn health(&self) -> ServiceHealth {
         ServiceHealth::Ready
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_auth_service_config_bridge() {
+        let mut config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .base_url("https://open.feishu.cn")
+            .build()
+            .unwrap();
+        config.add_header("X-Test-Header", "test-value");
+
+        let service = AuthService::new(&config);
+
+        assert_eq!(service.config.app_id, "test_app_id");
+        assert_eq!(service.config.app_secret, "test_app_secret");
+        assert_eq!(service.config.base_url, "https://open.feishu.cn");
+        assert_eq!(service.config.req_timeout, Some(config.timeout));
+        assert_eq!(
+            service.config.header.get("X-Test-Header"),
+            Some(&"test-value".to_string())
+        );
     }
 }
