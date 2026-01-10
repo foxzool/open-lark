@@ -1,4 +1,5 @@
 use crate::{
+    auth::TokenRequest,
     config::Config,
     constants::AccessTokenType,
     error::{authentication_error, LarkAPIError},
@@ -34,10 +35,11 @@ impl AuthHandler {
         let app_access_token = if !option.app_access_token.is_empty() {
             option.app_access_token.clone()
         } else if config.enable_token_cache {
-            let token_manager = config.token_manager.lock().await;
-            token_manager
-                .get_app_access_token(config, &option.app_ticket, &config.app_ticket_manager)
-                .await?
+            let mut request = TokenRequest::app();
+            if !option.app_ticket.is_empty() {
+                request = request.app_ticket(option.app_ticket.clone());
+            }
+            config.token_provider.get_token(request).await?
         } else {
             return Err(authentication_error("访问令牌缺失"));
         };
@@ -54,15 +56,14 @@ impl AuthHandler {
         let tenant_access_token = if !option.tenant_access_token.is_empty() {
             option.tenant_access_token.clone()
         } else if config.enable_token_cache {
-            let token_manager = config.token_manager.lock().await;
-            token_manager
-                .get_tenant_access_token(
-                    config,
-                    &option.tenant_key,
-                    &option.app_ticket,
-                    &config.app_ticket_manager,
-                )
-                .await?
+            let mut request = TokenRequest::tenant();
+            if !option.tenant_key.is_empty() {
+                request = request.tenant_key(option.tenant_key.clone());
+            }
+            if !option.app_ticket.is_empty() {
+                request = request.app_ticket(option.app_ticket.clone());
+            }
+            config.token_provider.get_token(request).await?
         } else {
             return Err(authentication_error("访问令牌缺失"));
         };
@@ -87,6 +88,8 @@ mod tests {
     use crate::constants::AppType;
     use crate::error::traits::ErrorTrait;
     use crate::prelude::ErrorType;
+    use crate::{auth::TokenProvider, SDKResult};
+    use async_trait::async_trait;
     use reqwest::Client;
 
     fn create_test_config() -> Config {
@@ -96,6 +99,21 @@ mod tests {
             .app_type(AppType::SelfBuild)
             .enable_token_cache(false)
             .build()
+    }
+
+    #[derive(Debug)]
+    struct StaticTokenProvider;
+
+    #[async_trait]
+    impl TokenProvider for StaticTokenProvider {
+        async fn get_token(&self, request: TokenRequest) -> SDKResult<String> {
+            Ok(match request.token_type {
+                AccessTokenType::App => "static_app_token".to_string(),
+                AccessTokenType::Tenant => "static_tenant_token".to_string(),
+                AccessTokenType::User => "static_user_token".to_string(),
+                AccessTokenType::None => "".to_string(),
+            })
+        }
     }
 
     fn create_test_request_builder() -> RequestBuilder {
@@ -188,6 +206,51 @@ mod tests {
             Err(ref err) if err.error_type() == ErrorType::Authentication => (),
             _ => panic!("Expected MissingAccessToken error"),
         }
+    }
+
+    #[tokio::test]
+    async fn test_apply_app_auth_via_token_provider() {
+        let req_builder = create_test_request_builder();
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .token_provider(StaticTokenProvider)
+            .build();
+        let option = RequestOption::default(); // no app_access_token
+
+        let result = AuthHandler::apply_app_auth(req_builder, &config, &option)
+            .await
+            .unwrap();
+
+        let req = result.build().unwrap();
+        let header = req.headers().get("Authorization").unwrap();
+        assert_eq!(header.to_str().unwrap(), "Bearer static_app_token");
+    }
+
+    #[tokio::test]
+    async fn test_apply_tenant_auth_via_token_provider() {
+        let req_builder = create_test_request_builder();
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .token_provider(StaticTokenProvider)
+            .build();
+        let option = RequestOption {
+            tenant_key: "test_tenant".to_string(),
+            ..Default::default()
+        };
+
+        let result = AuthHandler::apply_tenant_auth(req_builder, &config, &option)
+            .await
+            .unwrap();
+
+        let req = result.build().unwrap();
+        let header = req.headers().get("Authorization").unwrap();
+        assert_eq!(header.to_str().unwrap(), "Bearer static_tenant_token");
     }
 
     #[test]
@@ -316,6 +379,55 @@ mod tests {
 
         // The header should be formatted as "Bearer {token}"
         // We can't easily test this without building the request
-        // but we verify the method doesn't panic
+        // but we verify method doesn't panic
+    }
+
+    #[tokio::test]
+    async fn test_noop_token_provider_returns_error() {
+        let req_builder = create_test_request_builder();
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .token_provider(crate::auth::NoOpTokenProvider)
+            .build();
+        let option = RequestOption::default();
+
+        let result = AuthHandler::apply_app_auth(req_builder, &config, &option).await;
+
+        assert!(result.is_err());
+
+        match result {
+            Err(ref err) if err.error_type() == ErrorType::Configuration => {
+                let msg = err.user_message().unwrap_or_default();
+                assert!(msg.contains("NoOpTokenProvider"));
+            }
+            _ => panic!("Expected Configuration error from NoOpTokenProvider"),
+        }
+    }
+
+    #[tokio::test]
+    async fn test_apply_tenant_auth_via_token_provider_marketplace() {
+        let req_builder = create_test_request_builder();
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::Marketplace)
+            .enable_token_cache(true)
+            .token_provider(StaticTokenProvider)
+            .build();
+        let option = RequestOption {
+            app_ticket: "test_ticket_123".to_string(),
+            ..Default::default()
+        };
+
+        let result = AuthHandler::apply_tenant_auth(req_builder, &config, &option)
+            .await
+            .unwrap();
+
+        let req = result.build().unwrap();
+        let header = req.headers().get("Authorization").unwrap();
+        assert_eq!(header.to_str().unwrap(), "Bearer static_tenant_token");
     }
 }
