@@ -141,7 +141,8 @@ pub async fn update(
         }
     }
 
-    let api_endpoint = CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id, data_validation_id);
+    let api_endpoint =
+        CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id, data_validation_id);
     let mut api_request: ApiRequest<UpdateDataValidationResponse> =
         ApiRequest::put(&api_endpoint.to_url())
             .body(serialize_params(&request, "更新下拉列表设置")?);

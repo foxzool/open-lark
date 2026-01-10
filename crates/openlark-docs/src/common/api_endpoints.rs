@@ -1282,7 +1282,11 @@ impl CcmSheetApiOld {
                     spreadsheet_token
                 )
             }
-            CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id, data_validation_id) => {
+            CcmSheetApiOld::DataValidationUpdate(
+                spreadsheet_token,
+                sheet_id,
+                data_validation_id,
+            ) => {
                 format!(
                     "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}/{}",
                     spreadsheet_token, sheet_id, data_validation_id
