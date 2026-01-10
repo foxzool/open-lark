@@ -154,24 +154,20 @@ impl<'a> CommunicationService<'a> {
             );
         }
 
-        // 模拟API调用（实际实现中会调用真实的飞书API）
-        let api_result = self
-            .simulate_send_message(receive_id, receive_id_type, content)
-            .await;
-
-        match api_result {
-            Ok(response) => {
-                tracing::info!("文本消息发送成功，消息ID: {}", response.message_id);
-                with_context(Ok(response), "operation", operation_name)
-            }
-            Err(e) => {
-                tracing::error!(
-                    "文本消息发送失败: {}",
-                    e.user_message().unwrap_or("未知错误")
-                );
-                with_context(Err(e), "operation", operation_name)
-            }
-        }
+        // TODO: 实现实际API调用 - 应该委托给 openlark-communication crate
+        // 参考文档: https://open.feishu.cn/document/client-docs/im-v1/message/create
+        with_context(
+            Err(api_error(
+                501,
+                self.endpoints
+                    .get("send_message")
+                    .map_or("/unknown", |v| *v),
+                "消息发送功能尚未实现，请使用 openlark-communication crate 或直接使用 HTTP 客户端",
+                Some("comm_impl_001".to_string()),
+            )),
+            "operation",
+            operation_name,
+        )
     }
 
     /// 📨 发送富文本消息
@@ -207,24 +203,18 @@ impl<'a> CommunicationService<'a> {
         let content_json = serde_json::to_string(rich_content)
             .map_err(|e| crate::error::serialization_error(format!("富文本序列化失败: {}", e)))?;
 
-        // 模拟API调用
-        let api_result = self
-            .simulate_send_rich_text(receive_id, receive_id_type, &content_json)
-            .await;
-
-        match api_result {
-            Ok(response) => {
-                tracing::info!("富文本消息发送成功，消息ID: {}", response.message_id);
-                with_context(Ok(response), "operation", operation_name)
-            }
-            Err(e) => {
-                tracing::error!(
-                    "富文本消息发送失败: {}",
-                    e.user_message().unwrap_or("未知错误")
-                );
-                with_context(Err(e), "operation", operation_name)
-            }
-        }
+        // TODO: 实现实际API调用 - 应该委托给 openlark-communication crate
+        // 参考文档: https://open.feishu.cn/document/client-docs/im-v1/message/create
+        with_context(
+            Err(api_error(
+                501,
+                self.endpoints.get("send_rich_text").map_or("/unknown", |v| *v),
+                "富文本消息发送功能尚未实现，请使用 openlark-communication crate 或直接使用 HTTP 客户端",
+                Some("comm_impl_002".to_string()),
+            )),
+            "operation",
+            operation_name,
+        )
     }
 
     /// 📋 获取消息列表
@@ -281,24 +271,18 @@ impl<'a> CommunicationService<'a> {
             }
         }
 
-        // 模拟API调用
-        let api_result = self
-            .simulate_list_messages(container_id_type, container_id, page_size, page_token)
-            .await;
-
-        match api_result {
-            Ok(response) => {
-                tracing::info!("消息列表获取成功，共 {} 条消息", response.total);
-                with_context(Ok(response), "operation", operation_name)
-            }
-            Err(e) => {
-                tracing::error!(
-                    "消息列表获取失败: {}",
-                    e.user_message().unwrap_or("未知错误")
-                );
-                with_context(Err(e), "operation", operation_name)
-            }
-        }
+        // TODO: 实现实际API调用 - 应该委托给 openlark-communication crate
+        // 参考文档: https://open.feishu.cn/document/client-docs/im-v1/message/list
+        with_context(
+            Err(api_error(
+                501,
+                self.endpoints.get("list_messages").map_or("/unknown", |v| *v),
+                "消息列表获取功能尚未实现，请使用 openlark-communication crate 或直接使用 HTTP 客户端",
+                Some("comm_impl_003".to_string()),
+            )),
+            "operation",
+            operation_name,
+        )
     }
 
     /// 🗑️ 删除消息
@@ -333,21 +317,20 @@ impl<'a> CommunicationService<'a> {
             );
         }
 
-        // 模拟API调用
-        let api_result = self
-            .simulate_delete_message(message_id, receive_id_type, receive_id)
-            .await;
-
-        match api_result {
-            Ok(response) => {
-                tracing::info!("消息删除成功，消息ID: {}", message_id);
-                with_context(Ok(response), "operation", operation_name)
-            }
-            Err(e) => {
-                tracing::error!("消息删除失败: {}", e.user_message().unwrap_or("未知错误"));
-                with_context(Err(e), "operation", operation_name)
-            }
-        }
+        // TODO: 实现实际API调用 - 应该委托给 openlark-communication crate
+        // 参考文档: https://open.feishu.cn/document/client-docs/im-v1/message/delete
+        with_context(
+            Err(api_error(
+                501,
+                self.endpoints
+                    .get("delete_message")
+                    .map_or("/unknown", |v| *v),
+                "消息删除功能尚未实现，请使用 openlark-communication crate 或直接使用 HTTP 客户端",
+                Some("comm_impl_004".to_string()),
+            )),
+            "operation",
+            operation_name,
+        )
     }
 
     // ========================================================================
@@ -368,112 +351,6 @@ impl<'a> CommunicationService<'a> {
             container_id_type,
             "open_id" | "user_id" | "union_id" | "chat_id"
         )
-    }
-
-    /// 模拟发送消息的API调用
-    async fn simulate_send_message(
-        &self,
-        receive_id: &str,
-        _receive_id_type: &str,
-        _content: &str,
-    ) -> Result<SendMessageResponse> {
-        // 模拟网络延迟
-        tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
-
-        // 成功响应
-        let response = SendMessageResponse {
-            message_id: format!("msg_{}_{}", receive_id, chrono::Utc::now().timestamp()),
-            create_time: chrono::Utc::now().timestamp(),
-            msg_type: "text".to_string(),
-        };
-
-        Ok(response)
-    }
-
-    /// 模拟发送富文本消息的API调用
-    async fn simulate_send_rich_text(
-        &self,
-        receive_id: &str,
-        _receive_id_type: &str,
-        _content_json: &str,
-    ) -> Result<SendMessageResponse> {
-        // 模拟网络延迟
-        tokio::time::sleep(tokio::time::Duration::from_millis(150)).await;
-
-        // 成功响应
-        let response = SendMessageResponse {
-            message_id: format!("rich_msg_{}_{}", receive_id, chrono::Utc::now().timestamp()),
-            create_time: chrono::Utc::now().timestamp(),
-            msg_type: "rich_text".to_string(),
-        };
-
-        Ok(response)
-    }
-
-    /// 模拟获取消息列表的API调用
-    async fn simulate_list_messages(
-        &self,
-        _container_id_type: &str,
-        container_id: &str,
-        page_size: Option<u32>,
-        page_token: Option<&str>,
-    ) -> Result<ListMessagesResponse> {
-        // 模拟网络延迟
-        tokio::time::sleep(tokio::time::Duration::from_millis(80)).await;
-
-        // 生成模拟消息
-        let mut messages = Vec::new();
-        let message_count = page_size.unwrap_or(20) as usize;
-
-        for i in 0..message_count {
-            messages.push(MessageInfo {
-                message_id: format!("msg_{}_{}", container_id, i + 1),
-                create_time: chrono::Utc::now().timestamp() - (i as i64 * 60),
-                msg_type: "text".to_string(),
-                content: format!("模拟消息内容 {}", i + 1),
-                sender_id: "user_mock_001".to_string(),
-                chat_id: container_id.to_string(),
-            });
-        }
-
-        Ok(ListMessagesResponse {
-            items: messages,
-            total: 100, // 模拟总数
-            has_more: true,
-            page_token: page_token.unwrap_or("").to_string(),
-        })
-    }
-
-    /// 模拟删除消息的API调用
-    async fn simulate_delete_message(
-        &self,
-        message_id: &str,
-        _receive_id_type: &str,
-        _receive_id: &str,
-    ) -> Result<DeleteMessageResponse> {
-        // 模拟网络延迟
-        tokio::time::sleep(tokio::time::Duration::from_millis(50)).await;
-
-        // 模拟权限检查
-        if message_id.contains("protected") {
-            return with_operation_context(
-                Err(api_error(
-                    403,
-                    self.endpoints
-                        .get("delete_message")
-                        .map_or("/unknown", |v| *v),
-                    "无权限删除该消息",
-                    Some("req_sim_002".to_string()),
-                )),
-                "simulate_delete_message",
-                "CommunicationService",
-            );
-        }
-
-        Ok(DeleteMessageResponse {
-            message_id: message_id.to_string(),
-            deleted: true,
-        })
     }
 }
 
@@ -660,25 +537,6 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_send_text_message_success() {
-        let config = create_test_config();
-        let registry = DefaultServiceRegistry::new();
-        let service = CommunicationService::new(&config, &registry).unwrap();
-
-        let result = service
-            .send_text_message("test_user_123", "open_id", "Hello, World!")
-            .await;
-
-        assert!(result.is_ok(), "发送文本消息应该成功");
-
-        if let Ok(response) = result {
-            assert_eq!(response.msg_type, "text");
-            assert!(!response.message_id.is_empty());
-            assert!(response.create_time > 0);
-        }
-    }
-
-    #[tokio::test]
     async fn test_send_text_message_with_empty_receive_id() {
         let config = create_test_config();
         let registry = DefaultServiceRegistry::new();
@@ -764,47 +622,6 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_send_rich_text_message_success() {
-        let config = create_test_config();
-        let registry = DefaultServiceRegistry::new();
-        let service = CommunicationService::new(&config, &registry).unwrap();
-
-        let mut rich_content = RichTextContent::new();
-        rich_content.add_text("Hello, ");
-        rich_content.add_text("World!");
-
-        let result = service
-            .send_rich_text_message("test_user_123", "open_id", &rich_content)
-            .await;
-
-        assert!(result.is_ok(), "发送富文本消息应该成功");
-
-        if let Ok(response) = result {
-            assert_eq!(response.msg_type, "rich_text");
-            assert!(!response.message_id.is_empty());
-        }
-    }
-
-    #[tokio::test]
-    async fn test_list_messages_success() {
-        let config = create_test_config();
-        let registry = DefaultServiceRegistry::new();
-        let service = CommunicationService::new(&config, &registry).unwrap();
-
-        let result = service
-            .list_messages("chat_id", "chat_123", Some(10), None)
-            .await;
-
-        assert!(result.is_ok(), "获取消息列表应该成功");
-
-        if let Ok(response) = result {
-            assert_eq!(response.items.len(), 10); // 请求了10条消息
-            assert!(response.total > 0);
-            assert!(response.has_more);
-        }
-    }
-
-    #[tokio::test]
     async fn test_list_messages_with_invalid_page_size() {
         let config = create_test_config();
         let registry = DefaultServiceRegistry::new();
@@ -822,48 +639,6 @@ mod tests {
                 .user_message()
                 .unwrap_or("未知错误")
                 .contains("分页大小必须在1-200之间"));
-        }
-    }
-
-    #[tokio::test]
-    async fn test_delete_message_success() {
-        let config = create_test_config();
-        let registry = DefaultServiceRegistry::new();
-        let service = CommunicationService::new(&config, &registry).unwrap();
-
-        let result = service
-            .delete_message("msg_123", "open_id", "user_123")
-            .await;
-
-        assert!(result.is_ok(), "删除消息应该成功");
-
-        if let Ok(response) = result {
-            assert_eq!(response.message_id, "msg_123");
-            assert!(response.deleted);
-        }
-    }
-
-    #[tokio::test]
-    async fn test_delete_protected_message_should_fail() {
-        let config = create_test_config();
-        let registry = DefaultServiceRegistry::new();
-        let service = CommunicationService::new(&config, &registry).unwrap();
-
-        let result = service
-            .delete_message("msg_protected_123", "open_id", "user_123")
-            .await;
-
-        assert!(result.is_err(), "删除受保护的消息应该失败");
-
-        if let Err(error) = result {
-            assert!(error.is_business_error() || error.is_api_error());
-            assert!(
-                error
-                    .user_message()
-                    .unwrap_or("未知错误")
-                    .contains("无权限")
-                    || error.user_message().unwrap_or("未知错误").contains("权限")
-            );
         }
     }
 
