@@ -50,6 +50,7 @@ api_check_output.txt
 # Temporary development files
 /tmp/
 /temp/
+.sisyphus/
 
 # POC and experimental files
 *_poc.toml
