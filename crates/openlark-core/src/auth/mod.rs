@@ -5,10 +5,12 @@
 pub mod cache;
 pub mod refresh;
 pub mod token;
+pub mod token_provider;
 pub mod validator;
 
 // Re-export commonly used types
 pub use cache::{CacheConfig, CacheStats, MemoryTokenCache, TokenStorage};
 pub use refresh::{RefreshTokenResponse, TokenRefresher};
 pub use token::{TokenInfo, TokenManager, TokenRefreshConfig, TokenType, TokenValidationResult};
+pub use token_provider::{NoOpTokenProvider, TokenProvider, TokenRequest};
 pub use validator::TokenValidator;
