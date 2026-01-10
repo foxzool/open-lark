@@ -1,11 +1,9 @@
 use std::{collections::HashMap, ops::Deref, sync::Arc, time::Duration};
-use tokio::sync::Mutex;
 
 use crate::{
-    app_ticket_manager::AppTicketManager,
+    auth::token_provider::{NoOpTokenProvider, TokenProvider},
     constants::{AppType, FEISHU_BASE_URL},
     performance::OptimizedHttpConfig,
-    token_manager::TokenManager,
 };
 
 #[derive(Debug, Clone)]
@@ -21,6 +19,7 @@ pub struct ConfigInner {
     pub app_secret: String,
     /// 域名, 默认为 <https://open.feishu.cn>
     pub base_url: String,
+    /// 是否允许 core 在缺少显式 token 时自动获取 token
     pub enable_token_cache: bool,
     /// 应用类型, 默认为自建应用
     pub app_type: AppType,
@@ -28,10 +27,8 @@ pub struct ConfigInner {
     /// 客户端超时时间, 默认永不超时
     pub req_timeout: Option<Duration>,
     pub header: HashMap<String, String>,
-    /// Token 管理器
-    pub token_manager: Arc<Mutex<TokenManager>>,
-    /// App Ticket 管理器
-    pub app_ticket_manager: Arc<Mutex<AppTicketManager>>,
+    /// Token 获取抽象（由业务 crate 实现，例如 openlark-auth）
+    pub token_provider: Arc<dyn TokenProvider>,
 }
 
 impl Default for ConfigInner {
@@ -45,8 +42,7 @@ impl Default for ConfigInner {
             http_client: reqwest::Client::new(),
             req_timeout: None,
             header: Default::default(),
-            token_manager: Arc::new(Mutex::new(TokenManager::new())),
-            app_ticket_manager: Arc::new(Mutex::new(AppTicketManager::new())),
+            token_provider: Arc::new(NoOpTokenProvider),
         }
     }
 }
@@ -77,6 +73,26 @@ impl Config {
         Self {
             inner: Arc::new(inner),
         }
+    }
+
+    /// 基于当前配置生成一个“替换 TokenProvider”的新配置
+    ///
+    /// 说明：
+    /// - 这是一个纯拷贝操作（`Config` 本身是 `Arc` 包装），不会修改原配置
+    /// - 推荐用法：先构建一个“基础 Config”（默认 `NoOpTokenProvider`），再用该基础 Config 构建业务 TokenProvider，
+    ///   最后调用此方法把 provider 注入到“业务 Config”中，避免循环引用。
+    pub fn with_token_provider(&self, provider: impl TokenProvider + 'static) -> Self {
+        Config::new(ConfigInner {
+            app_id: self.app_id.clone(),
+            app_secret: self.app_secret.clone(),
+            base_url: self.base_url.clone(),
+            enable_token_cache: self.enable_token_cache,
+            app_type: self.app_type,
+            http_client: self.http_client.clone(),
+            req_timeout: self.req_timeout,
+            header: self.header.clone(),
+            token_provider: Arc::new(provider),
+        })
     }
 
     /// 获取内部 Arc 的引用计数
@@ -120,6 +136,7 @@ pub struct ConfigBuilder {
     http_client: Option<reqwest::Client>,
     req_timeout: Option<Duration>,
     header: Option<HashMap<String, String>>,
+    token_provider: Option<Arc<dyn TokenProvider>>,
 }
 
 impl ConfigBuilder {
@@ -191,6 +208,11 @@ impl ConfigBuilder {
         self
     }
 
+    pub fn token_provider(mut self, provider: impl TokenProvider + 'static) -> Self {
+        self.token_provider = Some(Arc::new(provider));
+        self
+    }
+
     pub fn build(self) -> Config {
         let default = ConfigInner::default();
         Config::new(ConfigInner {
@@ -204,8 +226,7 @@ impl ConfigBuilder {
             http_client: self.http_client.unwrap_or(default.http_client),
             req_timeout: self.req_timeout.or(default.req_timeout),
             header: self.header.unwrap_or(default.header),
-            token_manager: default.token_manager,
-            app_ticket_manager: default.app_ticket_manager,
+            token_provider: self.token_provider.unwrap_or(default.token_provider),
         })
     }
 }
@@ -213,7 +234,11 @@ impl ConfigBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::auth::NoOpTokenProvider;
+    use crate::auth::TokenProvider;
+    use crate::auth::TokenRequest;
     use crate::constants::{AppType, FEISHU_BASE_URL};
+    use async_trait::async_trait;
     use std::time::Duration;
 
     #[test]
@@ -227,8 +252,7 @@ mod tests {
             http_client: reqwest::Client::new(),
             req_timeout: Some(Duration::from_secs(30)),
             header: HashMap::new(),
-            token_manager: Arc::new(Mutex::new(TokenManager::new())),
-            app_ticket_manager: Arc::new(Mutex::new(AppTicketManager::new())),
+            token_provider: Arc::new(NoOpTokenProvider),
         });
 
         assert_eq!(config.app_id, "test_app_id");
@@ -266,8 +290,7 @@ mod tests {
                 header.insert("Test-Header".to_string(), "test-value".to_string());
                 header
             },
-            token_manager: Arc::new(Mutex::new(TokenManager::new())),
-            app_ticket_manager: Arc::new(Mutex::new(AppTicketManager::new())),
+            token_provider: Arc::new(NoOpTokenProvider),
         });
 
         let cloned_config = config.clone();
@@ -411,5 +434,32 @@ mod tests {
         assert_eq!(config.reference_count(), 5);
 
         println!("Arc<Config> 改造成功：5个配置实例共享同一份内存！");
+    }
+
+    #[derive(Debug)]
+    struct TestTokenProvider;
+
+    #[async_trait]
+    impl TokenProvider for TestTokenProvider {
+        async fn get_token(&self, _request: TokenRequest) -> crate::SDKResult<String> {
+            Ok("test_token".to_string())
+        }
+    }
+
+    #[tokio::test]
+    async fn test_with_token_provider() {
+        let base = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+
+        let config = base.with_token_provider(TestTokenProvider);
+
+        let token = config
+            .token_provider
+            .get_token(TokenRequest::app())
+            .await
+            .unwrap();
+        assert_eq!(token, "test_token");
     }
 }
