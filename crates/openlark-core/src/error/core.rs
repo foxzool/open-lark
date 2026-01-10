@@ -822,7 +822,7 @@ impl ErrorTrait for CoreError {
             Self::Authentication { .. } => Some("认证失败，请重新登录"),
             Self::Api(api) => Some(api.message.as_str()),
             Self::Validation { message, .. } => Some(message.as_str()),
-            Self::Configuration { .. } => Some("配置错误，请检查环境"),
+            Self::Configuration { message, .. } => Some(message.as_str()),
             Self::Serialization { message, .. } => Some(message.as_str()),
             Self::Business { message, .. } => Some(message.as_str()),
             Self::Timeout { .. } => Some("请求超时，请稍后重试"),
