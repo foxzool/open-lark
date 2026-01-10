@@ -38,58 +38,19 @@ impl DocsService {
     /// 访问云文档协同服务
     #[cfg(feature = "ccm")]
     pub fn ccm(&self) -> crate::ccm::CcmService {
-        crate::ccm::CcmService::new(openlark_core::config::Config::new(
-            openlark_core::config::ConfigInner {
-                app_id: self.config.app_id().to_string(),
-                app_secret: self.config.app_secret().to_string(),
-                base_url: self.config.base_url().to_string(),
-                enable_token_cache: self.config.enable_token_cache(),
-                app_type: self.config.app_type,
-                http_client: reqwest::Client::new(),
-                req_timeout: self.config.req_timeout,
-                header: self.config.header.clone(),
-                token_manager: self.config.token_manager.clone(),
-                app_ticket_manager: self.config.app_ticket_manager.clone(),
-            },
-        ))
+        crate::ccm::CcmService::new((*self.config).clone())
     }
 
     /// 访问多维表格服务
     #[cfg(feature = "bitable")]
     pub fn bitable(&self) -> crate::bitable::BitableService {
-        crate::bitable::BitableService::new(openlark_core::config::Config::new(
-            openlark_core::config::ConfigInner {
-                app_id: self.config.app_id().to_string(),
-                app_secret: self.config.app_secret().to_string(),
-                base_url: self.config.base_url().to_string(),
-                enable_token_cache: self.config.enable_token_cache(),
-                app_type: self.config.app_type,
-                http_client: reqwest::Client::new(),
-                req_timeout: self.config.req_timeout,
-                header: self.config.header.clone(),
-                token_manager: self.config.token_manager.clone(),
-                app_ticket_manager: self.config.app_ticket_manager.clone(),
-            },
-        ))
+        crate::bitable::BitableService::new((*self.config).clone())
     }
 
     /// 访问基础服务
     #[cfg(feature = "base")]
     pub fn base(&self) -> crate::base::BaseService {
-        crate::base::BaseService::new(openlark_core::config::Config::new(
-            openlark_core::config::ConfigInner {
-                app_id: self.config.app_id().to_string(),
-                app_secret: self.config.app_secret().to_string(),
-                base_url: self.config.base_url().to_string(),
-                enable_token_cache: self.config.enable_token_cache(),
-                app_type: self.config.app_type,
-                http_client: reqwest::Client::new(),
-                req_timeout: self.config.req_timeout,
-                header: self.config.header.clone(),
-                token_manager: self.config.token_manager.clone(),
-                app_ticket_manager: self.config.app_ticket_manager.clone(),
-            },
-        ))
+        crate::base::BaseService::new((*self.config).clone())
     }
 
     /// 访问知识库服务
