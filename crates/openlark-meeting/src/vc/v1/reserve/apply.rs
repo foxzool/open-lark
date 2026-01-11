@@ -11,7 +11,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::VcApiV1;
 
 /// 预约会议请求
 #[allow(dead_code)]
