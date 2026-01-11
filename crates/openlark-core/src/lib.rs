@@ -65,7 +65,6 @@ pub mod prelude {
     pub use crate::validate_required;
 
     // Re-export commonly used dependencies
-    pub use anyhow::Result;
 
     /// Result type alias for convenience（已默认使用 CoreError）
     pub type SDKResult<T> = Result<T, LarkAPIError>;
