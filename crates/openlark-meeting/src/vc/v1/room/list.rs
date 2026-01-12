@@ -11,7 +11,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 /// 查询会议室列表请求
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
@@ -74,7 +73,7 @@ impl ListRoomRequest {
         let api_endpoint = VcApiV1::RoomList;
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<ListRoomResponse> = ApiRequest::get(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<ListRoomResponse> = ApiRequest::get(api_endpoint.to_url());
 
         // 添加查询参数
         for (key, value) in self.query_params {
