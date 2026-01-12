@@ -72,8 +72,7 @@ impl ListAlertRequest {
         let api_endpoint = VcApiV1::AlertList;
 
         // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<ListAlertResponse> =
-            ApiRequest::get(&api_endpoint.to_url());
+        let mut api_request: ApiRequest<ListAlertResponse> = ApiRequest::get(api_endpoint.to_url());
 
         // 添加查询参数
         for (key, value) in self.query_params {

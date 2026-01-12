@@ -67,7 +67,7 @@ impl UpdateReserveRequest {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<UpdateReserveResponse> =
-            ApiRequest::patch(&api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
+            ApiRequest::patch(api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
