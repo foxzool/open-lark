@@ -11,7 +11,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 /// 删除会议室请求
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
@@ -64,8 +63,7 @@ impl DeleteRoomRequest {
         let api_endpoint = VcApiV1::RoomDelete(self.room_id.clone());
 
         // 创建API请求 - 使用类型安全的URL生成
-        let api_request: ApiRequest<DeleteRoomResponse> =
-            ApiRequest::delete(&api_endpoint.to_url());
+        let api_request: ApiRequest<DeleteRoomResponse> = ApiRequest::delete(api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

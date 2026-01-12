@@ -80,7 +80,7 @@ impl GetMeetingRequest {
 
         // 创建API请求 - 使用类型安全的URL生成
         let mut api_request: ApiRequest<GetMeetingResponse> =
-            ApiRequest::get(&api_endpoint.to_url());
+            ApiRequest::get(api_endpoint.to_url());
 
         // 添加查询参数
         for (key, value) in self.query_params {
