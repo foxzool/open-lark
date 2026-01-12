@@ -65,7 +65,7 @@ impl DeleteReserveRequest {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<DeleteReserveResponse> =
-            ApiRequest::delete(&api_endpoint.to_url());
+            ApiRequest::delete(api_endpoint.to_url());
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;

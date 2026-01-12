@@ -11,7 +11,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
 /// 创建会议室请求
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
@@ -52,7 +51,7 @@ impl CreateRoomRequest {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<CreateRoomResponse> =
-            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
+            ApiRequest::post(api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
