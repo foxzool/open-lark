@@ -13,16 +13,17 @@ edition.workspace = true
 
 [dependencies]
 openlark-core = { workspace = true }
-openlark-protocol = { workspace = true, optional = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
-tokio = { workspace = true, optional = true }
 tracing = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true }
 
 [features]
-default = []
-websocket = ["openlark-protocol", "tokio"]
-async = ["tokio"]
+default = ["im", "contact", "moments"]
+full = ["im", "contact", "moments"]
+
+im = []
+contact = []
+moments = []
