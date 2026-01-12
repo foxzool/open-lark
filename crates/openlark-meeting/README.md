@@ -10,14 +10,7 @@
 
 ## 目录结构说明
 
-**重要**：本 crate (`openlark-meeting`) 是一个 **workspace aggregator**，所有功能模块代码都来自其他独立的 crate（通过 feature 控制）。
-
-### 实际的模块组织
-
-所有业务模块代码都存储在独立的 crate 中：
-- **视频会议模块**：`openlark-vc` crate
-- **日历模块**：`openlark-calendar` crate
-- **会议室模块**：`openlark-meeting-room` crate
+本 crate (`openlark-meeting`) 包含会议和日程相关的所有业务模块代码，通过 Cargo feature 条件编译控制模块的启用。
 
 ### Feature 控制
 
@@ -41,30 +34,28 @@ calendar = ["calendar-v4"]
 meeting-room = ["meeting-room-v1"]
 ```
 
-### 目录结构示例（workspace 架构）
-
-由于是 workspace 架构，各模块的代码在各自独立的 crate 中组织。例如：
+### 目录结构示例
 
 ```text
-# 仓库根目录
-/Users/zool/RustroverProjects/open-lark/
-├── crates/
-│   ├── openlark-core/           # 核心基础设施
-│   ├── openlark-vc/           # 视频会议模块
-│   ├── openlark-calendar/       # 日历模块
-│   ├── openlark-meeting-room/  # 会议室模块
-│   └── openlark-meeting/        # 本 crate（workspace aggregator）
-│       └── src/lib.rs           # 统一导出入口
-
-# 各个模块的内部结构示例
-# crates/openlark-vc/src/
-├── src/
-│   ├── vc/
-│   │   └── v1/
-│   │       ├── meeting/
-│   │       ├── room/
-│   │       └── reserve/
-│   └── ...
+# crates/openlark-meeting/src/
+├── common/                    # 公共工具和模型
+├── endpoints/                 # API 端点定义
+├── calendar/                 # 日历模块 (calendar-v4)
+│   ├── v4/
+│   │   ├── calendar/
+│   │   ├── freebusy/
+│   │   └── setting/
+│   └── service.rs
+├── vc/                       # 视频会议模块 (vc-v1)
+│   ├── v1/
+│   │   ├── meeting/
+│   │   ├── room/
+│   │   └── reserve/
+│   └── service.rs
+└── meeting_room/             # 会议室模块 (meeting-room-v1)
+    ├── room/
+    ├── building/
+    └── service.rs
 ```
 
 ### 功能模块说明
@@ -112,6 +103,8 @@ openlark-meeting = { version = "0.15", features = ["full"] }
 - `vc`: 仅视频会议功能
 - `calendar`: 仅日历功能
 - `meeting-room`: 仅会议室功能
+
+**注意**：当使用单独的 feature（如 `vc`、`calendar` 或 `meeting-room`）时，必须设置 `default-features = false`。</think>
 
 ## 快速开始
 
