@@ -40,16 +40,17 @@ mod macros;
 
 // 通用工具与类型
 pub mod common;
-
-// 导入端点模块
 pub mod endpoints;
 
-// 业务模块（按 bizTag 组织）
-pub mod contact;
+#[cfg(feature = "im")]
 pub mod im;
+
+#[cfg(feature = "contact")]
+pub mod contact;
+
+#[cfg(feature = "moments")]
 pub mod moments;
 
-// 重新导出端点常量，方便外部使用
 pub use endpoints::*;
 
 /// Re-exports from openlark-core for convenience.
