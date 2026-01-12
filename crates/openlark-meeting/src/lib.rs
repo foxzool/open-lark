@@ -39,14 +39,17 @@
 //! - `resource` 内用 `.` 分割目录（例如 `calendar.event.attendee` => `calendar/event/attendee`）
 //! - 如 `meta.name` 内包含 `/`（历史接口），则按目录继续下沉（例如 `building/list` => `building/list.rs`）
 
-// Core modules
 pub mod common;
 pub mod endpoints;
 
-// 业务模块（按 bizTag 组织）
-pub mod calendar;
-pub mod meeting_room;
+#[cfg(feature = "vc")]
 pub mod vc;
+
+#[cfg(feature = "calendar")]
+pub mod calendar;
+
+#[cfg(feature = "meeting-room")]
+pub mod meeting_room;
 
 /// Prelude 模块 - 常用导入
 pub mod prelude {
