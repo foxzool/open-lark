@@ -106,6 +106,7 @@ pub mod endpoints;
 pub mod prelude;
 
 // 重新导出主要类型
+pub use common::chain::DocsClient;
 pub use error::{DocsError, DocsResult};
 pub use service::DocsService as MainDocsService;
 

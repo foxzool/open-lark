@@ -52,6 +52,18 @@ pub struct Client {
     /// CardKit meta 调用链：client.cardkit.v1.card.create(...)
     #[cfg(feature = "cardkit")]
     pub cardkit: openlark_cardkit::CardkitClient,
+
+    /// Docs meta 调用链入口：client.docs.ccm / client.docs.base ...
+    #[cfg(feature = "docs")]
+    pub docs: openlark_docs::DocsClient,
+
+    /// Communication meta 调用链入口：client.communication.im / client.communication.contact ...
+    #[cfg(feature = "communication")]
+    pub communication: openlark_communication::CommunicationClient,
+
+    /// Meeting meta 调用链入口：client.meeting.vc.v1.room.create() ...
+    #[cfg(feature = "meeting")]
+    pub meeting: openlark_meeting::MeetingClient,
 }
 
 impl Client {
@@ -210,22 +222,37 @@ impl Client {
 
         let registry = Arc::new(registry);
 
+        let core_config = openlark_core::config::Config::builder()
+            .app_id(config.app_id.clone())
+            .app_secret(config.app_secret.clone())
+            .base_url(config.base_url.clone())
+            .req_timeout(config.timeout)
+            .header(config.headers.clone())
+            .build();
+
         #[cfg(feature = "cardkit")]
-        let cardkit = openlark_cardkit::CardkitClient::new(
-            openlark_core::config::Config::builder()
-                .app_id(config.app_id.clone())
-                .app_secret(config.app_secret.clone())
-                .base_url(config.base_url.clone())
-                .req_timeout(config.timeout)
-                .header(config.headers.clone())
-                .build(),
-        );
+        let cardkit = openlark_cardkit::CardkitClient::new(core_config.clone());
+
+        #[cfg(feature = "docs")]
+        let docs = openlark_docs::DocsClient::new(core_config.clone());
+
+        #[cfg(feature = "communication")]
+        let communication = openlark_communication::CommunicationClient::new(core_config.clone());
+
+        #[cfg(feature = "meeting")]
+        let meeting = openlark_meeting::MeetingClient::new(core_config.clone());
 
         Ok(Client {
             config,
             registry,
             #[cfg(feature = "cardkit")]
             cardkit,
+            #[cfg(feature = "docs")]
+            docs,
+            #[cfg(feature = "communication")]
+            communication,
+            #[cfg(feature = "meeting")]
+            meeting,
         })
     }
 
@@ -645,6 +672,42 @@ mod tests {
             .unwrap();
 
         let _ = &client.cardkit.v1.card;
+    }
+
+    #[cfg(feature = "docs")]
+    #[test]
+    fn test_docs_chain_exists() {
+        let client = Client::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+            .unwrap();
+
+        let _ = client.docs.config();
+    }
+
+    #[cfg(feature = "communication")]
+    #[test]
+    fn test_communication_chain_exists() {
+        let client = Client::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+            .unwrap();
+
+        let _ = client.communication.config();
+    }
+
+    #[cfg(feature = "meeting")]
+    #[test]
+    fn test_meeting_chain_exists() {
+        let client = Client::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+            .unwrap();
+
+        let _ = client.meeting.config();
     }
 
     #[test]

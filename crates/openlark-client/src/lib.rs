@@ -351,6 +351,16 @@ pub use services::ApprovalService;
 #[cfg(feature = "cardkit")]
 pub use openlark_cardkit::CardkitClient;
 
+// Docs / Communication / Meeting meta 调用链入口（字段链式）
+#[cfg(feature = "docs")]
+pub use openlark_docs::DocsClient;
+
+#[cfg(feature = "communication")]
+pub use openlark_communication::CommunicationClient;
+
+#[cfg(feature = "meeting")]
+pub use openlark_meeting::MeetingClient;
+
 // 其他服务（当前未启用但已规划）
 // #[cfg(feature = "collab")]
 // pub use services::CollabService;
@@ -481,6 +491,19 @@ pub mod prelude {
 
     #[cfg(feature = "docs")]
     pub use crate::services::DocsService;
+
+    // meta 风格链式入口（字段链式）
+    #[cfg(feature = "cardkit")]
+    pub use openlark_cardkit::CardkitClient;
+
+    #[cfg(feature = "docs")]
+    pub use openlark_docs::DocsClient;
+
+    #[cfg(feature = "communication")]
+    pub use openlark_communication::CommunicationClient;
+
+    #[cfg(feature = "meeting")]
+    pub use openlark_meeting::MeetingClient;
 
     #[cfg(feature = "hr")]
     pub use crate::services::HRService;

@@ -55,3 +55,5 @@ pub mod meeting_room;
 pub mod prelude {
     pub use openlark_core::{config::Config, SDKResult};
 }
+
+pub use common::chain::MeetingClient;

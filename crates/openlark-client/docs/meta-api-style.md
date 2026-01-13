@@ -74,3 +74,31 @@ async fn main() -> Result<()> {
   - `client.cardkit.v1.card.element.patch(body).await?`
   - `client.cardkit.v1.card.element.content(body).await?`
   - `client.cardkit.v1.card.element.delete(body).await?`
+
+### 4. docs / communication / meeting（模块级链式入口）
+
+由于 `openlark-docs` / `openlark-communication` / `openlark-meeting` 的 API 规模较大，目前在 `openlark-client` 中提供的是“模块级链式入口 + Config 透传”，用于把调用入口统一收敛到：
+
+- `client.docs...`
+- `client.communication...`
+- `client.meeting...`
+
+你可以在链式入口上拿到 `Config`，然后按各业务 crate 的既有请求类型/Builder 继续调用。
+
+示例：会议（需要启用 `meeting` feature）
+
+```rust,no_run
+use openlark_client::prelude::*;
+use serde_json::json;
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    let client = Client::from_env()?;
+
+    // 会议：字段链式入口（Room 资源提供 Builder）
+    let req = client.meeting.vc.v1.room.create().build();
+    let _resp = req.execute(json!({"name": "demo"})).await?;
+
+    Ok(())
+}
+```
