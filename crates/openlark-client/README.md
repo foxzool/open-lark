@@ -35,6 +35,9 @@ openlark-client = { version = "0.15.0-dev", features = ["ccm-doc", "communicatio
 # 云文档服务
 features = ["ccm-doc", "ccm-sheets", "bitable", "ccm-wiki", "ccm-drive", "ccm"]
 
+# CardKit（卡片能力，meta 调用链）
+features = ["cardkit"]
+
 # 通信服务
 features = ["communication"]
 
@@ -50,6 +53,14 @@ features = ["auth"]
 # 所有服务
 features = ["all-services"]
 ```
+
+## 🧩 meta 调用链（按 CSV 映射）
+
+本仓库提供一种“调用路径与 `api_list_export.csv` 的 `meta.*` 字段一一对应”的访问方式：
+
+`client.{meta.Project}.{meta.Version}.{meta.Resource}.{meta.Name}(...)`
+
+规范与示例见：`crates/openlark-client/docs/meta-api-style.md:1`
 
 ## 🔧 快速开始
 
