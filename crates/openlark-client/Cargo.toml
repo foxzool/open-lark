@@ -33,6 +33,7 @@ log = { workspace = true, optional = true }
 openlark-auth = { workspace = true }  # 认证服务设为默认依赖
 openlark-communication = { workspace = true, optional = true }
 openlark-docs = { workspace = true, optional = true }
+openlark-cardkit = { workspace = true, optional = true }
 openlark-security = { workspace = true, optional = true }
 
 # Phase 2+ 模块依赖（暂时只保留存在的）
@@ -64,6 +65,7 @@ ai = ["openlark-ai"]                     # AI服务
 
 # Additional business services
 bitable = ["openlark-docs"]            # 多维表格
+cardkit = ["openlark-cardkit"]         # CardKit 卡片能力（按 api_list_export.csv 生成的 meta 调用链）
 calendar = []                          # 日历会议
 admin = []                             # 管理功能
 approval = []                          # 审批流程
