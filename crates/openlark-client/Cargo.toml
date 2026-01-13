@@ -34,6 +34,7 @@ openlark-auth = { workspace = true }  # 认证服务设为默认依赖
 openlark-communication = { workspace = true, optional = true }
 openlark-docs = { workspace = true, optional = true }
 openlark-cardkit = { workspace = true, optional = true }
+openlark-meeting = { workspace = true, optional = true }
 openlark-security = { workspace = true, optional = true }
 
 # Phase 2+ 模块依赖（暂时只保留存在的）
@@ -72,7 +73,7 @@ approval = []                          # 审批流程
 helpdesk = []                          # 帮助台
 mail = []                              # 邮件服务
 application = []                       # 应用服务
-meeting = []                           # 会议服务
+meeting = ["openlark-meeting"]         # 会议服务
 
 # Legacy features for backward compatibility (暂时保留，用于解决代码中的cfg引用)
 collab = []                             # 协作功能（集成到其他模块中）
