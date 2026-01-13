@@ -57,3 +57,5 @@ pub use endpoints::*;
 pub mod prelude {
     pub use openlark_core::{config::Config, SDKResult};
 }
+
+pub use common::chain::CommunicationClient;

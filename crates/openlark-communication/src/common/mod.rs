@@ -3,4 +3,5 @@
 //! 提供 API 实现中常用的工具函数与宏，减少重复代码。
 
 pub mod api_utils;
+pub mod chain;
 pub mod models;
