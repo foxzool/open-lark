@@ -253,6 +253,9 @@ pub mod types;
 // 服务访问层
 pub mod services;
 
+// meta.Project 维度的 API 调用链（数据源：api_list_export.csv）
+// CardKit 由 openlark-cardkit 提供链式调用；openlark-client 仅负责挂载到 Client 上。
+
 // WebSocket 模块（条件编译）
 /// WebSocket 客户端模块
 ///
@@ -343,6 +346,10 @@ pub use services::AdminService;
 
 #[cfg(feature = "approval")]
 pub use services::ApprovalService;
+
+// CardKit meta 调用链
+#[cfg(feature = "cardkit")]
+pub use openlark_cardkit::CardkitClient;
 
 // 其他服务（当前未启用但已规划）
 // #[cfg(feature = "collab")]
