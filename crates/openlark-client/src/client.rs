@@ -48,6 +48,10 @@ pub struct Client {
     config: Arc<Config>,
     /// 服务注册表
     registry: Arc<DefaultServiceRegistry>,
+
+    /// CardKit meta 调用链：client.cardkit.v1.card.create(...)
+    #[cfg(feature = "cardkit")]
+    pub cardkit: openlark_cardkit::CardkitClient,
 }
 
 impl Client {
@@ -205,7 +209,24 @@ impl Client {
         }
 
         let registry = Arc::new(registry);
-        Ok(Client { config, registry })
+
+        #[cfg(feature = "cardkit")]
+        let cardkit = openlark_cardkit::CardkitClient::new(
+            openlark_core::config::Config::builder()
+                .app_id(config.app_id.clone())
+                .app_secret(config.app_secret.clone())
+                .base_url(config.base_url.clone())
+                .req_timeout(config.timeout)
+                .header(config.headers.clone())
+                .build(),
+        );
+
+        Ok(Client {
+            config,
+            registry,
+            #[cfg(feature = "cardkit")]
+            cardkit,
+        })
     }
 
     /// 🔧 执行带有错误上下文的操作
@@ -612,6 +633,18 @@ mod tests {
 
         let cloned_client = client.clone();
         assert_eq!(client.config().app_id, cloned_client.config().app_id);
+    }
+
+    #[cfg(feature = "cardkit")]
+    #[test]
+    fn test_cardkit_chain_exists() {
+        let client = Client::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+            .unwrap();
+
+        let _ = &client.cardkit.v1.card;
     }
 
     #[test]
