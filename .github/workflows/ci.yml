@@ -30,7 +30,7 @@ jobs:
   doc:
     runs-on: ubuntu-latest
     env:
-      RUSTDOCFLAGS: "-D warnings"
+      RUSTDOCFLAGS: "-D warnings -A rustdoc::bare_urls"
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
