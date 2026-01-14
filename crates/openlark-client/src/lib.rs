@@ -764,6 +764,7 @@ pub mod utils {
     /// 返回当前编译时启用的功能标志列表
     pub fn get_enabled_features() -> Vec<&'static str> {
         // 基础功能（始终启用）
+        #[allow(unused_mut)]
         let mut features = vec!["auth"];
 
         // 可选功能（基于编译时标志）
