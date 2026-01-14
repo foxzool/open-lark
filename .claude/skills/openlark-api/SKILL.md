@@ -299,7 +299,340 @@ pub use im::message::{MessageSendRequest, MessageSendResponse, end_points};
 - [ ] 可选字段标记为 `Option<T>` 并使用 `#[serde(skip_serializing_if = "Option::is_none")]`
 - [ ] 在模块的 `mod.rs` 中正确导出类型
 
-## API 配置数据源
+## Enum+Builder 端点系统
+
+项目提供了现代化的 Enum+Builder 端点系统，替代传统的字符串拼接方式，提供类型安全和 IDE 友好性。
+
+### 系统架构
+
+#### 1. Enum 端点定义
+
+所有 API 端点通过 Enum 定义，提供类型安全的 URL 生成：
+
+```rust
+// 基础模式：单参数
+#[derive(Debug, Clone, PartialEq)]
+pub enum BaseApiV2 {
+    RoleCreate(String),              // 创建角色
+    RoleUpdate(String, String),     // 更新角色
+    RoleList(String),               // 角色列表
+}
+
+impl BaseApiV2 {
+    pub fn to_url(&self) -> String {
+        match self {
+            BaseApiV2::RoleCreate(app_token) => {
+                format!("/open-apis/base/v2/apps/{}/roles", app_token)
+            }
+            BaseApiV2::RoleUpdate(app_token, role_id) => {
+                format!("/open-apis/base/v2/apps/{}/roles/{}", app_token, role_id)
+            }
+            BaseApiV2::RoleList(app_token) => {
+                format!("/open-apis/base/v2/apps/{}/roles", app_token)
+            }
+        }
+    }
+}
+```
+
+#### 2. 复杂嵌套模式
+
+支持深度资源路径（最多 4 层嵌套）：
+
+```rust
+#[derive(Debug, Clone, PartialEq)]
+pub enum BitableApiV1 {
+    // App 管理
+    AppCreate,
+    AppGet(String),
+    AppUpdate(String),
+    
+    // 表格管理
+    TableCreate(String, String),         // app_token, table_id
+    TableUpdate(String, String),         // app_token, table_id
+    TableDelete(String, String),
+    
+    // 字段管理
+    FieldCreate(String, String, String),    // app_token, table_id, field_id
+    FieldUpdate(String, String, String),  // app_token, table_id, field_id
+    
+    // 记录管理
+    RecordCreate(String, String),         // app_token, table_id
+    RecordGet(String, String, String),     // app_token, table_id, record_id
+    RecordBatchCreate(String, String),  // app_token, table_id
+    
+    // 权限管理
+    FormGet(String, String, String),         // app_token, table_id, form_id
+    FormFieldPatch(String, String, String, String), // app_token, table_id, form_id, field_id
+}
+
+impl BitableApiV1 {
+    pub fn to_url(&self) -> String {
+        match self {
+            // 零参数
+            BitableApiV1::AppCreate => "/open-apis/bitable/v1/apps".to_string(),
+            
+            // 单参数
+            BitableApiV1::AppGet(app_token) => {
+                format!("/open-apis/bitable/v1/apps/{}", app_token)
+            }
+            
+            // 双参数
+            BitableApiV1::TableCreate(app_token, table_id) => {
+                format!("/open-apis/bitable/v1/apps/{}/tables/{}", app_token, table_id)
+            }
+            
+            // 三参数（最深嵌套）
+            BitableApiV1::RecordGet(app_token, table_id, record_id) => {
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
+                    app_token, table_id, record_id
+                )
+            }
+            
+            // 四参数（特殊场景）
+            BitableApiV1::FormFieldPatch(app_token, table_id, form_id, field_id) => {
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/fields/{}",
+                    app_token, table_id, form_id, field_id
+                )
+            }
+        }
+    }
+}
+```
+
+#### 3. 特殊操作模式
+
+支持智能操作、搜索、批量操作等特殊模式：
+
+```rust
+#[derive(Debug, Clone, PartialEq)]
+pub enum SheetsApiV3 {
+    // 筛选视图管理
+    CreateFilterView(String, String),           // (spreadsheet_token, sheet_id)
+    QueryFilterViews(String, String),           // (spreadsheet_token, sheet_id)
+    GetFilterView(String, String, String),      // (spreadsheet_token, sheet_id, filter_view_id)
+    PatchFilterView(String, String, String),      // (spreadsheet_token, sheet_id, filter_view_id)
+    DeleteFilterView(String, String, String),   // (spreadsheet_token, sheet_id, filter_view_id)
+    
+    // 筛选条件管理
+    CreateFilterCondition(String, String, String),    // (spreadsheet_token, sheet_id, filter_view_id)
+    QueryFilterConditions(String, String, String),    // (spreadsheet_token, sheet_id, filter_view_id)
+    GetFilterCondition(String, String, String, String), // (spreadsheet_token, sheet_id, filter_view_id, condition_id)
+    UpdateFilterCondition(String, String, String, String), // (spreadsheet_token, sheet_id, filter_view_id, condition_id)
+    DeleteFilterCondition(String, String, String, String), // (spreadsheet_token, sheet_id, filter_view_id, condition_id)
+}
+
+impl SheetsApiV3 {
+    pub fn to_url(&self) -> String {
+        match self {
+            SheetsApiV3::CreateSpreadsheet => "/open-apis/sheets/v3/spreadsheets".to_string(),
+            SheetsApiV3::GetSpreadsheet(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{}", spreadsheet_token)
+            }
+            SheetsApiV3::CreateFilterView(spreadsheet_token, sheet_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filterViews",
+                    spreadsheet_token, sheet_id
+                )
+            }
+            SheetsApiV3::GetFilterCondition(spreadsheet_token, sheet_id, filter_view_id, condition_id)
+            | SheetsApiV3::UpdateFilterCondition(spreadsheet_token, sheet_id, filter_view_id, condition_id)
+            | SheetsApiV3::DeleteFilterCondition(spreadsheet_token, sheet_id, filter_view_id, condition_id) => {
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filterViews/{}/conditions/{}",
+                    spreadsheet_token, sheet_id, filter_view_id, condition_id
+                )
+            }
+        }
+    }
+}
+```
+
+### Builder 模式实现
+
+#### 1. RequestBuilder 结构体
+
+所有 Builder 遵循统一的结构体定义：
+
+```rust
+#[derive(Debug, Clone, Default)]
+pub struct CreateRecordRequestBuilder {
+    request: CreateRecordRequest,
+}
+
+impl CreateRecordRequestBuilder {
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: CreateRecordRequest::new(config),
+        }
+    }
+
+    // 设置单个值
+    pub fn app_token(mut self, app_token: String) -> Self {
+        self.request.app_token = app_token;
+        self
+    }
+
+    pub fn table_id(mut self, table_id: String) -> Self {
+        self.request.table_id = table_id;
+        self
+    }
+
+    // 添加到集合
+    pub fn add_tag(mut self, tag: String) -> Self {
+        self.request.tags.push(tag);
+        self
+    }
+
+    pub fn add_tags(mut self, tags: Vec<String>) -> Self {
+        self.request.tags.extend(tags);
+        self
+    }
+
+    // 添加到 Map
+    pub fn add_custom_field(mut self, key: String, value: serde_json::Value) -> Self {
+        self.request.custom_fields
+            .get_or_insert_with(HashMap::new())
+            .insert(key, value);
+        self
+    }
+
+    // 构建请求
+    pub fn build(self) -> CreateRecordRequest {
+        self.request
+    }
+}
+```
+
+#### 2. 使用示例
+
+```rust
+use openlark_docs::bitable::v1::app::table::record::*;
+use openlark_docs::bitable::v1::app::table::record::end_points::*;
+
+// 链式调用
+let request = CreateRecordRequestBuilder::new(config)
+    .app_token("app_token")
+    .table_id("table_id")
+    .user_id_type("open_id")
+    .client_token("request_token")
+    .ignore_consistency_check(true)
+    .fields(json!({
+        "姓名": "张三",
+        "邮箱": "zhangsan@example.com",
+        "电话": "13800138000",
+        "入职日期": "2024-01-15"
+    }))
+    .build();
+
+let response = request.execute().await?;
+println!("记录ID: {}", response.record.record_id);
+```
+
+### bizTag 目录层级说明
+
+#### 1. bizTag 作为目录层级
+
+当 `bizTag` 与 `feature-crate` 名称不同时（如 `base` → `openlark-docs`），保留 bizTag 作为目录层级：
+
+```
+实际路径 = crates/{feature-crate}/src/{bizTag}/{meta.Project}/{meta.Version}/{meta.Resource}/{name}.rs
+```
+
+#### 2. 完整路径映射表
+
+| CSV 字段组合 | 文件路径示例 | 说明 |
+|--------------|--------------|------|
+| bizTag=base, meta.Project=bitable | `crates/openlark-docs/src/base/bitable/v1/app/table/record/create.rs` | base 目录下的 bitable 模块 |
+| bizTag=contact, meta.Project=contact | `crates/openlark-communication/src/contact/contact/v3/user/create.rs` | contact 目录下的 contact 模块 |
+| bizTag=vc, meta.Project=vc | `crates/openlark-meeting/src/vc/v1/room_level/list.rs` | vc 自成目录 |
+| bizTag=ccm, meta.Project=drive | `crates/openlark-docs/src/ccm/drive/v1/file/list.rs` | ccm 目录下的 drive 模块 |
+
+#### 3. bizTag 目录层级示例
+
+```
+crates/openlark-docs/src/
+├── base/
+│   └── bitable/v1/
+│       ├── app/
+│       │   └── table/
+│       │       ├── field/
+│       │       ├── record/
+│       │       └── view/
+│       └── wiki/v2/
+└── ccm/
+    ├── drive/v1/
+    │   ├── file/
+    │   ├── import_task/
+    │   └── export_task/
+    ├── docs/v1/
+    └── sheets/v3/
+```
+
+### Enum 命名规范
+
+#### 1. 基础模式
+
+```
+{Project}Api{Version}
+```
+
+示例：
+- `BaseApiV2` - 基础服务 v2
+- `BitableApiV1` - 多维表格 v1
+- `ContactApiV3` - 通讯录 v3
+- `ImApiV1` - 即时消息 v1
+
+#### 2. 复杂模式
+
+```
+{Project}{Resource}Api{Version}
+```
+
+示例：
+- `SheetsApiV3` - 电子表格 v3（包含多个资源）
+- `BaikeApiV1` - 百科词条 v1
+- `LingoApiV1` - 词典系统 v1
+
+#### 3. 特殊模式
+
+```
+{Project}{SpecialModule}Api{Version}
+```
+
+示例：
+- `CcmDriveExplorerApi` - CCM 云盘探索器
+- `AISearchApiV1` - AI 搜索服务
+
+### 端点使用对比
+
+#### 传统模式（不推荐）
+
+```rust
+// ❌ 字符串拼接，易出错
+let url = format!("/open-apis/bitable/v1/apps/{}/tables/{}", 
+                  app_token, table_id);
+
+// ❌ 无类型安全，拼写错误编译期无法发现
+let url = "/open-apis/bitable/v1/appps/{}/tables/{}";  // appps 拼写错误
+```
+
+#### Enum 模式（推荐）
+
+```rust
+// ✅ 类型安全，编译时检查
+use crate::common::api_endpoints::BitableApiV1;
+
+let api_endpoint = BitableApiV1::TableCreate(app_token, table_id);
+let url = api_endpoint.to_url();
+
+// ✅ IDE 自动补全和跳转
+BitableApiV1::  // IDE 自动提示所有可用变体
+```
+
+### API 配置数据源
 
 所有 API 的详细配置信息存储在 `api_list_export.csv` 文件中（包含 1687+ 个 API）。
 
@@ -375,6 +708,80 @@ fn method(&self) -> RequestMethod {
 | `url` 中的方法 | `method()` 方法返回值（GET/POST/PUT/DELETE/PATCH） |
 | `detail` | 文档注释和端点描述 |
 | `docPath` | 详细字段说明链接 |
+
+### bizTag 目录层级说明
+
+#### 1. bizTag 作为目录层级
+
+当 `bizTag` 与 `feature-crate` 名称不同时（如 `base` → `openlark-docs`），保留 bizTag 作为目录层级：
+
+```
+实际文件路径 = crates/{feature-crate}/src/{bizTag}/{meta.Project}/{meta.Version}/{meta.Resource}/{name}.rs
+```
+
+#### 2. 完整映射示例
+
+**示例 1: bizTag = base（与 feature-crate 不同）**
+
+```csv
+bizTag: base
+meta.Project: bitable
+meta.Version: v1
+meta.Resource: app.table.record
+meta.Name: create
+```
+
+```
+实际文件路径: crates/openlark-docs/src/base/bitable/v1/app/table/record/create.rs
+```
+
+**示例 2: bizTag = vc（与 feature-crate 相同）**
+
+```csv
+bizTag: vc
+meta.Project: vc
+meta.Version: v1
+meta.Resource: room_level
+meta.Name: list
+```
+
+```
+实际文件路径: crates/openlark-meeting/src/vc/v1/room_level/list.rs
+```
+
+#### 3. 主要 bizTag 目录层级
+
+| bizTag | Feature Crate | 目录结构说明 |
+|--------|--------------|----------------|
+| **base** | openlark-docs | base/ → bitable（多维表格） |
+| **ccm** | openlark-docs | ccm/ → drive（云盘）、docs（文档）、sheets（表格）、wiki（知识库） |
+| **contact** | openlark-communication | contact/ → 用户、部门、用户组管理 |
+| **im** | openlark-communication | im/ → 消息、群聊、文件、图片 |
+| **vc** | openlark-meeting | vc/ → 视频会议、会议室、预约管理 |
+| **hire** | openlark-hr | hire/ → 招聘、候选人、面试、Offer |
+| **ai** | openlark-ai | ai/ → OCR、翻译、语音识别 |
+| **auth** | openlark-auth | auth/ → 认证、令牌管理 |
+
+#### 4. 目录结构示例
+
+```
+crates/openlark-docs/src/
+├── base/
+│   └── bitable/v1/
+│       ├── app/
+│       │   ├── table/
+│       │   └── record/
+│       └── wiki/v2/
+├── ccm/
+│   ├── drive/v1/
+│   ├── docs/v1/
+│   └── sheets/v3/
+
+crates/openlark-communication/src/
+├── contact/v3/
+├── im/v1/
+└── contact_search/
+```
 
 ### CSV 到完整文件路径的转换示例
 
