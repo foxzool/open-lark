@@ -219,6 +219,7 @@ impl ServiceFactory {
 
     /// 🔢 统计可用服务数量
     fn count_available_services(&self) -> usize {
+        #[allow(unused_mut)]
         let mut count = 1; // auth service is always available
 
         #[cfg(feature = "communication")]
@@ -266,6 +267,7 @@ impl ServiceFactory {
 
     /// 🏷️ 获取已启用的功能列表
     fn get_enabled_features(&self) -> Vec<&'static str> {
+        #[allow(unused_mut)]
         let mut features = vec!["auth"];
 
         #[cfg(feature = "communication")]
