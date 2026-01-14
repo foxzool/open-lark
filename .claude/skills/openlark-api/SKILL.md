@@ -17,25 +17,41 @@ allowed-tools:
 API 接口文件必须遵循以下路径格式：
 
 ```
-src/{bizTag}/{project}{version}/{resource}/{name}.rs
+crates/{feature-crate}/src/{version}/{resource}/{name}.rs
 ```
 
 ### 路径组件说明
 
 | 组件 | 说明 | 示例值 |
 |------|------|--------|
-| `bizTag` | 业务领域标签 | `communication`, `docs`, `hr`, `workflow`, `meeting`, `mail`, `platform`, `ai`, `security`, `analytics`, `helpdesk`, `user` |
-| `version` | API 版本 | `v1`, `v2`, `v3` |
-| `resource` | 资源名称 | `message`, `user`, `document`, `sheet`, `candidate` |
-| `name` | 具体操作或实体名称 | `send`, `get`, `create`, `update`, `list`, `delete` |
+| `feature-crate` | Feature crate 名称（对应 CSV 的 bizTag） | `openlark-communication`, `openlark-hr`, `openlark-meeting`, `openlark-docs`, `openlark-auth` |
+| `version` | API 版本（对应 CSV 的 meta.Version） | `v1`, `v2`, `v3`, `old` |
+| `resource` | 资源名称（对应 CSV 的 meta.Resource） | `message`, `user`, `document`, `sheet`, `candidate` |
+| `name` | 具体操作或实体名称（对应 CSV 的 meta.Name） | `send`, `get`, `create`, `update`, `list`, `delete` |
 
 ### 完整路径示例
 
 ```
-src/communication/open-apis/v1/message/send.rs
-src/docs/open-apis/v1/document/create.rs
-src/hr/open-apis/v1/candidate/get.rs
+crates/openlark-communication/src/v1/message/send.rs
+crates/openlark-docs/src/v1/document/create.rs
+crates/openlark-hr/src/v1/candidate/get.rs
 ```
+
+### Feature Crate 与 CSV bizTag 的映射关系
+
+| CSV bizTag | Feature Crate | 说明 |
+|-----------|--------------|------|
+| `communication` | `openlark-communication` | 通讯协作模块 |
+| `docs` | `openlark-docs` | 文档协作模块 |
+| `hr` | `openlark-hr` | 人力管理模块 |
+| `auth` | `openlark-auth` | 认证模块 |
+| `meeting_room`, `vc`, `calendar` | `openlark-meeting` | 会议与日程模块 |
+| `mail` | `openlark-mail` | 邮件服务模块 |
+| `cardkit` | `openlark-cardkit` | 卡片工具模块 |
+| `ai` | `openlark-ai` | AI 服务模块 |
+| `helpdesk` | `openlark-helpdesk` | 帮助台模块 |
+| `application` | `openlark-application` | 应用管理模块 |
+| `security_and_compliance` | `openlark-security` | 安全合规模块 |
 
 ## API 接口文件模板
 
@@ -350,15 +366,39 @@ fn method(&self) -> RequestMethod {
 
 | CSV 字段 | 代码实现 |
 |----------|----------|
-| `bizTag` | 文件路径的第一级目录 |
-| `meta.Project` | `open-apis` 目录名前缀 |
-| `meta.Version` | API 版本目录（v1, v2, v3） |
+| `bizTag` | Feature crate 名称（如 `openlark-communication`） |
+| `meta.Project` | 对应 bizTag 或子模块标识 |
+| `meta.Version` | API 版本目录（`v1`, `v2`, `v3`, `old`） |
 | `meta.Resource` | 资源目录名 |
 | `meta.Name` | 文件名 |
 | `url` | `path()` 方法返回值（提取路径部分） |
 | `url` 中的方法 | `method()` 方法返回值（GET/POST/PUT/DELETE/PATCH） |
 | `detail` | 文档注释和端点描述 |
 | `docPath` | 详细字段说明链接 |
+
+### CSV 到完整文件路径的转换示例
+
+```bash
+# CSV 信息
+bizTag: communication
+meta.Version: v1
+meta.Resource: message
+meta.Name: send
+
+# 转换为文件路径
+crates/openlark-communication/src/v1/message/send.rs
+```
+
+```bash
+# CSV 信息
+bizTag: hr
+meta.Version: v1
+meta.Resource: candidate
+meta.Name: get
+
+# 转换为文件路径
+crates/openlark-hr/src/v1/candidate/get.rs
+```
 
 ## 参考资源
 
