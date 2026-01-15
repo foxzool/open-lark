@@ -3,12 +3,10 @@ name: ServiceRegistry Validation
 on:
   pull_request:
     paths:
-      - 'src/service_registry/**'
-      - 'SERVICE_REGISTRY_VALIDATION_REPORT.md'
+      - 'crates/openlark-client/src/**/*.rs'
   push:
     paths:
-      - 'src/service_registry/**'
-      - 'SERVICE_REGISTRY_VALIDATION_REPORT.md'
+      - 'crates/openlark-client/src/**/*.rs'
   workflow_dispatch:
 
 env:
