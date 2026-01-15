@@ -1,12 +1,6 @@
 /// 文档内容模块
 ///
 /// 提供云文档内容的获取功能，包括文档详细信息、文本内容等。
-#[allow(unused_variables)]
-#[allow(unused_imports)]
-#[allow(unused_mut)]
-#[allow(non_snake_case)]
-#[allow(clippy::too_many_arguments)]
-#[allow(clippy::module_inception)]
 use openlark_core::{config::Config, req_option::RequestOption, SDKResult};
 
 // 重新导出所有模块类型

@@ -5,14 +5,13 @@
 /// # 使用示例
 ///
 /// ```rust,no_run
-/// use openlark_core::Config;
 /// use openlark_docs::base::bitable::v1::app::table::record::*;
 /// use openlark_docs::base::bitable::v1::field_types::{RecordFieldsBuilder, RecordFieldValue};
 /// use serde_json::json;
 ///
 /// # #[tokio::main]
 /// # async fn main() -> Result<(), Box<dyn std::error::Error>> {
-/// let config = Config::builder()
+/// let config = openlark_core::Config::builder()
 ///     .app_id("your_app_id")
 ///     .app_secret("your_app_secret")
 ///     .build();
