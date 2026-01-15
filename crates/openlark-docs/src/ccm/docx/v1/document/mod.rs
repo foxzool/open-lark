@@ -1,12 +1,6 @@
 /// 文档模块
 ///
 /// 提供文档的基础操作功能，包括文档创建、获取、内容管理等。
-#[allow(unused_variables)]
-#[allow(unused_imports)]
-#[allow(unused_mut)]
-#[allow(non_snake_case)]
-#[allow(clippy::too_many_arguments)]
-#[allow(clippy::module_inception)]
 use openlark_core::{
     api::Response, config::Config, error::validation_error, req_option::RequestOption, SDKResult,
 };
