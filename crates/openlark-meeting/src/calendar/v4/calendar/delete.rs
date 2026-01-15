@@ -3,15 +3,30 @@
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/delete
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    error::validation_error,
+    http::Transport,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
-use crate::{common::api_utils::extract_response_data, endpoints::CALENDAR_V4_CALENDARS};
+use crate::common::api_endpoints::CalendarApiV4;
 
 /// 删除共享日历请求
 pub struct DeleteCalendarRequest {
     config: Config,
     calendar_id: String,
+}
+
+/// 删除共享日历响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct DeleteCalendarResponse {}
+
+impl ApiResponseTrait for DeleteCalendarResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl DeleteCalendarRequest {
@@ -31,14 +46,18 @@ impl DeleteCalendarRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/delete
-    pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        validate_required!(self.calendar_id, "calendar_id 不能为空");
+    pub async fn execute(self) -> SDKResult<DeleteCalendarResponse> {
+        if self.calendar_id.trim().is_empty() {
+            return Err(validation_error("calendar_id", "日历 ID 不能为空"));
+        }
 
-        // url: DELETE:/open-apis/calendar/v4/calendars/:calendar_id
-        let req: ApiRequest<serde_json::Value> =
-            ApiRequest::delete(format!("{}/{}", CALENDAR_V4_CALENDARS, self.calendar_id));
+        let api_endpoint = CalendarApiV4::CalendarDelete(self.calendar_id.clone());
+        let api_request: ApiRequest<DeleteCalendarResponse> =
+            ApiRequest::delete(api_endpoint.to_url());
 
-        let resp = Transport::request(req, &self.config, None).await?;
-        extract_response_data(resp, "删除共享日历")
+        let response = Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
