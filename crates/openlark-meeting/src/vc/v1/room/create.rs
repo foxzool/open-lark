@@ -12,7 +12,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 创建会议室请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateRoomRequest {
     /// 配置信息
@@ -62,7 +61,6 @@ impl CreateRoomRequest {
 }
 
 /// 创建会议室请求构建器
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateRoomRequestBuilder {
     request: CreateRoomRequest,

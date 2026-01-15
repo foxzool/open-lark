@@ -189,12 +189,9 @@ mod tests {
                 .expect("user_id_type should be set when .user_id_type() is called"),
             "open_id"
         );
-        assert_eq!(
-            request
-                .is_whole
-                .expect("is_whole should be set when .is_whole() is called"),
-            true
-        );
+        assert!(request
+            .is_whole
+            .expect("is_whole should be set when .is_whole() is called"));
         assert!(!request
             .is_solved
             .expect("is_solved should be set when .is_solved() is called"));

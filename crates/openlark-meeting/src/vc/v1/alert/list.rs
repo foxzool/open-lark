@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 use crate::common::api_endpoints::VcApiV1;
 
 /// 获取告警记录请求
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct ListAlertRequest {
     /// 配置信息
@@ -88,7 +88,7 @@ impl ListAlertRequest {
 }
 
 /// 获取告警记录请求构建器
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct ListAlertRequestBuilder {
     request: ListAlertRequest,
