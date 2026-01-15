@@ -1,0 +1,59 @@
+# feature-crate → bizTag 映射（单一真相）
+#
+# 目的：
+# - 给 tools/validate_apis.py 提供 --crate 的自动补全（src + filter）
+# - 给 .claude/skills/openlark-api/ 提供一致的“选 crate 口径”
+#
+# 约定：
+# - key 使用 workspace crate/package 名（例如 openlark-docs）
+# - biz_tags 使用 CSV 的 bizTag 原值（区分大小写，通常为小写）
+
+[crates.openlark-docs]
+src = "crates/openlark-docs/src"
+biz_tags = ["ccm", "base", "baike", "minutes"]
+
+[crates.openlark-meeting]
+src = "crates/openlark-meeting/src"
+biz_tags = ["calendar", "vc", "meeting_room"]
+
+[crates.openlark-communication]
+src = "crates/openlark-communication/src"
+biz_tags = ["im", "contact", "moments", "aily", "event"]
+
+[crates.openlark-cardkit]
+src = "crates/openlark-cardkit/src"
+biz_tags = ["cardkit"]
+
+[crates.openlark-hr]
+src = "crates/openlark-hr/src"
+biz_tags = [
+  "hire",
+  "corehr",
+  "feishu_people",
+  "attendance",
+  "compensation_management",
+  "performance",
+  "payroll",
+  "okr",
+  "ehr",
+]
+
+[crates.openlark-security]
+src = "crates/openlark-security/src"
+biz_tags = ["acs", "auth", "security_and_compliance"]
+
+[crates.openlark-ai]
+src = "crates/openlark-ai/src"
+biz_tags = ["ai"]
+
+[crates.openlark-mail]
+src = "crates/openlark-mail/src"
+biz_tags = ["mail"]
+
+[crates.openlark-helpdesk]
+src = "crates/openlark-helpdesk/src"
+biz_tags = ["helpdesk"]
+
+[crates.openlark-application]
+src = "crates/openlark-application/src"
+biz_tags = ["application"]

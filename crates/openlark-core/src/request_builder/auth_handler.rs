@@ -87,7 +87,7 @@ mod tests {
     use super::*;
     use crate::constants::AppType;
     use crate::error::traits::ErrorTrait;
-    use crate::prelude::ErrorType;
+    use crate::error::ErrorType;
     use crate::{auth::TokenProvider, SDKResult};
     use async_trait::async_trait;
     use reqwest::Client;
