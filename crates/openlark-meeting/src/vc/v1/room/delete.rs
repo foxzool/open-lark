@@ -12,7 +12,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 删除会议室请求
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct DeleteRoomRequest {
     /// 配置信息
@@ -74,7 +74,7 @@ impl DeleteRoomRequest {
 }
 
 /// 删除会议室请求构建器
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct DeleteRoomRequestBuilder {
     request: DeleteRoomRequest,

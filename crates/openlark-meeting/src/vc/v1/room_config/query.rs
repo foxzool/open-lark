@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 use crate::common::api_endpoints::VcApiV1;
 
 /// 查询会议室配置请求
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct QueryRoomConfigRequest {
     /// 配置信息
@@ -71,7 +71,7 @@ impl QueryRoomConfigRequest {
 }
 
 /// 查询会议室配置请求构建器
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct QueryRoomConfigRequestBuilder {
     request: QueryRoomConfigRequest,

@@ -9,8 +9,22 @@ macro_rules! impl_executable_builder {
                 $response,
             > for $builder
         {
+            fn build(self) -> $request {
+                self.build()
+            }
+
             async fn execute(self, service: &$service) -> openlark_core::SDKResult<$response> {
-                service.$method(&self.build(), None).await
+                let request = self.build();
+                service.$method(&request, None).await
+            }
+
+            async fn execute_with_options(
+                self,
+                service: &$service,
+                option: openlark_core::req_option::RequestOption,
+            ) -> openlark_core::SDKResult<$response> {
+                let request = self.build();
+                service.$method(&request, Some(option)).await
             }
         }
     };
@@ -27,8 +41,22 @@ macro_rules! impl_executable_builder_owned {
                 $response,
             > for $builder
         {
+            fn build(self) -> $request {
+                self.build()
+            }
+
             async fn execute(self, service: &$service) -> openlark_core::SDKResult<$response> {
-                service.$method(self.build(), None).await
+                let request = self.build();
+                service.$method(request, None).await
+            }
+
+            async fn execute_with_options(
+                self,
+                service: &$service,
+                option: openlark_core::req_option::RequestOption,
+            ) -> openlark_core::SDKResult<$response> {
+                let request = self.build();
+                service.$method(request, Some(option)).await
             }
         }
     };
@@ -45,8 +73,22 @@ macro_rules! impl_executable_builder_config {
                 $response,
             > for $builder
         {
+            fn build(self) -> $request {
+                self.build()
+            }
+
             async fn execute(self, service: &$service) -> openlark_core::SDKResult<$response> {
-                service.$method(self.build(), None).await
+                let request = self.build();
+                service.$method(request, None).await
+            }
+
+            async fn execute_with_options(
+                self,
+                service: &$service,
+                option: openlark_core::req_option::RequestOption,
+            ) -> openlark_core::SDKResult<$response> {
+                let request = self.build();
+                service.$method(request, Some(option)).await
             }
         }
     };
