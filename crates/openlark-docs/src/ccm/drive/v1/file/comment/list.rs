@@ -171,12 +171,33 @@ mod tests {
             .user_id_type("open_id");
 
         assert_eq!(request.file_token, "file_token");
-        assert_eq!(request.page_size.unwrap(), 20);
-        assert_eq!(request.page_token.unwrap(), "next_page_token");
-        assert_eq!(request.user_id_type.unwrap(), "open_id");
-        assert_eq!(request.file_type, "docx");
-        assert!(request.is_whole.unwrap());
-        assert!(!request.is_solved.unwrap());
+        assert_eq!(
+            request
+                .page_size
+                .expect("page_size should be set when .page_size() is called"),
+            20
+        );
+        assert_eq!(
+            request
+                .page_token
+                .expect("page_token should be set when .page_token() is called"),
+            "next_page_token"
+        );
+        assert_eq!(
+            request
+                .user_id_type
+                .expect("user_id_type should be set when .user_id_type() is called"),
+            "open_id"
+        );
+        assert_eq!(
+            request
+                .is_whole
+                .expect("is_whole should be set when .is_whole() is called"),
+            true
+        );
+        assert!(!request
+            .is_solved
+            .expect("is_solved should be set when .is_solved() is called"));
     }
 
     #[test]

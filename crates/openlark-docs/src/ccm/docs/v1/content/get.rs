@@ -101,7 +101,12 @@ mod tests {
     #[test]
     fn test_get_docs_content_request_with_lang() {
         let request = GetDocsContentRequest::new("doc_token", "docx", "markdown").lang("zh");
-        assert_eq!(request.lang.unwrap(), "zh");
+        assert_eq!(
+            request
+                .lang
+                .expect("lang should be set when .lang() is called"),
+            "zh"
+        );
     }
 
     #[test]

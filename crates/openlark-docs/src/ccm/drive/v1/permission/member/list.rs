@@ -148,8 +148,18 @@ mod tests {
 
         assert_eq!(request.token, "file_token");
         assert_eq!(request.file_type, "docx");
-        assert_eq!(request.fields.unwrap(), "*");
-        assert_eq!(request.perm_type.unwrap(), "container");
+        assert_eq!(
+            request
+                .fields
+                .expect("fields should be set when .fields() is called"),
+            "*"
+        );
+        assert_eq!(
+            request
+                .perm_type
+                .expect("perm_type should be set when .perm_type() is called"),
+            "container"
+        );
     }
 
     #[test]

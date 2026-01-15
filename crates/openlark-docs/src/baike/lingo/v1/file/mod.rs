@@ -14,13 +14,17 @@ pub use upload::*;
 /// 文件管理服务
 #[derive(Debug, Clone)]
 pub struct FileService {
-    #[allow(dead_code)]
     config: Config,
 }
 
 impl FileService {
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 }
 

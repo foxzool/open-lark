@@ -24,7 +24,6 @@ pub use repo::*;
 /// Lingo 语言服务主结构
 pub struct LingoServiceV1 {
     /// 配置信息
-    #[allow(dead_code)]
     config: Config,
 }
 
@@ -32,6 +31,11 @@ impl LingoServiceV1 {
     /// 创建新的 Lingo 服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 }
 

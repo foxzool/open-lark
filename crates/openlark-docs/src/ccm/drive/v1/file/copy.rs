@@ -263,8 +263,13 @@ mod tests {
                 }],
             );
 
-        assert!(request.extra.is_some());
-        assert_eq!(request.extra.unwrap().len(), 1);
+        assert_eq!(
+            request
+                .extra
+                .expect("extra should be set when .extra() is called")
+                .len(),
+            1
+        );
     }
 
     #[test]

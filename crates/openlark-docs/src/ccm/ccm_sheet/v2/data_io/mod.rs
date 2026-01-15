@@ -134,7 +134,10 @@ pub async fn read_multiple_ranges(
     // 创建API请求
     let api_request: ApiRequest<ReadMultipleRangesResponse> =
         ApiRequest::get(&api_endpoint.to_url())
-            .query("ranges", &serde_json::to_string(&params.ranges).unwrap())
+            .query(
+                "ranges",
+                &serde_json::to_string(&params.ranges).expect("Failed to serialize ranges to JSON"),
+            )
             .query_opt("value_render_option", params.value_render_option.as_ref())
             .query_opt("date_render_option", params.date_render_option.as_ref());
 
