@@ -4,9 +4,7 @@ use tracing::{info_span, Instrument};
 
 use crate::{
     api::{ApiResponseTrait, BaseResponse, RawResponse, Response, ResponseFormat},
-    error::{
-        network_error, validation_error, ErrorCategory, ErrorCode, ErrorContext, LarkAPIError,
-    },
+    error::{network_error, validation_error},
     observability::ResponseTracker,
     SDKResult,
 };
@@ -309,6 +307,9 @@ impl ImprovedResponseHandler {
 }
 
 /// 优化的BaseResponse，使用更好的serde特性
+///
+/// 注意：该结构目前仅用于单元测试与序列化验证，不参与线上请求链路。
+#[cfg(test)]
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct OptimizedBaseResponse<T>
 where
@@ -326,6 +327,7 @@ where
     pub data: Option<T>,
 }
 
+#[cfg(test)]
 impl<T> OptimizedBaseResponse<T>
 where
     T: Default,
@@ -390,6 +392,7 @@ where
     }
 }
 
+#[cfg(test)]
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct ErrorInfo {
     #[serde(rename = "key", default, skip_serializing_if = "Option::is_none")]
@@ -398,6 +401,7 @@ pub struct ErrorInfo {
     pub details: Vec<ErrorDetail>,
 }
 
+#[cfg(test)]
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct ErrorDetail {
     #[serde(default, skip_serializing_if = "Option::is_none")]
