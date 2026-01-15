@@ -4,7 +4,9 @@ use tracing::{info_span, Instrument};
 
 use crate::{
     api::{ApiResponseTrait, BaseResponse, RawResponse, Response, ResponseFormat},
-    error::{network_error, validation_error},
+    error::{
+        network_error, validation_error, ErrorCategory, ErrorCode, ErrorContext, LarkAPIError,
+    },
     observability::ResponseTracker,
     SDKResult,
 };
