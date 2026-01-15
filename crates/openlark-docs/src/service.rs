@@ -141,7 +141,10 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let service = DocsServiceBuilder::new().config(config).build().unwrap();
+        let service = DocsServiceBuilder::new()
+            .config(config)
+            .build()
+            .expect("DocsServiceBuilder::build should succeed with valid config");
 
         assert_eq!(service.config().app_id, "test_app_id");
         assert_eq!(service.config().app_secret, "test_app_secret");
