@@ -60,6 +60,7 @@ pub struct CreateCardResponse {
 impl openlark_core::api::ApiResponseTrait for CreateCardResponse {}
 
 /// 创建卡片实体请求
+#[derive(Debug, Clone)]
 pub struct CreateCardRequest {
     config: Config,
 }
@@ -83,4 +84,81 @@ impl CreateCardRequest {
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "创建卡片实体")
     }
+}
+
+/// 创建卡片实体请求构建器
+#[derive(Debug, Clone)]
+pub struct CreateCardRequestBuilder {
+    request: CreateCardRequest,
+    card_content: Option<serde_json::Value>,
+    card_type: Option<String>,
+    template_id: Option<String>,
+    temp: Option<bool>,
+    temp_expire_time: Option<i32>,
+}
+
+impl CreateCardRequestBuilder {
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: CreateCardRequest::new(config),
+            card_content: None,
+            card_type: None,
+            template_id: None,
+            temp: None,
+            temp_expire_time: None,
+        }
+    }
+
+    /// 设置卡片内容
+    pub fn card_content(mut self, card_content: impl Into<serde_json::Value>) -> Self {
+        self.card_content = Some(card_content.into());
+        self
+    }
+
+    /// 设置卡片类型
+    pub fn card_type(mut self, card_type: impl Into<String>) -> Self {
+        self.card_type = Some(card_type.into());
+        self
+    }
+
+    /// 设置模板 ID
+    pub fn template_id(mut self, template_id: impl Into<String>) -> Self {
+        self.template_id = Some(template_id.into());
+        self
+    }
+
+    /// 设置临时卡片标记
+    pub fn temp(mut self, temp: impl Into<bool>) -> Self {
+        self.temp = Some(temp.into());
+        self
+    }
+
+    /// 设置临时卡片过期时间
+    pub fn temp_expire_time(mut self, temp_expire_time: impl Into<i32>) -> Self {
+        self.temp_expire_time = Some(temp_expire_time.into());
+        self
+    }
+
+    /// 构建请求
+    pub fn build(self) -> CreateCardRequest {
+        CreateCardRequest {
+            config: self.request.config,
+        }
+    }
+}
+
+/// 执行创建卡片实体请求
+///
+/// docPath: https://open.feishu.cn/document/cardkit-v1/card/create
+pub async fn create(config: &Config, body: CreateCardBody) -> SDKResult<CreateCardResponse> {
+    body.validate()
+        .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
+
+    // url: POST:/open-apis/cardkit/v1/cards
+    let req: ApiRequest<CreateCardResponse> =
+        ApiRequest::post(CARDKIT_V1_CARDS).body(serialize_params(&body, "创建卡片实体")?);
+
+    let resp = Transport::request(req, config, None).await?;
+    extract_response_data(resp, "创建卡片实体")
 }
