@@ -11,7 +11,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 删除数据表请求
-#[allow(dead_code)]
 pub struct DeleteTableRequest {
     /// 配置信息
     config: Config,

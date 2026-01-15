@@ -13,7 +13,6 @@ use serde::{Deserialize, Serialize};
 use super::models::RoleMemberInfo;
 
 /// 列出协作者请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ListRoleMembersRequest {
     config: Config,

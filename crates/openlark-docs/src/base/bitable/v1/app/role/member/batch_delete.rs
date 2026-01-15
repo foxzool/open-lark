@@ -13,7 +13,6 @@ use serde::{Deserialize, Serialize};
 use super::models::RoleMemberId;
 
 /// 批量删除协作者请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct BatchDeleteRoleMemberRequest {
     config: Config,

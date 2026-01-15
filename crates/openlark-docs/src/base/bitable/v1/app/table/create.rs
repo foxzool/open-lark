@@ -11,7 +11,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 新增数据表请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateTableRequest {
     /// 配置信息
@@ -277,7 +276,6 @@ impl TableField {
 
 /// 创建数据表请求体（内部使用）
 #[derive(Serialize)]
-#[allow(dead_code)]
 struct CreateTableRequestBody {
     table: TableData,
 }

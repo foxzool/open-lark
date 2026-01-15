@@ -14,7 +14,6 @@ use serde::{Deserialize, Serialize};
 use super::patch::View;
 
 /// 列出视图请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ListViewsRequest {
     /// 配置信息

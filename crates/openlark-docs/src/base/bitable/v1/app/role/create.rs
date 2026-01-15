@@ -13,7 +13,6 @@ use serde::{Deserialize, Serialize};
 use super::models::{BlockRole, Role, TableRole};
 
 /// 新增自定义角色请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateAppRoleRequest {
     config: Config,

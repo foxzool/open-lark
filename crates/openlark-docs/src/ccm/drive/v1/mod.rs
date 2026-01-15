@@ -12,6 +12,8 @@
 /// - 统计分析：文件统计、查看记录等
 /// - 密码保护：文件密码的增删改查
 /// - 文件搜索：文件搜索功能
+use openlark_core::config::Config;
+
 pub mod file;
 pub mod meta;
 // pub mod upload;
@@ -19,10 +21,10 @@ pub mod export_task;
 pub mod import_task;
 pub mod media;
 pub mod permission;
-// pub mod file_version; // Generated: Module file not found
+// pub mod file_version;
 // pub mod task_check;
-// pub mod password; // Generated: Module file not found
-// pub mod search; // Generated: Module file not found
+// pub mod password;
+// pub mod search;
 
 // 重新导出所有模块
 pub use file::*;
@@ -32,8 +34,26 @@ pub use export_task::*;
 pub use import_task::*;
 pub use media::*;
 pub use permission::*;
-// pub use file_version::*; // Generated: Module use not found
-// pub use comment::*; // Generated: Module use not found
+// pub use file_version::*;
+// pub use comment::*;
 // pub use task_check::*;
-// pub use password::*; // Generated: Module use not found
-// pub use search::*; // Generated: Module use not found
+// pub use password::*;
+// pub use search::*;
+
+/// Drive V1 服务
+#[derive(Debug, Clone)]
+pub struct DriveV1Service {
+    config: Config,
+}
+
+impl DriveV1Service {
+    /// 创建新的 Drive V1 服务实例
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
+}

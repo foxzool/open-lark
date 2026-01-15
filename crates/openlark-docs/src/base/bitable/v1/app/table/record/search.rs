@@ -13,7 +13,6 @@ use serde::{Deserialize, Serialize};
 use super::models::Record;
 
 /// 查询记录请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct SearchRecordRequest {
     config: Config,
@@ -91,33 +90,49 @@ impl SearchRecordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<SearchRecordResponse> {
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "app_token 不能为空"));
-        }
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "table_id 不能为空"));
-        }
+        use crate::common::{api_endpoints::BitableApiV1, api_utils::*};
+
+        validate_required_field("app_token", Some(&self.app_token), "app_token 不能为空")?;
+        validate_required_field("table_id", Some(&self.table_id), "table_id 不能为空")?;
+
         if let Some(page_size) = self.page_size {
             if page_size <= 0 {
                 return Err(validation_error("page_size", "page_size 必须大于 0"));
             }
         }
 
-        use crate::common::api_endpoints::BitableApiV1;
         let api_endpoint =
             BitableApiV1::RecordSearch(self.app_token.clone(), self.table_id.clone());
 
-        let mut api_request: ApiRequest<SearchRecordResponse> =
-            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(&self.body)?);
+        let request = ApiRequest::<SearchRecordResponse>::post(&api_endpoint.to_url())
+            .query_opt("user_id_type", self.user_id_type)
+            .query_opt("page_token", self.page_token)
+            .query_opt("page_size", self.page_size.map(|v| v.to_string()))
+            .body(serialize_params(&self.body, "查询记录")?);
 
-        api_request = api_request.query_opt("user_id_type", self.user_id_type);
-        api_request = api_request.query_opt("page_token", self.page_token);
-        api_request = api_request.query_opt("page_size", self.page_size.map(|v| v.to_string()));
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "查询记录")
+    }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
+    /// 获取所有记录（自动处理分页）
+    pub async fn fetch_all(mut self) -> SDKResult<Vec<Record>> {
+        let mut all_records = Vec::new();
+        let mut has_more = true;
+        let mut page_token: Option<String> = None;
+
+        while has_more {
+            if let Some(token) = page_token {
+                self = self.page_token(token);
+            }
+
+            let response = self.clone().execute().await?;
+            all_records.extend(response.items);
+
+            has_more = response.has_more;
+            page_token = response.page_token;
+        }
+
+        Ok(all_records)
     }
 }
 
@@ -189,7 +204,7 @@ impl SearchRecordRequestBuilder {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
-struct SearchRecordRequestBody {
+pub struct SearchRecordRequestBody {
     #[serde(skip_serializing_if = "Option::is_none")]
     view_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -230,11 +245,59 @@ pub struct FilterCondition {
 }
 
 /// 查询记录响应
+///
+/// 包含查询结果列表以及分页信息。
+///
+/// # 示例
+/// ```json
+/// {
+///   "items": [
+///     {
+///       "record_id": "recxxxxxxxxxxxx",
+///       "fields": {
+///         "姓名": "张三",
+///         "年龄": 25
+///       }
+///     },
+///     {
+///       "record_id": "recyyyyyyyyyyyy",
+///       "fields": {
+///         "姓名": "李四",
+///         "年龄": 30
+///       }
+///     }
+///   ],
+///   "has_more": true,
+///   "page_token": "page_token_xxxxxxxxx",
+///   "total": 100
+/// }
+/// ```
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SearchRecordResponse {
+    /// 查询结果列表
+    ///
+    /// 符合查询条件的记录列表，每个记录包含：
+    /// - `record_id`: 记录的唯一标识符
+    /// - `fields`: 字段名到字段值的映射
+    /// - `created_by` (可选): 记录创建者信息
+    /// - `created_time` (可选): 创建时间戳
+    /// - `last_modified_by` (可选): 最后更新者信息
+    /// - `last_modified_time` (可选): 最后更新时间戳
     pub items: Vec<Record>,
+    /// 是否还有更多数据
+    ///
+    /// - `true`: 还有更多记录，可以使用 page_token 继续查询
+    /// - `false`: 已查询到最后一条记录
     pub has_more: bool,
+    /// 分页标记
+    ///
+    /// 用于获取下一页数据的令牌。仅在 has_more 为 true 时有效。
+    /// 将此值作为 page_token 参数传递给下一个请求即可获取下一页数据。
     pub page_token: Option<String>,
+    /// 符合条件的记录总数
+    ///
+    /// 注意：此字段表示符合查询条件的总记录数，而非当前返回的记录数。
+    /// 当设置了查询条件或过滤器时，此值可能远大于 items.length。
     pub total: i32,
 }
 
