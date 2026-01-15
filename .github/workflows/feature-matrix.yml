@@ -24,35 +24,35 @@ jobs:
       matrix:
         features:
           # Individual core features
-          - "im"
-          - "cloud-docs"
-          - "contact"
-          - "group"
-          - "authentication"
-          - "search"
-          - "websocket"
-          
-          # Important combinations
-          - "im,authentication"
-          - "cloud-docs,authentication"
-          - "im,cloud-docs"
-          - "contact,group"
-          - "im,websocket"
-          - "search,contact"
-          
-          # Advanced service sampling (high-value features)
-          - "attendance"
-          - "approval"
-          - "calendar"
-          - "hire"
-          - "bot"
-          - "task"
-          - "admin"
+          - "auth"
+          - "docs"
+          - "communication"
+          - "hr"
           - "ai"
-          
+          - "meeting"
+          - "helpdesk"
+          - "mail"
+          - "application"
+          - "cardkit"
+          - "websocket"
+          - "dev-tools"
+
+          # Important combinations
+          - "communication,auth"
+          - "docs,auth"
+          - "communication,docs"
+          - "communication,websocket"
+          - "hr,communication"
+
+          # Advanced service sampling (high-value features)
+          - "ai"
+          - "meeting"
+          - "helpdesk"
+          - "mail"
+
           # Edge cases
           - "" # no features
-          - "full" # all features
+          - "core-services" # recommended feature set
           
     steps:
       - uses: actions/checkout@v4
@@ -174,7 +174,7 @@ jobs:
           echo "### Core Feature Combinations" >> $GITHUB_STEP_SUMMARY
           
           # Test combinations of core features
-          CORE_FEATURES="im,cloud-docs,contact,group,authentication,search"
+          CORE_FEATURES="auth,docs,communication,hr,ai,websocket"
           echo "Testing core features: $CORE_FEATURES" >> $GITHUB_STEP_SUMMARY
           
           if timeout 10m cargo hack test --feature-powerset --depth 2 \
