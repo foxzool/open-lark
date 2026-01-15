@@ -1,58 +1,167 @@
-# Repository Guidelines
+# PROJECT KNOWLEDGE BASE
 
-## 项目结构与模块组织
+**Generated:** 2026-01-15 01:26:55
+**Commit:** unknown
+**Branch:** unknown
 
-- `src/`：核心 SDK 与服务接口；按 feature 拆分。
-- `crates/`：子包（如 `protobuf`）。
-- `examples/`：可运行示例：`basic/`、`api/`、`core/`。
-- `tools/`：辅助工具二进制（见 `[[bin]]`）。
-- 其它：`docs/` 文档，`scripts/` 脚本，`reports/` 报告。
+## OVERVIEW
 
-### 添加API
+Enterprise-grade Rust SDK for Feishu (Lark) APIs with 1,134+ endpoints across 22 specialized crates. Workspace architecture with business-domain organization.
 
-在添加新 API 时，严格遵循命名规范：
+## STRUCTURE
 
 ```
-   src/bizTag/meta.project/meta.version/meta.resource/meta.name.rs
+crates/
+├── openlark-core/        # Core infra: HTTP, config, error handling
+├── openlark-protocol/     # WebSocket protocol definitions
+├── openlark-client/       # High-level client + service registry
+├── openlark-auth/         # Authentication services
+├── openlark-communication/ # IM, contacts, groups (300+ APIs)
+├── openlark-docs/         # Cloud docs, spreadsheets, wiki (254 APIs)
+├── openlark-hr/           # HR: attendance, hiring, CoreHR (153 APIs)
+├── openlark-ai/           # AI services & assistants
+├── openlark-meeting/       # Video conferencing (75 APIs)
+├── openlark-mail/         # Email services (30 APIs)
+├── openlark-helpdesk/      # Helpdesk services (47 APIs)
+├── openlark-cardkit/       # CardKit components (25 APIs)
+├── openlark-security/      # Security services
+├── openlark-application/   # Application management
+├── protobuf/              # Generated protobuf bindings
+└── openlark-admin/        # Admin functions
 ```
 
-架构参考 @ARCHITECTURE.md。正确使用 Error、Client、Request、Response、end_points 调用。
+## WHERE TO LOOK
 
-## 构建、测试与开发命令
+| Task | Location | Notes |
+|------|----------|-------|
+| Add new API | `src/bizTag/meta.project/meta.version/meta.resource/meta.name.rs` | Follow path strictly |
+| Builder pattern usage | `crates/openlark-client/src/services/` | 21 files, service definitions |
+| API endpoints | `crates/openlark-docs/src/common/api_endpoints.rs` | Enum-based mapping |
+| Error handling | `crates/openlark-core/src/error/` | 8 files, comprehensive error codes |
+| Validation logic | `crates/openlark-core/src/validation/` | 13 files |
+| IM message ops | `crates/openlark-communication/src/im/im/v1/message/` | 16 files |
+| Drive file ops | `crates/openlark-docs/src/ccm/drive/v1/file/` | 16 files |
+| Bitable records | `crates/openlark-docs/src/base/bitable/v1/app/table/record/` | 12 files |
+| Unit tests | `tests/unit/` | Feature-organized (auth, im, cloud_docs, etc.) |
+| Integration tests | `tests/integration/` | End-to-end workflows |
+| Property tests | `tests/property/` | Proptest-based robustness |
 
-- 依赖 `just` 作为任务入口：
-    - `just build`：构建所有特性。
-    - `just test`：运行单元与文档测试。
-    - `just lint`：Clippy 零告警检查。
-    - `just fmt` / `just fmt-check`：格式化/检查。
-    - `just docs`：生成本地文档。
-    - `just check-all`：发布前全检。
-    - `just release 0.x.y`：打 tag 触发 CI 发布。
-- 等价 cargo 示例：`cargo build --all-features`、`cargo test --all-features`。
+## CONVENTIONS
 
-## 代码风格与命名
+### File Organization
+- **API Path**: `src/{bizTag}/{project}/{version}/{resource}/{name}.rs`
+- **Example**: `src/im/im/v1/message/create.rs`
+- **Module**: `mod.rs` in each directory
+- **Prelude**: `prelude.rs` for re-exports in major crates
 
-- Rust 2021；`rustfmt` 默认规则。
-- Clippy：在 CI 以 `-D warnings` 严格通过；`.clippy.toml` 已适配大仓阈值。
-- 命名：模块/函数用 snake_case，类型用 PascalCase；feature 用 kebab-case（如 `cloud-docs`）。
-- 最小公开原则：仅暴露必要 API。
+### Naming
+- **Modules/Functions**: snake_case
+- **Types**: PascalCase
+- **Features**: kebab-case (e.g., `cloud-docs`, `communication-core`)
 
-## 测试指南
+### API Implementation
+- Use `Error`, `Client`, `Request`, `Response`, `end_points` from architecture
+- Reference `endpoints` constants via `ApiEndpoint` enum
+- Never hardcode API URLs
+- Builder pattern: `create_xxx_builder() → .execute()`
 
-- 框架：内置 `cargo test` 与 doctest；示例位于 `examples/`。
-- 约定：测试函数以 `test_*` 命名；需要凭证的示例请复制 `.env-example` 为 `.env`。
-- 覆盖：优先核心路径与错误处理，提交需附测试或示例更新。
+### Language
+- **Comments**: Chinese throughout
+- **Commits**: emoji + Chinese messages (e.g., `🐛 fix: 修复 WebSocket 解析问题`)
+- **Documentation**: Chinese docs with Rust examples
 
-## 提交与 Pull Request
+## ANTI-PATTERNS (THIS PROJECT)
 
-- 提交规范：采用 emoji + 类型 + 概述，例如：
-    - `🐛 fix: restore WebSocket frame parsing`
-    - `🎨 style: format code`
-    - `🚀 release: bump version to 0.13.1`
-- PR 要求：清晰描述、关联 Issue、影响范围、变更清单、测试/文档更新；API 变更需附迁移说明。
+### Deprecated Items
+- Old `CoreError` type → use `CoreError` replacement
+- Old field types → use `RecordFieldValue` directly
+- Old enum variants in docs models
 
-## 安全与配置提示（可选）
+### Forbidden Practices
+- **Manual URL construction** - Use `ApiEndpoint` enum constants only
+- **Bypassing ServiceRegistry** - Always go through service registry
+- **Hardcoded endpoints in lib.rs** - Centralize in `endpoints/` modules
+- **Ignoring conditional compilation** - Respect `cfg(feature = "...")` gates
+- **Mixing versions** - Don't put v3 logic in v2 directories
 
-- 切勿提交敏感信息；`.env` 已忽略。
-- 功能开关：通过 `Cargo.toml` features 精简构建（如 `full`、`websocket`、`cloud-docs`）。
+### Test Requirements
+- All code must have tests
+- Tests must not panic under any circumstances
+- Property tests for robustness (WebSocket, JSON, HTTP)
+- Integration tests for end-to-end workflows
 
+## UNIQUE STYLES
+
+### Enterprise-Grade CI/CD
+- 9 specialized GitHub workflows (unusually complex for Rust)
+- Custom API consistency tools (`enhanced_api_checker`, `api_compatibility_tester`)
+- Feature matrix testing with `cargo-hack`
+- Security audits + supply chain analysis
+- Multi-stage release with dual publishing (GitHub + crates.io)
+
+### Strict Quality Gates
+- Clippy: cognitive complexity 50, type complexity 500 (relaxed for 214k LOC)
+- Code coverage: 65% total, 60% per crate minimum
+- Dependency security: only approved open-source licenses (deny.toml)
+- Zero warnings enforced in CI
+
+### Feature-Based Architecture
+- 15+ crates organized by business domain, not technical layer
+- Root `src/lib.rs` conditionally re-exports all crates based on features
+- 50+ fine-grained feature flags for conditional compilation
+- Examples in `examples/` organized by feature (basic/, api/, core/)
+
+### Development Workflow
+- Primary task runner: `just` (15+ commands)
+- Justfile includes automated release processes
+- Build: `just build` → `cargo build --all-features`
+- Test: `just test` → `cargo test --all-features`
+- Release: `just release 0.x.y` triggers CI
+
+## COMMANDS
+
+```bash
+# Development
+just build           # Build all features
+just test            # Run unit + doc tests
+just lint            # Clippy zero-warnings check
+just fmt / just fmt-check  # Format/check format
+just docs            # Generate local docs
+just check-all       # Pre-release checks
+just release 0.x.y    # Tag + trigger CI release
+
+# Cargo equivalents
+cargo build --all-features
+cargo test --all-features
+cargo clippy -- -D warnings
+cargo fmt
+```
+
+## NOTES
+
+### Project Scale
+- 1,354 total files (excluding target/)
+- 214,660 lines of code
+- 100 files >500 lines (complexity hotspots)
+- Max depth: 15 directories
+- 15 workspace crates
+
+### Key Architectural Decisions
+- Root workspace has `src/` directory (unusual for workspaces)
+- Re-exports in root `src/lib.rs` for unified interface
+- No binary targets (`main.rs`) - pure library SDK
+- Tools in `tools/` are Python scripts, not Rust binaries
+
+### Testing Strategy
+- Feature-organized unit tests (tests/unit/{auth, im, cloud_docs, ...})
+- Property tests for robustness (tests/property/)
+- Integration tests for workflows (tests/integration/)
+- Inline tests in crates alongside implementation
+- Real API integration with credentials when available
+
+### Existing Knowledge Base
+- Root: `./AGENTS.md` (59 lines)
+- Communication: `crates/openlark-communication/AGENTS.md` (39 lines)
+- Docs: `crates/openlark-docs/AGENTS.md` (39 lines)
+- Client: `crates/openlark-client/CLAUDE.md`
+- Core: `crates/openlark-core/CLAUDE.md`
