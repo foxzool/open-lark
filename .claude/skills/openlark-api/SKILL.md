@@ -30,8 +30,9 @@ crates/{feature-crate}/src/{bizTag}/{meta.Project}/{meta.Version}/{meta.Resource
 - `meta.Resource` 若包含 `.`，按目录层级拆开：`app.table.record` → `app/table/record/`
 - 若该模块已有“重复层级/旧目录”（如 `im/im/v1`、`contact/contact/v3`、`old/default`），以现有结构为准：新增文件放在同级目录下
 4) 在文件内实现：`Body/Response` + Builder（`execute/send`）+ 端点（常量或 enum）
-5) 在相应 `mod.rs` 里 `pub mod ...` / `pub use ...` 导出（必要时同步 client 入口链路）
-6) 运行：`just fmt && just lint && just test`
+5) 在相应 `mod.rs` 里 `pub mod ...` / `pub use ...` 导出
+6) 为 openlark-client 提供链式调用：在 `crates/{feature-crate}/src/service.rs` 补齐/新增 service 链路方法（见 §6）
+7) 运行：`just fmt && just lint && just test`
 
 ## 1. Feature Crate 映射（常用）
 
@@ -99,6 +100,7 @@ impl {Name}Request {
 - [ ] Request/Response 字段对齐官方文档（含 `serde(rename)`）
 - [ ] HTTP 方法与 `url` 字段一致；path 常量/enum 端点使用一致
 - [ ] 对应 `mod.rs` 已导出（必要时 client 链路可访问）
+- [ ] `crates/{feature-crate}/src/service.rs` 已提供链式访问 `{bizTag}().{meta.Project}().{meta.Version}().{meta.Resource...}().{meta.Name}()`（或与现有结构等价）
 - [ ] `just fmt && just lint && just test` 通过
 
 ## 4. docPath 网页读取（生成字段草稿）
@@ -116,3 +118,16 @@ python3 .claude/skills/openlark-api/scripts/fetch_docpath.py "<docPath>" --forma
 - 目录规范与反查：`references/file-layout.md`
 - `api_list_export.csv` 映射与提取规则：`references/csv-mapping.md`
 - 标准示例（建议照抄结构）：`references/standard-example.md`
+
+## 6. service.rs 链式调用（给 openlark-client 使用）
+
+目标：让 `openlark-client` 能通过“业务链路”定位到具体 API builder，而不是在 client 内重复实现 API。
+
+推荐实现方式：
+- 若 crate 已有 `src/service.rs`：在顶层 service 中新增 `pub fn {bizTag}(&self) -> ...`，逐层返回 `{Project}Service` / `{Version}Service` / `{Resource}Service`
+- 若 crate 还没有 `src/service.rs`：创建该文件并在 `lib.rs` 里 `pub mod service;`
+
+最终调用链应能覆盖（等价即可）：
+`{feature_crate}::service::{Service}. {bizTag}().{meta.Project}().{meta.Version}().{meta.Resource...}().{meta.Name}()`
+
+具体可参考 `references/standard-example.md` 的 service 链示例（以 `openlark-docs` 为样板）。
