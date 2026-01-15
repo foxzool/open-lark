@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 use crate::common::api_endpoints::VcApiV1;
 
 /// 查询会议室详情请求
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct GetRoomRequest {
     /// 配置信息
@@ -108,7 +108,7 @@ impl GetRoomRequest {
 }
 
 /// 查询会议室详情请求构建器
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct GetRoomRequestBuilder {
     request: GetRoomRequest,

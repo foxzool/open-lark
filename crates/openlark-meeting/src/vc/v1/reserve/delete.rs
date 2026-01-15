@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 use crate::common::api_endpoints::VcApiV1;
 
 /// 删除预约请求
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct DeleteReserveRequest {
     /// 配置信息
@@ -76,7 +76,7 @@ impl DeleteReserveRequest {
 }
 
 /// 删除预约请求构建器
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct DeleteReserveRequestBuilder {
     request: DeleteReserveRequest,

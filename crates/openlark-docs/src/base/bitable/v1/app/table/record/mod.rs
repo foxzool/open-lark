@@ -7,6 +7,7 @@
 /// ```rust,no_run
 /// use openlark_docs::base::bitable::v1::app::table::record::*;
 /// use openlark_docs::base::bitable::v1::field_types::{RecordFieldsBuilder, RecordFieldValue};
+/// use openlark_docs::base::bitable::v1::app::table::record::search::{FilterCondition, FilterInfo};
 /// use serde_json::json;
 ///
 /// # #[tokio::main]
@@ -25,16 +26,16 @@
 ///     .build();
 ///
 /// let create_req = CreateRecordRequest::new(config.clone())
-///     .app_token("your_app_token")
-///     .table_id("your_table_id")
+///     .app_token("your_app_token".to_string())
+///     .table_id("your_table_id".to_string())
 ///     .fields(json!(fields));
 /// let response = create_req.execute().await?;
 /// println!("记录ID: {}", response.record.record_id);
 ///
 /// // 2. 查询记录（带过滤器）
 /// let search_req = SearchRecordRequest::new(config.clone())
-///     .app_token("your_app_token")
-///     .table_id("your_table_id")
+///     .app_token("your_app_token".to_string())
+///     .table_id("your_table_id".to_string())
 ///     .filter(FilterInfo {
 ///         conjunction: "and".to_string(),
 ///         conditions: vec![FilterCondition {
@@ -48,17 +49,17 @@
 ///
 /// // 3. 更新记录
 /// let update_req = UpdateRecordRequest::new(config.clone())
-///     .app_token("your_app_token")
-///     .table_id("your_table_id")
-///     .record_id("record_id")
+///     .app_token("your_app_token".to_string())
+///     .table_id("your_table_id".to_string())
+///     .record_id("record_id".to_string())
 ///     .fields(json!(fields));
 /// update_req.execute().await?;
 ///
 /// // 4. 删除记录
 /// let delete_req = DeleteRecordRequest::new(config)
-///     .app_token("your_app_token")
-///     .table_id("your_table_id")
-///     .record_id("record_id");
+///     .app_token("your_app_token".to_string())
+///     .table_id("your_table_id".to_string())
+///     .record_id("record_id".to_string());
 /// delete_req.execute().await?;
 /// # Ok(())
 /// # }
@@ -108,8 +109,8 @@
 ///
 /// // fields 会自动转换为 serde_json::Value
 /// let request = CreateRecordRequest::new(config)
-///     .app_token("app_token")
-///     .table_id("table_id")
+///     .app_token("app_token".to_string())
+///     .table_id("table_id".to_string())
 ///     .fields(json!(fields));
 /// ```
 ///
