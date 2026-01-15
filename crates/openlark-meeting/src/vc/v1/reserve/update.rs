@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 use crate::common::api_endpoints::VcApiV1;
 
 /// 更新预约请求
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct UpdateReserveRequest {
     /// 配置信息
@@ -78,7 +78,7 @@ impl UpdateReserveRequest {
 }
 
 /// 更新预约请求构建器
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct UpdateReserveRequestBuilder {
     request: UpdateReserveRequest,

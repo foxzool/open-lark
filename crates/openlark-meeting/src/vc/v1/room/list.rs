@@ -12,7 +12,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 查询会议室列表请求
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct ListRoomRequest {
     /// 配置信息
@@ -89,7 +89,7 @@ impl ListRoomRequest {
 }
 
 /// 查询会议室列表请求构建器
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct ListRoomRequestBuilder {
     request: ListRoomRequest,

@@ -12,7 +12,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 预约会议请求
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct ApplyReserveRequest {
     /// 配置信息
@@ -63,7 +63,7 @@ impl ApplyReserveRequest {
 }
 
 /// 预约会议请求构建器
-#[allow(dead_code)]
+
 #[derive(Debug, Clone)]
 pub struct ApplyReserveRequestBuilder {
     request: ApplyReserveRequest,
