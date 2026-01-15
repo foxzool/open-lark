@@ -42,7 +42,6 @@ pub enum FieldType {
 pub type FieldProperty = Value;
 
 /// 创建字段请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateFieldRequest {
     /// 配置信息

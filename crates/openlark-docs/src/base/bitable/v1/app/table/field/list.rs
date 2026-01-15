@@ -14,7 +14,6 @@ use serde::{Deserialize, Serialize};
 pub use super::create::Field;
 
 /// 列出字段请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ListFieldRequest {
     /// 配置信息

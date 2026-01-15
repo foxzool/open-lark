@@ -5,7 +5,7 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
@@ -14,7 +14,6 @@ use serde_json::Value;
 use super::models::Record;
 
 /// 创建记录请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateRecordRequest {
     /// 多维表格的 app_token
@@ -83,55 +82,39 @@ impl CreateRecordRequest {
         self
     }
 
-    /// 执行请求（集成现代化enum+builder API端点系统）
+    /// 执行请求
     pub async fn execute(self) -> SDKResult<CreateRecordResponse> {
-        // 参数验证
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "应用token不能为空"));
-        }
+        use crate::common::{api_endpoints::BitableApiV1, api_utils::*};
 
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "数据表ID不能为空"));
-        }
+        validate_required_field("app_token", Some(&self.app_token), "应用token不能为空")?;
+        validate_required_field("table_id", Some(&self.table_id), "数据表ID不能为空")?;
 
-        // 🚀 使用新的enum+builder系统生成API端点
-        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
-        use crate::common::api_endpoints::BitableApiV1;
         let api_endpoint =
             BitableApiV1::RecordCreate(self.app_token.clone(), self.table_id.clone());
+        let mut request = ApiRequest::<CreateRecordResponse>::post(&api_endpoint.to_url());
 
-        // 创建API请求 - 使用类型安全的URL生成
-        let mut api_request: ApiRequest<CreateRecordResponse> =
-            ApiRequest::post(&api_endpoint.to_url());
-
-        // 构建查询参数
         if let Some(ref user_id_type) = self.user_id_type {
-            api_request = api_request.query("user_id_type", user_id_type);
+            request = request.query("user_id_type", user_id_type);
         }
 
         if let Some(ref client_token) = self.client_token {
-            api_request = api_request.query("client_token", client_token);
+            request = request.query("client_token", client_token);
         }
 
         if let Some(ignore_consistency_check) = self.ignore_consistency_check {
-            api_request = api_request.query(
+            request = request.query(
                 "ignore_consistency_check",
                 &ignore_consistency_check.to_string(),
             );
         }
 
-        // 构建请求体
         let request_body = CreateRecordRequestBody {
             fields: self.fields,
         };
+        request = request.body(serialize_params(&request_body, "新增记录")?);
 
-        api_request = api_request.body(serde_json::to_vec(&request_body)?);
-
-        // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "新增记录")
     }
 }
 
@@ -199,9 +182,40 @@ struct CreateRecordRequestBody {
 }
 
 /// 创建记录响应
+///
+/// 包含新增记录的完整信息，包括记录ID、字段值以及创建元数据。
+///
+/// # 示例
+/// ```json
+/// {
+///   "record": {
+///     "record_id": "recxxxxxxxxxxxx",
+///     "fields": {
+///       "姓名": "张三",
+///       "年龄": 25,
+///       "部门": ["optxxxxxxxxxxxx"]
+///     },
+///     "created_by": {
+///       "id": "ou_xxxxxxxxxxxxxxxx",
+///       "name": "张三",
+///       "en_name": "Zhang San"
+///     },
+///     "created_time": 1234567890000,
+///     "record_url": "https://example.feishu.cn/base/xxxxxxxxxxxxx"
+///   }
+/// }
+/// ```
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateRecordResponse {
     /// 新增记录的内容
+    ///
+    /// 包含记录ID、所有字段的值以及元数据信息。
+    /// - `record_id`: 记录的唯一标识符
+    /// - `fields`: 字段名到字段值的映射，字段值可以是简单类型、数组或对象
+    /// - `created_by` (可选): 记录创建者信息，需要开启 automatic_fields 参数
+    /// - `created_time` (可选): 创建时间戳（毫秒），需要开启 automatic_fields 参数
+    /// - `shared_url` (可选): 记录分享链接
+    /// - `record_url` (可选): 记录访问链接
     pub record: Record,
 }
 

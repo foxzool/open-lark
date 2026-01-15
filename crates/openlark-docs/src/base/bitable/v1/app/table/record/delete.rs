@@ -5,13 +5,12 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
 
 /// 删除记录请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct DeleteRecordRequest {
     config: Config,
@@ -46,27 +45,18 @@ impl DeleteRecordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeleteRecordResponse> {
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "app_token 不能为空"));
-        }
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "table_id 不能为空"));
-        }
-        if self.record_id.trim().is_empty() {
-            return Err(validation_error("record_id", "record_id 不能为空"));
-        }
+        use crate::common::{api_endpoints::BitableApiV1, api_utils::*};
 
-        use crate::common::api_endpoints::BitableApiV1;
+        validate_required_field("app_token", Some(&self.app_token), "app_token 不能为空")?;
+        validate_required_field("table_id", Some(&self.table_id), "table_id 不能为空")?;
+        validate_required_field("record_id", Some(&self.record_id), "record_id 不能为空")?;
+
         let api_endpoint =
             BitableApiV1::RecordDelete(self.app_token, self.table_id, self.record_id);
+        let request = ApiRequest::<DeleteRecordResponse>::delete(&api_endpoint.to_url());
 
-        let api_request: ApiRequest<DeleteRecordResponse> =
-            ApiRequest::delete(&api_endpoint.to_url());
-
-        let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "删除记录")
     }
 }
 
@@ -103,11 +93,26 @@ impl DeleteRecordRequestBuilder {
 }
 
 /// 删除记录响应
+///
+/// 表示记录是否成功删除以及被删除记录的ID。
+///
+/// # 示例
+/// ```json
+/// {
+///   "deleted": true,
+///   "record_id": "recxxxxxxxxxxxx"
+/// }
+/// ```
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DeleteRecordResponse {
     /// 是否成功删除
+    ///
+    /// - `true`: 删除成功
+    /// - `false`: 删除失败（通常不会出现，失败会抛出异常）
     pub deleted: bool,
     /// 删除的记录 ID
+    ///
+    /// 被删除记录的唯一标识符
     pub record_id: String,
 }
 

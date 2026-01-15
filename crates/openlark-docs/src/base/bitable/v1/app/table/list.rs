@@ -11,7 +11,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 列出数据表请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ListTablesRequest {
     /// 多维表格的 app_token

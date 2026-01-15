@@ -11,7 +11,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 批量删除记录请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct BatchDeleteRecordRequest {
     config: Config,
