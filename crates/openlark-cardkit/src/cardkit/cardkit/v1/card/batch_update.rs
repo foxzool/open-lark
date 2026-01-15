@@ -31,19 +31,34 @@ pub struct BatchUpdateCardResponse {
 impl openlark_core::api::ApiResponseTrait for BatchUpdateCardResponse {}
 
 /// 局部更新卡片实体请求
+#[derive(Debug, Clone)]
 pub struct BatchUpdateCardRequest {
     config: Config,
+    card_id: Option<String>,
+    operations: Option<Vec<serde_json::Value>>,
 }
 
 impl BatchUpdateCardRequest {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config,
+            card_id: None,
+            operations: None,
+        }
     }
 
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/cardkit-v1/card/batch_update
     pub async fn execute(self, body: BatchUpdateCardBody) -> SDKResult<BatchUpdateCardResponse> {
+        let mut body = body;
+        if let Some(card_id) = self.card_id {
+            body.card_id = card_id;
+        }
+        if let Some(operations) = self.operations {
+            body.operations = operations;
+        }
+
         if body.card_id.trim().is_empty() {
             return Err(openlark_core::error::validation_error(
                 "card_id 不能为空",
@@ -64,5 +79,45 @@ impl BatchUpdateCardRequest {
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "局部更新卡片实体")
+    }
+}
+
+/// 局部更新卡片实体请求构建器
+#[derive(Debug, Clone)]
+pub struct BatchUpdateCardRequestBuilder {
+    request: BatchUpdateCardRequest,
+    card_id: Option<String>,
+    operations: Option<Vec<serde_json::Value>>,
+}
+
+impl BatchUpdateCardRequestBuilder {
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: BatchUpdateCardRequest::new(config),
+            card_id: None,
+            operations: None,
+        }
+    }
+
+    /// 设置卡片 ID
+    pub fn card_id(mut self, card_id: impl Into<String>) -> Self {
+        self.card_id = Some(card_id.into());
+        self
+    }
+
+    /// 设置操作列表
+    pub fn operations(mut self, operations: impl Into<Vec<serde_json::Value>>) -> Self {
+        self.operations = Some(operations.into());
+        self
+    }
+
+    /// 构建请求
+    pub fn build(self) -> BatchUpdateCardRequest {
+        BatchUpdateCardRequest {
+            config: self.request.config,
+            card_id: self.card_id,
+            operations: self.operations,
+        }
     }
 }

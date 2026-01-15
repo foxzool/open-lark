@@ -31,13 +31,20 @@ pub struct UpdateCardSettingsResponse {
 impl openlark_core::api::ApiResponseTrait for UpdateCardSettingsResponse {}
 
 /// 更新卡片实体配置请求
+#[derive(Debug, Clone)]
 pub struct UpdateCardSettingsRequest {
     config: Config,
+    card_id: Option<String>,
+    settings: Option<serde_json::Value>,
 }
 
 impl UpdateCardSettingsRequest {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config,
+            card_id: None,
+            settings: None,
+        }
     }
 
     /// 执行请求
@@ -47,6 +54,14 @@ impl UpdateCardSettingsRequest {
         self,
         body: UpdateCardSettingsBody,
     ) -> SDKResult<UpdateCardSettingsResponse> {
+        let mut body = body;
+        if let Some(card_id) = self.card_id {
+            body.card_id = card_id;
+        }
+        if let Some(settings) = self.settings {
+            body.settings = settings;
+        }
+
         if body.card_id.trim().is_empty() {
             return Err(openlark_core::error::validation_error(
                 "card_id 不能为空",
@@ -61,5 +76,45 @@ impl UpdateCardSettingsRequest {
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "更新卡片实体配置")
+    }
+}
+
+/// 更新卡片实体配置请求构建器
+#[derive(Debug, Clone)]
+pub struct UpdateCardSettingsRequestBuilder {
+    request: UpdateCardSettingsRequest,
+    card_id: Option<String>,
+    settings: Option<serde_json::Value>,
+}
+
+impl UpdateCardSettingsRequestBuilder {
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: UpdateCardSettingsRequest::new(config),
+            card_id: None,
+            settings: None,
+        }
+    }
+
+    /// 设置卡片 ID
+    pub fn card_id(mut self, card_id: impl Into<String>) -> Self {
+        self.card_id = Some(card_id.into());
+        self
+    }
+
+    /// 设置配置
+    pub fn settings(mut self, settings: impl Into<serde_json::Value>) -> Self {
+        self.settings = Some(settings.into());
+        self
+    }
+
+    /// 构建请求
+    pub fn build(self) -> UpdateCardSettingsRequest {
+        UpdateCardSettingsRequest {
+            config: self.request.config,
+            card_id: self.card_id,
+            settings: self.settings,
+        }
     }
 }

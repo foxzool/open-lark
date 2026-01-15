@@ -5,39 +5,59 @@
 pub mod content;
 pub mod create;
 pub mod delete;
+pub mod models;
 pub mod patch;
 pub mod update;
+
+pub use models::*;
+pub use create::*;
+pub use content::*;
+pub use delete::*;
+pub use patch::*;
+pub use update::*;
 
 use openlark_core::config::Config;
 
 /// card.element 资源服务
 #[derive(Debug, Clone)]
-pub struct CardElementService {
+pub struct CardElementResource {
     config: Config,
 }
 
-impl CardElementService {
+/// 兼容历史命名：card.element 服务
+pub type CardElementService = CardElementResource;
+
+impl CardElementResource {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
-    pub fn create(&self) -> create::CreateCardElementRequest {
-        create::CreateCardElementRequest::new(self.config.clone())
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 
-    pub fn update(&self) -> update::UpdateCardElementRequest {
-        update::UpdateCardElementRequest::new(self.config.clone())
+    /// 创建卡片组件
+    pub fn create(&self) -> create::CreateCardElementRequestBuilder {
+        create::CreateCardElementRequestBuilder::new(self.config.clone())
     }
 
-    pub fn patch(&self) -> patch::PatchCardElementRequest {
-        patch::PatchCardElementRequest::new(self.config.clone())
+    /// 更新组件
+    pub fn update(&self) -> update::UpdateCardElementRequestBuilder {
+        update::UpdateCardElementRequestBuilder::new(self.config.clone())
     }
 
-    pub fn content(&self) -> content::UpdateCardElementContentRequest {
-        content::UpdateCardElementContentRequest::new(self.config.clone())
+    /// 补丁组件
+    pub fn patch(&self) -> patch::PatchCardElementRequestBuilder {
+        patch::PatchCardElementRequestBuilder::new(self.config.clone())
     }
 
-    pub fn delete(&self) -> delete::DeleteCardElementRequest {
-        delete::DeleteCardElementRequest::new(self.config.clone())
+    /// 流式更新文本
+    pub fn content(&self) -> content::UpdateCardElementContentRequestBuilder {
+        content::UpdateCardElementContentRequestBuilder::new(self.config.clone())
+    }
+
+    /// 删除组件
+    pub fn delete(&self) -> delete::DeleteCardElementRequestBuilder {
+        delete::DeleteCardElementRequestBuilder::new(self.config.clone())
     }
 }

@@ -5,6 +5,7 @@
 pub mod batch_update;
 pub mod create;
 pub mod id_convert;
+pub mod models;
 pub mod settings;
 pub mod update;
 

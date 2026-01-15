@@ -124,7 +124,8 @@ impl CardResource {
     pub async fn id_convert(
         &self,
         body: crate::cardkit::cardkit::v1::card::id_convert::ConvertCardIdBody,
-    ) -> openlark_core::SDKResult<serde_json::Value> {
+    ) -> openlark_core::SDKResult<crate::cardkit::cardkit::v1::card::models::ConvertCardIdResponse>
+    {
         crate::cardkit::cardkit::v1::card::id_convert::ConvertCardIdRequest::new(
             (*self.config).clone(),
         )
@@ -151,7 +152,9 @@ impl CardElementResource {
     pub async fn create(
         &self,
         body: crate::cardkit::cardkit::v1::card::element::create::CreateCardElementBody,
-    ) -> openlark_core::SDKResult<serde_json::Value> {
+    ) -> openlark_core::SDKResult<
+        crate::cardkit::cardkit::v1::card::element::models::CreateCardElementResponse,
+    > {
         crate::cardkit::cardkit::v1::card::element::create::CreateCardElementRequest::new(
             (*self.config).clone(),
         )
@@ -162,7 +165,9 @@ impl CardElementResource {
     pub async fn update(
         &self,
         body: crate::cardkit::cardkit::v1::card::element::update::UpdateCardElementBody,
-    ) -> openlark_core::SDKResult<serde_json::Value> {
+    ) -> openlark_core::SDKResult<
+        crate::cardkit::cardkit::v1::card::element::models::UpdateCardElementResponse,
+    > {
         crate::cardkit::cardkit::v1::card::element::update::UpdateCardElementRequest::new(
             (*self.config).clone(),
         )
@@ -173,7 +178,9 @@ impl CardElementResource {
     pub async fn patch(
         &self,
         body: crate::cardkit::cardkit::v1::card::element::patch::PatchCardElementBody,
-    ) -> openlark_core::SDKResult<serde_json::Value> {
+    ) -> openlark_core::SDKResult<
+        crate::cardkit::cardkit::v1::card::element::models::PatchCardElementResponse,
+    > {
         crate::cardkit::cardkit::v1::card::element::patch::PatchCardElementRequest::new(
             (*self.config).clone(),
         )
@@ -184,7 +191,9 @@ impl CardElementResource {
     pub async fn content(
         &self,
         body: crate::cardkit::cardkit::v1::card::element::content::UpdateCardElementContentBody,
-    ) -> openlark_core::SDKResult<serde_json::Value> {
+    ) -> openlark_core::SDKResult<
+        crate::cardkit::cardkit::v1::card::element::models::UpdateCardElementContentResponse,
+    > {
         crate::cardkit::cardkit::v1::card::element::content::UpdateCardElementContentRequest::new(
             (*self.config).clone(),
         )
@@ -195,7 +204,9 @@ impl CardElementResource {
     pub async fn delete(
         &self,
         body: crate::cardkit::cardkit::v1::card::element::delete::DeleteCardElementBody,
-    ) -> openlark_core::SDKResult<()> {
+    ) -> openlark_core::SDKResult<
+        crate::cardkit::cardkit::v1::card::element::models::DeleteCardElementResponse,
+    > {
         crate::cardkit::cardkit::v1::card::element::delete::DeleteCardElementRequest::new(
             (*self.config).clone(),
         )
