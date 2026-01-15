@@ -3,7 +3,11 @@ name: CI
 on:
   pull_request:
   push:
-env:
+
+permissions:
+  contents: read
+
+ env:
   CARGO_TERM_COLOR: always
   CARGO_TOOLCHAIN: stable
   # Sparse cargo registry for faster updates
@@ -12,9 +16,10 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
       - uses: Swatinem/rust-cache@v2
@@ -29,11 +34,12 @@ jobs:
 
   doc:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     env:
       RUSTDOCFLAGS: "-D warnings -A rustdoc::bare_urls"
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
       - uses: Swatinem/rust-cache@v2
@@ -48,11 +54,12 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     env:
       RUSTFLAGS: "-D warnings"
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
           components: rustfmt, clippy

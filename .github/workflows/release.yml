@@ -12,20 +12,21 @@ env:
 
 jobs:
   # 验证构建和测试
-  validate:
+   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       
-      - uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
-          components: rustfmt, clippy
-      
-      - name: Cache Cargo build files
-        uses: Leafwing-Studios/cargo-cache@v1
-      
-      - name: Install Protoc
+           components: rustfmt, clippy
+       
+       - name: Cache Cargo build files
+         uses: Swatinem/rust-cache@v2
+       
+       - name: Install Protoc
         uses: arduino/setup-protoc@v3
       
       - name: Check format
@@ -43,9 +44,10 @@ jobs:
           RUSTDOCFLAGS: "-D warnings"
 
   # 创建 GitHub Release
-  github-release:
+   github-release:
     needs: validate
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write
     steps:
@@ -90,7 +92,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
       
