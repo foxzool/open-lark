@@ -5,34 +5,26 @@
 
 #![allow(missing_docs)]
 
-// New modular structure
-pub mod auth;
-pub mod validation;
-
-// Legacy modules (to be refactored)
+// 对外稳定导出：尽量保持“少而清晰”的公共 API（KISS）
 pub mod api;
-pub mod app_ticket_manager;
-pub mod cache;
+pub mod auth;
 pub mod config;
 pub mod constants;
 pub mod error;
 pub mod http;
-pub mod improved_response_handler;
 pub mod observability;
-pub mod performance;
 pub mod query_params;
 pub mod req_option;
-pub mod req_translator;
 pub mod request_builder;
-pub mod request_executor;
-pub mod retry_middleware;
-pub mod standard_response;
-pub mod test_utils;
 pub mod trait_system;
-pub mod utils;
+pub mod validation;
 
-// Business modules (should be moved to separate crates)
-// NOTE: contact 和 endpoints 已移至独立业务 crate
+// crate 内部实现细节：不对外暴露（避免把 core 变成“全家桶”）
+mod app_ticket_manager;
+mod improved_response_handler;
+mod performance;
+mod req_translator;
+mod utils;
 
 // Re-export commonly used types from crate root
 pub use error::{validation_error, CoreError, SDKResult};
@@ -52,22 +44,18 @@ macro_rules! validate_required {
 
 /// Prelude module for convenient imports.
 pub mod prelude {
-    // Re-export new API module
+    // Re-export new API module（请求/响应基础类型）
     pub use crate::api::prelude::*;
 
-    // Re-export commonly used core modules directly
+    // Re-export commonly used core modules directly（最小集合）
+    pub use crate::config::Config;
     pub use crate::constants::*;
-    pub use crate::error::validation_error;
-    pub use crate::error::*;
-    pub use crate::http::*;
+    pub use crate::error::{validation_error, CoreError, LarkAPIError, SDKResult};
+    pub use crate::http::Transport;
     pub use crate::req_option::*;
-    pub use crate::standard_response::*;
     pub use crate::validate_required;
 
     // Re-export commonly used dependencies
-
-    /// Result type alias for convenience（已默认使用 CoreError）
-    pub type SDKResult<T> = Result<T, LarkAPIError>;
     pub use serde::{Deserialize, Serialize};
     pub use serde_json::Value;
     pub use std::collections::HashMap;
