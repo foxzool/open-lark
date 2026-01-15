@@ -22,7 +22,6 @@ pub struct FormFieldQuestion {
 }
 
 /// 列出表单问题请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ListFormFieldQuestionRequest {
     config: Config,

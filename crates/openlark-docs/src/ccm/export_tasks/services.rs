@@ -73,9 +73,11 @@ impl ExportTasksService {
         }
 
         // 构建API请求
+        use crate::common::api_endpoints::DriveApi;
+        let api_endpoint = DriveApi::CreateExportTask;
         let api_req = ApiRequest {
             method: HttpMethod::Post,
-            url: "/open-apis/drive/v1/export_tasks".to_string(),
+            url: api_endpoint.to_url(),
             // supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Some(openlark_core::api::RequestData::Json(serde_json::json!(&body)))?,
             query: HashMap::new(),

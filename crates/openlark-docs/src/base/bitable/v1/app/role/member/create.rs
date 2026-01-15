@@ -13,7 +13,6 @@ use serde::{Deserialize, Serialize};
 use super::models::RoleMemberIdType;
 
 /// 新增协作者请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CreateRoleMemberRequest {
     config: Config,

@@ -13,7 +13,6 @@ use serde::{Deserialize, Serialize};
 use super::models::Form;
 
 /// 获取表单请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct GetFormRequest {
     config: Config,
