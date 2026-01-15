@@ -12,13 +12,17 @@ pub use list::*;
 /// 词典分类服务
 #[derive(Debug, Clone)]
 pub struct ClassificationService {
-    #[allow(dead_code)]
     config: Config,
 }
 
 impl ClassificationService {
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 }
 

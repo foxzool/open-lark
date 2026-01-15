@@ -1,4 +1,3 @@
-#![allow(dead_code)]
 #![allow(unused_variables)]
 
 ///[allow(unused_imports)]
@@ -11,7 +10,6 @@
 /// - 获取文档内容（纯文本和富文本）
 /// - 编辑文档内容
 /// - 获取电子表格元数据
-
 // 重新启用已修复的模块
 // pub mod batch_update; // ✅ 已修复 // Generated: Module file not found
 // pub mod content; // ✅ 已修复 // Generated: Module file not found
@@ -36,7 +34,7 @@ use openlark_core::config::Config;
 /// 提供飞书旧版文档v2版本的完整入口，支持文档的创建、
 /// 查询、编辑等基础功能。
 pub struct DocV2Service {
-    #[allow(dead_code)] // 配置保留供将来使用
+    /// 配置信息，保留供将来使用
     config: Config,
     /// 文档创建服务
     pub create: CreateDocService,
@@ -47,7 +45,7 @@ pub struct DocV2Service {
     /// 文档编辑服务
     pub batch_update: BatchUpdateDocService,
     /// 电子表格元数据服务
-    pub sheet_meta: SheetMetaDocService;
+    pub sheet_meta: SheetMetaDocService,
 }
 
 impl DocV2Service {
@@ -74,5 +72,10 @@ impl DocV2Service {
             batch_update: BatchUpdateDocService::new(config),
             sheet_meta: SheetMetaDocService::new(config),
         }
+    }
+
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 }

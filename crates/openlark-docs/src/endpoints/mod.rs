@@ -1,41 +1,31 @@
-//! OpenLark Docs 服务端点定义
+//! OpenLark Docs 服务端点定义（常量端点系统）
 //!
-//! 此模块包含文档和云盘相关的所有 API 端点常量，从 openlark-core 迁移而来。
-//! 包含云文档、表格、知识库、白板、评论、云盘、卡片和报告等完整功能。
+//! 本模块提供基于常量的 API 端点定义，用于测试和文档示例。
 //!
-//! # 服务模块包含
+//! # 使用场景
 //!
-//! - **cloud_docs**: 云文档服务（Bitable多维表格、Sheets电子表格、Docx文档、Wiki知识库、Board白板）
-//! - **drive**: 云盘服务（文件管理、文件夹管理、媒体处理、权限管理）
-//! - **cardkit**: 交互式卡片组件
-//! - **report**: 报告和分析服务
-//! - **comment**: 评论系统
-//! - **assistant**: AI助手服务
+//! ## 测试和文档示例（推荐）
+//! 使用常量端点获得简洁的 URL 引用：
+//! ```rust
+//! use crate::endpoints::BITABLE_V1_APPS;
 //!
-//! # 使用示例
-//!
-//! ```rust,ignore
-//! use openlark_docs::endpoints::*;
-//!
-//! // Bitable多维表格
-//! let app_endpoint = BITABLE_V1_APPS;
-//! let records_endpoint = BITABLE_V1_RECORDS;
-//!
-//! // Sheets电子表格
-//! let sheets_endpoint = SHEETS_V3_SPREADSHEETS;
-//! let values_endpoint = SHEETS_V3_SPREADSHEET_VALUES_GET;
-//!
-//! // Wiki知识库
-//! let wiki_space_endpoint = WIKI_V2_SPACES;
-//! let wiki_node_endpoint = WIKI_V2_SPACE_NODES;
-//!
-//! // 云盘文件
-//! let drive_files_endpoint = DRIVE_V1_FILES;
-//! let upload_endpoint = DRIVE_V1_FILES_UPLOAD_ALL;
-//!
-//! // 卡片组件
-//! let cards_endpoint = CARDKIT_V1_CARDS;
+//! let url = BITABLE_V1_APPS; // 简洁明了
 //! ```
+//!
+//! # 特性
+//! - ✅ **简洁明了**：直接引用常量
+//! - ✅ **便于调试**：URL 路径清晰可见
+//! - ✅ **测试友好**：易于在测试中使用
+//! - ✅ **文档友好**：适合示例代码
+//!
+//! # 与枚举端点系统的关系
+//!
+//! 本模块与 `common/api_endpoints.rs` 中的枚举端点系统配合使用：
+//! - **枚举端点**：用于生产代码（类型安全、动态 URL）
+//! - **常量端点**：用于测试和文档（简洁明了）
+//!
+//! 不建议混合使用两个系统，应根据场景选择合适的端点方式。
+
 // 注意: 以下端点在 openlark_core 中不可用，已被删除
 // pub use openlark_core::endpoints::{apass, application, auth, platform_integration};
 

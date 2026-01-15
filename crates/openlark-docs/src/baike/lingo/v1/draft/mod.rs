@@ -12,12 +12,16 @@ pub use update::*;
 /// Lingo草稿服务
 #[derive(Debug, Clone)]
 pub struct LingoDraftService {
-    #[allow(dead_code)]
     config: Config,
 }
 
 impl LingoDraftService {
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 }
