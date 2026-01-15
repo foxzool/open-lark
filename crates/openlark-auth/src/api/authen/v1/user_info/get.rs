@@ -66,7 +66,7 @@ impl UserInfoBuilder {
 
         // 创建API请求 - 使用类型安全的URL生成
         let mut api_request: ApiRequest<UserInfoResponseData> =
-            ApiRequest::get(api_endpoint.to_url());
+            ApiRequest::get(api_endpoint.path());
 
         // 添加Authorization头
         api_request.headers.insert(
