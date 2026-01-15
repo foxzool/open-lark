@@ -1,39 +1,63 @@
 name: ServiceRegistry Validation
-
+    i
+    timeout-minutes: 60
 on:
-  pull_request:
+    i
+    timeout-minutes: 60  pull_request:
     paths:
-      - 'crates/openlark-client/src/**/*.rs'
+    i
+    timeout-minutes: 60      - 'crates/openlark-client/src/**/*.rs'
   push:
-    paths:
-      - 'crates/openlark-client/src/**/*.rs'
+    i
+    timeout-minutes: 60    paths:
+    i
+    timeout-minutes: 60      - 'crates/openlark-client/src/**/*.rs'
   workflow_dispatch:
 
+permissions:
+    i
+    timeout-minutes: 60  contents: read
+    i
+    timeout-minutes: 60
 env:
-  CARGO_TERM_COLOR: always
+    i
+    timeout-minutes: 60  CARGO_TERM_COLOR: always
   CARGO_TOOLCHAIN: stable
   CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
 
 jobs:
-  service-registry-tests:
-    name: ServiceRegistry Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
+    i
+    timeout-minutes: 60  service-registry-tests:
+    i
+    timeout-minutes: 60    name: ServiceRegistry Tests
+    i
+    timeout-minutes: 60    runs-on: ubuntu-latest
+    i
+    timeout-minutes: 60    steps:
+    i
+    timeout-minutes: 60      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@v1
         with:
-          toolchain: ${{ env.CARGO_TOOLCHAIN }}
-      - uses: Swatinem/rust-cache@v2
+    i
+    timeout-minutes: 60          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+    i
+    timeout-minutes: 60      - uses: Swatinem/rust-cache@v2
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
-        with:
-          version: 23.4
-          include-pre-releases: false
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
+    i
+    timeout-minutes: 60        with:
+    i
+    timeout-minutes: 60          version: 23.4
+    i
+    timeout-minutes: 60          include-pre-releases: false
+    i
+    timeout-minutes: 60          repo-token: ${{ secrets.GITHUB_TOKEN }}
+    i
+    timeout-minutes: 60
       - name: Run ServiceRegistry specific tests
         run: |
-          echo "🔍 运行ServiceRegistry特定功能验证..."
+    i
+    timeout-minutes: 60          echo "🔍 运行ServiceRegistry特定功能验证..."
 
           # 基础功能测试
           echo "📋 运行基础ServiceRegistry测试..."
@@ -53,24 +77,36 @@ jobs:
           cargo test --release test_benchmark_suite --features "authentication,contact,group,im,search" --lib
 
   service-registry-performance:
-    name: ServiceRegistry Performance
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
+    i
+    timeout-minutes: 60    name: ServiceRegistry Performance
+    i
+    timeout-minutes: 60    runs-on: ubuntu-latest
+    i
+    timeout-minutes: 60    steps:
+    i
+    timeout-minutes: 60      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@v1
         with:
-          toolchain: ${{ env.CARGO_TOOLCHAIN }}
-      - uses: Swatinem/rust-cache@v2
+    i
+    timeout-minutes: 60          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+    i
+    timeout-minutes: 60      - uses: Swatinem/rust-cache@v2
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
-        with:
-          version: 23.4
-          include-pre-releases: false
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
+    i
+    timeout-minutes: 60        with:
+    i
+    timeout-minutes: 60          version: 23.4
+    i
+    timeout-minutes: 60          include-pre-releases: false
+    i
+    timeout-minutes: 60          repo-token: ${{ secrets.GITHUB_TOKEN }}
+    i
+    timeout-minutes: 60
       - name: Performance Benchmarks
         run: |
-          echo "⚡ 运行ServiceRegistry性能基准测试..."
+    i
+    timeout-minutes: 60          echo "⚡ 运行ServiceRegistry性能基准测试..."
 
           # 编译性能测试
           echo "🔨 编译性能基准测试..."
@@ -85,24 +121,36 @@ jobs:
           fi
 
   service-registry-validation:
-    name: ServiceRegistry Validation Report
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
+    i
+    timeout-minutes: 60    name: ServiceRegistry Validation Report
+    i
+    timeout-minutes: 60    runs-on: ubuntu-latest
+    i
+    timeout-minutes: 60    steps:
+    i
+    timeout-minutes: 60      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@v1
         with:
-          toolchain: ${{ env.CARGO_TOOLCHAIN }}
-      - uses: Swatinem/rust-cache@v2
+    i
+    timeout-minutes: 60          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+    i
+    timeout-minutes: 60      - uses: Swatinem/rust-cache@v2
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
-        with:
-          version: 23.4
-          include-pre-releases: false
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
+    i
+    timeout-minutes: 60        with:
+    i
+    timeout-minutes: 60          version: 23.4
+    i
+    timeout-minutes: 60          include-pre-releases: false
+    i
+    timeout-minutes: 60          repo-token: ${{ secrets.GITHUB_TOKEN }}
+    i
+    timeout-minutes: 60
       - name: Generate Validation Report
         run: |
-          echo "📊 生成ServiceRegistry验证报告..."
+    i
+    timeout-minutes: 60          echo "📊 生成ServiceRegistry验证报告..."
 
           # 运行测试并收集结果
           TEST_RESULT=$(cargo test --release service_registry --features "authentication,contact,group,im,search" --lib 2>&1)
@@ -165,24 +213,36 @@ jobs:
 
       - name: Upload Validation Report
         uses: actions/upload-artifact@v4
-        with:
-          name: service-registry-validation-report
-          path: SERVICE_REGISTRY_CI_VALIDATION.md
-          retention-days: 30
-
+    i
+    timeout-minutes: 60        with:
+    i
+    timeout-minutes: 60          name: service-registry-validation-report
+    i
+    timeout-minutes: 60          path: SERVICE_REGISTRY_CI_VALIDATION.md
+    i
+    timeout-minutes: 60          retention-days: 30
+    i
+    timeout-minutes: 60
   service-registry-security:
-    name: ServiceRegistry Security Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
+    i
+    timeout-minutes: 60    name: ServiceRegistry Security Check
+    i
+    timeout-minutes: 60    runs-on: ubuntu-latest
+    i
+    timeout-minutes: 60    steps:
+    i
+    timeout-minutes: 60      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@v1
         with:
-          toolchain: ${{ env.CARGO_TOOLCHAIN }}
-      - uses: Swatinem/rust-cache@v2
+    i
+    timeout-minutes: 60          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+    i
+    timeout-minutes: 60      - uses: Swatinem/rust-cache@v2
 
       - name: Security Audit
         run: |
-          echo "🔒 运行ServiceRegistry安全审计..."
+    i
+    timeout-minutes: 60          echo "🔒 运行ServiceRegistry安全审计..."
 
           # 安装cargo-deny（如果尚未安装）
           if ! command -v cargo-deny &> /dev/null; then
@@ -211,18 +271,28 @@ jobs:
           echo "📊 发现 $UNWRAP_COUNT 处unwrap()调用"
 
   summary:
-    name: Validation Summary
-    needs: [service-registry-tests, service-registry-performance, service-registry-validation, service-registry-security]
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Validation Report
+    i
+    timeout-minutes: 60    name: Validation Summary
+    i
+    timeout-minutes: 60    needs: [service-registry-tests, service-registry-performance, service-registry-validation, service-registry-security]
+    i
+    timeout-minutes: 60    if: always()
+    i
+    timeout-minutes: 60    runs-on: ubuntu-latest
+    i
+    timeout-minutes: 60    steps:
+    i
+    timeout-minutes: 60      - name: Download Validation Report
         uses: actions/download-artifact@v4
-        with:
-          name: service-registry-validation-report
-      - name: Summary
+    i
+    timeout-minutes: 60        with:
+    i
+    timeout-minutes: 60          name: service-registry-validation-report
+    i
+    timeout-minutes: 60      - name: Summary
         run: |
-          echo "## 🚀 ServiceRegistry CI验证摘要" >> $GITHUB_STEP_SUMMARY
+    i
+    timeout-minutes: 60          echo "## 🚀 ServiceRegistry CI验证摘要" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ "${{ needs.service-registry-tests.result }}" == "success" ]; then

@@ -9,6 +9,9 @@ on:
     # Run feature matrix testing weekly on Sundays at 00:00 UTC
     - cron: '0 0 * * 0'
 
+permissions:
+  contents: read
+
 env:
   CARGO_TERM_COLOR: always
   CARGO_TOOLCHAIN: stable
@@ -58,7 +61,7 @@ jobs:
       - uses: actions/checkout@v4
         
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@master
+        uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
           
@@ -127,7 +130,7 @@ jobs:
       - uses: actions/checkout@v4
         
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@master
+        uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
           
