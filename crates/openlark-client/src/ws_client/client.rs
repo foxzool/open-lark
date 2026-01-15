@@ -27,10 +27,11 @@ use url::Url;
 use super::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine};
 use openlark_core::{
     api::Response,
-    cache::QuickCache,
     constants::FEISHU_BASE_URL,
     // event::dispatcher::EventDispatcherHandler, // TODO: 需要实现 event 模块
 };
+use std::collections::HashMap;
+use std::time::{Duration, Instant};
 
 // 临时类型占位符，等待 event 模块实现
 #[derive(Debug, Clone)]
@@ -57,7 +58,7 @@ const HEARTBEAT_TIMEOUT: Duration = Duration::from_secs(120);
 pub struct LarkWsClient {
     frame_tx: mpsc::UnboundedSender<Frame>,
     event_rx: mpsc::UnboundedReceiver<WsEvent>,
-    cache: QuickCache<Vec<Vec<u8>>>,
+    // cache: QuickCache<Vec<Vec<u8>>>,  // TODO: 重新实现缓存机制
     state_machine: WebSocketStateMachine,
 }
 
@@ -70,7 +71,7 @@ impl LarkWsClient {
         Self {
             frame_tx,
             event_rx,
-            cache: QuickCache::new(),
+            // cache: QuickCache::new(),  // TODO: 重新实现缓存机制
             state_machine: WebSocketStateMachine::new(),
         }
     }
@@ -227,26 +228,30 @@ impl LarkWsClient {
     }
 
     fn combine(&mut self, msg_id: &str, sum: usize, seq: usize, bs: &[u8]) -> Option<Vec<u8>> {
-        let val = self.cache.get(msg_id);
-        if val.is_none() {
-            let mut buf = vec![Vec::new(); sum];
-            buf[seq] = bs.to_vec();
-            self.cache.set(msg_id, buf, 5);
-            return None;
-        }
+        // TODO: 重新实现缓存机制
+        // let val = self.cache.get(msg_id);
+        // if val.is_none() {
+        //     let mut buf = vec![Vec::new(); sum];
+        //     buf[seq] = bs.to_vec();
+        //     self.cache.set(msg_id, buf, 5);
+        //     return None;
+        // }
+        // let mut val = val?;
+        // val[seq] = bs.to_vec();
+        // let mut pl = Vec::new();
+        // for v in val.iter() {
+        //     if v.is_empty() {
+        //         self.cache.set(msg_id, val, 5);
+        //         return None;
+        //     }
+        //     pl.extend_from_slice(v);
+        // }
+        // Some(pl)
 
-        let mut val = val?;
-        val[seq] = bs.to_vec();
-        let mut pl = Vec::new();
-        for v in val.iter() {
-            if v.is_empty() {
-                self.cache.set(msg_id, val, 5);
-                return None;
-            }
-            pl.extend_from_slice(v);
-        }
-
-        Some(pl)
+        // 暂时不使用缓存，直接返回数据
+        let mut buf = vec![Vec::new(); sum];
+        buf[seq] = bs.to_vec();
+        Some(buf)
     }
 }
 
