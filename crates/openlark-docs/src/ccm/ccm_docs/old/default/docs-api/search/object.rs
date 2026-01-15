@@ -17,7 +17,7 @@ use crate::common::api_utils::*;
 pub struct SearchObjectReq {
     /// 指定搜索的关键字
     pub search_key: Option<String>,
-    /// 指定搜索返回的文件数量。取值范围为 [0,50]
+    /// 指定搜索返回的文件数量。取值范围为 ` [0,50] `
     pub count: Option<i32>,
     /// 指定搜索的偏移量，最小为 0，且 offset + count < 200
     pub offset: Option<i32>,
