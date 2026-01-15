@@ -3,14 +3,12 @@ name: API Consistency Check
 on:
   pull_request:
     paths:
-      - 'src/service/**/*.rs'
-      - 'src/core/**/*.rs'
+      - 'crates/**/*.rs'
   push:
     branches:
       - main
     paths:
-      - 'src/service/**/*.rs'
-      - 'src/core/**/*.rs'
+      - 'crates/**/*.rs'
 
 permissions:
   contents: read
