@@ -1,5 +1,9 @@
 name: API Consistency Check
 
+# TODO: API Consistency Check 工具需要作为 Rust 二进制实现
+# 当前 tools/api-analysis/ 包含的是 Python 脚本，无法构建为二进制
+# 暂时禁用此工作流，等待工具实现或修复
+
 on:
   pull_request:
     paths:
