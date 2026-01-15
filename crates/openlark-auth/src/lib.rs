@@ -60,44 +60,15 @@ pub mod common;
 pub mod models;
 pub mod services;
 pub mod token_provider;
-pub mod utils;
 
 // 重新导出核心类型，方便用户使用
 pub use services::{AuthService, AuthenService, OAuthService};
 pub use token_provider::AuthTokenProvider;
 
-// 重新导出常用模型
-pub use models::{auth::*, authen::*, oauth::*};
-
-// 重新导出API构建器和服务
-pub use api::*;
-
-// 类型别名，提供更好的用户体验
-pub type AuthResult<T> = openlark_core::SDKResult<T>;
-
 /// 认证模块的预导入，包含最常用的类型和特征
 pub mod prelude {
-    pub use crate::{AuthResult, AuthService, AuthTokenProvider, AuthenService, OAuthService};
-
-    // 重新导出API服务类
-    pub use crate::api::{
-        AppAccessTokenBuilder, AppAccessTokenInternalBuilder, AppTicketResendBuilder,
-        AuthServiceV3, AuthenServiceV1, AuthorizationBuilder, OAuthServiceOld,
-        OidcAccessTokenBuilder, OidcRefreshAccessTokenBuilder, OidcService,
-        RefreshUserAccessTokenV1Builder, TenantAccessTokenBuilder,
-        TenantAccessTokenInternalRequestBuilder, UserAccessTokenV1Builder, UserInfoBuilder,
-    };
-
-    // 重新导出openlark-core的核心类型
-    pub use openlark_core::api::ApiResponse;
-    pub use openlark_core::{
-        config::Config,
-        error::{CoreError as LarkAPIError, SDKResult},
-        http::Transport,
-    };
-
-    // 重新导出常用模型
-    pub use crate::models::{AccessTokenResponse, AuthorizationCodeRequest, UserInfo};
+    pub use crate::{AuthService, AuthTokenProvider, AuthenService, OAuthService};
+    pub use openlark_core::{config::Config, error::SDKResult, http::Transport};
 }
 
 /// 认证模块版本信息
@@ -116,7 +87,7 @@ mod tests {
     #[test]
     fn test_prelude_imports() {
         // 确保prelude中的类型可以正常导入，避免unused import警告
-        use crate::prelude::{AuthResult, AuthService, AuthenService, OAuthService};
+        use crate::prelude::{AuthService, AuthenService, OAuthService, SDKResult};
 
         // 这里只是验证类型导入，不进行实际操作
         let _: String = VERSION.to_string();
@@ -125,6 +96,6 @@ mod tests {
         let _ = PhantomData::<AuthService>;
         let _ = PhantomData::<AuthenService>;
         let _ = PhantomData::<OAuthService>;
-        let _: PhantomData<AuthResult<()>>;
+        let _: PhantomData<SDKResult<()>>;
     }
 }

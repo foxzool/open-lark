@@ -95,7 +95,7 @@ impl OidcRefreshAccessTokenBuilder {
 
         // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<OidcRefreshAccessTokenResponseData> =
-            ApiRequest::post(api_endpoint.to_url())
+            ApiRequest::post(api_endpoint.path())
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .body(openlark_core::api::RequestData::Form(form_data));
 

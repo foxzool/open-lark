@@ -13,9 +13,6 @@ pub use user_info::{UserInfoBuilder, UserInfoService};
 
 use openlark_core::config::Config;
 
-// 类型别名
-pub type AuthResult<T> = openlark_core::error::SDKResult<T>;
-
 // AuthenServiceV1结构体
 #[derive(Debug)]
 pub struct AuthenServiceV1 {
