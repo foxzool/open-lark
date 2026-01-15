@@ -6,18 +6,10 @@
 
 ### 核心测试文件
 
-- **`auth_api_tests.rs`** - 认证API接口测试
-  - 测试租户访问令牌获取 (`tenant_access_token/internal`)
-  - 测试应用访问令牌获取 (`app_access_token/internal`)
-  - 测试用户信息获取 (`user_info.get`)
-  - 错误场景测试
-  - 并发请求测试
-
-- **`auth_mock_tests.rs`** - Mock服务器测试
-  - 基于wiremock的Mock服务器测试
-  - API错误响应测试
-  - 网络错误处理测试
-  - OAuth授权测试
+- **`basic_tests.rs`** - 基本功能测试
+  - 服务与构建器创建
+  - 模型序列化
+  - Debug/版本信息等基础健全性检查
 
 ## 运行测试
 
@@ -26,8 +18,7 @@
 cargo test -p openlark-auth
 
 # 运行特定测试文件
-cargo test -p openlark-auth --test auth_api_tests
-cargo test -p openlark-auth --test auth_mock_tests
+cargo test -p openlark-auth --test basic_tests
 
 # 运行库单元测试
 cargo test -p openlark-auth --lib
@@ -52,9 +43,7 @@ cargo test -p openlark-auth --lib
 ## 测试架构
 
 测试基于项目的实际AuthServices架构：
-- 使用 `openlark_auth::prelude::*` 导入
 - 遵循 Project-Version-Resource (PVR) 设计模式
-- 使用 wiremock 进行HTTP Mock
 - 支持异步测试执行
 
 ## 测试数据
