@@ -18,6 +18,11 @@ from typing import Dict, List, Set
 from dataclasses import dataclass
 from collections import defaultdict
 
+try:
+    import tomllib  # py>=3.11
+except ModuleNotFoundError:  # pragma: no cover
+    tomllib = None
+
 
 @dataclass
 class APIInfo:
@@ -133,29 +138,17 @@ class APIValidator:
                 name_with_path = name_path
             return f"meeting_room/{name_with_path}.rs"
 
-        # 根据 bizTag 确定基础路径
-        if api.biz_tag == 'calendar':
-            # 特殊规则 2: 当 meta.project == bizTag 时，省略 project 层级
-            if api.meta_project == 'calendar':
-                base = "calendar"
-            else:
-                base = f"calendar/{api.meta_project}"
-        elif api.biz_tag == 'vc':
-            # 特殊规则 2: 当 meta.project == bizTag 时，省略 project 层级
-            if api.meta_project == 'vc':
-                base = "vc"
-            else:
-                base = f"vc/{api.meta_project}"
-        elif api.biz_tag == 'meeting_room':
-            # meeting_room 的 project 可能是 vc_meeting，需要判断
-            # 这里我们假设如果 project 是 'vc_meeting' 则省略
-            if api.meta_project == 'vc_meeting':
-                base = "meeting_room"
-            else:
-                base = f"meeting_room/{api.meta_project}"
+        # 根据 bizTag/meta.project 确定基础路径：
+        # - 通用规则：当 meta.project == bizTag 时省略 project 层级（例如 base/base、im/im）
+        # - meeting_room 兼容：project 可能为 vc_meeting，此时也省略 project
+        project = api.meta_project
+        if api.biz_tag == 'meeting_room' and api.meta_project == 'vc_meeting':
+            project = api.biz_tag
+
+        if project == api.biz_tag:
+            base = api.biz_tag
         else:
-            # 其他 bizTag 使用通用格式
-            base = f"{api.biz_tag}/{api.meta_project}"
+            base = f"{api.biz_tag}/{project}"
 
         # 处理 meta.version
         version = api.meta_version
@@ -359,12 +352,18 @@ def main():
     parser = argparse.ArgumentParser(description='API 验证脚本（基于 strict 命名规范）')
     parser.add_argument('--csv', default='api_list_export.csv',
                        help='CSV 文件路径 (默认: api_list_export.csv)')
-    parser.add_argument('--src', default='crates/openlark-meeting/src',
-                       help='源码目录路径 (默认: crates/openlark-meeting/src)')
-    parser.add_argument('--output', default='API_VALIDATION_REPORT.md',
-                       help='报告输出路径 (默认: API_VALIDATION_REPORT.md)')
+    parser.add_argument('--src', default=None,
+                       help='源码目录路径（默认: crates/openlark-meeting/src；也可用 --crate 自动设置）')
+    parser.add_argument('--output', default=None,
+                       help='报告输出路径（默认: API_VALIDATION_REPORT.md；--crate 时默认: reports/api_validation/<crate>.md）')
     parser.add_argument('--filter', nargs='+',
                        help='过滤业务标签 (例如: --filter calendar vc meeting_room)')
+    parser.add_argument('--crate',
+                        help='按 crate 自动设置 --src/--filter（来源: tools/api_coverage.toml）')
+    parser.add_argument('--mapping', default='tools/api_coverage.toml',
+                        help='crate→bizTag 映射文件路径 (默认: tools/api_coverage.toml)')
+    parser.add_argument('--list-crates', action='store_true',
+                        help='列出映射文件中的 crate 与 bizTag，然后退出')
 
     args = parser.parse_args()
 
@@ -372,6 +371,58 @@ def main():
     print("🚀 API 验证工具（Strict 命名规范）")
     print("=" * 60)
     print()
+
+    def _load_mapping(path: str) -> dict:
+        if tomllib is None:
+            print("❌ 错误: 当前 Python 不支持 tomllib，请使用 Python 3.11+")
+            raise SystemExit(1)
+        mapping_path = Path(path)
+        if not mapping_path.exists():
+            print(f"❌ 错误: 映射文件不存在: {mapping_path}")
+            raise SystemExit(1)
+        data = tomllib.loads(mapping_path.read_text(encoding="utf-8"))
+        crates = data.get("crates", {})
+        if not isinstance(crates, dict) or not crates:
+            print(f"❌ 错误: 映射文件缺少 [crates.*] 配置: {mapping_path}")
+            raise SystemExit(1)
+        return crates
+
+    if args.list_crates:
+        crates = _load_mapping(args.mapping)
+        print(f"📄 映射文件: {args.mapping}\n")
+        for crate_name in sorted(crates.keys()):
+            cfg = crates.get(crate_name, {})
+            src = cfg.get("src", "")
+            tags = cfg.get("biz_tags", [])
+            tags_text = ", ".join(tags) if isinstance(tags, list) else str(tags)
+            print(f"- {crate_name}: src={src} biz_tags=[{tags_text}]")
+        return 0
+
+    # 当指定 --crate 时，自动补齐 src/filter（显式参数优先）
+    if args.crate:
+        crates = _load_mapping(args.mapping)
+        if args.crate not in crates:
+            print(f"❌ 错误: 映射文件中不存在 crate: {args.crate}")
+            print(f"   提示：运行 `python3 tools/validate_apis.py --list-crates` 查看可用项")
+            return 1
+        cfg = crates[args.crate]
+        if args.src is None:
+            args.src = cfg.get("src")
+        if args.filter is None:
+            args.filter = cfg.get("biz_tags")
+
+    # 输出路径默认值：
+    # - --crate：默认写入 reports/api_validation/<crate>.md（集中存放，且根 .gitignore 已忽略 /reports/）
+    # - 否则：保持旧默认 API_VALIDATION_REPORT.md
+    if args.output is None:
+        if args.crate:
+            args.output = f"reports/api_validation/{args.crate}.md"
+        else:
+            args.output = "API_VALIDATION_REPORT.md"
+
+    # 兼容旧默认值
+    if args.src is None:
+        args.src = 'crates/openlark-meeting/src'
 
     # 验证输入
     if not os.path.exists(args.csv):
@@ -388,6 +439,8 @@ def main():
     validator.parse_csv()
     validator.scan_implementations()
     validator.compare()
+
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
     validator.generate_report(args.output)
 
     print()
