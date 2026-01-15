@@ -17,10 +17,10 @@ allowed-tools:
 
 ## 0. 快速工作流（新增一个 API 文件）
 
-1) 在 `api_list_export.csv` 定位目标 API，拿到：
+1) 在仓库根目录 `./api_list_export.csv` 定位目标 API，拿到：
    - `bizTag`、`meta.Project`、`meta.Version`、`meta.Resource`、`meta.Name`、`url`
    - 若存在 `docPath`（文档链接），先抓取“请求体/响应体”定义（见 §4）
-2) 选择 feature crate（见下方映射表；不确定时按现有目录反查）。
+2) 选择 feature crate（见 §1；不确定时按现有目录反查）。
 3) 计算落盘路径（核心口径）：
 
 ```
@@ -34,23 +34,22 @@ crates/{feature-crate}/src/{bizTag}/{meta.Project}/{meta.Version}/{meta.Resource
 6) 为 openlark-client 提供链式调用：在 `crates/{feature-crate}/src/service.rs` 补齐/新增 service 链路方法（见 §6）
 7) 运行：`just fmt && just lint && just test`
 
-## 1. Feature Crate 映射（常用）
+## 1. Feature Crate ↔ bizTag（单一真相）
 
-| CSV bizTag | Feature Crate | 说明 |
-|-----------|--------------|------|
-| `communication` | `openlark-communication` | 通讯协作模块 |
-| `docs` | `openlark-docs` | 文档协作模块 |
-| `hr` | `openlark-hr` | 人力管理模块 |
-| `auth` | `openlark-auth` | 认证模块 |
-| `meeting_room`, `vc`, `calendar` | `openlark-meeting` | 会议与日程模块 |
-| `mail` | `openlark-mail` | 邮件服务模块 |
-| `cardkit` | `openlark-cardkit` | 卡片工具模块 |
-| `ai` | `openlark-ai` | AI 服务模块 |
-| `helpdesk` | `openlark-helpdesk` | 帮助台模块 |
-| `application` | `openlark-application` | 应用管理模块 |
-| `security_and_compliance` | `openlark-security` | 安全合规模块 |
+仓库以 `tools/api_coverage.toml` 作为 **crate→bizTag** 的唯一来源（避免 tool/skill 各写一份导致漂移）。
 
-反查技巧（优先模仿现有模块结构）：
+常用命令：
+
+```bash
+# 查看所有映射（crate -> src + biz_tags）
+python3 tools/validate_apis.py --list-crates
+
+# 用映射自动补齐 --src/--filter，直接做覆盖率验证
+python3 tools/validate_apis.py --crate openlark-docs
+python3 tools/validate_apis.py --crate openlark-meeting
+```
+
+反查技巧（落盘路径最终以“目标 crate 现有结构”为准）：
 - 在 `crates/<crate>/src/` 下查是否存在 `bizTag` / `meta.Project` 相关目录
 - 参考 `references/file-layout.md`
 
@@ -87,7 +86,9 @@ pub struct {Name}Request {
 impl {Name}Request {
     pub fn new(config: Config) -> Self { /* ... */ }
     pub async fn execute(self, body: {Name}Body) -> SDKResult<{Name}Response> {
-        let req: ApiRequest<{Name}Response> = ApiRequest::post("/open-apis/...").json_body(&body);
+        // 端点必须复用 crate 的 endpoints 常量或 enum（禁止手写 "/open-apis/..."）
+        // 具体写法以目标 crate 现有风格为准：见 references/standard-example.md
+        let req: ApiRequest<{Name}Response> = ApiRequest::post({ENDPOINT_CONST_OR_ENUM});
         let resp = Transport::request(req, &self.config, None).await?;
         resp.data.ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
@@ -128,6 +129,6 @@ python3 .claude/skills/openlark-api/scripts/fetch_docpath.py "<docPath>" --forma
 - 若 crate 还没有 `src/service.rs`：创建该文件并在 `lib.rs` 里 `pub mod service;`
 
 最终调用链应能覆盖（等价即可）：
-`{feature_crate}::service::{Service}. {bizTag}().{meta.Project}().{meta.Version}().{meta.Resource...}().{meta.Name}()`
+`{feature_crate}::service::{Service}.{bizTag}().{meta.Project}().{meta.Version}().{meta.Resource...}().{meta.Name}()`
 
 具体可参考 `references/standard-example.md` 的 service 链示例（以 `openlark-docs` 为样板）。

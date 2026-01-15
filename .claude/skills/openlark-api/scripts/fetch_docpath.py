@@ -9,6 +9,10 @@
 用法：
   python3 .claude/skills/openlark-api/scripts/fetch_docpath.py "<docPath>" --format md --out /tmp/doc.md
   python3 .claude/skills/openlark-api/scripts/fetch_docpath.py "<docPath>" --format json
+
+离线模式（无网络/受限环境）：
+  python3 .claude/skills/openlark-api/scripts/fetch_docpath.py "<docPath>" --html-file /path/to/page.html --format md
+  cat /path/to/page.html | python3 .claude/skills/openlark-api/scripts/fetch_docpath.py "<docPath>" --stdin --format md
 """
 
 from __future__ import annotations
@@ -165,7 +169,7 @@ def fetch_html(url: str, timeout: int) -> str:
     req = urllib.request.Request(
         url,
         headers={
-            "User-Agent": "openlark-api-skill/1.0 (+https://openai.com)",
+            "User-Agent": "open-lark(openlark-api-skill)/1.0",
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         },
     )
@@ -272,20 +276,37 @@ def to_markdown(data: Extracted) -> str:
 
 def _parse_args(argv: list[str]) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Fetch and extract useful parts from a docPath page.")
-    p.add_argument("url", help="docPath URL")
+    p.add_argument("url", nargs="?", help="docPath URL（离线模式可省略）")
     p.add_argument("--timeout", type=int, default=20)
     p.add_argument("--max-code-blocks", type=int, default=12)
     p.add_argument("--max-text-chars", type=int, default=12000)
     p.add_argument("--format", choices=["md", "json"], default="md")
     p.add_argument("--out", help="Write output to file instead of stdout")
+    p.add_argument("--html-file", help="Read HTML from a local file instead of fetching from network")
+    p.add_argument("--stdin", action="store_true", help="Read HTML from stdin instead of fetching from network")
     return p.parse_args(argv)
 
 
 def main(argv: list[str]) -> int:
     args = _parse_args(argv)
-    html = fetch_html(args.url, timeout=args.timeout)
+    if args.html_file and args.stdin:
+        raise SystemExit("不能同时指定 --html-file 与 --stdin")
+
+    if args.html_file:
+        with open(args.html_file, "r", encoding="utf-8", errors="replace") as f:
+            html = f.read()
+        url = args.url or f"file:{args.html_file}"
+    elif args.stdin:
+        html = sys.stdin.read()
+        url = args.url or "stdin"
+    else:
+        if not args.url:
+            raise SystemExit("缺少 docPath URL：请提供 <docPath>，或使用 --html-file/--stdin 进入离线模式")
+        html = fetch_html(args.url, timeout=args.timeout)
+        url = args.url
+
     data = extract(
-        args.url,
+        url,
         html,
         max_code_blocks=args.max_code_blocks,
         max_text_chars=args.max_text_chars,

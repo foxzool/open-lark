@@ -2,7 +2,8 @@
 //!
 //! 本示例演示如何使用openlark-auth模块的所有11个认证API
 
-use openlark_auth::prelude::*;
+use openlark_auth::{AuthService, AuthenService, OAuthService};
+use openlark_core::config::Config;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -14,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 1. Auth v3 APIs (5个)
     println!("\n📋 Auth v3 APIs (5个):");
-    let auth_service = AuthServiceV3::new(config.clone());
+    let auth_service = AuthService::new(config.clone()).v3();
 
     println!("✅ 1. 商店应用获取app_access_token");
     let _builder1 = auth_service
@@ -48,7 +49,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 2. Authen v1 APIs (5个)
     println!("\n👤 Authen v1 APIs (5个):");
-    let authen_service = AuthenServiceV1::new(config.clone());
+    let authen_service = AuthenService::new(config.clone()).v1();
 
     println!("✅ 1. 获取用户信息 (user_info.get)");
     let _builder6 = authen_service
@@ -91,7 +92,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 3. OAuth APIs (1个)
     println!("\n🔗 OAuth APIs (1个):");
-    let oauth_service = OAuthServiceOld::new(config.clone());
+    let oauth_service = OAuthService::new(config.clone()).old();
 
     println!("✅ 1. 获取登录预授权码 (v1/index)");
     let auth_url = oauth_service
