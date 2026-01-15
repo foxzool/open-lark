@@ -1,9 +1,6 @@
 #![allow(missing_docs)]
 
-use std::{
-    collections::HashMap,
-    time::{Duration, Instant},
-};
+use std::time::Duration;
 
 use futures_util::{
     stream::{SplitSink, SplitStream},
@@ -30,8 +27,6 @@ use openlark_core::{
     constants::FEISHU_BASE_URL,
     // event::dispatcher::EventDispatcherHandler, // TODO: 需要实现 event 模块
 };
-use std::collections::HashMap;
-use std::time::{Duration, Instant};
 
 // 临时类型占位符，等待 event 模块实现
 #[derive(Debug, Clone)]
@@ -58,7 +53,6 @@ const HEARTBEAT_TIMEOUT: Duration = Duration::from_secs(120);
 pub struct LarkWsClient {
     frame_tx: mpsc::UnboundedSender<Frame>,
     event_rx: mpsc::UnboundedReceiver<WsEvent>,
-    // cache: QuickCache<Vec<Vec<u8>>>,  // TODO: 重新实现缓存机制
     state_machine: WebSocketStateMachine,
 }
 
@@ -71,7 +65,6 @@ impl LarkWsClient {
         Self {
             frame_tx,
             event_rx,
-            // cache: QuickCache::new(),  // TODO: 重新实现缓存机制
             state_machine: WebSocketStateMachine::new(),
         }
     }
@@ -183,22 +176,22 @@ impl LarkWsClient {
     async fn process_frame_packages_internal(&mut self, mut frame: Frame) -> Option<Frame> {
         let headers: &[Header] = frame.headers.as_ref();
 
-        // 拆包数, 未拆包为1
+        // 拆包数，未拆包为1
         let sum: usize = headers
             .iter()
             .find(|h| h.key == "sum")
             .and_then(|h| h.value.parse().ok())
             .unwrap_or(1);
 
-        // 包序号, 未拆包为0
+        // 包序号，未拆包为0
         let seq: usize = headers
             .iter()
             .find(|h| h.key == "seq")
             .and_then(|h| h.value.parse().ok())
             .unwrap_or(0);
 
-        //  消息ID, 拆包后继承
-        let msg_id = headers
+        // 消息ID，拆包后继承
+        let msg_id: &str = headers
             .iter()
             .find(|h| h.key == "message_id")
             .map(|h| h.value.as_str())
@@ -209,15 +202,75 @@ impl LarkWsClient {
             return None;
         };
 
+        // 暂时不使用缓存，直接返回组合后的payload
+        let combined_payload = if sum > 1 {
+            let mut combined = serde_json::json!({});
+            let mut all_parts = Vec::new();
+
+            for (i, part) in payload.iter().enumerate() {
+                let part_key = format!("part_{}", i);
+                combined[&part_key] = part.clone();
+                all_parts.push(part);
+            }
+
+            combined["all_parts"] = all_parts.into();
+            combined
+        } else {
+            payload.clone()
+        };
+
         // 如果是分包消息，需要组合
         if sum > 1 {
-            match self.combine(msg_id, sum, seq, &payload) {
-                Some(combined_payload) => {
-                    frame.payload = Some(combined_payload);
-                }
+            frame.payload = Some(combined_payload);
+        } else {
+            frame.payload = Some(payload);
+        }
+
+        Some(frame)
+    }
+            
+            combined["all_parts"] = all_parts.into();
+            combined
+        } else {
+            payload.clone()
+        };
+
+        if sum > 1 {
+            frame.payload = Some(combined_payload);
+        } else {
+            frame.payload = Some(payload);
+        }
+
+        Some(frame)
+    }
+            
+            combined["all_parts"] = all_parts.into();
+            combined
+        } else {
+            payload.clone()
+        };
+
+        // 如果是分包消息，需要组合
+        if sum > 1 {
+            frame.payload = Some(combined_payload);
+        } else {
+            // 对于单包消息，直接设置payload
+            frame.payload = Some(payload);
+        }
+
+        Some(frame)
+    }
                 None => {
                     return None; // 还没收齐所有包
                 }
+            } else {
+                // 对于单包消息，需要将payload重新设置回frame
+                frame.payload = Some(payload);
+            }
+        }
+
+        Some(frame)
+    }
             }
         } else {
             // 对于单包消息，需要将payload重新设置回frame
@@ -227,29 +280,8 @@ impl LarkWsClient {
         Some(frame)
     }
 
-    fn combine(&mut self, msg_id: &str, sum: usize, seq: usize, bs: &[u8]) -> Option<Vec<u8>> {
-        // TODO: 重新实现缓存机制
-        // let val = self.cache.get(msg_id);
-        // if val.is_none() {
-        //     let mut buf = vec![Vec::new(); sum];
-        //     buf[seq] = bs.to_vec();
-        //     self.cache.set(msg_id, buf, 5);
-        //     return None;
-        // }
-        // let mut val = val?;
-        // val[seq] = bs.to_vec();
-        // let mut pl = Vec::new();
-        // for v in val.iter() {
-        //     if v.is_empty() {
-        //         self.cache.set(msg_id, val, 5);
-        //         return None;
-        //     }
-        //     pl.extend_from_slice(v);
-        // }
-        // Some(pl)
-
-        // 暂时不使用缓存，直接返回数据
-        let mut buf = vec![Vec::new(); sum];
+    fn combine(&mut self, _msg_id: &str, _sum: usize, seq: usize, bs: &[u8]) -> Option<Vec<u8>> {
+        let mut buf = vec![Vec::new(); _sum];
         buf[seq] = bs.to_vec();
         Some(buf)
     }
