@@ -11,7 +11,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 删除字段请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct DeleteFieldRequest {
     /// 配置信息

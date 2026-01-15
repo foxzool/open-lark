@@ -13,7 +13,6 @@ use serde::{Deserialize, Serialize};
 use super::models::Record;
 
 /// 获取记录请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct GetRecordRequest {
     config: Config,

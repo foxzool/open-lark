@@ -14,7 +14,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 /// 更新数据表请求 (Patch)
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct PatchTableRequest {
     /// 配置信息

@@ -5,7 +5,7 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
@@ -14,7 +14,6 @@ use serde_json::Value;
 use super::models::Record;
 
 /// 更新记录请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct UpdateRecordRequest {
     config: Config,
@@ -71,40 +70,33 @@ impl UpdateRecordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UpdateRecordResponse> {
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "app_token 不能为空"));
-        }
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "table_id 不能为空"));
-        }
-        if self.record_id.trim().is_empty() {
-            return Err(validation_error("record_id", "record_id 不能为空"));
-        }
+        use crate::common::{api_endpoints::BitableApiV1, api_utils::*};
 
-        use crate::common::api_endpoints::BitableApiV1;
+        validate_required_field("app_token", Some(&self.app_token), "app_token 不能为空")?;
+        validate_required_field("table_id", Some(&self.table_id), "table_id 不能为空")?;
+        validate_required_field("record_id", Some(&self.record_id), "record_id 不能为空")?;
+
         let api_endpoint = BitableApiV1::RecordUpdate(
             self.app_token.clone(),
             self.table_id.clone(),
             self.record_id,
         );
 
-        let mut api_request: ApiRequest<UpdateRecordResponse> = ApiRequest::put(
-            &api_endpoint.to_url(),
-        )
-        .body(serde_json::to_vec(&UpdateRecordRequestBody {
-            fields: self.fields,
-        })?);
+        let request = ApiRequest::<UpdateRecordResponse>::put(&api_endpoint.to_url())
+            .query_opt("user_id_type", self.user_id_type)
+            .query_opt(
+                "ignore_consistency_check",
+                self.ignore_consistency_check.map(|v| v.to_string()),
+            )
+            .body(serialize_params(
+                &UpdateRecordRequestBody {
+                    fields: self.fields,
+                },
+                "更新记录",
+            )?);
 
-        api_request = api_request.query_opt("user_id_type", self.user_id_type);
-        api_request = api_request.query_opt(
-            "ignore_consistency_check",
-            self.ignore_consistency_check.map(|v| v.to_string()),
-        );
-
-        let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
+        let response = Transport::request(request, &self.config, None).await?;
+        extract_response_data(response, "更新记录")
     }
 }
 
@@ -163,9 +155,39 @@ struct UpdateRecordRequestBody {
 }
 
 /// 更新记录响应
+///
+/// 包含更新后记录的完整信息，包括记录ID、更新后的字段值以及更新元数据。
+///
+/// # 示例
+/// ```json
+/// {
+///   "record": {
+///     "record_id": "recxxxxxxxxxxxx",
+///     "fields": {
+///       "姓名": "张三",
+///       "邮箱": "new_email@example.com"
+///     },
+///     "last_modified_by": {
+///       "id": "ou_xxxxxxxxxxxxxxxx",
+///       "name": "李四",
+///       "en_name": "Li Si"
+///     },
+///     "last_modified_time": 1234567890000,
+///     "record_url": "https://example.feishu.cn/base/xxxxxxxxxxxxx"
+///   }
+/// }
+/// ```
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpdateRecordResponse {
     /// 更新记录的内容
+    ///
+    /// 包含记录ID、更新后的所有字段值以及元数据信息。
+    /// - `record_id`: 记录的唯一标识符
+    /// - `fields`: 字段名到更新后字段值的映射
+    /// - `last_modified_by` (可选): 最后更新者信息，需要开启 automatic_fields 参数
+    /// - `last_modified_time` (可选): 最后更新时间戳（毫秒），需要开启 automatic_fields 参数
+    /// - `shared_url` (可选): 记录分享链接
+    /// - `record_url` (可选): 记录访问链接
     pub record: Record,
 }
 

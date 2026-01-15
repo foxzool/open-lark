@@ -14,7 +14,6 @@ use serde_json::Value;
 use super::models::Record;
 
 /// 批量更新记录请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct BatchUpdateRecordRequest {
     config: Config,

@@ -1,7 +1,6 @@
 /// 文档内容模块
 ///
 /// 提供云文档内容的获取功能，包括文档详细信息、文本内容等。
-#[allow(dead_code)]
 #[allow(unused_variables)]
 #[allow(unused_imports)]
 #[allow(unused_mut)]

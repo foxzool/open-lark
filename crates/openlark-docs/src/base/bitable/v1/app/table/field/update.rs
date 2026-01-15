@@ -15,7 +15,6 @@ use serde_json::Value;
 pub use super::create::{Field, FieldProperty, FieldType};
 
 /// 更新字段请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct UpdateFieldRequest {
     /// 配置信息

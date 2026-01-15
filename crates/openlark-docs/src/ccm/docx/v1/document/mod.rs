@@ -1,7 +1,6 @@
 /// 文档模块
 ///
 /// 提供文档的基础操作功能，包括文档创建、获取、内容管理等。
-#[allow(dead_code)]
 #[allow(unused_variables)]
 #[allow(unused_imports)]
 #[allow(unused_mut)]

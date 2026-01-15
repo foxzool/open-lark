@@ -13,7 +13,6 @@ use serde::{Deserialize, Serialize};
 use super::models::Form;
 
 /// 更新表单元数据请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct PatchFormRequest {
     config: Config,

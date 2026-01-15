@@ -14,7 +14,6 @@ use super::models::App;
 use super::AppService;
 
 /// 获取多维表格请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct GetAppRequest {
     /// 应用token

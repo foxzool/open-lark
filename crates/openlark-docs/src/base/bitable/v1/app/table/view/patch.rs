@@ -77,7 +77,6 @@ impl ApiResponseTrait for PatchViewResponse {
 }
 
 /// 更新视图请求
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct PatchViewRequest {
     config: Config,
