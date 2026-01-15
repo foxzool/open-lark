@@ -22,4 +22,3 @@ pub trait Service {
         "v1"
     }
 }
-

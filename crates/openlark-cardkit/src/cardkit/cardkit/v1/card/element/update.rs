@@ -2,12 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card-element/update
 
-use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 use super::models::UpdateCardElementResponse;
 use crate::common::api_utils::{extract_response_data, serialize_params};
@@ -35,7 +30,7 @@ pub struct UpdateCardElementRequest {
 
 impl UpdateCardElementRequest {
     pub fn new(config: Config) -> Self {
-        Self { 
+        Self {
             config,
             card_id: None,
             element_id: None,

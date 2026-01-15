@@ -26,4 +26,3 @@ struct ResendAppTicketReq {
     app_id: String,
     app_secret: String,
 }
-

@@ -2,12 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/historic-version/id_convert
 
-use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 use serde::{Deserialize, Serialize};
 
 use super::models::ConvertCardIdResponse;
