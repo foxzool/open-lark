@@ -2,12 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card-element/content
 
-use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 use super::models::UpdateCardElementContentResponse;
 use crate::common::api_utils::{extract_response_data, serialize_params};
@@ -75,9 +70,10 @@ impl UpdateCardElementContentRequest {
         }
 
         // url: PUT:/open-apis/cardkit/v1/cards/:card_id/elements/:element_id/content
-        let req: ApiRequest<UpdateCardElementContentResponse> =
-            ApiRequest::put(cardkit_v1_card_element_content(&body.card_id, &body.element_id))
-                .body(serialize_params(&body, "流式更新文本")?);
+        let req: ApiRequest<UpdateCardElementContentResponse> = ApiRequest::put(
+            cardkit_v1_card_element_content(&body.card_id, &body.element_id),
+        )
+        .body(serialize_params(&body, "流式更新文本")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "流式更新文本")

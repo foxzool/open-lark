@@ -2,12 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card-element/patch
 
-use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 use super::models::PatchCardElementResponse;
 use crate::common::api_utils::{extract_response_data, serialize_params};
