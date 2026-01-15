@@ -84,6 +84,21 @@ impl AuthorizationBuilder {
         validate_required!(self.app_id, "应用ID不能为空");
         validate_required!(self.redirect_uri, "重定向URI不能为空");
 
+        let url = self.build_authorization_url();
+
+        // OAuth授权是重定向流程，返回构建的URL
+        Ok(AuthorizationCodeResponseData {
+            data: AuthorizationUrlResponse {
+                authorization_url: url.clone(),
+                app_id: self.app_id,
+                redirect_uri: self.redirect_uri,
+                scope: self.scope,
+                state: self.state,
+            },
+        })
+    }
+
+    fn build_authorization_url(&self) -> String {
         // 🚀 使用新的enum+builder系统生成API端点
         use crate::common::api_endpoints::OAuthApiOld;
         let api_endpoint = OAuthApiOld::Index;
@@ -92,7 +107,7 @@ impl AuthorizationBuilder {
         let mut url = format!(
             "{}{}?app_id={}&redirect_uri={}",
             self.config.base_url,
-            api_endpoint.to_url(),
+            api_endpoint.path(),
             urlencoding::encode(&self.app_id),
             urlencoding::encode(&self.redirect_uri)
         );
@@ -108,19 +123,10 @@ impl AuthorizationBuilder {
 
         url.push_str(&format!(
             "&response_type={}",
-            self.response_type.unwrap_or_default()
+            self.response_type.clone().unwrap_or_default()
         ));
 
-        // OAuth授权是重定向流程，返回构建的URL
-        Ok(AuthorizationCodeResponseData {
-            data: AuthorizationUrlResponse {
-                authorization_url: url.clone(),
-                app_id: self.app_id,
-                redirect_uri: self.redirect_uri,
-                scope: self.scope,
-                state: self.state,
-            },
-        })
+        url
     }
 
     /// 构建授权URL（保持向后兼容）
@@ -129,26 +135,7 @@ impl AuthorizationBuilder {
     /// 验证成功后，飞书会将用户重定向到指定的redirect_uri，
     /// 并附带授权码code参数。
     pub fn build_url(self) -> String {
-        let mut url = format!(
-            "{}/open-apis/authen/v1/index?app_id={}&redirect_uri={}",
-            self.config.base_url,
-            urlencoding::encode(&self.app_id),
-            urlencoding::encode(&self.redirect_uri)
-        );
-
-        if let Some(scope) = &self.scope {
-            url.push_str(&format!("&scope={}", urlencoding::encode(scope)));
-        }
-
-        if let Some(state) = &self.state {
-            url.push_str(&format!("&state={}", urlencoding::encode(state)));
-        }
-
-        url.push_str(&format!(
-            "&response_type={}",
-            self.response_type.unwrap_or_default()
-        ));
-        url
+        self.build_authorization_url()
     }
 
     /// 获取授权码（OAuth流程）
@@ -160,18 +147,9 @@ impl AuthorizationBuilder {
     /// 3. 用户授权后，飞书重定向到redirect_uri并附带code参数
     /// 4. 使用获取到的code调用user_access_token接口获取访问令牌
     pub async fn send(self) -> SDKResult<AuthorizationCodeResponse> {
-        // OAuth授权是重定向流程，不直接返回响应
-        // 实际应用中需要处理重定向流程
-        Err(openlark_core::error::CoreError::Configuration {
-            message: "OAuth授权需要重定向流程，请使用 build_url() 获取授权链接".to_string(),
-            code: openlark_core::error::ErrorCode::ValidationError,
-            ctx: {
-                let mut ctx = openlark_core::error::ErrorContext::new();
-                ctx.add_context("endpoint", "/open-apis/authen/v1/index");
-                ctx.add_context("flow", "oauth_redirect");
-                Box::new(ctx)
-            },
-        })
+        Err(openlark_core::error::configuration_error(
+            "OAuth授权需要重定向流程，请使用 build_url() 获取授权链接",
+        ))
     }
 }
 

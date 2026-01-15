@@ -2,6 +2,11 @@
 //!
 //! 提供统一的 API 端点管理和 URL 生成功能
 
+use openlark_core::constants::{
+    APPLY_APP_TICKET_PATH, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_URL_PATH,
+    TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH, TENANT_ACCESS_TOKEN_URL_PATH,
+};
+
 /// Auth V3 API 端点枚举
 #[derive(Debug, Clone)]
 pub enum AuthApiV3 {
@@ -18,18 +23,14 @@ pub enum AuthApiV3 {
 }
 
 impl AuthApiV3 {
-    /// 生成对应的 URL
-    pub fn to_url(&self) -> String {
+    /// 获取对应的 API 路径
+    pub fn path(&self) -> &'static str {
         match self {
-            AuthApiV3::AppAccessTokenInternal => {
-                "/open-apis/auth/v3/app_access_token/internal".to_string()
-            }
-            AuthApiV3::TenantAccessTokenInternal => {
-                "/open-apis/auth/v3/tenant_access_token/internal".to_string()
-            }
-            AuthApiV3::AppTicketResend => "/open-apis/auth/v3/app_ticket/resend".to_string(),
-            AuthApiV3::AppAccessToken => "/open-apis/auth/v3/app_access_token".to_string(),
-            AuthApiV3::TenantAccessToken => "/open-apis/auth/v3/tenant_access_token".to_string(),
+            AuthApiV3::AppAccessTokenInternal => APP_ACCESS_TOKEN_INTERNAL_URL_PATH,
+            AuthApiV3::TenantAccessTokenInternal => TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH,
+            AuthApiV3::AppTicketResend => APPLY_APP_TICKET_PATH,
+            AuthApiV3::AppAccessToken => APP_ACCESS_TOKEN_URL_PATH,
+            AuthApiV3::TenantAccessToken => TENANT_ACCESS_TOKEN_URL_PATH,
         }
     }
 }
@@ -50,18 +51,14 @@ pub enum AuthenApiV1 {
 }
 
 impl AuthenApiV1 {
-    /// 生成对应的 URL
-    pub fn to_url(&self) -> String {
+    /// 获取对应的 API 路径
+    pub fn path(&self) -> &'static str {
         match self {
-            AuthenApiV1::UserInfo => "/open-apis/authen/v1/user_info".to_string(),
-            AuthenApiV1::AccessToken => "/open-apis/authen/v1/access_token".to_string(),
-            AuthenApiV1::RefreshAccessToken => {
-                "/open-apis/authen/v1/refresh_access_token".to_string()
-            }
-            AuthenApiV1::OidcAccessToken => "/open-apis/authen/v1/oidc/access_token".to_string(),
-            AuthenApiV1::OidcRefreshAccessToken => {
-                "/open-apis/authen/v1/oidc/refresh_access_token".to_string()
-            }
+            AuthenApiV1::UserInfo => "/open-apis/authen/v1/user_info",
+            AuthenApiV1::AccessToken => "/open-apis/authen/v1/access_token",
+            AuthenApiV1::RefreshAccessToken => "/open-apis/authen/v1/refresh_access_token",
+            AuthenApiV1::OidcAccessToken => "/open-apis/authen/v1/oidc/access_token",
+            AuthenApiV1::OidcRefreshAccessToken => "/open-apis/authen/v1/oidc/refresh_access_token",
         }
     }
 }
@@ -74,10 +71,10 @@ pub enum OAuthApiOld {
 }
 
 impl OAuthApiOld {
-    /// 生成对应的 URL
-    pub fn to_url(&self) -> String {
+    /// 获取对应的 API 路径
+    pub fn path(&self) -> &'static str {
         match self {
-            OAuthApiOld::Index => "/open-apis/authen/v1/index".to_string(),
+            OAuthApiOld::Index => "/open-apis/authen/v1/index",
         }
     }
 }
