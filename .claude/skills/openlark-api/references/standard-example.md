@@ -146,3 +146,28 @@ pub mod create;
 pub mod get;
 pub mod models;
 ```
+
+## service.rs 链式调用（给 openlark-client 调用）
+
+`openlark-client` 推荐以“薄包装 + raw 透传”的方式复用各 feature crate 的 service 链路。
+
+### 示例：openlark-docs 的链式结构（真实存在）
+
+入口：`crates/openlark-docs/src/service.rs`
+
+```rust
+// openlark_docs::service::DocsService
+service.base().v2().app().role().create()
+```
+
+其中：
+- `base()`（bizTag）在 `DocsService` 上提供
+- `v2()`（meta.Version）在 `BaseService` 上提供：`crates/openlark-docs/src/base/service.rs`
+- `app().role()`（meta.Project/meta.Resource）在各层 `*Service` 上提供
+- `create()`（meta.Name）在 `RoleService` 上提供：`crates/openlark-docs/src/base/base/v2/app/role/mod.rs`
+
+### 对新 API 的要求（建议照此落地）
+
+当你新增 `crates/{feature-crate}/src/{bizTag}/{meta.Project}/{meta.Version}/.../{meta.Name}.rs` 时：
+- 确保能从 `crates/{feature-crate}/src/service.rs` 逐层链式访问到该 API builder
+- 每一层 service 只做“路由/分组”，最后一层返回具体 API builder（其上再 `.send()`/`.execute()`）

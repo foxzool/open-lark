@@ -3,16 +3,61 @@
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/get
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    error::validation_error,
+    http::Transport,
+    SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
-use crate::{common::api_utils::extract_response_data, endpoints::CALENDAR_V4_CALENDARS};
+use crate::common::api_endpoints::CalendarApiV4;
 
 /// 查询日历信息请求
 pub struct GetCalendarRequest {
     config: Config,
     calendar_id: String,
     query_params: Vec<(String, String)>,
+}
+
+/// 查询日历信息响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct GetCalendarResponse {
+    pub calendar: CalendarData,
+}
+
+/// 日历数据
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CalendarData {
+    /// 日历 ID
+    pub calendar_id: String,
+    /// 日历摘要
+    pub summary: String,
+    /// 日历描述
+    pub description: Option<String>,
+    /// 日历颜色
+    pub color: Option<String>,
+    /// 权限
+    pub permissions: Option<CalendarPermissions>,
+    /// 是否为主日历
+    pub primary: Option<bool>,
+    /// 日历类型
+    pub calendar_type: Option<String>,
+}
+
+/// 日历权限
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CalendarPermissions {
+    /// 是否可读
+    pub is_readable: Option<bool>,
+    /// 是否可写
+    pub is_writable: Option<bool>,
+}
+
+impl ApiResponseTrait for GetCalendarResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl GetCalendarRequest {
@@ -39,17 +84,23 @@ impl GetCalendarRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/get
-    pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        validate_required!(self.calendar_id, "calendar_id 不能为空");
-
-        // url: GET:/open-apis/calendar/v4/calendars/:calendar_id
-        let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::get(format!("{}/{}", CALENDAR_V4_CALENDARS, self.calendar_id));
-        for (k, v) in self.query_params {
-            req = req.query(k, v);
+    pub async fn execute(self) -> SDKResult<GetCalendarResponse> {
+        if self.calendar_id.trim().is_empty() {
+            return Err(validation_error("calendar_id", "日历 ID 不能为空"));
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
-        extract_response_data(resp, "查询日历信息")
+        let api_endpoint = CalendarApiV4::CalendarGet(self.calendar_id.clone());
+
+        let mut api_request: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
+
+        for (key, value) in self.query_params {
+            api_request = api_request.query(key, value);
+        }
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        let data: GetCalendarResponse = response
+            .data
+            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))?;
+        Ok(data)
     }
 }
