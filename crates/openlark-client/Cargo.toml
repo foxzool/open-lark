@@ -43,7 +43,7 @@ openlark-ai = { workspace = true, optional = true }   # AI服务模块
 # openlark-mail = { workspace = true, optional = true } # 暂时注释，未加入workspace
 
 [features]
-default = ["communication"]  # auth 始终启用，无需包含在默认功能中
+default = ["auth", "communication"]  # 单入口下建议默认启用认证链路
 
 # Core client feature
 client = []

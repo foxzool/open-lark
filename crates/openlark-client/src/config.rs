@@ -5,6 +5,8 @@
 use crate::Result;
 use std::time::Duration;
 
+use openlark_core::constants::AppType;
+
 /// 🔧 OpenLark客户端配置
 ///
 /// 支持从环境变量自动加载配置
@@ -12,7 +14,9 @@ use std::time::Duration;
 /// # 环境变量
 /// - `OPENLARK_APP_ID`: 应用ID（必需）
 /// - `OPENLARK_APP_SECRET`: 应用密钥（必需）
+/// - `OPENLARK_APP_TYPE`: 应用类型（可选：self_build / marketplace，默认 self_build）
 /// - `OPENLARK_BASE_URL`: API基础URL（可选，默认：https://open.feishu.cn）
+/// - `OPENLARK_ENABLE_TOKEN_CACHE`: 是否允许自动获取 token（可选，默认 true）
 ///
 /// # 示例
 /// ```rust,no_run
@@ -34,6 +38,10 @@ pub struct Config {
     pub app_id: String,
     /// 🔑 飞书应用密钥
     pub app_secret: String,
+    /// 🏷️ 应用类型（自建 / 商店）
+    pub app_type: AppType,
+    /// 🔐 是否允许 SDK 自动获取 token（通过 openlark-core 的 TokenProvider）
+    pub enable_token_cache: bool,
     /// 🌐 API基础URL
     pub base_url: String,
     /// ⏱️ 请求超时时间
@@ -51,6 +59,8 @@ impl Default for Config {
         Self {
             app_id: String::new(),
             app_secret: String::new(),
+            app_type: AppType::SelfBuild,
+            enable_token_cache: true,
             base_url: "https://open.feishu.cn".to_string(),
             timeout: Duration::from_secs(30),
             retry_count: 3,
@@ -71,7 +81,9 @@ impl Config {
     /// # 环境变量
     /// - `OPENLARK_APP_ID`: 应用ID（必需）
     /// - `OPENLARK_APP_SECRET`: 应用密钥（必需）
+    /// - `OPENLARK_APP_TYPE`: 应用类型（可选：self_build / marketplace）
     /// - `OPENLARK_BASE_URL`: API基础URL（可选）
+    /// - `OPENLARK_ENABLE_TOKEN_CACHE`: 是否允许自动获取 token（可选）
     ///
     /// # 返回值
     /// 返回配置实例，环境变量缺失时使用默认值
@@ -97,9 +109,25 @@ impl Config {
             }
         }
 
+        if let Ok(app_type) = std::env::var("OPENLARK_APP_TYPE") {
+            let v = app_type.trim().to_lowercase();
+            match v.as_str() {
+                "self_build" | "selfbuild" | "self" => self.app_type = AppType::SelfBuild,
+                "marketplace" | "store" => self.app_type = AppType::Marketplace,
+                _ => {}
+            }
+        }
+
         if let Ok(base_url) = std::env::var("OPENLARK_BASE_URL") {
             if !base_url.is_empty() {
                 self.base_url = base_url;
+            }
+        }
+
+        if let Ok(setting) = std::env::var("OPENLARK_ENABLE_TOKEN_CACHE") {
+            if !setting.trim().is_empty() {
+                let s = setting.trim().to_lowercase();
+                self.enable_token_cache = !(s.starts_with('f') || s == "0");
             }
         }
 
@@ -207,6 +235,8 @@ impl Config {
         ConfigSummary {
             app_id: self.app_id.clone(),
             app_secret_set: !self.app_secret.is_empty(),
+            app_type: self.app_type,
+            enable_token_cache: self.enable_token_cache,
             base_url: self.base_url.clone(),
             timeout: self.timeout,
             retry_count: self.retry_count,
@@ -222,6 +252,12 @@ impl Config {
         }
         if !other.app_secret.is_empty() {
             self.app_secret = other.app_secret.clone();
+        }
+        if other.app_type != AppType::SelfBuild {
+            self.app_type = other.app_type;
+        }
+        if other.enable_token_cache != self.enable_token_cache {
+            self.enable_token_cache = other.enable_token_cache;
         }
         if !other.base_url.is_empty() {
             self.base_url = other.base_url.clone();
@@ -281,6 +317,18 @@ impl ConfigBuilder {
     /// 🔑 设置应用密钥
     pub fn app_secret<S: Into<String>>(mut self, app_secret: S) -> Self {
         self.config.app_secret = app_secret.into();
+        self
+    }
+
+    /// 🏷️ 设置应用类型（自建 / 商店）
+    pub fn app_type(mut self, app_type: AppType) -> Self {
+        self.config.app_type = app_type;
+        self
+    }
+
+    /// 🔐 设置是否允许自动获取 token（默认 true）
+    pub fn enable_token_cache(mut self, enable: bool) -> Self {
+        self.config.enable_token_cache = enable;
         self
     }
 
@@ -354,6 +402,10 @@ pub struct ConfigSummary {
     pub app_id: String,
     /// 🔑 应用密钥是否已设置
     pub app_secret_set: bool,
+    /// 🏷️ 应用类型
+    pub app_type: AppType,
+    /// 🔐 是否允许自动获取 token
+    pub enable_token_cache: bool,
     /// 🌐 API基础URL
     pub base_url: String,
     /// ⏱️ 请求超时时间
@@ -400,6 +452,22 @@ impl From<std::env::Vars> for Config {
 
         if let Some(base_url) = env_map.get("OPENLARK_BASE_URL") {
             config.base_url = base_url.clone();
+        }
+
+        if let Some(app_type) = env_map.get("OPENLARK_APP_TYPE") {
+            let v = app_type.trim().to_lowercase();
+            match v.as_str() {
+                "self_build" | "selfbuild" | "self" => config.app_type = AppType::SelfBuild,
+                "marketplace" | "store" => config.app_type = AppType::Marketplace,
+                _ => {}
+            }
+        }
+
+        if let Some(enable) = env_map.get("OPENLARK_ENABLE_TOKEN_CACHE") {
+            let s = enable.trim().to_lowercase();
+            if !s.is_empty() {
+                config.enable_token_cache = !(s.starts_with('f') || s == "0");
+            }
         }
 
         if let Some(timeout_str) = env_map.get("OPENLARK_TIMEOUT") {
@@ -465,7 +533,9 @@ mod tests {
         // 设置环境变量
         std::env::set_var("OPENLARK_APP_ID", "test_app_id");
         std::env::set_var("OPENLARK_APP_SECRET", "test_app_secret");
+        std::env::set_var("OPENLARK_APP_TYPE", "marketplace");
         std::env::set_var("OPENLARK_BASE_URL", "https://test.feishu.cn");
+        std::env::set_var("OPENLARK_ENABLE_TOKEN_CACHE", "false");
         std::env::set_var("OPENLARK_TIMEOUT", "60");
         std::env::set_var("OPENLARK_RETRY_COUNT", "5");
         std::env::set_var("OPENLARK_ENABLE_LOG", "false");
@@ -473,7 +543,9 @@ mod tests {
         let config = Config::from_env();
         assert_eq!(config.app_id, "test_app_id");
         assert_eq!(config.app_secret, "test_app_secret");
+        assert_eq!(config.app_type, AppType::Marketplace);
         assert_eq!(config.base_url, "https://test.feishu.cn");
+        assert!(!config.enable_token_cache);
         assert_eq!(config.timeout, Duration::from_secs(60));
         assert_eq!(config.retry_count, 5);
         assert!(!config.enable_log);
@@ -481,7 +553,9 @@ mod tests {
         // 清理环境变量
         std::env::remove_var("OPENLARK_APP_ID");
         std::env::remove_var("OPENLARK_APP_SECRET");
+        std::env::remove_var("OPENLARK_APP_TYPE");
         std::env::remove_var("OPENLARK_BASE_URL");
+        std::env::remove_var("OPENLARK_ENABLE_TOKEN_CACHE");
         std::env::remove_var("OPENLARK_TIMEOUT");
         std::env::remove_var("OPENLARK_RETRY_COUNT");
         std::env::remove_var("OPENLARK_ENABLE_LOG");
@@ -493,6 +567,8 @@ mod tests {
         let config = Config {
             app_id: "test_app_id".to_string(),
             app_secret: "test_app_secret".to_string(),
+            app_type: AppType::SelfBuild,
+            enable_token_cache: true,
             base_url: "https://open.feishu.cn".to_string(),
             timeout: Duration::from_secs(30),
             retry_count: 3,
@@ -556,6 +632,8 @@ mod tests {
         let config = Config {
             app_id: "test_app_id".to_string(),
             app_secret: "test_app_secret".to_string(),
+            app_type: AppType::SelfBuild,
+            enable_token_cache: true,
             base_url: "https://open.feishu.cn".to_string(),
             timeout: Duration::from_secs(30),
             retry_count: 3,
