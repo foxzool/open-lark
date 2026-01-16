@@ -228,66 +228,8 @@ impl LarkWsClient {
 
         Some(frame)
     }
-            
-            combined["all_parts"] = all_parts.into();
-            combined
-        } else {
-            payload.clone()
-        };
 
-        if sum > 1 {
-            frame.payload = Some(combined_payload);
-        } else {
-            frame.payload = Some(payload);
-        }
-
-        Some(frame)
-    }
-            
-            combined["all_parts"] = all_parts.into();
-            combined
-        } else {
-            payload.clone()
-        };
-
-        // 如果是分包消息，需要组合
-        if sum > 1 {
-            frame.payload = Some(combined_payload);
-        } else {
-            // 对于单包消息，直接设置payload
-            frame.payload = Some(payload);
-        }
-
-        Some(frame)
-    }
-                None => {
-                    return None; // 还没收齐所有包
-                }
-            } else {
-                // 对于单包消息，需要将payload重新设置回frame
-                frame.payload = Some(payload);
-            }
-        }
-
-        Some(frame)
-    }
-            }
-        } else {
-            // 对于单包消息，需要将payload重新设置回frame
-            frame.payload = Some(payload);
-        }
-
-        Some(frame)
-    }
-
-    fn combine(&mut self, _msg_id: &str, _sum: usize, seq: usize, bs: &[u8]) -> Option<Vec<u8>> {
-        let mut buf = vec![Vec::new(); _sum];
-        buf[seq] = bs.to_vec();
-        Some(buf)
-    }
-}
-
-/// 获取连接配置
+    /// 获取连接配置
 async fn get_conn_url(
     config: &std::sync::Arc<crate::config::Config>,
 ) -> WsClientResult<EndPointResponse> {
