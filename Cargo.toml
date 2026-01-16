@@ -216,6 +216,10 @@ mockall = { workspace = true }
 name = "open_lark"
 path = "src/lib.rs"
 
+[[bench]]
+name = "config_performance"
+harness = false
+
 [features]
 default = ["core-services"]
 
