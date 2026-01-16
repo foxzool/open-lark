@@ -108,7 +108,7 @@ impl LarkWsClient {
             conn,
             frame_rx,
             event_tx,
-         ));
+        ));
         let mut client = LarkWsClient {
             frame_tx,
             event_rx,
@@ -229,52 +229,53 @@ impl LarkWsClient {
     }
 
     /// 获取连接配置
-async fn get_conn_url(
-    config: &std::sync::Arc<crate::config::Config>,
-) -> WsClientResult<EndPointResponse> {
-    let body = json!({
-        "AppID": &config.app_id,
-        "AppSecret": &config.app_secret
-    });
-
-    let http_client = Client::builder().timeout(config.timeout).build()?;
-
-    let req = http_client
-        .post(format!("{FEISHU_BASE_URL}/{END_POINT_URL}"))
-        .header("locale", "zh")
-        .json(&body)
-        .send()
-        .await?;
-
-    let resp = req.json::<Response<EndPointResponse>>().await?;
-    debug!("{:?}", resp.data);
-
-    if !resp.is_success() {
-        return match resp.raw_response.code {
-            1 => Err(WsClientError::ServerError {
-                code: resp.raw_response.code,
-                message: resp.raw_response.msg,
-            }),
-            1000040343 => Err(WsClientError::ServerError {
-                code: resp.raw_response.code,
-                message: resp.raw_response.msg,
-            }),
-            _ => Err(WsClientError::ClientError {
-                code: resp.raw_response.code,
-                message: resp.raw_response.msg,
-            }),
-        };
-    }
-
-    let end_point = resp.data.ok_or(WsClientError::UnexpectedResponse)?;
-    if end_point.url.as_ref().is_none_or(|url| url.is_empty()) {
-        return Err(WsClientError::ServerError {
-            code: 500,
-            message: "No available endpoint".to_string(),
+    async fn get_conn_url(
+        config: &std::sync::Arc<crate::config::Config>,
+    ) -> WsClientResult<EndPointResponse> {
+        let body = json!({
+            "AppID": &config.app_id,
+            "AppSecret": &config.app_secret
         });
-    }
 
-    Ok(end_point)
+        let http_client = Client::builder().timeout(config.timeout).build()?;
+
+        let req = http_client
+            .post(format!("{FEISHU_BASE_URL}/{END_POINT_URL}"))
+            .header("locale", "zh")
+            .json(&body)
+            .send()
+            .await?;
+
+        let resp = req.json::<Response<EndPointResponse>>().await?;
+        debug!("{:?}", resp.data);
+
+        if !resp.is_success() {
+            return match resp.raw_response.code {
+                1 => Err(WsClientError::ServerError {
+                    code: resp.raw_response.code,
+                    message: resp.raw_response.msg,
+                }),
+                1000040343 => Err(WsClientError::ServerError {
+                    code: resp.raw_response.code,
+                    message: resp.raw_response.msg,
+                }),
+                _ => Err(WsClientError::ClientError {
+                    code: resp.raw_response.code,
+                    message: resp.raw_response.msg,
+                }),
+            };
+        }
+
+        let end_point = resp.data.ok_or(WsClientError::UnexpectedResponse)?;
+        if end_point.url.as_ref().is_none_or(|url| url.is_empty()) {
+            return Err(WsClientError::ServerError {
+                code: 500,
+                message: "No available endpoint".to_string(),
+            });
+        }
+
+        Ok(end_point)
+    }
 }
 
 #[derive(Debug, Deserialize)]
