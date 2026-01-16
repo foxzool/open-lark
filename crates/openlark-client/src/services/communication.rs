@@ -92,15 +92,9 @@ impl<'a> CommunicationService<'a> {
     ///         .base_url("https://open.feishu.cn")
     ///         .build()?;
     ///
-    ///     // 需要启用 communication feature
+    ///     // 单入口：meta 链式字段访问（需要 communication feature）
     ///     #[cfg(feature = "communication")]
-    ///     {
-    ///         let service = client.communication()?;
-    ///         let response = service
-    ///             .send_text_message("user_123", "open_id", "Hello World!")
-    ///             .await?;
-    ///         println!("消息发送成功，ID: {}", response.message_id);
-    ///     }
+    ///     let _comm = &client.communication;
     ///
     ///     Ok(())
     /// }

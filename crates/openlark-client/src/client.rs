@@ -1,6 +1,6 @@
 //! OpenLark Client - 全新简化架构
 //!
-//! 极简设计，1行代码创建客户端，类型安全的服务访问
+//! 极简设计：仅保留 meta 链式字段访问（单入口，KISS）
 
 use crate::registry::ServiceRegistry;
 use crate::{
@@ -11,11 +11,31 @@ use crate::{
 use openlark_core::error::ErrorTrait;
 use std::sync::Arc;
 
+/// 🔐 认证 meta 入口：`client.auth.app / client.auth.user / client.auth.oauth`
+#[cfg(feature = "auth")]
+#[derive(Debug, Clone)]
+pub struct AuthClient {
+    pub app: openlark_auth::AuthService,
+    pub user: openlark_auth::AuthenService,
+    pub oauth: openlark_auth::OAuthService,
+}
+
+#[cfg(feature = "auth")]
+impl AuthClient {
+    fn new(config: openlark_core::config::Config) -> Self {
+        Self {
+            app: openlark_auth::AuthService::new(config.clone()),
+            user: openlark_auth::AuthenService::new(config.clone()),
+            oauth: openlark_auth::OAuthService::new(config),
+        }
+    }
+}
+
 /// 🚀 OpenLark客户端 - 极简设计
 ///
 /// # 特性
 /// - 零配置启动：`Client::from_env()`
-/// - 类型安全的服务访问
+/// - 单入口：meta 链式字段访问（`client.docs/...`）
 /// - 编译时feature优化
 /// - 高性能异步
 /// - 现代化错误处理
@@ -29,15 +49,10 @@ use std::sync::Arc;
 ///     // 从环境变量创建客户端
 ///     let client = Client::from_env()?;
 ///
-///     // 发送消息（需要communication feature）
-///     #[cfg(feature = "communication")]
-///     {
-///         let result = client
-///             .communication()?
-///             .send_text_message("user_id", "open_id", "Hello!")
-///             .await?;
-///         println!("消息发送成功: {}", result.message_id);
-///     }
+///     // meta 链式入口（需要对应 feature）
+///     // - 通讯：client.communication.im...
+///     // - 文档：client.docs.ccm...
+///     // - 认证：client.auth.app / client.auth.user / client.auth.oauth
 ///
 ///     Ok(())
 /// }
@@ -48,10 +63,16 @@ pub struct Client {
     config: Arc<Config>,
     /// 服务注册表
     registry: Arc<DefaultServiceRegistry>,
+    /// 底层 core 配置（供各 meta client 复用）
+    core_config: openlark_core::config::Config,
 
     /// CardKit meta 调用链：client.cardkit.v1.card.create(...)
     #[cfg(feature = "cardkit")]
     pub cardkit: openlark_cardkit::CardkitClient,
+
+    /// Auth meta 调用链入口：client.auth.app / client.auth.user / client.auth.oauth
+    #[cfg(feature = "auth")]
+    pub auth: AuthClient,
 
     /// Docs meta 调用链入口：client.docs.ccm / client.docs.base ...
     #[cfg(feature = "docs")]
@@ -94,101 +115,6 @@ impl Client {
         ClientBuilder::new()
     }
 
-    // /// 🏢 访问管理服务
-    // ///
-    // /// 需要 `admin` feature
-    // #[cfg(feature = "admin")]
-    // pub fn admin(&self) -> crate::services::AdminService<'_> {
-    //     crate::services::AdminService::new(&self.config)
-    // }
-
-    // /// ✅ 访问审批服务
-    // ///
-    // /// 需要 `approval` feature
-    // #[cfg(feature = "approval")]
-    // pub fn approval(&self) -> crate::services::ApprovalService<'_> {
-    //     crate::services::ApprovalService::new(&self.config)
-    // }
-
-    /// 🔐 访问认证服务
-    ///
-    /// 需要 `auth` feature
-    #[cfg(feature = "auth")]
-    pub fn auth(&self) -> crate::services::AuthService {
-        crate::services::AuthService::new(&self.config)
-    }
-
-    // #[cfg(feature = "collab")]
-    // pub fn collab(&self) -> crate::services::CollabService<'_> {
-    //     crate::services::CollabService::new(&self.config)
-    // }
-
-    /// 📡 访问通讯服务
-    ///
-    /// 需要 `communication` feature
-    #[cfg(feature = "communication")]
-    pub fn communication(&self) -> Result<crate::services::CommunicationService<'_>> {
-        crate::services::CommunicationService::new(&self.config, &self.registry)
-    }
-
-    /// 📄 访问文档服务
-    ///
-    /// 需要 `docs` feature
-    #[cfg(feature = "docs")]
-    pub fn docs(&self) -> crate::services::DocsService {
-        crate::services::DocsService::new(self.config.as_ref())
-    }
-
-    /// 📊 访问多维表格服务
-    ///
-    /// 需要 `bitable` feature (docs 模块包含 bitable 功能)
-    // TODO: 实现 BitableService，暂时注释掉
-    // #[cfg(feature = "docs")]
-    // pub fn bitable(&self) -> crate::services::BitableService<'_> {
-    //     crate::services::BitableService::new(&self.config)
-    // }
-    #[cfg(feature = "docs")]
-    pub fn bitable(&self) -> &'static str {
-        "BitableService 尚未实现"
-    }
-
-    // /// 💬 访问帮助台服务
-    // ///
-    // /// 需要 `helpdesk` feature
-    // #[cfg(feature = "helpdesk")]
-    // pub fn helpdesk(&self) -> crate::services::HelpdeskService<'_> {
-    //     crate::services::HelpdeskService::new(&self.config)
-    // }
-
-    // /// 💼 访问招聘服务
-    // ///
-    // /// 需要 `hire` feature
-    // #[cfg(feature = "hire")]
-    // pub fn hire(&self) -> crate::services::HireService<'_> {
-    //     crate::services::HireService::new(&self.config)
-    // }
-
-    /// 👥 访问 HR 服务
-    ///
-    /// 需要 `hr` feature
-    #[cfg(feature = "hr")]
-    pub fn hr(&self) -> crate::services::HRService<'_> {
-        crate::services::HRService::new(&self.config, &self.registry)
-    }
-
-    /// 🤖 访问 AI 服务
-    ///
-    /// 需要 `ai` feature
-    #[cfg(feature = "ai")]
-    pub fn ai(&self) -> crate::services::AIService<'_> {
-        crate::services::AIService::new(&self.config)
-    }
-
-    // #[cfg(feature = "people")]
-    // pub fn people(&self) -> crate::services::PeopleService<'_> {
-    //     crate::services::PeopleService::new(&self.config)
-    // }
-
     /// 🔧 获取客户端配置
     pub fn config(&self) -> &Config {
         &self.config
@@ -197,6 +123,11 @@ impl Client {
     /// 📋 获取服务注册表
     pub fn registry(&self) -> &DefaultServiceRegistry {
         &self.registry
+    }
+
+    /// 🔧 获取底层 core 配置（高级用法/调试用）
+    pub fn core_config(&self) -> &openlark_core::config::Config {
+        &self.core_config
     }
 
     /// ✅ 检查客户端是否已正确配置
@@ -222,16 +153,28 @@ impl Client {
 
         let registry = Arc::new(registry);
 
-        let core_config = openlark_core::config::Config::builder()
+        let base_core_config = openlark_core::config::Config::builder()
             .app_id(config.app_id.clone())
             .app_secret(config.app_secret.clone())
             .base_url(config.base_url.clone())
+            .app_type(config.app_type)
+            .enable_token_cache(config.enable_token_cache)
             .req_timeout(config.timeout)
             .header(config.headers.clone())
             .build();
 
+        // P0：默认注入 openlark-auth 的 TokenProvider，保证 meta 链式入口开箱即用。
+        // provider 内部持有 base_core_config（不含 provider），避免潜在递归依赖。
+        let core_config = {
+            let provider = openlark_auth::AuthTokenProvider::new(base_core_config.clone());
+            base_core_config.with_token_provider(provider)
+        };
+
         #[cfg(feature = "cardkit")]
         let cardkit = openlark_cardkit::CardkitClient::new(core_config.clone());
+
+        #[cfg(feature = "auth")]
+        let auth = AuthClient::new(base_core_config.clone());
 
         #[cfg(feature = "docs")]
         let docs = openlark_docs::DocsClient::new(core_config.clone());
@@ -245,8 +188,11 @@ impl Client {
         Ok(Client {
             config,
             registry,
+            core_config: core_config.clone(),
             #[cfg(feature = "cardkit")]
             cardkit,
+            #[cfg(feature = "auth")]
+            auth,
             #[cfg(feature = "docs")]
             docs,
             #[cfg(feature = "communication")]
@@ -512,6 +458,18 @@ impl ClientBuilder {
     /// 🔑 设置应用密钥
     pub fn app_secret<S: Into<String>>(mut self, app_secret: S) -> Self {
         self.config.app_secret = app_secret.into();
+        self
+    }
+
+    /// 🏷️ 设置应用类型（自建 / 商店）
+    pub fn app_type(mut self, app_type: openlark_core::constants::AppType) -> Self {
+        self.config.app_type = app_type;
+        self
+    }
+
+    /// 🔐 设置是否允许自动获取 token（默认 true）
+    pub fn enable_token_cache(mut self, enable: bool) -> Self {
+        self.config.enable_token_cache = enable;
         self
     }
 
@@ -802,9 +760,8 @@ mod tests {
             .build()
             .unwrap();
 
-        // 这个测试只验证服务访问器可以正常创建
-        // 实际的API调用需要mock服务器
-        let _service = client.communication();
+        // 单入口：meta 链式字段访问（这里只验证字段可用）
+        let _comm = &client.communication;
     }
 
     // === 异步客户端功能测试 ===

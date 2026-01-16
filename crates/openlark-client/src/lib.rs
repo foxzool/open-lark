@@ -28,15 +28,10 @@
 //!     // 从环境变量创建客户端（推荐）
 //!     let client = Client::from_env()?;
 //!
-//!     // 发送文本消息（需要 communication feature）
-//!     #[cfg(feature = "communication")]
-//!     {
-//!         let result = client
-//!             .communication()?
-//!             .send_text_message("user_open_id", "open_id", "Hello!")
-//!             .await?;
-//!         println!("消息发送成功: {}", result.message_id);
-//!     }
+//!     // 单入口：meta 链式字段访问（需要对应 feature）
+//!     // - 通讯：client.communication.im...
+//!     // - 文档：client.docs.ccm...
+//!     // - 认证：client.auth.app / client.auth.user / client.auth.oauth
 //!
 //!     Ok(())
 //! }
@@ -90,7 +85,7 @@
 //!
 //! ## 服务访问
 //!
-//! 每个启用功能都提供对应的服务访问器：
+//! 每个启用功能都提供对应的 meta 链式入口（字段访问）：
 //!
 //! ```rust,no_run
 //! use openlark_client::prelude::*;
@@ -98,17 +93,17 @@
 //! fn main() -> Result<()> {
 //! let client = Client::from_env()?;
 //!
-//! // 通讯服务（communication feature）
+//! // 通讯入口（communication feature）
 //! #[cfg(feature = "communication")]
-//! let _comm = client.communication()?;
+//! let _comm = &client.communication;
 //!
-//! // 文档服务（docs feature）
+//! // 文档入口（docs feature）
 //! #[cfg(feature = "docs")]
-//! let _docs = client.docs();
+//! let _docs = &client.docs;
 //!
-//! // 认证服务（auth feature）
+//! // 认证入口（auth feature）
 //! #[cfg(feature = "auth")]
-//! let _auth = client.auth();
+//! let _auth = &client.auth;
 //! Ok(())
 //! }
 //! ```
@@ -202,31 +197,12 @@
 //! async fn send_message_with_error_handling() -> Result<()> {
 //!     let client = Client::from_env()?;
 //!
-//!     match client
-//!         .communication()?
-//!         .send_text_message("user_123", "open_id", "Hello!")
-//!         .await
-//!     {
-//!         Ok(response) => {
-//!             println!("消息发送成功: {}", response.message_id);
-//!             Ok(())
-//!         },
-//!         Err(error) => {
-//!             // 自动错误分析和处理建议
-//!             if error.is_retryable() {
-//!                 println!("错误可重试，建议稍后重试");
-//!                 // 实现重试逻辑...
-//!             }
+//!     // 单入口：meta 链式字段访问。这里演示“拿到入口 + 挂上错误上下文”的模式。
+//!     #[cfg(feature = "communication")]
+//!     let _comm = &client.communication;
 //!
-//!             // 记录错误用于监控
-//!             tracing::error!(
-//!                 "消息发送失败: {}",
-//!                 ErrorAnalyzer::new(&error).log_summary()
-//!             );
-//!
-//!             Err(error) // 返回原始错误给上层处理
-//!         }
-//!     }
+//!     // 具体 API 调用请使用 openlark-communication 的强类型请求/构建器并在 `.await` 处处理 Result。
+//!     Ok(())
 //! }
 //! ```
 
@@ -251,7 +227,7 @@ pub mod traits;
 pub mod types;
 
 // 服务访问层
-pub mod services;
+mod services;
 
 // meta.Project 维度的 API 调用链（数据源：api_list_export.csv）
 // CardKit 由 openlark-cardkit 提供链式调用；openlark-client 仅负责挂载到 Client 上。
@@ -312,46 +288,14 @@ pub use traits::*;
 // 请使用新的 DefaultLarkClient 和 ClientBuilder
 // 迁移指南：https://github.com/foxzool/open-lark/blob/main/docs/migration-guide.md
 
-// ============================================================================
-// 服务类型重新导出
-// ============================================================================
-
-// 基础服务（始终可用）
-pub use services::AuthService;
-
-// 服务工厂和管理
-pub use services::{ServiceFactory, ServiceFactoryStats, ServiceValidator};
-
-// 可选服务（基于功能标志）
-#[cfg(feature = "communication")]
-pub use services::CommunicationService;
-
-#[cfg(feature = "docs")]
-pub use services::DocsService;
-
-#[cfg(feature = "hr")]
-pub use services::HRService;
-
-#[cfg(feature = "ai")]
-pub use services::AIService;
-
-#[cfg(feature = "task")]
-pub use services::TaskService;
-
-#[cfg(feature = "calendar")]
-pub use services::CalendarService;
-
-#[cfg(feature = "admin")]
-pub use services::AdminService;
-
-#[cfg(feature = "approval")]
-pub use services::ApprovalService;
-
 // CardKit meta 调用链
 #[cfg(feature = "cardkit")]
 pub use openlark_cardkit::CardkitClient;
 
 // Docs / Communication / Meeting meta 调用链入口（字段链式）
+#[cfg(feature = "auth")]
+pub use client::AuthClient;
+
 #[cfg(feature = "docs")]
 pub use openlark_docs::DocsClient;
 
@@ -409,7 +353,8 @@ pub type ConfigResult<T> = Result<T>;
 ///
 /// fn main() -> Result<()> {
 ///     let client = Client::from_env()?;
-///     let _service_factory = ServiceFactory::new(client.config().clone())?;
+///     #[cfg(feature = "docs")]
+///     let _docs = &client.docs;
 ///     Ok(())
 /// }
 /// ```
@@ -471,30 +416,12 @@ pub mod prelude {
 
     pub use crate::{FeatureLoader, FeatureSet};
 
-    // ============================================================================
-    // 服务工厂和管理
-    // ============================================================================
-
-    // 服务工厂
-    pub use crate::{ServiceFactory, ServiceFactoryStats, ServiceValidator};
-
-    // ============================================================================
-    // 服务类型
-    // ============================================================================
-
-    // 基础服务（始终可用）
-    pub use crate::services::AuthService;
-
-    // 可选服务（基于功能标志）
-    #[cfg(feature = "communication")]
-    pub use crate::services::CommunicationService;
-
-    #[cfg(feature = "docs")]
-    pub use crate::services::DocsService;
-
     // meta 风格链式入口（字段链式）
     #[cfg(feature = "cardkit")]
     pub use openlark_cardkit::CardkitClient;
+
+    #[cfg(feature = "auth")]
+    pub use crate::AuthClient;
 
     #[cfg(feature = "docs")]
     pub use openlark_docs::DocsClient;
@@ -504,24 +431,6 @@ pub mod prelude {
 
     #[cfg(feature = "meeting")]
     pub use openlark_meeting::MeetingClient;
-
-    #[cfg(feature = "hr")]
-    pub use crate::services::HRService;
-
-    #[cfg(feature = "ai")]
-    pub use crate::services::AIService;
-
-    #[cfg(feature = "task")]
-    pub use crate::services::TaskService;
-
-    #[cfg(feature = "calendar")]
-    pub use crate::services::CalendarService;
-
-    #[cfg(feature = "admin")]
-    pub use crate::services::AdminService;
-
-    #[cfg(feature = "approval")]
-    pub use crate::services::ApprovalService;
 
     // 其他服务（当前未启用但已规划）
     // #[cfg(feature = "collab")]
