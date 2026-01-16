@@ -1,5 +1,6 @@
 #![allow(missing_docs)]
 
+use std::collections::HashMap;
 use std::time::Duration;
 
 use futures_util::{
@@ -12,7 +13,7 @@ use prost::Message as ProstMessage;
 use reqwest::Client;
 use serde::Deserialize;
 use serde_json::json;
-use tokio::{net::TcpStream, sync::mpsc, time::Interval};
+use tokio::{net::TcpStream, sync::mpsc, time::Instant, time::Interval};
 use tokio_tungstenite::tungstenite::protocol::Message as WsMessage;
 use tokio_tungstenite::{
     connect_async,
@@ -73,7 +74,7 @@ impl LarkWsClient {
         config: std::sync::Arc<crate::config::Config>,
         event_handler: EventDispatcherHandler,
     ) -> WsClientResult<()> {
-        let end_point = get_conn_url(&config).await?;
+        let end_point = Self::get_conn_url(&config).await?;
         let conn_url = end_point.url.ok_or(WsClientError::UnexpectedResponse)?;
         let client_config = end_point
             .client_config
@@ -183,14 +184,14 @@ impl LarkWsClient {
             .unwrap_or(1);
 
         // 包序号，未拆包为0
-        let seq: usize = headers
+        let _seq: usize = headers
             .iter()
             .find(|h| h.key == "seq")
             .and_then(|h| h.value.parse().ok())
             .unwrap_or(0);
 
         // 消息ID，拆包后继承
-        let msg_id: &str = headers
+        let _msg_id: &str = headers
             .iter()
             .find(|h| h.key == "message_id")
             .map(|h| h.value.as_str())
@@ -201,30 +202,11 @@ impl LarkWsClient {
             return None;
         };
 
-        // 暂时不使用缓存，直接返回组合后的payload
-        let combined_payload = if sum > 1 {
-            let mut combined = serde_json::json!({});
-            let mut all_parts = Vec::new();
-
-            for (i, part) in payload.iter().enumerate() {
-                let part_key = format!("part_{}", i);
-                combined[&part_key] = part.clone();
-                all_parts.push(part);
-            }
-
-            combined["all_parts"] = all_parts.into();
-            combined
-        } else {
-            payload.clone()
-        };
-
-        // 如果是分包消息，需要组合
         if sum > 1 {
-            frame.payload = Some(combined_payload);
-        } else {
-            frame.payload = Some(payload);
+            debug!("收到分包帧（sum={sum}），当前未实现分包组合逻辑，暂按单包透传处理");
         }
 
+        frame.payload = Some(payload);
         Some(frame)
     }
 
