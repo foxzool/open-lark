@@ -4,14 +4,15 @@ use tracing::{info_span, Instrument};
 
 use crate::{
     api::{ApiResponseTrait, BaseResponse, RawResponse, Response, ResponseFormat},
-    error::{
-        network_error, validation_error, ErrorCategory, ErrorCode, ErrorContext, LarkAPIError,
-    },
+    error::{network_error, validation_error},
     observability::ResponseTracker,
     SDKResult,
 };
 use serde::Deserialize;
 use std::any::Any;
+
+#[cfg(test)]
+use crate::error::{ErrorCategory, ErrorCode, ErrorContext, LarkAPIError};
 
 /// 改进的响应处理器，解决双重解析问题
 /// 使用 #[serde(flatten)] 和高级 Serde 特性简化反序列化

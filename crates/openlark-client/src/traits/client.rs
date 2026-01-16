@@ -328,6 +328,8 @@ mod tests {
         let config = Config {
             app_id: "test_app_id".to_string(),
             app_secret: "test_app_secret".to_string(),
+            app_type: openlark_core::constants::AppType::SelfBuild,
+            enable_token_cache: true,
             base_url: "https://test.feishu.cn".to_string(),
             timeout: Duration::from_secs(30),
             retry_count: 3,
