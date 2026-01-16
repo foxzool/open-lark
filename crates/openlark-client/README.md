@@ -26,32 +26,34 @@
 
 ```toml
 [dependencies]
-openlark-client = { version = "0.15.0-dev", features = ["ccm-doc", "communication"] }
+openlark-client = { version = "0.15.0-dev", features = ["docs"] }
 ```
 
 ### 功能标志
 
 ```toml
-# 云文档服务
-features = ["ccm-doc", "ccm-sheets", "bitable", "ccm-wiki", "ccm-drive", "ccm"]
+# 默认启用：auth + communication（如需关闭：default-features = false）
+
+# 文档服务（会启用 openlark-docs）
+features = ["docs"]
+
+# 通信服务（会启用 openlark-communication；默认已启用）
+features = ["communication"]
+
+# 认证服务（默认已启用）
+features = ["auth"]
 
 # CardKit（卡片能力，meta 调用链）
 features = ["cardkit"]
 
-# 通信服务
-features = ["communication"]
+# 会议服务
+features = ["meeting"]
 
-# HR 服务
-features = ["hr"]
+# WebSocket 支持
+features = ["websocket"]
 
-# AI 服务
-features = ["ai"]
-
-# 认证服务
-features = ["auth"]
-
-# 所有服务
-features = ["all-services"]
+# 组合功能（P0 推荐）
+features = ["p0-services"]
 ```
 
 ## 🧩 meta 调用链（按 CSV 映射）
@@ -67,59 +69,74 @@ features = ["all-services"]
 ### 基础用法
 
 ```rust
-use openlark_client::DefaultLarkClient;
-use openlark_core::{config::Config, constants::AppType};
+use openlark_client::prelude::*;
+use std::time::Duration;
 
-// 创建配置
-let config = Config::builder()
-    .app_id("your_app_id")
-    .app_secret("your_app_secret")
-    .app_type(AppType::SelfBuild)
-    .build();
-
-// 创建客户端
-let client = DefaultLarkClient::new(config);
+fn main() -> Result<()> {
+    // 使用构建器创建客户端
+    let _client = Client::builder()
+        .app_id("your_app_id")
+        .app_secret("your_app_secret")
+        .base_url("https://open.feishu.cn")
+        .timeout(Duration::from_secs(30))
+        .build()?;
+    Ok(())
+}
 ```
 
-### 兼容构建器
+### 从环境变量创建
 
 ```rust
-// 使用兼容的构建器（向后兼容）
-let client = DefaultLarkClient::builder("app_id", "app_secret")
-    .with_app_type(AppType::SelfBuild)
-    .build();
+use openlark_client::prelude::*;
+
+fn main() -> Result<()> {
+    // 需要配置 OPENLARK_APP_ID / OPENLARK_APP_SECRET
+    let _client = Client::from_env()?;
+    Ok(())
+}
 ```
 
 ## 🎪 服务访问
 
-### 类型安全的服务访问
+### meta 单入口（推荐）
 
 ```rust
-// 扩展访问器（推荐）
-if let Some(docs_service) = client.service_accessors().docs_ext() {
-    // 使用文档服务
-    println!("✅ 文档服务可用");
-}
+use openlark_client::prelude::*;
 
-// 通用服务访问
-if let Some(docs_service) = client.services()
-    .get_service::<openlark_docs::docs::DocxService>("docs") {
-    // 使用文档服务
-    println!("✅ 文档服务可用");
+fn main() -> Result<()> {
+    let client = Client::from_env()?;
+
+    // 文档入口（需启用 docs feature）
+    #[cfg(feature = "docs")]
+    let _docs_config = client.docs.config();
+
+    // 通讯入口（需启用 communication feature，默认启用）
+    #[cfg(feature = "communication")]
+    let _comm = &client.communication;
+
+    Ok(())
 }
 ```
 
 ### 服务发现
 
 ```rust
-// 列出所有已注册的服务
-for service_name in client.services().list_services() {
-    println!("可用服务: {}", service_name);
-}
+use openlark_client::prelude::*;
 
-// 检查特定服务是否可用
-if client.services().has_service("docs") {
-    println!("文档服务已启用");
+fn main() -> Result<()> {
+    let client = Client::from_env()?;
+
+    // 列出已注册的服务元数据
+    for entry in client.registry().list_services() {
+        println!("可用服务: {}", entry.metadata.name);
+    }
+
+    // 检查特定服务是否已启用（注册）
+    if client.registry().has_service("docs") {
+        println!("文档服务已启用");
+    }
+
+    Ok(())
 }
 ```
 
@@ -129,32 +146,21 @@ if client.services().has_service("docs") {
 
 1. **新代码**（推荐）:
    ```rust
-   let config = Config::builder()
+   use openlark_client::prelude::*;
+   let client = Client::builder()
        .app_id("app_id")
        .app_secret("app_secret")
-       .build();
-   let client = DefaultLarkClient::new(config);
+       .build()?;
    ```
 
-2. **兼容代码**:
+2. **服务访问更新**:
    ```rust
-   let client = DefaultLarkClient::builder("app_id", "app_secret").build();
+   // 旧方式：依赖 openlark-client 内部的服务包装层（已移除）
+   // 新方式：直接使用 meta 单入口（字段链式）访问业务 crate 的能力
+   // - 文档：client.docs...
+   // - 通讯：client.communication...
+   // - 认证：client.auth...
    ```
-
-3. **服务访问更新**:
-   ```rust
-   // 旧方式: client.docs.xxx()
-   // 新方式: client.service_accessors().docs_ext().unwrap().xxx()
-   ```
-
-### 功能映射
-
-| 原有功能 | 新功能 |
-|---------|--------|
-| `client.docs` | `client.service_accessors().docs_ext()` |
-| `client.sheet` | `client.service_accessors().sheet_ext()` |
-| `client.contact` | `client.service_accessors().contact_ext()` |
-| 通用服务 | `client.services().get_service<T>()` |
 
 ## 🏗️ 架构设计
 
@@ -162,7 +168,7 @@ if client.services().has_service("docs") {
 
 ```mermaid
 graph TD
-    A[DefaultLarkClient] --> B[ServiceRegistry]
+    A[Client] --> B[ServiceRegistry]
     B --> C[Type-safe Storage]
     B --> D[Service Discovery]
 

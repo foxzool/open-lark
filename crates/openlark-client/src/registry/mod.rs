@@ -364,7 +364,8 @@ impl Default for RegistryConfig {
             feature_flags: HashMap::new(),
             service_discovery: ServiceDiscoveryConfig {
                 auto_discover: true,
-                scan_paths: vec!["services".to_string()],
+                // openlark-client 采用「meta 单入口」聚合各业务 crate，不在本 crate 内做服务实现扫描。
+                scan_paths: vec![],
                 include_patterns: vec!["*".to_string()],
                 exclude_patterns: vec![],
             },

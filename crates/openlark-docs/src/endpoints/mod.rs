@@ -7,9 +7,10 @@
 //! ## 测试和文档示例（推荐）
 //! 使用常量端点获得简洁的 URL 引用：
 //! ```rust
-//! use crate::endpoints::BITABLE_V1_APPS;
+//! use openlark_docs::endpoints::BITABLE_V1_APPS;
 //!
 //! let url = BITABLE_V1_APPS; // 简洁明了
+//! assert!(url.contains("/open-apis/bitable/v1/"));
 //! ```
 //!
 //! # 特性

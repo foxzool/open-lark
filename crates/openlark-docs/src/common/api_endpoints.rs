@@ -7,10 +7,13 @@
 //! ## 生产代码（推荐）
 //! 使用枚举端点获得编译时类型检查和动态 URL 生成能力：
 //! ```rust
-//! use crate::common::api_endpoints::BitableApiV1;
+//! use openlark_docs::common::api_endpoints::BitableApiV1;
 //!
+//! let app_token = "app_token".to_string();
+//! let table_id = "table_id".to_string();
 //! let endpoint = BitableApiV1::RecordCreate(app_token, table_id);
 //! let url = endpoint.to_url(); // 类型安全，动态生成
+//! assert!(url.contains("/open-apis/bitable/v1/"));
 //! ```
 //!
 //! # 特性

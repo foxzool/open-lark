@@ -29,6 +29,52 @@ use openlark_core::{
     // event::dispatcher::EventDispatcherHandler, // TODO: 需要实现 event 模块
 };
 
+/// 分包消息缓存（按 message_id 聚合）
+#[derive(Debug, Default)]
+struct FramePackageBuffer {
+    sum: usize,
+    parts: Vec<Option<Vec<u8>>>,
+    received: usize,
+}
+
+impl FramePackageBuffer {
+    fn new(sum: usize) -> Self {
+        Self {
+            sum,
+            parts: vec![None; sum],
+            received: 0,
+        }
+    }
+
+    fn insert_part(&mut self, seq: usize, payload: Vec<u8>) {
+        if seq >= self.sum {
+            return;
+        }
+
+        if self.parts[seq].is_none() {
+            self.received = self.received.saturating_add(1);
+        }
+        self.parts[seq] = Some(payload);
+    }
+
+    fn is_complete(&self) -> bool {
+        self.sum > 0 && self.received == self.sum && self.parts.iter().all(|p| p.is_some())
+    }
+
+    fn combine(self) -> Vec<u8> {
+        let total_len: usize = self
+            .parts
+            .iter()
+            .filter_map(|p| p.as_ref().map(|v| v.len()))
+            .sum();
+        let mut out = Vec::with_capacity(total_len);
+        for part in self.parts.into_iter().flatten() {
+            out.extend_from_slice(&part);
+        }
+        out
+    }
+}
+
 // 临时类型占位符，等待 event 模块实现
 #[derive(Debug, Clone)]
 pub struct EventDispatcherHandler;
@@ -55,6 +101,7 @@ pub struct LarkWsClient {
     frame_tx: mpsc::UnboundedSender<Frame>,
     event_rx: mpsc::UnboundedReceiver<WsEvent>,
     state_machine: WebSocketStateMachine,
+    package_buffers: HashMap<String, FramePackageBuffer>,
 }
 
 impl LarkWsClient {
@@ -67,6 +114,7 @@ impl LarkWsClient {
             frame_tx,
             event_rx,
             state_machine: WebSocketStateMachine::new(),
+            package_buffers: HashMap::new(),
         }
     }
 
@@ -114,6 +162,7 @@ impl LarkWsClient {
             frame_tx,
             event_rx,
             state_machine,
+            package_buffers: HashMap::new(),
         };
 
         client.handler_loop(event_handler).await;
@@ -176,6 +225,14 @@ impl LarkWsClient {
     async fn process_frame_packages_internal(&mut self, mut frame: Frame) -> Option<Frame> {
         let headers: &[Header] = frame.headers.as_ref();
 
+        fn header_value<'a>(headers: &'a [Header], key: &str) -> Option<&'a str> {
+            headers.iter().find(|h| h.key == key).map(|h| h.value.as_str())
+        }
+
+        fn header_usize(headers: &[Header], key: &str) -> Option<usize> {
+            header_value(headers, key).and_then(|v| v.parse().ok())
+        }
+
         // 拆包数，未拆包为1
         let sum: usize = headers
             .iter()
@@ -184,29 +241,63 @@ impl LarkWsClient {
             .unwrap_or(1);
 
         // 包序号，未拆包为0
-        let _seq: usize = headers
-            .iter()
-            .find(|h| h.key == "seq")
-            .and_then(|h| h.value.parse().ok())
-            .unwrap_or(0);
+        let seq: usize = header_usize(headers, "seq").unwrap_or(0);
 
         // 消息ID，拆包后继承
-        let _msg_id: &str = headers
-            .iter()
-            .find(|h| h.key == "message_id")
-            .map(|h| h.value.as_str())
-            .unwrap_or("");
+        let msg_id: &str = header_value(headers, "message_id").unwrap_or("");
 
         let Some(payload) = frame.payload.take() else {
             error!("Frame payload is empty");
             return None;
         };
 
-        if sum > 1 {
-            debug!("收到分包帧（sum={sum}），当前未实现分包组合逻辑，暂按单包透传处理");
+        let sum = if sum == 0 { 1 } else { sum };
+
+        // 单包：直接透传
+        if sum == 1 {
+            frame.payload = Some(payload);
+            return Some(frame);
         }
 
-        frame.payload = Some(payload);
+        // 分包：需要 message_id 作为聚合键；缺失则降级为单包透传，避免丢消息
+        if msg_id.is_empty() {
+            debug!("收到分包帧但 message_id 为空，无法聚合，降级为单包处理（sum={sum}, seq={seq}）");
+            frame.payload = Some(payload);
+            return Some(frame);
+        }
+
+        if seq >= sum {
+            debug!("收到分包帧但 seq 越界，降级为单包处理（sum={sum}, seq={seq}, message_id={msg_id}）");
+            frame.payload = Some(payload);
+            return Some(frame);
+        }
+
+        // 获取/初始化缓存；sum 不一致时以最新为准重置（防止错配）
+        let buffer = self.package_buffers.entry(msg_id.to_string()).or_insert_with(|| {
+            debug!("开始聚合分包消息（sum={sum}, message_id={msg_id}）");
+            FramePackageBuffer::new(sum)
+        });
+
+        if buffer.sum != sum {
+            debug!(
+                "分包聚合参数变化，重置缓存（old_sum={}, new_sum={}, message_id={msg_id}）",
+                buffer.sum, sum
+            );
+            *buffer = FramePackageBuffer::new(sum);
+        }
+
+        buffer.insert_part(seq, payload);
+
+        if !buffer.is_complete() {
+            return None;
+        }
+
+        let buffer = self
+            .package_buffers
+            .remove(msg_id)
+            .unwrap_or_else(|| FramePackageBuffer::new(sum));
+
+        frame.payload = Some(buffer.combine());
         Some(frame)
     }
 
