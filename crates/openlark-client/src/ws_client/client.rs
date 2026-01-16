@@ -226,7 +226,10 @@ impl LarkWsClient {
         let headers: &[Header] = frame.headers.as_ref();
 
         fn header_value<'a>(headers: &'a [Header], key: &str) -> Option<&'a str> {
-            headers.iter().find(|h| h.key == key).map(|h| h.value.as_str())
+            headers
+                .iter()
+                .find(|h| h.key == key)
+                .map(|h| h.value.as_str())
         }
 
         fn header_usize(headers: &[Header], key: &str) -> Option<usize> {
@@ -261,7 +264,9 @@ impl LarkWsClient {
 
         // 分包：需要 message_id 作为聚合键；缺失则降级为单包透传，避免丢消息
         if msg_id.is_empty() {
-            debug!("收到分包帧但 message_id 为空，无法聚合，降级为单包处理（sum={sum}, seq={seq}）");
+            debug!(
+                "收到分包帧但 message_id 为空，无法聚合，降级为单包处理（sum={sum}, seq={seq}）"
+            );
             frame.payload = Some(payload);
             return Some(frame);
         }
@@ -273,10 +278,13 @@ impl LarkWsClient {
         }
 
         // 获取/初始化缓存；sum 不一致时以最新为准重置（防止错配）
-        let buffer = self.package_buffers.entry(msg_id.to_string()).or_insert_with(|| {
-            debug!("开始聚合分包消息（sum={sum}, message_id={msg_id}）");
-            FramePackageBuffer::new(sum)
-        });
+        let buffer = self
+            .package_buffers
+            .entry(msg_id.to_string())
+            .or_insert_with(|| {
+                debug!("开始聚合分包消息（sum={sum}, message_id={msg_id}）");
+                FramePackageBuffer::new(sum)
+            });
 
         if buffer.sum != sum {
             debug!(
