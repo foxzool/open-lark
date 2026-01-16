@@ -7,8 +7,6 @@ use std::sync::Arc;
 pub struct DocsService {
     /// 配置信息
     config: Arc<openlark_core::config::Config>,
-    /// HTTP客户端
-    http_client: Arc<reqwest::Client>,
 }
 
 impl DocsService {
@@ -16,7 +14,6 @@ impl DocsService {
     pub fn new(config: openlark_core::config::Config) -> Self {
         Self {
             config: Arc::new(config),
-            http_client: Arc::new(reqwest::Client::new()),
         }
     }
 
@@ -32,7 +29,7 @@ impl DocsService {
 
     /// 获取HTTP客户端引用
     pub fn http_client(&self) -> &reqwest::Client {
-        &self.http_client
+        &self.config.http_client
     }
 
     /// 访问云文档协同服务

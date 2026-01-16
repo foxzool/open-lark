@@ -4,6 +4,7 @@
 
 use crate::registry::ServiceRegistry;
 use crate::{
+    core_config::{build_base_core_config, build_core_config_with_default_token_provider},
     error::{with_context, with_operation_context},
     traits::LarkClient,
     Config, DefaultServiceRegistry, Result, ServiceMetadata, ServiceStatus,
@@ -153,22 +154,8 @@ impl Client {
 
         let registry = Arc::new(registry);
 
-        let base_core_config = openlark_core::config::Config::builder()
-            .app_id(config.app_id.clone())
-            .app_secret(config.app_secret.clone())
-            .base_url(config.base_url.clone())
-            .app_type(config.app_type)
-            .enable_token_cache(config.enable_token_cache)
-            .req_timeout(config.timeout)
-            .header(config.headers.clone())
-            .build();
-
-        // P0：默认注入 openlark-auth 的 TokenProvider，保证 meta 链式入口开箱即用。
-        // provider 内部持有 base_core_config（不含 provider），避免潜在递归依赖。
-        let core_config = {
-            let provider = openlark_auth::AuthTokenProvider::new(base_core_config.clone());
-            base_core_config.with_token_provider(provider)
-        };
+        let base_core_config = build_base_core_config(config.as_ref());
+        let core_config = build_core_config_with_default_token_provider(config.as_ref());
 
         #[cfg(feature = "cardkit")]
         let cardkit = openlark_cardkit::CardkitClient::new(core_config.clone());

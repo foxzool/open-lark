@@ -220,14 +220,12 @@
 // 核心模块
 pub mod client;
 pub mod config;
+mod core_config;
 pub mod error;
 pub mod features;
 pub mod registry;
 pub mod traits;
 pub mod types;
-
-// 服务访问层
-mod services;
 
 // meta.Project 维度的 API 调用链（数据源：api_list_export.csv）
 // CardKit 由 openlark-cardkit 提供链式调用；openlark-client 仅负责挂载到 Client 上。
@@ -285,7 +283,7 @@ pub use registry::{
 pub use traits::*;
 
 // 注意：legacy_client 已在 v0.15.0 中移除
-// 请使用新的 DefaultLarkClient 和 ClientBuilder
+// 请使用 `Client` 与 `ClientBuilder`
 // 迁移指南：https://github.com/foxzool/open-lark/blob/main/docs/migration-guide.md
 
 // CardKit meta 调用链
@@ -306,17 +304,7 @@ pub use openlark_communication::CommunicationClient;
 pub use openlark_meeting::MeetingClient;
 
 // 其他服务（当前未启用但已规划）
-// #[cfg(feature = "collab")]
-// pub use services::CollabService;
-
-// #[cfg(feature = "helpdesk")]
-// pub use services::HelpdeskService;
-
-// #[cfg(feature = "hire")]
-// pub use services::HireService;
-
-// #[cfg(feature = "people")]
-// pub use services::PeopleService;
+//（历史上曾尝试在 openlark-client 内重复实现业务服务包装层，但现已收敛为 meta 单入口。）
 
 // ============================================================================
 // Core 系统类型重新导出
@@ -433,17 +421,7 @@ pub mod prelude {
     pub use openlark_meeting::MeetingClient;
 
     // 其他服务（当前未启用但已规划）
-    // #[cfg(feature = "collab")]
-    // pub use crate::services::CollabService;
-
-    // #[cfg(feature = "helpdesk")]
-    // pub use crate::services::HelpdeskService;
-
-    // #[cfg(feature = "hire")]
-    // pub use crate::services::HireService;
-
-    // #[cfg(feature = "people")]
-    // pub use crate::services::PeopleService;
+    //（历史上曾尝试在 openlark-client 内重复实现业务服务包装层，但现已收敛为 meta 单入口。）
 
     // ============================================================================
     // 便利类型别名
