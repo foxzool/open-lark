@@ -66,34 +66,30 @@ jobs:
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
       - uses: Swatinem/rust-cache@v2
-       - name: Install Protoc
-         uses: arduino/setup-protoc@v3
-         with:
-           version: 23.4
-           include-preleases: false
-           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          version: 23.4
+          include-pre-releases: false
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-       - name: Install Criterion
-         uses: taiki-e/install-action@v3
-         with:
-           crate: criterion
-           version: "0.5.1"
+      - name: Install Criterion
+        uses: taiki-e/install-action@v3
+        with:
+          crate: criterion
+          version: "0.5.1"
 
-       - name: Performance Benchmarks
-         run: |
+      - name: Performance Benchmarks
+        run: |
           echo "⚡ 运行ServiceRegistry性能基准测试..."
 
           # 编译性能测试
-           echo "🔨 编译性能基准测试..."
-           cargo build --release --features "openlark-core,openlark-communication" --bench
+          echo "🔨 编译性能基准测试..."
+          cargo build --release --features "openlark-core,openlark-communication" --bench
 
-          # 运行基准测试（如果存在）
-           if [ -d "benches" ] && [ -f "benches/service_registry_benchmark.rs" ]; then
-             echo "🏃 运行基准测试..."
-             cargo bench --features "openlark-core,openlark-communication"
-           else
-             echo "ℹ️  未找到基准测试文件，跳过基准测试运行"
-           fi
+          # 运行基准测试
+          echo "🏃 运行基准测试..."
+          cargo bench --features "openlark-core,openlark-communication"
 
   service-registry-validation:
     name: ServiceRegistry Validation Report

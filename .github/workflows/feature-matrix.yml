@@ -89,21 +89,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-target-feat-
             ${{ runner.os }}-target-
-            
+
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
         with:
+          version: 23.4
+          include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Build with feature combination
         run: |
           echo "Testing feature combination: ${{ matrix.features }}"
           if [ -z "${{ matrix.features }}" ]; then
             echo "Building with no features (minimal build)"
             timeout 8m cargo build --no-default-features
-          elif [ "${{ matrix.features }}" = "full" ]; then
-            echo "Building with all features"
-            timeout 10m cargo build --all-features
           else
             echo "Building with features: ${{ matrix.features }}"
             timeout 8m cargo build --no-default-features --features "${{ matrix.features }}"
@@ -114,9 +113,6 @@ jobs:
           if [ -z "${{ matrix.features }}" ]; then
             echo "Testing with no features"
             timeout 5m cargo test --no-default-features --lib
-          elif [ "${{ matrix.features }}" = "full" ]; then
-            echo "Testing with all features"
-            timeout 8m cargo test --all-features --lib
           else
             echo "Testing with features: ${{ matrix.features }}"
             timeout 5m cargo test --no-default-features --features "${{ matrix.features }}" --lib
@@ -155,12 +151,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-target-hack-
             ${{ runner.os }}-target-
-            
+
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
         with:
+          version: 23.4
+          include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       # Test each feature individually
       - name: Test each feature individually
         run: |
