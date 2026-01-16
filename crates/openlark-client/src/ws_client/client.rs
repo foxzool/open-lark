@@ -108,11 +108,10 @@ impl LarkWsClient {
             conn,
             frame_rx,
             event_tx,
-        ));
+         ));
         let mut client = LarkWsClient {
             frame_tx,
             event_rx,
-            cache: QuickCache::new(),
             state_machine,
         };
 
