@@ -12,39 +12,43 @@ env:
 
 jobs:
   # 验证构建和测试
-   validate:
+  validate:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
-           components: rustfmt, clippy
-       
-       - name: Cache Cargo build files
-         uses: Swatinem/rust-cache@v2
-       
-       - name: Install Protoc
+          components: rustfmt, clippy
+
+      - name: Cache Cargo build files
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Protoc
         uses: arduino/setup-protoc@v3
-      
+        with:
+          version: 23.4
+          include-pre-releases: false
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Check format
         run: cargo fmt --all -- --check
-      
+
       - name: Run clippy
         run: cargo clippy --workspace --all-targets --all-features
-      
+
       - name: Run tests
         run: cargo test --lib --all-features
-      
+
       - name: Run cargo doc
         run: cargo doc --no-deps --all-features --lib
         env:
           RUSTDOCFLAGS: "-D warnings"
 
   # 创建 GitHub Release
-   github-release:
+  github-release:
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -52,30 +56,30 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Extract version from tag
         id: extract_version
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
           echo "Extracted version: ${VERSION}"
-      
+
       - name: Extract changelog entry
         id: changelog
         run: |
           # 提取当前版本的 changelog 内容
           awk '/^## \['"${{ steps.extract_version.outputs.VERSION }}"'\]/{flag=1; next} /^## \[/{flag=0} flag' CHANGELOG.md > release_notes.md
-          
+
           # 如果没有找到内容，使用默认说明
           if [ ! -s release_notes.md ]; then
             echo "Release version ${{ steps.extract_version.outputs.VERSION }}" > release_notes.md
             echo "" >> release_notes.md
             echo "See [CHANGELOG.md](CHANGELOG.md) for details." >> release_notes.md
           fi
-          
+
           echo "Release notes content:"
           cat release_notes.md
-      
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -91,39 +95,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
-      
+
       - name: Cache Cargo build files
         uses: Leafwing-Studios/cargo-cache@v1
-      
+
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
-      
+        with:
+          version: 23.4
+          include-pre-releases: false
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Extract version from tag
         id: extract_version
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
-      
+
       - name: Verify Cargo.toml version matches tag
         run: |
           CARGO_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = "\(.*\)"/\1/')
           TAG_VERSION="${{ steps.extract_version.outputs.VERSION }}"
           echo "Cargo.toml version: ${CARGO_VERSION}"
           echo "Tag version: ${TAG_VERSION}"
-          
+
           if [ "${CARGO_VERSION}" != "${TAG_VERSION}" ]; then
             echo "❌ Version mismatch: Cargo.toml has ${CARGO_VERSION}, but tag is v${TAG_VERSION}"
             exit 1
           fi
           echo "✅ Version verification passed"
-      
+
       - name: Build release
         run: cargo build --release --all-features
-      
+
       - name: Publish to crates.io
         run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
         env:

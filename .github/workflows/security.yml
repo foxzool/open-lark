@@ -17,17 +17,17 @@ env:
   CARGO_TOOLCHAIN: stable
 
 jobs:
-   security-audit:
+  security-audit:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-        
+
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
-          
+
       - name: Cache Cargo registry
         uses: actions/cache@v4
         with:
@@ -35,17 +35,17 @@ jobs:
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-registry-
-            
+
       - name: Install cargo-audit and cargo-deny
         uses: taiki-e/install-action@v2
         with:
           tool: cargo-audit,cargo-deny
-        
+
       - name: Audit dependencies for security vulnerabilities
         run: |
           echo "## Security Audit Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           # Run cargo audit and capture output
           echo "### Vulnerability Scan (cargo audit)" >> $GITHUB_STEP_SUMMARY
           if cargo audit --json > audit-results.json; then
@@ -57,32 +57,32 @@ jobs:
             cat audit-results.json >> $GITHUB_STEP_SUMMARY
             echo "```" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
       - name: Check licenses and supply chain
         run: |
           echo "### Supply Chain Analysis (cargo deny)" >> $GITHUB_STEP_SUMMARY
-          
+
           # Check licenses
           if cargo deny check licenses --log-level warn; then
             echo "✅ All licenses are approved" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ License issues detected" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # Check for banned/duplicate dependencies
           if cargo deny check bans --log-level warn; then
             echo "✅ No banned or problematic dependencies" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Dependency issues detected" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # Check sources
           if cargo deny check sources --log-level warn; then
             echo "✅ All dependency sources are approved" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Unapproved dependency sources detected" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
       - name: Upload security report
         uses: actions/upload-artifact@v4
         if: always()
@@ -91,17 +91,17 @@ jobs:
           path: |
             audit-results.json
           retention-days: 30
-          
-      # Fail the job only on high/critical vulnerabilities
+
+      # Fail job only on high/critical vulnerabilities
       - name: Check for critical vulnerabilities
         run: |
           if [ -f audit-results.json ]; then
             # Count critical and high severity vulnerabilities
             CRITICAL_COUNT=$(cat audit-results.json | jq -r '.vulnerabilities.found | length' 2>/dev/null || echo "0")
-            
+
             if [ "$CRITICAL_COUNT" -gt "0" ]; then
               echo "❌ Found $CRITICAL_COUNT security vulnerabilities"
-              echo "Please review the security audit report and update vulnerable dependencies"
+              echo "Please review and update vulnerable dependencies"
               exit 1
             else
               echo "✅ No critical security vulnerabilities found"
