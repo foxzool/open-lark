@@ -37,24 +37,9 @@ jobs:
 
       - name: Run ServiceRegistry specific tests
         run: |
-          echo "🔍 运行ServiceRegistry特定功能验证..."
-
-          # 基础功能测试
-          echo "📋 运行基础ServiceRegistry测试..."
-          cargo test --release service_registry --features "openlark-core,openlark-communication" --lib --no-fail-fast
-
-          # 构建器功能测试
-          echo "🔧 测试ServiceRegistry构建器功能..."
-          cargo test --release test_service_registry_builder --features "openlark-core,openlark-communication" --lib
-          cargo test --release test_builder_integration --features "openlark-core,openlark-communication" --lib
-
-          # 依赖分析器测试
-          echo "📊 测试依赖分析器功能..."
-          cargo test --release dependency_analyzer --features "openlark-core,openlark-communication" --lib
-
-          # 性能基准测试
-          echo "⚡ 运行性能基准测试..."
-          cargo test --release test_benchmark_suite --features "authentication,contact,group,im,search" --lib
+          echo "🔍 运行 openlark-client 的 ServiceRegistry 相关验证..."
+          echo "📋 运行 openlark-client 全量单元测试（含全部 feature）..."
+          cargo test -p openlark-client --release --all-features --lib --no-fail-fast
 
   service-registry-performance:
     name: ServiceRegistry Performance
@@ -73,23 +58,17 @@ jobs:
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install Criterion
-        uses: taiki-e/install-action@v3
-        with:
-          crate: criterion
-          version: "0.5.1"
-
       - name: Performance Benchmarks
         run: |
           echo "⚡ 运行ServiceRegistry性能基准测试..."
 
           # 编译性能测试
           echo "🔨 编译性能基准测试..."
-          cargo build --release --features "openlark-core,openlark-communication" --bench
+          cargo build -p open-lark --release --features core-services --benches
 
           # 运行基准测试
           echo "🏃 运行基准测试..."
-          cargo bench --features "openlark-core,openlark-communication"
+          cargo bench -p open-lark --features core-services --bench config_performance
 
   service-registry-validation:
     name: ServiceRegistry Validation Report
@@ -112,24 +91,36 @@ jobs:
         run: |
           echo "📊 生成ServiceRegistry验证报告..."
 
-           # 运行测试并收集结果
-           TEST_RESULT=$(cargo test --release service_registry --features "openlark-core,openlark-communication" --lib 2>&1)
-           TEST_PASSED=$(echo "$TEST_RESULT" | grep -o "test result: [^.]*" | grep -o "passed" | head -1)
-           TEST_TOTAL=$(echo "$TEST_RESULT" | grep -o "running [0-9]* tests" | grep -o "[0-9]*")
-           TEST_FAILED_COUNT=$(echo "$TEST_RESULT" | grep -o "[0-9]* failed" | grep -o "[0-9]*" | head -1)
+          # 运行测试并收集结果（即使失败也继续生成报告）
+          set +e
+          TEST_RESULT=$(cargo test -p openlark-client --release --all-features --lib 2>&1)
+          TEST_EXIT_CODE=$?
+          set -e
+
+          TEST_TOTAL=$(echo "$TEST_RESULT" | grep -o "running [0-9]* tests" | grep -o "[0-9]*" | head -1)
+          TEST_FAILED_COUNT=$(echo "$TEST_RESULT" | grep -o "[0-9]* failed" | grep -o "[0-9]*" | head -1)
 
           if [ -z "$TEST_FAILED_COUNT" ]; then
             TEST_FAILED_COUNT=0
           fi
+          if [ -z "$TEST_TOTAL" ]; then
+            TEST_TOTAL=0
+          fi
 
-          TEST_PASSED_COUNT=$((TEST_TOTAL - TEST_FAILED_COUNT))
-          TEST_PASS_RATE=$(echo "scale=1; $TEST_PASSED_COUNT * 100 / $TEST_TOTAL" | bc)
+          if [ "$TEST_TOTAL" -gt "0" ]; then
+            TEST_PASSED_COUNT=$((TEST_TOTAL - TEST_FAILED_COUNT))
+            TEST_PASS_RATE=$(awk -v passed="$TEST_PASSED_COUNT" -v total="$TEST_TOTAL" 'BEGIN { printf("%.1f", passed * 100 / total) }')
+          else
+            TEST_PASSED_COUNT=0
+            TEST_PASS_RATE="0.0"
+          fi
 
           echo "✅ 测试统计:"
           echo "  总测试数: $TEST_TOTAL"
           echo "  通过数: $TEST_PASSED_COUNT"
           echo "  失败数: $TEST_FAILED_COUNT"
           echo "  通过率: ${TEST_PASS_RATE}%"
+          echo "  退出码: $TEST_EXIT_CODE"
 
           # 生成验证报告摘要
           cat > SERVICE_REGISTRY_CI_VALIDATION.md << EOF
@@ -142,6 +133,7 @@ jobs:
           ## 📊 验证结果
 
           - **测试通过率**: ${TEST_PASS_RATE}% ($TEST_PASSED_COUNT/$TEST_TOTAL)
+          - **测试退出码**: ${TEST_EXIT_CODE}
           - **编译状态**: ✅ 成功
           - **基准测试**: ✅ 通过（除零错误已修复）
           - **构建器功能**: ✅ 完全实现
@@ -188,15 +180,14 @@ jobs:
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
       - uses: Swatinem/rust-cache@v2
+      - name: Install cargo-deny
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deny
 
       - name: Security Audit
         run: |
           echo "🔒 运行ServiceRegistry安全审计..."
-
-          # 安装cargo-deny（如果尚未安装）
-          if ! command -v cargo-deny &> /dev/null; then
-            cargo install cargo-deny
-          fi
 
           # 运行安全审计
           cargo deny check
@@ -205,18 +196,24 @@ jobs:
           echo "🔍 检查ServiceRegistry特定安全问题..."
 
           # 检查是否有可能的不安全代码模式
-          if grep -r "unsafe" src/service_registry/; then
-            echo "⚠️  发现unsafe代码块，需要人工审查"
+          TARGET_DIR="crates/openlark-client/src/service_registry"
+          if [ ! -d "$TARGET_DIR" ]; then
+            echo "⚠️  未找到目录: $TARGET_DIR（跳过ServiceRegistry源码扫描）"
+            exit 0
+          fi
+
+          if grep -R "unsafe" "$TARGET_DIR" -n; then
+            echo "⚠️  发现 unsafe 代码块，需要人工审查"
           else
-            echo "✅ 未发现unsafe代码块"
+            echo "✅ 未发现 unsafe 代码块"
           fi
 
           # 检查panic!使用情况
-          PANIC_COUNT=$(grep -r "panic!" src/service_registry/ | wc -l)
+          PANIC_COUNT=$(grep -R "panic!" "$TARGET_DIR" -n 2>/dev/null | wc -l || true)
           echo "📊 发现 $PANIC_COUNT 处panic!调用"
 
           # 检查unwrap()使用情况
-          UNWRAP_COUNT=$(grep -r "\.unwrap()" src/service_registry/ | wc -l)
+          UNWRAP_COUNT=$(grep -R "\\.unwrap()" "$TARGET_DIR" -n 2>/dev/null | wc -l || true)
           echo "📊 发现 $UNWRAP_COUNT 处unwrap()调用"
 
   summary:
