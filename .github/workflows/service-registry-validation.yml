@@ -41,16 +41,16 @@ jobs:
 
           # 基础功能测试
           echo "📋 运行基础ServiceRegistry测试..."
-          cargo test --release service_registry --features "authentication,contact,group,im,search" --lib --no-fail-fast
+          cargo test --release service_registry --features "openlark-core,openlark-communication" --lib --no-fail-fast
 
           # 构建器功能测试
           echo "🔧 测试ServiceRegistry构建器功能..."
-          cargo test --release test_service_registry_builder --features "authentication,contact,group,im,search" --lib
-          cargo test --release test_builder_integration --features "authentication,contact,group,im,search" --lib
+          cargo test --release test_service_registry_builder --features "openlark-core,openlark-communication" --lib
+          cargo test --release test_builder_integration --features "openlark-core,openlark-communication" --lib
 
           # 依赖分析器测试
           echo "📊 测试依赖分析器功能..."
-          cargo test --release dependency_analyzer --features "authentication,contact,group,im,search" --lib
+          cargo test --release dependency_analyzer --features "openlark-core,openlark-communication" --lib
 
           # 性能基准测试
           echo "⚡ 运行性能基准测试..."
@@ -78,16 +78,16 @@ jobs:
           echo "⚡ 运行ServiceRegistry性能基准测试..."
 
           # 编译性能测试
-          echo "🔨 编译性能基准测试..."
-          cargo build --release --features "authentication,contact,group,im,search" --bench
+           echo "🔨 编译性能基准测试..."
+           cargo build --release --features "openlark-core,openlark-communication" --bench
 
           # 运行基准测试（如果存在）
-          if [ -d "benches" ] && [ -f "benches/service_registry_benchmark.rs" ]; then
-            echo "🏃 运行基准测试..."
-            cargo bench --features "authentication,contact,group,im,search"
-          else
-            echo "ℹ️  未找到基准测试文件，跳过基准测试运行"
-          fi
+           if [ -d "benches" ] && [ -f "benches/service_registry_benchmark.rs" ]; then
+             echo "🏃 运行基准测试..."
+             cargo bench --features "openlark-core,openlark-communication"
+           else
+             echo "ℹ️  未找到基准测试文件，跳过基准测试运行"
+           fi
 
   service-registry-validation:
     name: ServiceRegistry Validation Report
@@ -110,11 +110,11 @@ jobs:
         run: |
           echo "📊 生成ServiceRegistry验证报告..."
 
-          # 运行测试并收集结果
-          TEST_RESULT=$(cargo test --release service_registry --features "authentication,contact,group,im,search" --lib 2>&1)
-          TEST_PASSED=$(echo "$TEST_RESULT" | grep -o "test result: [^.]*" | grep -o "passed" | head -1)
-          TEST_TOTAL=$(echo "$TEST_RESULT" | grep -o "running [0-9]* tests" | grep -o "[0-9]*")
-          TEST_FAILED_COUNT=$(echo "$TEST_RESULT" | grep -o "[0-9]* failed" | grep -o "[0-9]*" | head -1)
+           # 运行测试并收集结果
+           TEST_RESULT=$(cargo test --release service_registry --features "openlark-core,openlark-communication" --lib 2>&1)
+           TEST_PASSED=$(echo "$TEST_RESULT" | grep -o "test result: [^.]*" | grep -o "passed" | head -1)
+           TEST_TOTAL=$(echo "$TEST_RESULT" | grep -o "running [0-9]* tests" | grep -o "[0-9]*")
+           TEST_FAILED_COUNT=$(echo "$TEST_RESULT" | grep -o "[0-9]* failed" | grep -o "[0-9]*" | head -1)
 
           if [ -z "$TEST_FAILED_COUNT" ]; then
             TEST_FAILED_COUNT=0
