@@ -1,8 +1,10 @@
 name: API Consistency Check
 
+# ⚠️ WORKFLOW DISABLED
 # TODO: API Consistency Check 工具需要作为 Rust 二进制实现
 # 当前 tools/api-analysis/ 包含的是 Python 脚本，无法构建为二进制
 # 暂时禁用此工作流，等待工具实现或修复
+# 要启用此workflow，请移除下面的 if: false 条件
 
 on:
   pull_request:
@@ -13,6 +15,9 @@ on:
       - main
     paths:
       - 'crates/**/*.rs'
+
+# 禁用workflow - 移除此行即可启用
+if: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
