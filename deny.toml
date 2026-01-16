@@ -34,17 +34,18 @@ ignore = false
 registries = []
 
 [bans]
-# 多版本检测级别
-multiple-versions = "warn"
-# 通配符依赖检测级别
-wildcards = "deny"
-# 允许的包（小心使用）
-allow = []
-# 禁止的包
-deny = []
-# 跳过检查的包
-skip = []
-skip-tree = []
+  # 多版本检测级别
+  multiple-versions = "warn"
+  # 通配符依赖检测级别
+  # workspace 项目中的 workspace = true 是正常用法，不拒绝
+  wildcards = "allow"
+  # 允许的包（小心使用）
+  allow = []
+  # 禁止的包
+  deny = []
+  # 跳过检查的包
+  skip = []
+  skip-tree = []
 
 [sources]
 # 未知注册表检测级别
