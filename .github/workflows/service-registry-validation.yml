@@ -66,15 +66,21 @@ jobs:
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
       - uses: Swatinem/rust-cache@v2
-      - name: Install Protoc
-        uses: arduino/setup-protoc@v3
-        with:
-          version: 23.4
-          include-pre-releases: false
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+       - name: Install Protoc
+         uses: arduino/setup-protoc@v3
+         with:
+           version: 23.4
+           include-preleases: false
+           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Performance Benchmarks
-        run: |
+       - name: Install Criterion
+         uses: taiki-e/install-action@v3
+         with:
+           crate: criterion
+           version: "0.5.1"
+
+       - name: Performance Benchmarks
+         run: |
           echo "⚡ 运行ServiceRegistry性能基准测试..."
 
           # 编译性能测试

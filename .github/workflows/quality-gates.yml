@@ -78,7 +78,6 @@ jobs:
 
     - name: 运行性能基准测试
       run: |
-        cargo install criterion
         cargo bench --bench config_performance
 
   coverage:
