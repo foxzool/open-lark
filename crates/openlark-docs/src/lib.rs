@@ -9,7 +9,7 @@
 //!
 //! 飞书开放平台云文档服务模块，提供文档、表格、知识库等 API 访问能力。
 //!
-//! ## 功能模块
+//! ## CCM业务域模块结构 (严格按照project-version-resource组织)
 //!
 //! - **ccm**: 云内容管理（174 APIs）- 文档、表格、知识库、云盘
 //!   - **ccm_doc**: 旧版文档（6 APIs）
@@ -38,11 +38,15 @@
 //!     .app_id("app_id")
 //!     .app_secret("app_secret")
 //!     .build();
-//! let docs = DocsService::new(config);
+//! let client = DocsClient::new(config);
 //!
-//! // 基础服务使用
-//! let config_ref = docs.config();
-//! println!("App ID: {}", config_ref.app_id);
+//! // 云盘文件服务
+//! let files = client.drive.v1.file();
+//! let folder = files.create_folder("parent_token", "新文件夹").await?;
+//!
+//! // 电子表格服务
+//! let sheets = client.sheets.v2.spreadsheet();
+//! let props = sheets.properties("spreadsheet_token").await?;
 //! ```
 //!
 //! ## 特性
@@ -61,8 +65,6 @@ mod macros;
 // Core modules
 pub mod error;
 pub mod models;
-
-// 主要服务模块
 pub mod service;
 
 // 功能模块按业务域组织
@@ -113,15 +115,6 @@ pub use service::DocsService as MainDocsService;
 // 重新导出各域服务
 #[cfg(feature = "ccm-core")]
 pub use ccm::CcmService;
-
-#[cfg(feature = "bitable")]
-pub use bitable::BitableService;
-
-#[cfg(feature = "base")]
-pub use base::BaseService;
-
-#[cfg(feature = "baike")]
-pub use baike::BaikeService;
 
 #[cfg(feature = "lingo")]
 pub use lingo::LingoService;

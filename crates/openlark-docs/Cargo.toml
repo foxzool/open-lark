@@ -90,6 +90,7 @@ uuid = { workspace = true }
 url = { workspace = true }
 urlencoding = { workspace = true }
 futures = { workspace = true }
+futures-util = "0.3"
 regex = { workspace = true }
 rand = { workspace = true }
 serde_repr = { workspace = true }

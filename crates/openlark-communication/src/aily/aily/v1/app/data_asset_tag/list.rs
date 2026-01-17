@@ -4,11 +4,9 @@
 
 use std::collections::HashMap;
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, SDKResult,
-};
-use openlark_core::validate_required;
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_DATA_ASSET_TAGS};
+use openlark_core::validate_required;
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 /// 获取数据知识分类列表请求
 pub struct ListDataAssetTagsRequest {

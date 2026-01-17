@@ -2,11 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/aily-v1/data-knowledge/data-knowledge-management/create
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, SDKResult,
-};
-use openlark_core::validate_required;
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_DATA_ASSETS};
+use openlark_core::validate_required;
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 /// 创建数据知识请求体
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
@@ -35,10 +33,7 @@ impl CreateDataAssetRequest {
         self
     }
 
-    pub async fn execute(
-        self,
-        body: CreateDataAssetBody,
-    ) -> SDKResult<serde_json::Value> {
+    pub async fn execute(self, body: CreateDataAssetBody) -> SDKResult<serde_json::Value> {
         validate_required!(self.app_id, "app_id 不能为空");
 
         let url = AILY_V1_DATA_ASSETS.replace("{app_id}", &self.app_id);

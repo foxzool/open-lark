@@ -2,11 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/aily-v1/app-skill/start
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, SDKResult,
-};
-use openlark_core::validate_required;
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_SKILL_START};
+use openlark_core::validate_required;
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 /// 调用技能请求体
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
@@ -40,10 +38,7 @@ impl StartSkillRequest {
         self
     }
 
-    pub async fn execute(
-        self,
-        body: StartSkillBody,
-    ) -> SDKResult<serde_json::Value> {
+    pub async fn execute(self, body: StartSkillBody) -> SDKResult<serde_json::Value> {
         validate_required!(self.app_id, "app_id 不能为空");
         validate_required!(self.skill_id, "skill_id 不能为空");
 

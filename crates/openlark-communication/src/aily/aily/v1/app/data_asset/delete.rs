@@ -2,11 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/aily-v1/data-knowledge/data-knowledge-management/delete
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, SDKResult,
-};
-use openlark_core::validate_required;
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_DATA_ASSET};
+use openlark_core::validate_required;
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 /// 删除数据知识请求
 pub struct DeleteDataAssetRequest {

@@ -2,11 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/aily-v1/data-knowledge/data-knowledge-management/upload_file
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, SDKResult,
-};
-use openlark_core::validate_required;
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_UPLOAD_FILE};
+use openlark_core::validate_required;
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 /// 上传文件用于数据知识管理请求
 pub struct UploadFileRequest {
@@ -27,10 +25,7 @@ impl UploadFileRequest {
         self
     }
 
-    pub async fn execute(
-        self,
-        body: serde_json::Value,
-    ) -> SDKResult<serde_json::Value> {
+    pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         validate_required!(self.app_id, "app_id 不能为空");
 
         let url = AILY_V1_UPLOAD_FILE.replace("{app_id}", &self.app_id);
