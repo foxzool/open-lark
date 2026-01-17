@@ -19,7 +19,7 @@ impl WorkforcePlanDetailRow {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/workforce_plan_detail_row/batchSave".to_string();
+        let path = "/open-apis/corehr/v2/workforce_plan_detail_row/batchSave".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl WorkforcePlanDetailRow {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/workforce_plan_detail_row/batchDelete".to_string();
+        let path = "/open-apis/corehr/v2/workforce_plan_detail_row/batchDelete".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

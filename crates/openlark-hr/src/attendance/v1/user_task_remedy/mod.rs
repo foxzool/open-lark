@@ -19,7 +19,7 @@ impl UserTaskRemedy {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/user_task_remedys".to_string();
+        let path = "/open-apis/attendance/v1/user_task_remedys".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl UserTaskRemedy {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path =
+        let path =
             "/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys".to_string();
         let method = Method::POST;
         let (query, body) = match method {
@@ -48,7 +48,7 @@ impl UserTaskRemedy {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/user_task_remedys/query".to_string();
+        let path = "/open-apis/attendance/v1/user_task_remedys/query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

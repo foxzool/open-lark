@@ -16,7 +16,7 @@ impl Minutes {
 
     /// 文档参考: https://open.feishu.cn/document/hire-v1/candidate-management/delivery-process-management/interview/get-4
     pub async fn get_open_apis_hire_v1_minutes(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/minutes".to_string();
+        let path = "/open-apis/hire/v1/minutes".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

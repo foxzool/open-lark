@@ -19,7 +19,7 @@ impl Semester {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/performance/v1/semesters".to_string();
+        let path = "/open-apis/performance/v1/semesters".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

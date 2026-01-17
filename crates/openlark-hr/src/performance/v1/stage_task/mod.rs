@@ -19,7 +19,7 @@ impl StageTask {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/performance/v1/stage_tasks/find_by_user_list".to_string();
+        let path = "/open-apis/performance/v1/stage_tasks/find_by_user_list".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl StageTask {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/performance/v1/stage_tasks/find_by_page".to_string();
+        let path = "/open-apis/performance/v1/stage_tasks/find_by_page".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

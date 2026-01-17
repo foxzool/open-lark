@@ -19,7 +19,7 @@ impl RecurringPayment {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/compensation/v1/recurring_payment/query".to_string();
+        let path = "/open-apis/compensation/v1/recurring_payment/query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl RecurringPayment {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/compensation/v1/recurring_payment/batch_update".to_string();
+        let path = "/open-apis/compensation/v1/recurring_payment/batch_update".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -47,7 +47,7 @@ impl RecurringPayment {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/compensation/v1/recurring_payment/batch_remove".to_string();
+        let path = "/open-apis/compensation/v1/recurring_payment/batch_remove".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -61,7 +61,7 @@ impl RecurringPayment {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/compensation/v1/recurring_payment/batch_create".to_string();
+        let path = "/open-apis/compensation/v1/recurring_payment/batch_create".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

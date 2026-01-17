@@ -21,7 +21,7 @@ impl Job {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/jobs/combined_create".to_string();
+        let path = "/open-apis/hire/v1/jobs/combined_create".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -128,7 +128,7 @@ impl Job {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job/list-2
     pub async fn get_open_apis_hire_v1_jobs(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/jobs".to_string();
+        let path = "/open-apis/hire/v1/jobs".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

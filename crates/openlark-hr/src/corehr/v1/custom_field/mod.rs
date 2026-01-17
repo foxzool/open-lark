@@ -19,7 +19,7 @@ impl CustomField {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/custom_fields/list_object_api_name".to_string();
+        let path = "/open-apis/corehr/v1/custom_fields/list_object_api_name".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl CustomField {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/custom_fields/query".to_string();
+        let path = "/open-apis/corehr/v1/custom_fields/query".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -47,7 +47,7 @@ impl CustomField {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/custom_fields/get_by_param".to_string();
+        let path = "/open-apis/corehr/v1/custom_fields/get_by_param".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

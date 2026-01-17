@@ -19,7 +19,7 @@ impl PreHire {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/pre_hires/withdraw_onboarding".to_string();
+        let path = "/open-apis/corehr/v2/pre_hires/withdraw_onboarding".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl PreHire {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/pre_hires/restore_flow_instance".to_string();
+        let path = "/open-apis/corehr/v2/pre_hires/restore_flow_instance".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -47,7 +47,7 @@ impl PreHire {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/pre_hires".to_string();
+        let path = "/open-apis/corehr/v2/pre_hires".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -93,7 +93,7 @@ impl PreHire {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/pre_hires/query".to_string();
+        let path = "/open-apis/corehr/v2/pre_hires/query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -107,7 +107,7 @@ impl PreHire {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/pre_hires/search".to_string();
+        let path = "/open-apis/corehr/v2/pre_hires/search".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -137,7 +137,7 @@ impl PreHire {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/pre_hires/transform_onboarding_task".to_string();
+        let path = "/open-apis/corehr/v2/pre_hires/transform_onboarding_task".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
