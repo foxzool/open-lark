@@ -19,7 +19,7 @@ impl Position {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/positions".to_string();
+        let path = "/open-apis/corehr/v2/positions".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -49,7 +49,7 @@ impl Position {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/positions/query".to_string();
+        let path = "/open-apis/corehr/v2/positions/query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -63,7 +63,7 @@ impl Position {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/positions/query_recent_change".to_string();
+        let path = "/open-apis/corehr/v2/positions/query_recent_change".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -77,7 +77,7 @@ impl Position {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/positions/active".to_string();
+        let path = "/open-apis/corehr/v2/positions/active".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -91,7 +91,7 @@ impl Position {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/positions/del_position".to_string();
+        let path = "/open-apis/corehr/v2/positions/del_position".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

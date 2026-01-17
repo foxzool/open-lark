@@ -136,10 +136,20 @@ jobs:
         run: cargo llvm-cov --all-features --lcov --output-path lcov.info
 
       - name: 上传覆盖率到 Codecov
+        if: ${{ secrets.CODECOV_TOKEN != '' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) }}
         uses: codecov/codecov-action@v4
         with:
           files: lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
+
+      - name: 上传覆盖率报告 (Artifact)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lcov-info
+          path: lcov.info
+          retention-days: 30
 
   security-audit:
     name: 安全审计

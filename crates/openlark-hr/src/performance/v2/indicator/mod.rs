@@ -19,7 +19,7 @@ impl Indicator {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/performance/v2/indicators/query".to_string();
+        let path = "/open-apis/performance/v2/indicators/query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

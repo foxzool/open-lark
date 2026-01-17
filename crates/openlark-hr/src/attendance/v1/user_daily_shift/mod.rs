@@ -19,7 +19,7 @@ impl UserDailyShift {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/user_daily_shifts/batch_create".to_string();
+        let path = "/open-apis/attendance/v1/user_daily_shifts/batch_create".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl UserDailyShift {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/user_daily_shifts/query".to_string();
+        let path = "/open-apis/attendance/v1/user_daily_shifts/query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -47,7 +47,7 @@ impl UserDailyShift {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/user_daily_shifts/batch_create_temp".to_string();
+        let path = "/open-apis/attendance/v1/user_daily_shifts/batch_create_temp".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

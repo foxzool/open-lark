@@ -19,7 +19,7 @@ impl ProgressRecord {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/okr/v1/progress_records".to_string();
+        let path = "/open-apis/okr/v1/progress_records".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

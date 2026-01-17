@@ -37,7 +37,7 @@ impl Talent {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/talents/combined_create".to_string();
+        let path = "/open-apis/hire/v1/talents/combined_create".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -51,7 +51,7 @@ impl Talent {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/talents/combined_update".to_string();
+        let path = "/open-apis/hire/v1/talents/combined_update".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -65,7 +65,7 @@ impl Talent {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/talents/add_to_folder".to_string();
+        let path = "/open-apis/hire/v1/talents/add_to_folder".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -79,7 +79,7 @@ impl Talent {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/talents/remove_to_folder".to_string();
+        let path = "/open-apis/hire/v1/talents/remove_to_folder".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -93,7 +93,7 @@ impl Talent {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/talents/batch_get_id".to_string();
+        let path = "/open-apis/hire/v1/talents/batch_get_id".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -104,7 +104,7 @@ impl Talent {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/talent/list
     pub async fn get_open_apis_hire_v1_talents(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/talents".to_string();
+        let path = "/open-apis/hire/v1/talents".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

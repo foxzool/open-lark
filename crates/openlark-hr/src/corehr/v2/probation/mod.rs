@@ -21,7 +21,7 @@ impl Probation {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/probation/enable_disable_assessment".to_string();
+        let path = "/open-apis/corehr/v2/probation/enable_disable_assessment".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -35,7 +35,7 @@ impl Probation {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/probation/search".to_string();
+        let path = "/open-apis/corehr/v2/probation/search".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -49,7 +49,7 @@ impl Probation {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/probation/submit".to_string();
+        let path = "/open-apis/corehr/v2/probation/submit".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -63,7 +63,7 @@ impl Probation {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/probation/withdraw".to_string();
+        let path = "/open-apis/corehr/v2/probation/withdraw".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

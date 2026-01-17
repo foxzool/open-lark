@@ -19,7 +19,7 @@ impl JobGrade {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/job_grades".to_string();
+        let path = "/open-apis/corehr/v2/job_grades".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -49,7 +49,7 @@ impl JobGrade {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/job_grades/query".to_string();
+        let path = "/open-apis/corehr/v2/job_grades/query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -63,7 +63,7 @@ impl JobGrade {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/job_grades/query_recent_change".to_string();
+        let path = "/open-apis/corehr/v2/job_grades/query_recent_change".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

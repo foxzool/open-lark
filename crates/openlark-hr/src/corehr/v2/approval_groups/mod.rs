@@ -19,9 +19,8 @@ impl ApprovalGroups {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path =
-            "/open-apis/corehr/v2/approval_groups/open_query_position_change_list_by_ids"
-                .to_string();
+        let path = "/open-apis/corehr/v2/approval_groups/open_query_position_change_list_by_ids"
+            .to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -51,9 +50,8 @@ impl ApprovalGroups {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path =
-            "/open-apis/corehr/v2/approval_groups/open_query_department_change_list_by_ids"
-                .to_string();
+        let path = "/open-apis/corehr/v2/approval_groups/open_query_department_change_list_by_ids"
+            .to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -67,7 +65,7 @@ impl ApprovalGroups {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path =
+        let path =
             "/open-apis/corehr/v2/approval_groups/open_query_job_change_list_by_ids".to_string();
         let method = Method::POST;
         let (query, body) = match method {

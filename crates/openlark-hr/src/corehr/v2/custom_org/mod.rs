@@ -19,7 +19,7 @@ impl CustomOrg {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/custom_orgs".to_string();
+        let path = "/open-apis/corehr/v2/custom_orgs".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -49,7 +49,7 @@ impl CustomOrg {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/custom_orgs/update_rule".to_string();
+        let path = "/open-apis/corehr/v2/custom_orgs/update_rule".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -63,7 +63,7 @@ impl CustomOrg {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/custom_orgs/active".to_string();
+        let path = "/open-apis/corehr/v2/custom_orgs/active".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -77,7 +77,7 @@ impl CustomOrg {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/custom_orgs/query".to_string();
+        let path = "/open-apis/corehr/v2/custom_orgs/query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -91,7 +91,7 @@ impl CustomOrg {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/custom_orgs/query_recent_change".to_string();
+        let path = "/open-apis/corehr/v2/custom_orgs/query_recent_change".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -105,7 +105,7 @@ impl CustomOrg {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/custom_orgs/delete_org".to_string();
+        let path = "/open-apis/corehr/v2/custom_orgs/delete_org".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
