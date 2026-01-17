@@ -19,7 +19,7 @@ impl UserGroupUserRel {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/performance/v2/user_group_user_rels/write".to_string();
+        let path = "/open-apis/performance/v2/user_group_user_rels/write".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

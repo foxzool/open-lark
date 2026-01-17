@@ -19,7 +19,7 @@ impl TalentBlocklist {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/talent_blocklist/change_talent_block".to_string();
+        let path = "/open-apis/hire/v1/talent_blocklist/change_talent_block".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

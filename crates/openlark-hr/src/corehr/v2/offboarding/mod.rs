@@ -19,7 +19,7 @@ impl Offboarding {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/offboardings/submit_v2".to_string();
+        let path = "/open-apis/corehr/v2/offboardings/submit_v2".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl Offboarding {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/offboardings/edit".to_string();
+        let path = "/open-apis/corehr/v2/offboardings/edit".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -47,7 +47,7 @@ impl Offboarding {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/offboardings/revoke".to_string();
+        let path = "/open-apis/corehr/v2/offboardings/revoke".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

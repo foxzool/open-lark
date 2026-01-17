@@ -19,7 +19,7 @@ impl Review {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/okr/v1/reviews/query".to_string();
+        let path = "/open-apis/okr/v1/reviews/query".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

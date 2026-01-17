@@ -35,7 +35,7 @@ impl Person {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/persons/upload".to_string();
+        let path = "/open-apis/corehr/v1/persons/upload".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -65,7 +65,7 @@ impl Person {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/persons".to_string();
+        let path = "/open-apis/corehr/v1/persons".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

@@ -19,7 +19,7 @@ impl EcoBackgroundCheckCustomField {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/eco_background_check_custom_fields".to_string();
+        let path = "/open-apis/hire/v1/eco_background_check_custom_fields".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,8 +33,7 @@ impl EcoBackgroundCheckCustomField {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path =
-            "/open-apis/hire/v1/eco_background_check_custom_fields/batch_update".to_string();
+        let path = "/open-apis/hire/v1/eco_background_check_custom_fields/batch_update".to_string();
         let method = Method::PATCH;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -48,8 +47,7 @@ impl EcoBackgroundCheckCustomField {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path =
-            "/open-apis/hire/v1/eco_background_check_custom_fields/batch_delete".to_string();
+        let path = "/open-apis/hire/v1/eco_background_check_custom_fields/batch_delete".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

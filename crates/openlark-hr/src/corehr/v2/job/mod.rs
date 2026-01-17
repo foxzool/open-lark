@@ -32,7 +32,7 @@ impl Job {
 
     /// 文档参考: https://open.feishu.cn/document/corehr-v1/job-management/job/list
     pub async fn get_open_apis_corehr_v2_jobs(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/jobs".to_string();
+        let path = "/open-apis/corehr/v2/jobs".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -46,7 +46,7 @@ impl Job {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/jobs/batch_get".to_string();
+        let path = "/open-apis/corehr/v2/jobs/batch_get".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -60,7 +60,7 @@ impl Job {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/jobs/query_multi_timeline".to_string();
+        let path = "/open-apis/corehr/v2/jobs/query_multi_timeline".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -74,7 +74,7 @@ impl Job {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/jobs/query_recent_change".to_string();
+        let path = "/open-apis/corehr/v2/jobs/query_recent_change".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

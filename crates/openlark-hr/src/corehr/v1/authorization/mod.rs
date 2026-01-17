@@ -19,7 +19,7 @@ impl Authorization {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/authorizations/query".to_string();
+        let path = "/open-apis/corehr/v1/authorizations/query".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl Authorization {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/authorizations/get_by_param".to_string();
+        let path = "/open-apis/corehr/v1/authorizations/get_by_param".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -47,7 +47,7 @@ impl Authorization {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/authorizations/add_role_assign".to_string();
+        let path = "/open-apis/corehr/v1/authorizations/add_role_assign".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -61,7 +61,7 @@ impl Authorization {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/authorizations/update_role_assign".to_string();
+        let path = "/open-apis/corehr/v1/authorizations/update_role_assign".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -75,7 +75,7 @@ impl Authorization {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/authorizations/remove_role_assign".to_string();
+        let path = "/open-apis/corehr/v1/authorizations/remove_role_assign".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

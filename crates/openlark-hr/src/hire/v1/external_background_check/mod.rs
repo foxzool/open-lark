@@ -19,7 +19,7 @@ impl ExternalBackgroundCheck {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/external_background_checks".to_string();
+        let path = "/open-apis/hire/v1/external_background_checks".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -54,7 +54,7 @@ impl ExternalBackgroundCheck {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/external_background_checks/batch_query".to_string();
+        let path = "/open-apis/hire/v1/external_background_checks/batch_query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

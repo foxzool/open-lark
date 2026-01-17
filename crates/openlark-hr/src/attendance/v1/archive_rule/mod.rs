@@ -19,7 +19,7 @@ impl ArchiveRule {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/archive_rule/user_stats_fields_query".to_string();
+        let path = "/open-apis/attendance/v1/archive_rule/user_stats_fields_query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl ArchiveRule {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/archive_rule/upload_report".to_string();
+        let path = "/open-apis/attendance/v1/archive_rule/upload_report".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -47,7 +47,7 @@ impl ArchiveRule {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/archive_rule/del_report".to_string();
+        let path = "/open-apis/attendance/v1/archive_rule/del_report".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -61,7 +61,7 @@ impl ArchiveRule {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/archive_rule".to_string();
+        let path = "/open-apis/attendance/v1/archive_rule".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

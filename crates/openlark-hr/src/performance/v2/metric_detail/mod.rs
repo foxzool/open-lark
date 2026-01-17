@@ -19,7 +19,7 @@ impl MetricDetail {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/performance/v2/metric_details/query".to_string();
+        let path = "/open-apis/performance/v2/metric_details/query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl MetricDetail {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/performance/v2/metric_details/import".to_string();
+        let path = "/open-apis/performance/v2/metric_details/import".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

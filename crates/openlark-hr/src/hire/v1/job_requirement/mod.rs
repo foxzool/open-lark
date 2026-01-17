@@ -19,7 +19,7 @@ impl JobRequirement {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/job_requirements".to_string();
+        let path = "/open-apis/hire/v1/job_requirements".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -49,7 +49,7 @@ impl JobRequirement {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/job_requirements/search".to_string();
+        let path = "/open-apis/hire/job_requirements/search".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -63,7 +63,7 @@ impl JobRequirement {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/job_requirements".to_string();
+        let path = "/open-apis/hire/v1/job_requirements".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

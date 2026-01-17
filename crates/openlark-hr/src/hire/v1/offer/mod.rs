@@ -16,7 +16,7 @@ impl Offer {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/create
     pub async fn post_open_apis_hire_v1_offers(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/offers".to_string();
+        let path = "/open-apis/hire/v1/offers".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -59,7 +59,7 @@ impl Offer {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/list
     pub async fn get_open_apis_hire_v1_offers(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/offers".to_string();
+        let path = "/open-apis/hire/v1/offers".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

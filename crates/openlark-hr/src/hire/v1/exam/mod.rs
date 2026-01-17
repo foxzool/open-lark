@@ -16,7 +16,7 @@ impl Exam {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/exam/create
     pub async fn post_open_apis_hire_v1_exams(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/exams".to_string();
+        let path = "/open-apis/hire/v1/exams".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

@@ -16,7 +16,7 @@ impl Todo {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/recruitment-process-follow-up/list
     pub async fn get_open_apis_hire_v1_todos(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/todos".to_string();
+        let path = "/open-apis/hire/v1/todos".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

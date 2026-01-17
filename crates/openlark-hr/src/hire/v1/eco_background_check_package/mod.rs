@@ -19,7 +19,7 @@ impl EcoBackgroundCheckPackage {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/eco_background_check_packages".to_string();
+        let path = "/open-apis/hire/v1/eco_background_check_packages".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl EcoBackgroundCheckPackage {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/eco_background_check_packages/batch_update".to_string();
+        let path = "/open-apis/hire/v1/eco_background_check_packages/batch_update".to_string();
         let method = Method::PATCH;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -47,7 +47,7 @@ impl EcoBackgroundCheckPackage {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/eco_background_check_packages/batch_delete".to_string();
+        let path = "/open-apis/hire/v1/eco_background_check_packages/batch_delete".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

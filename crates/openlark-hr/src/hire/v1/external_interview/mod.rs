@@ -19,7 +19,7 @@ impl ExternalInterview {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/external_interviews".to_string();
+        let path = "/open-apis/hire/v1/external_interviews".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -49,7 +49,7 @@ impl ExternalInterview {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/external_interviews/batch_query".to_string();
+        let path = "/open-apis/hire/v1/external_interviews/batch_query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

@@ -16,7 +16,7 @@ impl Job {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job/create
     pub async fn post_open_apis_corehr_v1_jobs(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/jobs".to_string();
+        let path = "/open-apis/corehr/v1/jobs".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -75,7 +75,7 @@ impl Job {
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job/list
     pub async fn get_open_apis_corehr_v1_jobs(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/jobs".to_string();
+        let path = "/open-apis/corehr/v1/jobs".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

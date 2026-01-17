@@ -19,7 +19,7 @@ impl DatasourceRecord {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/payroll/v1/datasource_records/save".to_string();
+        let path = "/open-apis/payroll/v1/datasource_records/save".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl DatasourceRecord {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/payroll/v1/datasource_records/query".to_string();
+        let path = "/open-apis/payroll/v1/datasource_records/query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

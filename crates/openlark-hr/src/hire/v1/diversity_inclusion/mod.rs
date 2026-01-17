@@ -19,7 +19,7 @@ impl DiversityInclusion {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/hire/v1/applications/diversity_inclusions/search".to_string();
+        let path = "/open-apis/hire/v1/applications/diversity_inclusions/search".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

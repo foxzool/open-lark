@@ -19,7 +19,7 @@ impl EmployeesAdditionalJob {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/employees/additional_jobs".to_string();
+        let path = "/open-apis/corehr/v2/employees/additional_jobs".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -67,7 +67,7 @@ impl EmployeesAdditionalJob {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/employees/additional_jobs/batch".to_string();
+        let path = "/open-apis/corehr/v2/employees/additional_jobs/batch".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

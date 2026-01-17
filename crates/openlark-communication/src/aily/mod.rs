@@ -4,4 +4,5 @@
 //!
 //! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
 
+#[allow(clippy::module_inception)]
 pub mod aily;

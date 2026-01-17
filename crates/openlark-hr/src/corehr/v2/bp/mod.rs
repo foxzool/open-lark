@@ -19,7 +19,7 @@ impl Bp {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/bps/get_by_department".to_string();
+        let path = "/open-apis/corehr/v2/bps/get_by_department".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -30,7 +30,7 @@ impl Bp {
 
     /// 文档参考: https://open.feishu.cn/document/corehr-v1/authorization/list-2
     pub async fn get_open_apis_corehr_v2_bps(&self, payload: Option<&Value>) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/bps".to_string();
+        let path = "/open-apis/corehr/v2/bps".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

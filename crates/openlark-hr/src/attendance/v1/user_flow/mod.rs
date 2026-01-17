@@ -19,7 +19,7 @@ impl UserFlow {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/user_flows/batch_create".to_string();
+        let path = "/open-apis/attendance/v1/user_flows/batch_create".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -49,7 +49,7 @@ impl UserFlow {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/user_flows/query".to_string();
+        let path = "/open-apis/attendance/v1/user_flows/query".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -63,7 +63,7 @@ impl UserFlow {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/attendance/v1/user_flows/batch_del".to_string();
+        let path = "/open-apis/attendance/v1/user_flows/batch_del".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

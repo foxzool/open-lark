@@ -19,7 +19,7 @@ impl Department {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/departments/query_operation_logs".to_string();
+        let path = "/open-apis/corehr/departments/query_operation_logs".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -49,7 +49,7 @@ impl Department {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/departments/parents".to_string();
+        let path = "/open-apis/corehr/v2/departments/parents".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -63,7 +63,7 @@ impl Department {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/departments/batch_get".to_string();
+        let path = "/open-apis/corehr/v2/departments/batch_get".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -77,7 +77,7 @@ impl Department {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/departments/query_recent_change".to_string();
+        let path = "/open-apis/corehr/v2/departments/query_recent_change".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -91,7 +91,7 @@ impl Department {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/departments/query_timeline".to_string();
+        let path = "/open-apis/corehr/v2/departments/query_timeline".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -105,7 +105,7 @@ impl Department {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/departments/tree".to_string();
+        let path = "/open-apis/corehr/v2/departments/tree".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -119,7 +119,7 @@ impl Department {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/departments/query_multi_timeline".to_string();
+        let path = "/open-apis/corehr/v2/departments/query_multi_timeline".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -133,7 +133,7 @@ impl Department {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v2/departments/search".to_string();
+        let path = "/open-apis/corehr/v2/departments/search".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),

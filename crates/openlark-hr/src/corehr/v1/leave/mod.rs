@@ -19,7 +19,7 @@ impl Leave {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/leaves/leave_types".to_string();
+        let path = "/open-apis/corehr/v1/leaves/leave_types".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -33,7 +33,7 @@ impl Leave {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/leaves/leave_balances".to_string();
+        let path = "/open-apis/corehr/v1/leaves/leave_balances".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -47,7 +47,7 @@ impl Leave {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/leaves/leave_request_history".to_string();
+        let path = "/open-apis/corehr/v1/leaves/leave_request_history".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -61,7 +61,7 @@ impl Leave {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/leaves/work_calendar".to_string();
+        let path = "/open-apis/corehr/v1/leaves/work_calendar".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -75,7 +75,7 @@ impl Leave {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/leaves/calendar_by_scope".to_string();
+        let path = "/open-apis/corehr/v1/leaves/calendar_by_scope".to_string();
         let method = Method::GET;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
@@ -89,7 +89,7 @@ impl Leave {
         &self,
         payload: Option<&Value>,
     ) -> SDKResult<Value> {
-        let mut path = "/open-apis/corehr/v1/leaves/work_calendar_date".to_string();
+        let path = "/open-apis/corehr/v1/leaves/work_calendar_date".to_string();
         let method = Method::POST;
         let (query, body) = match method {
             Method::GET | Method::DELETE => (payload, None),
