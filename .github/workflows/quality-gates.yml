@@ -136,7 +136,6 @@ jobs:
         run: cargo llvm-cov --all-features --lcov --output-path lcov.info
 
       - name: 上传覆盖率到 Codecov
-        if: ${{ secrets.CODECOV_TOKEN != '' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)) }}
         uses: codecov/codecov-action@v4
         with:
           files: lcov.info
