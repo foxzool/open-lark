@@ -3,16 +3,33 @@
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting/end
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    validate_required, SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
 use crate::common::api_utils::{extract_response_data, serialize_params};
-use crate::endpoints::VC_V1_MEETINGS;
 
 /// 结束会议请求
+#[derive(Debug, Clone)]
 pub struct EndMeetingRequest {
     config: Config,
     meeting_id: String,
+}
+
+/// 结束会议响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct EndMeetingResponse {
+    /// 操作结果
+    pub success: bool,
+}
+
+impl ApiResponseTrait for EndMeetingResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl EndMeetingRequest {
@@ -34,15 +51,42 @@ impl EndMeetingRequest {
     /// 说明：如文档不要求请求体，可传入空对象 `{}`。
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting/end
-    pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+    pub async fn execute(self, body: serde_json::Value) -> SDKResult<EndMeetingResponse> {
+        use crate::common::api_endpoints::VcApiV1;
+
         validate_required!(self.meeting_id, "meeting_id 不能为空");
 
-        // url: PATCH:/open-apis/vc/v1/meetings/:meeting_id/end
-        let req: ApiRequest<serde_json::Value> =
-            ApiRequest::patch(format!("{}/{}/end", VC_V1_MEETINGS, self.meeting_id))
-                .body(serialize_params(&body, "结束会议")?);
+        let api_endpoint = VcApiV1::MeetingEnd(self.meeting_id);
+        let req: ApiRequest<EndMeetingResponse> =
+            ApiRequest::patch(api_endpoint.to_url()).body(serialize_params(&body, "结束会议")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "结束会议")
+    }
+}
+
+/// 结束会议请求构建器
+#[derive(Debug, Clone)]
+pub struct EndMeetingRequestBuilder {
+    request: EndMeetingRequest,
+}
+
+impl EndMeetingRequestBuilder {
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: EndMeetingRequest::new(config),
+        }
+    }
+
+    /// 设置会议ID
+    pub fn meeting_id(mut self, meeting_id: impl Into<String>) -> Self {
+        self.request = self.request.meeting_id(meeting_id);
+        self
+    }
+
+    /// 构建请求
+    pub fn build(self) -> EndMeetingRequest {
+        self.request
     }
 }

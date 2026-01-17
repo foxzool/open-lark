@@ -5,10 +5,11 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::validation_error,
     http::Transport,
     SDKResult,
 };
+
+use crate::common::api_utils::{extract_response_data, validate_required_field};
 use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::CalendarApiV4;
@@ -79,17 +80,13 @@ impl PatchCalendarRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/patch
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<PatchCalendarResponse> {
-        if self.calendar_id.trim().is_empty() {
-            return Err(validation_error("calendar_id", "日历 ID 不能为空"));
-        }
+        validate_required_field("calendar_id", Some(&self.calendar_id), "日历 ID 不能为空")?;
 
         let api_endpoint = CalendarApiV4::CalendarPatch(self.calendar_id.clone());
         let api_request: ApiRequest<PatchCalendarResponse> =
             ApiRequest::patch(api_endpoint.to_url()).body(body);
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        let data: PatchCalendarResponse =
-            serde_json::from_value(response.data.unwrap_or_default())?;
-        Ok(data)
+        extract_response_data(response, "更新日历信息")
     }
 }

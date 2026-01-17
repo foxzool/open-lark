@@ -5,10 +5,11 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::validation_error,
     http::Transport,
     SDKResult,
 };
+
+use crate::common::api_utils::{extract_response_data, validate_required_field};
 use serde::{Deserialize, Serialize};
 
 /// 更新会议室请求
@@ -55,24 +56,16 @@ impl PatchRoomRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/patch
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<PatchRoomResponse> {
-        // 参数验证
-        if self.room_id.trim().is_empty() {
-            return Err(validation_error("room_id", "会议室 ID 不能为空"));
-        }
-
-        // 🚀 使用新的枚举+builder系统生成API端点
         use crate::common::api_endpoints::VcApiV1;
-        let api_endpoint = VcApiV1::RoomPatch(self.room_id.clone());
 
-        // 创建API请求 - 使用类型安全的URL生成
+        validate_required_field("room_id", Some(&self.room_id), "会议室 ID 不能为空")?;
+
+        let api_endpoint = VcApiV1::RoomPatch(self.room_id.clone());
         let api_request: ApiRequest<PatchRoomResponse> =
             ApiRequest::patch(api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
 
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        extract_response_data(response, "更新会议室")
     }
 }
 
