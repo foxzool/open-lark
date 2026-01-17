@@ -36,24 +36,72 @@
 #[macro_use]
 mod macros;
 
-// 导入端点模块
-pub mod endpoints;
+// Core service
+pub mod service;
 
-pub mod compensation_management;
+// 项目模块（按 meta.Project）
+pub mod attendance;
+pub mod compensation;
+pub mod corehr;
+pub mod ehr;
 pub mod hire;
+pub mod okr;
+pub mod payroll;
+pub mod performance;
 
-// 重新导出端点常量，方便外部使用
+// 端点保留
+pub mod endpoints;
 pub use endpoints::*;
 
 pub mod prelude {
-    #[allow(ambiguous_glob_reexports)]
-    pub use crate::compensation_management::*;
-    #[allow(ambiguous_glob_reexports)]
-    pub use crate::hire::*;
-    pub use openlark_core::SDKResult;
+    pub use openlark_core::{config::Config, SDKResult};
 }
 
-#[allow(ambiguous_glob_reexports)]
-pub use crate::compensation_management::*;
-#[allow(ambiguous_glob_reexports)]
-pub use crate::hire::*;
+use service::HrService;
+use std::sync::Arc;
+
+/// HRClient：统一入口，提供 project-version-resource 链式访问
+#[derive(Clone)]
+pub struct HrClient {
+    service: Arc<HrService>,
+}
+
+impl HrClient {
+    pub fn new(config: openlark_core::config::Config) -> Self {
+        Self {
+            service: Arc::new(HrService::new(config)),
+        }
+    }
+
+    pub fn attendance(&self) -> attendance::Attendance {
+        attendance::Attendance::new(self.service.clone())
+    }
+
+    pub fn corehr(&self) -> corehr::Corehr {
+        corehr::Corehr::new(self.service.clone())
+    }
+
+    pub fn compensation(&self) -> compensation::Compensation {
+        compensation::Compensation::new(self.service.clone())
+    }
+
+    pub fn payroll(&self) -> payroll::Payroll {
+        payroll::Payroll::new(self.service.clone())
+    }
+
+    pub fn performance(&self) -> performance::Performance {
+        performance::Performance::new(self.service.clone())
+    }
+
+    pub fn okr(&self) -> okr::Okr {
+        okr::Okr::new(self.service.clone())
+    }
+
+    pub fn hire(&self) -> hire::Hire {
+        hire::Hire::new(self.service.clone())
+    }
+
+    pub fn ehr(&self) -> ehr::Ehr {
+        ehr::Ehr::new(self.service.clone())
+    }
+}

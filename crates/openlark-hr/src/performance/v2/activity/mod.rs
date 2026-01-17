@@ -1,0 +1,30 @@
+use crate::service::HrService;
+use openlark_core::SDKResult;
+use reqwest::Method;
+use serde_json::Value;
+use std::sync::Arc;
+
+#[derive(Clone)]
+pub struct Activity {
+    service: Arc<HrService>,
+}
+
+impl Activity {
+    pub fn new(service: Arc<HrService>) -> Self {
+        Self { service }
+    }
+
+    /// 文档参考: https://open.feishu.cn/document/performance-v1/review_config/semester_activity/activity/query
+    pub async fn post_open_apis_performance_v2_activity_query(
+        &self,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
+        let mut path = "/open-apis/performance/v2/activity/query".to_string();
+        let method = Method::POST;
+        let (query, body) = match method {
+            Method::GET | Method::DELETE => (payload, None),
+            _ => (None, payload),
+        };
+        self.service.request_value(method, &path, query, body).await
+    }
+}

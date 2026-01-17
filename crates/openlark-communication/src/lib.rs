@@ -51,6 +51,9 @@ pub mod contact;
 #[cfg(feature = "moments")]
 pub mod moments;
 
+// AILY 模块
+pub mod aily;
+
 pub use endpoints::*;
 
 /// Re-exports from openlark-core for convenience.

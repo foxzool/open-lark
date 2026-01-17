@@ -2,10 +2,8 @@
 //!
 //! docPath: https://open.feishu.cn/document/aily-v1/aily_session/create
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, SDKResult,
-};
 use openlark_core::validate_required;
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_SESSIONS};
 
@@ -29,7 +27,8 @@ impl CreateSessionRequest {
     pub async fn execute(self, body: CreateSessionBody) -> SDKResult<serde_json::Value> {
         validate_required!(body.name, "name 不能为空");
 
-        let req: ApiRequest<CreateSessionBody> = ApiRequest::post(AILY_V1_SESSIONS).json_body(&body);
+        let req: ApiRequest<CreateSessionBody> =
+            ApiRequest::post(AILY_V1_SESSIONS).json_body(&body);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "创建会话")
