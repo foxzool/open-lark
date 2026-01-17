@@ -2,11 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/aily-v1/aily_session-run/create
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, SDKResult,
-};
-use openlark_core::validate_required;
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_RUNS};
+use openlark_core::validate_required;
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 /// 创建运行请求
 pub struct CreateRunRequest {
@@ -27,10 +25,7 @@ impl CreateRunRequest {
         self
     }
 
-    pub async fn execute(
-        self,
-        body: serde_json::Value,
-    ) -> SDKResult<serde_json::Value> {
+    pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         validate_required!(self.aily_session_id, "aily_session_id 不能为空");
 
         let url = AILY_V1_RUNS.replace("{aily_session_id}", &self.aily_session_id);

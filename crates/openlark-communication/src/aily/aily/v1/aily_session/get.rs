@@ -2,11 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/aily-v1/aily_session/get
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, SDKResult,
-};
-use openlark_core::validate_required;
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_SESSION};
+use openlark_core::validate_required;
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 /// 获取会话请求
 pub struct GetSessionRequest {
