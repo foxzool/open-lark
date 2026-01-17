@@ -29,3 +29,24 @@ pub fn serialize_params<T: serde::Serialize>(
         )
     })
 }
+
+/// 标准化参数验证错误处理
+///
+/// # 参数
+/// - `field_name`: 字段名称
+/// - `field_value`: 字段值
+/// - `error_message`: 错误消息
+///
+/// # 返回
+/// - `Ok(())`: 验证通过
+/// - `Err(SDKError)`: 验证失败错误
+pub fn validate_required_field<T: AsRef<str>>(
+    field_name: &str,
+    field_value: Option<T>,
+    error_message: &str,
+) -> SDKResult<()> {
+    match field_value {
+        Some(value) if !value.as_ref().trim().is_empty() => Ok(()),
+        _ => Err(error::validation_error(field_name, error_message)),
+    }
+}

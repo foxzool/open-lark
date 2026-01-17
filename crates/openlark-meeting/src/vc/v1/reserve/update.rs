@@ -5,13 +5,13 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::validation_error,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::VcApiV1;
+use crate::common::api_utils::{extract_response_data, validate_required_field};
 
 /// 更新预约请求
 
@@ -57,23 +57,14 @@ impl UpdateReserveRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/reserve/update
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<UpdateReserveResponse> {
-        // 参数验证
-        if self.reserve_id.trim().is_empty() {
-            return Err(validation_error("reserve_id", "预约 ID 不能为空"));
-        }
+        validate_required_field("reserve_id", Some(&self.reserve_id), "预约 ID 不能为空")?;
 
-        // 🚀 使用新的枚举+builder系统生成API端点
         let api_endpoint = VcApiV1::ReservePatch(self.reserve_id.clone());
-
-        // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<UpdateReserveResponse> =
             ApiRequest::patch(api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
 
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        extract_response_data(response, "更新预约")
     }
 }
 

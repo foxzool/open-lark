@@ -3,16 +3,33 @@
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting/set_host
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    validate_required, SDKResult,
 };
+use serde::{Deserialize, Serialize};
 
 use crate::common::api_utils::{extract_response_data, serialize_params};
-use crate::endpoints::VC_V1_MEETINGS;
 
 /// 设置主持人请求
+#[derive(Debug, Clone)]
 pub struct SetHostMeetingRequest {
     config: Config,
     meeting_id: String,
+}
+
+/// 设置主持人响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct SetHostMeetingResponse {
+    /// 操作结果
+    pub success: bool,
+}
+
+impl ApiResponseTrait for SetHostMeetingResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 impl SetHostMeetingRequest {
@@ -34,15 +51,42 @@ impl SetHostMeetingRequest {
     /// 说明：该接口请求体字段较多，建议直接按文档构造 JSON 传入。
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting/set_host
-    pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+    pub async fn execute(self, body: serde_json::Value) -> SDKResult<SetHostMeetingResponse> {
+        use crate::common::api_endpoints::VcApiV1;
+
         validate_required!(self.meeting_id, "meeting_id 不能为空");
 
-        // url: PATCH:/open-apis/vc/v1/meetings/:meeting_id/set_host
-        let req: ApiRequest<serde_json::Value> =
-            ApiRequest::patch(format!("{}/{}/set_host", VC_V1_MEETINGS, self.meeting_id))
-                .body(serialize_params(&body, "设置主持人")?);
+        let api_endpoint = VcApiV1::MeetingSetHost(self.meeting_id);
+        let req: ApiRequest<SetHostMeetingResponse> =
+            ApiRequest::patch(api_endpoint.to_url()).body(serialize_params(&body, "设置主持人")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "设置主持人")
+    }
+}
+
+/// 设置主持人请求构建器
+#[derive(Debug, Clone)]
+pub struct SetHostMeetingRequestBuilder {
+    request: SetHostMeetingRequest,
+}
+
+impl SetHostMeetingRequestBuilder {
+    /// 创建Builder实例
+    pub fn new(config: Config) -> Self {
+        Self {
+            request: SetHostMeetingRequest::new(config),
+        }
+    }
+
+    /// 设置会议ID
+    pub fn meeting_id(mut self, meeting_id: impl Into<String>) -> Self {
+        self.request = self.request.meeting_id(meeting_id);
+        self
+    }
+
+    /// 构建请求
+    pub fn build(self) -> SetHostMeetingRequest {
+        self.request
     }
 }

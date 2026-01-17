@@ -5,10 +5,11 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::validation_error,
     http::Transport,
     SDKResult,
 };
+
+use crate::common::api_utils::extract_response_data;
 use serde::{Deserialize, Serialize};
 
 /// 查询会议室列表请求
@@ -68,23 +69,17 @@ impl ListRoomRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/list
     pub async fn execute(self) -> SDKResult<ListRoomResponse> {
-        // 🚀 使用新的枚举+builder系统生成API端点
         use crate::common::api_endpoints::VcApiV1;
-        let api_endpoint = VcApiV1::RoomList;
 
-        // 创建API请求 - 使用类型安全的URL生成
+        let api_endpoint = VcApiV1::RoomList;
         let mut api_request: ApiRequest<ListRoomResponse> = ApiRequest::get(api_endpoint.to_url());
 
-        // 添加查询参数
         for (key, value) in self.query_params {
             api_request = api_request.query(key, value);
         }
 
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        extract_response_data(response, "查询会议室列表")
     }
 }
 

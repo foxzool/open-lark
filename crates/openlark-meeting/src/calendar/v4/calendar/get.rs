@@ -5,10 +5,11 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::validation_error,
     http::Transport,
     SDKResult,
 };
+
+use crate::common::api_utils::{extract_response_data, validate_required_field};
 use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::CalendarApiV4;
@@ -85,22 +86,17 @@ impl GetCalendarRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/get
     pub async fn execute(self) -> SDKResult<GetCalendarResponse> {
-        if self.calendar_id.trim().is_empty() {
-            return Err(validation_error("calendar_id", "日历 ID 不能为空"));
-        }
+        validate_required_field("calendar_id", Some(&self.calendar_id), "日历 ID 不能为空")?;
 
         let api_endpoint = CalendarApiV4::CalendarGet(self.calendar_id.clone());
-
-        let mut api_request: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
+        let mut api_request: ApiRequest<GetCalendarResponse> =
+            ApiRequest::get(api_endpoint.to_url());
 
         for (key, value) in self.query_params {
             api_request = api_request.query(key, value);
         }
 
         let response = Transport::request(api_request, &self.config, None).await?;
-        let data: GetCalendarResponse = response
-            .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))?;
-        Ok(data)
+        extract_response_data(response, "查询日历信息")
     }
 }

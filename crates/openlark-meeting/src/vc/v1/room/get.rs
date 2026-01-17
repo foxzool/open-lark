@@ -5,13 +5,13 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::validation_error,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::VcApiV1;
+use crate::common::api_utils::{extract_response_data, validate_required_field};
 
 /// 查询会议室详情请求
 
@@ -82,28 +82,17 @@ impl GetRoomRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/get
     pub async fn execute(self) -> SDKResult<GetRoomResponse> {
-        // 参数验证
-        if self.room_id.trim().is_empty() {
-            return Err(validation_error("room_id", "会议室 ID 不能为空"));
-        }
+        validate_required_field("room_id", Some(&self.room_id), "会议室 ID 不能为空")?;
 
-        // 🚀 使用新的枚举+builder系统生成API端点
-        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         let api_endpoint = VcApiV1::RoomGet(self.room_id.clone());
-
-        // 创建API请求 - 使用类型安全的URL生成
         let mut api_request: ApiRequest<GetRoomResponse> = ApiRequest::get(api_endpoint.to_url());
 
-        // 添加查询参数
         for (key, value) in self.query_params {
             api_request = api_request.query(key, value);
         }
 
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        extract_response_data(response, "查询会议室详情")
     }
 }
 

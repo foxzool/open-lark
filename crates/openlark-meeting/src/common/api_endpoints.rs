@@ -388,6 +388,14 @@ pub enum VcApiV1 {
     /// POST /open-apis/vc/v1/meetings/:meeting_id/kickout
     MeetingKickout(String),
 
+    /// 结束会议
+    /// PATCH /open-apis/vc/v1/meetings/:meeting_id/end
+    MeetingEnd(String),
+
+    /// 设置主持人
+    /// PATCH /open-apis/vc/v1/meetings/:meeting_id/set_host
+    MeetingSetHost(String),
+
     /// 获取会议列表
     /// GET /open-apis/vc/v1/meetings
     MeetingList,
@@ -579,6 +587,12 @@ impl VcApiV1 {
             }
             VcApiV1::MeetingKickout(meeting_id) => {
                 format!("/open-apis/vc/v1/meetings/{}/kickout", meeting_id)
+            }
+            VcApiV1::MeetingEnd(meeting_id) => {
+                format!("/open-apis/vc/v1/meetings/{}/end", meeting_id)
+            }
+            VcApiV1::MeetingSetHost(meeting_id) => {
+                format!("/open-apis/vc/v1/meetings/{}/set_host", meeting_id)
             }
             VcApiV1::MeetingList => "/open-apis/vc/v1/meetings".to_string(),
             VcApiV1::MeetingRecordingGet(meeting_id, recording_id) => {
