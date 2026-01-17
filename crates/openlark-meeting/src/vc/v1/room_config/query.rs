@@ -5,13 +5,13 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::validation_error,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::VcApiV1;
+use crate::common::api_utils::extract_response_data;
 
 /// 查询会议室配置请求
 
@@ -55,18 +55,12 @@ impl QueryRoomConfigRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/room_config/query
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<QueryRoomConfigResponse> {
-        // 🚀 使用新的枚举+builder系统生成API端点
         let api_endpoint = VcApiV1::RoomConfigList;
-
-        // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<QueryRoomConfigResponse> =
             ApiRequest::get(api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
 
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        extract_response_data(response, "查询会议室配置")
     }
 }
 

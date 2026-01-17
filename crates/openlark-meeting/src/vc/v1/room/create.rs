@@ -5,11 +5,12 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::validation_error,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::extract_response_data;
 
 /// 创建会议室请求
 #[derive(Debug, Clone)]
@@ -43,20 +44,14 @@ impl CreateRoomRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<CreateRoomResponse> {
-        // 🚀 使用新的枚举+builder系统生成API端点
-        // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
         use crate::common::api_endpoints::VcApiV1;
-        let api_endpoint = VcApiV1::RoomCreate;
 
-        // 创建API请求 - 使用类型安全的URL生成
+        let api_endpoint = VcApiV1::RoomCreate;
         let api_request: ApiRequest<CreateRoomResponse> =
             ApiRequest::post(api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
 
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        extract_response_data(response, "创建会议室")
     }
 }
 
