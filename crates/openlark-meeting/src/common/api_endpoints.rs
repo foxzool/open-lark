@@ -408,6 +408,18 @@ pub enum VcApiV1 {
     /// GET /open-apis/vc/v1/meetings/:meeting_id/recordings
     MeetingRecordingList(String),
 
+    /// 开始录制
+    /// PATCH /open-apis/vc/v1/meetings/:meeting_id/recording/start
+    MeetingRecordingStart(String),
+
+    /// 停止录制
+    /// PATCH /open-apis/vc/v1/meetings/:meeting_id/recording/stop
+    MeetingRecordingStop(String),
+
+    /// 设置录制权限
+    /// PATCH /open-apis/vc/v1/meetings/:meeting_id/recording/set_permission
+    MeetingRecordingSetPermission(String),
+
     // ========== Reserve 预约 ==========
     /// 预约会议
     /// POST /open-apis/vc/v1/reserves
@@ -601,6 +613,16 @@ impl VcApiV1 {
                     meeting_id, recording_id
                 )
             }
+            VcApiV1::MeetingRecordingStart(meeting_id) => {
+                format!("/open-apis/vc/v1/meetings/{}/recording/start", meeting_id)
+            }
+            VcApiV1::MeetingRecordingStop(meeting_id) => {
+                format!("/open-apis/vc/v1/meetings/{}/recording/stop", meeting_id)
+            }
+            VcApiV1::MeetingRecordingSetPermission(meeting_id) => {
+                format!("/open-apis/vc/v1/meetings/{}/recording/set_permission", meeting_id)
+            }
+            VcApiV1::MeetingList => "/open-apis/vc/v1/meetings".to_string(),
             VcApiV1::MeetingRecordingList(meeting_id) => {
                 format!("/open-apis/vc/v1/meetings/{}/recordings", meeting_id)
             }
