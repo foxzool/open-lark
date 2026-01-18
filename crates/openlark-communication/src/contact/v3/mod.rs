@@ -1,3 +1,8 @@
+//! 通讯录 v3 API
+//!
+//! 提供企业通讯录管理的完整功能，包括用户、部门、用户组、角色等信息的管理。
+//! v3 版本是当前的稳定版本，建议新项目使用 v3 API。
+
 pub mod custom_attr;
 pub mod department;
 pub mod employee_type_enum;
@@ -11,8 +16,8 @@ pub mod unit;
 pub mod user;
 pub mod work_city;
 
-use std::sync::Arc;
 use crate::service::CommunicationService;
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct ContactV3 {
@@ -20,7 +25,9 @@ pub struct ContactV3 {
 }
 
 impl ContactV3 {
-    pub fn new(service: Arc<CommunicationService>) -> Self { Self { service } }
+    pub fn new(service: Arc<CommunicationService>) -> Self {
+        Self { service }
+    }
 
     pub fn custom_attr(&self) -> custom_attr::CustomAttr {
         custom_attr::CustomAttr::new(self.service.clone())

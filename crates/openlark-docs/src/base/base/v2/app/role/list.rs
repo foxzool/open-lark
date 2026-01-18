@@ -76,7 +76,7 @@ impl List {
         self
     }
 
-    pub async fn send(self) -> SDKResult<ListResp> {
+    pub async fn execute(self) -> SDKResult<ListResp> {
         validate_required!(self.app_token, "app_token 不能为空");
         if let Some(page_size) = self.req.page_size {
             if page_size <= 0 {

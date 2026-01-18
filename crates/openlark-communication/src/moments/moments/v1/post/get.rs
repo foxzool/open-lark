@@ -12,7 +12,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::{common::api_utils::extract_response_data, endpoints::MOMENTS_V1_POST_GET};
+use crate::common::api_utils::extract_response_data;
 
 /// 查询帖子信息响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]

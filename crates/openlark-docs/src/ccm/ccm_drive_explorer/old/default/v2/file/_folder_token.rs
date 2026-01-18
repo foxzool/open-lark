@@ -85,7 +85,7 @@ impl CreateFileRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<CreateFileResp> {
+    pub async fn execute(self) -> SDKResult<CreateFileResp> {
         validate_required!(self.folder_token, "folderToken 不能为空");
         validate_required!(self.req.title, "title 不能为空");
 

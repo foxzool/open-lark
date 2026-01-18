@@ -10,6 +10,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::{extract_response_data, serialize_params};
 
 /// 移除参会人请求
@@ -52,8 +53,6 @@ impl KickoutMeetingRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting/kickout
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<KickoutMeetingResponse> {
-        use crate::common::api_endpoints::VcApiV1;
-
         validate_required!(self.meeting_id, "meeting_id 不能为空");
 
         let api_endpoint = VcApiV1::MeetingKickout(self.meeting_id);

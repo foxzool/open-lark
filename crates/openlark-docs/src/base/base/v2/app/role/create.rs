@@ -86,7 +86,7 @@ impl Create {
         self
     }
 
-    pub async fn send(self) -> SDKResult<CreateResp> {
+    pub async fn execute(self) -> SDKResult<CreateResp> {
         validate_required!(self.app_token, "app_token 不能为空");
         validate_required!(self.req.role_name, "role_name 不能为空");
         if self.req.role_name.chars().count() > 100 {

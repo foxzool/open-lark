@@ -88,7 +88,7 @@ impl GetDocMetaRequest {
         }
     }
 
-    pub async fn send(self) -> SDKResult<GetDocMetaResponse> {
+    pub async fn execute(self) -> SDKResult<GetDocMetaResponse> {
         use crate::common::api_endpoints::CcmDocApiOld;
         validate_required!(self.doc_token, "doc_token 不能为空");
 

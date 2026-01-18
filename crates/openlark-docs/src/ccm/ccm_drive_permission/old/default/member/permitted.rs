@@ -55,7 +55,7 @@ impl PermittedRequest {
         }
     }
 
-    pub async fn send(self) -> SDKResult<PermittedResponse> {
+    pub async fn execute(self) -> SDKResult<PermittedResponse> {
         validate_required!(self.req.token, "token 不能为空");
         validate_required!(self.req.type_, "type 不能为空");
         validate_required!(self.req.perm, "perm 不能为空");

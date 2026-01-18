@@ -66,6 +66,10 @@ impl CreateMessageRequest {
 }
 ```
 
+补充约定（新增/重构时统一）：
+- 若该 API 可能需要用户态 token / request_id / 自定义 header：在 builder 上提供 `execute_with_options(..., RequestOption)`，并将 `option` 透传到 `Transport::request(..., Some(option))`
+- 不要只调用 `ApiRequest::request_option(...)`：当前实现仅合并 header，token 推断/注入需要走 `Transport` 的 `option` 参数
+
 ## B) enum 端点 + typed response + ApiResponseTrait
 
 参考现有文件：`crates/openlark-docs/src/base/base/v2/app/role/create.rs`
@@ -137,6 +141,9 @@ impl Create {
 }
 ```
 
+补充约定（新增/重构时统一）：
+- 若保留 `send()`：建议额外提供 `send_with_options(option: RequestOption)`（或改为 `send(self, option: Option<RequestOption>)`），并将 option 透传到 `Transport::request(...)`
+
 ## 最小导出约定（mod.rs）
 
 在同级 `mod.rs` 中导出模块（模仿目标 crate 现有结构）：
@@ -153,15 +160,18 @@ pub mod models;
 
 ### 示例：openlark-docs 的链式结构（真实存在）
 
-入口：`crates/openlark-docs/src/service.rs`
+入口：
+- `openlark-client`：`client.docs.service() ...`
+- `feature crate`：`openlark_docs::service::DocsService::new(config) ...`
 
 ```rust
-// openlark_docs::service::DocsService
-service.base().v2().app().role().create()
+// 统一调用形态（方案 1）：client.<biz>.service()...<api>() -> Builder
+client.docs.service().base().v2().app().role().create()
 ```
 
 其中：
-- `base()`（bizTag）在 `DocsService` 上提供
+- `service()` 在 `DocsClient` 上提供：`crates/openlark-docs/src/common/chain.rs`
+- `base()`（bizTag）在 `DocsService` 上提供：`crates/openlark-docs/src/service.rs`
 - `v2()`（meta.Version）在 `BaseService` 上提供：`crates/openlark-docs/src/base/service.rs`
 - `app().role()`（meta.Project/meta.Resource）在各层 `*Service` 上提供
 - `create()`（meta.Name）在 `RoleService` 上提供：`crates/openlark-docs/src/base/base/v2/app/role/mod.rs`
@@ -170,4 +180,5 @@ service.base().v2().app().role().create()
 
 当你新增 `crates/{feature-crate}/src/{bizTag}/{meta.Project}/{meta.Version}/.../{meta.Name}.rs` 时：
 - 确保能从 `crates/{feature-crate}/src/service.rs` 逐层链式访问到该 API builder
+- 并确保 `client.<biz>` 的链式入口提供 `service()`，让调用侧统一走 `client.<biz>.service()...`
 - 每一层 service 只做“路由/分组”，最后一层返回具体 API builder（其上再 `.send()`/`.execute()`）

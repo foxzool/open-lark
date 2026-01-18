@@ -10,8 +10,8 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::{extract_response_data, validate_required_field};
+use crate::endpoints::VC_V1_ROOM_LEVEL_GET;
 
 /// 查询会议室层级详情请求
 
@@ -77,11 +77,15 @@ impl GetRoomLevelRequest {
 
         let api_endpoint = VcApiV1::RoomLevelGet(self.room_level_id.clone());
         let mut api_request: ApiRequest<GetRoomLevelResponse> =
-            ApiRequest::get(&api_endpoint.to_url());
+            ApiRequest::get(api_endpoint.to_url());
 
         for (key, value) in self.query_params {
             api_request = api_request.query(key, value);
         }
+
+        let response = Transport::request(api_request, &self.config, None).await?;
+        extract_response_data(response, "查询会议室层级详情")
+    }
 
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "查询会议室层级详情")

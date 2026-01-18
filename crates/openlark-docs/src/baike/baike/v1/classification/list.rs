@@ -41,7 +41,7 @@ impl ListClassificationRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<ListClassificationResponse> {
+    pub async fn execute(self) -> SDKResult<ListClassificationResponse> {
         if let Some(page_size) = self.page_size {
             if !(1..=500).contains(&page_size) {
                 return Err(openlark_core::error::validation_error(

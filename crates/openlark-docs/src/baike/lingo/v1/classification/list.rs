@@ -69,7 +69,7 @@ impl ListClassificationRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<ListClassificationResp> {
+    pub async fn execute(self) -> SDKResult<ListClassificationResp> {
         let mut api_request: ApiRequest<ListClassificationResp> =
             ApiRequest::get(&LingoApiV1::ClassificationList.to_url());
         if let Some(page_size) = self.page_size {

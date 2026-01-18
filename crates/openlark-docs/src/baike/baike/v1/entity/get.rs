@@ -64,7 +64,7 @@ impl GetEntityRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<GetEntityResp> {
+    pub async fn execute(self) -> SDKResult<GetEntityResp> {
         validate_required!(self.entity_id, "entity_id 不能为空");
 
         let using_outer = self.provider.is_some() || self.outer_id.is_some();

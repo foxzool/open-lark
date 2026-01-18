@@ -10,7 +10,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CalendarApiV4;
+use crate::endpoints::CALENDAR_V4_CALENDARS;
 
 /// 创建共享日历请求
 pub struct CreateCalendarRequest {
@@ -78,9 +78,8 @@ impl CreateCalendarRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<CreateCalendarResponse> {
-        let api_endpoint = CalendarApiV4::CalendarCreate;
         let api_request: ApiRequest<serde_json::Value> =
-            ApiRequest::post(api_endpoint.to_url()).body(body);
+            ApiRequest::post(CALENDAR_V4_CALENDARS).body(body);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         let data: CreateCalendarResponse =

@@ -48,7 +48,7 @@ impl ExtractEntityRequest {
         }
     }
 
-    pub async fn send(self) -> SDKResult<ExtractEntityResponse> {
+    pub async fn execute(self) -> SDKResult<ExtractEntityResponse> {
         use crate::common::api_endpoints::BaikeApiV1;
         // 文档：text 非必填，但要求最大长度 128
         let len = self.req.text.chars().count();
