@@ -9,28 +9,33 @@
 //! - **视频会议**: 会议室管理、会议创建、参会控制
 //! - **动态分享**: 朋友圈动态、内容分享、社交互动
 //! - **事件系统**: 事件订阅、处理、分发机制
+//! - **AILY (AI学习平台)**: 数据知识管理、AI 会话和技能调用
+//! - **通讯录**: 用户、部门、用户组、角色等管理
 //!
 //! ## 使用示例
 //!
 //! ```rust
 //! use openlark_communication::endpoints::*;
 //!
-//! // 使用端点常量
 //! let messages_endpoint = IM_V1_MESSAGES;
 //! let meetings_endpoint = VC_V1_MEETING_CREATE;
 //! let mailgroups_endpoint = MAIL_V1_MAILGROUPS;
-//! println!("IM消息端点: {}", messages_endpoint);
-//! println!("会议创建端点: {}", meetings_endpoint);
-//! println!("邮件组端点: {}", mailgroups_endpoint);
 //! ```
 //!
-//! ## 端点组织
+//! ## 子模块
 //!
-//! - `im`: 即时通讯端点
-//! - `mail`: 邮件服务端点
-//! - `vc`: 视频会议端点
-//! - `moments`: 动态分享端点
-//! - `event`: 事件系统端点
+//! 端点模块按服务分类组织，便于维护和查找：
+//! - `endpoints/aily.rs` - AILY 相关端点
+//! - `endpoints/im.rs` - IM 相关端点
+//! - `endpoints/mail.rs` - Mail 相关端点
+//! - `endpoints/vc.rs` - VC 相关端点
+//! - `endpoints/event.rs` - Event 相关端点
+//! - `endpoints/moments.rs` - Moments 相关端点
+//! - `endpoints/contact.rs` - Contact 相关端点
+//!
+//! ## 功能模块
+//!
+//! 这些模块包含完整的 API 端点常量定义和测试用例。
 
 #![allow(missing_docs)]
 
@@ -40,23 +45,50 @@ mod macros;
 
 // 通用工具与类型
 pub mod common;
-pub mod endpoints;
 
+// AILY 模块
+#[cfg(feature = "aily")]
+pub mod aily;
+
+// IM 模块
 #[cfg(feature = "im")]
 pub mod im;
 
+// Contact 模块
 #[cfg(feature = "contact")]
 pub mod contact;
 
+// Moments 模块
 #[cfg(feature = "moments")]
 pub mod moments;
 
-// AILY 模块
-pub mod aily;
+// V1 版本的历史遗留模块（标记为 deprecated）
+// 注意：这些模块保留用于向后兼容，建议使用新的 v3 版本
+#[cfg(all(feature = "contact", feature = "contact-v1-v2"))]
+pub mod contact_v1_v2;
 
-pub use endpoints::*;
+#[cfg(all(feature = "im", feature = "im-v1-v2"))]
+pub mod im_v1_v2;
 
-/// Re-exports from openlark-core for convenience.
+#[cfg(all(feature = "contact", feature = "contact-v1-v2"))]
+pub mod contact_user_v1_v2;
+
+#[cfg(all(feature = "contact", feature = "contact-v1-v2"))]
+pub mod contact_search_v1_v2;
+
+#[cfg(all(feature = "im", feature = "im-v1-v2"))]
+pub mod im_message_v1_v2;
+
+#[cfg(all(feature = "im", feature = "im-v1-v2"))]
+pub mod im_card_v1_v2;
+
+#[cfg(all(feature = "im", feature = "im-v1-v2"))]
+pub mod im_ephemeral_v1_v2;
+
+#[cfg(all(feature = "contact", feature = "contact-v1-v2"))]
+pub mod card_v1_v2;
+
+// Re-exports from openlark-core for convenience.
 pub mod prelude {
     pub use openlark_core::{config::Config, SDKResult};
 }
