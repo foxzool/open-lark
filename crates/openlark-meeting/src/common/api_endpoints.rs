@@ -1,6 +1,25 @@
-//! API端点定义
+//! API端点定义（类型安全枚举系统）
 //!
-//! 提供类型安全的API端点管理，替代字符串拼接方式。
+//! 本模块提供基于枚举的 API 端点定义，用于生产代码中的类型安全调用。
+//!
+//! # 使用场景
+//!
+//! ## 生产代码（推荐）
+//! 使用枚举端点获得编译时类型检查和动态 URL 生成能力：
+//! ```rust
+//! use openlark_meeting::common::api_endpoints::VcApiV1;
+//!
+//! let room_id = "room_123".to_string();
+//! let endpoint = VcApiV1::RoomGet(room_id);
+//! let url = endpoint.to_url(); // 类型安全，动态生成
+//! assert!(url.contains("/open-apis/vc/v1/rooms/"));
+//! ```
+//!
+//! # 特性
+//! - ✅ **类型安全**：编译时验证参数
+//! - ✅ **动态生成**：支持参数化 URL
+//! - ✅ **易于维护**：集中管理端点定义
+//! - ✅ **避免错误**：消除字符串拼接错误
 
 // ==================== Calendar（日历）v4 ====================
 
@@ -44,19 +63,6 @@ pub enum CalendarApiV4 {
     /// GET /open-apis/calendar/v4/calendars/primary
     CalendarPrimaryGet,
 
-    // ========== Calendar ACL 权限管理 ==========
-    /// 创建日历 ACL
-    /// POST /open-apis/calendar/v4/calendars/:calendar_id/acls
-    CalendarAclCreate(String),
-
-    /// 删除日历 ACL
-    /// DELETE /open-apis/calendar/v4/calendars/:calendar_id/acls/:acl_type/:rule_id
-    CalendarAclDelete(String, String, String),
-
-    /// 获取日历 ACL 列表
-    /// GET /open-apis/calendar/v4/calendars/:calendar_id/acls
-    CalendarAclList(String),
-
     // ========== Event 日程管理 ==========
     /// 获取日程信息
     /// GET /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id
@@ -85,90 +91,6 @@ pub enum CalendarApiV4 {
     /// 回复日程
     /// POST /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees/chat_member
     EventReply(String, String),
-
-    // ========== Event Attendee 参会人管理 ==========
-    /// 创建参会人
-    /// POST /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees
-    EventAttendeeCreate(String, String),
-
-    /// 删除参会人
-    /// DELETE /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees/:attendee_id
-    EventAttendeeDelete(String, String, String),
-
-    /// 获取参会人列表
-    /// GET /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees
-    EventAttendeeList(String, String),
-
-    /// 批量删除参会人
-    /// POST /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees/batch_delete
-    EventAttendeeBatchDelete(String, String),
-
-    /// 获取会议群成员
-    /// GET /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees/chat_member
-    EventAttendeeChatMemberList(String, String),
-
-    // ========== Freebusy 忙闲查询 ==========
-    /// 查询忙闲信息
-    /// POST /open-apis/calendar/v4/freebusy/query
-    FreebusyQuery,
-
-    // ========== Setting 设置 ==========
-    /// 获取日历设置
-    /// GET /open-apis/calendar/v4/settings
-    SettingGet,
-
-    /// 更新日历设置
-    /// PUT /open-apis/calendar/v4/settings
-    SettingUpdate,
-
-    // ========== Timeoff Event 请假日程 ==========
-    /// 创建请假日程
-    /// POST /open-apis/calendar/v4/timeoff_events
-    TimeoffEventCreate,
-
-    /// 获取请假日程列表
-    /// GET /open-apis/calendar/v4/timeoff_events
-    TimeoffEventList,
-
-    /// 删除请假日程
-    /// DELETE /open-apis/calendar/v4/timeoff_events/:event_id
-    TimeoffEventDelete(String),
-
-    // ========== Exchange Binding ==========
-    /// 获取 Exchange 绑定
-    /// GET /open-apis/calendar/v4/exchange_bindings
-    ExchangeBindingGet,
-
-    /// 创建 Exchange 绑定
-    /// POST /open-apis/calendar/v4/exchange_bindings
-    ExchangeBindingCreate,
-
-    /// 删除 Exchange 绑定
-    /// DELETE /open-apis/calendar/v4/exchange_bindings/:exchange_id
-    ExchangeBindingDelete(String),
-
-    // ========== Meeting Chat ==========
-    /// 获取会议群
-    /// GET /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/meeting_chat
-    MeetingChatGet(String, String),
-
-    // ========== Meeting Minute ==========
-    /// 获取会议纪要
-    /// GET /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/meeting_minute
-    MeetingMinuteGet(String, String),
-
-    /// 更新会议纪要
-    /// PATCH /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/meeting_minute
-    MeetingMinutePatch(String, String),
-
-    // ========== Subscription 订阅 ==========
-    /// 订阅日历
-    /// POST /open-apis/calendar/v4/calendars/:calendar_id/subscribe
-    CalendarSubscribe(String),
-
-    /// 取消订阅日历
-    /// POST /open-apis/calendar/v4/calendars/:calendar_id/unsubscribe
-    CalendarUnsubscribe(String),
 }
 
 impl CalendarApiV4 {
@@ -196,20 +118,6 @@ impl CalendarApiV4 {
             }
             CalendarApiV4::CalendarPrimaryGet => {
                 "/open-apis/calendar/v4/calendars/primary".to_string()
-            }
-
-            // Calendar ACL
-            CalendarApiV4::CalendarAclCreate(calendar_id) => {
-                format!("/open-apis/calendar/v4/calendars/{}/acls", calendar_id)
-            }
-            CalendarApiV4::CalendarAclDelete(calendar_id, acl_type, rule_id) => {
-                format!(
-                    "/open-apis/calendar/v4/calendars/{}/acls/{}/{}",
-                    calendar_id, acl_type, rule_id
-                )
-            }
-            CalendarApiV4::CalendarAclList(calendar_id) => {
-                format!("/open-apis/calendar/v4/calendars/{}/acls", calendar_id)
             }
 
             // Event
@@ -247,98 +155,6 @@ impl CalendarApiV4 {
                 format!(
                     "/open-apis/calendar/v4/calendars/{}/events/{}/attendees/chat_member",
                     calendar_id, event_id
-                )
-            }
-
-            // Event Attendee
-            CalendarApiV4::EventAttendeeCreate(calendar_id, event_id) => {
-                format!(
-                    "/open-apis/calendar/v4/calendars/{}/events/{}/attendees",
-                    calendar_id, event_id
-                )
-            }
-            CalendarApiV4::EventAttendeeDelete(calendar_id, event_id, attendee_id) => {
-                format!(
-                    "/open-apis/calendar/v4/calendars/{}/events/{}/attendees/{}",
-                    calendar_id, event_id, attendee_id
-                )
-            }
-            CalendarApiV4::EventAttendeeList(calendar_id, event_id) => {
-                format!(
-                    "/open-apis/calendar/v4/calendars/{}/events/{}/attendees",
-                    calendar_id, event_id
-                )
-            }
-            CalendarApiV4::EventAttendeeBatchDelete(calendar_id, event_id) => {
-                format!(
-                    "/open-apis/calendar/v4/calendars/{}/events/{}/attendees/batch_delete",
-                    calendar_id, event_id
-                )
-            }
-            CalendarApiV4::EventAttendeeChatMemberList(calendar_id, event_id) => {
-                format!(
-                    "/open-apis/calendar/v4/calendars/{}/events/{}/attendees/chat_member",
-                    calendar_id, event_id
-                )
-            }
-
-            // Freebusy
-            CalendarApiV4::FreebusyQuery => "/open-apis/calendar/v4/freebusy/query".to_string(),
-
-            // Setting
-            CalendarApiV4::SettingGet => "/open-apis/calendar/v4/settings".to_string(),
-            CalendarApiV4::SettingUpdate => "/open-apis/calendar/v4/settings".to_string(),
-
-            // Timeoff Event
-            CalendarApiV4::TimeoffEventCreate => {
-                "/open-apis/calendar/v4/timeoff_events".to_string()
-            }
-            CalendarApiV4::TimeoffEventList => "/open-apis/calendar/v4/timeoff_events".to_string(),
-            CalendarApiV4::TimeoffEventDelete(event_id) => {
-                format!("/open-apis/calendar/v4/timeoff_events/{}", event_id)
-            }
-
-            // Exchange Binding
-            CalendarApiV4::ExchangeBindingGet => {
-                "/open-apis/calendar/v4/exchange_bindings".to_string()
-            }
-            CalendarApiV4::ExchangeBindingCreate => {
-                "/open-apis/calendar/v4/exchange_bindings".to_string()
-            }
-            CalendarApiV4::ExchangeBindingDelete(exchange_id) => {
-                format!("/open-apis/calendar/v4/exchange_bindings/{}", exchange_id)
-            }
-
-            // Meeting Chat
-            CalendarApiV4::MeetingChatGet(calendar_id, event_id) => {
-                format!(
-                    "/open-apis/calendar/v4/calendars/{}/events/{}/meeting_chat",
-                    calendar_id, event_id
-                )
-            }
-
-            // Meeting Minute
-            CalendarApiV4::MeetingMinuteGet(calendar_id, event_id) => {
-                format!(
-                    "/open-apis/calendar/v4/calendars/{}/events/{}/meeting_minute",
-                    calendar_id, event_id
-                )
-            }
-            CalendarApiV4::MeetingMinutePatch(calendar_id, event_id) => {
-                format!(
-                    "/open-apis/calendar/v4/calendars/{}/events/{}/meeting_minute",
-                    calendar_id, event_id
-                )
-            }
-
-            // Subscription
-            CalendarApiV4::CalendarSubscribe(calendar_id) => {
-                format!("/open-apis/calendar/v4/calendars/{}/subscribe", calendar_id)
-            }
-            CalendarApiV4::CalendarUnsubscribe(calendar_id) => {
-                format!(
-                    "/open-apis/calendar/v4/calendars/{}/unsubscribe",
-                    calendar_id
                 )
             }
         }
@@ -455,6 +271,10 @@ pub enum VcApiV1 {
     /// GET /open-apis/vc/v1/exports/:export_id
     ExportGet(String),
 
+    /// 下载导出
+    /// GET /open-apis/vc/v1/exports/:export_id/download
+    ExportDownload(String),
+
     /// 获取会议列表导出
     /// GET /open-apis/vc/v1/exports/meeting_list
     ExportMeetingList,
@@ -466,6 +286,10 @@ pub enum VcApiV1 {
     /// 获取参会人质量列表导出
     /// GET /open-apis/vc/v1/exports/participant_quality_list
     ExportParticipantQualityList,
+
+    /// 获取资源预约列表导出
+    /// GET /open-apis/vc/v1/exports/resource_reservation_list
+    ExportResourceReservationList,
 
     // ========== Room Level 会议室层级 ==========
     /// 创建会议室层级
@@ -613,6 +437,9 @@ impl VcApiV1 {
                     meeting_id, recording_id
                 )
             }
+            VcApiV1::MeetingRecordingList(meeting_id) => {
+                format!("/open-apis/vc/v1/meetings/{}/recordings", meeting_id)
+            }
             VcApiV1::MeetingRecordingStart(meeting_id) => {
                 format!("/open-apis/vc/v1/meetings/{}/recording/start", meeting_id)
             }
@@ -620,11 +447,10 @@ impl VcApiV1 {
                 format!("/open-apis/vc/v1/meetings/{}/recording/stop", meeting_id)
             }
             VcApiV1::MeetingRecordingSetPermission(meeting_id) => {
-                format!("/open-apis/vc/v1/meetings/{}/recording/set_permission", meeting_id)
-            }
-            VcApiV1::MeetingList => "/open-apis/vc/v1/meetings".to_string(),
-            VcApiV1::MeetingRecordingList(meeting_id) => {
-                format!("/open-apis/vc/v1/meetings/{}/recordings", meeting_id)
+                format!(
+                    "/open-apis/vc/v1/meetings/{}/recording/set_permission",
+                    meeting_id
+                )
             }
 
             // Reserve
@@ -647,13 +473,21 @@ impl VcApiV1 {
             VcApiV1::ReportTopUserGet => "/open-apis/vc/v1/reports/top_user".to_string(),
 
             // Export
-            VcApiV1::ExportGet(export_id) => format!("/open-apis/vc/v1/exports/{}", export_id),
+            VcApiV1::ExportGet(export_id) => {
+                format!("/open-apis/vc/v1/exports/{}", export_id)
+            }
+            VcApiV1::ExportDownload(export_id) => {
+                format!("/open-apis/vc/v1/exports/{}/download", export_id)
+            }
             VcApiV1::ExportMeetingList => "/open-apis/vc/v1/exports/meeting_list".to_string(),
             VcApiV1::ExportParticipantList => {
                 "/open-apis/vc/v1/exports/participant_list".to_string()
             }
             VcApiV1::ExportParticipantQualityList => {
                 "/open-apis/vc/v1/exports/participant_quality_list".to_string()
+            }
+            VcApiV1::ExportResourceReservationList => {
+                "/open-apis/vc/v1/exports/resource_reservation_list".to_string()
             }
 
             // Room Level
