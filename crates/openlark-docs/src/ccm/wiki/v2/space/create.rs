@@ -15,19 +15,21 @@ use serde::{Deserialize, Serialize};
 use super::super::models::WikiSpace;
 use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
-/// 创建知识空间请求
+/// 创建知识空间请求（流式 Builder 模式）
 pub struct CreateWikiSpaceRequest {
     config: Config,
+    /// 知识空间名称
+    name: String,
+    /// 知识空间描述
+    description: Option<String>,
 }
 
-/// 创建知识空间请求参数
+/// 创建知识空间请求体（内部使用）
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateWikiSpaceParams {
-    /// 知识空间名称
-    pub name: String,
-    /// 知识空间描述
+struct CreateWikiSpaceRequestBody {
+    name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
+    description: Option<String>,
 }
 
 /// 创建知识空间响应
@@ -46,27 +48,55 @@ impl ApiResponseTrait for CreateWikiSpaceResponse {
 impl CreateWikiSpaceRequest {
     /// 创建创建知识空间请求
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config,
+            name: String::new(),
+            description: None,
+        }
+    }
+
+    /// 设置知识空间名称
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.name = name.into();
+        self
+    }
+
+    /// 设置知识空间描述
+    pub fn description(mut self, description: impl Into<String>) -> Self {
+        self.description = Some(description.into());
+        self
     }
 
     /// 执行请求
-    pub async fn execute(
-        self,
-        params: CreateWikiSpaceParams,
-    ) -> SDKResult<CreateWikiSpaceResponse> {
-        // 验证必填字段
-        validate_required!(params.name, "知识空间名称不能为空");
+    pub async fn execute(self) -> SDKResult<CreateWikiSpaceResponse> {
+        validate_required!(self.name, "知识空间名称不能为空");
 
-        // 使用新的enum+builder系统生成API端点
         let api_endpoint = WikiApiV2::SpaceCreate;
 
-        // 创建API请求 - 使用类型安全的URL生成
+        let request_body = CreateWikiSpaceRequestBody {
+            name: self.name,
+            description: self.description,
+        };
+
         let api_request: ApiRequest<CreateWikiSpaceResponse> =
             ApiRequest::post(&api_endpoint.to_url())
-                .body(serialize_params(&params, "创建知识空间")?);
+                .body(serialize_params(&request_body, "创建知识空间")?);
 
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "创建知识空间")
     }
+}
+
+/// 创建知识空间请求参数（兼容旧 API，已弃用）
+#[deprecated(
+    since = "0.16.0",
+    note = "请使用 CreateWikiSpaceRequest 的流式 Builder 模式"
+)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateWikiSpaceParams {
+    /// 知识空间名称
+    pub name: String,
+    /// 知识空间描述
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
 }

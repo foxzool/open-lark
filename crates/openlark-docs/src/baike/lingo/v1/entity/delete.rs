@@ -52,7 +52,7 @@ impl DeleteEntityRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<DeleteEntityResp> {
+    pub async fn execute(self) -> SDKResult<DeleteEntityResp> {
         validate_required!(self.entity_id, "entity_id 不能为空");
 
         let mut api_request: ApiRequest<DeleteEntityResp> =

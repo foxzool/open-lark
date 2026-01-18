@@ -56,7 +56,7 @@ impl CreateDraftRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<CreateDraftResp> {
+    pub async fn execute(self) -> SDKResult<CreateDraftResp> {
         validate_required!(self.body.main_keys, "main_keys 不能为空");
         if self
             .body

@@ -61,7 +61,7 @@ impl CreateFolderRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<CreateFolderResp> {
+    pub async fn execute(self) -> SDKResult<CreateFolderResp> {
         use crate::common::api_endpoints::CcmDriveExplorerApiOld;
 
         validate_required!(self.folder_token, "folderToken 不能为空");

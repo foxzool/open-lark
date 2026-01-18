@@ -9,6 +9,7 @@ use openlark_core::{
     SDKResult,
 };
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::{extract_response_data, validate_required_field};
 use serde::{Deserialize, Serialize};
 
@@ -53,13 +54,11 @@ impl DeleteRoomRequest {
     /// 执行请求
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/delete
-    pub async fn execute(self) -> SDKResult<DeleteRoomResponse> {
-        use crate::common::api_endpoints::VcApiV1;
-
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         validate_required_field("room_id", Some(&self.room_id), "会议室 ID 不能为空")?;
 
         let api_endpoint = VcApiV1::RoomDelete(self.room_id.clone());
-        let api_request: ApiRequest<DeleteRoomResponse> = ApiRequest::delete(api_endpoint.to_url());
+        let api_request: ApiRequest<serde_json::Value> = ApiRequest::delete(api_endpoint.to_url());
 
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "删除会议室")

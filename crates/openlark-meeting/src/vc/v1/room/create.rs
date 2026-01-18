@@ -10,6 +10,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
 
 /// 创建会议室请求
@@ -40,12 +41,8 @@ impl CreateRoomRequest {
 
     /// 执行请求
     ///
-    /// 说明：该接口请求体字段较多，建议直接按文档构造 JSON 传入。
-    ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<CreateRoomResponse> {
-        use crate::common::api_endpoints::VcApiV1;
-
         let api_endpoint = VcApiV1::RoomCreate;
         let api_request: ApiRequest<CreateRoomResponse> =
             ApiRequest::post(api_endpoint.to_url()).body(serde_json::to_vec(&body)?);

@@ -107,7 +107,7 @@ impl CopyFileRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<CopyFileResp> {
+    pub async fn execute(self) -> SDKResult<CopyFileResp> {
         validate_required!(self.file_token, "fileToken 不能为空");
 
         let api_request: ApiRequest<CopyFileResp> =

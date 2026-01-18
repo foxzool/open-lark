@@ -53,7 +53,7 @@ impl UpdateReserveRequest {
 
     /// 执行请求
     ///
-    /// 说明：该接口请求体字段较多，建议直接按文档构造 JSON 传入。
+    /// 说明：该接口请求体字段较多，建议直接按文档按文档构造 JSON 传入。
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/reserve/update
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<UpdateReserveResponse> {

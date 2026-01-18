@@ -9,6 +9,7 @@ use openlark_core::{
     SDKResult,
 };
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::{extract_response_data, validate_required_field};
 use serde::{Deserialize, Serialize};
 
@@ -52,12 +53,8 @@ impl PatchRoomRequest {
 
     /// 执行请求
     ///
-    /// 说明：该接口请求体字段较多，建议直接按文档构造 JSON 传入。
-    ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/patch
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<PatchRoomResponse> {
-        use crate::common::api_endpoints::VcApiV1;
-
         validate_required_field("room_id", Some(&self.room_id), "会议室 ID 不能为空")?;
 
         let api_endpoint = VcApiV1::RoomPatch(self.room_id.clone());

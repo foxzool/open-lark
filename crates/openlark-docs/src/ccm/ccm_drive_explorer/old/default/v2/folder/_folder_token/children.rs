@@ -73,7 +73,7 @@ impl GetFolderChildrenRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<GetFolderChildrenResp> {
+    pub async fn execute(self) -> SDKResult<GetFolderChildrenResp> {
         validate_required!(self.folder_token, "folderToken 不能为空");
 
         let mut api_request: ApiRequest<GetFolderChildrenResp> =

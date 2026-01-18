@@ -30,23 +30,23 @@
 //!
 //! ## 快速开始
 //!
-//! ```rust
+//! ```rust,ignore
 //! use openlark_core::config::Config;
-//! use openlark_docs::service::DocsService;
+//! use openlark_docs::DocsClient;
 //!
-//! let config = Config::builder()
-//!     .app_id("app_id")
-//!     .app_secret("app_secret")
-//!     .build();
-//! let client = DocsClient::new(config);
+//! #[tokio::main]
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//!     let config = Config::builder()
+//!         .app_id("app_id")
+//!         .app_secret("app_secret")
+//!         .build();
+//!     let client = DocsClient::new(config);
 //!
-//! // 云盘文件服务
-//! let files = client.drive.v1.file();
-//! let folder = files.create_folder("parent_token", "新文件夹").await?;
+//!     // 使用链式调用访问云盘文件服务
+//!     // client.ccm().drive().v1().file()...
 //!
-//! // 电子表格服务
-//! let sheets = client.sheets.v2.spreadsheet();
-//! let props = sheets.properties("spreadsheet_token").await?;
+//!     Ok(())
+//! }
 //! ```
 //!
 //! ## 特性

@@ -63,7 +63,7 @@ impl CreateDocRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<CreateDocResp> {
+    pub async fn execute(self) -> SDKResult<CreateDocResp> {
         let api_request: ApiRequest<CreateDocResp> =
             ApiRequest::post(&CcmDocApiOld::Create.to_url())
                 .body(serialize_params(&self.req, "创建旧版文档")?);

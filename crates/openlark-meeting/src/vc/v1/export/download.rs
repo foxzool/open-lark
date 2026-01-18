@@ -10,8 +10,8 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
+use crate::endpoints::VC_V1_EXPORT_GET;
 
 /// 下载导出文件请求
 
@@ -55,9 +55,8 @@ impl DownloadExportRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/export/download
     pub async fn execute(self) -> SDKResult<DownloadExportResponse> {
-        let api_endpoint = VcApiV1::ExportGet("download".to_string());
-        let mut api_request: ApiRequest<DownloadExportResponse> =
-            ApiRequest::get(api_endpoint.to_url());
+        let url = VC_V1_EXPORT_GET.replace("{export_id}", "download");
+        let mut api_request: ApiRequest<DownloadExportResponse> = ApiRequest::get(&url);
 
         for (key, value) in self.query_params {
             api_request = api_request.query(key, value);

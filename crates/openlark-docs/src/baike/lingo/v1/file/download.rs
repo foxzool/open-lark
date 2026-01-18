@@ -24,7 +24,7 @@ impl DownloadFileRequest {
     }
 
     /// 下载图片二进制内容
-    pub async fn send(self) -> SDKResult<Vec<u8>> {
+    pub async fn execute(self) -> SDKResult<Vec<u8>> {
         validate_required!(self.file_token, "file_token 不能为空");
 
         let api_request: ApiRequest<Vec<u8>> =

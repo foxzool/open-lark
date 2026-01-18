@@ -79,7 +79,7 @@ impl MatchEntityRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<MatchEntityResp> {
+    pub async fn execute(self) -> SDKResult<MatchEntityResp> {
         validate_required!(self.body.word, "word 不能为空");
 
         let body = serde_json::to_value(&self.body).map_err(|e| {

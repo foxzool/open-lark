@@ -12,7 +12,7 @@ use openlark_core::{
 use crate::common::api_utils::{extract_response_data, validate_required_field};
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CalendarApiV4;
+use crate::endpoints::CALENDAR_V4_CALENDARS;
 
 /// 删除共享日历请求
 pub struct DeleteCalendarRequest {
@@ -50,9 +50,8 @@ impl DeleteCalendarRequest {
     pub async fn execute(self) -> SDKResult<DeleteCalendarResponse> {
         validate_required_field("calendar_id", Some(&self.calendar_id), "日历 ID 不能为空")?;
 
-        let api_endpoint = CalendarApiV4::CalendarDelete(self.calendar_id.clone());
-        let api_request: ApiRequest<DeleteCalendarResponse> =
-            ApiRequest::delete(api_endpoint.to_url());
+        let url = format!("{}/{}", CALENDAR_V4_CALENDARS, self.calendar_id);
+        let api_request: ApiRequest<DeleteCalendarResponse> = ApiRequest::delete(&url);
 
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "删除共享日历")
