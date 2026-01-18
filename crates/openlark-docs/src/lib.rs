@@ -117,7 +117,7 @@ pub use service::DocsService as MainDocsService;
 pub use ccm::CcmService;
 
 #[cfg(feature = "lingo")]
-pub use lingo::LingoService;
+pub use baike::lingo::LingoService;
 
 #[cfg(feature = "minutes")]
 pub use minutes::MinutesService;
