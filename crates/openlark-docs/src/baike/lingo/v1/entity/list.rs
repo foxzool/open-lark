@@ -85,7 +85,7 @@ impl ListEntityRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<ListEntityResp> {
+    pub async fn execute(self) -> SDKResult<ListEntityResp> {
         let mut api_request: ApiRequest<ListEntityResp> =
             ApiRequest::get(&LingoApiV1::EntityList.to_url());
         if let Some(page_size) = self.page_size {

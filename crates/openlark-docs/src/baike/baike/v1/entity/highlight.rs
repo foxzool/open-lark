@@ -54,7 +54,7 @@ impl HighlightEntityRequest {
         }
     }
 
-    pub async fn send(self) -> SDKResult<HighlightEntityResponse> {
+    pub async fn execute(self) -> SDKResult<HighlightEntityResponse> {
         use crate::common::api_endpoints::BaikeApiV1;
         validate_required!(self.req.text, "text 不能为空");
         let len = self.req.text.chars().count();

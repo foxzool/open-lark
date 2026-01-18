@@ -8,9 +8,10 @@ use openlark_core::{
     http::Transport,
     SDKResult,
 };
-
-use crate::common::api_utils::extract_response_data;
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_endpoints::VcApiV1;
+use crate::common::api_utils::extract_response_data;
 
 /// 查询会议室列表请求
 
@@ -69,8 +70,6 @@ impl ListRoomRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/list
     pub async fn execute(self) -> SDKResult<ListRoomResponse> {
-        use crate::common::api_endpoints::VcApiV1;
-
         let api_endpoint = VcApiV1::RoomList;
         let mut api_request: ApiRequest<ListRoomResponse> = ApiRequest::get(api_endpoint.to_url());
 

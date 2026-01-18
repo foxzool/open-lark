@@ -50,10 +50,9 @@ impl GetDailyReportRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/report/get_daily
     pub async fn execute(self) -> SDKResult<GetDailyReportResponse> {
-        use crate::common::api_endpoints::VcApiV1;
+        use crate::endpoints::VC_V1_REPORT_DAILY_GET;
 
-        let mut req: ApiRequest<GetDailyReportResponse> =
-            ApiRequest::get(VcApiV1::ReportDailyGet.to_url());
+        let mut req: ApiRequest<GetDailyReportResponse> = ApiRequest::get(VC_V1_REPORT_DAILY_GET);
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }

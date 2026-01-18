@@ -28,7 +28,7 @@ impl GetRootFolderMetaRequest {
     ///
     /// docPath: /document/ukTMukTMukTM/ugTNzUjL4UzM14CO1MTN/get-root-folder-meta
     /// doc: https://open.feishu.cn/document/ukTMukTMukTM/ugTNzUjL4UzM14CO1MTN/get-root-folder-meta
-    pub async fn send(self) -> SDKResult<GetRootFolderMetaResponse> {
+    pub async fn execute(self) -> SDKResult<GetRootFolderMetaResponse> {
         let api_endpoint = CcmDriveExplorerApiOld::RootFolderMeta;
         let api_request: ApiRequest<GetRootFolderMetaResponse> =
             ApiRequest::get(&api_endpoint.to_url());

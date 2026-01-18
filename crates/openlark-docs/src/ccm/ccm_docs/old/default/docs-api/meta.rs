@@ -69,7 +69,7 @@ impl GetMetaRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<GetMetaResponse> {
+    pub async fn execute(self) -> SDKResult<GetMetaResponse> {
         if self.req.request_docs.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "request_docs",

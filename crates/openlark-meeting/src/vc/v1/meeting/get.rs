@@ -9,10 +9,9 @@ use openlark_core::{
     SDKResult,
 };
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::{extract_response_data, validate_required_field};
 use serde::{Deserialize, Serialize};
-
-use crate::common::api_endpoints::VcApiV1;
 
 /// 获取会议详情请求
 

@@ -5,7 +5,8 @@
 #[cfg(test)]
 mod tests {
     use openlark_core::config::Config;
-    use openlark_docs::{BaseService, BitableService};
+    use openlark_docs::bitable::BitableService;
+    use openlark_docs::prelude::BaseService;
 
     #[test]
     fn test_base_api_access() {

@@ -65,7 +65,7 @@ impl BatchUpdateDocRequestBuilder {
         self
     }
 
-    pub async fn send(self) -> SDKResult<BatchUpdateDocResponse> {
+    pub async fn execute(self) -> SDKResult<BatchUpdateDocResponse> {
         validate_required!(self.doc_token, "doc_token 不能为空");
         if self.req.revision < 0 {
             return Err(openlark_core::error::validation_error(

@@ -62,7 +62,7 @@ impl GetPublicPermissionRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<GetPublicPermissionResponse> {
+    pub async fn execute(self) -> SDKResult<GetPublicPermissionResponse> {
         validate_required!(self.req.token, "token 不能为空");
         validate_required!(self.req.type_, "type 不能为空");
 

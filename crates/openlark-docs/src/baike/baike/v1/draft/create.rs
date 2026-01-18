@@ -78,7 +78,7 @@ impl CreateDraftRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<CreateDraftResp> {
+    pub async fn execute(self) -> SDKResult<CreateDraftResp> {
         validate_required!(self.req.main_keys, "main_keys 不能为空");
         if self.req.main_keys.len() > 1 {
             return Err(openlark_core::error::validation_error(

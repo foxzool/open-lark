@@ -38,7 +38,7 @@ impl ListRepoRequest {
         Self { config }
     }
 
-    pub async fn send(self) -> SDKResult<ListRepoResp> {
+    pub async fn execute(self) -> SDKResult<ListRepoResp> {
         let api_request: ApiRequest<ListRepoResp> = ApiRequest::get(&LingoApiV1::RepoList.to_url());
 
         let response: Response<ListRepoResp> =

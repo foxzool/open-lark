@@ -67,7 +67,7 @@ impl HighlightEntityRequest {
         }
     }
 
-    pub async fn send(self) -> SDKResult<HighlightEntityResp> {
+    pub async fn execute(self) -> SDKResult<HighlightEntityResp> {
         validate_required!(self.body.text, "text 不能为空");
 
         let body = serde_json::to_value(&self.body).map_err(|e| {

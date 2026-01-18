@@ -42,7 +42,7 @@ impl DeleteDocRequest {
         }
     }
 
-    pub async fn send(self) -> SDKResult<DeleteDocResp> {
+    pub async fn execute(self) -> SDKResult<DeleteDocResp> {
         validate_required!(self.doc_token, "docToken 不能为空");
 
         let api_request: ApiRequest<DeleteDocResp> =

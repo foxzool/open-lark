@@ -1,9 +1,7 @@
 /// 文档模块
 ///
 /// 提供文档的基础操作功能，包括文档创建、获取、内容管理等。
-use openlark_core::{
-    api::Response, config::Config, error::validation_error, req_option::RequestOption, SDKResult,
-};
+use openlark_core::{api::Response, config::Config, error::validation_error, SDKResult};
 
 // 重新导出所有模块类型，解决名称冲突
 pub use block::*;
@@ -11,9 +9,9 @@ pub use convert::{
     ContentType, ConvertContentToBlocksParams, ConvertContentToBlocksRequest,
     ConvertContentToBlocksResponse,
 };
-pub use create::{
-    CreateDocumentParams, CreateDocumentRequest, CreateDocumentResponse, CreatedDocument,
-};
+#[allow(deprecated)]
+pub use create::CreateDocumentParams;
+pub use create::{CreateDocumentRequest, CreateDocumentResponse, CreatedDocument};
 pub use get::{Document, GetDocumentRequest, GetDocumentResponse};
 pub use raw_content::{
     GetDocumentRawContentParams, GetDocumentRawContentRequest, GetDocumentRawContentResponse,
@@ -37,90 +35,41 @@ pub struct DocumentService {
 
 impl DocumentService {
     /// 创建新的文档服务实例
-    ///
-    /// # 参数
-    /// * `config` - SDK配置信息
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
-    /// 创建文档
+    /// 创建文档（流式 Builder）
     ///
-    /// 创建新版文档，支持设置文档标题、目录位置和模板。
-    /// 文档创建后自动生成文档ID和访问链接。
-    ///
-    /// # 参数
-    /// * `request` - 创建文档请求
-    /// * `option` - 可选请求配置
-    ///
-    /// # 返回
-    /// 成功返回创建的文档信息，失败返回错误信息
+    /// 返回一个请求构建器，支持链式调用设置参数。
     ///
     /// # 示例
     /// ```rust,no_run
     /// use openlark_core::config::Config;
-    /// use openlark_docs::ccm::docx::v1::document::{CreateDocumentParams, DocumentService};
+    /// use openlark_docs::ccm::docx::v1::document::DocumentService;
     ///
     /// let config = Config::builder()
     ///     .app_id("app_id")
     ///     .app_secret("app_secret")
     ///     .build();
     /// let service = DocumentService::new(config);
-    /// let params = CreateDocumentParams {
-    ///     title: Some("新文档标题".to_string()),
-    ///     folder_token: Some("folder_token".to_string()),
-    /// };
     ///
-    /// // 这里只演示构建 Future，不发起网络请求
-    /// let _future = service.create(params, None);
+    /// // 流式 Builder 调用
+    /// let _future = service
+    ///     .create_builder()
+    ///     .title("新文档标题")
+    ///     .folder_token("folder_token")
+    ///     .execute();
     /// ```
-    pub async fn create(
-        &self,
-        params: CreateDocumentParams,
-        option: Option<RequestOption>,
-    ) -> SDKResult<CreatedDocument> {
-        let _ = option;
-        let data = CreateDocumentRequest::new(self.config.clone())
-            .execute(params)
-            .await?;
-        Ok(data.document)
+    pub fn create_builder(&self) -> CreateDocumentRequest {
+        CreateDocumentRequest::new(self.config.clone())
     }
 
-    /// 获取文档信息
+    /// 获取文档信息请求构建器
     ///
-    /// 获取指定文档的详细信息，包括文档内容、结构信息等。
-    /// 支持获取文档的完整内容和元数据。
-    ///
-    /// # 参数
-    /// * `request` - 获取文档请求
-    /// * `option` - 可选请求配置
-    ///
-    /// # 返回
-    /// 成功返回文档详细信息，失败返回错误信息
-    ///
-    /// # 示例
-    /// ```rust,no_run
-    /// use openlark_core::config::Config;
-    /// use openlark_docs::ccm::docx::v1::document::{DocumentService, GetDocumentRequest};
-    ///
-    /// let config = Config::builder()
-    ///     .app_id("app_id")
-    ///     .app_secret("app_secret")
-    ///     .build();
-    /// let service = DocumentService::new(config.clone());
-    /// let request = GetDocumentRequest::new(config).document_id("document_id");
-    ///
-    /// // 这里只演示构建 Future，不发起网络请求
-    /// let _future = service.get(request, None);
-    /// ```
-    pub async fn get(
-        &self,
-        request: GetDocumentRequest,
-        option: Option<RequestOption>,
-    ) -> SDKResult<Document> {
-        let _ = option;
-        let result = request.execute().await?;
-        Ok(result.document)
+    /// 返回一个请求构建器，支持链式调用设置参数。
+    pub fn get_builder(&self) -> GetDocumentRequest {
+        GetDocumentRequest::new(self.config.clone())
     }
 }
 
@@ -177,43 +126,29 @@ mod tests {
     #[test]
     fn test_service_trait_implementation() {
         let service = create_test_service();
-
-        // 测试Service trait的实现
         let config_ref = service.config();
         assert_eq!(config_ref.app_id(), "test_app_id");
     }
 
     #[test]
     fn test_create_document_builder() {
-        let params = CreateDocumentParams {
-            title: Some("文档标题".to_string()),
-            folder_token: Some("folder_token".to_string()),
-        };
-
-        assert_eq!(params.title.as_deref(), Some("文档标题"));
-        assert_eq!(params.folder_token.as_deref(), Some("folder_token"));
+        let service = create_test_service();
+        let _request = service
+            .create_builder()
+            .title("文档标题")
+            .folder_token("folder_token");
     }
 
     #[test]
     fn test_get_document_builder() {
-        let config = openlark_core::config::Config::builder()
-            .app_id("id")
-            .app_secret("secret")
-            .build();
-        let _request = GetDocumentRequest::new(config).document_id("document_token");
+        let service = create_test_service();
+        let _request = service.get_builder().document_id("document_token");
     }
 
     #[test]
     fn test_module_structure() {
-        // 这个测试验证模块结构的完整性
-        let _service = create_test_service();
-
-        // 验证可以访问所有服务方法
-        let config = openlark_core::config::Config::builder()
-            .app_id("id")
-            .app_secret("secret")
-            .build();
-        let _create_request = CreateDocumentRequest::new(config.clone());
-        let _get_request = GetDocumentRequest::new(config);
+        let service = create_test_service();
+        let _create_request = service.create_builder();
+        let _get_request = service.get_builder();
     }
 }

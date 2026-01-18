@@ -55,7 +55,7 @@ impl MatchEntityRequest {
         }
     }
 
-    pub async fn send(self) -> SDKResult<MatchEntityResp> {
+    pub async fn execute(self) -> SDKResult<MatchEntityResp> {
         validate_required!(self.req.word, "word 不能为空");
         let len = self.req.word.chars().count();
         if !(1..=100).contains(&len) {

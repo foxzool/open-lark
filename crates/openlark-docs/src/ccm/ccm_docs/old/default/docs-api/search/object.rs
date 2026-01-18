@@ -105,7 +105,7 @@ impl SearchObjectRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<SearchObjectResponse> {
+    pub async fn execute(self) -> SDKResult<SearchObjectResponse> {
         use crate::common::api_endpoints::CcmDocsApiOld;
         if self
             .req

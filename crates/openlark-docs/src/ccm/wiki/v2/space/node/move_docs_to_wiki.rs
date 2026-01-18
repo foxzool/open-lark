@@ -14,21 +14,25 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
-/// 移动云空间文档至知识空间请求
+/// 移动云空间文档至知识空间请求（流式 Builder 模式）
 pub struct MoveDocsToWikiRequest {
-    space_id: String,
     config: Config,
+    /// 知识空间ID
+    space_id: String,
+    /// 源文档 token
+    obj_token: String,
+    /// 源文档类型（例如 doc、docx 等）
+    obj_type: String,
+    /// 目标父节点 wiki token
+    parent_wiki_token: String,
 }
 
-/// 移动云空间文档至知识空间请求参数
+/// 移动云空间文档至知识空间请求体（内部使用）
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MoveDocsToWikiParams {
-    /// 源文档 token
-    pub obj_token: String,
-    /// 源文档类型（例如 doc、docx 等）
-    pub obj_type: String,
-    /// 目标父节点 wiki token
-    pub parent_wiki_token: String,
+struct MoveDocsToWikiRequestBody {
+    obj_token: String,
+    obj_type: String,
+    parent_wiki_token: String,
 }
 
 /// 移动云空间文档至知识空间响应
@@ -50,35 +54,73 @@ impl MoveDocsToWikiRequest {
     /// 创建移动云空间文档至知识空间请求
     pub fn new(config: Config) -> Self {
         Self {
-            space_id: String::new(),
             config,
+            space_id: String::new(),
+            obj_token: String::new(),
+            obj_type: String::new(),
+            parent_wiki_token: String::new(),
         }
     }
 
-    /// 设置知识空间ID
+    /// 设置知识空间 ID
     pub fn space_id(mut self, space_id: impl Into<String>) -> Self {
         self.space_id = space_id.into();
         self
     }
 
+    /// 设置源文档 token
+    pub fn obj_token(mut self, obj_token: impl Into<String>) -> Self {
+        self.obj_token = obj_token.into();
+        self
+    }
+
+    /// 设置源文档类型（例如 doc、docx 等）
+    pub fn obj_type(mut self, obj_type: impl Into<String>) -> Self {
+        self.obj_type = obj_type.into();
+        self
+    }
+
+    /// 设置目标父节点 wiki token
+    pub fn parent_wiki_token(mut self, parent_wiki_token: impl Into<String>) -> Self {
+        self.parent_wiki_token = parent_wiki_token.into();
+        self
+    }
+
     /// 执行请求
-    pub async fn execute(self, params: MoveDocsToWikiParams) -> SDKResult<MoveDocsToWikiResponse> {
-        // 验证必填字段
+    pub async fn execute(self) -> SDKResult<MoveDocsToWikiResponse> {
         validate_required!(self.space_id, "知识空间ID不能为空");
-        validate_required!(params.obj_token, "源文档token不能为空");
-        validate_required!(params.obj_type, "源文档类型不能为空");
-        validate_required!(params.parent_wiki_token, "目标父节点wiki token不能为空");
+        validate_required!(self.obj_token, "源文档token不能为空");
+        validate_required!(self.obj_type, "源文档类型不能为空");
+        validate_required!(self.parent_wiki_token, "目标父节点wiki token不能为空");
 
-        // 使用新的enum+builder系统生成API端点
-        let api_endpoint = WikiApiV2::SpaceNodeMoveDocsToWiki(self.space_id.clone());
+        let api_endpoint = WikiApiV2::SpaceNodeMoveDocsToWiki(self.space_id);
 
-        // 创建API请求 - 使用类型安全的URL生成
+        let request_body = MoveDocsToWikiRequestBody {
+            obj_token: self.obj_token,
+            obj_type: self.obj_type,
+            parent_wiki_token: self.parent_wiki_token,
+        };
+
         let api_request: ApiRequest<MoveDocsToWikiResponse> =
             ApiRequest::post(&api_endpoint.to_url())
-                .body(serialize_params(&params, "移动云空间文档至知识空间")?);
+                .body(serialize_params(&request_body, "移动云空间文档至知识空间")?);
 
-        // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "移动云空间文档至知识空间")
     }
+}
+
+/// 移动云空间文档至知识空间请求参数（兼容旧 API，已弃用）
+#[deprecated(
+    since = "0.16.0",
+    note = "请使用 MoveDocsToWikiRequest 的流式 Builder 模式"
+)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MoveDocsToWikiParams {
+    /// 源文档 token
+    pub obj_token: String,
+    /// 源文档类型（例如 doc、docx 等）
+    pub obj_type: String,
+    /// 目标父节点 wiki token
+    pub parent_wiki_token: String,
 }

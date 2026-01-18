@@ -10,6 +10,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::{extract_response_data, serialize_params};
 
 /// 创建会议室层级请求
@@ -42,8 +43,6 @@ impl CreateRoomLevelRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room_level/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<CreateRoomLevelResponse> {
-        use crate::common::api_endpoints::VcApiV1;
-
         let api_endpoint = VcApiV1::RoomLevelCreate;
         let req: ApiRequest<CreateRoomLevelResponse> = ApiRequest::post(api_endpoint.to_url())
             .body(serialize_params(&body, "创建会议室层级")?);

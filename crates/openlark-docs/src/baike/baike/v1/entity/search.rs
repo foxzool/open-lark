@@ -102,7 +102,7 @@ impl SearchEntityRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<SearchEntityResponse> {
+    pub async fn execute(self) -> SDKResult<SearchEntityResponse> {
         if let Some(page_size) = self.page_size {
             if !(1..=100).contains(&page_size) {
                 return Err(openlark_core::error::validation_error(

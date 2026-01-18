@@ -42,7 +42,7 @@ impl UploadFileRequest {
         }
     }
 
-    pub async fn send(self) -> SDKResult<UploadFileResponse> {
+    pub async fn execute(self) -> SDKResult<UploadFileResponse> {
         use crate::common::api_endpoints::BaikeApiV1;
         validate_required!(self.name, "name 不能为空");
         validate_required!(self.file, "file 不能为空");

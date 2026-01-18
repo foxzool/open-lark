@@ -1,8 +1,12 @@
-use std::sync::Arc;
-use openlark_core::SDKResult;
+//! 职级管理
+//!
+//! 提供企业职级的完整管理功能。
+
 use crate::service::CommunicationService;
-use serde_json::Value;
+use openlark_core::SDKResult;
 use reqwest::Method;
+use serde_json::Value;
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct JobLevel {
@@ -10,10 +14,15 @@ pub struct JobLevel {
 }
 
 impl JobLevel {
-    pub fn new(service: Arc<CommunicationService>) -> Self { Self { service } }
+    pub fn new(service: Arc<CommunicationService>) -> Self {
+        Self { service }
+    }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/job_level/create
-    pub async fn post_open_apis_contact_v3_job_levels(&self, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn post_open_apis_contact_v3_job_levels(
+        &self,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/job_levels".to_string();
         let method = Method::POST;
         let (query, body) = match method {
@@ -24,7 +33,11 @@ impl JobLevel {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/job_level/update
-    pub async fn put_open_apis_contact_v3_job_levels_by_job_level_id(&self, job_level_id: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn put_open_apis_contact_v3_job_levels_by_job_level_id(
+        &self,
+        job_level_id: impl AsRef<str>,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/job_levels/:job_level_id".to_string();
         path = path.replace(":job_level_id", job_level_id.as_ref());
         let method = Method::PUT;
@@ -36,7 +49,11 @@ impl JobLevel {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/job_level/get
-    pub async fn get_open_apis_contact_v3_job_levels_by_job_level_id(&self, job_level_id: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn get_open_apis_contact_v3_job_levels_by_job_level_id(
+        &self,
+        job_level_id: impl AsRef<str>,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/job_levels/:job_level_id".to_string();
         path = path.replace(":job_level_id", job_level_id.as_ref());
         let method = Method::GET;
@@ -48,7 +65,10 @@ impl JobLevel {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/job_level/list
-    pub async fn get_open_apis_contact_v3_job_levels(&self, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn get_open_apis_contact_v3_job_levels(
+        &self,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/job_levels".to_string();
         let method = Method::GET;
         let (query, body) = match method {
@@ -59,7 +79,11 @@ impl JobLevel {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/job_level/delete
-    pub async fn delete_open_apis_contact_v3_job_levels_by_job_level_id(&self, job_level_id: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn delete_open_apis_contact_v3_job_levels_by_job_level_id(
+        &self,
+        job_level_id: impl AsRef<str>,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/job_levels/:job_level_id".to_string();
         path = path.replace(":job_level_id", job_level_id.as_ref());
         let method = Method::DELETE;

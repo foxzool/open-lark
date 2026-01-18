@@ -6,8 +6,8 @@ use openlark_core::{
     api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
-use crate::endpoints::VC_V1_EXPORTS;
 
 /// 查询导出任务结果请求
 pub struct GetExportTaskRequest {
@@ -44,8 +44,8 @@ impl GetExportTaskRequest {
         validate_required!(self.task_id, "task_id 不能为空");
 
         // url: GET:/open-apis/vc/v1/exports/:task_id
-        let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::get(format!("{}/{}", VC_V1_EXPORTS, self.task_id));
+        let api_endpoint = VcApiV1::ExportGet(self.task_id.clone());
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }

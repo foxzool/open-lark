@@ -11,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use crate::common::api_utils::{extract_response_data, serialize_params};
+use crate::endpoints::CALENDAR_V4_EVENT_CREATE;
 
 /// 创建日程请求
 #[derive(Debug, Clone)]
@@ -52,13 +53,11 @@ impl CreateCalendarEventRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<CreateCalendarEventResponse> {
-        use crate::common::api_endpoints::CalendarApiV4;
-
         validate_required!(self.calendar_id, "calendar_id 不能为空");
 
-        let api_endpoint = CalendarApiV4::EventCreate(self.calendar_id);
+        let url = CALENDAR_V4_EVENT_CREATE.replace("{calendar_id}", &self.calendar_id);
         let req: ApiRequest<CreateCalendarEventResponse> =
-            ApiRequest::post(api_endpoint.to_url()).body(serialize_params(&body, "创建日程")?);
+            ApiRequest::post(&url).body(serialize_params(&body, "创建日程")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "创建日程")

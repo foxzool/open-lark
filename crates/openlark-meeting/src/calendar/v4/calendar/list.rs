@@ -12,7 +12,7 @@ use openlark_core::{
 use crate::common::api_utils::extract_response_data;
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::CalendarApiV4;
+use crate::endpoints::CALENDAR_V4_CALENDARS;
 
 /// 查询日历列表请求
 pub struct ListCalendarRequest {
@@ -83,9 +83,8 @@ impl ListCalendarRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/list-2
     pub async fn execute(self) -> SDKResult<ListCalendarResponse> {
-        let api_endpoint = CalendarApiV4::CalendarList;
         let mut api_request: ApiRequest<ListCalendarResponse> =
-            ApiRequest::get(api_endpoint.to_url());
+            ApiRequest::get(CALENDAR_V4_CALENDARS);
 
         for (key, value) in self.query_params {
             api_request = api_request.query(key, value);

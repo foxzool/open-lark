@@ -1,8 +1,12 @@
-use std::sync::Arc;
-use openlark_core::SDKResult;
+//! 用户管理
+//!
+//! 提供用户信息的增删改查功能，支持批量操作和用户ID更新。
+
 use crate::service::CommunicationService;
-use serde_json::Value;
+use openlark_core::SDKResult;
 use reqwest::Method;
+use serde_json::Value;
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct User {
@@ -10,10 +14,15 @@ pub struct User {
 }
 
 impl User {
-    pub fn new(service: Arc<CommunicationService>) -> Self { Self { service } }
+    pub fn new(service: Arc<CommunicationService>) -> Self {
+        Self { service }
+    }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/user/create
-    pub async fn post_open_apis_contact_v3_users(&self, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn post_open_apis_contact_v3_users(
+        &self,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/users".to_string();
         let method = Method::POST;
         let (query, body) = match method {
@@ -24,7 +33,11 @@ impl User {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/user/patch
-    pub async fn patch_open_apis_contact_v3_users_by_user_id(&self, user_id: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn patch_open_apis_contact_v3_users_by_user_id(
+        &self,
+        user_id: impl AsRef<str>,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/users/:user_id".to_string();
         path = path.replace(":user_id", user_id.as_ref());
         let method = Method::PATCH;
@@ -36,7 +49,11 @@ impl User {
     }
 
     /// 文档参考: https://open.feishu.cn/document/contact-v3/user/update_user_id
-    pub async fn patch_open_apis_contact_v3_users_by_user_id_update_user_id(&self, user_id: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn patch_open_apis_contact_v3_users_by_user_id_update_user_id(
+        &self,
+        user_id: impl AsRef<str>,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/users/:user_id/update_user_id".to_string();
         path = path.replace(":user_id", user_id.as_ref());
         let method = Method::PATCH;
@@ -48,7 +65,11 @@ impl User {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/user/get
-    pub async fn get_open_apis_contact_v3_users_by_user_id(&self, user_id: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn get_open_apis_contact_v3_users_by_user_id(
+        &self,
+        user_id: impl AsRef<str>,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/users/:user_id".to_string();
         path = path.replace(":user_id", user_id.as_ref());
         let method = Method::GET;
@@ -60,7 +81,10 @@ impl User {
     }
 
     /// 文档参考: https://open.feishu.cn/document/contact-v3/user/batch
-    pub async fn get_open_apis_contact_v3_users_batch(&self, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn get_open_apis_contact_v3_users_batch(
+        &self,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/users/batch".to_string();
         let method = Method::GET;
         let (query, body) = match method {
@@ -71,7 +95,10 @@ impl User {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/user/find_by_department
-    pub async fn get_open_apis_contact_v3_users_find_by_department(&self, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn get_open_apis_contact_v3_users_find_by_department(
+        &self,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/users/find_by_department".to_string();
         let method = Method::GET;
         let (query, body) = match method {
@@ -82,7 +109,10 @@ impl User {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/user/batch_get_id
-    pub async fn post_open_apis_contact_v3_users_batch_get_id(&self, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn post_open_apis_contact_v3_users_batch_get_id(
+        &self,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/users/batch_get_id".to_string();
         let method = Method::POST;
         let (query, body) = match method {
@@ -93,7 +123,11 @@ impl User {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/user/delete
-    pub async fn delete_open_apis_contact_v3_users_by_user_id(&self, user_id: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn delete_open_apis_contact_v3_users_by_user_id(
+        &self,
+        user_id: impl AsRef<str>,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/users/:user_id".to_string();
         path = path.replace(":user_id", user_id.as_ref());
         let method = Method::DELETE;
@@ -105,7 +139,11 @@ impl User {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/contact-v3/user/resurrect
-    pub async fn post_open_apis_contact_v3_users_by_user_id_resurrect(&self, user_id: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn post_open_apis_contact_v3_users_by_user_id_resurrect(
+        &self,
+        user_id: impl AsRef<str>,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/users/:user_id/resurrect".to_string();
         path = path.replace(":user_id", user_id.as_ref());
         let method = Method::POST;
@@ -117,7 +155,10 @@ impl User {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/historic-version//user/list
-    pub async fn get_open_apis_contact_v3_users(&self, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn get_open_apis_contact_v3_users(
+        &self,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/users".to_string();
         let method = Method::GET;
         let (query, body) = match method {
@@ -128,7 +169,11 @@ impl User {
     }
 
     /// 文档参考: https://open.feishu.cn/document/server-docs/historic-version//user/update
-    pub async fn put_open_apis_contact_v3_users_by_user_id(&self, user_id: impl AsRef<str>, payload: Option<&Value>) -> SDKResult<Value> {
+    pub async fn put_open_apis_contact_v3_users_by_user_id(
+        &self,
+        user_id: impl AsRef<str>,
+        payload: Option<&Value>,
+    ) -> SDKResult<Value> {
         let mut path = "/open-apis/contact/v3/users/:user_id".to_string();
         path = path.replace(":user_id", user_id.as_ref());
         let method = Method::PUT;

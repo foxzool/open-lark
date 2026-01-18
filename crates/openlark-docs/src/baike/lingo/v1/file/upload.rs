@@ -45,7 +45,7 @@ impl UploadFileRequest {
         }
     }
 
-    pub async fn send(self) -> SDKResult<UploadFileResp> {
+    pub async fn execute(self) -> SDKResult<UploadFileResp> {
         validate_required!(self.name, "name 不能为空");
         validate_required!(self.file, "file 不能为空");
 

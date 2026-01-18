@@ -5,12 +5,6 @@
 #[cfg(feature = "wiki")]
 use openlark_core::config::Config;
 #[cfg(feature = "wiki")]
-use openlark_docs::wiki::v1::node::search::SearchWikiParams;
-#[cfg(feature = "wiki")]
-use openlark_docs::wiki::v2::space::create::CreateWikiSpaceParams;
-#[cfg(feature = "wiki")]
-use openlark_docs::wiki::v2::space::list::ListWikiSpacesParams;
-#[cfg(feature = "wiki")]
 use openlark_docs::wiki::v2::WikiService;
 
 #[cfg(feature = "wiki")]
@@ -36,47 +30,41 @@ fn test_wiki_space_list_request_builder() {
 
     let wiki = WikiService::new(config);
 
-    // 测试空间列表请求构建器
-    let _request = wiki.list_spaces();
-
-    // 测试参数结构
-    let params = ListWikiSpacesParams {
-        page_size: Some(20),
-        page_token: None,
-    };
-
-    assert_eq!(params.page_size, Some(20));
-    assert!(params.page_token.is_none());
+    let _request = wiki.list_spaces().page_size(20);
 }
 
 #[cfg(feature = "wiki")]
 #[test]
-fn test_wiki_space_create_params() {
-    let params = CreateWikiSpaceParams {
-        name: "测试知识库".to_string(),
-        description: Some("测试描述".to_string()),
-    };
+fn test_wiki_space_create_builder() {
+    let config = Config::builder()
+        .app_id("test_app_id")
+        .app_secret("test_app_secret")
+        .build();
 
-    assert_eq!(params.name, "测试知识库");
-    assert_eq!(params.description, Some("测试描述".to_string()));
+    let wiki = WikiService::new(config);
+
+    let _request = wiki
+        .create_space()
+        .name("测试知识库")
+        .description("测试描述");
 }
 
 #[cfg(feature = "wiki")]
 #[test]
-fn test_wiki_v1_search_params() {
-    let params = SearchWikiParams {
-        query: "搜索关键词".to_string(),
-        space_id: Some("space1".to_string()),
-        node_id: None,
-        page_size: Some(10),
-        page_token: Some("token123".to_string()),
-    };
+fn test_wiki_v1_search_builder() {
+    let config = Config::builder()
+        .app_id("test_app_id")
+        .app_secret("test_app_secret")
+        .build();
 
-    assert_eq!(params.query, "搜索关键词");
-    assert_eq!(params.space_id, Some("space1".to_string()));
-    assert!(params.node_id.is_none());
-    assert_eq!(params.page_size, Some(10));
-    assert_eq!(params.page_token, Some("token123".to_string()));
+    let wiki = WikiService::new(config);
+
+    let _request = wiki
+        .search_wiki()
+        .query("搜索关键词")
+        .space_id("space1")
+        .page_size(10)
+        .page_token("token123");
 }
 
 #[cfg(feature = "wiki")]
@@ -89,7 +77,6 @@ fn test_wiki_service_all_methods() {
 
     let wiki = WikiService::new(config);
 
-    // 测试所有方法都能正确创建请求构建器
     let _list_request = wiki.list_spaces();
     let _get_request = wiki.get_space("test_space_id");
     let _create_request = wiki.create_space();

@@ -10,6 +10,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
 
 /// 查询参会人明细请求
@@ -50,10 +51,9 @@ impl GetParticipantListRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting-room-data/get-2
     pub async fn execute(self) -> SDKResult<GetParticipantListResponse> {
-        use crate::common::api_endpoints::VcApiV1;
-
+        let api_endpoint = VcApiV1::ParticipantListList;
         let mut req: ApiRequest<GetParticipantListResponse> =
-            ApiRequest::get(VcApiV1::ParticipantListList.to_url());
+            ApiRequest::get(api_endpoint.to_url());
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }

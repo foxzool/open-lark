@@ -50,7 +50,7 @@ impl UpdateEntityRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<UpdateEntityResp> {
+    pub async fn execute(self) -> SDKResult<UpdateEntityResp> {
         validate_required!(self.entity_id, "entity_id 不能为空");
         validate_required!(self.body.main_keys, "main_keys 不能为空");
         if self

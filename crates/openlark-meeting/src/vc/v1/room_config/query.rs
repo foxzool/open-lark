@@ -51,9 +51,7 @@ impl QueryRoomConfigRequest {
 
     /// 执行请求
     ///
-    /// 说明：该接口请求体字段较多，建议直接按文档构造 JSON 传入。
-    ///
-    /// docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/room_config/query
+    /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room_config/query
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<QueryRoomConfigResponse> {
         let api_endpoint = VcApiV1::RoomConfigList;
         let api_request: ApiRequest<QueryRoomConfigResponse> =

@@ -89,7 +89,7 @@ impl TransferRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<TransferResponse> {
+    pub async fn execute(self) -> SDKResult<TransferResponse> {
         validate_required!(self.req.token, "token 不能为空");
         validate_required!(self.req.type_, "type 不能为空");
         validate_required!(self.req.owner.member_type, "owner.member_type 不能为空");

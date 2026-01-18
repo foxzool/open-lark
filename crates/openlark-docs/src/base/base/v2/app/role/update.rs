@@ -95,7 +95,7 @@ impl Update {
         self
     }
 
-    pub async fn send(self) -> SDKResult<UpdateResp> {
+    pub async fn execute(self) -> SDKResult<UpdateResp> {
         validate_required!(self.app_token, "app_token 不能为空");
         validate_required!(self.role_id, "role_id 不能为空");
         validate_required!(self.req.role_name, "role_name 不能为空");

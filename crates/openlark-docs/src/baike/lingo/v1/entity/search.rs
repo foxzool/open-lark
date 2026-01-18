@@ -130,7 +130,7 @@ impl SearchEntityRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<SearchEntityResp> {
+    pub async fn execute(self) -> SDKResult<SearchEntityResp> {
         let body = serde_json::to_value(&self.body).map_err(|e| {
             openlark_core::error::serialization_error("序列化模糊搜索词条请求体失败", Some(e))
         })?;

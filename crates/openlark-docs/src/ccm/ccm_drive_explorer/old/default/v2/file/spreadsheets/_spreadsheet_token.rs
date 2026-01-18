@@ -42,7 +42,7 @@ impl DeleteSpreadsheetRequest {
         }
     }
 
-    pub async fn send(self) -> SDKResult<DeleteSpreadsheetResp> {
+    pub async fn execute(self) -> SDKResult<DeleteSpreadsheetResp> {
         validate_required!(self.spreadsheet_token, "spreadsheetToken 不能为空");
 
         let api_request: ApiRequest<DeleteSpreadsheetResp> = ApiRequest::delete(

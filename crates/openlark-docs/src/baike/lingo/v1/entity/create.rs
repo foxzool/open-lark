@@ -56,7 +56,7 @@ impl CreateEntityRequest {
         self
     }
 
-    pub async fn send(self) -> SDKResult<CreateEntityResp> {
+    pub async fn execute(self) -> SDKResult<CreateEntityResp> {
         validate_required!(self.body.main_keys, "main_keys 不能为空");
         if self
             .body

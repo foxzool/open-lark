@@ -56,7 +56,7 @@ impl GetFolderMetaRequest {
         }
     }
 
-    pub async fn send(self) -> SDKResult<GetFolderMetaResp> {
+    pub async fn execute(self) -> SDKResult<GetFolderMetaResp> {
         validate_required!(self.folder_token, "folderToken 不能为空");
 
         let api_request: ApiRequest<GetFolderMetaResp> =
