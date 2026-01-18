@@ -6,10 +6,10 @@
 use openlark_core::config::Config;
 
 // 导出v1版本实现和模型
-pub mod lingo;
-pub use lingo::*;
 pub mod baike;
+pub mod lingo;
 pub use baike::*;
+pub use lingo::*;
 
 pub mod models;
 pub mod v1;
