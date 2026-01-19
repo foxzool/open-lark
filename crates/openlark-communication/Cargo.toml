@@ -23,8 +23,9 @@ tokio = { workspace = true }
 
 [features]
 default = ["im", "contact", "moments"]
-full = ["im", "contact", "moments"]
+full = ["im", "contact", "moments", "aily"]
 
 im = []
 contact = []
 moments = []
+aily = []
