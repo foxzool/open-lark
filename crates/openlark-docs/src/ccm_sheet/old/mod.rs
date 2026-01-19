@@ -1,17 +1,13 @@
-pub mod default;
+/// Old API 模块已废弃
+pub struct CcmSheetOldService;
 
-use std::sync::Arc;
-use crate::service::DocsService;
-
-#[derive(Clone)]
-pub struct CcmSheetOLD {
-    service: Arc<DocsService>,
+impl CcmSheetOldService {
+    pub fn new(_config: openlark_core::config::Config) -> Self {
+        Self
+    }
 }
 
-impl CcmSheetOLD {
-    pub fn new(service: Arc<DocsService>) -> Self { Self { service } }
-
-    pub fn default(&self) -> default::Default {
-        default::Default::new(self.service.clone())
-    }
+pub mod v2 {
+    /// 占位类型
+    pub struct CcmSheetOldV2;
 }

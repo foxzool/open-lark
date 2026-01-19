@@ -1,17 +1,8 @@
-pub mod default;
+/// Old API 模块已废弃
+pub struct CcmDrivePermissionOldService;
 
-use std::sync::Arc;
-use crate::service::DocsService;
-
-#[derive(Clone)]
-pub struct CcmDrivePermissionOLD {
-    service: Arc<DocsService>,
-}
-
-impl CcmDrivePermissionOLD {
-    pub fn new(service: Arc<DocsService>) -> Self { Self { service } }
-
-    pub fn default(&self) -> default::Default {
-        default::Default::new(self.service.clone())
+impl CcmDrivePermissionOldService {
+    pub fn new(_config: openlark_core::config::Config) -> Self {
+        Self
     }
 }
