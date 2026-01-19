@@ -47,7 +47,8 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validation_error, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validation_error,
+    SDKResult,
 };
 
 use crate::common::api_endpoints::DriveApi;
@@ -76,6 +77,25 @@ impl PermissionService {
     pub async fn check_member_permission(
         &self,
         request: &CheckMemberPermissionRequest,
+    ) -> SDKResult<CheckMemberPermissionResponse> {
+        self.check_member_permission_with_options(request, RequestOption::default())
+            .await
+    }
+
+    /// 判断协作者是否有某权限（带请求选项）
+    ///
+    /// 根据filetoken判断当前登录用户是否具有某权限
+    ///
+    /// # 参数
+    /// * `request` - 判断权限请求
+    /// * `option` - 请求选项
+    ///
+    /// # 返回
+    /// 返回权限检查结果
+    pub async fn check_member_permission_with_options(
+        &self,
+        request: &CheckMemberPermissionRequest,
+        option: RequestOption,
     ) -> SDKResult<CheckMemberPermissionResponse> {
         // 验证请求参数
         request
@@ -109,7 +129,7 @@ impl PermissionService {
 
         // 发送请求
         let resp: openlark_core::api::Response<CheckMemberPermissionResponse> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -125,6 +145,16 @@ impl PermissionService {
     pub async fn transfer_owner(
         &self,
         request: &TransferOwnerRequest,
+    ) -> SDKResult<TransferOwnerResponse> {
+        self.transfer_owner_with_options(request, RequestOption::default())
+            .await
+    }
+
+    /// 转移拥有者（带请求选项）
+    pub async fn transfer_owner_with_options(
+        &self,
+        request: &TransferOwnerRequest,
+        option: RequestOption,
     ) -> SDKResult<TransferOwnerResponse> {
         // 验证请求参数
         request
@@ -155,7 +185,7 @@ impl PermissionService {
 
         // 发送请求
         let resp: openlark_core::api::Response<TransferOwnerResponse> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -171,6 +201,16 @@ impl PermissionService {
     pub async fn get_public_permission(
         &self,
         request: &GetPublicPermissionRequest,
+    ) -> SDKResult<GetPublicPermissionResponse> {
+        self.get_public_permission_with_options(request, RequestOption::default())
+            .await
+    }
+
+    /// 获取云文档权限设置V2（带请求选项）
+    pub async fn get_public_permission_with_options(
+        &self,
+        request: &GetPublicPermissionRequest,
+        option: RequestOption,
     ) -> SDKResult<GetPublicPermissionResponse> {
         // 验证请求参数
         request
@@ -192,7 +232,7 @@ impl PermissionService {
 
         // 发送请求
         let resp: openlark_core::api::Response<GetPublicPermissionResponse> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(

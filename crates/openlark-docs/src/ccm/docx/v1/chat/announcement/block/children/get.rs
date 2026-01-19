@@ -61,6 +61,18 @@ impl GetChatAnnouncementBlockChildrenRequest {
         self,
         params: GetChatAnnouncementBlockChildrenParams,
     ) -> SDKResult<GetChatAnnouncementBlockChildrenResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（带请求选项）
+    ///
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/get
+    pub async fn execute_with_options(
+        self,
+        params: GetChatAnnouncementBlockChildrenParams,
+        option: RequestOption,
+    ) -> SDKResult<GetChatAnnouncementBlockChildrenResponse> {
         validate_required!(params.chat_id, "群聊ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
 
@@ -79,7 +91,7 @@ impl GetChatAnnouncementBlockChildrenRequest {
             api_request = api_request.query("page_token", &page_token);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取所有子块")
     }
 }

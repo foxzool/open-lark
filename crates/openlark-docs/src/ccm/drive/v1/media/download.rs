@@ -47,6 +47,11 @@ impl DownloadMediaRequest {
 
     /// 执行下载请求，返回二进制内容
     pub async fn execute(self) -> SDKResult<Response<Vec<u8>>> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行下载请求，返回二进制内容（带请求选项）
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<Response<Vec<u8>>> {
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -70,7 +75,7 @@ impl DownloadMediaRequest {
             request = request.header("Range", &r);
         }
 
-        Transport::request(request, &self.config, None).await
+        Transport::request(request, &self.config, Some(option)).await
     }
 }
 

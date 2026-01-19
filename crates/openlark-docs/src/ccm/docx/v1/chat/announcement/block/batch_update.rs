@@ -65,6 +65,18 @@ impl BatchUpdateChatAnnouncementBlocksRequest {
         self,
         params: BatchUpdateChatAnnouncementBlocksParams,
     ) -> SDKResult<BatchUpdateChatAnnouncementBlocksResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（带请求选项）
+    ///
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/batch_update
+    pub async fn execute_with_options(
+        self,
+        params: BatchUpdateChatAnnouncementBlocksParams,
+        option: RequestOption,
+    ) -> SDKResult<BatchUpdateChatAnnouncementBlocksResponse> {
         validate_required!(params.chat_id, "群聊ID不能为空");
         validate_required!(params.requests, "批量请求不能为空");
 
@@ -74,7 +86,7 @@ impl BatchUpdateChatAnnouncementBlocksRequest {
             ApiRequest::patch(&api_endpoint.to_url())
                 .body(serialize_params(&params, "批量更新群公告块的内容")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "批量更新群公告块的内容")
     }
 }

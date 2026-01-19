@@ -57,6 +57,18 @@ impl GetChatAnnouncementBlockRequest {
         self,
         params: GetChatAnnouncementBlockParams,
     ) -> SDKResult<GetChatAnnouncementBlockResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（带请求选项）
+    ///
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/get
+    pub async fn execute_with_options(
+        self,
+        params: GetChatAnnouncementBlockParams,
+        option: RequestOption,
+    ) -> SDKResult<GetChatAnnouncementBlockResponse> {
         validate_required!(params.chat_id, "群聊ID不能为空");
         validate_required!(params.block_id, "块ID不能为空");
 
@@ -66,7 +78,7 @@ impl GetChatAnnouncementBlockRequest {
         let api_request: ApiRequest<GetChatAnnouncementBlockResponse> =
             ApiRequest::get(&api_endpoint.to_url());
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取群公告块的内容")
     }
 }

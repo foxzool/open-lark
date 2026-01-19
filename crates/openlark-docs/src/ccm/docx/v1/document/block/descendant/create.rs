@@ -71,6 +71,15 @@ impl CreateDocumentBlockDescendantRequest {
         self,
         params: CreateDocumentBlockDescendantParams,
     ) -> SDKResult<CreateDocumentBlockDescendantResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        params: CreateDocumentBlockDescendantParams,
+        option: RequestOption,
+    ) -> SDKResult<CreateDocumentBlockDescendantResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
         validate_required!(params.children_id, "children_id不能为空");
@@ -89,7 +98,7 @@ impl CreateDocumentBlockDescendantRequest {
                 api_request.query("document_revision_id", &document_revision_id.to_string());
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "创建嵌套块")
     }
 }

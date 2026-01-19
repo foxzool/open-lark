@@ -70,6 +70,19 @@ pub async fn add_sheet(
     spreadsheet_token: &str,
     params: AddSheetParams,
 ) -> SDKResult<AddSheetResponse> {
+    add_sheet_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 添加工作表（带请求选项）
+///
+/// 根据 spreadsheetToken 在电子表格中添加新的工作表。
+/// docPath: /document/server-docs/docs/sheets-v3/sheet/add-sheet
+pub async fn add_sheet_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: AddSheetParams,
+    option: RequestOption,
+) -> SDKResult<AddSheetResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
     validate_required!(params.title.trim(), "工作表标题不能为空");
@@ -82,7 +95,7 @@ pub async fn add_sheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "添加工作表")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "添加工作表")
 }
 
@@ -94,6 +107,19 @@ pub async fn get_sheet(
     config: &Config,
     spreadsheet_token: &str,
     params: GetSheetParams,
+) -> SDKResult<GetSheetResponse> {
+    get_sheet_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 获取工作表信息（带请求选项）
+///
+/// 根据 spreadsheetToken 和 sheet_id 获取工作表的详细信息。
+/// docPath: /document/server-docs/docs/sheets-v3/sheet/get-sheet
+pub async fn get_sheet_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: GetSheetParams,
+    option: RequestOption,
 ) -> SDKResult<GetSheetResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -107,7 +133,7 @@ pub async fn get_sheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取工作表信息")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "获取工作表信息")
 }
 
@@ -119,6 +145,19 @@ pub async fn update_sheet(
     config: &Config,
     spreadsheet_token: &str,
     params: UpdateSheetParams,
+) -> SDKResult<UpdateSheetResponse> {
+    update_sheet_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 更新工作表（带请求选项）
+///
+/// 根据 spreadsheetToken 和 sheet_id 更新工作表的基本信息，如标题或位置。
+/// docPath: /document/server-docs/docs/sheets-v3/sheet/update-sheet
+pub async fn update_sheet_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: UpdateSheetParams,
+    option: RequestOption,
 ) -> SDKResult<UpdateSheetResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -132,7 +171,7 @@ pub async fn update_sheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新工作表")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "更新工作表")
 }
 
@@ -144,6 +183,19 @@ pub async fn delete_sheet(
     config: &Config,
     spreadsheet_token: &str,
     params: DeleteSheetParams,
+) -> SDKResult<DeleteSheetResponse> {
+    delete_sheet_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 删除工作表（带请求选项）
+///
+/// 根据 spreadsheetToken 和 sheet_id 删除指定的工作表。
+/// docPath: /document/server-docs/docs/sheets-v3/sheet/delete-sheet
+pub async fn delete_sheet_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: DeleteSheetParams,
+    option: RequestOption,
 ) -> SDKResult<DeleteSheetResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -157,7 +209,7 @@ pub async fn delete_sheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除工作表")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "删除工作表")
 }
 
