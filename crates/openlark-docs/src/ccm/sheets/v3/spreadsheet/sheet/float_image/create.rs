@@ -57,6 +57,6 @@ pub async fn create_float_image(
     let api_request: ApiRequest<CreateFloatImageResponse> =
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建浮动图片")?);
 
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "创建浮动图片")
 }

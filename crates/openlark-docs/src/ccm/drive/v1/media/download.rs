@@ -70,7 +70,7 @@ impl DownloadMediaRequest {
             request = request.header("Range", &r);
         }
 
-        Transport::request(request, &self.config, Some(option)).await
+        Transport::request(request, &self.config, None).await
     }
 }
 

@@ -74,7 +74,7 @@ pub async fn get_spreadsheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取表格信息")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取表格信息")
 }
 
@@ -97,7 +97,7 @@ pub async fn create_spreadsheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建表格")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "创建表格")
 }
 
@@ -121,7 +121,7 @@ pub async fn update_spreadsheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新表格")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "更新表格")
 }
 

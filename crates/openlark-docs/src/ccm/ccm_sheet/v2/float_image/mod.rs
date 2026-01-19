@@ -84,7 +84,7 @@ pub async fn create_float_image(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建浮图")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "创建浮图")
 }
 
@@ -115,7 +115,7 @@ pub async fn get_float_image(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取浮图")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取浮图")
 }
 
@@ -145,7 +145,7 @@ pub async fn update_float_image(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新浮图")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "更新浮图")
 }
 
@@ -175,7 +175,7 @@ pub async fn delete_float_image(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除浮图")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "删除浮图")
 }
 

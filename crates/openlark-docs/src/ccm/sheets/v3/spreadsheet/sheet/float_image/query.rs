@@ -36,6 +36,6 @@ pub async fn query_float_images(
         SheetsApiV3::QueryFloatImages(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<QueryFloatImagesResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "查询浮动图片")
 }
