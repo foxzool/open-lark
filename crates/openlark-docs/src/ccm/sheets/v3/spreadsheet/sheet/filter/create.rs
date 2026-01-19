@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -43,6 +44,6 @@ pub async fn create_filter(
     let api_request: ApiRequest<CreateFilterResponse> =
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建筛选")?);
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "创建筛选")
 }

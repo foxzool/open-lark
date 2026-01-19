@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -56,6 +57,6 @@ pub async fn update_float_image(
     let api_request: ApiRequest<UpdateFloatImageResponse> =
         ApiRequest::patch(&api_endpoint.to_url()).body(serialize_params(&params, "更新浮动图片")?);
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "更新浮动图片")
 }

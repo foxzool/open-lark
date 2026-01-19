@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 
@@ -35,6 +36,6 @@ pub async fn update_spreadsheet(
         ApiRequest::patch(&api_endpoint.to_url()).body(serialize_params(&params, "更新电子表格")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "更新电子表格")
 }
