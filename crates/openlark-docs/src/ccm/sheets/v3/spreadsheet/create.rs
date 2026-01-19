@@ -27,6 +27,15 @@ pub async fn create_spreadsheet(
     config: &Config,
     params: CreateSpreadsheetParams,
 ) -> SDKResult<CreateSpreadsheetResponse> {
+    create_spreadsheet_with_options(config, params, RequestOption::default()).await
+}
+
+/// 创建电子表格（支持自定义选项）
+pub async fn create_spreadsheet_with_options(
+    config: &Config,
+    params: CreateSpreadsheetParams,
+    option: RequestOption,
+) -> SDKResult<CreateSpreadsheetResponse> {
     // 使用enum+builder系统生成API端点
     let api_endpoint = SheetsApiV3::CreateSpreadsheet;
 
@@ -35,6 +44,6 @@ pub async fn create_spreadsheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建电子表格")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "创建电子表格")
 }
