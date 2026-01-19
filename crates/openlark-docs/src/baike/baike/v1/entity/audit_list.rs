@@ -117,12 +117,8 @@ impl EntityAuditListRequest {
             api_request = api_request.query("user_id_type", user_id_type.as_str());
         }
 
-        let response: Response<EntityAuditListResp> = Transport::request(
-            Transport::request(api_request, &self.config, None),
-            &self.config,
-            Some(option),
-        )
-        .await?;
+        let response: Response<EntityAuditListResp> =
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
