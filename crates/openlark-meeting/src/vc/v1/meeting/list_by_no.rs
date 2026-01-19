@@ -2,9 +2,10 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting/list_by_no
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult};
 
-use crate::{common::api_utils::extract_response_data, endpoints::VC_V1_MEETINGS};
+use crate::common::api_endpoints::VcApiV1;
+use crate::common::api_utils::extract_response_data;
 
 /// 获取与会议号关联的会议列表请求
 pub struct ListByNoMeetingRequest {
@@ -30,14 +31,22 @@ impl ListByNoMeetingRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting/list_by_no
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/vc/v1/meetings/list_by_no
-        let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::get(format!("{}/list_by_no", VC_V1_MEETINGS));
+        let api_endpoint = VcApiV1::MeetingListList;
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取与会议号关联的会议列表")
     }
 }

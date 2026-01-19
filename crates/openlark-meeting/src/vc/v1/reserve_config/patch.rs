@@ -4,10 +4,11 @@
 
 use openlark_core::{
     api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    req_option::RequestOption,
 };
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::{extract_response_data, serialize_params};
-use crate::endpoints::VC_V1_RESERVE_CONFIGS;
 
 /// 更新会议室预定限制请求
 pub struct PatchReserveConfigRequest {
@@ -33,16 +34,23 @@ impl PatchReserveConfigRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/scope_config/patch
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.reserve_config_id, "reserve_config_id 不能为空");
 
         // url: PATCH:/open-apis/vc/v1/reserve_configs/:reserve_config_id
-        let req: ApiRequest<serde_json::Value> = ApiRequest::patch(format!(
-            "{}/{}",
-            VC_V1_RESERVE_CONFIGS, self.reserve_config_id
-        ))
-        .body(serialize_params(&body, "更新会议室预定限制")?);
+        let api_endpoint = VcApiV1::ReserveConfigPatch(self.reserve_config_id);
+        let req: ApiRequest<serde_json::Value> = ApiRequest::patch(api_endpoint.to_url())
+            .body(serialize_params(&body, "更新会议室预定限制")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "更新会议室预定限制")
     }
 }

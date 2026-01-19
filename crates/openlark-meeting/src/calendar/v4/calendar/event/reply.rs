@@ -2,13 +2,11 @@
 //!
 //! docPath: https://open.feishu.cn/document/calendar-v4/calendar-event/reply
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
 
 use crate::{
+    common::api_endpoints::CalendarApiV4,
     common::api_utils::{extract_response_data, serialize_params},
-    endpoints::CALENDAR_V4_CALENDARS,
 };
 
 /// 回复日程请求
@@ -48,12 +46,9 @@ impl ReplyCalendarEventRequest {
         validate_required!(self.calendar_id, "calendar_id 不能为空");
         validate_required!(self.event_id, "event_id 不能为空");
 
-        // url: POST:/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/reply
-        let req: ApiRequest<serde_json::Value> = ApiRequest::post(format!(
-            "{}/{}/events/{}/reply",
-            CALENDAR_V4_CALENDARS, self.calendar_id, self.event_id
-        ))
-        .body(serialize_params(&body, "回复日程")?);
+        let api_endpoint = CalendarApiV4::EventReply(self.calendar_id.clone(), self.event_id.clone());
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url())
+            .body(serialize_params(&body, "回复日程")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "回复日程")

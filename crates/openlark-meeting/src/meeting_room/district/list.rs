@@ -2,7 +2,8 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/api-reference/obtain-city-list
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport,
+    req_option::RequestOption, SDKResult};
 
 use crate::{common::api_utils::extract_response_data, endpoints::MEETING_ROOM};
 
@@ -29,13 +30,23 @@ impl ListDistrictRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/api-reference/obtain-city-list
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
+
         // url: GET:/open-apis/meeting_room/district/list
         let mut req: ApiRequest<serde_json::Value> =
             ApiRequest::get(format!("{}/district/list", MEETING_ROOM));
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取城市列表")
+
     }
+
 }

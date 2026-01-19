@@ -4,9 +4,11 @@
 
 use openlark_core::{
     api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    req_option::RequestOption,
 };
 
-use crate::{common::api_utils::extract_response_data, endpoints::VC_V1_RESERVES};
+use crate::common::api_endpoints::VcApiV1;
+use crate::common::api_utils::extract_response_data;
 
 /// 获取活跃会议请求
 pub struct GetActiveMeetingRequest {
@@ -40,18 +42,24 @@ impl GetActiveMeetingRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/reserve/get_active_meeting
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.reserve_id, "reserve_id 不能为空");
 
-        // url: GET:/open-apis/vc/v1/reserves/:reserve_id/get_active_meeting
-        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(format!(
-            "{}/{}/get_active_meeting",
-            VC_V1_RESERVES, self.reserve_id
-        ));
+        // url: GET:/open-apis/vc/v1/reserves/:reserve_id/active_meeting
+        let api_endpoint = VcApiV1::ReserveGetActiveMeeting(self.reserve_id);
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取活跃会议")
     }
 }

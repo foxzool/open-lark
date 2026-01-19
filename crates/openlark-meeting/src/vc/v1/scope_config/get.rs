@@ -2,7 +2,8 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/scope_config/get
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult,
+    req_option::RequestOption};
 
 use crate::common::api_utils::extract_response_data;
 use crate::endpoints::VC_V1_SCOPE_CONFIG;
@@ -31,13 +32,23 @@ impl GetScopeConfigRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/scope_config/get
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
+
         // url: GET:/open-apis/vc/v1/scope_config
         let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(VC_V1_SCOPE_CONFIG);
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询会议室配置")
+
     }
+
 }

@@ -52,8 +52,16 @@ pub enum CalendarApiV4 {
     CalendarBatchGet,
 
     /// 搜索日历
-    /// GET /open-apis/calendar/v4/calendars/search
+    /// POST /open-apis/calendar/v4/calendars/search
     CalendarSearch,
+
+    /// 批量获取日历
+    /// POST /open-apis/calendar/v4/calendars/mget
+    CalendarMget,
+
+    /// 订阅日历变更事件
+    /// POST /open-apis/calendar/v4/calendars/subscription
+    CalendarSubscription,
 
     /// 设置主日历
     /// PUT /open-apis/calendar/v4/calendars/primary
@@ -89,8 +97,28 @@ pub enum CalendarApiV4 {
     EventBatchGet(String),
 
     /// 回复日程
-    /// POST /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees/chat_member
+    /// POST /open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/reply
     EventReply(String, String),
+
+    // ========== ACL 访问控制 ==========
+    /// 订阅日历访问控制变更事件
+    /// POST /open-apis/calendar/v4/calendars/:calendar_id/acls/subscription
+    CalendarAclSubscription(String),
+
+    // ========== Exchange 绑定 ==========
+    /// 将 Exchange 账户绑定到飞书账户
+    /// POST /open-apis/calendar/v4/exchange_bindings
+    ExchangeBindingCreate,
+
+    // ========== 请假日程 ==========
+    /// 创建请假日程
+    /// POST /open-apis/calendar/v4/timeoff_events
+    TimeoffEventCreate,
+
+    // ========== 忙闲查询 ==========
+    /// 批量查询主日历日程忙闲信息
+    /// POST /open-apis/calendar/v4/freebusy/batch
+    FreebusyBatch,
 }
 
 impl CalendarApiV4 {
@@ -113,6 +141,10 @@ impl CalendarApiV4 {
                 "/open-apis/calendar/v4/calendars/batch_get".to_string()
             }
             CalendarApiV4::CalendarSearch => "/open-apis/calendar/v4/calendars/search".to_string(),
+            CalendarApiV4::CalendarMget => "/open-apis/calendar/v4/calendars/mget".to_string(),
+            CalendarApiV4::CalendarSubscription => {
+                "/open-apis/calendar/v4/calendars/subscription".to_string()
+            }
             CalendarApiV4::CalendarPrimary => {
                 "/open-apis/calendar/v4/calendars/primary".to_string()
             }
@@ -153,10 +185,31 @@ impl CalendarApiV4 {
             }
             CalendarApiV4::EventReply(calendar_id, event_id) => {
                 format!(
-                    "/open-apis/calendar/v4/calendars/{}/events/{}/attendees/chat_member",
+                    "/open-apis/calendar/v4/calendars/{}/events/{}/reply",
                     calendar_id, event_id
                 )
             }
+
+            // ACL
+            CalendarApiV4::CalendarAclSubscription(calendar_id) => {
+                format!(
+                    "/open-apis/calendar/v4/calendars/{}/acls/subscription",
+                    calendar_id
+                )
+            }
+
+            // Exchange Binding
+            CalendarApiV4::ExchangeBindingCreate => {
+                "/open-apis/calendar/v4/exchange_bindings".to_string()
+            }
+
+            // Timeoff Event
+            CalendarApiV4::TimeoffEventCreate => {
+                "/open-apis/calendar/v4/timeoff_events".to_string()
+            }
+
+            // Freebusy
+            CalendarApiV4::FreebusyBatch => "/open-apis/calendar/v4/freebusy/batch".to_string(),
         }
     }
 }
@@ -186,6 +239,10 @@ pub enum VcApiV1 {
     /// 批量获取会议室
     /// POST /open-apis/vc/v1/rooms/batch_get
     RoomBatchGet,
+
+    /// 搜索会议室
+    /// POST /open-apis/vc/v1/rooms/search
+    RoomSearch,
 
     /// 更新会议室
     /// PATCH /open-apis/vc/v1/rooms/:room_id
@@ -333,6 +390,10 @@ pub enum VcApiV1 {
     /// PATCH /open-apis/vc/v1/room_configs/:room_config_id
     RoomConfigPatch(String),
 
+    /// 创建会议室部署码
+    /// POST /open-apis/vc/v1/room_configs/set_room_access_code
+    RoomConfigSetRoomAccessCode,
+
     // ========== Reserve Config 预约配置 ==========
     /// 创建预约配置
     /// POST /open-apis/vc/v1/reserve_configs
@@ -353,6 +414,10 @@ pub enum VcApiV1 {
     /// 更新预约配置
     /// PATCH /open-apis/vc/v1/reserve_configs/:reserve_config_id
     ReserveConfigPatch(String),
+
+    /// 更新预约配置管理员
+    /// PATCH /open-apis/vc/v1/reserve_configs/:reserve_config_id/admin
+    ReserveConfigAdminPatch(String),
 
     // ========== Scope Config 范围配置 ==========
     /// 创建范围配置
@@ -412,6 +477,7 @@ impl VcApiV1 {
             VcApiV1::RoomDelete(room_id) => format!("/open-apis/vc/v1/rooms/{}", room_id),
             VcApiV1::RoomList => "/open-apis/vc/v1/rooms".to_string(),
             VcApiV1::RoomBatchGet => "/open-apis/vc/v1/rooms/batch_get".to_string(),
+            VcApiV1::RoomSearch => "/open-apis/vc/v1/rooms/search".to_string(),
             VcApiV1::RoomPatch(room_id) => format!("/open-apis/vc/v1/rooms/{}", room_id),
 
             // Meeting
@@ -515,6 +581,9 @@ impl VcApiV1 {
             VcApiV1::RoomConfigPatch(room_config_id) => {
                 format!("/open-apis/vc/v1/room_configs/{}", room_config_id)
             }
+            VcApiV1::RoomConfigSetRoomAccessCode => {
+                "/open-apis/vc/v1/room_configs/set_room_access_code".to_string()
+            }
 
             // Reserve Config
             VcApiV1::ReserveConfigCreate => "/open-apis/vc/v1/reserve_configs".to_string(),
@@ -527,6 +596,9 @@ impl VcApiV1 {
             VcApiV1::ReserveConfigList => "/open-apis/vc/v1/reserve_configs".to_string(),
             VcApiV1::ReserveConfigPatch(reserve_config_id) => {
                 format!("/open-apis/vc/v1/reserve_configs/{}", reserve_config_id)
+            }
+            VcApiV1::ReserveConfigAdminPatch(reserve_config_id) => {
+                format!("/open-apis/vc/v1/reserve_configs/{}/admin", reserve_config_id)
             }
 
             // Scope Config
@@ -643,6 +715,14 @@ pub enum MeetingRoomApi {
     /// 批量获取摘要
     /// POST /open-apis/meeting_room/rooms/batch_get_summary
     RoomBatchGetSummary,
+
+    /// 更新会议室（旧版本 API）
+    /// POST /open-apis/meeting_room/room/update
+    RoomUpdate,
+
+    /// 回复会议室日程实例（旧版本 API）
+    /// POST /open-apis/meeting_room/instance/reply
+    InstanceReplyOld,
 }
 
 impl MeetingRoomApi {
@@ -699,6 +779,8 @@ impl MeetingRoomApi {
             MeetingRoomApi::RoomBatchGetSummary => {
                 "/open-apis/meeting_room/rooms/batch_get_summary".to_string()
             }
+            MeetingRoomApi::RoomUpdate => "/open-apis/meeting_room/room/update".to_string(),
+            MeetingRoomApi::InstanceReplyOld => "/open-apis/meeting_room/instance/reply".to_string(),
         }
     }
 }

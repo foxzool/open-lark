@@ -6,10 +6,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
 
 /// 获取会议报告请求
@@ -50,14 +52,21 @@ impl GetDailyReportRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/report/get_daily
     pub async fn execute(self) -> SDKResult<GetDailyReportResponse> {
-        use crate::endpoints::VC_V1_REPORT_DAILY_GET;
+        self.execute_with_options(RequestOption::default()).await
+    }
 
-        let mut req: ApiRequest<GetDailyReportResponse> = ApiRequest::get(VC_V1_REPORT_DAILY_GET);
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<GetDailyReportResponse> {
+        let api_endpoint = VcApiV1::ReportDailyGet;
+        let mut req: ApiRequest<GetDailyReportResponse> = ApiRequest::get(api_endpoint.to_url());
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取会议报告")
     }
 }

@@ -5,8 +5,8 @@
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 use crate::{
+    common::api_endpoints::CalendarApiV4,
     common::api_utils::{extract_response_data, serialize_params},
-    endpoints::CALENDAR_V4_FREEBUSY,
 };
 
 /// 批量查询主日历日程忙闲信息请求
@@ -25,9 +25,9 @@ impl BatchFreebusyRequest {
     ///
     /// docPath: https://open.feishu.cn/document/calendar-v4/calendar/batch
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
-        // url: POST:/open-apis/calendar/v4/freebusy/batch
+        let api_endpoint = CalendarApiV4::FreebusyBatch;
         let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(format!("{}/batch", CALENDAR_V4_FREEBUSY))
+            ApiRequest::post(api_endpoint.to_url())
                 .body(serialize_params(&body, "批量查询主日历日程忙闲信息")?);
 
         let resp = Transport::request(req, &self.config, None).await?;

@@ -2,14 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-acl/unsubscription
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required, SDKResult};
 
-use crate::{
-    common::api_utils::{extract_response_data, serialize_params},
-    endpoints::CALENDAR_V4_CALENDARS,
-};
+use crate::common::api_utils::{extract_response_data, serialize_params};
 
 /// 取消订阅日历访问控制变更事件请求
 pub struct UnsubscriptionCalendarAclRequest {
@@ -37,16 +32,19 @@ impl UnsubscriptionCalendarAclRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-acl/unsubscription
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(RequestOption::default(), body).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(self, option: RequestOption, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         validate_required!(self.calendar_id, "calendar_id 不能为空");
 
         // url: POST:/open-apis/calendar/v4/calendars/:calendar_id/acls/unsubscription
-        let req: ApiRequest<serde_json::Value> = ApiRequest::post(format!(
-            "{}/{}/acls/unsubscription",
-            CALENDAR_V4_CALENDARS, self.calendar_id
-        ))
-        .body(serialize_params(&body, "取消订阅日历访问控制变更事件")?);
+        let url = format!("/open-apis/calendar/v4/calendars/{}/acls/unsubscription", self.calendar_id);
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(url)
+            .body(serialize_params(&body, "取消订阅日历访问控制变更事件")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "取消订阅日历访问控制变更事件")
     }
 }

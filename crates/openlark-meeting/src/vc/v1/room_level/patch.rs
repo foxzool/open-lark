@@ -3,7 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/room_level/patch
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport,
+    req_option::RequestOption, validate_required, SDKResult,
 };
 
 use crate::common::api_utils::{extract_response_data, serialize_params};

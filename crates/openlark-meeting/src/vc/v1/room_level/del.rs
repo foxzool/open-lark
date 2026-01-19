@@ -2,7 +2,8 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/room_level/del
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult,
+    req_option::RequestOption};
 
 use crate::common::api_utils::{extract_response_data, serialize_params};
 use crate::endpoints::VC_V1_ROOM_LEVELS;

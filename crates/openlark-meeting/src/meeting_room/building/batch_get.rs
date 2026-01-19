@@ -2,7 +2,8 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/api-reference/query-building-details
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport,
+    req_option::RequestOption, SDKResult};
 
 use crate::common::api_utils::extract_response_data;
 use crate::endpoints::MEETING_ROOM;
@@ -31,6 +32,14 @@ impl BatchGetBuildingRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/api-reference/query-building-details
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
+
         // url: GET:/open-apis/meeting_room/building/batch_get
         let mut req: ApiRequest<serde_json::Value> =
             ApiRequest::get(format!("{}/building/batch_get", MEETING_ROOM));
@@ -38,7 +47,9 @@ impl BatchGetBuildingRequest {
             req = req.query(k, v);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询建筑物详情")
+
     }
+
 }
