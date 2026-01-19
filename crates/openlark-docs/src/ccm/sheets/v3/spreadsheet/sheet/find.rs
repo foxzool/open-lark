@@ -26,10 +26,28 @@ pub async fn find_cells(
     sheet_id: &str,
     params: FindParams,
 ) -> SDKResult<FindResponse> {
+    find_cells_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        params,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 查找单元格（带选项）
+pub async fn find_cells_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    params: FindParams,
+    option: RequestOption,
+) -> SDKResult<FindResponse> {
     let api_endpoint = SheetsApiV3::FindCells(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<FindResponse> =
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "查找单元格")?);
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "查找单元格")
 }
