@@ -1,4 +1,6 @@
 pub mod v2;
+pub mod wiki;
 
-// Wiki V1 已废弃，使用 ccm::wiki 替代
-// pub mod v1;
+// 重新导出所有 API 函数
+pub use v2::*;
+pub use wiki::*;
