@@ -1,9 +1,9 @@
-//! openlark-communication 链式调用入口（meta 风格，偏“模块入口”）
+//! openlark-communication 链式调用入口（meta 风格，偏"模块入口"）
 //!
 //! 说明：
-//! - 本文件放在 `common/` 下，避免被 strict API 校验脚本计入“额外实现文件”。
+//! - 本文件放在 `common/` 下，避免被 strict API 校验脚本计入"额外实现文件"。
 //! - communication 模块 API 规模较大（IM/Contact/Moments 等）。为避免为大量 API 手写方法，
-//!   这里先提供“bizTag 级入口 + Config 透传”。
+//!   这里先提供"bizTag 级入口 + Config 透传"。
 //! - 具体 API 调用仍使用各 `*RequestBuilder/*Request` 的 `new(config)` / `execute(...)`。
 
 use std::sync::Arc;
@@ -35,7 +35,7 @@ impl CommunicationClient {
             #[cfg(feature = "contact")]
             contact: ContactClient::new(config.clone()),
             #[cfg(feature = "moments")]
-            moments: MomentsClient::new(config),
+            moments: MomentsClient::new(config)
         }
     }
 

@@ -49,6 +49,16 @@ impl UpdateChatRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat/update-2
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<EmptyData> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<EmptyData> {
+
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: PUT:/open-apis/im/v1/chats/:chat_id
@@ -60,7 +70,9 @@ impl UpdateChatRequest {
             req = req.query("user_id_type", user_id_type.as_str());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "更新群信息")
-    }
+}
 }

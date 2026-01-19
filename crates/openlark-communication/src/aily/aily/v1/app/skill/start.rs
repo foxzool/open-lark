@@ -39,6 +39,15 @@ impl StartSkillRequest {
     }
 
     pub async fn execute(self, body: StartSkillBody) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: StartSkillBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.app_id, "app_id 不能为空");
         validate_required!(self.skill_id, "skill_id 不能为空");
 
@@ -47,7 +56,7 @@ impl StartSkillRequest {
             .replace("{skill_id}", &self.skill_id);
         let req: ApiRequest<StartSkillBody> = ApiRequest::post(&url).json_body(&body);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "调用技能")
-    }
+}
 }

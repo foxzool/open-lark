@@ -53,13 +53,20 @@ impl BatchGetDepartmentsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/contact-v3/department/batch
     pub async fn execute(self) -> SDKResult<BatchGetDepartmentsResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<BatchGetDepartmentsResponse> {
         if self.department_ids.is_empty() {
             return Err(error::validation_error(
                 "department_ids 不能为空".to_string(),
                 "请至少传入 1 个 department_ids（最多 50 个）".to_string(),
             ));
         }
-
         // url: GET:/open-apis/contact/v3/departments/batch
         let mut req: ApiRequest<BatchGetDepartmentsResponse> =
             ApiRequest::get(CONTACT_V3_DEPARTMENTS_BATCH);
@@ -74,7 +81,7 @@ impl BatchGetDepartmentsRequest {
             req = req.query("user_id_type", user_id_type.as_str());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "批量获取部门信息")
     }
 }

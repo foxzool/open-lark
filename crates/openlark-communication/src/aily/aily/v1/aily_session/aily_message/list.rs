@@ -33,8 +33,15 @@ impl ListAilyMessagesRequest {
         self.query.insert(key.into(), value.into());
         self
     }
-
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.aily_session_id, "aily_session_id 不能为空");
 
         let url = AILY_V1_MESSAGES.replace("{aily_session_id}", &self.aily_session_id);
@@ -42,8 +49,7 @@ impl ListAilyMessagesRequest {
         for (k, v) in self.query {
             req = req.query(&k, &v);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "列出 Aily 消息")
-    }
+}
 }

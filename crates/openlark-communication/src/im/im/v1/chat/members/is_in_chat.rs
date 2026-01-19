@@ -35,6 +35,14 @@ impl IsInChatRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat-member/is_in_chat
     pub async fn execute(self) -> SDKResult<IsInChatResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<IsInChatResponse> {
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: GET:/open-apis/im/v1/chats/:chat_id/members/is_in_chat
@@ -43,7 +51,7 @@ impl IsInChatRequest {
             IM_V1_CHATS, self.chat_id
         ));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "判断用户或机器人是否在群里")
     }
 }

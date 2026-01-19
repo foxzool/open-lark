@@ -33,13 +33,21 @@ impl DeleteMessageRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/message/delete
     pub async fn execute(self) -> SDKResult<EmptyData> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<EmptyData> {
         validate_required!(self.message_id, "message_id 不能为空");
 
         // url: DELETE:/open-apis/im/v1/messages/:message_id
         let req: ApiRequest<EmptyData> =
             ApiRequest::delete(format!("{}/{}", IM_V1_MESSAGES, self.message_id));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "撤回消息")
     }
 }

@@ -36,6 +36,16 @@ impl DeleteChatTabsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat-tab/delete_tabs
     pub async fn execute(self, body: TabIdsBody) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: TabIdsBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+
         validate_required!(self.chat_id, "chat_id 不能为空");
         if body.tab_ids.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -51,7 +61,9 @@ impl DeleteChatTabsRequest {
         ))
         .body(serialize_params(&body, "删除会话标签页")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "删除会话标签页")
-    }
+}
 }

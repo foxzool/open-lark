@@ -59,6 +59,14 @@ impl ReadMessageUsersRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/message/read_users
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.message_id, "message_id 不能为空");
 
         // url: GET:/open-apis/im/v1/messages/:message_id/read_users
@@ -75,8 +83,7 @@ impl ReadMessageUsersRequest {
         if let Some(page_token) = self.page_token {
             req = req.query("page_token", page_token);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询消息已读信息")
     }
 }

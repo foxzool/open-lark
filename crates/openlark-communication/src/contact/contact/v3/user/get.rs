@@ -53,6 +53,14 @@ impl GetUserRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/get
     pub async fn execute(self) -> SDKResult<UserResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<UserResponse> {
         validate_required!(self.user_id, "user_id 不能为空");
 
         // url: GET:/open-apis/contact/v3/users/:user_id
@@ -65,8 +73,7 @@ impl GetUserRequest {
         if let Some(department_id_type) = self.department_id_type {
             req = req.query("department_id_type", department_id_type.as_str());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取单个用户信息")
     }
 }

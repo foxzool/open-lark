@@ -35,13 +35,21 @@ impl GetJobTitleRequest {
     ///
     /// docPath: https://open.feishu.cn/document/contact-v3/job_title/get
     pub async fn execute(self) -> SDKResult<JobTitleResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<JobTitleResponse> {
         validate_required!(self.job_title_id, "job_title_id 不能为空");
 
         // url: GET:/open-apis/contact/v3/job_titles/:job_title_id
         let req: ApiRequest<JobTitleResponse> =
             ApiRequest::get(format!("{}/{}", CONTACT_V3_JOB_TITLES, self.job_title_id));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取单个职务信息")
     }
 }

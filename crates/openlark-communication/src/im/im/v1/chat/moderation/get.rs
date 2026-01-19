@@ -62,6 +62,14 @@ impl GetChatModerationRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat/get
     pub async fn execute(self) -> SDKResult<GetChatModerationResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<GetChatModerationResponse> {
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: GET:/open-apis/im/v1/chats/:chat_id/moderation
@@ -77,8 +85,7 @@ impl GetChatModerationRequest {
         if let Some(page_token) = self.page_token {
             req = req.query("page_token", page_token);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取群成员发言权限")
     }
 }

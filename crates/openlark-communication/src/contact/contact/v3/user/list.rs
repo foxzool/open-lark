@@ -89,7 +89,14 @@ impl ListUsersRequest {
     ///
     /// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/list
     pub async fn execute(self) -> SDKResult<ListUsersResponse> {
-        // url: GET:/open-apis/contact/v3/users
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListUsersResponse> {
         let mut req: ApiRequest<ListUsersResponse> = ApiRequest::get(CONTACT_V3_USERS);
 
         if let Some(user_id_type) = self.user_id_type {
@@ -107,8 +114,7 @@ impl ListUsersRequest {
         if let Some(page_size) = self.page_size {
             req = req.query("page_size", page_size.to_string());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取用户列表")
     }
 }

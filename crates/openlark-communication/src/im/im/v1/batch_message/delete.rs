@@ -35,6 +35,14 @@ impl DeleteBatchMessageRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/batch_message/delete
     pub async fn execute(self) -> SDKResult<EmptyData> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<EmptyData> {
         validate_required!(self.batch_message_id, "batch_message_id 不能为空");
 
         // url: DELETE:/open-apis/im/v1/batch_messages/:batch_message_id
@@ -43,7 +51,7 @@ impl DeleteBatchMessageRequest {
             IM_V1_BATCH_MESSAGES, self.batch_message_id
         ));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "批量撤回消息")
     }
 }

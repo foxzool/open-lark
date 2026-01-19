@@ -32,13 +32,21 @@ impl GetImageRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/image/get
     pub async fn execute(self) -> SDKResult<Vec<u8>> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<Vec<u8>> {
         validate_required!(self.image_key, "image_key 不能为空");
 
         // url: GET:/open-apis/im/v1/images/:image_key
         let req: ApiRequest<Vec<u8>> =
             ApiRequest::get(format!("{}/{}", IM_V1_IMAGES, self.image_key));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "下载图片")
     }
 }

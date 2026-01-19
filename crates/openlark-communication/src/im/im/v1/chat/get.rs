@@ -43,6 +43,14 @@ impl GetChatRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat/get-2
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: GET:/open-apis/im/v1/chats/:chat_id
@@ -52,8 +60,7 @@ impl GetChatRequest {
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取群信息")
     }
 }

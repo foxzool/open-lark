@@ -2,7 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/find_by_department
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, config::Config, error, http::Transport, SDKResult};
 
 use crate::{
     common::api_utils::extract_response_data,
@@ -67,8 +67,16 @@ impl FindUsersByDepartmentRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/find_by_department
     pub async fn execute(self) -> SDKResult<ListUsersResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListUsersResponse> {
         let department_id = self.department_id.ok_or_else(|| {
-            openlark_core::error::validation_error(
+            error::validation_error(
                 "department_id 不能为空".to_string(),
                 "department_id 为必填查询参数".to_string(),
             )
@@ -91,8 +99,7 @@ impl FindUsersByDepartmentRequest {
         if let Some(page_token) = self.page_token {
             req = req.query("page_token", page_token);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取部门直属用户列表")
     }
 }

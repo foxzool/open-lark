@@ -70,6 +70,16 @@ impl SearchDepartmentsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/department/search
     pub async fn execute(self, body: SearchDepartmentsBody) -> SDKResult<DepartmentListResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: SearchDepartmentsBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DepartmentListResponse> {
+
         validate_required!(body.query, "query 不能为空");
         if body.query.trim().is_empty() {
             return Err(error::validation_error(
@@ -104,7 +114,9 @@ impl SearchDepartmentsRequest {
             req = req.query("page_size", page_size.to_string());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "搜索部门")
-    }
+}
 }

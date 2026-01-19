@@ -33,12 +33,21 @@ impl AskKnowledgeRequest {
     }
 
     pub async fn execute(self, body: AskKnowledgeBody) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: AskKnowledgeBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.app_id, "app_id 不能为空");
 
         let url = AILY_V1_KNOWLEDGE_ASK.replace("{app_id}", &self.app_id);
         let req: ApiRequest<AskKnowledgeBody> = ApiRequest::post(&url).json_body(&body);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "执行数据知识问答")
-    }
+}
 }

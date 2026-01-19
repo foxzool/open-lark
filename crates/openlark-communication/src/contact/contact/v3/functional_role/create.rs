@@ -36,13 +36,25 @@ impl CreateFunctionalRoleRequest {
         self,
         body: CreateFunctionalRoleBody,
     ) -> SDKResult<CreateFunctionalRoleResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: CreateFunctionalRoleBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateFunctionalRoleResponse> {
+
         validate_required!(body.role_name, "role_name 不能为空");
 
         // url: POST:/open-apis/contact/v3/functional_roles
         let req: ApiRequest<CreateFunctionalRoleResponse> =
             ApiRequest::post(CONTACT_V3_FUNCTIONAL_ROLES)
                 .body(serialize_params(&body, "创建角色")?);
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "创建角色")
-    }
+}
 }

@@ -39,6 +39,16 @@ impl BindDepartmentRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/unit/bind_department
     pub async fn execute(self, body: BindDepartmentBody) -> SDKResult<EmptyData> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: BindDepartmentBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<EmptyData> {
+
         validate_required!(body.unit_id, "unit_id 不能为空");
         validate_required!(body.department_id, "department_id 不能为空");
 
@@ -46,7 +56,9 @@ impl BindDepartmentRequest {
         let req: ApiRequest<EmptyData> = ApiRequest::post(CONTACT_V3_UNIT_BIND_DEPARTMENT)
             .body(serialize_params(&body, "建立部门与单位的绑定关系")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "建立部门与单位的绑定关系")
-    }
+}
 }

@@ -42,13 +42,25 @@ impl CreateJobFamilyRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/job_family/create
     pub async fn execute(self, body: CreateJobFamilyBody) -> SDKResult<JobFamilyResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: CreateJobFamilyBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<JobFamilyResponse> {
+
         validate_required!(body.name, "name 不能为空");
 
         // url: POST:/open-apis/contact/v3/job_families
         let req: ApiRequest<JobFamilyResponse> =
             ApiRequest::post(CONTACT_V3_JOB_FAMILIES).body(serialize_params(&body, "创建序列")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "创建序列")
-    }
+}
 }

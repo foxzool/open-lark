@@ -25,12 +25,21 @@ impl CreateSessionRequest {
     }
 
     pub async fn execute(self, body: CreateSessionBody) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: CreateSessionBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(body.name, "name 不能为空");
 
         let req: ApiRequest<CreateSessionBody> =
             ApiRequest::post(AILY_V1_SESSIONS).json_body(&body);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "创建会话")
-    }
+}
 }

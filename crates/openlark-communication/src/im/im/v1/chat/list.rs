@@ -58,7 +58,14 @@ impl ListChatsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat/list
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        // url: GET:/open-apis/im/v1/chats
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(IM_V1_CHATS);
 
         if let Some(user_id_type) = self.user_id_type {
@@ -73,8 +80,7 @@ impl ListChatsRequest {
         if let Some(page_size) = self.page_size {
             req = req.query("page_size", page_size.to_string());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取用户或机器人所在的群列表")
     }
 }

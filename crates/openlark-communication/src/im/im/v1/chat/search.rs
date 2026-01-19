@@ -57,7 +57,14 @@ impl SearchChatsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat/search
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        // url: GET:/open-apis/im/v1/chats/search
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         let mut req: ApiRequest<serde_json::Value> =
             ApiRequest::get(format!("{}/search", IM_V1_CHATS));
 
@@ -73,8 +80,7 @@ impl SearchChatsRequest {
         if let Some(page_size) = self.page_size {
             req = req.query("page_size", page_size.to_string());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "搜索对用户或机器人可见的群列表")
     }
 }

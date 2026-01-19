@@ -86,6 +86,15 @@ impl CreateDepartmentRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/department/create
     pub async fn execute(self, body: CreateDepartmentBody) -> SDKResult<DepartmentResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: CreateDepartmentBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DepartmentResponse> {
         validate_required!(body.name, "name 不能为空");
         validate_required!(body.parent_department_id, "parent_department_id 不能为空");
         if body.name.contains('/') {
@@ -109,7 +118,7 @@ impl CreateDepartmentRequest {
             req = req.query("client_token", client_token);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "创建部门")
     }
 }

@@ -60,6 +60,16 @@ impl PushFollowUpRequest {
     ///
     /// docPath: https://open.feishu.cn/document/im-v1/message/push_follow_up
     pub async fn execute(self, body: PushFollowUpBody) -> SDKResult<EmptyData> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: PushFollowUpBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<EmptyData> {
+
         validate_required!(self.message_id, "message_id 不能为空");
         if body.follow_ups.is_empty() {
             return Err(error::validation_error(
@@ -75,7 +85,9 @@ impl PushFollowUpRequest {
         ))
         .body(serialize_params(&body, "添加跟随气泡")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "添加跟随气泡")
-    }
+}
 }

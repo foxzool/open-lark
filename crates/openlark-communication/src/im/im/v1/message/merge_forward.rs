@@ -52,6 +52,16 @@ impl MergeForwardMessageRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/message/merge_forward
     pub async fn execute(self, body: MergeForwardMessageBody) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: MergeForwardMessageBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+
         validate_required!(body.receive_id, "receive_id 不能为空");
         if body.message_id_list.is_empty() {
             return Err(error::validation_error(
@@ -76,7 +86,9 @@ impl MergeForwardMessageRequest {
             req = req.query("uuid", uuid);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "合并转发消息")
-    }
+}
 }

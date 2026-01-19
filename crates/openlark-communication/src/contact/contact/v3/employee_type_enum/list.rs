@@ -42,7 +42,14 @@ impl ListEmployeeTypeEnumsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/employee_type_enum/list
     pub async fn execute(self) -> SDKResult<ListEmployeeTypeEnumsResponse> {
-        // url: GET:/open-apis/contact/v3/employee_type_enums
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListEmployeeTypeEnumsResponse> {
         let mut req: ApiRequest<ListEmployeeTypeEnumsResponse> =
             ApiRequest::get(CONTACT_V3_EMPLOYEE_TYPE_ENUMS);
 
@@ -52,8 +59,7 @@ impl ListEmployeeTypeEnumsRequest {
         if let Some(page_size) = self.page_size {
             req = req.query("page_size", page_size.to_string());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询人员类型")
     }
 }

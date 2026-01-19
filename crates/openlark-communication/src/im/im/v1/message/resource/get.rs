@@ -64,6 +64,14 @@ impl GetMessageResourceRequest {
     ///
     /// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get
     pub async fn execute(self) -> SDKResult<Vec<u8>> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<Vec<u8>> {
         validate_required!(self.message_id, "message_id 不能为空");
         validate_required!(self.file_key, "file_key 不能为空");
         let resource_type = self.resource_type.ok_or_else(|| {
@@ -80,7 +88,7 @@ impl GetMessageResourceRequest {
         ))
         .query("type", resource_type.as_str());
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取消息中的资源文件")
     }
 }

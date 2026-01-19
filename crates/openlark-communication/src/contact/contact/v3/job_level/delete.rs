@@ -35,13 +35,21 @@ impl DeleteJobLevelRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/job_level/delete
     pub async fn execute(self) -> SDKResult<EmptyData> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<EmptyData> {
         validate_required!(self.job_level_id, "job_level_id 不能为空");
 
         // url: DELETE:/open-apis/contact/v3/job_levels/:job_level_id
         let req: ApiRequest<EmptyData> =
             ApiRequest::delete(format!("{}/{}", CONTACT_V3_JOB_LEVELS, self.job_level_id));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "删除职级")
     }
 }

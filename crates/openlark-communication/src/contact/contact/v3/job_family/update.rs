@@ -56,6 +56,16 @@ impl UpdateJobFamilyRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/job_family/update
     pub async fn execute(self, body: UpdateJobFamilyBody) -> SDKResult<JobFamilyResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: UpdateJobFamilyBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<JobFamilyResponse> {
+
         validate_required!(self.job_family_id, "job_family_id 不能为空");
 
         // url: PUT:/open-apis/contact/v3/job_families/:job_family_id
@@ -65,7 +75,9 @@ impl UpdateJobFamilyRequest {
         ))
         .body(serialize_params(&body, "更新序列")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "更新序列")
-    }
+}
 }

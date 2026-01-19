@@ -32,12 +32,19 @@ impl GetBatchTaskRequest {
     ///
     /// docPath: https://open.feishu.cn/document/ukTMukTMukTM/uUDOwUjL1gDM14SN4ATN
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        // url: GET:/open-apis/contact/v2/task/get
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(CONTACT_V2_TASK_GET);
         for (k, v) in self.query {
             req = req.query(k, v);
         }
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询批量任务执行状态")
     }
 }

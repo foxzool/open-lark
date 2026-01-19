@@ -36,6 +36,16 @@ impl DeleteChatMenuTreeRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat-menu_tree/delete
     pub async fn execute(self, body: ChatMenuTopLevelIdsBody) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: ChatMenuTopLevelIdsBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+
         validate_required!(self.chat_id, "chat_id 不能为空");
         if body.chat_menu_top_level_ids.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -49,7 +59,9 @@ impl DeleteChatMenuTreeRequest {
             ApiRequest::delete(format!("{}/{}/menu_tree", IM_V1_CHATS, self.chat_id))
                 .body(serialize_params(&body, "删除群菜单")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "删除群菜单")
-    }
+}
 }

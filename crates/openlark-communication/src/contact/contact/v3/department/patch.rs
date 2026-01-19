@@ -57,6 +57,16 @@ impl PatchDepartmentRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/department/patch
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<DepartmentResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DepartmentResponse> {
+
         validate_required!(self.department_id, "department_id 不能为空");
 
         // url: PATCH:/open-apis/contact/v3/departments/:department_id
@@ -71,7 +81,9 @@ impl PatchDepartmentRequest {
             req = req.query("department_id_type", department_id_type.as_str());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "修改部门部分信息")
-    }
+}
 }
