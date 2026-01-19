@@ -13,7 +13,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 
 use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
@@ -92,8 +92,8 @@ pub async fn read_single_range(
     params: ReadSingleRangeParams,
 ) -> SDKResult<ReadSingleRangeResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("数据范围", Some(&params.value_range), "数据范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.value_range, "数据范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::ReadSingleRange(spreadsheet_token.to_string());
@@ -119,7 +119,7 @@ pub async fn read_multiple_ranges(
     params: ReadMultipleRangesParams,
 ) -> SDKResult<ReadMultipleRangesResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
 
     if params.ranges.is_empty() {
         return Err(openlark_core::error::CoreError::validation(
@@ -156,8 +156,8 @@ pub async fn write_single_range(
     params: WriteSingleRangeParams,
 ) -> SDKResult<WriteSingleRangeResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("数据范围", Some(&params.range), "数据范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "数据范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::WriteSingleRange(spreadsheet_token.to_string());
@@ -181,7 +181,7 @@ pub async fn batch_write_ranges(
     params: BatchWriteRangesParams,
 ) -> SDKResult<BatchWriteRangesResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
 
     if params.data.is_empty() {
         return Err(openlark_core::error::CoreError::validation(
@@ -212,8 +212,8 @@ pub async fn append_values(
     params: AppendValuesParams,
 ) -> SDKResult<AppendValuesResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("追加范围", Some(&params.range), "追加范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "追加范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::AppendValues(spreadsheet_token.to_string());
@@ -237,8 +237,8 @@ pub async fn insert_values(
     params: InsertValuesParams,
 ) -> SDKResult<InsertValuesResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("插入范围", Some(&params.range), "插入范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "插入范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::InsertValues(spreadsheet_token.to_string());
@@ -262,8 +262,8 @@ pub async fn values_image(
     params: ValuesImageParams,
 ) -> SDKResult<ValuesImageResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("图片范围", Some(&params.range), "图片范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "图片范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::ValuesImage(spreadsheet_token.to_string());

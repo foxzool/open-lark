@@ -70,6 +70,15 @@ impl ListWikiSpaceNodesRequest {
         self,
         params: Option<ListWikiSpaceNodesParams>,
     ) -> SDKResult<ListWikiSpaceNodesResponse> {
+        self.execute_with_options(params, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        params: Option<ListWikiSpaceNodesParams>,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListWikiSpaceNodesResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
 
@@ -94,7 +103,7 @@ impl ListWikiSpaceNodesRequest {
         }
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取知识空间节点列表")
     }
 }

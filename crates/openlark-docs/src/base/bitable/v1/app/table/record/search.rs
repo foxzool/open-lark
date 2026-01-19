@@ -7,6 +7,7 @@ use openlark_core::{
     config::Config,
     error::{validation_error, SDKResult},
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -90,10 +91,18 @@ impl SearchRecordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<SearchRecordResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<SearchRecordResponse> {
         use crate::common::{api_endpoints::BitableApiV1, api_utils::*};
 
-        validate_required_field("app_token", Some(&self.app_token), "app_token 不能为空")?;
-        validate_required_field("table_id", Some(&self.table_id), "table_id 不能为空")?;
+        validate_required!(self.app_token.trim(), "app_token 不能为空");
+        validate_required!(self.table_id.trim(), "table_id 不能为空");
 
         if let Some(page_size) = self.page_size {
             if page_size <= 0 {
@@ -110,7 +119,7 @@ impl SearchRecordRequest {
             .query_opt("page_size", self.page_size.map(|v| v.to_string()))
             .body(serialize_params(&self.body, "查询记录")?);
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "查询记录")
     }
 

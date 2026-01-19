@@ -3,7 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/patch
 
 use openlark_core::{
-    api::ApiRequest, config::Config, error::validation_error, http::Transport, SDKResult,
+    api::ApiRequest,
+    config::Config,
+    http::Transport,
+    SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -54,22 +58,13 @@ pub async fn patch_subscription(
     config: &Config,
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<PatchSubscriptionResponse> {
-    if request.file_token.trim().is_empty() {
-        return Err(validation_error("file_token", "file_token 不能为空"));
-    }
-    if request.subscription_id.trim().is_empty() {
-        return Err(validation_error(
-            "subscription_id",
-            "subscription_id 不能为空",
-        ));
-    }
-    if request.file_type.trim().is_empty() {
-        return Err(validation_error("file_type", "file_type 不能为空"));
-    }
+    validate_required!(request.file_token.trim(), "file_token 不能为空");
+    validate_required!(request.subscription_id.trim(), "subscription_id 不能为空");
+    validate_required!(request.file_type.trim(), "file_type 不能为空");
     match request.file_type.as_str() {
         "doc" | "docx" | "wiki" => {}
         _ => {
-            return Err(validation_error(
+            return Err(openlark_core::error::validation_error(
                 "file_type",
                 "file_type 仅支持 doc/docx/wiki",
             ));

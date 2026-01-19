@@ -5,8 +5,7 @@ pub mod patch;
 use openlark_core::config::Config;
 // 明确导出以避免模糊重导出
 pub use list::{
-    FormFieldQuestion, ListFormFieldQuestionRequest, ListFormFieldQuestionRequestBuilder,
-    ListFormFieldQuestionResponse,
+    FormFieldQuestion, ListFormFieldQuestionRequest, ListFormFieldQuestionResponse,
 };
 pub use models::PatchFormFieldRequest;
 pub use patch::{
@@ -28,8 +27,8 @@ impl FormFieldService {
         &self.config
     }
 
-    pub fn list(&self) -> ListFormFieldQuestionRequestBuilder {
-        ListFormFieldQuestionRequestBuilder::new(self.config.clone())
+    pub fn list(&self) -> ListFormFieldQuestionRequest {
+        ListFormFieldQuestionRequest::new(self.config.clone())
     }
 
     pub fn patch(&self) -> PatchFormFieldQuestionBuilder {

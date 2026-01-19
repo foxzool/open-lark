@@ -60,6 +60,14 @@ impl ListPermissionMembersRequest {
     }
 
     pub async fn execute(self) -> SDKResult<ListPermissionMembersResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<ListPermissionMembersResponse> {
+
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -107,9 +115,10 @@ impl ListPermissionMembersRequest {
             api_request = api_request.query("perm_type", perm_type);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "获取云文档协作者")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "列表")
+        }
 }
 
 /// 获取协作者列表响应

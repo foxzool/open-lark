@@ -58,6 +58,14 @@ impl UploadPartRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UploadPartResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<UploadPartResponse> {
         if self.upload_id.trim().is_empty() {
             return Err(openlark_core::error::validation_error(
                 "upload_id",
@@ -112,7 +120,7 @@ impl UploadPartRequest {
             .json_body(&meta)
             .file_content(self.file);
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "分片上传文件-上传分片")
     }
 }

@@ -51,6 +51,14 @@ impl GetWikiSpaceRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<GetWikiSpaceResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<GetWikiSpaceResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
 
@@ -61,7 +69,7 @@ impl GetWikiSpaceRequest {
         let api_request: ApiRequest<GetWikiSpaceResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取知识空间信息")
     }
 }

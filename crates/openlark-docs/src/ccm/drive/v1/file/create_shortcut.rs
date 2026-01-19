@@ -109,6 +109,14 @@ impl CreateFileShortcutRequest {
 
     /// 执行创建文件快捷方式操作
     pub async fn execute(self) -> SDKResult<CreateFileShortcutResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateFileShortcutResponse> {
         if self.parent_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "parent_token",
@@ -157,7 +165,7 @@ impl CreateFileShortcutRequest {
 
         request = request.body(serialize_params(&self, "创建文件快捷方式")?);
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "创建文件快捷方式")
     }
 }

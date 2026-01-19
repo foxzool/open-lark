@@ -73,6 +73,15 @@ impl CopyWikiSpaceNodeRequest {
         self,
         params: CopyWikiSpaceNodeParams,
     ) -> SDKResult<CopyWikiSpaceNodeResponse> {
+        self.execute_with_options(params, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        params: CopyWikiSpaceNodeParams,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CopyWikiSpaceNodeResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
         validate_required!(self.node_token, "节点Token不能为空");
@@ -88,7 +97,7 @@ impl CopyWikiSpaceNodeRequest {
                 .body(serialize_params(&params, "创建知识空间节点副本")?);
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "创建知识空间节点副本")
     }
 }

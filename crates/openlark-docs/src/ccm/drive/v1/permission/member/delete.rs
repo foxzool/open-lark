@@ -75,6 +75,14 @@ impl DeletePermissionMemberRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeletePermissionMemberResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<DeletePermissionMemberResponse> {
+
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -176,9 +184,10 @@ impl DeletePermissionMemberRequest {
                 .query("member_type", &self.member_type)
                 .body(serialize_params(&body, "移除云文档协作者权限")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "移除云文档协作者权限")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "删除")
+        }
 }
 
 /// 移除协作者权限响应

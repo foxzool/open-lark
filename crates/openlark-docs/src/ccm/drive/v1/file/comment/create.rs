@@ -3,8 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/create
 
 use openlark_core::{
-    api::ApiRequest, config::Config, error::validation_error, http::Transport, SDKResult,
-};
+    api::ApiRequest,
+    config::Config,
+    http::Transport,
+    SDKResult,
+    };
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -57,14 +60,14 @@ pub async fn create_comment(
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<Comment> {
     if request.file_token.trim().is_empty() {
-        return Err(validation_error("file_token", "file_token 不能为空"));
+        return Err(openlark_core::error::validation_error("file_token", "file_token 不能为空"));
     }
     if request.file_type.trim().is_empty() {
-        return Err(validation_error("file_type", "file_type 不能为空"));
+        return Err(openlark_core::error::validation_error("file_type", "file_type 不能为空"));
     }
     super::validate_comment_file_type_for_create(&request.file_type)?;
     if request.reply_list.replies.is_empty() {
-        return Err(validation_error(
+        return Err(openlark_core::error::validation_error(
             "reply_list",
             "reply_list.replies 不能为空",
         ));

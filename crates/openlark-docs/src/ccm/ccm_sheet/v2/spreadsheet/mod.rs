@@ -8,7 +8,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 
 use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
@@ -63,7 +63,7 @@ pub async fn get_spreadsheet(
     params: GetSpreadsheetParams,
 ) -> SDKResult<GetSpreadsheetResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::GetSpreadsheet(spreadsheet_token.to_string());
@@ -86,7 +86,7 @@ pub async fn create_spreadsheet(
     params: CreateSpreadsheetParams,
 ) -> SDKResult<CreateSpreadsheetResponse> {
     // 验证必填字段
-    validate_required_field("表格标题", Some(&params.title), "表格标题不能为空")?;
+    validate_required!(params.title.trim(), "表格标题不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::CreateSpreadsheet;
@@ -110,7 +110,7 @@ pub async fn update_spreadsheet(
     params: UpdateSpreadsheetParams,
 ) -> SDKResult<UpdateSpreadsheetResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::UpdateSpreadsheet(spreadsheet_token.to_string());

@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -55,15 +56,9 @@ impl DeleteRoleMemberRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeleteRoleMemberResponse> {
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "app_token 不能为空"));
-        }
-        if self.role_id.trim().is_empty() {
-            return Err(validation_error("role_id", "role_id 不能为空"));
-        }
-        if self.member_id.trim().is_empty() {
-            return Err(validation_error("member_id", "member_id 不能为空"));
-        }
+        validate_required!(self.app_token.trim(), "app_token");
+        validate_required!(self.role_id.trim(), "role_id");
+        validate_required!(self.member_id.trim(), "member_id");
 
         use crate::common::api_endpoints::BitableApiV1;
         let api_endpoint = BitableApiV1::RoleMemberDelete(
@@ -90,46 +85,13 @@ impl DeleteRoleMemberRequest {
         let response = Transport::request(api_request, &self.config, None).await?;
         response
             .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 
-/// 删除协作者 Builder
-pub struct DeleteRoleMemberRequestBuilder {
-    request: DeleteRoleMemberRequest,
-}
 
-impl DeleteRoleMemberRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: DeleteRoleMemberRequest::new(config),
-        }
-    }
 
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    pub fn role_id(mut self, role_id: String) -> Self {
-        self.request = self.request.role_id(role_id);
-        self
-    }
-
-    pub fn member_id(mut self, member_id: String) -> Self {
-        self.request = self.request.member_id(member_id);
-        self
-    }
-
-    pub fn member_id_type(mut self, member_id_type: RoleMemberIdType) -> Self {
-        self.request = self.request.member_id_type(member_id_type);
-        self
-    }
-
-    pub fn build(self) -> DeleteRoleMemberRequest {
-        self.request
-    }
-}
 
 /// 删除协作者响应（data 为 {}）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

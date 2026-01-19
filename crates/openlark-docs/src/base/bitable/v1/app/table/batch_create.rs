@@ -60,6 +60,14 @@ impl BatchCreateTableRequest {
     }
 
     pub async fn execute(self) -> SDKResult<BatchCreateTableResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<BatchCreateTableResponse> {
         validate_required!(self.app_token, "app_token 不能为空");
         if self.tables.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -85,49 +93,16 @@ impl BatchCreateTableRequest {
         api_request = api_request.query_opt("user_id_type", self.user_id_type);
         api_request = api_request.query_opt("client_token", self.client_token);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 
-/// 批量新增数据表 Builder
-pub struct BatchCreateTableRequestBuilder {
-    request: BatchCreateTableRequest,
-}
 
-impl BatchCreateTableRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: BatchCreateTableRequest::new(config),
-        }
-    }
 
-    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
-    pub fn client_token(mut self, client_token: impl Into<String>) -> Self {
-        self.request = self.request.client_token(client_token);
-        self
-    }
-
-    pub fn tables(mut self, tables: Vec<TableData>) -> Self {
-        self.request = self.request.tables(tables);
-        self
-    }
-
-    pub fn build(self) -> BatchCreateTableRequest {
-        self.request
-    }
-}
 
 #[derive(Debug, Serialize)]
 struct BatchCreateTableRequestBody {

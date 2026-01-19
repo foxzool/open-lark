@@ -84,6 +84,19 @@ pub async fn update_permission_public(
     request: UpdatePermissionPublicRequest,
     config: &Config,
 ) -> SDKResult<UpdatePermissionPublicResponse> {
+    update_permission_public_with_options(
+        request,
+        config,
+        openlark_core::req_option::RequestOption::default(),
+    )
+    .await
+}
+
+pub async fn update_permission_public_with_options(
+    request: UpdatePermissionPublicRequest,
+    config: &Config,
+    option: openlark_core::req_option::RequestOption,
+) -> SDKResult<UpdatePermissionPublicResponse> {
     if request.token.is_empty() {
         return Err(openlark_core::error::validation_error(
             "token",
@@ -114,6 +127,6 @@ pub async fn update_permission_public(
             .query("type", &request.r#type)
             .body(serialize_params(&body, "更新云文档权限设置")?);
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "更新云文档权限设置")
 }

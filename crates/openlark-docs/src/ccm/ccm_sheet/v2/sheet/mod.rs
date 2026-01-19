@@ -9,7 +9,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 
 use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
@@ -70,8 +70,8 @@ pub async fn add_sheet(
     params: AddSheetParams,
 ) -> SDKResult<AddSheetResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("工作表标题", Some(&params.title), "工作表标题不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.title.trim(), "工作表标题不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::AddSheet(spreadsheet_token.to_string());
@@ -95,8 +95,8 @@ pub async fn get_sheet(
     params: GetSheetParams,
 ) -> SDKResult<GetSheetResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.sheet_id.trim(), "工作表ID不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::GetSheet(spreadsheet_token.to_string());
@@ -120,8 +120,8 @@ pub async fn update_sheet(
     params: UpdateSheetParams,
 ) -> SDKResult<UpdateSheetResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.sheet_id.trim(), "工作表ID不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::UpdateSheet(spreadsheet_token.to_string());
@@ -145,8 +145,8 @@ pub async fn delete_sheet(
     params: DeleteSheetParams,
 ) -> SDKResult<DeleteSheetResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.sheet_id.trim(), "工作表ID不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::DeleteSheet(spreadsheet_token.to_string());

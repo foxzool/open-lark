@@ -14,7 +14,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 
 use crate::common::{api_endpoints::CcmDriveExplorerApiOld, api_utils::*};
@@ -86,7 +86,7 @@ pub async fn get_folder_meta(
     folder_token: &str,
 ) -> SDKResult<FolderMetaResponse> {
     // 验证必填字段
-    validate_required_field("文件夹Token", Some(folder_token), "文件夹Token不能为空")?;
+    validate_required!(folder_token.trim(), "文件夹Token不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmDriveExplorerApiOld::FolderMeta(folder_token.to_string());
@@ -110,9 +110,9 @@ pub async fn create_file(
     params: CreateFileParams,
 ) -> SDKResult<CreateFileResponse> {
     // 验证必填字段
-    validate_required_field("文件夹Token", Some(folder_token), "文件夹Token不能为空")?;
-    validate_required_field("文件标题", Some(&params.title), "文件标题不能为空")?;
-    validate_required_field("文件类型", Some(&params.parent_type), "文件类型不能为空")?;
+    validate_required!(folder_token.trim(), "文件夹Token不能为空");
+    validate_required!(params.title.trim(), "文件标题不能为空");
+    validate_required!(params.parent_type.trim(), "文件类型不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmDriveExplorerApiOld::File(folder_token.to_string());
@@ -137,8 +137,8 @@ pub async fn copy_file(
     params: CopyFileParams,
 ) -> SDKResult<CopyFileResponse> {
     // 验证必填字段
-    validate_required_field("文件Token", Some(file_token), "文件Token不能为空")?;
-    validate_required_field("目标文件夹Token", Some(&params.folder_token), "目标文件夹Token不能为空")?;
+    validate_required!(file_token.trim(), "文件Token不能为空");
+    validate_required!(params.folder_token.trim(), "目标文件夹Token不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmDriveExplorerApiOld::FileCopy(file_token.to_string());
@@ -162,7 +162,7 @@ pub async fn delete_doc(
     doc_token: &str,
 ) -> SDKResult<DeleteFileResponse> {
     // 验证必填字段
-    validate_required_field("文档Token", Some(doc_token), "文档Token不能为空")?;
+    validate_required!(doc_token.trim(), "文档Token不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmDriveExplorerApiOld::FileDocs(doc_token.to_string());
@@ -185,7 +185,7 @@ pub async fn delete_sheet(
     spreadsheet_token: &str,
 ) -> SDKResult<DeleteFileResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmDriveExplorerApiOld::FileSpreadsheets(spreadsheet_token.to_string());
@@ -209,7 +209,7 @@ pub async fn get_folder_children(
     params: Option<GetFolderChildrenParams>,
 ) -> SDKResult<GetFolderChildrenResponse> {
     // 验证必填字段
-    validate_required_field("文件夹Token", Some(folder_token), "文件夹Token不能为空")?;
+    validate_required!(folder_token.trim(), "文件夹Token不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmDriveExplorerApiOld::FolderChildren(folder_token.to_string());
@@ -237,8 +237,8 @@ pub async fn create_folder(
     params: CreateFolderParams,
 ) -> SDKResult<CreateFolderResponse> {
     // 验证必填字段
-    validate_required_field("父文件夹Token", Some(folder_token), "父文件夹Token不能为空")?;
-    validate_required_field("文件夹标题", Some(&params.title), "文件夹标题不能为空")?;
+    validate_required!(folder_token.trim(), "父文件夹Token不能为空");
+    validate_required!(params.title.trim(), "文件夹标题不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmDriveExplorerApiOld::Folder(folder_token.to_string());

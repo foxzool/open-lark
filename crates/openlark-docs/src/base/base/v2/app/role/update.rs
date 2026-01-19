@@ -96,6 +96,14 @@ impl Update {
     }
 
     pub async fn execute(self) -> SDKResult<UpdateResp> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<UpdateResp> {
         validate_required!(self.app_token, "app_token 不能为空");
         validate_required!(self.role_id, "role_id 不能为空");
         validate_required!(self.req.role_name, "role_name 不能为空");
@@ -120,7 +128,7 @@ impl Update {
         let api_request: ApiRequest<UpdateResp> = ApiRequest::put(&api_endpoint.to_url())
             .body(serialize_params(&self.req, "更新自定义角色")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "更新自定义角色")
     }
 }

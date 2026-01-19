@@ -108,6 +108,14 @@ impl SearchWikiRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<SearchWikiResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<SearchWikiResponse> {
+
         validate_required!(self.query, "搜索关键词不能为空");
 
         let api_endpoint = WikiApiV1::NodeSearch;
@@ -123,9 +131,10 @@ impl SearchWikiRequest {
         let api_request: ApiRequest<SearchWikiResponse> = ApiRequest::post(&api_endpoint.to_url())
             .body(serialize_params(&request_body, "搜索Wiki")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "搜索Wiki")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "搜索")
+        }
 }
 
 /// 搜索 Wiki 请求参数（兼容旧 API，已弃用）

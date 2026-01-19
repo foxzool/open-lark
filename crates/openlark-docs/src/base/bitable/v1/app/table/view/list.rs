@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -76,18 +77,14 @@ impl ListViewsRequest {
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ListViewsResponse> {
         // 参数验证
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "应用token不能为空"));
-        }
+        validate_required!(self.app_token.trim(), "app_token");
 
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "数据表ID不能为空"));
-        }
+        validate_required!(self.table_id.trim(), "table_id");
 
         // 验证分页大小
         if let Some(page_size) = self.page_size {
             if page_size <= 0 {
-                return Err(validation_error("page_size", "分页大小必须大于0"));
+                return Err(openlark_core::error::validation_error("page_size", "分页大小必须大于0"));
             }
         }
 
@@ -117,7 +114,7 @@ impl ListViewsRequest {
         let response = Transport::request(api_request, &self.config, None).await?;
         response
             .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+            .ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 

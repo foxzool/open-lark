@@ -103,6 +103,14 @@ impl CreatePermissionMemberRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CreatePermissionMemberResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreatePermissionMemberResponse> {
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -223,7 +231,7 @@ impl CreatePermissionMemberRequest {
 
         api_request = api_request.body(serialize_params(&body, "增加协作者权限")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "增加协作者权限")
     }
 }

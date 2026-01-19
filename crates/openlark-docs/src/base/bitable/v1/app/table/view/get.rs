@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -58,17 +59,11 @@ impl GetViewRequest {
     /// 执行请求
     pub async fn execute(self) -> SDKResult<GetViewResponse> {
         // 参数验证
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "应用token不能为空"));
-        }
+        validate_required!(self.app_token.trim(), "app_token");
 
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "数据表ID不能为空"));
-        }
+        validate_required!(self.table_id.trim(), "table_id");
 
-        if self.view_id.trim().is_empty() {
-            return Err(validation_error("view_id", "视图ID不能为空"));
-        }
+        validate_required!(self.view_id.trim(), "view_id");
 
         // 🚀 使用新的enum+builder系统生成API端点
         // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
@@ -86,46 +81,13 @@ impl GetViewRequest {
         let response = Transport::request(api_request, &self.config, None).await?;
         response
             .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 
-/// 获取视图Builder
-pub struct GetViewRequestBuilder {
-    request: GetViewRequest,
-}
 
-impl GetViewRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: GetViewRequest::new(config),
-        }
-    }
 
-    /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    /// 设置数据表ID
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    /// 设置视图ID
-    pub fn view_id(mut self, view_id: String) -> Self {
-        self.request = self.request.view_id(view_id);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> GetViewRequest {
-        self.request
-    }
-}
 
 /// 获取视图响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

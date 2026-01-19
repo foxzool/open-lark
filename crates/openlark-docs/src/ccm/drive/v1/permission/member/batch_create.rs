@@ -65,6 +65,14 @@ impl BatchCreatePermissionMemberRequest {
     }
 
     pub async fn execute(self) -> SDKResult<BatchCreatePermissionMemberResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<BatchCreatePermissionMemberResponse> {
+
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -188,9 +196,10 @@ impl BatchCreatePermissionMemberRequest {
 
         api_request = api_request.body(serialize_params(&body, "批量增加协作者权限")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "批量增加协作者权限")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "创建")
+        }
 }
 
 /// 批量增加协作者权限响应

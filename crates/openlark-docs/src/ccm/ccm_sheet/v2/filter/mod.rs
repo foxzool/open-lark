@@ -9,7 +9,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 
 use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
@@ -70,8 +70,8 @@ pub async fn create_filter(
     params: CreateFilterParams,
 ) -> SDKResult<CreateFilterResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("筛选范围", Some(&params.range), "筛选范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "筛选范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::CreateFilter(spreadsheet_token.to_string());
@@ -95,8 +95,8 @@ pub async fn get_filter(
     params: GetFilterParams,
 ) -> SDKResult<GetFilterResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("筛选范围", Some(&params.range), "筛选范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "筛选范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::GetFilter(spreadsheet_token.to_string());
@@ -120,8 +120,8 @@ pub async fn update_filter(
     params: UpdateFilterParams,
 ) -> SDKResult<UpdateFilterResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("筛选ID", Some(&params.filter_id), "筛选ID不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.filter_id.trim(), "筛选ID不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::UpdateFilter(spreadsheet_token.to_string());
@@ -145,8 +145,8 @@ pub async fn delete_filter(
     params: DeleteFilterParams,
 ) -> SDKResult<DeleteFilterResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("筛选ID", Some(&params.filter_id), "筛选ID不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.filter_id.trim(), "筛选ID不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::DeleteFilter(spreadsheet_token.to_string());

@@ -70,6 +70,14 @@ impl GetMetaRequest {
     }
 
     pub async fn execute(self) -> SDKResult<GetMetaResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<GetMetaResponse> {
+
         if self.req.request_docs.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "request_docs",
@@ -103,7 +111,7 @@ impl GetMetaRequest {
             ApiRequest::post(&CcmDocsApiOld::Meta.to_url())
                 .body(serialize_params(&self.req, "获取元数据")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取元数据")
     }
 }

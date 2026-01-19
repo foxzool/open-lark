@@ -73,6 +73,14 @@ impl UploadAllRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UploadAllResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<UploadAllResponse> {
         let file_name_len = self.file_name.chars().count();
         if file_name_len == 0 || file_name_len > 250 {
             return Err(openlark_core::error::validation_error(
@@ -132,7 +140,7 @@ impl UploadAllRequest {
             .json_body(&meta)
             .file_content(self.file);
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "上传文件")
     }
 }

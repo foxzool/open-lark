@@ -54,6 +54,14 @@ impl BatchDeleteTableRequest {
     }
 
     pub async fn execute(self) -> SDKResult<BatchDeleteTableResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<BatchDeleteTableResponse> {
         validate_required!(self.app_token, "app_token 不能为空");
         if self.table_ids.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -79,49 +87,16 @@ impl BatchDeleteTableRequest {
         api_request = api_request.query_opt("user_id_type", self.user_id_type);
         api_request = api_request.query_opt("client_token", self.client_token);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 
-/// 批量删除数据表 Builder
-pub struct BatchDeleteTableRequestBuilder {
-    request: BatchDeleteTableRequest,
-}
 
-impl BatchDeleteTableRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: BatchDeleteTableRequest::new(config),
-        }
-    }
 
-    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
-    pub fn client_token(mut self, client_token: impl Into<String>) -> Self {
-        self.request = self.request.client_token(client_token);
-        self
-    }
-
-    pub fn table_ids(mut self, table_ids: Vec<String>) -> Self {
-        self.request = self.request.table_ids(table_ids);
-        self
-    }
-
-    pub fn build(self) -> BatchDeleteTableRequest {
-        self.request
-    }
-}
 
 #[derive(Debug, Serialize)]
 struct BatchDeleteTableRequestBody {

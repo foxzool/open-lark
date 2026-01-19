@@ -8,7 +8,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -52,25 +52,34 @@ impl UploadPrepareRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UploadPrepareResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<UploadPrepareResponse> {
+        // 验证必填字段
+        validate_required!(self.file_name.trim(), "file_name 不能为空");
+        validate_required!(self.parent_node.trim(), "parent_node 不能为空");
+
+        // 自定义验证逻辑
         let file_name_len = self.file_name.chars().count();
-        if file_name_len == 0 || file_name_len > 250 {
+        if file_name_len > 250 {
             return Err(openlark_core::error::validation_error(
                 "file_name",
-                "file_name 长度必须在 1~250 字符之间",
+                "file_name 长度不能超过 250 字符",
             ));
         }
+
         if self.parent_type != "explorer" {
             return Err(openlark_core::error::validation_error(
                 "parent_type",
                 "parent_type 仅支持固定值 explorer",
             ));
         }
-        if self.parent_node.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "parent_node",
-                "parent_node 不能为空",
-            ));
-        }
+
         if self.size < 0 {
             return Err(openlark_core::error::validation_error(
                 "size",
@@ -82,7 +91,7 @@ impl UploadPrepareRequest {
         let request = ApiRequest::<UploadPrepareResponse>::post(&api_endpoint.to_url())
             .body(serialize_params(&self, "分片上传文件-预上传")?);
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "分片上传文件-预上传")
     }
 }
