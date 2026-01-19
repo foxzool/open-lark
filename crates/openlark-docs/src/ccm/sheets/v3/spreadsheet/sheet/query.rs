@@ -27,6 +27,15 @@ pub async fn query_sheets(
     config: &Config,
     spreadsheet_token: &str,
 ) -> SDKResult<QuerySheetResponse> {
+    query_sheets_with_options(config, spreadsheet_token, RequestOption::default()).await
+}
+
+/// 查询工作表（支持自定义选项）
+pub async fn query_sheets_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    option: RequestOption,
+) -> SDKResult<QuerySheetResponse> {
     // 使用enum+builder系统生成API端点
     let api_endpoint = SheetsApiV3::QuerySheets(spreadsheet_token.to_string());
 
@@ -34,6 +43,6 @@ pub async fn query_sheets(
     let api_request: ApiRequest<QuerySheetResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "查询工作表")
 }
