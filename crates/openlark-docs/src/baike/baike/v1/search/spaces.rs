@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -61,6 +62,10 @@ impl SearchSpacesRequest {
     }
 
     pub async fn execute(self) -> SDKResult<SearchSpacesResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<SearchSpacesResp> {
         let query_len = self.query.chars().count();
         if !(1..=100).contains(&query_len) {
             return Err(openlark_core::error::validation_error(
@@ -70,15 +75,14 @@ impl SearchSpacesRequest {
         }
 
         let mut api_request: ApiRequest<SearchSpacesResp> =
-            ApiRequest::get(&BaikeApiV1::SearchSpace.to_url())
-                .query("query", &self.query);
+            ApiRequest::get(&BaikeApiV1::SearchSpace.to_url()).query("query", &self.query);
 
         if let Some(user_id_type) = &self.user_id_type {
             api_request = api_request.query("user_id_type", user_id_type.as_str());
         }
 
         let response: Response<SearchSpacesResp> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

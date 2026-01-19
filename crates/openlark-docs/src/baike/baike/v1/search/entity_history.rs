@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -78,6 +79,13 @@ impl SearchEntityHistoryRequest {
     }
 
     pub async fn execute(self) -> SDKResult<SearchEntityHistoryResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<SearchEntityHistoryResp> {
         if let Some(page_size) = self.page_size {
             if !(1..=100).contains(&page_size) {
                 return Err(openlark_core::error::validation_error(
@@ -101,7 +109,7 @@ impl SearchEntityHistoryRequest {
         }
 
         let response: Response<SearchEntityHistoryResp> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
