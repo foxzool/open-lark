@@ -7,6 +7,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -77,7 +78,7 @@ impl GetChatAnnouncementBlocksRequest {
             api_request = api_request.query("revision_id", &revision_id.to_string());
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取群公告所有块")
     }
 }

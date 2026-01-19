@@ -8,6 +8,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -80,7 +81,7 @@ impl UpdateWikiSpaceNodeTitleRequest {
                 .body(serialize_params(&params, "更新知识空间节点标题")?);
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "更新知识空间节点标题")
     }
 }

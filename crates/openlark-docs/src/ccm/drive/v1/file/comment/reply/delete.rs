@@ -1,5 +1,7 @@
 //! 删除回复
+
 //!
+
 //! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/delete
 
 use openlark_core::{
@@ -8,15 +10,20 @@ use openlark_core::{
     http::Transport,
     SDKResult,
 };
+
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+
 pub struct DeleteCommentReplyRequest {
     pub file_token: String,
+
     pub comment_id: String,
+
     pub reply_id: String,
+
     /// 云文档类型（必填）
     pub file_type: String,
 }
@@ -24,20 +31,27 @@ pub struct DeleteCommentReplyRequest {
 impl DeleteCommentReplyRequest {
     pub fn new(
         file_token: impl Into<String>,
+
         comment_id: impl Into<String>,
+
         reply_id: impl Into<String>,
+
         file_type: impl Into<String>,
     ) -> Self {
         Self {
             file_token: file_token.into(),
+
             comment_id: comment_id.into(),
+
             reply_id: reply_id.into(),
+
             file_type: file_type.into(),
         }
     }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+
 pub struct DeleteCommentReplyResponse {}
 
 impl ApiResponseTrait for DeleteCommentReplyResponse {
@@ -48,7 +62,9 @@ impl ApiResponseTrait for DeleteCommentReplyResponse {
 
 pub async fn delete_comment_reply(
     request: DeleteCommentReplyRequest,
+
     config: &Config,
+
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<DeleteCommentReplyResponse> {
     if request.file_token.trim().is_empty() {
@@ -57,24 +73,28 @@ pub async fn delete_comment_reply(
             "file_token 不能为空",
         ));
     }
+
     if request.comment_id.trim().is_empty() {
         return Err(openlark_core::error::validation_error(
             "comment_id",
             "comment_id 不能为空",
         ));
     }
+
     if request.reply_id.trim().is_empty() {
         return Err(openlark_core::error::validation_error(
             "reply_id",
             "reply_id 不能为空",
         ));
     }
+
     if request.file_type.trim().is_empty() {
         return Err(openlark_core::error::validation_error(
             "file_type",
             "file_type 不能为空",
         ));
     }
+
     super::super::validate_comment_file_type_for_list_like(&request.file_type)?;
 
     let api_endpoint = DriveApi::DeleteCommentReply(
@@ -82,6 +102,7 @@ pub async fn delete_comment_reply(
         request.comment_id.clone(),
         request.reply_id.clone(),
     );
+
     let mut api_request: ApiRequest<DeleteCommentReplyResponse> =
         ApiRequest::delete(&api_endpoint.to_url());
 
@@ -91,6 +112,7 @@ pub async fn delete_comment_reply(
         api_request = api_request.request_option(opt);
     }
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
+
     extract_response_data(response, "删除回复")
 }
