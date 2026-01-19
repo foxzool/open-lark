@@ -2,13 +2,11 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-acl/subscription
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
 
 use crate::{
+    common::api_endpoints::CalendarApiV4,
     common::api_utils::{extract_response_data, serialize_params},
-    endpoints::CALENDAR_V4_CALENDARS,
 };
 
 /// 订阅日历访问控制变更事件请求
@@ -39,12 +37,9 @@ impl SubscriptionCalendarAclRequest {
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         validate_required!(self.calendar_id, "calendar_id 不能为空");
 
-        // url: POST:/open-apis/calendar/v4/calendars/:calendar_id/acls/subscription
-        let req: ApiRequest<serde_json::Value> = ApiRequest::post(format!(
-            "{}/{}/acls/subscription",
-            CALENDAR_V4_CALENDARS, self.calendar_id
-        ))
-        .body(serialize_params(&body, "订阅日历访问控制变更事件")?);
+        let api_endpoint = CalendarApiV4::CalendarAclSubscription(self.calendar_id.clone());
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url())
+            .body(serialize_params(&body, "订阅日历访问控制变更事件")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "订阅日历访问控制变更事件")

@@ -1,7 +1,7 @@
 # AGENTS.md (openlark-docs)
 
 ## OVERVIEW
-飞书云文档（CCM）与百科（Baike）服务实现。涵盖 254 个 API，488 个源码文件。核心特征是多版本（v1-v4）共存与严格的资源路径映射。
+飞书云文档（CCM）与百科（Baike）服务实现。涵盖 533 个 API（pub async fn），455 个源码文件。核心特征是多版本（v1-v4）共存与严格的资源路径映射。
 
 ## STRUCTURE
 - **CCM (Cloud Docs Management)**
@@ -15,8 +15,8 @@
 
 ## WHERE TO LOOK
 - **多维表格记录**: `src/base/bitable/v1/app/table/record/`
-- **电子表格（最新）**: `src/sheets/v3/`
-- **云盘权限控制**: `src/drive/v1/permission/`
+- **电子表格（最新）**: `src/ccm/sheets/v3/`
+- **云盘权限控制**: `src/ccm/drive/v1/permission/`
 - **百科词条管理**: `src/baike/v1/entity/`
 - **Endpoint 定义**: `src/common/api_endpoints.rs` (基于 Enum 的类型安全映射)
 

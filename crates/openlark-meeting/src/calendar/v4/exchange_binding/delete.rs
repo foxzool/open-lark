@@ -2,9 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/exchange_binding/delete
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult, req_option::RequestOption};
 
 use crate::{common::api_utils::extract_response_data, endpoints::CALENDAR_V4_EXCHANGE_BINDINGS};
 
@@ -32,6 +30,14 @@ impl DeleteExchangeBindingRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/exchange_binding/delete
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
+
         validate_required!(self.exchange_binding_id, "exchange_binding_id 不能为空");
 
         // url: DELETE:/open-apis/calendar/v4/exchange_bindings/:exchange_binding_id
@@ -40,7 +46,9 @@ impl DeleteExchangeBindingRequest {
             CALENDAR_V4_EXCHANGE_BINDINGS, self.exchange_binding_id
         ));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "解除 Exchange 账户绑定")
+
     }
+
 }

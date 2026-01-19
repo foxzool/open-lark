@@ -2,12 +2,10 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/api-reference/create-meeting-room
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult};
 
-use crate::{
-    common::api_utils::{extract_response_data, serialize_params},
-    endpoints::MEETING_ROOM,
-};
+use crate::common::api_endpoints::MeetingRoomApi;
+use crate::common::api_utils::{extract_response_data, serialize_params};
 
 /// 创建会议室请求
 pub struct CreateRoomRequest {
@@ -25,12 +23,21 @@ impl CreateRoomRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/api-reference/create-meeting-room
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
-        // url: POST:/open-apis/meeting_room/room/create
-        let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(format!("{}/room/create", MEETING_ROOM))
-                .body(serialize_params(&body, "创建会议室")?);
+        self.execute_with_options(body, RequestOption::default()).await
+    }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+        // url: POST:/open-apis/meeting_room/rooms
+        let api_endpoint = MeetingRoomApi::RoomCreate;
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url())
+            .body(serialize_params(&body, "创建会议室")?);
+
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "创建会议室")
     }
 }

@@ -3,11 +3,12 @@
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting-recording/get
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
+    validate_required, SDKResult,
 };
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
-use crate::endpoints::VC_V1_MEETINGS;
 
 /// 获取录制文件请求
 pub struct GetRecordingRequest {
@@ -41,16 +42,24 @@ impl GetRecordingRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting-recording/get
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.meeting_id, "meeting_id 不能为空");
 
         // url: GET:/open-apis/vc/v1/meetings/:meeting_id/recording
-        let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::get(format!("{}/{}/recording", VC_V1_MEETINGS, self.meeting_id));
+        let api_endpoint = VcApiV1::MeetingRecordingList(self.meeting_id);
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取录制文件")
     }
 }

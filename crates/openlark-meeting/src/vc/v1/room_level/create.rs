@@ -3,7 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/room_level/create
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat,
+    req_option::RequestOption},
     config::Config,
     http::Transport,
     SDKResult,

@@ -4,8 +4,8 @@
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
+use crate::common::api_endpoints::MeetingRoomApi;
 use crate::common::api_utils::{extract_response_data, serialize_params};
-use crate::endpoints::MEETING_ROOM;
 
 /// 回复会议室日程实例请求
 pub struct ReplyInstanceRequest {
@@ -23,9 +23,9 @@ impl ReplyInstanceRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/meeting-room-event/reply-meeting-room-event-instance
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
-        // url: POST:/open-apis/meeting_room/instance/reply
+        let api_endpoint = MeetingRoomApi::InstanceReplyOld;
         let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(format!("{}/instance/reply", MEETING_ROOM))
+            ApiRequest::post(api_endpoint.to_url())
                 .body(serialize_params(&body, "回复会议室日程实例")?);
 
         let resp = Transport::request(req, &self.config, None).await?;

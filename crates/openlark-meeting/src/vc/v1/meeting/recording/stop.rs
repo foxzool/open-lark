@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting-recording/stop
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required, SDKResult,
 };
 
 use crate::common::api_utils::{extract_response_data, serialize_params};
-use crate::endpoints::VC_V1_MEETINGS;
+use crate::common::api_endpoints::VcApiV1;
 
 /// 停止录制请求
 pub struct StopRecordingRequest {
@@ -35,16 +35,19 @@ impl StopRecordingRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting-recording/stop
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(RequestOption::default(), body).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(self, option: RequestOption, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         validate_required!(self.meeting_id, "meeting_id 不能为空");
 
         // url: PATCH:/open-apis/vc/v1/meetings/:meeting_id/recording/stop
-        let req: ApiRequest<serde_json::Value> = ApiRequest::patch(format!(
-            "{}/{}/recording/stop",
-            VC_V1_MEETINGS, self.meeting_id
-        ))
-        .body(serialize_params(&body, "停止录制")?);
+        let api_endpoint = VcApiV1::MeetingRecordingStop(self.meeting_id.clone());
+        let req: ApiRequest<serde_json::Value> = ApiRequest::patch(api_endpoint.to_url())
+            .body(serialize_params(&body, "停止录制")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "停止录制")
     }
 }
