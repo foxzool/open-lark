@@ -3,10 +3,10 @@
 //! docPath: https://open.feishu.cn/document/calendar-v4/calendar-event/instances
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required, SDKResult,
 };
 
-use crate::{common::api_utils::extract_response_data, endpoints::CALENDAR_V4_CALENDARS};
+use crate::common::api_utils::extract_response_data;
 
 /// 获取重复日程实例请求
 pub struct InstancesCalendarEventRequest {
@@ -48,19 +48,24 @@ impl InstancesCalendarEventRequest {
     ///
     /// docPath: https://open.feishu.cn/document/calendar-v4/calendar-event/instances
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         validate_required!(self.calendar_id, "calendar_id 不能为空");
         validate_required!(self.event_id, "event_id 不能为空");
 
         // url: GET:/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/instances
         let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(format!(
-            "{}/{}/events/{}/instances",
-            CALENDAR_V4_CALENDARS, self.calendar_id, self.event_id
+            "/open-apis/calendar/v4/calendars/{}/events/{}/instances",
+            self.calendar_id, self.event_id
         ));
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取重复日程实例")
     }
 }

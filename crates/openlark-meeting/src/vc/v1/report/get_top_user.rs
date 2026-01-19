@@ -2,10 +2,10 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/report/get_top_user
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult, req_option::RequestOption};
 
+use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
-use crate::endpoints::VC_V1_REPORTS;
 
 /// 获取 Top 用户列表请求
 pub struct GetTopUserReportRequest {
@@ -31,14 +31,22 @@ impl GetTopUserReportRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/report/get_top_user
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        // url: GET:/open-apis/vc/v1/reports/get_top_user
-        let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::get(format!("{}/get_top_user", VC_V1_REPORTS));
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+        // url: GET:/open-apis/vc/v1/reports/top_user
+        let api_endpoint = VcApiV1::ReportTopUserGet;
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取 Top 用户列表")
     }
 }

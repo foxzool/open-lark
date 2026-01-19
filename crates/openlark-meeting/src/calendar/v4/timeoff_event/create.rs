@@ -5,8 +5,8 @@
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 
 use crate::{
+    common::api_endpoints::CalendarApiV4,
     common::api_utils::{extract_response_data, serialize_params},
-    endpoints::CALENDAR_V4_TIMEOFF_EVENTS,
 };
 
 /// 创建请假日程请求
@@ -25,8 +25,8 @@ impl CreateTimeoffEventRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/timeoff_event/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
-        // url: POST:/open-apis/calendar/v4/timeoff_events
-        let req: ApiRequest<serde_json::Value> = ApiRequest::post(CALENDAR_V4_TIMEOFF_EVENTS)
+        let api_endpoint = CalendarApiV4::TimeoffEventCreate;
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url())
             .body(serialize_params(&body, "创建请假日程")?);
 
         let resp = Transport::request(req, &self.config, None).await?;

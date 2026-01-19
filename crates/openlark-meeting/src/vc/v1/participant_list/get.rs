@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -51,6 +52,14 @@ impl GetParticipantListRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting-room-data/get-2
     pub async fn execute(self) -> SDKResult<GetParticipantListResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<GetParticipantListResponse> {
         let api_endpoint = VcApiV1::ParticipantListList;
         let mut req: ApiRequest<GetParticipantListResponse> =
             ApiRequest::get(api_endpoint.to_url());
@@ -58,7 +67,7 @@ impl GetParticipantListRequest {
             req = req.query(k, v);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询参会人明细")
     }
 }

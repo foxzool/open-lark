@@ -7,8 +7,8 @@ use openlark_core::{
 };
 
 use crate::{
+    common::api_endpoints::MeetingRoomApi,
     common::api_utils::{extract_response_data, serialize_params},
-    endpoints::MEETING_ROOM,
 };
 
 /// 更新建筑物请求
@@ -39,9 +39,9 @@ impl UpdateBuildingRequest {
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         validate_required!(self.building_id, "building_id 不能为空");
 
-        // url: POST:/open-apis/meeting_room/building/update
+        let api_endpoint = MeetingRoomApi::BuildingUpdate;
         let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(format!("{}/building/update", MEETING_ROOM))
+            ApiRequest::post(api_endpoint.to_url())
                 .body(serialize_params(&body, "更新建筑物")?);
 
         let resp = Transport::request(req, &self.config, None).await?;

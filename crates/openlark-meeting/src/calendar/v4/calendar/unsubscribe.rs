@@ -2,9 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/unsubscribe
 
-use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
-};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult, req_option::RequestOption};
 
 use crate::{common::api_utils::extract_response_data, endpoints::CALENDAR_V4_CALENDARS};
 
@@ -32,6 +30,14 @@ impl UnsubscribeCalendarRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/unsubscribe
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
+
         validate_required!(self.calendar_id, "calendar_id 不能为空");
 
         // url: POST:/open-apis/calendar/v4/calendars/:calendar_id/unsubscribe
@@ -40,7 +46,9 @@ impl UnsubscribeCalendarRequest {
             CALENDAR_V4_CALENDARS, self.calendar_id
         ));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "取消订阅日历")
+
     }
+
 }
