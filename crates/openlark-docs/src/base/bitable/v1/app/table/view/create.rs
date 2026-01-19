@@ -64,7 +64,10 @@ impl CreateViewRequest {
         validate_required!(self.table_id.trim(), "table_id");
 
         if self.view.view_name.trim().is_empty() {
-            return Err(openlark_core::error::validation_error("view.view_name", "视图名称不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "view.view_name",
+                "视图名称不能为空",
+            ));
         }
 
         if self.view.view_name.len() > 100 {
@@ -104,15 +107,11 @@ impl CreateViewRequest {
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
-
-
-
-
 
 #[derive(Serialize, Default, Debug, Clone)]
 /// 视图数据

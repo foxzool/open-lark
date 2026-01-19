@@ -58,7 +58,10 @@ impl BatchDeleteRecordRequest {
         validate_required!(self.table_id.trim(), "table_id");
         validate_required!(self.record_ids, "record_ids");
         if self.record_ids.len() > 500 {
-            return Err(openlark_core::error::validation_error("record_ids", "单次最多删除 500 条记录"));
+            return Err(openlark_core::error::validation_error(
+                "record_ids",
+                "单次最多删除 500 条记录",
+            ));
         }
 
         use crate::common::api_endpoints::BitableApiV1;
@@ -78,10 +81,6 @@ impl BatchDeleteRecordRequest {
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
-
-
-
-
 
 #[derive(Serialize)]
 struct BatchDeleteRecordRequestBody {

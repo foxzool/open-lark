@@ -67,11 +67,17 @@ impl UpdateAppRoleRequest {
         validate_required!(self.role_name.trim(), "role_name");
         validate_required!(self.table_roles, "table_roles");
         if self.table_roles.len() > 100 {
-            return Err(openlark_core::error::validation_error("table_roles", "table_roles 最多 100 项"));
+            return Err(openlark_core::error::validation_error(
+                "table_roles",
+                "table_roles 最多 100 项",
+            ));
         }
         if let Some(ref block_roles) = self.block_roles {
             if block_roles.len() > 100 {
-                return Err(openlark_core::error::validation_error("block_roles", "block_roles 最多 100 项"));
+                return Err(openlark_core::error::validation_error(
+                    "block_roles",
+                    "block_roles 最多 100 项",
+                ));
             }
         }
 

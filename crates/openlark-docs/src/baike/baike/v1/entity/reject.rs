@@ -50,14 +50,22 @@ impl RejectEntityRequest {
     }
 
     pub async fn execute(self) -> SDKResult<RejectEntityResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<RejectEntityResp> {
         validate_required!(self.entity_id, "entity_id 不能为空");
 
         let api_request: ApiRequest<RejectEntityResp> =
             ApiRequest::post(&BaikeApiV1::EntityReject(self.entity_id).to_url())
                 .body(serde_json::to_value(&self.req)?);
 
-        let response: Response<RejectEntityResp> =
-            Transport::request(api_request, &self.config, None).await?;
+        let response: Response<RejectEntityResp> = Transport::request(
+            Transport::request(api_request, &self.config, None),
+            &self.config,
+            Some(option),
+        )
+        .await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

@@ -69,7 +69,10 @@ impl ListTablesRequest {
         // 验证分页大小
         if let Some(page_size) = self.page_size {
             if page_size <= 0 {
-                return Err(openlark_core::error::validation_error("page_size", "分页大小必须大于0"));
+                return Err(openlark_core::error::validation_error(
+                    "page_size",
+                    "分页大小必须大于0",
+                ));
             }
         }
 
@@ -93,9 +96,9 @@ impl ListTablesRequest {
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
 
