@@ -72,6 +72,19 @@ pub const IM_V2_BIZ_ENTITY_TAG_RELATION: &str = "/open-apis/im/v2/biz_entity_tag
 /// IM 租户标签 v2
 pub const IM_V2_TAGS: &str = "/open-apis/im/v2/tags";
 
+// ==================== Ephemeral (临时消息) ====================
+
+/// IM 临时消息 - 删除仅特定人可见的消息卡片
+pub const EPHEMERAL_V1_DELETE: &str = "/open-apis/ephemeral/v1/delete";
+
+/// IM 临时消息 - 发送仅特定人可见的消息卡片
+pub const EPHEMERAL_V1_SEND: &str = "/open-apis/ephemeral/v1/send";
+
+// ==================== Interactive (交互式卡片) ====================
+
+/// IM 交互式卡片 - 延时更新消息卡片
+pub const INTERACTIVE_V1_CARD_UPDATE: &str = "/open-apis/interactive/v1/card/update";
+
 #[cfg(test)]
 mod tests {
     use super::*;

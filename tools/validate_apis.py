@@ -118,16 +118,16 @@ class APIValidator:
         """
         根据 API 信息生成预期的文件路径
 
-        实际命名规范（基于 crates/openlark-meeting 结构）：
-        1. base/bizTag/version/resource/name.rs
-        2. 当 meta.project == bizTag 时，省略 project 层级
-        3. 当 meta.version == "old" 且 meta.resource == "default" 时，省略这两个层级
-        4. meta.resource 中的 '.' 转换为 '/'
-        5. meta.name 中的 '/' 转换为 '/'（作为子目录）
-        6. meta.name 中的 ':' 替换为 '_'（路径参数）
+        项目命名规范（见 AGENTS.md）：
+        - API Path: src/{bizTag}/{project}/{version}/{resource}/{name}.rs
+        - Example: src/im/im/v1/message/create.rs
+        - 当 meta.project == bizTag 时，仍然保留 project 层级（如 im/im）
+        - meta.resource 中的 '.' 转换为 '/' 作为子目录
+        - meta.name 中的 '/' 转换为 '/' 作为子目录
+        - meta.name 中的 ':' 替换为 '_'（路径参数）
         """
 
-        # 特殊规则 1: meeting_room 的 old/default 组合完全省略
+        # 特殊规则: meeting_room 的 old/default 组合完全省略
         if api.biz_tag == 'meeting_room' and api.meta_version == 'old' and api.meta_resource == 'default':
             # 直接使用 meta.name 作为路径
             name_path = api.meta_name.replace(':', '_')
@@ -138,17 +138,9 @@ class APIValidator:
                 name_with_path = name_path
             return f"meeting_room/{name_with_path}.rs"
 
-        # 根据 bizTag/meta.project 确定基础路径：
-        # - 通用规则：当 meta.project == bizTag 时省略 project 层级（例如 base/base、im/im）
-        # - meeting_room 兼容：project 可能为 vc_meeting，此时也省略 project
-        project = api.meta_project
-        if api.biz_tag == 'meeting_room' and api.meta_project == 'vc_meeting':
-            project = api.biz_tag
-
-        if project == api.biz_tag:
-            base = api.biz_tag
-        else:
-            base = f"{api.biz_tag}/{project}"
+        # 基础路径：{bizTag}/{project}
+        # 始终保留 project 层级，即使 project == bizTag
+        base = f"{api.biz_tag}/{api.meta_project}"
 
         # 处理 meta.version
         version = api.meta_version
@@ -173,7 +165,7 @@ class APIValidator:
             name_with_path = name_path
 
         # 构建完整路径
-        # base/version/resource/name.rs
+        # {bizTag}/{project}/{version}/{resource}/{name}.rs
         full_path = f"{base}/{version}/{resource_path}/{name_with_path}.rs"
 
         return full_path
