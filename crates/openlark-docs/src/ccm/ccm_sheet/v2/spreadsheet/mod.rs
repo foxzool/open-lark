@@ -63,6 +63,19 @@ pub async fn get_spreadsheet(
     spreadsheet_token: &str,
     params: GetSpreadsheetParams,
 ) -> SDKResult<GetSpreadsheetResponse> {
+    get_spreadsheet_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 获取表格信息（带选项）
+///
+/// 根据 spreadsheetToken 获取表格的详细信息，包括工作表信息。
+/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/get-spreadsheet
+pub async fn get_spreadsheet_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: GetSpreadsheetParams,
+    option: RequestOption,
+) -> SDKResult<GetSpreadsheetResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
 
@@ -74,7 +87,7 @@ pub async fn get_spreadsheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取表格信息")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "获取表格信息")
 }
 
@@ -85,6 +98,18 @@ pub async fn get_spreadsheet(
 pub async fn create_spreadsheet(
     config: &Config,
     params: CreateSpreadsheetParams,
+) -> SDKResult<CreateSpreadsheetResponse> {
+    create_spreadsheet_with_options(config, params, RequestOption::default()).await
+}
+
+/// 创建表格（带选项）
+///
+/// 创建新的电子表格，支持指定标题和文件夹位置。
+/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/create-spreadsheet
+pub async fn create_spreadsheet_with_options(
+    config: &Config,
+    params: CreateSpreadsheetParams,
+    option: RequestOption,
 ) -> SDKResult<CreateSpreadsheetResponse> {
     // 验证必填字段
     validate_required!(params.title.trim(), "表格标题不能为空");
@@ -97,7 +122,7 @@ pub async fn create_spreadsheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建表格")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "创建表格")
 }
 
@@ -110,6 +135,20 @@ pub async fn update_spreadsheet(
     spreadsheet_token: &str,
     params: UpdateSpreadsheetParams,
 ) -> SDKResult<UpdateSpreadsheetResponse> {
+    update_spreadsheet_with_options(config, spreadsheet_token, params, RequestOption::default())
+        .await
+}
+
+/// 更新表格（带选项）
+///
+/// 根据 spreadsheetToken 更新表格的基本信息，如标题。
+/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/update-spreadsheet
+pub async fn update_spreadsheet_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: UpdateSpreadsheetParams,
+    option: RequestOption,
+) -> SDKResult<UpdateSpreadsheetResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
 
@@ -121,7 +160,7 @@ pub async fn update_spreadsheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新表格")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "更新表格")
 }
 

@@ -70,6 +70,19 @@ pub async fn create_filter(
     spreadsheet_token: &str,
     params: CreateFilterParams,
 ) -> SDKResult<CreateFilterResponse> {
+    create_filter_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 创建筛选（带选项）
+///
+/// 根据 spreadsheetToken 和 range 在指定范围创建筛选。
+/// docPath: /document/server-docs/docs/sheets-v3/filter/create-filter
+pub async fn create_filter_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: CreateFilterParams,
+    option: RequestOption,
+) -> SDKResult<CreateFilterResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
     validate_required!(params.range, "筛选范围不能为空");
@@ -82,7 +95,7 @@ pub async fn create_filter(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建筛选")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "创建筛选")
 }
 
@@ -94,6 +107,19 @@ pub async fn get_filter(
     config: &Config,
     spreadsheet_token: &str,
     params: GetFilterParams,
+) -> SDKResult<GetFilterResponse> {
+    get_filter_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 获取筛选（带选项）
+///
+/// 根据 spreadsheetToken 和 filter_id 获取筛选信息。
+/// docPath: /document/server-docs/docs/sheets-v3/filter/get-filter
+pub async fn get_filter_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: GetFilterParams,
+    option: RequestOption,
 ) -> SDKResult<GetFilterResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -107,7 +133,7 @@ pub async fn get_filter(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取筛选")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "获取筛选")
 }
 
@@ -119,6 +145,19 @@ pub async fn update_filter(
     config: &Config,
     spreadsheet_token: &str,
     params: UpdateFilterParams,
+) -> SDKResult<UpdateFilterResponse> {
+    update_filter_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 更新筛选（带选项）
+///
+/// 根据 spreadsheetToken 和 filter_id 更新筛选条件。
+/// docPath: /document/server-docs/docs/sheets-v3/filter/update-filter
+pub async fn update_filter_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: UpdateFilterParams,
+    option: RequestOption,
 ) -> SDKResult<UpdateFilterResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -132,7 +171,7 @@ pub async fn update_filter(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新筛选")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "更新筛选")
 }
 
@@ -144,6 +183,19 @@ pub async fn delete_filter(
     config: &Config,
     spreadsheet_token: &str,
     params: DeleteFilterParams,
+) -> SDKResult<DeleteFilterResponse> {
+    delete_filter_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 删除筛选（带选项）
+///
+/// 根据 spreadsheetToken 和 filter_id 删除筛选。
+/// docPath: /document/server-docs/docs/sheets-v3/filter/delete-filter
+pub async fn delete_filter_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: DeleteFilterParams,
+    option: RequestOption,
 ) -> SDKResult<DeleteFilterResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -157,7 +209,7 @@ pub async fn delete_filter(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除筛选")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "删除筛选")
 }
 

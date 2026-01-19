@@ -32,9 +32,25 @@ pub async fn get_filter(
     spreadsheet_token: &str,
     sheet_id: &str,
 ) -> SDKResult<GetFilterResponse> {
+    get_filter_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 获取筛选（带选项）
+pub async fn get_filter_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    option: RequestOption,
+) -> SDKResult<GetFilterResponse> {
     let api_endpoint = SheetsApiV3::GetFilter(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<GetFilterResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "获取筛选")
 }

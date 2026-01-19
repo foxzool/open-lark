@@ -29,10 +29,26 @@ pub async fn delete_filter(
     spreadsheet_token: &str,
     sheet_id: &str,
 ) -> SDKResult<DeleteFilterResponse> {
+    delete_filter_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 删除筛选（带选项）
+pub async fn delete_filter_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    option: RequestOption,
+) -> SDKResult<DeleteFilterResponse> {
     let api_endpoint =
         SheetsApiV3::DeleteFilter(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<DeleteFilterResponse> = ApiRequest::delete(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "删除筛选")
 }

@@ -70,6 +70,20 @@ pub async fn create_float_image(
     spreadsheet_token: &str,
     params: CreateFloatImageParams,
 ) -> SDKResult<CreateFloatImageResponse> {
+    create_float_image_with_options(config, spreadsheet_token, params, RequestOption::default())
+        .await
+}
+
+/// 创建浮图（带选项）
+///
+/// 根据 spreadsheetToken 创建浮图，在工作表中插入浮动图片。
+/// docPath: /document/server-docs/docs/sheets-v3/float-image/create-float-image
+pub async fn create_float_image_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: CreateFloatImageParams,
+    option: RequestOption,
+) -> SDKResult<CreateFloatImageResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
     validate_required!(params.image_token.trim(), "图片Token不能为空");
@@ -84,7 +98,7 @@ pub async fn create_float_image(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建浮图")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "创建浮图")
 }
 
@@ -96,6 +110,19 @@ pub async fn get_float_image(
     config: &Config,
     spreadsheet_token: &str,
     params: GetFloatImageParams,
+) -> SDKResult<GetFloatImageResponse> {
+    get_float_image_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 获取浮图（带选项）
+///
+/// 根据 spreadsheetToken 和 float_image_id 获取浮图信息。
+/// docPath: /document/server-docs/docs/sheets-v3/float-image/get-float-image
+pub async fn get_float_image_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: GetFloatImageParams,
+    option: RequestOption,
 ) -> SDKResult<GetFloatImageResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -115,7 +142,7 @@ pub async fn get_float_image(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取浮图")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "获取浮图")
 }
 
@@ -127,6 +154,20 @@ pub async fn update_float_image(
     config: &Config,
     spreadsheet_token: &str,
     params: UpdateFloatImageParams,
+) -> SDKResult<UpdateFloatImageResponse> {
+    update_float_image_with_options(config, spreadsheet_token, params, RequestOption::default())
+        .await
+}
+
+/// 更新浮图（带选项）
+///
+/// 根据 spreadsheetToken 和 float_image_id 更新浮图位置和属性。
+/// docPath: /document/server-docs/docs/sheets-v3/float-image/update-float-image
+pub async fn update_float_image_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: UpdateFloatImageParams,
+    option: RequestOption,
 ) -> SDKResult<UpdateFloatImageResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -145,7 +186,7 @@ pub async fn update_float_image(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新浮图")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "更新浮图")
 }
 
@@ -157,6 +198,20 @@ pub async fn delete_float_image(
     config: &Config,
     spreadsheet_token: &str,
     params: DeleteFloatImageParams,
+) -> SDKResult<DeleteFloatImageResponse> {
+    delete_float_image_with_options(config, spreadsheet_token, params, RequestOption::default())
+        .await
+}
+
+/// 删除浮图（带选项）
+///
+/// 根据 spreadsheetToken 和 float_image_id 删除浮图。
+/// docPath: /document/server-docs/docs/sheets-v3/float-image/delete-float-image
+pub async fn delete_float_image_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: DeleteFloatImageParams,
+    option: RequestOption,
 ) -> SDKResult<DeleteFloatImageResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -175,7 +230,7 @@ pub async fn delete_float_image(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除浮图")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "删除浮图")
 }
 

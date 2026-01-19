@@ -92,6 +92,20 @@ pub async fn read_single_range(
     spreadsheet_token: &str,
     params: ReadSingleRangeParams,
 ) -> SDKResult<ReadSingleRangeResponse> {
+    read_single_range_with_options(config, spreadsheet_token, params, RequestOption::default())
+        .await
+}
+
+/// 读取单个范围（带选项）
+///
+/// 根据 spreadsheetToken 和 range 读取表格单个范围的值，返回数据限制为10M。
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range
+pub async fn read_single_range_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: ReadSingleRangeParams,
+    option: RequestOption,
+) -> SDKResult<ReadSingleRangeResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
     validate_required!(params.value_range, "数据范围不能为空");
@@ -106,7 +120,7 @@ pub async fn read_single_range(
         .query_opt("date_render_option", params.date_render_option.as_ref());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "读取单个范围")
 }
 
@@ -118,6 +132,20 @@ pub async fn read_multiple_ranges(
     config: &Config,
     spreadsheet_token: &str,
     params: ReadMultipleRangesParams,
+) -> SDKResult<ReadMultipleRangesResponse> {
+    read_multiple_ranges_with_options(config, spreadsheet_token, params, RequestOption::default())
+        .await
+}
+
+/// 读取多个范围（带选项）
+///
+/// 根据 spreadsheetToken 和 ranges 读取表格多个范围的值，返回数据限制为10M。
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/reading-multiple-ranges
+pub async fn read_multiple_ranges_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: ReadMultipleRangesParams,
+    option: RequestOption,
 ) -> SDKResult<ReadMultipleRangesResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -143,7 +171,7 @@ pub async fn read_multiple_ranges(
             .query_opt("date_render_option", params.date_render_option.as_ref());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "读取多个范围")
 }
 
@@ -155,6 +183,20 @@ pub async fn write_single_range(
     config: &Config,
     spreadsheet_token: &str,
     params: WriteSingleRangeParams,
+) -> SDKResult<WriteSingleRangeResponse> {
+    write_single_range_with_options(config, spreadsheet_token, params, RequestOption::default())
+        .await
+}
+
+/// 写入单个范围（带选项）
+///
+/// 根据 spreadsheetToken 和 range 向单个范围写入数据，若范围内有数据，将被更新覆盖。
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/write-data-to-a-single-range
+pub async fn write_single_range_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: WriteSingleRangeParams,
+    option: RequestOption,
 ) -> SDKResult<WriteSingleRangeResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -168,7 +210,7 @@ pub async fn write_single_range(
         ApiRequest::put(&api_endpoint.to_url()).body(serialize_params(&params, "写入单个范围")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "写入单个范围")
 }
 
@@ -180,6 +222,20 @@ pub async fn batch_write_ranges(
     config: &Config,
     spreadsheet_token: &str,
     params: BatchWriteRangesParams,
+) -> SDKResult<BatchWriteRangesResponse> {
+    batch_write_ranges_with_options(config, spreadsheet_token, params, RequestOption::default())
+        .await
+}
+
+/// 批量写入多个范围（带选项）
+///
+/// 根据 spreadsheetToken 和 range 向多个范围写入数据，若范围内有数据，将被更新覆盖。
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/write-data-to-multiple-ranges
+pub async fn batch_write_ranges_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: BatchWriteRangesParams,
+    option: RequestOption,
 ) -> SDKResult<BatchWriteRangesResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -199,7 +255,7 @@ pub async fn batch_write_ranges(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "批量写入范围")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "批量写入范围")
 }
 
@@ -211,6 +267,19 @@ pub async fn append_values(
     config: &Config,
     spreadsheet_token: &str,
     params: AppendValuesParams,
+) -> SDKResult<AppendValuesResponse> {
+    append_values_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 追加数据（带选项）
+///
+/// 根据 spreadsheetToken 和 range 遇到空行则进行覆盖追加或新增行追加数据。
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/append-data
+pub async fn append_values_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: AppendValuesParams,
+    option: RequestOption,
 ) -> SDKResult<AppendValuesResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -224,7 +293,7 @@ pub async fn append_values(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "追加数据")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "追加数据")
 }
 
@@ -236,6 +305,19 @@ pub async fn insert_values(
     config: &Config,
     spreadsheet_token: &str,
     params: InsertValuesParams,
+) -> SDKResult<InsertValuesResponse> {
+    insert_values_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 插入数据（带选项）
+///
+/// 根据 spreadsheetToken 和 range 向范围之前增加相应数据的行和相应的数据，相当于数组的插入操作。
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/prepend-data
+pub async fn insert_values_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: InsertValuesParams,
+    option: RequestOption,
 ) -> SDKResult<InsertValuesResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -249,7 +331,7 @@ pub async fn insert_values(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "插入数据")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "插入数据")
 }
 
@@ -261,6 +343,19 @@ pub async fn values_image(
     config: &Config,
     spreadsheet_token: &str,
     params: ValuesImageParams,
+) -> SDKResult<ValuesImageResponse> {
+    values_image_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 写入图片（带选项）
+///
+/// 根据 spreadsheetToken 和 range 向指定范围写入图片，支持批量写入图片数据。
+/// docPath: /document/server-docs/docs/sheets-v3/data-operation/writing-images-to-a-range
+pub async fn values_image_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: ValuesImageParams,
+    option: RequestOption,
 ) -> SDKResult<ValuesImageResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -274,7 +369,7 @@ pub async fn values_image(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "写入图片")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "写入图片")
 }
 
