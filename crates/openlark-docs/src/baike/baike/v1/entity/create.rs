@@ -70,6 +70,10 @@ impl CreateEntityRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CreateEntityResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CreateEntityResp> {
         validate_required!(self.req.main_keys, "main_keys 不能为空");
         if self.req.main_keys.len() > 1 {
             return Err(openlark_core::error::validation_error(
@@ -116,7 +120,7 @@ impl CreateEntityRequest {
         }
 
         let response: Response<CreateEntityResp> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

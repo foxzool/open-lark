@@ -55,6 +55,13 @@ impl HighlightEntityRequest {
     }
 
     pub async fn execute(self) -> SDKResult<HighlightEntityResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<HighlightEntityResponse> {
         use crate::common::api_endpoints::BaikeApiV1;
         validate_required!(self.req.text, "text 不能为空");
         let len = self.req.text.chars().count();
@@ -70,7 +77,7 @@ impl HighlightEntityRequest {
                 .body(serde_json::to_value(&self.req)?);
 
         let response: Response<HighlightEntityResponse> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
