@@ -39,10 +39,14 @@ impl ListRepoRequest {
     }
 
     pub async fn execute(self) -> SDKResult<ListRepoResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListRepoResp> {
         let api_request: ApiRequest<ListRepoResp> = ApiRequest::get(&LingoApiV1::RepoList.to_url());
 
         let response: Response<ListRepoResp> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

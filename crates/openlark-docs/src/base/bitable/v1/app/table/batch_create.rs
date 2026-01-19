@@ -100,10 +100,6 @@ impl BatchCreateTableRequest {
     }
 }
 
-
-
-
-
 #[derive(Debug, Serialize)]
 struct BatchCreateTableRequestBody {
     tables: Vec<TableData>,

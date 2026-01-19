@@ -135,10 +135,6 @@ impl GetRecordRequest {
     }
 }
 
-
-
-
-
 /// 获取记录响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetRecordResponse {

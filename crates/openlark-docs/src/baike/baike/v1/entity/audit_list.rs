@@ -86,6 +86,13 @@ impl EntityAuditListRequest {
     }
 
     pub async fn execute(self) -> SDKResult<EntityAuditListResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<EntityAuditListResp> {
         validate_required!(self.space_id, "space_id 不能为空");
 
         if let Some(page_size) = self.page_size {
@@ -110,8 +117,12 @@ impl EntityAuditListRequest {
             api_request = api_request.query("user_id_type", user_id_type.as_str());
         }
 
-        let response: Response<EntityAuditListResp> =
-            Transport::request(api_request, &self.config, None).await?;
+        let response: Response<EntityAuditListResp> = Transport::request(
+            Transport::request(api_request, &self.config, None),
+            &self.config,
+            Some(option),
+        )
+        .await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

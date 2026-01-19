@@ -52,14 +52,14 @@ impl CreateExportTaskRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CreateExportTaskResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<CreateExportTaskResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateExportTaskResponse> {
         let token_len = self.token.len();
         if token_len == 0 || token_len > 27 {
             return Err(openlark_core::error::validation_error(
@@ -111,10 +111,9 @@ impl CreateExportTaskRequest {
         let api_request: ApiRequest<CreateExportTaskResponse> =
             ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&self, "创建导出任务")?);
 
-        
-            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "创建")
-        }
+    }
 }
 
 /// 创建导出任务响应

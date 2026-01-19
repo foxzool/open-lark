@@ -68,6 +68,13 @@ impl HighlightEntityRequest {
     }
 
     pub async fn execute(self) -> SDKResult<HighlightEntityResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<HighlightEntityResp> {
         validate_required!(self.body.text, "text 不能为空");
 
         let body = serde_json::to_value(&self.body).map_err(|e| {
@@ -78,7 +85,7 @@ impl HighlightEntityRequest {
             ApiRequest::post(&LingoApiV1::EntityHighlight.to_url()).body(body);
 
         let response: Response<HighlightEntityResp> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

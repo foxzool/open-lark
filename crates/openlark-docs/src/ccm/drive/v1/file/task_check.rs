@@ -34,14 +34,14 @@ impl CheckTaskStatusRequest {
 
     /// 执行查询异步任务状态操作
     pub async fn execute(self) -> SDKResult<CheckTaskStatusResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<CheckTaskStatusResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CheckTaskStatusResponse> {
         if self.task_id.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "task_id",
@@ -53,10 +53,9 @@ impl CheckTaskStatusRequest {
         let api_request = ApiRequest::<CheckTaskStatusResponse>::get(&api_endpoint.to_url())
             .query("task_id", &self.task_id);
 
-        
-            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "任务检查")
-        }
+    }
 }
 
 /// 查询异步任务状态响应（data）

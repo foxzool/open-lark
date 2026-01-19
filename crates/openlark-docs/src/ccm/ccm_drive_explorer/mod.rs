@@ -26,7 +26,6 @@ impl CcmDriveExplorerService {
     pub fn explorer(&self) -> explorer::ExplorerService {
         explorer::ExplorerService::new(self.config.clone())
     }
-
 }
 
 impl openlark_core::trait_system::service::Service for CcmDriveExplorerService {

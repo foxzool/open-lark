@@ -108,10 +108,6 @@ impl BatchGetRecordRequest {
     }
 }
 
-
-
-
-
 #[derive(Serialize)]
 struct BatchGetRecordRequestBody {
     record_ids: Vec<String>,

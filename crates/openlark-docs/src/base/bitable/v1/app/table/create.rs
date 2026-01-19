@@ -77,32 +77,56 @@ impl CreateTableRequest {
         validate_required!(self.app_token.trim(), "app_token");
 
         if self.table.name.trim().is_empty() {
-            return Err(openlark_core::error::validation_error("name", "数据表名称不能为空"));
+            return Err(openlark_core::error::validation_error(
+                "name",
+                "数据表名称不能为空",
+            ));
         }
 
         if self.table.name.len() > 100 {
-            return Err(openlark_core::error::validation_error("name", "数据表名称长度不能超过100个字符"));
+            return Err(openlark_core::error::validation_error(
+                "name",
+                "数据表名称长度不能超过100个字符",
+            ));
         }
 
         // 名称不允许包含 `/ \\ ? * : [ ]`
         let name = self.table.name.as_str();
         if name.contains('/') {
-            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 '/'"));
+            return Err(openlark_core::error::validation_error(
+                "name",
+                "数据表名称不能包含 '/'",
+            ));
         }
         if name.contains('\\') {
-            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 '\\\\'"));
+            return Err(openlark_core::error::validation_error(
+                "name",
+                "数据表名称不能包含 '\\\\'",
+            ));
         }
         if name.contains('?') {
-            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 '?'"));
+            return Err(openlark_core::error::validation_error(
+                "name",
+                "数据表名称不能包含 '?'",
+            ));
         }
         if name.contains('*') {
-            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 '*'"));
+            return Err(openlark_core::error::validation_error(
+                "name",
+                "数据表名称不能包含 '*'",
+            ));
         }
         if name.contains(':') {
-            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 ':'"));
+            return Err(openlark_core::error::validation_error(
+                "name",
+                "数据表名称不能包含 ':'",
+            ));
         }
         if name.contains('[') || name.contains(']') {
-            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 '[' 或 ']'"));
+            return Err(openlark_core::error::validation_error(
+                "name",
+                "数据表名称不能包含 '[' 或 ']'",
+            ));
         }
 
         // 如果传入了 default_view_name，则必须传入 fields
@@ -137,15 +161,11 @@ impl CreateTableRequest {
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
-        response
-            .data
-            .ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+        })
     }
 }
-
-
-
-
 
 /// 数据表数据
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]

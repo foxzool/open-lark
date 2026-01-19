@@ -43,6 +43,13 @@ impl UploadFileRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UploadFileResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<UploadFileResponse> {
         use crate::common::api_endpoints::BaikeApiV1;
         validate_required!(self.name, "name 不能为空");
         validate_required!(self.file, "file 不能为空");
@@ -94,7 +101,7 @@ impl UploadFileRequest {
                 .file_content(self.file);
 
         let response: Response<UploadFileResponse> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

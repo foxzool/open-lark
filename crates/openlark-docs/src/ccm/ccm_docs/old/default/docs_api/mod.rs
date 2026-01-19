@@ -2,5 +2,5 @@
 #[deprecated(note = "使用新架构替代")]
 pub struct DocsApiPlaceholder;
 
-pub mod search;
 pub mod meta;
+pub mod search;

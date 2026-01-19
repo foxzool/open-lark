@@ -7,7 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     SDKResult,
-    };
+};
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -73,14 +73,23 @@ pub async fn batch_query_comment(
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<BatchQueryCommentResponse> {
     if request.file_token.trim().is_empty() {
-        return Err(openlark_core::error::validation_error("file_token", "file_token 不能为空"));
+        return Err(openlark_core::error::validation_error(
+            "file_token",
+            "file_token 不能为空",
+        ));
     }
     if request.file_type.trim().is_empty() {
-        return Err(openlark_core::error::validation_error("file_type", "file_type 不能为空"));
+        return Err(openlark_core::error::validation_error(
+            "file_type",
+            "file_type 不能为空",
+        ));
     }
     super::validate_comment_file_type_for_list_like(&request.file_type)?;
     if request.comment_ids.is_empty() {
-        return Err(openlark_core::error::validation_error("comment_ids", "comment_ids 不能为空"));
+        return Err(openlark_core::error::validation_error(
+            "comment_ids",
+            "comment_ids 不能为空",
+        ));
     }
 
     let api_endpoint = DriveApi::BatchQueryComments(request.file_token.clone());

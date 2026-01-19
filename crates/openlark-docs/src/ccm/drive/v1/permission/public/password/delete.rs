@@ -32,14 +32,14 @@ impl DeletePermissionPublicPasswordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeletePermissionPublicPasswordResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<DeletePermissionPublicPasswordResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DeletePermissionPublicPasswordResponse> {
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -73,10 +73,9 @@ impl DeletePermissionPublicPasswordRequest {
         let api_request: ApiRequest<DeletePermissionPublicPasswordResponse> =
             ApiRequest::delete(&api_endpoint.to_url()).query("type", self.r#type);
 
-        
-            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "删除")
-        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

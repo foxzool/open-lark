@@ -65,7 +65,6 @@ impl CcmSheetService {
     pub fn v2(&self) -> CcmSheetV2 {
         CcmSheetV2::new(self.config.clone())
     }
-
 }
 
 /// CCM Sheet V2 API访问器

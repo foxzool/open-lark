@@ -88,14 +88,14 @@ impl MoveDocsToWikiRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<MoveDocsToWikiResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<MoveDocsToWikiResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<MoveDocsToWikiResponse> {
         validate_required!(self.space_id, "知识空间ID不能为空");
         validate_required!(self.obj_token, "源文档token不能为空");
         validate_required!(self.obj_type, "源文档类型不能为空");
@@ -113,10 +113,9 @@ impl MoveDocsToWikiRequest {
             ApiRequest::post(&api_endpoint.to_url())
                 .body(serialize_params(&request_body, "移动云空间文档至知识空间")?);
 
-        
-            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "节点")
-        }
+    }
 }
 
 /// 移动云空间文档至知识空间请求参数（兼容旧 API，已弃用）

@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 
@@ -58,6 +59,15 @@ pub async fn list_space_members(
     config: &Config,
     space_id: &str,
 ) -> SDKResult<ListSpaceMembersResponse> {
+    list_space_members_with_options(config, space_id, RequestOption::default()).await
+}
+
+/// 获取知识空间成员列表（支持自定义选项）
+pub async fn list_space_members_with_options(
+    config: &Config,
+    space_id: &str,
+    option: RequestOption,
+) -> SDKResult<ListSpaceMembersResponse> {
     // 使用 ApiEndpoint 枚举生成 URL
     let api_endpoint = WikiApiV2::SpaceMemberList(space_id.to_string());
 
@@ -65,7 +75,7 @@ pub async fn list_space_members(
     let api_request: ApiRequest<ListSpaceMembersResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     Ok(response.data.ok_or_else(|| {
         openlark_core::error::CoreError::validation_msg("响应数据为空")
     })?)

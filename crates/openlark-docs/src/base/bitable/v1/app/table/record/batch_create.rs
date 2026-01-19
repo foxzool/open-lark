@@ -82,7 +82,10 @@ impl BatchCreateRecordRequest {
         validate_required!(self.table_id.trim(), "table_id");
         validate_required!(self.records, "records");
         if self.records.len() > 500 {
-            return Err(openlark_core::error::validation_error("records", "单次最多新增 500 条记录"));
+            return Err(openlark_core::error::validation_error(
+                "records",
+                "单次最多新增 500 条记录",
+            ));
         }
 
         use crate::common::api_endpoints::BitableApiV1;
@@ -109,10 +112,6 @@ impl BatchCreateRecordRequest {
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
-
-
-
-
 
 /// 新增记录条目
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

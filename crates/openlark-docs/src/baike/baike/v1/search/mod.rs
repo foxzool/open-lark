@@ -1,5 +1,5 @@
-pub mod entity_history;
 pub mod entities;
+pub mod entity_history;
 pub mod history;
 pub mod history_delete;
 pub mod space_access;
@@ -13,8 +13,8 @@ pub mod space_recommend;
 pub mod spaces;
 pub mod users;
 
-pub use entity_history::*;
 pub use entities::*;
+pub use entity_history::*;
 pub use history::*;
 pub use history_delete::*;
 pub use space_access::*;

@@ -132,7 +132,10 @@ impl PatchViewRequest {
 
         if let Some(ref view_name) = self.payload.view_name {
             if view_name.trim().is_empty() {
-                return Err(openlark_core::error::validation_error("view_name", "视图名称不能为空"));
+                return Err(openlark_core::error::validation_error(
+                    "view_name",
+                    "视图名称不能为空",
+                ));
             }
             if view_name.len() > 100 {
                 return Err(openlark_core::error::validation_error(
@@ -141,7 +144,10 @@ impl PatchViewRequest {
                 ));
             }
             if view_name.contains('[') || view_name.contains(']') {
-                return Err(openlark_core::error::validation_error("view_name", "视图名称不能包含 '[' 或 ']'"));
+                return Err(openlark_core::error::validation_error(
+                    "view_name",
+                    "视图名称不能包含 '[' 或 ']'",
+                ));
             }
         }
 
@@ -155,7 +161,3 @@ impl PatchViewRequest {
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
-
-
-
-

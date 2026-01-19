@@ -45,7 +45,6 @@ impl CcmDrivePermissionService {
     pub fn permission(&self) -> crate::ccm::ccm_drive_permission::permission::PermissionService {
         crate::ccm::ccm_drive_permission::permission::PermissionService::new(self.config.clone())
     }
-
 }
 
 impl openlark_core::trait_system::service::Service for CcmDrivePermissionService {

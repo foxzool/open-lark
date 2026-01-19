@@ -67,25 +67,32 @@ impl CreateAppRoleRequest {
         validate_required!(self.role_name.trim(), "角色名称不能为空");
         validate_required!(self.table_roles, "表格角色列表不能为空");
         if self.table_roles.len() > 100 {
-            return Err(openlark_core::error::validation_error("table_roles", "table_roles 最多 100 项"));
+            return Err(openlark_core::error::validation_error(
+                "table_roles",
+                "table_roles 最多 100 项",
+            ));
         }
         if let Some(ref block_roles) = self.block_roles {
             if block_roles.len() > 100 {
-                return Err(openlark_core::error::validation_error("block_roles", "block_roles 最多 100 项"));
+                return Err(openlark_core::error::validation_error(
+                    "block_roles",
+                    "block_roles 最多 100 项",
+                ));
             }
         }
 
         use crate::common::api_endpoints::BitableApiV1;
         let api_endpoint = BitableApiV1::RoleCreate(self.app_token.clone());
 
-        let api_request: ApiRequest<CreateAppRoleResponse> = ApiRequest::post(
-            &api_endpoint.to_url(),
-        )
-        .body(serialize_params(&CreateAppRoleRequestBody {
-            role_name: self.role_name,
-            table_roles: self.table_roles,
-            block_roles: self.block_roles,
-        }, "新增角色")?);
+        let api_request: ApiRequest<CreateAppRoleResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(
+                &CreateAppRoleRequestBody {
+                    role_name: self.role_name,
+                    table_roles: self.table_roles,
+                    block_roles: self.block_roles,
+                },
+                "新增角色",
+            )?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "新增角色")

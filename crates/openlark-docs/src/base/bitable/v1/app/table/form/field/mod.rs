@@ -4,9 +4,7 @@ pub mod patch;
 
 use openlark_core::config::Config;
 // 明确导出以避免模糊重导出
-pub use list::{
-    FormFieldQuestion, ListFormFieldQuestionRequest, ListFormFieldQuestionResponse,
-};
+pub use list::{FormFieldQuestion, ListFormFieldQuestionRequest, ListFormFieldQuestionResponse};
 pub use models::PatchFormFieldRequest;
 pub use patch::{
     PatchFormFieldQuestionBuilder, PatchFormFieldQuestionRequest, PatchFormFieldQuestionResponse,

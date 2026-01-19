@@ -56,14 +56,14 @@ impl UploadPrepareMediaRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UploadPrepareMediaResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<UploadPrepareMediaResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<UploadPrepareMediaResponse> {
         let file_name_len = self.file_name.chars().count();
         if file_name_len == 0 || file_name_len > 250 {
             return Err(openlark_core::error::validation_error(
@@ -107,10 +107,9 @@ impl UploadPrepareMediaRequest {
         let request = ApiRequest::<UploadPrepareMediaResponse>::post(&api_endpoint.to_url())
             .body(serialize_params(&self, "分片上传素材-预上传")?);
 
-        
-            let response = Transport::request(request, &self.config, Some(option)).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "上传")
-        }
+    }
 }
 
 /// 分片上传素材准备响应

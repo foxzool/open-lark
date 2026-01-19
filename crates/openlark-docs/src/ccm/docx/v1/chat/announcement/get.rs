@@ -77,14 +77,14 @@ impl GetChatAnnouncementRequest {
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement/get
     pub async fn execute(self) -> SDKResult<GetChatAnnouncementResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<GetChatAnnouncementResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<GetChatAnnouncementResponse> {
         validate_required!(self.chat_id, "群聊ID不能为空");
 
         let api_endpoint = DocxApiV1::ChatAnnouncementGet(self.chat_id.clone());
@@ -95,8 +95,7 @@ impl GetChatAnnouncementRequest {
             api_request = api_request.query("user_id_type", &user_id_type);
         }
 
-        
-            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取")
-        }
+    }
 }

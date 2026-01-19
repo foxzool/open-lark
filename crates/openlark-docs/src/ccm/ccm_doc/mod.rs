@@ -28,7 +28,6 @@ impl CcmDocService {
     pub fn config(&self) -> &Config {
         &self.config
     }
-
 }
 
 // old 模块已废弃，使用新架构

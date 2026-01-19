@@ -131,6 +131,10 @@ impl SearchEntityRequest {
     }
 
     pub async fn execute(self) -> SDKResult<SearchEntityResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<SearchEntityResp> {
         let body = serde_json::to_value(&self.body).map_err(|e| {
             openlark_core::error::serialization_error("序列化模糊搜索词条请求体失败", Some(e))
         })?;
@@ -151,7 +155,7 @@ impl SearchEntityRequest {
         }
 
         let response: Response<SearchEntityResp> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
