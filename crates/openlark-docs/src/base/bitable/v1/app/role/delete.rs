@@ -40,6 +40,13 @@ impl DeleteAppRoleRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeleteAppRoleResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<DeleteAppRoleResponse> {
         validate_required!(self.app_token.trim(), "app_token");
         validate_required!(self.role_id.trim(), "role_id");
 
@@ -49,7 +56,7 @@ impl DeleteAppRoleRequest {
         let api_request: ApiRequest<DeleteAppRoleResponse> =
             ApiRequest::delete(&api_endpoint.to_url());
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

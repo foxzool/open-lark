@@ -120,6 +120,10 @@ impl PatchViewRequest {
     }
 
     pub async fn execute(self) -> SDKResult<PatchViewResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<PatchViewResponse> {
         validate_required!(self.app_token.trim(), "app_token");
         validate_required!(self.table_id.trim(), "table_id");
         validate_required!(self.view_id.trim(), "view_id");
@@ -156,7 +160,7 @@ impl PatchViewRequest {
         let api_request: ApiRequest<PatchViewResponse> =
             ApiRequest::patch(&api_endpoint.to_url()).body(serde_json::to_vec(&self.payload)?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

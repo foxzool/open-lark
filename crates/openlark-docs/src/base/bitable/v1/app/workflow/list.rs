@@ -77,6 +77,13 @@ impl ListWorkflowRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ListWorkflowResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListWorkflowResponse> {
         validate_required!(self.app_token, "app_token 不能为空");
 
         let api_endpoint = BitableApiV1::WorkflowList(self.app_token);
@@ -85,7 +92,7 @@ impl ListWorkflowRequest {
         api_request = api_request.query_opt("page_token", self.page_token);
         api_request = api_request.query_opt("page_size", self.page_size.map(|v| v.to_string()));
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

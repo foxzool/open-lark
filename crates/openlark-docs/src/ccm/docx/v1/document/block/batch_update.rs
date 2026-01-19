@@ -62,6 +62,15 @@ impl BatchUpdateDocumentBlocksRequest {
         self,
         params: BatchUpdateDocumentBlocksParams,
     ) -> SDKResult<BatchUpdateDocumentBlocksResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        params: BatchUpdateDocumentBlocksParams,
+        option: RequestOption,
+    ) -> SDKResult<BatchUpdateDocumentBlocksResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.requests, "批量请求不能为空");
 
@@ -70,7 +79,7 @@ impl BatchUpdateDocumentBlocksRequest {
             ApiRequest::patch(&api_endpoint.to_url());
         api_request = api_request.json_body(&params);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "批量更新块的内容")
     }
 }

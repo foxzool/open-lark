@@ -77,6 +77,13 @@ impl UpdateWorkflowRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<UpdateWorkflowResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<UpdateWorkflowResponse> {
         validate_required!(self.app_token, "app_token 不能为空");
         validate_required!(self.workflow_id, "workflow_id 不能为空");
 
@@ -91,7 +98,7 @@ impl UpdateWorkflowRequest {
         let api_request: ApiRequest<UpdateWorkflowResponse> =
             ApiRequest::put(&api_endpoint.to_url()).body(body);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

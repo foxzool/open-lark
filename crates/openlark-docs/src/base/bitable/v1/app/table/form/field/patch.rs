@@ -83,6 +83,13 @@ impl PatchFormFieldQuestionRequest {
     }
 
     pub async fn execute(self) -> SDKResult<PatchFormFieldQuestionResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<PatchFormFieldQuestionResponse> {
         validate_required!(self.app_token.trim(), "app_token");
         validate_required!(self.table_id.trim(), "table_id");
         validate_required!(self.form_id.trim(), "form_id");
@@ -102,7 +109,7 @@ impl PatchFormFieldQuestionRequest {
         let api_request: ApiRequest<PatchFormFieldQuestionResponse> =
             ApiRequest::patch(&api_endpoint.to_url()).body(serde_json::to_vec(&self.body)?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

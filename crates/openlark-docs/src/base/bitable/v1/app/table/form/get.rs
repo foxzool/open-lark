@@ -54,6 +54,10 @@ impl GetFormRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<GetFormResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetFormResponse> {
         // 参数验证
         validate_required!(self.app_token.trim(), "app_token");
         validate_required!(self.table_id.trim(), "table_id");
@@ -63,7 +67,7 @@ impl GetFormRequest {
         let api_endpoint = BitableApiV1::FormGet(self.app_token, self.table_id, self.form_id);
 
         let api_request: ApiRequest<GetFormResponse> = ApiRequest::get(&api_endpoint.to_url());
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

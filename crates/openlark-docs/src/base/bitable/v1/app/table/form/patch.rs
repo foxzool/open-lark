@@ -85,6 +85,10 @@ impl PatchFormRequest {
     }
 
     pub async fn execute(self) -> SDKResult<PatchFormResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<PatchFormResponse> {
         validate_required!(self.app_token.trim(), "app_token");
         validate_required!(self.table_id.trim(), "table_id");
         validate_required!(self.form_id.trim(), "form_id");
@@ -113,7 +117,7 @@ impl PatchFormRequest {
                 submit_limit_once: self.submit_limit_once,
             })?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
