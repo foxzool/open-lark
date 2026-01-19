@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card-element/content
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 
 use super::models::UpdateCardElementContentResponse;
 use crate::common::api_utils::{extract_response_data, serialize_params};
@@ -45,6 +47,18 @@ impl UpdateCardElementContentRequest {
         self,
         body: UpdateCardElementContentBody,
     ) -> SDKResult<UpdateCardElementContentResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（支持自定义选项）
+    ///
+    /// docPath: https://open.feishu.cn/document/cardkit-v1/card-element/content
+    pub async fn execute_with_options(
+        self,
+        body: UpdateCardElementContentBody,
+        option: RequestOption,
+    ) -> SDKResult<UpdateCardElementContentResponse> {
         let mut body = body;
         if let Some(card_id) = self.card_id {
             body.card_id = card_id;
@@ -75,7 +89,7 @@ impl UpdateCardElementContentRequest {
         )
         .body(serialize_params(&body, "流式更新文本")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "流式更新文本")
     }
 }

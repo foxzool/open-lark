@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card/settings
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -54,6 +56,18 @@ impl UpdateCardSettingsRequest {
         self,
         body: UpdateCardSettingsBody,
     ) -> SDKResult<UpdateCardSettingsResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（支持自定义选项）
+    ///
+    /// docPath: https://open.feishu.cn/document/cardkit-v1/card/settings
+    pub async fn execute_with_options(
+        self,
+        body: UpdateCardSettingsBody,
+        option: RequestOption,
+    ) -> SDKResult<UpdateCardSettingsResponse> {
         let mut body = body;
         if let Some(card_id) = self.card_id {
             body.card_id = card_id;
@@ -74,7 +88,7 @@ impl UpdateCardSettingsRequest {
         let req: ApiRequest<UpdateCardSettingsResponse> =
             ApiRequest::patch(url).body(serialize_params(&body, "更新卡片实体配置")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "更新卡片实体配置")
     }
 }
