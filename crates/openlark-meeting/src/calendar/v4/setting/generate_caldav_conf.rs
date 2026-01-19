@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/setting/generate_caldav_conf
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 
 use crate::common::api_utils::extract_response_data;
 

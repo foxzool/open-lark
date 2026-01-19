@@ -3,8 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/get
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required,
+    SDKResult,
 };
 
 use crate::common::{api_endpoints::CalendarApiV4, api_utils::extract_response_data};
@@ -53,10 +53,7 @@ impl GetCalendarEventRequest {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        option: RequestOption,
-    ) -> SDKResult<serde_json::Value> {
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         validate_required!(self.calendar_id, "calendar_id 不能为空");
         validate_required!(self.event_id, "event_id 不能为空");
 

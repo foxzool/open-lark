@@ -3,7 +3,8 @@
 //! docPath: https://open.feishu.cn/document/calendar-v4/calendar-event/instances
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required,
+    SDKResult,
 };
 
 use crate::common::api_utils::extract_response_data;

@@ -26,9 +26,8 @@ impl SetRoomAccessCodeRequest {
     /// docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/room_config/set_room_access_code
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         let api_endpoint = VcApiV1::RoomConfigSetRoomAccessCode;
-        let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(api_endpoint.to_url())
-                .body(serialize_params(&body, "创建会议室部署码")?);
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url())
+            .body(serialize_params(&body, "创建会议室部署码")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "创建会议室部署码")

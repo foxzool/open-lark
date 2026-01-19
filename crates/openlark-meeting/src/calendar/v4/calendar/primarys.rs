@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/calendar-v4/calendar/primarys
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 
 use crate::common::api_utils::extract_response_data;
 

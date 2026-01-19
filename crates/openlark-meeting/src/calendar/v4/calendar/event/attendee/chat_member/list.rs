@@ -2,7 +2,10 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event-attendee/list
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult, req_option::RequestOption};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required,
+    SDKResult,
+};
 
 use crate::{common::api_utils::extract_response_data, endpoints::CALENDAR_V4_CALENDARS};
 
@@ -54,14 +57,12 @@ impl ListCalendarEventAttendeeChatMemberRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event-attendee/list
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-
         self.execute_with_options(RequestOption::default()).await
     }
 
     /// 执行请求（带选项）
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
-
         validate_required!(self.calendar_id, "calendar_id 不能为空");
         validate_required!(self.event_id, "event_id 不能为空");
         validate_required!(self.attendee_id, "attendee_id 不能为空");
@@ -77,7 +78,5 @@ impl ListCalendarEventAttendeeChatMemberRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取日程参与群成员列表")
-
     }
-
 }

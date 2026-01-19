@@ -26,9 +26,8 @@ impl BatchFreebusyRequest {
     /// docPath: https://open.feishu.cn/document/calendar-v4/calendar/batch
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         let api_endpoint = CalendarApiV4::FreebusyBatch;
-        let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(api_endpoint.to_url())
-                .body(serialize_params(&body, "批量查询主日历日程忙闲信息")?);
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url())
+            .body(serialize_params(&body, "批量查询主日历日程忙闲信息")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "批量查询主日历日程忙闲信息")
