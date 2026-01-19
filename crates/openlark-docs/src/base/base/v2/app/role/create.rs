@@ -87,6 +87,14 @@ impl Create {
     }
 
     pub async fn execute(self) -> SDKResult<CreateResp> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateResp> {
         validate_required!(self.app_token, "app_token 不能为空");
         validate_required!(self.req.role_name, "role_name 不能为空");
         if self.req.role_name.chars().count() > 100 {
@@ -115,7 +123,7 @@ impl Create {
         let api_request: ApiRequest<CreateResp> = ApiRequest::post(&api_endpoint.to_url())
             .body(serialize_params(&self.req, "新增自定义角色")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "新增自定义角色")
     }
 }

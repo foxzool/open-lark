@@ -75,13 +75,21 @@ impl CopyFileRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CopyFileResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CopyFileResponse> {
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
                 "file_token 不能为空",
             ));
         }
-        // 文档说明：该参数为必填（请忽略必填列的“否”），为空会导致接口失败。
+        // 文档说明：该参数为必填（请忽略必填列的"否"），为空会导致接口失败。
         if self.r#type.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "type",
@@ -169,7 +177,7 @@ impl CopyFileRequest {
             "复制文件",
         )?);
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "复制文件")
     }
 }

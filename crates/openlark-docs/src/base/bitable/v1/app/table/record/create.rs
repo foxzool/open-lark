@@ -5,8 +5,8 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::SDKResult,
     http::Transport,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -84,10 +84,19 @@ impl CreateRecordRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CreateRecordResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateRecordResponse> {
         use crate::common::{api_endpoints::BitableApiV1, api_utils::*};
 
-        validate_required_field("app_token", Some(&self.app_token), "应用token不能为空")?;
-        validate_required_field("table_id", Some(&self.table_id), "数据表ID不能为空")?;
+        // 验证必填字段
+        validate_required!(self.app_token.trim(), "应用token不能为空");
+        validate_required!(self.table_id.trim(), "数据表ID不能为空");
 
         let api_endpoint =
             BitableApiV1::RecordCreate(self.app_token.clone(), self.table_id.clone());
@@ -113,65 +122,8 @@ impl CreateRecordRequest {
         };
         request = request.body(serialize_params(&request_body, "新增记录")?);
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "新增记录")
-    }
-}
-
-/// 创建记录Builder
-pub struct CreateRecordRequestBuilder {
-    request: CreateRecordRequest,
-}
-
-impl CreateRecordRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: CreateRecordRequest::new(config),
-        }
-    }
-
-    /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    /// 设置数据表ID
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
-    /// 设置客户端令牌
-    pub fn client_token(mut self, client_token: String) -> Self {
-        self.request = self.request.client_token(client_token);
-        self
-    }
-
-    /// 是否忽略一致性读写检查
-    pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
-        self.request = self
-            .request
-            .ignore_consistency_check(ignore_consistency_check);
-        self
-    }
-
-    /// 设置记录数据
-    pub fn fields(mut self, fields: Value) -> Self {
-        self.request = self.request.fields(fields);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> CreateRecordRequest {
-        self.request
     }
 }
 

@@ -81,6 +81,14 @@ impl CreateDocumentRequest {
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/create
     /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/create
     pub async fn execute(self) -> SDKResult<CreateDocumentResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<CreateDocumentResponse> {
+
         let api_endpoint = DocxApiV1::DocumentCreate;
 
         let request_body = CreateDocumentRequestBody {
@@ -92,9 +100,10 @@ impl CreateDocumentRequest {
             ApiRequest::post(&api_endpoint.to_url())
                 .body(serialize_params(&request_body, "创建文档")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "创建文档")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "创建")
+        }
 }
 
 /// 创建文档请求参数（兼容旧 API，已弃用）

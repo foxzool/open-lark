@@ -9,7 +9,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -34,18 +34,19 @@ impl DeleteFileRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeleteFileResponse> {
-        if self.file_token.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "file_token",
-                "file_token 不能为空",
-            ));
-        }
-        if self.r#type.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "type",
-                "type 不能为空",
-            ));
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DeleteFileResponse> {
+        // 验证必填字段
+        validate_required!(self.file_token.trim(), "file_token 不能为空");
+        validate_required!(self.r#type.trim(), "type 不能为空");
+
+        // 自定义验证逻辑：type 枚举值验证
         match self.r#type.as_str() {
             "file" | "docx" | "bitable" | "folder" | "doc" | "sheet" | "mindnote" | "shortcut"
             | "slides" => {}
@@ -62,7 +63,7 @@ impl DeleteFileRequest {
 
         request = request.query("type", self.r#type);
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "删除文件或文件夹")
     }
 }

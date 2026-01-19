@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -87,15 +88,17 @@ impl GetRecordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<GetRecordResponse> {
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "app_token 不能为空"));
-        }
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "table_id 不能为空"));
-        }
-        if self.record_id.trim().is_empty() {
-            return Err(validation_error("record_id", "record_id 不能为空"));
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<GetRecordResponse> {
+        validate_required!(self.app_token.trim(), "app_token");
+        validate_required!(self.table_id.trim(), "table_id");
+        validate_required!(self.record_id.trim(), "record_id");
 
         use crate::common::api_endpoints::BitableApiV1;
         let api_endpoint = BitableApiV1::RecordGet(
@@ -125,69 +128,16 @@ impl GetRecordRequest {
             self.automatic_fields.map(|v| v.to_string()),
         );
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 
-/// 获取记录 Builder
-pub struct GetRecordRequestBuilder {
-    request: GetRecordRequest,
-}
 
-impl GetRecordRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: GetRecordRequest::new(config),
-        }
-    }
 
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    pub fn record_id(mut self, record_id: String) -> Self {
-        self.request = self.request.record_id(record_id);
-        self
-    }
-
-    pub fn text_field_as_array(mut self, text_field_as_array: bool) -> Self {
-        self.request = self.request.text_field_as_array(text_field_as_array);
-        self
-    }
-
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
-    pub fn display_formula_ref(mut self, display_formula_ref: bool) -> Self {
-        self.request = self.request.display_formula_ref(display_formula_ref);
-        self
-    }
-
-    pub fn with_shared_url(mut self, with_shared_url: bool) -> Self {
-        self.request = self.request.with_shared_url(with_shared_url);
-        self
-    }
-
-    pub fn automatic_fields(mut self, automatic_fields: bool) -> Self {
-        self.request = self.request.automatic_fields(automatic_fields);
-        self
-    }
-
-    pub fn build(self) -> GetRecordRequest {
-        self.request
-    }
-}
 
 /// 获取记录响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

@@ -65,12 +65,21 @@ impl GetDocSheetMetaRequest {
     }
 
     pub async fn execute(self) -> SDKResult<GetDocSheetMetaResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<GetDocSheetMetaResponse> {
+
         use crate::common::api_endpoints::CcmDocApiOld;
         validate_required!(self.doc_token, "doc_token 不能为空");
 
         let api_request: ApiRequest<GetDocSheetMetaResponse> =
             ApiRequest::get(&CcmDocApiOld::SheetMeta(self.doc_token).to_url());
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "获取旧版文档中的电子表格元数据")
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+            extract_response_data(response, "获取文档表格元数据")
     }
 }

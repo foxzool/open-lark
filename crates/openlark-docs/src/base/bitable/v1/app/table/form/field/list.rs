@@ -5,10 +5,12 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
     http::Transport,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::*;
 
 /// 表单问题项
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -70,18 +72,20 @@ impl ListFormFieldQuestionRequest {
     }
 
     pub async fn execute(self) -> SDKResult<ListFormFieldQuestionResponse> {
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "app_token 不能为空"));
-        }
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "table_id 不能为空"));
-        }
-        if self.form_id.trim().is_empty() {
-            return Err(validation_error("form_id", "form_id 不能为空"));
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListFormFieldQuestionResponse> {
+        validate_required!(self.app_token.trim(), "应用令牌不能为空");
+        validate_required!(self.table_id.trim(), "数据表ID不能为空");
+        validate_required!(self.form_id.trim(), "表单ID不能为空");
         if let Some(page_size) = self.page_size {
             if page_size < 1 || page_size > 100 {
-                return Err(validation_error("page_size", "page_size 必须在 1~100 之间"));
+                return Err(openlark_core::error::validation_error("page_size", "page_size 必须在 1~100 之间"));
             }
         }
 
@@ -102,52 +106,8 @@ impl ListFormFieldQuestionRequest {
             api_request = api_request.query("page_token", page_token);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        response
-            .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
-    }
-}
-
-/// 列出表单问题 Builder
-pub struct ListFormFieldQuestionRequestBuilder {
-    request: ListFormFieldQuestionRequest,
-}
-
-impl ListFormFieldQuestionRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: ListFormFieldQuestionRequest::new(config),
-        }
-    }
-
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    pub fn form_id(mut self, form_id: String) -> Self {
-        self.request = self.request.form_id(form_id);
-        self
-    }
-
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        self.request = self.request.page_size(page_size);
-        self
-    }
-
-    pub fn page_token(mut self, page_token: String) -> Self {
-        self.request = self.request.page_token(page_token);
-        self
-    }
-
-    pub fn build(self) -> ListFormFieldQuestionRequest {
-        self.request
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "列出表单问题")
     }
 }
 

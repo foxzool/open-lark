@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -53,15 +54,9 @@ impl GetFormRequest {
     /// 执行请求
     pub async fn execute(self) -> SDKResult<GetFormResponse> {
         // 参数验证
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "应用token不能为空"));
-        }
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "数据表ID不能为空"));
-        }
-        if self.form_id.trim().is_empty() {
-            return Err(validation_error("form_id", "表单ID不能为空"));
-        }
+        validate_required!(self.app_token.trim(), "app_token");
+        validate_required!(self.table_id.trim(), "table_id");
+        validate_required!(self.form_id.trim(), "form_id");
 
         use crate::common::api_endpoints::BitableApiV1;
         let api_endpoint = BitableApiV1::FormGet(self.app_token, self.table_id, self.form_id);
@@ -74,42 +69,9 @@ impl GetFormRequest {
     }
 }
 
-/// 获取表单Builder
-pub struct GetFormRequestBuilder {
-    request: GetFormRequest,
-}
 
-impl GetFormRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: GetFormRequest::new(config),
-        }
-    }
 
-    /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    /// 设置数据表ID
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    /// 设置表单ID
-    pub fn form_id(mut self, form_id: String) -> Self {
-        self.request = self.request.form_id(form_id);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> GetFormRequest {
-        self.request
-    }
-}
 
 /// 获取表单响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

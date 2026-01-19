@@ -62,6 +62,14 @@ impl CreateFolderRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CreateFolderResp> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<CreateFolderResp> {
+
         use crate::common::api_endpoints::CcmDriveExplorerApiOld;
 
         validate_required!(self.folder_token, "folderToken 不能为空");
@@ -71,7 +79,8 @@ impl CreateFolderRequest {
             ApiRequest::post(&CcmDriveExplorerApiOld::Folder(self.folder_token).to_url())
                 .body(serialize_params(&self.req, "新建文件夹")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "新建文件夹")
-    }
+        
+            let response = Transport::request(api_request, &self.config, 
+Some(option)).await?;
+                extract_response_data(response, "操作")}
 }

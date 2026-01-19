@@ -53,6 +53,14 @@ impl ListFileVersionsRequest {
     }
 
     pub async fn execute(self) -> SDKResult<ListFileVersionsResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<ListFileVersionsResponse> {
+
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -82,9 +90,10 @@ impl ListFileVersionsRequest {
             .query_opt("page_token", self.page_token)
             .query_opt("user_id_type", self.user_id_type);
 
-        let response = Transport::request(request, &self.config, None).await?;
-        extract_response_data(response, "获取文档版本列表")
-    }
+        
+            let response = Transport::request(request, &self.config, Some(option)).await?;
+        extract_response_data(response, "列表")
+        }
 }
 
 /// 获取文档版本列表响应（data）

@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -62,17 +63,19 @@ impl BatchUpdateRecordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<BatchUpdateRecordResponse> {
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "app_token 不能为空"));
-        }
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "table_id 不能为空"));
-        }
-        if self.records.is_empty() {
-            return Err(validation_error("records", "records 不能为空"));
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<BatchUpdateRecordResponse> {
+        validate_required!(self.app_token.trim(), "app_token");
+        validate_required!(self.table_id.trim(), "table_id");
+        validate_required!(self.records, "records");
         if self.records.len() > 500 {
-            return Err(validation_error("records", "单次最多更新 500 条记录"));
+            return Err(openlark_core::error::validation_error("records", "单次最多更新 500 条记录"));
         }
 
         use crate::common::api_endpoints::BitableApiV1;
@@ -92,56 +95,16 @@ impl BatchUpdateRecordRequest {
             self.ignore_consistency_check.map(|v| v.to_string()),
         );
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 
-/// 批量更新记录 Builder
-pub struct BatchUpdateRecordRequestBuilder {
-    request: BatchUpdateRecordRequest,
-}
 
-impl BatchUpdateRecordRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: BatchUpdateRecordRequest::new(config),
-        }
-    }
 
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
-    pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
-        self.request = self
-            .request
-            .ignore_consistency_check(ignore_consistency_check);
-        self
-    }
-
-    pub fn records(mut self, records: Vec<UpdateRecordItem>) -> Self {
-        self.request = self.request.records(records);
-        self
-    }
-
-    pub fn build(self) -> BatchUpdateRecordRequest {
-        self.request
-    }
-}
 
 /// 更新记录条目
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

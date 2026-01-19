@@ -9,7 +9,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 
 use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
@@ -70,9 +70,9 @@ pub async fn create_float_image(
     params: CreateFloatImageParams,
 ) -> SDKResult<CreateFloatImageResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("图片Token", Some(&params.image_token), "图片Token不能为空")?;
-    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.image_token.trim(), "图片Token不能为空");
+    validate_required!(params.sheet_id.trim(), "工作表ID不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint =
@@ -97,10 +97,10 @@ pub async fn get_float_image(
     params: GetFloatImageParams,
 ) -> SDKResult<GetFloatImageResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("浮图ID", Some(&params.float_image_id), "浮图ID不能为空")?;
-    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
-    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.float_image_id.trim(), "浮图ID不能为空");
+    validate_required!(params.sheet_id.trim(), "工作表ID不能为空");
+    validate_required!(params.sheet_id.trim(), "工作表ID不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::GetFloatImage(
@@ -128,9 +128,9 @@ pub async fn update_float_image(
     params: UpdateFloatImageParams,
 ) -> SDKResult<UpdateFloatImageResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("浮图ID", Some(&params.float_image_id), "浮图ID不能为空")?;
-    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.float_image_id.trim(), "浮图ID不能为空");
+    validate_required!(params.sheet_id.trim(), "工作表ID不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::UpdateFloatImage(
@@ -158,9 +158,9 @@ pub async fn delete_float_image(
     params: DeleteFloatImageParams,
 ) -> SDKResult<DeleteFloatImageResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("浮图ID", Some(&params.float_image_id), "浮图ID不能为空")?;
-    validate_required_field("工作表ID", Some(&params.sheet_id), "工作表ID不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.float_image_id.trim(), "浮图ID不能为空");
+    validate_required!(params.sheet_id.trim(), "工作表ID不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::DeleteFloatImage(

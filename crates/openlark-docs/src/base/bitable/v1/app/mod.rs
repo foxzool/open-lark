@@ -27,15 +27,12 @@ pub use update::*;
 
 // 角色相关 - 选择性导入以避免命名冲突
 pub use role::{
-    AppRoleService, BatchCreateRoleMemberRequest, BatchCreateRoleMemberRequestBuilder,
-    BatchCreateRoleMemberResponse, BatchDeleteRoleMemberRequest,
-    BatchDeleteRoleMemberRequestBuilder, BatchDeleteRoleMemberResponse, CreateAppRoleRequest,
-    CreateAppRoleRequestBody, CreateAppRoleRequestBuilder, CreateAppRoleResponse,
-    CreateRoleMemberRequest, CreateRoleMemberRequestBuilder, CreateRoleMemberResponse,
-    DeleteAppRoleRequest, DeleteAppRoleRequestBuilder, DeleteAppRoleResponse, ListAppRoleRequest,
-    ListAppRoleRequestBuilder, ListAppRoleResponse, RoleMemberInfo, RoleMemberService,
-    UpdateAppRoleRequest, UpdateAppRoleRequestBody, UpdateAppRoleRequestBuilder,
-    UpdateAppRoleResponse,
+    AppRoleService, BatchCreateRoleMemberRequest, BatchCreateRoleMemberResponse,
+    BatchDeleteRoleMemberRequest, BatchDeleteRoleMemberResponse, CreateAppRoleRequest,
+    CreateAppRoleRequestBody, CreateAppRoleResponse, CreateRoleMemberRequest,
+    CreateRoleMemberResponse, DeleteAppRoleRequest, DeleteAppRoleResponse, ListAppRoleRequest,
+    ListAppRoleResponse, RoleMemberInfo, RoleMemberService, UpdateAppRoleRequest,
+    UpdateAppRoleRequestBody, UpdateAppRoleResponse,
 };
 
 #[allow(ambiguous_glob_reexports)]

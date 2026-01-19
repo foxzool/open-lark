@@ -35,6 +35,14 @@ impl GetExportTaskRequest {
     }
 
     pub async fn execute(self) -> SDKResult<GetExportTaskResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<GetExportTaskResponse> {
+
         if self.ticket.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "ticket",
@@ -54,9 +62,10 @@ impl GetExportTaskRequest {
         let api_request = ApiRequest::<GetExportTaskResponse>::get(&api_endpoint.to_url())
             .query("token", &self.token);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "查询导出任务结果")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "获取")
+        }
 }
 
 /// 获取导出任务响应

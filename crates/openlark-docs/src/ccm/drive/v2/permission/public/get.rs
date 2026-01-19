@@ -44,6 +44,19 @@ pub async fn get_permission_public(
     request: GetPermissionPublicRequest,
     config: &Config,
 ) -> SDKResult<GetPermissionPublicResponse> {
+    get_permission_public_with_options(
+        request,
+        config,
+        openlark_core::req_option::RequestOption::default(),
+    )
+    .await
+}
+
+pub async fn get_permission_public_with_options(
+    request: GetPermissionPublicRequest,
+    config: &Config,
+    option: openlark_core::req_option::RequestOption,
+) -> SDKResult<GetPermissionPublicResponse> {
     if request.token.is_empty() {
         return Err(openlark_core::error::validation_error(
             "token",
@@ -61,6 +74,6 @@ pub async fn get_permission_public(
     let api_request: ApiRequest<GetPermissionPublicResponse> =
         ApiRequest::get(&api_endpoint.to_url()).query("type", &request.r#type);
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "获取云文档权限设置")
 }

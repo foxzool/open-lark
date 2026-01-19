@@ -66,6 +66,14 @@ impl ListWikiSpacesRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ListWikiSpacesResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListWikiSpacesResponse> {
         let api_endpoint = WikiApiV2::SpaceList;
 
         let mut api_request: ApiRequest<ListWikiSpacesResponse> =
@@ -78,7 +86,7 @@ impl ListWikiSpacesRequest {
             api_request = api_request.query("page_token", &page_token);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取知识空间列表")
     }
 }

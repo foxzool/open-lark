@@ -133,6 +133,14 @@ impl ListFilesRequest {
     }
 
     pub async fn execute(self) -> SDKResult<ListFilesResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListFilesResponse> {
         // 不填写或填空字符串表示根目录；根目录不支持分页
         let is_root = self
             .folder_token
@@ -220,7 +228,7 @@ impl ListFilesRequest {
             request = request.query("user_id_type", user_id_type);
         }
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取文件夹中的文件清单")
     }
 }

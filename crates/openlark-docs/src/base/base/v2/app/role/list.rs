@@ -77,6 +77,14 @@ impl List {
     }
 
     pub async fn execute(self) -> SDKResult<ListResp> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListResp> {
         validate_required!(self.app_token, "app_token 不能为空");
         if let Some(page_size) = self.req.page_size {
             if page_size <= 0 {
@@ -94,7 +102,7 @@ impl List {
         api_request = api_request.query_opt("page_size", self.req.page_size.map(|v| v.to_string()));
         api_request = api_request.query_opt("page_token", self.req.page_token);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "列出自定义角色")
     }
 }

@@ -43,12 +43,21 @@ impl DeleteDocRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeleteDocResp> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<DeleteDocResp> {
+
         validate_required!(self.doc_token, "docToken 不能为空");
 
         let api_request: ApiRequest<DeleteDocResp> =
             ApiRequest::delete(&CcmDriveExplorerApiOld::FileDocs(self.doc_token).to_url());
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "删除Doc")
-    }
+        
+            let response = Transport::request(api_request, &self.config, 
+Some(option)).await?;
+                extract_response_data(response, "操作")}
 }

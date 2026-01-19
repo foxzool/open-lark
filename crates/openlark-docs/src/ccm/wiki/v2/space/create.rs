@@ -69,6 +69,14 @@ impl CreateWikiSpaceRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CreateWikiSpaceResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateWikiSpaceResponse> {
         validate_required!(self.name, "知识空间名称不能为空");
 
         let api_endpoint = WikiApiV2::SpaceCreate;
@@ -82,7 +90,7 @@ impl CreateWikiSpaceRequest {
             ApiRequest::post(&api_endpoint.to_url())
                 .body(serialize_params(&request_body, "创建知识空间")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "创建知识空间")
     }
 }

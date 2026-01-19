@@ -87,12 +87,21 @@ impl GetDocumentRequest {
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/get
     /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/get
     pub async fn execute(self) -> SDKResult<GetDocumentResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<GetDocumentResponse> {
+
         validate_required!(self.document_id, "文档ID不能为空");
 
         let api_endpoint = DocxApiV1::DocumentGet(self.document_id.clone());
         let api_request: ApiRequest<GetDocumentResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "获取文档基本信息")
-    }
+        
+            let response = Transport::request(api_request, &self.config, 
+Some(option)).await?;
+                extract_response_data(response, "获取")}
 }

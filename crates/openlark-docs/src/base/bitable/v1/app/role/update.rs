@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -61,24 +62,16 @@ impl UpdateAppRoleRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UpdateAppRoleResponse> {
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "app_token 不能为空"));
-        }
-        if self.role_id.trim().is_empty() {
-            return Err(validation_error("role_id", "role_id 不能为空"));
-        }
-        if self.role_name.trim().is_empty() {
-            return Err(validation_error("role_name", "role_name 不能为空"));
-        }
-        if self.table_roles.is_empty() {
-            return Err(validation_error("table_roles", "table_roles 不能为空"));
-        }
+        validate_required!(self.app_token.trim(), "app_token");
+        validate_required!(self.role_id.trim(), "role_id");
+        validate_required!(self.role_name.trim(), "role_name");
+        validate_required!(self.table_roles, "table_roles");
         if self.table_roles.len() > 100 {
-            return Err(validation_error("table_roles", "table_roles 最多 100 项"));
+            return Err(openlark_core::error::validation_error("table_roles", "table_roles 最多 100 项"));
         }
         if let Some(ref block_roles) = self.block_roles {
             if block_roles.len() > 100 {
-                return Err(validation_error("block_roles", "block_roles 最多 100 项"));
+                return Err(openlark_core::error::validation_error("block_roles", "block_roles 最多 100 项"));
             }
         }
 
@@ -97,7 +90,7 @@ impl UpdateAppRoleRequest {
         let response = Transport::request(api_request, &self.config, None).await?;
         response
             .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 

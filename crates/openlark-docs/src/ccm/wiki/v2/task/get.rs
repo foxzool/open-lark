@@ -59,6 +59,14 @@ impl GetWikiTaskRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<GetWikiTaskResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<GetWikiTaskResponse> {
+
         // 验证必填字段
         validate_required!(self.task_id, "任务ID不能为空");
 
@@ -74,7 +82,8 @@ impl GetWikiTaskRequest {
         }
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "获取任务结果")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "获取")
+        }
 }

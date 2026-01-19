@@ -64,11 +64,20 @@ impl CreateDocRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CreateDocResp> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<CreateDocResp> {
+
         let api_request: ApiRequest<CreateDocResp> =
             ApiRequest::post(&CcmDocApiOld::Create.to_url())
                 .body(serialize_params(&self.req, "创建旧版文档")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "创建旧版文档")
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+            extract_response_data(response, "创建文档")
     }
 }

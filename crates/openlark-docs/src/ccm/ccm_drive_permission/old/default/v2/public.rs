@@ -63,6 +63,14 @@ impl GetPublicPermissionRequest {
     }
 
     pub async fn execute(self) -> SDKResult<GetPublicPermissionResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<GetPublicPermissionResponse> {
+
         validate_required!(self.req.token, "token 不能为空");
         validate_required!(self.req.type_, "type 不能为空");
 
@@ -71,7 +79,8 @@ impl GetPublicPermissionRequest {
         let api_request: ApiRequest<GetPublicPermissionResponse> =
             ApiRequest::post(&CcmDrivePermissionApiOld::Public.to_url())
                 .body(serialize_params(&self.req, "获取云文档权限设置V2")?);
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "获取云文档权限设置V2")
-    }
+        
+            let response = Transport::request(api_request, &self.config, 
+Some(option)).await?;
+                extract_response_data(response, "权限")}
 }

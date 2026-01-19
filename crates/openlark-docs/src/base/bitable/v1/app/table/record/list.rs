@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -137,19 +138,22 @@ impl ListRecordRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ListRecordResponse> {
-        // 参数验证
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "应用token不能为空"));
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "数据表ID不能为空"));
-        }
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListRecordResponse> {
+        // 参数验证
+        validate_required!(self.app_token.trim(), "应用token不能为空");
+        validate_required!(self.table_id.trim(), "数据表ID不能为空");
 
         // 验证分页大小
         if let Some(page_size) = self.page_size {
             if page_size <= 0 {
-                return Err(validation_error("page_size", "分页大小必须大于0"));
+                return Err(openlark_core::error::validation_error("page_size", "分页大小必须大于0"));
             }
         }
 
@@ -198,101 +202,10 @@ impl ListRecordRequest {
         );
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
-    }
-}
-
-/// 列出记录Builder
-pub struct ListRecordRequestBuilder {
-    request: ListRecordRequest,
-}
-
-impl ListRecordRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: ListRecordRequest::new(config),
-        }
-    }
-
-    /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    /// 设置数据表ID
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    /// 设置分页标记
-    pub fn page_token(mut self, page_token: String) -> Self {
-        self.request = self.request.page_token(page_token);
-        self
-    }
-
-    /// 设置分页大小
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        self.request = self.request.page_size(page_size);
-        self
-    }
-
-    /// 设置视图ID
-    pub fn view_id(mut self, view_id: String) -> Self {
-        self.request = self.request.view_id(view_id);
-        self
-    }
-
-    /// 设置筛选参数（公式字符串）
-    pub fn filter(mut self, filter: impl Into<String>) -> Self {
-        self.request = self.request.filter(filter);
-        self
-    }
-
-    /// 设置排序参数（数组会被序列化为 JSON 字符串）
-    pub fn sort(mut self, sort: Vec<String>) -> Self {
-        self.request = self.request.sort(sort);
-        self
-    }
-
-    /// 设置字段名称（数组会被序列化为 JSON 字符串）
-    pub fn field_names(mut self, field_names: Vec<String>) -> Self {
-        self.request = self.request.field_names(field_names);
-        self
-    }
-
-    /// 控制多行文本字段数据的返回格式，true 表示以数组形式返回
-    pub fn text_field_as_array(mut self, text_field_as_array: bool) -> Self {
-        self.request = self.request.text_field_as_array(text_field_as_array);
-        self
-    }
-
-    /// 设置用户 ID 类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
-    /// 公式和查找引用字段是否以被引用字段格式返回
-    pub fn display_formula_ref(mut self, display_formula_ref: bool) -> Self {
-        self.request = self.request.display_formula_ref(display_formula_ref);
-        self
-    }
-
-    /// 控制是否返回自动计算字段
-    pub fn automatic_fields(mut self, automatic_fields: bool) -> Self {
-        self.request = self.request.automatic_fields(automatic_fields);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> ListRecordRequest {
-        self.request
+            .ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 

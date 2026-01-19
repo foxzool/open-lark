@@ -106,6 +106,14 @@ impl SearchObjectRequest {
     }
 
     pub async fn execute(self) -> SDKResult<SearchObjectResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<SearchObjectResponse> {
+
         use crate::common::api_endpoints::CcmDocsApiOld;
         if self
             .req
@@ -148,7 +156,7 @@ impl SearchObjectRequest {
             ApiRequest::post(&CcmDocsApiOld::SearchObject.to_url())
                 .body(serialize_params(&self.req, "搜索云文档")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "搜索云文档")
     }
 }

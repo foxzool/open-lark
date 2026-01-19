@@ -7,6 +7,7 @@ use openlark_core::{
     config::Config,
     error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -45,17 +46,25 @@ impl DeleteRecordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeleteRecordResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DeleteRecordResponse> {
         use crate::common::{api_endpoints::BitableApiV1, api_utils::*};
 
-        validate_required_field("app_token", Some(&self.app_token), "app_token 不能为空")?;
-        validate_required_field("table_id", Some(&self.table_id), "table_id 不能为空")?;
-        validate_required_field("record_id", Some(&self.record_id), "record_id 不能为空")?;
+        validate_required!(self.app_token.trim(), "app_token 不能为空");
+        validate_required!(self.table_id.trim(), "table_id 不能为空");
+        validate_required!(self.record_id.trim(), "record_id 不能为空");
 
         let api_endpoint =
             BitableApiV1::RecordDelete(self.app_token, self.table_id, self.record_id);
         let request = ApiRequest::<DeleteRecordResponse>::delete(&api_endpoint.to_url());
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "删除记录")
     }
 }

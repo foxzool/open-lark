@@ -74,6 +74,14 @@ impl GetFolderChildrenRequest {
     }
 
     pub async fn execute(self) -> SDKResult<GetFolderChildrenResp> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<GetFolderChildrenResp> {
+
         validate_required!(self.folder_token, "folderToken 不能为空");
 
         let mut api_request: ApiRequest<GetFolderChildrenResp> =
@@ -83,7 +91,8 @@ impl GetFolderChildrenRequest {
             api_request = api_request.query("types", type_);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "获取文件夹下的文档清单")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "子文件夹")
+        }
 }

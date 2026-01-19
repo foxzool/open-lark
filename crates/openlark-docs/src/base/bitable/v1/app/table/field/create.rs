@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -130,18 +131,20 @@ impl CreateFieldRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CreateFieldResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateFieldResponse> {
         // 参数验证
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "应用token不能为空"));
-        }
+        validate_required!(self.app_token.trim(), "app_token");
 
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "数据表ID不能为空"));
-        }
+        validate_required!(self.table_id.trim(), "table_id");
 
-        if self.field_name.trim().is_empty() {
-            return Err(validation_error("field_name", "字段名称不能为空"));
-        }
+        validate_required!(self.field_name.trim(), "field_name");
 
         // 🚀 使用新的enum+builder系统生成API端点
         // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
@@ -165,79 +168,16 @@ impl CreateFieldRequest {
         api_request = api_request.query_opt("client_token", self.client_token);
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+            .ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 
-/// 创建字段Builder
-pub struct CreateFieldRequestBuilder {
-    request: CreateFieldRequest,
-}
 
-impl CreateFieldRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: CreateFieldRequest::new(config),
-        }
-    }
 
-    /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    /// 设置数据表ID
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    /// 设置客户端token
-    pub fn client_token(mut self, client_token: String) -> Self {
-        self.request = self.request.client_token(client_token);
-        self
-    }
-
-    /// 设置字段名称
-    pub fn field_name(mut self, field_name: String) -> Self {
-        self.request = self.request.field_name(field_name);
-        self
-    }
-
-    /// 设置字段类型
-    pub fn field_type(mut self, field_type: FieldType) -> Self {
-        self.request = self.request.field_type(field_type);
-        self
-    }
-
-    /// 设置字段属性
-    pub fn property(mut self, property: FieldProperty) -> Self {
-        self.request = self.request.property(property);
-        self
-    }
-
-    /// 设置字段描述
-    pub fn description(mut self, description: Value) -> Self {
-        self.request = self.request.description(description);
-        self
-    }
-
-    /// 设置界面类型
-    pub fn ui_type(mut self, ui_type: String) -> Self {
-        self.request = self.request.ui_type(ui_type);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> CreateFieldRequest {
-        self.request
-    }
-}
 
 /// 字段信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

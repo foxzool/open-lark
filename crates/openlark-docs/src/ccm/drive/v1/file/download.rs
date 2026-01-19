@@ -42,6 +42,14 @@ impl DownloadFileRequest {
     ///
     /// 成功时返回文件二进制内容（`Response<Vec<u8>>`）。
     pub async fn execute(self) -> SDKResult<Response<Vec<u8>>> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<Response<Vec<u8>>> {
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -89,7 +97,7 @@ impl DownloadFileRequest {
             request = request.header("Range", r);
         }
 
-        Transport::request(request, &self.config, None).await
+        Transport::request(request, &self.config, Some(option)).await
     }
 }
 

@@ -54,6 +54,14 @@ impl SubscribeFileRequest {
     }
 
     pub async fn execute(self) -> SDKResult<SubscribeFileResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<SubscribeFileResponse> {
+
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -108,8 +116,8 @@ impl SubscribeFileRequest {
             request = request.query("event_type", et);
         }
 
-        let response = Transport::request(request, &self.config, None).await?;
-        extract_response_data(response, "订阅云文档事件")
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+        extract_response_data(response, "订阅文件")
     }
 }
 

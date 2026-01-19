@@ -34,6 +34,14 @@ impl CreatePermissionPublicPasswordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CreatePermissionPublicPasswordResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<CreatePermissionPublicPasswordResponse> {
+
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -68,9 +76,10 @@ impl CreatePermissionPublicPasswordRequest {
             ApiRequest::<CreatePermissionPublicPasswordResponse>::post(&api_endpoint.to_url())
                 .query("type", self.r#type);
 
-        let response = Transport::request(request, &self.config, None).await?;
-        extract_response_data(response, "启用云文档密码")
-    }
+        
+            let response = Transport::request(request, &self.config, Some(option)).await?;
+        extract_response_data(response, "创建")
+        }
 }
 
 /// 启用云文档密码响应（data）

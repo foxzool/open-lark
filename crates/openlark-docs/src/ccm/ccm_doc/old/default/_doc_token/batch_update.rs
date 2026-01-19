@@ -66,6 +66,14 @@ impl BatchUpdateDocRequestBuilder {
     }
 
     pub async fn execute(self) -> SDKResult<BatchUpdateDocResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<BatchUpdateDocResponse> {
+
         validate_required!(self.doc_token, "doc_token 不能为空");
         if self.req.revision < 0 {
             return Err(openlark_core::error::validation_error(
@@ -80,7 +88,8 @@ impl BatchUpdateDocRequestBuilder {
         let api_request: ApiRequest<BatchUpdateDocResponse> =
             ApiRequest::post(&CcmDocApiOld::BatchUpdate(self.doc_token).to_url())
                 .body(serialize_params(&self.req, "编辑旧版文档内容")?);
-        let response = Transport::request(api_request, &self.config, None).await?;
+
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "编辑旧版文档内容")
     }
 }

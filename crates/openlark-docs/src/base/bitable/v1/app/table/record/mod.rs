@@ -152,23 +152,17 @@ pub mod search;
 pub mod update;
 
 // 重新导出主要类型
-pub use batch_create::{
-    BatchCreateRecordRequest, BatchCreateRecordRequestBuilder, BatchCreateRecordResponse,
-};
-pub use batch_delete::{
-    BatchDeleteRecordRequest, BatchDeleteRecordRequestBuilder, BatchDeleteRecordResponse,
-};
-pub use batch_get::{BatchGetRecordRequest, BatchGetRecordRequestBuilder, BatchGetRecordResponse};
-pub use batch_update::{
-    BatchUpdateRecordRequest, BatchUpdateRecordRequestBuilder, BatchUpdateRecordResponse,
-};
-pub use create::{CreateRecordRequest, CreateRecordRequestBuilder, CreateRecordResponse};
-pub use delete::{DeleteRecordRequest, DeleteRecordRequestBuilder, DeleteRecordResponse};
-pub use get::{GetRecordRequest, GetRecordRequestBuilder, GetRecordResponse};
-pub use list::{ListRecordRequest, ListRecordRequestBuilder, ListRecordResponse};
+pub use batch_create::{BatchCreateRecordRequest, BatchCreateRecordResponse};
+pub use batch_delete::{BatchDeleteRecordRequest, BatchDeleteRecordResponse};
+pub use batch_get::{BatchGetRecordRequest, BatchGetRecordResponse};
+pub use batch_update::{BatchUpdateRecordRequest, BatchUpdateRecordResponse};
+pub use create::{CreateRecordRequest, CreateRecordResponse};
+pub use delete::{DeleteRecordRequest, DeleteRecordResponse};
+pub use get::{GetRecordRequest, GetRecordResponse};
+pub use list::{ListRecordRequest, ListRecordResponse};
 pub use models::{Person, Record};
-pub use search::{SearchRecordRequest, SearchRecordRequestBuilder, SearchRecordResponse};
-pub use update::{UpdateRecordRequest, UpdateRecordRequestBuilder, UpdateRecordResponse};
+pub use search::{SearchRecordRequest, SearchRecordResponse};
+pub use update::{UpdateRecordRequest, UpdateRecordResponse};
 
 /// 记录服务
 pub struct AppTableRecordService {
@@ -184,11 +178,6 @@ impl AppTableRecordService {
     /// 获取配置
     pub fn config(&self) -> &Config {
         &self.config
-    }
-
-    /// 批量获取记录
-    pub async fn batch_get(&self) -> BatchGetRecordRequestBuilder {
-        BatchGetRecordRequestBuilder::new(self.config.clone())
     }
 }
 

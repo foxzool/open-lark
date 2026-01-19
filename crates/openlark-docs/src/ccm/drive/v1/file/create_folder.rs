@@ -50,6 +50,14 @@ impl CreateFolderRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CreateFolderResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateFolderResponse> {
         let name_len = self.name.len();
         if !(1..=256).contains(&name_len) {
             return Err(openlark_core::error::validation_error(
@@ -62,7 +70,7 @@ impl CreateFolderRequest {
         let request = ApiRequest::<CreateFolderResponse>::post(&api_endpoint.to_url())
             .body(serialize_params(&self, "新建文件夹")?);
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "新建文件夹")
     }
 }

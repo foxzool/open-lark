@@ -35,6 +35,14 @@ impl UploadFinishRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UploadFinishResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<UploadFinishResponse> {
         if self.upload_id.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "upload_id",
@@ -52,7 +60,7 @@ impl UploadFinishRequest {
         let request = ApiRequest::<UploadFinishResponse>::post(&api_endpoint.to_url())
             .body(serialize_params(&self, "分片上传文件-完成上传")?);
 
-        let response = Transport::request(request, &self.config, None).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "分片上传文件-完成上传")
     }
 }

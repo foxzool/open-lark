@@ -86,6 +86,14 @@ impl CreateFileRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CreateFileResp> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<CreateFileResp> {
+
         validate_required!(self.folder_token, "folderToken 不能为空");
         validate_required!(self.req.title, "title 不能为空");
 
@@ -93,7 +101,8 @@ impl CreateFileRequest {
             ApiRequest::post(&CcmDriveExplorerApiOld::File(self.folder_token).to_url())
                 .body(serialize_params(&self.req, "新建文件")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "新建文件")
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+            extract_response_data(response, "操作")
     }
 }

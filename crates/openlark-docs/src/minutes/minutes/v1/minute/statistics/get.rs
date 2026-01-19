@@ -39,6 +39,14 @@ impl GetMinuteStatisticsRequest {
     }
 
     pub async fn execute(self) -> SDKResult<GetMinuteStatisticsResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<GetMinuteStatisticsResponse> {
+
         let minute_token = self.minute_token.ok_or_else(|| {
             openlark_core::error::validation_error("minute_token", "minute_token 不能为空")
         })?;
@@ -68,9 +76,10 @@ impl GetMinuteStatisticsRequest {
             api_request = api_request.query("user_id_type", user_id_type);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "获取妙记统计数据")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "获取")
+        }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

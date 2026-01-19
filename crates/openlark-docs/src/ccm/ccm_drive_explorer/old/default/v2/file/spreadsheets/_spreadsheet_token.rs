@@ -43,13 +43,22 @@ impl DeleteSpreadsheetRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeleteSpreadsheetResp> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<DeleteSpreadsheetResp> {
+
         validate_required!(self.spreadsheet_token, "spreadsheetToken 不能为空");
 
         let api_request: ApiRequest<DeleteSpreadsheetResp> = ApiRequest::delete(
             &CcmDriveExplorerApiOld::FileSpreadsheets(self.spreadsheet_token).to_url(),
         );
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "删除Sheet")
-    }
+        
+            let response = Transport::request(api_request, &self.config, 
+Some(option)).await?;
+                extract_response_data(response, "操作")}
 }

@@ -15,21 +15,11 @@ pub mod delete;
 pub mod list;
 pub mod models;
 
-pub use batch_create::{
-    BatchCreateRoleMemberRequest, BatchCreateRoleMemberRequestBuilder,
-    BatchCreateRoleMemberResponse,
-};
-pub use batch_delete::{
-    BatchDeleteRoleMemberRequest, BatchDeleteRoleMemberRequestBuilder,
-    BatchDeleteRoleMemberResponse,
-};
-pub use create::{
-    CreateRoleMemberRequest, CreateRoleMemberRequestBuilder, CreateRoleMemberResponse,
-};
-pub use delete::{
-    DeleteRoleMemberRequest, DeleteRoleMemberRequestBuilder, DeleteRoleMemberResponse,
-};
-pub use list::{ListRoleMembersRequest, ListRoleMembersRequestBuilder, ListRoleMembersResponse};
+pub use batch_create::{BatchCreateRoleMemberRequest, BatchCreateRoleMemberResponse};
+pub use batch_delete::{BatchDeleteRoleMemberRequest, BatchDeleteRoleMemberResponse};
+pub use create::{CreateRoleMemberRequest, CreateRoleMemberResponse};
+pub use delete::{DeleteRoleMemberRequest, DeleteRoleMemberResponse};
+pub use list::{ListRoleMembersRequest, ListRoleMembersResponse};
 pub use models::{RoleMemberId, RoleMemberIdType, RoleMemberInfo, RoleMemberType};
 
 /// 协作者服务
@@ -44,26 +34,6 @@ impl RoleMemberService {
 
     pub fn config(&self) -> &Config {
         &self.config
-    }
-
-    pub fn create(&self) -> CreateRoleMemberRequestBuilder {
-        CreateRoleMemberRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn batch_create(&self) -> BatchCreateRoleMemberRequestBuilder {
-        BatchCreateRoleMemberRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn list(&self) -> ListRoleMembersRequestBuilder {
-        ListRoleMembersRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn delete(&self) -> DeleteRoleMemberRequestBuilder {
-        DeleteRoleMemberRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn batch_delete(&self) -> BatchDeleteRoleMemberRequestBuilder {
-        BatchDeleteRoleMemberRequestBuilder::new(self.config.clone())
     }
 }
 

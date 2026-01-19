@@ -91,6 +91,14 @@ impl TransferOwnerRequest {
     }
 
     pub async fn execute(self) -> SDKResult<TransferOwnerResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<TransferOwnerResponse> {
+
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -177,9 +185,10 @@ impl TransferOwnerRequest {
 
         api_request = api_request.body(serialize_params(&body, "转移云文档所有者")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "转移云文档所有者")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "转移")
+        }
 }
 
 /// 转移所有者响应
