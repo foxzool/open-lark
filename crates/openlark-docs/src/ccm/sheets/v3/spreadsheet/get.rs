@@ -27,6 +27,15 @@ pub async fn get_spreadsheet(
     config: &Config,
     spreadsheet_token: &str,
 ) -> SDKResult<GetSpreadsheetResponse> {
+    get_spreadsheet_with_options(config, spreadsheet_token, RequestOption::default()).await
+}
+
+/// 获取电子表格信息（支持自定义选项）
+pub async fn get_spreadsheet_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    option: RequestOption,
+) -> SDKResult<GetSpreadsheetResponse> {
     // 使用enum+builder系统生成API端点
     let api_endpoint = SheetsApiV3::GetSpreadsheet(spreadsheet_token.to_string());
 
@@ -34,6 +43,6 @@ pub async fn get_spreadsheet(
     let api_request: ApiRequest<GetSpreadsheetResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "获取电子表格信息")
 }
