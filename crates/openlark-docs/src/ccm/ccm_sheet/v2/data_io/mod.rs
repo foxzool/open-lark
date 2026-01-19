@@ -106,7 +106,7 @@ pub async fn read_single_range(
         .query_opt("date_render_option", params.date_render_option.as_ref());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "读取单个范围")
 }
 
@@ -143,7 +143,7 @@ pub async fn read_multiple_ranges(
             .query_opt("date_render_option", params.date_render_option.as_ref());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "读取多个范围")
 }
 
@@ -168,7 +168,7 @@ pub async fn write_single_range(
         ApiRequest::put(&api_endpoint.to_url()).body(serialize_params(&params, "写入单个范围")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "写入单个范围")
 }
 
@@ -199,7 +199,7 @@ pub async fn batch_write_ranges(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "批量写入范围")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "批量写入范围")
 }
 
@@ -224,7 +224,7 @@ pub async fn append_values(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "追加数据")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "追加数据")
 }
 
@@ -249,7 +249,7 @@ pub async fn insert_values(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "插入数据")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "插入数据")
 }
 
@@ -274,7 +274,7 @@ pub async fn values_image(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "写入图片")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "写入图片")
 }
 

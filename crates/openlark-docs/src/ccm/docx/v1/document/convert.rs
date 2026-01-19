@@ -77,7 +77,7 @@ impl ConvertContentToBlocksRequest {
                 .body(serialize_params(&params, "Markdown/HTML 内容转换为文档块")?);
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "Markdown/HTML 内容转换为文档块")
     }
 }

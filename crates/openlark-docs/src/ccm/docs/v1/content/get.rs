@@ -98,11 +98,7 @@ pub async fn get_docs_content(
             .query("content_type", &request.content_type)
             .query_opt("lang", request.lang);
 
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "获取云文档内容")
 }

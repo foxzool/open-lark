@@ -35,6 +35,6 @@ pub async fn get_sheet(
     let api_request: ApiRequest<GetSheetResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取工作表信息")
 }

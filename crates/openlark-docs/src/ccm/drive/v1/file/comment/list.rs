@@ -183,11 +183,7 @@ pub async fn list_comments(
         api_request = api_request.query("user_id_type", user_id_type);
     }
 
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "获取云文档所有评论")
 }

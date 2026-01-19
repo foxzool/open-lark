@@ -78,7 +78,7 @@ impl GetChatAnnouncementBlocksRequest {
             api_request = api_request.query("revision_id", &revision_id.to_string());
         }
 
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "获取群公告所有块")
     }
 }

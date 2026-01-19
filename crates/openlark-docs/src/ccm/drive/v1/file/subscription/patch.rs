@@ -105,11 +105,7 @@ pub async fn patch_subscription(
             "更新订阅状态",
         )?);
 
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "更新订阅状态")
 }

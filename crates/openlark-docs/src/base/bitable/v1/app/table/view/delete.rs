@@ -77,7 +77,7 @@ impl DeleteViewRequest {
             ApiRequest::delete(&api_endpoint.to_url());
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
         })

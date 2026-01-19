@@ -211,13 +211,9 @@ pub async fn get_file_view_records(
 
     // 如果有请求选项，应用它们
 
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
     // 发送请求
 
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "获取文件访问记录")
 }

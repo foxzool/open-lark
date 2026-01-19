@@ -84,7 +84,7 @@ impl GetDocumentBlockChildrenRequest {
             api_request = api_request.query("page_token", &page_token);
         }
 
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "获取所有子块")
     }
 }

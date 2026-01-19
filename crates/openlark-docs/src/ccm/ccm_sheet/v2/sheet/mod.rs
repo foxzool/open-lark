@@ -82,7 +82,7 @@ pub async fn add_sheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "添加工作表")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "添加工作表")
 }
 
@@ -107,7 +107,7 @@ pub async fn get_sheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取工作表信息")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取工作表信息")
 }
 
@@ -132,7 +132,7 @@ pub async fn update_sheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新工作表")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "更新工作表")
 }
 
@@ -157,7 +157,7 @@ pub async fn delete_sheet(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除工作表")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "删除工作表")
 }
 

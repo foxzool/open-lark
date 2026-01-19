@@ -82,7 +82,7 @@ pub async fn create_filter(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建筛选")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "创建筛选")
 }
 
@@ -107,7 +107,7 @@ pub async fn get_filter(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取筛选")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取筛选")
 }
 
@@ -132,7 +132,7 @@ pub async fn update_filter(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新筛选")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "更新筛选")
 }
 
@@ -157,7 +157,7 @@ pub async fn delete_filter(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除筛选")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "删除筛选")
 }
 

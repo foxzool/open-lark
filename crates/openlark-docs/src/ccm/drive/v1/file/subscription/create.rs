@@ -151,11 +151,7 @@ pub async fn create_file_subscription(
             "创建订阅",
         )?);
 
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "创建订阅")
 }

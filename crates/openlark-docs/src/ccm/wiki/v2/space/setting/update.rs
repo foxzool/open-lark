@@ -67,7 +67,7 @@ impl UpdateWikiSpaceSettingRequest {
                 .body(serialize_params(&setting, "更新知识空间设置")?);
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "更新知识空间设置")
     }
 }

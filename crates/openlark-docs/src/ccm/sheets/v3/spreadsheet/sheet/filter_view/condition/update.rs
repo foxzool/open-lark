@@ -55,6 +55,6 @@ pub async fn update_filter_condition(
     let api_request: ApiRequest<UpdateFilterConditionResponse> =
         ApiRequest::put(&api_endpoint.to_url()).body(serialize_params(&params, "更新筛选条件")?);
 
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "更新筛选条件")
 }

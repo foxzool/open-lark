@@ -65,11 +65,7 @@ pub async fn get_subscription(
     let mut api_request: ApiRequest<GetSubscriptionResponse> =
         ApiRequest::get(&api_endpoint.to_url());
 
-    if let Some(opt) = option {
-        api_request = api_request.request_option(opt);
-    }
-
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "获取订阅状态")
 }
