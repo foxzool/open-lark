@@ -58,5 +58,5 @@ impl StartSkillRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "调用技能")
-}
+    }
 }

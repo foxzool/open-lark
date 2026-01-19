@@ -46,7 +46,6 @@ impl CreateChatMenuTreeRequest {
         body: serde_json::Value,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
-
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: POST:/open-apis/im/v1/chats/:chat_id/menu_tree
@@ -54,9 +53,8 @@ impl CreateChatMenuTreeRequest {
             ApiRequest::post(format!("{}/{}/menu_tree", IM_V1_CHATS, self.chat_id))
                 .body(serialize_params(&body, "添加群菜单")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "添加群菜单")
-}
+    }
 }

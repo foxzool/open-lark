@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/message-card/delay-update-message-card
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -51,10 +53,10 @@ impl UpdateCardRequest {
         validate_required!(&body.token, "token 不能为空");
 
         // url: POST:/open-apis/interactive/v1/card/update
-        let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(INTERACTIVE_V1_CARD_UPDATE).body(serialize_params(&body, "延时更新消息卡片")?);
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(INTERACTIVE_V1_CARD_UPDATE)
+            .body(serialize_params(&body, "延时更新消息卡片")?);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "延时更新消息卡片")
-}
+    }
 }

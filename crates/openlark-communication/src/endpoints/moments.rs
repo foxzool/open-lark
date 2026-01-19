@@ -30,5 +30,5 @@ mod tests {
         assert!(MOMENTS_V1_POST_GET.starts_with("/open-apis/moments/v1/"));
         assert!(MOMENTS_V1_POST_GET.contains("{post_id}"));
         assert!(MOMENTS_V1_POSTS.starts_with("/open-apis/moments/v1/"));
-}
+    }
 }

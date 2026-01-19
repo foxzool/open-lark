@@ -51,16 +51,14 @@ impl CreateJobFamilyRequest {
         body: CreateJobFamilyBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<JobFamilyResponse> {
-
         validate_required!(body.name, "name 不能为空");
 
         // url: POST:/open-apis/contact/v3/job_families
         let req: ApiRequest<JobFamilyResponse> =
             ApiRequest::post(CONTACT_V3_JOB_FAMILIES).body(serialize_params(&body, "创建序列")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "创建序列")
-}
+    }
 }

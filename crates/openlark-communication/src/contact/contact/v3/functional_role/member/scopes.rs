@@ -75,7 +75,6 @@ impl PatchRoleMembersScopesRequest {
         body: PatchMembersScopesBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<PatchMembersScopesResponse> {
-
         validate_required!(self.role_id, "role_id 不能为空");
         if body.members.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -104,9 +103,8 @@ impl PatchRoleMembersScopesRequest {
             req = req.query("department_id_type", department_id_type.as_str());
         }
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "批量设置角色成员管理范围")
-}
+    }
 }

@@ -42,8 +42,12 @@ impl CreateFileRequest {
         body: CreateFileBody,
         file_bytes: Vec<u8>,
     ) -> SDKResult<CreateFileResponse> {
-        self.execute_with_options(body, file_bytes, openlark_core::req_option::RequestOption::default())
-            .await
+        self.execute_with_options(
+            body,
+            file_bytes,
+            openlark_core::req_option::RequestOption::default(),
+        )
+        .await
     }
 
     pub async fn execute_with_options(
@@ -68,5 +72,5 @@ impl CreateFileRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "上传文件")
-}
+    }
 }

@@ -52,8 +52,12 @@ impl RemoveGroupMemberRequest {
         member_id_type: UserIdType,
         member_id: impl Into<String>,
     ) -> SDKResult<EmptyData> {
-        self.execute_with_options(member_id_type, member_id, openlark_core::req_option::RequestOption::default())
-            .await
+        self.execute_with_options(
+            member_id_type,
+            member_id,
+            openlark_core::req_option::RequestOption::default(),
+        )
+        .await
     }
 
     pub async fn execute_with_options(
@@ -80,5 +84,5 @@ impl RemoveGroupMemberRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "移除用户组成员")
-}
+    }
 }

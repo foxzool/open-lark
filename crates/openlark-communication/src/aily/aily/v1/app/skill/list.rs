@@ -51,5 +51,5 @@ impl ListSkillsRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询技能列表")
-}
+    }
 }

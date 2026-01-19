@@ -69,7 +69,6 @@ impl PushFollowUpRequest {
         body: PushFollowUpBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
-
         validate_required!(self.message_id, "message_id 不能为空");
         if body.follow_ups.is_empty() {
             return Err(error::validation_error(
@@ -85,9 +84,8 @@ impl PushFollowUpRequest {
         ))
         .body(serialize_params(&body, "添加跟随气泡")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "添加跟随气泡")
-}
+    }
 }
