@@ -60,12 +60,8 @@ impl ApproveEntityRequest {
             ApiRequest::post(&BaikeApiV1::EntityApprove(self.entity_id).to_url())
                 .body(serde_json::to_value(&self.req)?);
 
-        let response: Response<ApproveEntityResp> = Transport::request(
-            Transport::request(api_request, &self.config, None),
-            &self.config,
-            Some(option),
-        )
-        .await?;
+        let response: Response<ApproveEntityResp> =
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
