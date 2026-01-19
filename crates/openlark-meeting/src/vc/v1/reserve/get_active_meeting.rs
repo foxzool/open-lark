@@ -3,8 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/reserve/get_active_meeting
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
-    req_option::RequestOption,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required,
+    SDKResult,
 };
 
 use crate::common::api_endpoints::VcApiV1;
@@ -46,10 +46,7 @@ impl GetActiveMeetingRequest {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        option: RequestOption,
-    ) -> SDKResult<serde_json::Value> {
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         validate_required!(self.reserve_id, "reserve_id 不能为空");
 
         // url: GET:/open-apis/vc/v1/reserves/:reserve_id/active_meeting

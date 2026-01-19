@@ -3,8 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/api-reference/delete-meeting-room
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
-    validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required,
+    SDKResult,
 };
 
 use crate::common::api_endpoints::MeetingRoomApi;
@@ -43,8 +43,8 @@ impl DeleteRoomRequest {
 
         // url: DELETE:/open-apis/meeting_room/rooms/:room_id
         let api_endpoint = MeetingRoomApi::RoomDelete(self.room_id);
-        let req: ApiRequest<serde_json::Value> = ApiRequest::delete(api_endpoint.to_url())
-            .body(serde_json::json!({
+        let req: ApiRequest<serde_json::Value> =
+            ApiRequest::delete(api_endpoint.to_url()).body(serde_json::json!({
                 "room_id": self.room_id
             }));
 

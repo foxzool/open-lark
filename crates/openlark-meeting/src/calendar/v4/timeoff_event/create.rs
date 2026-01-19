@@ -26,8 +26,8 @@ impl CreateTimeoffEventRequest {
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/timeoff_event/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         let api_endpoint = CalendarApiV4::TimeoffEventCreate;
-        let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url())
-            .body(serialize_params(&body, "创建请假日程")?);
+        let req: ApiRequest<serde_json::Value> =
+            ApiRequest::post(api_endpoint.to_url()).body(serialize_params(&body, "创建请假日程")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "创建请假日程")

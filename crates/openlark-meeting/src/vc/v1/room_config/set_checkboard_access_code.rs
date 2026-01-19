@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/room_config/set_checkboard_access_code
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 
 use crate::common::api_utils::{extract_response_data, serialize_params};
 
@@ -22,7 +24,8 @@ impl SetCheckboardAccessCodeRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/room_config/set_checkboard_access_code
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行请求（带选项）
@@ -32,10 +35,9 @@ impl SetCheckboardAccessCodeRequest {
         option: RequestOption,
     ) -> SDKResult<serde_json::Value> {
         // url: POST:/open-apis/vc/v1/room_configs/set_checkboard_access_code
-        let req: ApiRequest<serde_json::Value> = ApiRequest::post(
-            "/open-apis/vc/v1/room_configs/set_checkboard_access_code"
-        )
-            .body(serialize_params(&body, "创建签到板部署码")?);
+        let req: ApiRequest<serde_json::Value> =
+            ApiRequest::post("/open-apis/vc/v1/room_configs/set_checkboard_access_code")
+                .body(serialize_params(&body, "创建签到板部署码")?);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "创建签到板部署码")

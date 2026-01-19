@@ -2,7 +2,10 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/scope_config/get-4
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult, req_option::RequestOption};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required,
+    SDKResult,
+};
 
 use crate::common::api_utils::extract_response_data;
 use crate::endpoints::VC_V1_RESERVE_CONFIGS;
@@ -39,14 +42,12 @@ impl GetDisableInformRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/scope_config/get-4
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-
         self.execute_with_options(RequestOption::default()).await
     }
 
     /// 执行请求（带选项）
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
-
         validate_required!(self.reserve_config_id, "reserve_config_id 不能为空");
 
         // url: GET:/open-apis/vc/v1/reserve_configs/:reserve_config_id/disable_inform
@@ -60,7 +61,5 @@ impl GetDisableInformRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询禁用状态变更通知")
-
     }
-
 }

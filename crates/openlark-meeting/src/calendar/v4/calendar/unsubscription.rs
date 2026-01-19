@@ -2,10 +2,12 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/unsubscription
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 
-use crate::common::api_utils::{extract_response_data, serialize_params};
 use crate::common::api_endpoints::CalendarApiV4;
+use crate::common::api_utils::{extract_response_data, serialize_params};
 
 /// 取消订阅日历变更事件请求
 pub struct UnsubscriptionCalendarRequest {
@@ -23,16 +25,21 @@ impl UnsubscriptionCalendarRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/unsubscription
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
-        self.execute_with_options(RequestOption::default(), body).await
+        self.execute_with_options(RequestOption::default(), body)
+            .await
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+        body: serde_json::Value,
+    ) -> SDKResult<serde_json::Value> {
         // url: POST:/open-apis/calendar/v4/calendars/unsubscription
         let api_endpoint = CalendarApiV4::CalendarSubscription;
         let url = format!("{}/unsubscription", api_endpoint.to_url());
-        let req: ApiRequest<serde_json::Value> = ApiRequest::post(url)
-            .body(serialize_params(&body, "取消订阅日历变更事件")?);
+        let req: ApiRequest<serde_json::Value> =
+            ApiRequest::post(url).body(serialize_params(&body, "取消订阅日历变更事件")?);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "取消订阅日历变更事件")

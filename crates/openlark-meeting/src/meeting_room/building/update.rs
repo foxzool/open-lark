@@ -41,8 +41,7 @@ impl UpdateBuildingRequest {
 
         let api_endpoint = MeetingRoomApi::BuildingUpdate;
         let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(api_endpoint.to_url())
-                .body(serialize_params(&body, "更新建筑物")?);
+            ApiRequest::post(api_endpoint.to_url()).body(serialize_params(&body, "更新建筑物")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "更新建筑物")

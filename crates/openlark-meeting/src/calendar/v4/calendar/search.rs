@@ -27,8 +27,7 @@ impl SearchCalendarRequest {
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         let api_endpoint = CalendarApiV4::CalendarSearch;
         let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(api_endpoint.to_url())
-                .body(serialize_params(&body, "搜索日历")?);
+            ApiRequest::post(api_endpoint.to_url()).body(serialize_params(&body, "搜索日历")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "搜索日历")
