@@ -32,10 +32,26 @@ pub async fn query_float_images(
     spreadsheet_token: &str,
     sheet_id: &str,
 ) -> SDKResult<QueryFloatImagesResponse> {
+    query_float_images_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 查询浮动图片（带请求选项）
+pub async fn query_float_images_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    option: RequestOption,
+) -> SDKResult<QueryFloatImagesResponse> {
     let api_endpoint =
         SheetsApiV3::QueryFloatImages(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<QueryFloatImagesResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "查询浮动图片")
 }

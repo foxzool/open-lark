@@ -30,6 +30,24 @@ pub async fn delete_float_image(
     sheet_id: &str,
     float_image_id: &str,
 ) -> SDKResult<DeleteFloatImageResponse> {
+    delete_float_image_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        float_image_id,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 删除浮动图片（带请求选项）
+pub async fn delete_float_image_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    float_image_id: &str,
+    option: RequestOption,
+) -> SDKResult<DeleteFloatImageResponse> {
     let api_endpoint = SheetsApiV3::DeleteFloatImage(
         spreadsheet_token.to_string(),
         sheet_id.to_string(),
@@ -38,6 +56,6 @@ pub async fn delete_float_image(
     let api_request: ApiRequest<DeleteFloatImageResponse> =
         ApiRequest::delete(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "删除浮动图片")
 }
