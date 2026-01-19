@@ -33,6 +33,24 @@ pub async fn query_filter_conditions(
     sheet_id: &str,
     filter_view_id: &str,
 ) -> SDKResult<QueryFilterConditionsResponse> {
+    query_filter_conditions_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        filter_view_id,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 查询筛选条件（支持请求选项）
+pub async fn query_filter_conditions_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    filter_view_id: &str,
+    option: RequestOption,
+) -> SDKResult<QueryFilterConditionsResponse> {
     let api_endpoint = SheetsApiV3::QueryFilterConditions(
         spreadsheet_token.to_string(),
         sheet_id.to_string(),
@@ -41,6 +59,6 @@ pub async fn query_filter_conditions(
     let api_request: ApiRequest<QueryFilterConditionsResponse> =
         ApiRequest::get(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "查询筛选条件")
 }
