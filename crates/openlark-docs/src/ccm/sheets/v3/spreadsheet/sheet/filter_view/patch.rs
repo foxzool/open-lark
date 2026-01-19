@@ -43,6 +43,26 @@ pub async fn update_filter_view(
     filter_view_id: &str,
     params: UpdateFilterViewRequest,
 ) -> SDKResult<UpdateFilterViewResponse> {
+    update_filter_view_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        filter_view_id,
+        params,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 更新筛选视图（支持自定义选项）
+pub async fn update_filter_view_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    filter_view_id: &str,
+    params: UpdateFilterViewRequest,
+    option: RequestOption,
+) -> SDKResult<UpdateFilterViewResponse> {
     let api_endpoint = SheetsApiV3::PatchFilterView(
         spreadsheet_token.to_string(),
         sheet_id.to_string(),
@@ -51,6 +71,6 @@ pub async fn update_filter_view(
     let api_request: ApiRequest<UpdateFilterViewResponse> =
         ApiRequest::patch(&api_endpoint.to_url()).body(serialize_params(&params, "更新筛选视图")?);
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "更新筛选视图")
 }
