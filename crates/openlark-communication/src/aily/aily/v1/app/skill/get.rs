@@ -31,8 +31,15 @@ impl GetSkillRequest {
         self.skill_id = skill_id.into();
         self
     }
-
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.app_id, "app_id 不能为空");
         validate_required!(self.skill_id, "skill_id 不能为空");
 
@@ -41,7 +48,7 @@ impl GetSkillRequest {
             .replace("{skill_id}", &self.skill_id);
         let req: ApiRequest<serde_json::Value> = ApiRequest::get(&url);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取技能信息")
     }
 }

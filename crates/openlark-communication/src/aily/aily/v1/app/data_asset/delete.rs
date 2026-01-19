@@ -31,8 +31,15 @@ impl DeleteDataAssetRequest {
         self.data_asset_id = data_asset_id.into();
         self
     }
-
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.app_id, "app_id 不能为空");
         validate_required!(self.data_asset_id, "data_asset_id 不能为空");
 
@@ -41,7 +48,7 @@ impl DeleteDataAssetRequest {
             .replace("{data_asset_id}", &self.data_asset_id);
         let req: ApiRequest<()> = ApiRequest::delete(&url);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "删除数据知识")
     }
 }

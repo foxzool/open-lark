@@ -42,6 +42,16 @@ impl CreateFileRequest {
         body: CreateFileBody,
         file_bytes: Vec<u8>,
     ) -> SDKResult<CreateFileResponse> {
+        self.execute_with_options(body, file_bytes, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: CreateFileBody,
+        file_bytes: Vec<u8>,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateFileResponse> {
         validate_required!(body.file_type, "file_type 不能为空");
         validate_required!(body.file_name, "file_name 不能为空");
         if file_bytes.is_empty() {
@@ -56,7 +66,7 @@ impl CreateFileRequest {
             .body(serialize_params(&body, "上传文件")?)
             .file_content(file_bytes);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "上传文件")
-    }
+}
 }

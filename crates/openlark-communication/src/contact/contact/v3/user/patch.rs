@@ -55,6 +55,16 @@ impl PatchUserRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/patch
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<UserResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<UserResponse> {
+
         validate_required!(self.user_id, "user_id 不能为空");
 
         // url: PATCH:/open-apis/contact/v3/users/:user_id
@@ -69,7 +79,9 @@ impl PatchUserRequest {
             req = req.query("department_id_type", department_id_type.as_str());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "修改用户部分信息")
-    }
+}
 }

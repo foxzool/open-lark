@@ -20,9 +20,17 @@ impl ListOutboundIpRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/event-subscription-guide/list
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/event/v1/outbound_ip
         let req: ApiRequest<serde_json::Value> = ApiRequest::get(EVENT_V1_OUTBOUND_IP);
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取事件出口 IP")
-    }
+}
 }

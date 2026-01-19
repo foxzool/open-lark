@@ -37,6 +37,16 @@ impl PatchTagRequest {
     ///
     /// docPath: https://open.feishu.cn/document/tenant-tag/patch
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+
         validate_required!(self.tag_id, "tag_id 不能为空");
 
         // url: PATCH:/open-apis/im/v2/tags/:tag_id
@@ -44,7 +54,9 @@ impl PatchTagRequest {
             ApiRequest::patch(format!("{}/{}", IM_V2_TAGS, self.tag_id))
                 .body(serialize_params(&body, "修改标签")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "修改标签")
-    }
+}
 }

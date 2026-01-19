@@ -35,13 +35,21 @@ impl GetUnitRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/unit/get
     pub async fn execute(self) -> SDKResult<GetUnitResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<GetUnitResponse> {
         validate_required!(self.unit_id, "unit_id 不能为空");
 
         // url: GET:/open-apis/contact/v3/unit/:unit_id
         let req: ApiRequest<GetUnitResponse> =
             ApiRequest::get(format!("{}/{}", CONTACT_V3_UNIT, self.unit_id));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取单位信息")
     }
 }

@@ -42,7 +42,14 @@ impl ListJobTitlesRequest {
     ///
     /// docPath: https://open.feishu.cn/document/contact-v3/job_title/list
     pub async fn execute(self) -> SDKResult<ListJobTitlesResponse> {
-        // url: GET:/open-apis/contact/v3/job_titles
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListJobTitlesResponse> {
         let mut req: ApiRequest<ListJobTitlesResponse> = ApiRequest::get(CONTACT_V3_JOB_TITLES);
 
         if let Some(page_size) = self.page_size {
@@ -51,8 +58,7 @@ impl ListJobTitlesRequest {
         if let Some(page_token) = self.page_token {
             req = req.query("page_token", page_token);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取租户职务列表")
     }
 }

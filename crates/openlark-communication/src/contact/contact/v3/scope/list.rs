@@ -90,7 +90,14 @@ impl ListScopesRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/scope/list
     pub async fn execute(self) -> SDKResult<ListScopesResponse> {
-        // url: GET:/open-apis/contact/v3/scopes
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListScopesResponse> {
         let mut req: ApiRequest<ListScopesResponse> = ApiRequest::get(CONTACT_V3_SCOPES);
 
         if let Some(user_id_type) = self.user_id_type {
@@ -105,8 +112,7 @@ impl ListScopesRequest {
         if let Some(page_size) = self.page_size {
             req = req.query("page_size", page_size.to_string());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取通讯录授权范围")
     }
 }

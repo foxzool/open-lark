@@ -72,6 +72,14 @@ impl GetPostRequest {
     ///
     /// docPath: https://open.feishu.cn/document/moments-v1/post/get
     pub async fn execute(self) -> SDKResult<GetPostResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<GetPostResponse> {
         validate_required!(self.post_id, "post_id 不能为空");
 
         // url: GET:/open-apis/moments/v1/posts/:post_id
@@ -81,8 +89,7 @@ impl GetPostRequest {
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", &user_id_type);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询帖子信息")
     }
 }

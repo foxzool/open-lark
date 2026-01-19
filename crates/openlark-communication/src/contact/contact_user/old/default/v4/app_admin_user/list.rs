@@ -20,9 +20,17 @@ impl ListAppAdminUserRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/application-v6/admin/query-app-administrator-list
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/user/v4/app_admin_user/list
         let req: ApiRequest<serde_json::Value> = ApiRequest::get(USER_V4_APP_ADMIN_USER_LIST);
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询应用管理员列表")
-    }
+}
 }

@@ -57,6 +57,16 @@ impl CreateChatMembersRequest {
         self,
         body: CreateChatMembersBody,
     ) -> SDKResult<CreateChatMembersResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: CreateChatMembersBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateChatMembersResponse> {
+
         validate_required!(self.chat_id, "chat_id 不能为空");
         if body.id_list.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -77,7 +87,9 @@ impl CreateChatMembersRequest {
             req = req.query("succeed_type", succeed_type.as_str());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "将用户或机器人拉入群聊")
-    }
+}
 }

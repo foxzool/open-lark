@@ -52,6 +52,14 @@ impl GetChatLinkRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat/link
     pub async fn execute(self) -> SDKResult<GetChatLinkResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<GetChatLinkResponse> {
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         let body = GetChatLinkBody {
@@ -63,7 +71,7 @@ impl GetChatLinkRequest {
             ApiRequest::post(format!("{}/{}/link", IM_V1_CHATS, self.chat_id))
                 .body(serialize_params(&body, "获取群分享链接")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取群分享链接")
     }
 }

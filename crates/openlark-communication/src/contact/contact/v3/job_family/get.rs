@@ -36,6 +36,14 @@ impl GetJobFamilyRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/job_family/get
     pub async fn execute(self) -> SDKResult<JobFamilyResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<JobFamilyResponse> {
         validate_required!(self.job_family_id, "job_family_id 不能为空");
 
         // url: GET:/open-apis/contact/v3/job_families/:job_family_id
@@ -44,7 +52,7 @@ impl GetJobFamilyRequest {
             CONTACT_V3_JOB_FAMILIES, self.job_family_id
         ));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取单个序列信息")
     }
 }

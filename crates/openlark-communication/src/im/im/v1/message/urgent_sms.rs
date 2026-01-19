@@ -68,6 +68,15 @@ impl UrgentSmsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/buzz-messages/urgent_sms
     pub async fn execute(self, body: UrgentSmsBody) -> SDKResult<UrgentSmsResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: UrgentSmsBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<UrgentSmsResponse> {
         validate_required!(self.message_id, "message_id 不能为空");
         if body.user_id_list.is_empty() {
             return Err(error::validation_error(
@@ -88,7 +97,7 @@ impl UrgentSmsRequest {
                 .query("user_id_type", user_id_type.as_str())
                 .body(serialize_params(&body, "发送短信加急")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "发送短信加急")
     }
 }

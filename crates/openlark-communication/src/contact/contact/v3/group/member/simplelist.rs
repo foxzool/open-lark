@@ -68,6 +68,14 @@ impl SimpleListGroupMembersRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/group-member/simplelist
     pub async fn execute(self) -> SDKResult<SimpleListGroupMembersResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<SimpleListGroupMembersResponse> {
         validate_required!(self.group_id, "group_id 不能为空");
 
         // url: GET:/open-apis/contact/v3/group/:group_id/member/simplelist
@@ -88,8 +96,7 @@ impl SimpleListGroupMembersRequest {
         if let Some(member_type) = self.member_type {
             req = req.query("member_type", member_type);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询用户组成员列表")
     }
 }

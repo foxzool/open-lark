@@ -55,6 +55,16 @@ impl AddGroupMemberRequest {
         member_id_type: UserIdType,
         member_id: impl Into<String>,
     ) -> SDKResult<EmptyData> {
+        self.execute_with_options(member_id_type, member_id, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        member_id_type: UserIdType,
+        member_id: impl Into<String>,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<EmptyData> {
         validate_required!(self.group_id, "group_id 不能为空");
         let member_id = member_id.into();
         validate_required!(member_id, "member_id 不能为空");
@@ -69,7 +79,7 @@ impl AddGroupMemberRequest {
             ApiRequest::post(format!("{}/{}/member/add", CONTACT_V3_GROUP, self.group_id))
                 .body(serialize_params(&body, "添加用户组成员")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "添加用户组成员")
-    }
+}
 }

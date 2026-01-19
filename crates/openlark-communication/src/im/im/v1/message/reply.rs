@@ -51,6 +51,16 @@ impl ReplyMessageRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/message/reply
     pub async fn execute(self, body: ReplyMessageBody) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: ReplyMessageBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+
         validate_required!(self.message_id, "message_id 不能为空");
         validate_required!(body.msg_type, "msg_type 不能为空");
         validate_required!(body.content, "content 不能为空");
@@ -60,7 +70,9 @@ impl ReplyMessageRequest {
             ApiRequest::post(format!("{}/{}/reply", IM_V1_MESSAGES, self.message_id))
                 .body(serialize_params(&body, "回复消息")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "回复消息")
-    }
+}
 }

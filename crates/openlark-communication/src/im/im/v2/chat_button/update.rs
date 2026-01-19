@@ -37,6 +37,16 @@ impl UpdateChatButtonRequest {
     ///
     /// docPath: https://open.feishu.cn/document/im-v2/groups-bots/update
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<ChatButtonUpdateResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ChatButtonUpdateResponse> {
+
         // url: PUT:/open-apis/im/v2/chat_button
         let mut req: ApiRequest<ChatButtonUpdateResponse> =
             ApiRequest::put(IM_V2_CHAT_BUTTON).body(serialize_params(&body, "更新消息流卡片按钮")?);
@@ -45,7 +55,9 @@ impl UpdateChatButtonRequest {
             req = req.query("user_id_type", user_id_type.as_str());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "更新消息流卡片按钮")
-    }
+}
 }

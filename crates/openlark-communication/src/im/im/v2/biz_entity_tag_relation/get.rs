@@ -40,6 +40,14 @@ impl GetBizEntityTagRelationRequest {
     ///
     /// docPath: https://open.feishu.cn/document/tenant-tag/get
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.tag_biz_type, "tag_biz_type 不能为空");
         validate_required!(self.biz_entity_id, "biz_entity_id 不能为空");
 
@@ -48,7 +56,7 @@ impl GetBizEntityTagRelationRequest {
             .query("tag_biz_type", self.tag_biz_type)
             .query("biz_entity_id", self.biz_entity_id);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询实体与标签的绑定关系")
-    }
+}
 }

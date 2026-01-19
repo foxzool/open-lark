@@ -35,6 +35,14 @@ impl DeleteTopNoticeRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat/delete_top_notice
     pub async fn execute(self) -> SDKResult<EmptyData> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<EmptyData> {
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: POST:/open-apis/im/v1/chats/:chat_id/top_notice/delete_top_notice
@@ -43,7 +51,7 @@ impl DeleteTopNoticeRequest {
             IM_V1_CHATS, self.chat_id
         ));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "撤销群置顶")
     }
 }

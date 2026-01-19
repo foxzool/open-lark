@@ -49,6 +49,16 @@ impl DeleteChatMembersRequest {
         self,
         body: DeleteChatMembersBody,
     ) -> SDKResult<DeleteChatMembersResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: DeleteChatMembersBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DeleteChatMembersResponse> {
+
         validate_required!(self.chat_id, "chat_id 不能为空");
         if body.id_list.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -66,7 +76,9 @@ impl DeleteChatMembersRequest {
             req = req.query("member_id_type", member_id_type.as_str());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "将用户或机器人移出群聊")
-    }
+}
 }

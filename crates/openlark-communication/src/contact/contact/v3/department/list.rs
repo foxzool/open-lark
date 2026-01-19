@@ -77,7 +77,14 @@ impl ListDepartmentsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/list
     pub async fn execute(self) -> SDKResult<DepartmentListResponse> {
-        // url: GET:/open-apis/contact/v3/departments
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DepartmentListResponse> {
         let mut req: ApiRequest<DepartmentListResponse> = ApiRequest::get(CONTACT_V3_DEPARTMENTS);
 
         if let Some(user_id_type) = self.user_id_type {
@@ -98,8 +105,7 @@ impl ListDepartmentsRequest {
         if let Some(page_token) = self.page_token {
             req = req.query("page_token", page_token);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取部门信息列表")
     }
 }

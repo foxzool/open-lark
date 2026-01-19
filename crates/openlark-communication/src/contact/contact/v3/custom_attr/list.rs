@@ -76,7 +76,14 @@ impl ListCustomAttrsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/custom_attr/list
     pub async fn execute(self) -> SDKResult<ListCustomAttrsResponse> {
-        // url: GET:/open-apis/contact/v3/custom_attrs
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListCustomAttrsResponse> {
         let mut req: ApiRequest<ListCustomAttrsResponse> = ApiRequest::get(CONTACT_V3_CUSTOM_ATTRS);
 
         if let Some(page_size) = self.page_size {
@@ -85,8 +92,7 @@ impl ListCustomAttrsRequest {
         if let Some(page_token) = self.page_token {
             req = req.query("page_token", page_token);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取企业自定义用户字段")
     }
 }

@@ -38,6 +38,16 @@ impl BotTimeSentiveRequest {
         self,
         body: FeedCardTimeSensitiveBody,
     ) -> SDKResult<FeedCardActionResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: FeedCardTimeSensitiveBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<FeedCardActionResponse> {
+
         if body.user_ids.is_empty() {
             return Err(error::validation_error(
                 "user_ids 不能为空".to_string(),
@@ -57,7 +67,9 @@ impl BotTimeSentiveRequest {
                 .query("user_id_type", user_id_type.as_str())
                 .body(serialize_params(&body, "机器人单聊即时提醒")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "机器人单聊即时提醒")
-    }
+}
 }
