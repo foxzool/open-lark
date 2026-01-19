@@ -29,6 +29,27 @@ pub async fn move_dimension(
     sheet_id: &str,
     params: MoveDimensionParams,
 ) -> SDKResult<MoveDimensionResponse> {
+    move_dimension_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        params,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 移动行列（带请求选项）
+///
+/// 移动工作表中的行或列。
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/move_dimension
+pub async fn move_dimension_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    params: MoveDimensionParams,
+    option: RequestOption,
+) -> SDKResult<MoveDimensionResponse> {
     // 使用enum+builder系统生成API端点
     let api_endpoint =
         SheetsApiV3::MoveDimension(spreadsheet_token.to_string(), sheet_id.to_string());
@@ -38,6 +59,6 @@ pub async fn move_dimension(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "移动行列")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "移动行列")
 }

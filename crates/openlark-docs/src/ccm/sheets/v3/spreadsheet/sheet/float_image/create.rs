@@ -52,11 +52,29 @@ pub async fn create_float_image(
     sheet_id: &str,
     params: CreateFloatImageRequest,
 ) -> SDKResult<CreateFloatImageResponse> {
+    create_float_image_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        params,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 创建浮动图片（带请求选项）
+pub async fn create_float_image_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    params: CreateFloatImageRequest,
+    option: RequestOption,
+) -> SDKResult<CreateFloatImageResponse> {
     let api_endpoint =
         SheetsApiV3::CreateFloatImage(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<CreateFloatImageResponse> =
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建浮动图片")?);
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "创建浮动图片")
 }

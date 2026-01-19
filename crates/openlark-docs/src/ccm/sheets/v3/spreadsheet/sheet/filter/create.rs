@@ -39,11 +39,29 @@ pub async fn create_filter(
     sheet_id: &str,
     params: CreateFilterRequest,
 ) -> SDKResult<CreateFilterResponse> {
+    create_filter_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        params,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 创建筛选（带请求选项）
+pub async fn create_filter_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    params: CreateFilterRequest,
+    option: RequestOption,
+) -> SDKResult<CreateFilterResponse> {
     let api_endpoint =
         SheetsApiV3::CreateFilter(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<CreateFilterResponse> =
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建筛选")?);
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "创建筛选")
 }
