@@ -55,6 +55,18 @@ impl GetDocumentRawContentRequest {
         self,
         params: GetDocumentRawContentParams,
     ) -> SDKResult<GetDocumentRawContentResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（带请求选项）
+    ///
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/raw_content
+    pub async fn execute_with_options(
+        self,
+        params: GetDocumentRawContentParams,
+        option: RequestOption,
+    ) -> SDKResult<GetDocumentRawContentResponse> {
         // 验证必填字段
         validate_required!(params.document_id, "文档ID不能为空");
 
@@ -70,7 +82,7 @@ impl GetDocumentRawContentRequest {
         }
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取文档纯文本内容")
     }
 }

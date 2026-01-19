@@ -65,6 +65,18 @@ impl ConvertContentToBlocksRequest {
         self,
         params: ConvertContentToBlocksParams,
     ) -> SDKResult<ConvertContentToBlocksResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（带请求选项）
+    ///
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/convert
+    pub async fn execute_with_options(
+        self,
+        params: ConvertContentToBlocksParams,
+        option: RequestOption,
+    ) -> SDKResult<ConvertContentToBlocksResponse> {
         // 验证必填字段
         validate_required!(params.content, "源内容不能为空");
 
@@ -77,7 +89,7 @@ impl ConvertContentToBlocksRequest {
                 .body(serialize_params(&params, "Markdown/HTML 内容转换为文档块")?);
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "Markdown/HTML 内容转换为文档块")
     }
 }

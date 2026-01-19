@@ -56,6 +56,15 @@ impl UpdateDocumentBlockRequest {
         self,
         params: UpdateDocumentBlockParams,
     ) -> SDKResult<UpdateDocumentBlockResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        params: UpdateDocumentBlockParams,
+        option: RequestOption,
+    ) -> SDKResult<UpdateDocumentBlockResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "块ID不能为空");
 
@@ -65,7 +74,7 @@ impl UpdateDocumentBlockRequest {
             ApiRequest::patch(&api_endpoint.to_url());
         api_request = api_request.json_body(&params);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "更新块的内容")
     }
 }

@@ -65,6 +65,18 @@ impl GetDocumentBlocksRequest {
         self,
         params: GetDocumentBlocksParams,
     ) -> SDKResult<GetDocumentBlocksResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（带请求选项）
+    ///
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document-block/list
+    pub async fn execute_with_options(
+        self,
+        params: GetDocumentBlocksParams,
+        option: RequestOption,
+    ) -> SDKResult<GetDocumentBlocksResponse> {
         // 验证必填字段
         validate_required!(params.document_id, "文档ID不能为空");
 
@@ -88,7 +100,7 @@ impl GetDocumentBlocksRequest {
         }
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取文档所有块")
     }
 }
