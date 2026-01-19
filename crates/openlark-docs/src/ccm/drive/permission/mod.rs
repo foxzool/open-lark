@@ -50,6 +50,8 @@ use openlark_core::{
     api::ApiRequest, config::Config, http::Transport, validation_error, SDKResult,
 };
 
+use crate::common::api_endpoints::DriveApi;
+
 /// Drive Permission API服务
 #[derive(Debug, Clone)]
 pub struct PermissionService {
@@ -98,12 +100,12 @@ impl PermissionService {
             body.insert("user_id", Value::String(user_id.clone()));
         }
 
+        // 使用 ApiEndpoint 枚举生成 URL
+        let api_endpoint = DriveApi::AuthPermissionMember(request.file_token.clone());
+
         // 构建API请求
-        let api_request: ApiRequest<CheckMemberPermissionResponse> = ApiRequest::post(&format!(
-            "/open-apis/drive/v1/permissions/{}/members/auth",
-            request.file_token
-        ))
-        .body(serde_json::json!(&body));
+        let api_request: ApiRequest<CheckMemberPermissionResponse> =
+            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::json!(&body));
 
         // 发送请求
         let resp: openlark_core::api::Response<CheckMemberPermissionResponse> =
@@ -144,10 +146,12 @@ impl PermissionService {
             body.insert("user_id_type", Value::String(user_id_type.clone()));
         }
 
+        // 使用 ApiEndpoint 枚举生成 URL
+        let api_endpoint = DriveApi::TransferOwner(request.file_token.clone());
+
         // 构建API请求
         let api_request: ApiRequest<TransferOwnerResponse> =
-            ApiRequest::post("/open-apis/drive/permission/member/transfer")
-                .body(serde_json::json!(&body));
+            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::json!(&body));
 
         // 发送请求
         let resp: openlark_core::api::Response<TransferOwnerResponse> =
@@ -179,10 +183,12 @@ impl PermissionService {
         let mut body = HashMap::new();
         body.insert("file_token", Value::String(request.file_token.clone()));
 
+        // 使用 ApiEndpoint 枚举生成 URL
+        let api_endpoint = DriveApi::GetPublicPermissionV2(request.file_token.clone());
+
         // 构建API请求
         let api_request: ApiRequest<GetPublicPermissionResponse> =
-            ApiRequest::post("/open-apis/drive/permission/v2/public/")
-                .body(serde_json::json!(&body));
+            ApiRequest::post(&api_endpoint.to_url()).body(serde_json::json!(&body));
 
         // 发送请求
         let resp: openlark_core::api::Response<GetPublicPermissionResponse> =

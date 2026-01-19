@@ -46,12 +46,6 @@ impl CcmDrivePermissionService {
         crate::ccm::ccm_drive_permission::permission::PermissionService::new(self.config.clone())
     }
 
-    /// 获取旧版（old）API
-    pub fn old(&self) -> crate::ccm::ccm_drive_permission::old::CcmDrivePermissionOldService {
-        crate::ccm::ccm_drive_permission::old::CcmDrivePermissionOldService::new(
-            self.config.clone(),
-        )
-    }
 }
 
 impl openlark_core::trait_system::service::Service for CcmDrivePermissionService {
