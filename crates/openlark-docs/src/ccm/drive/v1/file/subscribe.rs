@@ -54,14 +54,14 @@ impl SubscribeFileRequest {
     }
 
     pub async fn execute(self) -> SDKResult<SubscribeFileResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<SubscribeFileResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<SubscribeFileResponse> {
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",

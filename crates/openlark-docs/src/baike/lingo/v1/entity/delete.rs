@@ -53,6 +53,10 @@ impl DeleteEntityRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeleteEntityResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<DeleteEntityResp> {
         validate_required!(self.entity_id, "entity_id 不能为空");
 
         let mut api_request: ApiRequest<DeleteEntityResp> =
@@ -65,7 +69,7 @@ impl DeleteEntityRequest {
         }
 
         let response: Response<DeleteEntityResp> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

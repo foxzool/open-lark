@@ -2,12 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/create
 
-use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    SDKResult,
-    };
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -74,7 +69,10 @@ pub async fn create_file_subscription(
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<CreateFileSubscriptionResponse> {
     if request.file_token.trim().is_empty() {
-        return Err(openlark_core::error::validation_error("file_token", "file_token 不能为空"));
+        return Err(openlark_core::error::validation_error(
+            "file_token",
+            "file_token 不能为空",
+        ));
     }
     if request.subscription_type.trim().is_empty() {
         return Err(openlark_core::error::validation_error(
@@ -92,7 +90,10 @@ pub async fn create_file_subscription(
         }
     }
     if request.file_type.trim().is_empty() {
-        return Err(openlark_core::error::validation_error("file_type", "file_type 不能为空"));
+        return Err(openlark_core::error::validation_error(
+            "file_type",
+            "file_type 不能为空",
+        ));
     }
     match request.file_type.as_str() {
         "doc" | "docx" | "wiki" => {}

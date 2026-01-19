@@ -94,7 +94,10 @@ impl PatchFormRequest {
             && self.shared_limit.is_none()
             && self.submit_limit_once.is_none()
         {
-            return Err(openlark_core::error::validation_error("body", "至少需要提供一个要更新的字段"));
+            return Err(openlark_core::error::validation_error(
+                "body",
+                "至少需要提供一个要更新的字段",
+            ));
         }
 
         use crate::common::api_endpoints::BitableApiV1;
@@ -115,10 +118,6 @@ impl PatchFormRequest {
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
-
-
-
-
 
 #[derive(Serialize)]
 struct PatchFormRequestBody {

@@ -57,7 +57,10 @@ impl BatchDeleteRoleMemberRequest {
         validate_required!(self.role_id.trim(), "role_id");
         validate_required!(self.member_list, "member_list");
         if self.member_list.len() > 100 {
-            return Err(openlark_core::error::validation_error("member_list", "member_list 最多 100 项"));
+            return Err(openlark_core::error::validation_error(
+                "member_list",
+                "member_list 最多 100 项",
+            ));
         }
         for (idx, item) in self.member_list.iter().enumerate() {
             if item.id.trim().is_empty() {
@@ -85,10 +88,6 @@ impl BatchDeleteRoleMemberRequest {
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
-
-
-
-
 
 #[derive(Serialize)]
 struct BatchDeleteRoleMemberRequestBody {

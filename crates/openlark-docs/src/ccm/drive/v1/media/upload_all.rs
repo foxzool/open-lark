@@ -68,14 +68,14 @@ impl UploadAllMediaRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UploadAllMediaResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<UploadAllMediaResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<UploadAllMediaResponse> {
         let file_name_len = self.file_name.chars().count();
         if file_name_len == 0 || file_name_len > 250 {
             return Err(openlark_core::error::validation_error(
@@ -148,10 +148,9 @@ impl UploadAllMediaRequest {
             .json_body(&meta)
             .file_content(self.file);
 
-        
-            let response = Transport::request(request, &self.config, Some(option)).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "上传")
-        }
+    }
 }
 
 /// 上传素材响应

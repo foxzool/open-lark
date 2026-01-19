@@ -89,10 +89,6 @@ impl DeleteRoleMemberRequest {
     }
 }
 
-
-
-
-
 /// 删除协作者响应（data 为 {}）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteRoleMemberResponse {}

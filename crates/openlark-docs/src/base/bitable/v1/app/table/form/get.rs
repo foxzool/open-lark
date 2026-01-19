@@ -69,10 +69,6 @@ impl GetFormRequest {
     }
 }
 
-
-
-
-
 /// 获取表单响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetFormResponse {

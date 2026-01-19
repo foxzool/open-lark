@@ -85,10 +85,6 @@ impl GetViewRequest {
     }
 }
 
-
-
-
-
 /// 获取视图响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetViewResponse {

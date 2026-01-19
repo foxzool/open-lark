@@ -51,14 +51,14 @@ impl AuthPermissionMemberRequest {
     }
 
     pub async fn execute(self) -> SDKResult<AuthPermissionMemberResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<AuthPermissionMemberResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<AuthPermissionMemberResponse> {
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -95,10 +95,9 @@ impl AuthPermissionMemberRequest {
             .query("type", &self.file_type)
             .query("action", &self.action);
 
-        
-            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "授权")
-        }
+    }
 }
 
 /// 判断用户云文档权限响应

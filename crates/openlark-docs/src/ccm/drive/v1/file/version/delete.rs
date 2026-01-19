@@ -50,14 +50,14 @@ impl DeleteFileVersionRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeleteFileVersionResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<DeleteFileVersionResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DeleteFileVersionResponse> {
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -85,10 +85,9 @@ impl DeleteFileVersionRequest {
             .query("obj_type", self.obj_type)
             .query_opt("user_id_type", self.user_id_type);
 
-        
-            let response = Transport::request(request, &self.config, Some(option)).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "删除")
-        }
+    }
 }
 
 /// 删除文档版本响应（data）

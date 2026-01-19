@@ -94,10 +94,6 @@ impl BatchDeleteTableRequest {
     }
 }
 
-
-
-
-
 #[derive(Debug, Serialize)]
 struct BatchDeleteTableRequestBody {
     table_ids: Vec<String>,

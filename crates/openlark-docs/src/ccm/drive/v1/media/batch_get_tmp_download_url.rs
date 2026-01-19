@@ -44,14 +44,14 @@ impl BatchGetTmpDownloadUrlRequest {
     }
 
     pub async fn execute(self) -> SDKResult<BatchGetTmpDownloadUrlResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<BatchGetTmpDownloadUrlResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<BatchGetTmpDownloadUrlResponse> {
         if self.file_tokens.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_tokens",
@@ -86,10 +86,9 @@ impl BatchGetTmpDownloadUrlRequest {
         let url = format!("{}?{}", api_endpoint.to_url(), query_pairs.join("&"));
         let request = ApiRequest::<BatchGetTmpDownloadUrlResponse>::get(url);
 
-        
-            let response = Transport::request(request, &self.config, Some(option)).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取")
-        }
+    }
 }
 
 /// 临时下载链接信息

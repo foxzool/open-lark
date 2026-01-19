@@ -74,6 +74,10 @@ impl UpdateDraftRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UpdateDraftResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<UpdateDraftResp> {
         validate_required!(self.draft_id, "draft_id 不能为空");
         validate_required!(self.req.main_keys, "main_keys 不能为空");
         if self.req.main_keys.len() > 1 {
@@ -121,7 +125,7 @@ impl UpdateDraftRequest {
         }
 
         let response: Response<UpdateDraftResp> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

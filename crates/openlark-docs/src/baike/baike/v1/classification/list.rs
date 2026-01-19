@@ -42,6 +42,13 @@ impl ListClassificationRequest {
     }
 
     pub async fn execute(self) -> SDKResult<ListClassificationResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListClassificationResponse> {
         if let Some(page_size) = self.page_size {
             if !(1..=500).contains(&page_size) {
                 return Err(openlark_core::error::validation_error(
@@ -61,7 +68,7 @@ impl ListClassificationRequest {
         }
 
         let response: Response<ListClassificationResponse> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

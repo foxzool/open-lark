@@ -54,14 +54,14 @@ impl DeleteSubscribeRequest {
     }
 
     pub async fn execute(self) -> SDKResult<DeleteSubscribeResponse> {
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<DeleteSubscribeResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DeleteSubscribeResponse> {
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -116,10 +116,9 @@ impl DeleteSubscribeRequest {
             request = request.query("event_type", event_type);
         }
 
-        
-            let response = Transport::request(request, &self.config, Some(option)).await?;
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "订阅文件")
-        }
+    }
 }
 
 /// 取消云文档事件订阅响应

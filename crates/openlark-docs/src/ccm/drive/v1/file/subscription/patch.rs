@@ -3,11 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/patch
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    SDKResult,
-    validate_required,
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
