@@ -44,6 +44,26 @@ pub async fn create_filter_condition(
     filter_view_id: &str,
     params: CreateFilterConditionRequest,
 ) -> SDKResult<CreateFilterConditionResponse> {
+    create_filter_condition_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        filter_view_id,
+        params,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 创建筛选条件（支持请求选项）
+pub async fn create_filter_condition_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    filter_view_id: &str,
+    params: CreateFilterConditionRequest,
+    option: RequestOption,
+) -> SDKResult<CreateFilterConditionResponse> {
     let api_endpoint = SheetsApiV3::CreateFilterCondition(
         spreadsheet_token.to_string(),
         sheet_id.to_string(),
@@ -52,6 +72,6 @@ pub async fn create_filter_condition(
     let api_request: ApiRequest<CreateFilterConditionResponse> =
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "创建筛选条件")?);
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "创建筛选条件")
 }
