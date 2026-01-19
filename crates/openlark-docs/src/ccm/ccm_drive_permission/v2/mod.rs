@@ -9,6 +9,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 
@@ -57,7 +58,7 @@ pub async fn check_member_permission(
             .body(serialize_params(&params, "检查成员权限")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "检查成员权限")
 }
 
@@ -84,7 +85,7 @@ pub async fn transfer_owner(
             .body(serialize_params(&params, "转移拥有者")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "转移拥有者")
 }
 
@@ -109,7 +110,7 @@ pub async fn get_public_permission(
             .body(serialize_params(&params, "获取公开权限设置")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "获取公开权限设置")
 }
 
