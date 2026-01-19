@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -50,7 +51,11 @@ pub struct SearchSpaceOperationStatusRequest {
 }
 
 impl SearchSpaceOperationStatusRequest {
-    pub fn new(config: Config, space_id: impl Into<String>, operation_id: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        space_id: impl Into<String>,
+        operation_id: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             space_id: space_id.into(),
@@ -66,6 +71,13 @@ impl SearchSpaceOperationStatusRequest {
     }
 
     pub async fn execute(self) -> SDKResult<SearchSpaceOperationStatusResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<SearchSpaceOperationStatusResp> {
         validate_required!(self.space_id, "space_id 不能为空");
         validate_required!(self.operation_id, "operation_id 不能为空");
 
@@ -79,7 +91,7 @@ impl SearchSpaceOperationStatusRequest {
         }
 
         let response: Response<SearchSpaceOperationStatusResp> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
