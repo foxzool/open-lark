@@ -42,7 +42,7 @@ impl DownloadExportRequest {
 
         let api_request = ApiRequest::<Vec<u8>>::get(&api_endpoint.to_url());
 
-        Transport::request(api_request, &self.config, Some(option)).await
+        Transport::request(api_request, &self.config, None).await
     }
 }
 

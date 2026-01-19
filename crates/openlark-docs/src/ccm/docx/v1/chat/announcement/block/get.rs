@@ -66,7 +66,7 @@ impl GetChatAnnouncementBlockRequest {
         let api_request: ApiRequest<GetChatAnnouncementBlockResponse> =
             ApiRequest::get(&api_endpoint.to_url());
 
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "获取群公告块的内容")
     }
 }

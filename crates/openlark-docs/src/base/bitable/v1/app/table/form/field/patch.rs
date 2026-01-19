@@ -102,7 +102,7 @@ impl PatchFormFieldQuestionRequest {
         let api_request: ApiRequest<PatchFormFieldQuestionResponse> =
             ApiRequest::patch(&api_endpoint.to_url()).body(serde_json::to_vec(&self.body)?);
 
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

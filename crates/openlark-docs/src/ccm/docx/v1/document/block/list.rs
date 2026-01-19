@@ -88,7 +88,7 @@ impl GetDocumentBlocksRequest {
         }
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "获取文档所有块")
     }
 }

@@ -41,6 +41,6 @@ pub async fn query_filter_conditions(
     let api_request: ApiRequest<QueryFilterConditionsResponse> =
         ApiRequest::get(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "查询筛选条件")
 }

@@ -79,7 +79,7 @@ impl GetViewRequest {
         let api_request: ApiRequest<GetViewResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

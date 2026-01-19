@@ -38,6 +38,6 @@ pub async fn delete_filter_view(
     let api_request: ApiRequest<DeleteFilterViewResponse> =
         ApiRequest::delete(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "删除筛选视图")
 }

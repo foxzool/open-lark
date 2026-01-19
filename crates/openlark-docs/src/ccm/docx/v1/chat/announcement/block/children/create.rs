@@ -75,7 +75,7 @@ impl CreateChatAnnouncementBlockChildrenRequest {
             ApiRequest::post(&api_endpoint.to_url())
                 .body(serialize_params(&params, "在群公告中创建块")?);
 
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "在群公告中创建块")
     }
 }

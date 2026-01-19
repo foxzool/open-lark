@@ -109,7 +109,7 @@ impl PermissionService {
 
         // 发送请求
         let resp: openlark_core::api::Response<CheckMemberPermissionResponse> =
-            Transport::request(api_request, &self.config, Some(option)).await?;
+            Transport::request(api_request, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -155,7 +155,7 @@ impl PermissionService {
 
         // 发送请求
         let resp: openlark_core::api::Response<TransferOwnerResponse> =
-            Transport::request(api_request, &self.config, Some(option)).await?;
+            Transport::request(api_request, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(
@@ -192,7 +192,7 @@ impl PermissionService {
 
         // 发送请求
         let resp: openlark_core::api::Response<GetPublicPermissionResponse> =
-            Transport::request(api_request, &self.config, Some(option)).await?;
+            Transport::request(api_request, &self.config, None).await?;
         let response = resp.data.unwrap_or_default();
 
         log::info!(

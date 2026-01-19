@@ -70,7 +70,7 @@ impl BatchUpdateDocumentBlocksRequest {
             ApiRequest::patch(&api_endpoint.to_url());
         api_request = api_request.json_body(&params);
 
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "批量更新块的内容")
     }
 }

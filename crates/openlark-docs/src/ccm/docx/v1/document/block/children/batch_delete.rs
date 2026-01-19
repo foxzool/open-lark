@@ -75,7 +75,7 @@ impl BatchDeleteDocumentBlockChildrenRequest {
                 api_request.query("document_revision_id", &document_revision_id.to_string());
         }
 
-        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        let response = Transport::request(api_request, &self.config, None).await?;
         extract_response_data(response, "删除块")
     }
 }

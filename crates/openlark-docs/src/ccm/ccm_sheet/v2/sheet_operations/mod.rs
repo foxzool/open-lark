@@ -103,7 +103,7 @@ pub async fn delete_range(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除范围")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "删除范围")
 }
 
@@ -128,7 +128,7 @@ pub async fn insert_dimension(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "插入行列")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "插入行列")
 }
 
@@ -153,7 +153,7 @@ pub async fn move_dimension(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "移动行列")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "移动行列")
 }
 
@@ -178,7 +178,7 @@ pub async fn replace_range(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "替换范围")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "替换范围")
 }
 
@@ -204,7 +204,7 @@ pub async fn find_replace(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "查找替换")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "查找替换")
 }
 
@@ -229,7 +229,7 @@ pub async fn merge_cells(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "合并单元格")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "合并单元格")
 }
 
@@ -254,7 +254,7 @@ pub async fn unmerge_cells(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "取消合并单元格")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "取消合并单元格")
 }
 

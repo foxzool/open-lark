@@ -35,6 +35,6 @@ pub async fn get_filter(
     let api_endpoint = SheetsApiV3::GetFilter(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<GetFilterResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取筛选")
 }
