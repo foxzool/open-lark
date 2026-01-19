@@ -103,6 +103,13 @@ impl SearchEntityRequest {
     }
 
     pub async fn execute(self) -> SDKResult<SearchEntityResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<SearchEntityResponse> {
         if let Some(page_size) = self.page_size {
             if !(1..=100).contains(&page_size) {
                 return Err(openlark_core::error::validation_error(
@@ -159,7 +166,7 @@ impl SearchEntityRequest {
         }
 
         let response: Response<SearchEntityResponse> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
