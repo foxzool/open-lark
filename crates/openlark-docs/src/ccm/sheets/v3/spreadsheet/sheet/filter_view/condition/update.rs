@@ -46,6 +46,28 @@ pub async fn update_filter_condition(
     condition_id: &str,
     params: UpdateFilterConditionRequest,
 ) -> SDKResult<UpdateFilterConditionResponse> {
+    update_filter_condition_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        filter_view_id,
+        condition_id,
+        params,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 更新筛选条件（带请求选项）
+pub async fn update_filter_condition_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    filter_view_id: &str,
+    condition_id: &str,
+    params: UpdateFilterConditionRequest,
+    option: RequestOption,
+) -> SDKResult<UpdateFilterConditionResponse> {
     let api_endpoint = SheetsApiV3::UpdateFilterCondition(
         spreadsheet_token.to_string(),
         sheet_id.to_string(),
@@ -55,6 +77,6 @@ pub async fn update_filter_condition(
     let api_request: ApiRequest<UpdateFilterConditionResponse> =
         ApiRequest::put(&api_endpoint.to_url()).body(serialize_params(&params, "更新筛选条件")?);
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "更新筛选条件")
 }

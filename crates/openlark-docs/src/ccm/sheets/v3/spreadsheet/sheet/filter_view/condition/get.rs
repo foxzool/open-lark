@@ -34,6 +34,26 @@ pub async fn get_filter_condition(
     filter_view_id: &str,
     condition_id: &str,
 ) -> SDKResult<GetFilterConditionResponse> {
+    get_filter_condition_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        filter_view_id,
+        condition_id,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 获取筛选条件（带请求选项）
+pub async fn get_filter_condition_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    filter_view_id: &str,
+    condition_id: &str,
+    option: RequestOption,
+) -> SDKResult<GetFilterConditionResponse> {
     let api_endpoint = SheetsApiV3::GetFilterCondition(
         spreadsheet_token.to_string(),
         sheet_id.to_string(),
@@ -43,6 +63,6 @@ pub async fn get_filter_condition(
     let api_request: ApiRequest<GetFilterConditionResponse> =
         ApiRequest::get(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "获取筛选条件")
 }
