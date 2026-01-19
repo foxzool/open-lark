@@ -29,11 +29,7 @@ impl CcmDocService {
         &self.config
     }
 
-    /// 获取旧版（old）API
-    pub fn old(&self) -> crate::ccm::ccm_doc::old::CcmDocOldService {
-        crate::ccm::ccm_doc::old::CcmDocOldService::new(self.config.clone())
-    }
 }
 
-// 导出版本模块
+// old 模块已废弃，使用新架构
 pub mod old;
