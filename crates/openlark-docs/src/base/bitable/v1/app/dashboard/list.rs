@@ -47,6 +47,13 @@ impl ListDashboardsRequest {
     }
 
     pub async fn execute(self) -> SDKResult<ListDashboardsResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListDashboardsResponse> {
         validate_required!(self.app_token, "app_token 不能为空");
         if let Some(page_size) = self.page_size {
             if !(1..=500).contains(&page_size) {
@@ -64,7 +71,7 @@ impl ListDashboardsRequest {
         api_request = api_request.query_opt("page_size", self.page_size.map(|v| v.to_string()));
         api_request = api_request.query_opt("page_token", self.page_token);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

@@ -48,6 +48,13 @@ impl CopyDashboardRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CopyDashboardResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<CopyDashboardResponse> {
         validate_required!(self.app_token, "app_token 不能为空");
         validate_required!(self.block_id, "block_id 不能为空");
         validate_required!(self.name, "name 不能为空");
@@ -58,7 +65,7 @@ impl CopyDashboardRequest {
                 &CopyDashboardRequestBody { name: self.name },
             )?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

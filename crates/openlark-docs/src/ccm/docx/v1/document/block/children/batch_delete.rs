@@ -59,6 +59,15 @@ impl BatchDeleteDocumentBlockChildrenRequest {
         self,
         params: BatchDeleteDocumentBlockChildrenParams,
     ) -> SDKResult<BatchDeleteDocumentBlockChildrenResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        params: BatchDeleteDocumentBlockChildrenParams,
+        option: RequestOption,
+    ) -> SDKResult<BatchDeleteDocumentBlockChildrenResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
 
@@ -75,7 +84,7 @@ impl BatchDeleteDocumentBlockChildrenRequest {
                 api_request.query("document_revision_id", &document_revision_id.to_string());
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "删除块")
     }
 }

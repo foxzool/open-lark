@@ -59,6 +59,10 @@ impl GetViewRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<GetViewResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetViewResponse> {
         // 参数验证
         validate_required!(self.app_token.trim(), "app_token");
 
@@ -79,7 +83,7 @@ impl GetViewRequest {
         let api_request: ApiRequest<GetViewResponse> = ApiRequest::get(&api_endpoint.to_url());
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
