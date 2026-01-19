@@ -1,6 +1,9 @@
 ---
 name: openlark-validation-style
 description: OpenLark Rust SDK 的 feature-crate 参数校验规范（必填校验）。当需要统一/评审 `validate()` 写法，或用户询问 `openlark_core::validate_required`（函数）与 `openlark_core::validate_required!`（宏）的区别、是否需要宏、空白字符串处理等问题时使用。
+allowed-tools:
+  - Read
+  - Grep
 ---
 
 # OpenLark Validation Style
