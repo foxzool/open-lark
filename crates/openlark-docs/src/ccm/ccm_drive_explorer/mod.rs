@@ -27,10 +27,6 @@ impl CcmDriveExplorerService {
         explorer::ExplorerService::new(self.config.clone())
     }
 
-    /// 获取旧版（old）API
-    pub fn old(&self) -> crate::ccm::ccm_drive_explorer::old::CcmDriveExplorerOldService {
-        crate::ccm::ccm_drive_explorer::old::CcmDriveExplorerOldService::new(self.config.clone())
-    }
 }
 
 impl openlark_core::trait_system::service::Service for CcmDriveExplorerService {

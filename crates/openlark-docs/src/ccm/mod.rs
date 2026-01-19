@@ -84,3 +84,6 @@ pub mod docx;
 pub mod drive;
 pub mod sheets;
 pub mod wiki;
+// old 模块已废弃 - 暂时注释以解决编译问题
+// pub mod old;
+

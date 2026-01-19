@@ -66,10 +66,6 @@ impl CcmSheetService {
         CcmSheetV2::new(self.config.clone())
     }
 
-    /// 获取旧版版本API（兼容性保留）
-    pub fn old(&self) -> crate::ccm::ccm_sheet::old::CcmSheetOldService {
-        crate::ccm::ccm_sheet::old::CcmSheetOldService::new(self.config.clone())
-    }
 }
 
 /// CCM Sheet V2 API访问器
@@ -93,7 +89,7 @@ impl CcmSheetV2 {
 /// 数据模型定义
 pub mod models;
 
-/// Old版本API (v2)
+/// Old版本API (v2) - 已废弃，使用新架构
 pub mod old;
 
 /// V2版本API
