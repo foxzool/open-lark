@@ -35,7 +35,7 @@ impl CommunicationClient {
             #[cfg(feature = "contact")]
             contact: ContactClient::new(config.clone()),
             #[cfg(feature = "moments")]
-            moments: MomentsClient::new(config)
+            moments: MomentsClient::new(config),
         }
     }
 

@@ -14,7 +14,10 @@ pub struct SearchUserRequest {
 
 impl SearchUserRequest {
     pub fn new(config: Config) -> Self {
-        Self { config, query: None }
+        Self {
+            config,
+            query: None,
+        }
     }
 
     /// 搜索关键字（查询参数，可选）

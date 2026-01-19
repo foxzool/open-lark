@@ -49,5 +49,5 @@ impl UpdateSessionRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "更新会话")
-}
+    }
 }

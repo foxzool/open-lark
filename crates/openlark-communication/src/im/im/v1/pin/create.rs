@@ -35,16 +35,14 @@ impl CreatePinRequest {
         body: CreatePinBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreatePinResponse> {
-
         validate_required!(body.message_id, "message_id 不能为空");
 
         // url: POST:/open-apis/im/v1/pins
         let req: ApiRequest<CreatePinResponse> =
             ApiRequest::post(IM_V1_PINS).body(serialize_params(&body, "Pin 消息")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "Pin 消息")
-}
+    }
 }

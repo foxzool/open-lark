@@ -33,14 +33,12 @@ impl BatchSendMessagesRequest {
         body: serde_json::Value,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
-
         // url: POST:/open-apis/message/v4/batch_send/
         let req: ApiRequest<serde_json::Value> = ApiRequest::post(IM_MESSAGE_V4_BATCH_SEND)
             .body(serialize_params(&body, "批量发送消息")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "批量发送消息")
-}
+    }
 }

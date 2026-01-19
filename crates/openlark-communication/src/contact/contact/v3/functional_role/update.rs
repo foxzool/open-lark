@@ -54,7 +54,6 @@ impl UpdateFunctionalRoleRequest {
         body: UpdateFunctionalRoleBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
-
         validate_required!(self.role_id, "role_id 不能为空");
         validate_required!(body.role_name, "role_name 不能为空");
 
@@ -62,9 +61,9 @@ impl UpdateFunctionalRoleRequest {
         let req: ApiRequest<EmptyData> =
             ApiRequest::put(format!("{}/{}", CONTACT_V3_FUNCTIONAL_ROLES, self.role_id))
                 .body(serialize_params(&body, "修改角色名称")?);
-        
+
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "修改角色名称")
-}
+    }
 }

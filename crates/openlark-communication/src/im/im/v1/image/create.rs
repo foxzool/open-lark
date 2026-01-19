@@ -44,8 +44,11 @@ impl CreateImageRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/image/create
     pub async fn execute(self, image_bytes: Vec<u8>) -> SDKResult<CreateImageResponse> {
-        self.execute_with_options(image_bytes, openlark_core::req_option::RequestOption::default())
-            .await
+        self.execute_with_options(
+            image_bytes,
+            openlark_core::req_option::RequestOption::default(),
+        )
+        .await
     }
 
     pub async fn execute_with_options(
@@ -53,7 +56,6 @@ impl CreateImageRequest {
         image_bytes: Vec<u8>,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateImageResponse> {
-
         let image_type = self.image_type.ok_or_else(|| {
             error::validation_error(
                 "image_type 不能为空".to_string(),
@@ -80,9 +82,8 @@ impl CreateImageRequest {
             .body(body)
             .file_content(image_bytes);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "上传图片")
-}
+    }
 }

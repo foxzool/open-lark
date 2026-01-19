@@ -57,7 +57,6 @@ impl PatchUnitRequest {
         body: PatchUnitBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
-
         validate_required!(self.unit_id, "unit_id 不能为空");
         validate_required!(body.name, "name 不能为空");
 
@@ -66,9 +65,8 @@ impl PatchUnitRequest {
             ApiRequest::patch(format!("{}/{}", CONTACT_V3_UNIT, self.unit_id))
                 .body(serialize_params(&body, "修改单位信息")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "修改单位信息")
-}
+    }
 }

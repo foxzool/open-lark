@@ -35,12 +35,11 @@ impl CreateAilyMessageRequest {
         body: serde_json::Value,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
-
         validate_required!(self.aily_session_id, "aily_session_id 不能为空");
 
         let url = AILY_V1_MESSAGES.replace("{aily_session_id}", &self.aily_session_id);
         let req: ApiRequest<serde_json::Value> = ApiRequest::post(&url).json_body(&body);
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "创建 Aily 消息")
-}
+    }
 }

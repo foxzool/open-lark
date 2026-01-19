@@ -32,5 +32,5 @@ impl ListAppAdminUserRequest {
         let req: ApiRequest<serde_json::Value> = ApiRequest::get(USER_V4_APP_ADMIN_USER_LIST);
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询应用管理员列表")
-}
+    }
 }

@@ -60,7 +60,6 @@ impl BatchRemoveGroupMembersRequest {
         body: BatchRemoveGroupMembersBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
-
         validate_required!(self.group_id, "group_id 不能为空");
         if body.members.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -76,9 +75,8 @@ impl BatchRemoveGroupMembersRequest {
         ))
         .body(serialize_params(&body, "批量移除用户组成员")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "批量移除用户组成员")
-}
+    }
 }

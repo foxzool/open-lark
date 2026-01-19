@@ -38,7 +38,6 @@ impl UpdateBizEntityTagRelationRequest {
         body: BizEntityTagRelationBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
-
         validate_required!(body.tag_biz_type, "tag_biz_type 不能为空");
         validate_required!(body.biz_entity_id, "biz_entity_id 不能为空");
 
@@ -46,9 +45,8 @@ impl UpdateBizEntityTagRelationRequest {
         let req: ApiRequest<EmptyData> = ApiRequest::put(IM_V2_BIZ_ENTITY_TAG_RELATION)
             .body(serialize_params(&body, "解绑标签与群")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "解绑标签与群")
-}
+    }
 }

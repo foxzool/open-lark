@@ -49,5 +49,5 @@ mod tests {
         assert!(VC_V1_MEETING_INVITE.contains("invite"));
         assert!(VC_V1_MEETING_KICKOUT.contains("kickout"));
         assert!(VC_V1_MEETING_SET_HOST.contains("set_host"));
-}
+    }
 }

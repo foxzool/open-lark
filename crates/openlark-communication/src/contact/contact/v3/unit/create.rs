@@ -48,7 +48,6 @@ impl CreateUnitRequest {
         body: CreateUnitBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateUnitResponse> {
-
         validate_required!(body.name, "name 不能为空");
         validate_required!(body.unit_type, "unit_type 不能为空");
 
@@ -56,9 +55,8 @@ impl CreateUnitRequest {
         let req: ApiRequest<CreateUnitResponse> =
             ApiRequest::post(CONTACT_V3_UNIT).body(serialize_params(&body, "创建单位")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "创建单位")
-}
+    }
 }

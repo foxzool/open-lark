@@ -56,7 +56,6 @@ impl AddChatManagersRequest {
         body: ChatManagersBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ChatManagersResponse> {
-
         validate_required!(self.chat_id, "chat_id 不能为空");
         if body.manager_ids.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -76,9 +75,8 @@ impl AddChatManagersRequest {
             req = req.query("member_id_type", member_id_type.as_str());
         }
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "指定群管理员")
-}
+    }
 }

@@ -50,5 +50,5 @@ mod tests {
         assert!(EVENT_V1_DISPATCHER.contains("dispatcher"));
         assert!(EVENT_V1_SUBSCRIPTION_CREATE.contains("create"));
         assert!(EVENT_V1_SUBSCRIPTION_DELETE.contains("{subscription_id}"));
-}
+    }
 }

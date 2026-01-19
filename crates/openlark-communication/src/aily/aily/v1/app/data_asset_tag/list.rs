@@ -51,5 +51,5 @@ impl ListDataAssetTagsRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取数据知识分类列表")
-}
+    }
 }

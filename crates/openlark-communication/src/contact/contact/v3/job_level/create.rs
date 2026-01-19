@@ -51,16 +51,14 @@ impl CreateJobLevelRequest {
         body: CreateJobLevelBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<JobLevelResponse> {
-
         validate_required!(body.name, "name 不能为空");
 
         // url: POST:/open-apis/contact/v3/job_levels
         let req: ApiRequest<JobLevelResponse> =
             ApiRequest::post(CONTACT_V3_JOB_LEVELS).body(serialize_params(&body, "创建职级")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "创建职级")
-}
+    }
 }

@@ -58,5 +58,5 @@ impl GetBizEntityTagRelationRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询实体与标签的绑定关系")
-}
+    }
 }

@@ -42,5 +42,5 @@ impl UploadFileRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "上传文件用于数据知识管理")
-}
+    }
 }

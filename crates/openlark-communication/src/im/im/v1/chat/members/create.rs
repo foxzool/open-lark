@@ -66,7 +66,6 @@ impl CreateChatMembersRequest {
         body: CreateChatMembersBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateChatMembersResponse> {
-
         validate_required!(self.chat_id, "chat_id 不能为空");
         if body.id_list.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -87,9 +86,8 @@ impl CreateChatMembersRequest {
             req = req.query("succeed_type", succeed_type.as_str());
         }
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "将用户或机器人拉入群聊")
-}
+    }
 }

@@ -63,7 +63,6 @@ impl BatchAddGroupMembersRequest {
         body: BatchAddGroupMembersBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchAddGroupMembersResponse> {
-
         validate_required!(self.group_id, "group_id 不能为空");
         if body.members.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -79,9 +78,8 @@ impl BatchAddGroupMembersRequest {
         ))
         .body(serialize_params(&body, "批量添加用户组成员")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "批量添加用户组成员")
-}
+    }
 }

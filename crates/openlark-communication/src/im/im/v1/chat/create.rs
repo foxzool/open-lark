@@ -61,7 +61,6 @@ impl CreateChatRequest {
         body: serde_json::Value,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
-
         // url: POST:/open-apis/im/v1/chats
         let mut req: ApiRequest<serde_json::Value> =
             ApiRequest::post(IM_V1_CHATS).body(serialize_params(&body, "创建群")?);
@@ -76,9 +75,8 @@ impl CreateChatRequest {
             req = req.query("uuid", uuid);
         }
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "创建群")
-}
+    }
 }

@@ -46,7 +46,6 @@ impl CreateChatTabRequest {
         body: serde_json::Value,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
-
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: POST:/open-apis/im/v1/chats/:chat_id/chat_tabs
@@ -54,9 +53,8 @@ impl CreateChatTabRequest {
             ApiRequest::post(format!("{}/{}/chat_tabs", IM_V1_CHATS, self.chat_id))
                 .body(serialize_params(&body, "添加会话标签页")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "添加会话标签页")
-}
+    }
 }

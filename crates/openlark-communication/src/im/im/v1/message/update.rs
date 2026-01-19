@@ -52,7 +52,6 @@ impl UpdateMessageRequest {
         body: UpdateMessageBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
-
         validate_required!(self.message_id, "message_id 不能为空");
         validate_required!(body.msg_type, "msg_type 不能为空");
         validate_required!(body.content, "content 不能为空");
@@ -62,9 +61,8 @@ impl UpdateMessageRequest {
             ApiRequest::put(format!("{}/{}", IM_V1_MESSAGES, self.message_id))
                 .body(serialize_params(&body, "编辑消息")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "编辑消息")
-}
+    }
 }

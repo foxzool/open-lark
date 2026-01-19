@@ -34,14 +34,12 @@ impl CreateTagRequest {
         body: serde_json::Value,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
-
         // url: POST:/open-apis/im/v2/tags
         let req: ApiRequest<serde_json::Value> =
             ApiRequest::post(IM_V2_TAGS).body(serialize_params(&body, "创建标签")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "创建标签")
-}
+    }
 }

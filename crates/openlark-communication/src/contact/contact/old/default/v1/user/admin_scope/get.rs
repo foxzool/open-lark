@@ -32,5 +32,5 @@ impl GetAdminScopeRequest {
         let req: ApiRequest<serde_json::Value> = ApiRequest::get(CONTACT_V1_USER_ADMIN_SCOPE_GET);
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取应用管理员管理范围")
-}
+    }
 }
