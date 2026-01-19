@@ -1,0 +1,40 @@
+//! 搜索用户
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/search-users
+
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+
+use crate::{common::api_utils::extract_response_data, endpoints::SEARCH_V1_USER};
+
+/// 搜索用户请求
+pub struct SearchUserRequest {
+    config: Config,
+    query: Option<String>,
+}
+
+impl SearchUserRequest {
+    pub fn new(config: Config) -> Self {
+        Self { config, query: None }
+    }
+
+    /// 搜索关键字（查询参数，可选）
+    pub fn query(mut self, query: impl Into<String>) -> Self {
+        self.query = Some(query.into());
+        self
+    }
+
+    /// 执行请求
+    ///
+    /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/search-users
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        // url: GET:/open-apis/search/v1/user
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(SEARCH_V1_USER);
+
+        if let Some(query) = self.query {
+            req = req.query("query", &query);
+        }
+
+        let resp = Transport::request(req, &self.config, None).await?;
+        extract_response_data(resp, "搜索用户")
+    }
+}

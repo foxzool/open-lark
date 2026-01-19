@@ -34,6 +34,10 @@ pub const EVENT_V1_HISTORY_REPLAY: &str = "/open-apis/event/v1/history/replay";
 pub const EVENT_V1_DISPATCHER: &str = "/open-apis/event/v1/dispatcher";
 pub const EVENT_V1_DISPATCHER_STATUS: &str = "/open-apis/event/v1/dispatcher/status";
 
+/// Event事件出口 IP
+/// 获取事件推送的出口 IP 地址
+pub const EVENT_V1_OUTBOUND_IP: &str = "/open-apis/event/v1/outbound_ip";
+
 #[cfg(test)]
 mod tests {
     use super::*;

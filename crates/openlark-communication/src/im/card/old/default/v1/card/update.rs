@@ -1,0 +1,50 @@
+//! 延时更新消息卡片
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/im-v1/message-card/delay-update-message-card
+
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
+
+use crate::{
+    common::api_utils::{extract_response_data, serialize_params},
+    endpoints::INTERACTIVE_V1_CARD_UPDATE,
+};
+
+/// 延时更新消息卡片请求体
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateCardBody {
+    /// 消息卡片 token
+    pub token: String,
+
+    /// 消息卡片内容（JSON 格式）
+    pub card: Value,
+
+    /// 消息卡片更新的触发关键词（可选）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger_keyword: Option<String>,
+}
+
+/// 延时更新消息卡片请求
+pub struct UpdateCardRequest {
+    config: Config,
+}
+
+impl UpdateCardRequest {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// 执行请求
+    ///
+    /// docPath: https://open.feishu.cn/document/server-docs/im-v1/message-card/delay-update-message-card
+    pub async fn execute(self, body: UpdateCardBody) -> SDKResult<serde_json::Value> {
+        validate_required!(&body.token, "token 不能为空");
+
+        // url: POST:/open-apis/interactive/v1/card/update
+        let req: ApiRequest<serde_json::Value> =
+            ApiRequest::post(INTERACTIVE_V1_CARD_UPDATE).body(serialize_params(&body, "延时更新消息卡片")?);
+        let resp = Transport::request(req, &self.config, None).await?;
+        extract_response_data(resp, "延时更新消息卡片")
+    }
+}
