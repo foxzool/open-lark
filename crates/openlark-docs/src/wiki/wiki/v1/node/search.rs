@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -67,6 +68,25 @@ pub async fn search_node(
     config: &Config,
     request: SearchNodeRequest,
 ) -> SDKResult<SearchNodeResponse> {
+    search_node_with_options(config, request, RequestOption::default()).await
+}
+
+/// 搜索Wiki节点（支持自定义选项）
+///
+/// 根据关键字搜索Wiki节点。
+///
+/// # 参数
+/// * `config` - SDK 配置
+/// * `request` - 搜索请求
+/// * `option` - 请求选项
+///
+/// # 返回
+/// 返回搜索到的节点列表
+pub async fn search_node_with_options(
+    config: &Config,
+    request: SearchNodeRequest,
+    option: RequestOption,
+) -> SDKResult<SearchNodeResponse> {
     // 使用 ApiEndpoint 枚举生成 URL
     let api_endpoint = WikiApiV1::NodeSearch;
 
@@ -75,7 +95,7 @@ pub async fn search_node(
         ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_value(&request)?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     Ok(response.data.ok_or_else(|| {
         openlark_core::error::CoreError::validation_msg("响应数据为空")
     })?)
