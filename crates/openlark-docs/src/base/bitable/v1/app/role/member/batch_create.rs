@@ -7,6 +7,7 @@ use openlark_core::{
     config::Config,
     error::SDKResult,
     http::Transport,
+    req_option::RequestOption,
     validate_required,
 };
 use serde::{Deserialize, Serialize};
@@ -82,7 +83,7 @@ impl BatchCreateRoleMemberRequest {
             member_list: self.member_list,
         })?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
