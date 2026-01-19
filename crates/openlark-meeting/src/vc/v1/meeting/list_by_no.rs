@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting/list_by_no
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 
 use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
@@ -35,10 +37,7 @@ impl ListByNoMeetingRequest {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        option: RequestOption,
-    ) -> SDKResult<serde_json::Value> {
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/vc/v1/meetings/list_by_no
         let api_endpoint = VcApiV1::MeetingListList;
         let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());

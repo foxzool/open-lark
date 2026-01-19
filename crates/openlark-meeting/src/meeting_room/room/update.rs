@@ -41,8 +41,7 @@ impl UpdateRoomRequest {
 
         let api_endpoint = MeetingRoomApi::RoomUpdate;
         let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(api_endpoint.to_url())
-                .body(serialize_params(&body, "更新会议室")?);
+            ApiRequest::post(api_endpoint.to_url()).body(serialize_params(&body, "更新会议室")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "更新会议室")

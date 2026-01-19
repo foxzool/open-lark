@@ -23,8 +23,7 @@ impl SearchRoomRequest {
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         let api_endpoint = VcApiV1::RoomSearch;
         let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(api_endpoint.to_url())
-                .body(serialize_params(&body, "搜索会议室")?);
+            ApiRequest::post(api_endpoint.to_url()).body(serialize_params(&body, "搜索会议室")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "搜索会议室")

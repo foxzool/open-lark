@@ -3,7 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event-attendee/create
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required,
+    SDKResult,
 };
 
 use crate::{
@@ -43,11 +44,16 @@ impl CreateCalendarEventAttendeeRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event-attendee/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, body: serde_json::Value, option: RequestOption) -> SDKResult<serde_json::Value> {
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.calendar_id, "calendar_id 不能为空");
         validate_required!(self.event_id, "event_id 不能为空");
 

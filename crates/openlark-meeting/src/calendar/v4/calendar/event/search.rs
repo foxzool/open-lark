@@ -2,8 +2,12 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/search
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required,
+    SDKResult,
+};
 
+use crate::common::api_endpoints::CalendarApiV4;
 use crate::common::api_utils::{extract_response_data, serialize_params};
 
 /// 搜索日程请求
@@ -32,17 +36,22 @@ impl SearchCalendarEventRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/search
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
-        self.execute_with_options(RequestOption::default(), body).await
+        self.execute_with_options(RequestOption::default(), body)
+            .await
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+        body: serde_json::Value,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.calendar_id, "calendar_id 不能为空");
 
         // url: POST:/open-apis/calendar/v4/calendars/:calendar_id/events/search
-        let url = format!("/open-apis/calendar/v4/calendars/{}/events/search", self.calendar_id);
-        let req: ApiRequest<serde_json::Value> = ApiRequest::post(url)
-            .body(serialize_params(&body, "搜索日程")?);
+        let endpoint = CalendarApiV4::EventSearch(self.calendar_id.clone());
+        let req: ApiRequest<serde_json::Value> =
+            ApiRequest::post(endpoint.to_url()).body(serialize_params(&body, "搜索日程")?);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "搜索日程")

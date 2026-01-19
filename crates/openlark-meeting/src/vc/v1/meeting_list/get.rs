@@ -57,8 +57,10 @@ impl GetMeetingListRequest {
 
     /// 执行请求（带选项）
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetMeetingListResponse> {
-
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<GetMeetingListResponse> {
         let api_endpoint = VcApiV1::MeetingListList;
         let mut req: ApiRequest<GetMeetingListResponse> = ApiRequest::get(api_endpoint.to_url());
         for (k, v) in self.query_params {
@@ -67,9 +69,7 @@ impl GetMeetingListRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询会议明细")
-
     }
-
 }
 
 /// 查询会议明细请求构建器

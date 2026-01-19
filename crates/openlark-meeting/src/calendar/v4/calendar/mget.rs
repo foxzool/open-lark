@@ -26,9 +26,8 @@ impl MgetCalendarRequest {
     /// docPath: https://open.feishu.cn/document/calendar-v4/calendar/mget-3
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         let api_endpoint = CalendarApiV4::CalendarMget;
-        let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(api_endpoint.to_url())
-                .body(serialize_params(&body, "批量查询日历信息")?);
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url())
+            .body(serialize_params(&body, "批量查询日历信息")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "批量查询日历信息")

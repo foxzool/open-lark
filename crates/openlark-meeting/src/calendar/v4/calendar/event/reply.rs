@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/calendar-v4/calendar-event/reply
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_endpoints::CalendarApiV4,
@@ -46,9 +48,10 @@ impl ReplyCalendarEventRequest {
         validate_required!(self.calendar_id, "calendar_id 不能为空");
         validate_required!(self.event_id, "event_id 不能为空");
 
-        let api_endpoint = CalendarApiV4::EventReply(self.calendar_id.clone(), self.event_id.clone());
-        let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url())
-            .body(serialize_params(&body, "回复日程")?);
+        let api_endpoint =
+            CalendarApiV4::EventReply(self.calendar_id.clone(), self.event_id.clone());
+        let req: ApiRequest<serde_json::Value> =
+            ApiRequest::post(api_endpoint.to_url()).body(serialize_params(&body, "回复日程")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "回复日程")

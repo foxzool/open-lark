@@ -26,9 +26,8 @@ impl SubscriptionCalendarRequest {
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/subscription
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         let api_endpoint = CalendarApiV4::CalendarSubscription;
-        let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(api_endpoint.to_url())
-                .body(serialize_params(&body, "订阅日历变更事件")?);
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url())
+            .body(serialize_params(&body, "订阅日历变更事件")?);
 
         let resp = Transport::request(req, &self.config, None).await?;
         extract_response_data(resp, "订阅日历变更事件")

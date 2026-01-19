@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/export/meeting_list
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 
 use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::{extract_response_data, serialize_params};
@@ -23,7 +25,8 @@ impl ExportMeetingListRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/export/meeting_list
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行请求（带选项）

@@ -92,6 +92,10 @@ pub enum CalendarApiV4 {
     /// GET /open-apis/calendar/v4/calendars/:calendar_id/events
     EventList(String),
 
+    /// 搜索日程
+    /// POST /open-apis/calendar/v4/calendars/:calendar_id/events/search
+    EventSearch(String),
+
     /// 批量获取日程信息
     /// POST /open-apis/calendar/v4/calendars/:calendar_id/events/batch_get
     EventBatchGet(String),
@@ -101,9 +105,17 @@ pub enum CalendarApiV4 {
     EventReply(String, String),
 
     // ========== ACL 访问控制 ==========
+    /// 创建访问控制
+    /// POST /open-apis/calendar/v4/calendars/:calendar_id/acls
+    CalendarAclCreate(String),
+
     /// 订阅日历访问控制变更事件
     /// POST /open-apis/calendar/v4/calendars/:calendar_id/acls/subscription
     CalendarAclSubscription(String),
+
+    /// 取消订阅日历访问控制变更事件
+    /// POST /open-apis/calendar/v4/calendars/:calendar_id/acls/unsubscription
+    CalendarAclUnsubscription(String),
 
     // ========== Exchange 绑定 ==========
     /// 将 Exchange 账户绑定到飞书账户
@@ -177,6 +189,12 @@ impl CalendarApiV4 {
             CalendarApiV4::EventList(calendar_id) => {
                 format!("/open-apis/calendar/v4/calendars/{}/events", calendar_id)
             }
+            CalendarApiV4::EventSearch(calendar_id) => {
+                format!(
+                    "/open-apis/calendar/v4/calendars/{}/events/search",
+                    calendar_id
+                )
+            }
             CalendarApiV4::EventBatchGet(calendar_id) => {
                 format!(
                     "/open-apis/calendar/v4/calendars/{}/events/batch_get",
@@ -191,9 +209,18 @@ impl CalendarApiV4 {
             }
 
             // ACL
+            CalendarApiV4::CalendarAclCreate(calendar_id) => {
+                format!("/open-apis/calendar/v4/calendars/{}/acls", calendar_id)
+            }
             CalendarApiV4::CalendarAclSubscription(calendar_id) => {
                 format!(
                     "/open-apis/calendar/v4/calendars/{}/acls/subscription",
+                    calendar_id
+                )
+            }
+            CalendarApiV4::CalendarAclUnsubscription(calendar_id) => {
+                format!(
+                    "/open-apis/calendar/v4/calendars/{}/acls/unsubscription",
                     calendar_id
                 )
             }
@@ -419,6 +446,14 @@ pub enum VcApiV1 {
     /// PATCH /open-apis/vc/v1/reserve_configs/:reserve_config_id/admin
     ReserveConfigAdminPatch(String),
 
+    /// 更新会议室预定表单
+    /// PATCH /open-apis/vc/v1/reserve_configs/:reserve_config_id/form
+    ReserveConfigFormPatch(String),
+
+    /// 更新禁用状态变更通知
+    /// PATCH /open-apis/vc/v1/reserve_configs/:reserve_config_id/disable_inform
+    ReserveConfigDisableInformPatch(String),
+
     // ========== Scope Config 范围配置 ==========
     /// 创建范围配置
     /// POST /open-apis/vc/v1/scope_config
@@ -598,7 +633,22 @@ impl VcApiV1 {
                 format!("/open-apis/vc/v1/reserve_configs/{}", reserve_config_id)
             }
             VcApiV1::ReserveConfigAdminPatch(reserve_config_id) => {
-                format!("/open-apis/vc/v1/reserve_configs/{}/admin", reserve_config_id)
+                format!(
+                    "/open-apis/vc/v1/reserve_configs/{}/admin",
+                    reserve_config_id
+                )
+            }
+            VcApiV1::ReserveConfigFormPatch(reserve_config_id) => {
+                format!(
+                    "/open-apis/vc/v1/reserve_configs/{}/form",
+                    reserve_config_id
+                )
+            }
+            VcApiV1::ReserveConfigDisableInformPatch(reserve_config_id) => {
+                format!(
+                    "/open-apis/vc/v1/reserve_configs/{}/disable_inform",
+                    reserve_config_id
+                )
             }
 
             // Scope Config
@@ -780,7 +830,9 @@ impl MeetingRoomApi {
                 "/open-apis/meeting_room/rooms/batch_get_summary".to_string()
             }
             MeetingRoomApi::RoomUpdate => "/open-apis/meeting_room/room/update".to_string(),
-            MeetingRoomApi::InstanceReplyOld => "/open-apis/meeting_room/instance/reply".to_string(),
+            MeetingRoomApi::InstanceReplyOld => {
+                "/open-apis/meeting_room/instance/reply".to_string()
+            }
         }
     }
 }
