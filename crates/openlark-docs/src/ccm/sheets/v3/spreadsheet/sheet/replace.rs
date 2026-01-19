@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 
@@ -30,6 +31,6 @@ pub async fn replace_cells(
     let api_request: ApiRequest<FindReplaceResponse> =
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "替换单元格")?);
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "替换单元格")
 }

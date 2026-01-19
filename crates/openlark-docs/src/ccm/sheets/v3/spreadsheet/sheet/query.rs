@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 
@@ -33,6 +34,6 @@ pub async fn query_sheets(
     let api_request: ApiRequest<QuerySheetResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "查询工作表")
 }

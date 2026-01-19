@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -32,6 +33,6 @@ pub async fn delete_filter(
         SheetsApiV3::DeleteFilter(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<DeleteFilterResponse> = ApiRequest::delete(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "删除筛选")
 }

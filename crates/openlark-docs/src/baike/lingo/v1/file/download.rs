@@ -3,7 +3,8 @@
 //! docPath: https://open.feishu.cn/document/lingo-v1/file/download
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required,
+    SDKResult,
 };
 
 use crate::common::api_endpoints::LingoApiV1;
@@ -30,7 +31,7 @@ impl DownloadFileRequest {
         let api_request: ApiRequest<Vec<u8>> =
             ApiRequest::get(&LingoApiV1::FileDownload(self.file_token).to_url());
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "下载图片")
     }
 }

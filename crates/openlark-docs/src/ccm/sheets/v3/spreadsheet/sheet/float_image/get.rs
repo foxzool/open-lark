@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -39,6 +40,6 @@ pub async fn get_float_image(
     );
     let api_request: ApiRequest<GetFloatImageResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "获取浮动图片")
 }
