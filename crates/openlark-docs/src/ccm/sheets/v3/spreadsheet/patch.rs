@@ -28,6 +28,17 @@ pub async fn update_spreadsheet(
     spreadsheet_token: &str,
     params: UpdateSpreadsheetParams,
 ) -> SDKResult<UpdateSpreadsheetResponse> {
+    update_spreadsheet_with_options(config, spreadsheet_token, params, RequestOption::default())
+        .await
+}
+
+/// 更新电子表格（支持自定义选项）
+pub async fn update_spreadsheet_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: UpdateSpreadsheetParams,
+    option: RequestOption,
+) -> SDKResult<UpdateSpreadsheetResponse> {
     // 使用enum+builder系统生成API端点
     let api_endpoint = SheetsApiV3::PatchSpreadsheet(spreadsheet_token.to_string());
 
@@ -36,6 +47,6 @@ pub async fn update_spreadsheet(
         ApiRequest::patch(&api_endpoint.to_url()).body(serialize_params(&params, "更新电子表格")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "更新电子表格")
 }
