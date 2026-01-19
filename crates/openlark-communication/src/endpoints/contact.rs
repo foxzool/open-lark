@@ -96,15 +96,15 @@ pub const USER_V4_APP_ADMIN_USER_LIST: &str = "/open-apis/user/v4/app_admin_user
 
 /// 为保持向后兼容性，提供一些简短的别名
 /// IM别名
-pub const SEND_MESSAGE: &str = IM_V1_MESSAGES;
-pub const CHAT_CREATE: &str = IM_V1_CHATS;
+pub const SEND_MESSAGE: &str = "/open-apis/im/v1/messages";
+pub const CHAT_CREATE: &str = "/open-apis/im/v1/chats";
 
 /// VC别名
-pub const ROOM_LIST: &str = VC_V1_ROOMS;
-pub const MEETING_LIST: &str = VC_V1_MEETINGS;
+pub const ROOM_LIST: &str = "/open-apis/vc/v1/rooms";
+pub const MEETING_LIST: &str = "/open-apis/vc/v1/meetings";
 
 /// Mail别名
-pub const MAILGROUP_LIST: &str = MAIL_V1_MAILGROUPS;
+pub const MAILGROUP_LIST: &str = "/open-apis/mail/v1/mailgroups";
 
 #[cfg(test)]
 mod tests {
@@ -137,11 +137,12 @@ mod tests {
     }
 
     #[test]
-    fn test_backward_compatibility() {
-        assert_eq!(SEND_MESSAGE, IM_V1_MESSAGES);
-        assert_eq!(CHAT_CREATE, IM_V1_CHATS);
-        assert_eq!(ROOM_LIST, VC_V1_ROOMS);
-        assert_eq!(MEETING_LIST, VC_V1_MEETINGS);
-        assert_eq!(MAILGROUP_LIST, MAIL_V1_MAILGROUPS);
+    fn test_backward_compatibility_aliases() {
+        // 测试兼容性别名的值
+        assert_eq!(SEND_MESSAGE, "/open-apis/im/v1/messages");
+        assert_eq!(CHAT_CREATE, "/open-apis/im/v1/chats");
+        assert_eq!(ROOM_LIST, "/open-apis/vc/v1/rooms");
+        assert_eq!(MEETING_LIST, "/open-apis/vc/v1/meetings");
+        assert_eq!(MAILGROUP_LIST, "/open-apis/mail/v1/mailgroups");
     }
 }
