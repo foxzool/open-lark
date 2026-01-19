@@ -31,6 +31,26 @@ pub async fn delete_filter_condition(
     filter_view_id: &str,
     condition_id: &str,
 ) -> SDKResult<DeleteFilterConditionResponse> {
+    delete_filter_condition_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        filter_view_id,
+        condition_id,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 删除筛选条件（支持请求选项）
+pub async fn delete_filter_condition_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    filter_view_id: &str,
+    condition_id: &str,
+    option: RequestOption,
+) -> SDKResult<DeleteFilterConditionResponse> {
     let api_endpoint = SheetsApiV3::DeleteFilterCondition(
         spreadsheet_token.to_string(),
         sheet_id.to_string(),
@@ -40,6 +60,6 @@ pub async fn delete_filter_condition(
     let api_request: ApiRequest<DeleteFilterConditionResponse> =
         ApiRequest::delete(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "删除筛选条件")
 }

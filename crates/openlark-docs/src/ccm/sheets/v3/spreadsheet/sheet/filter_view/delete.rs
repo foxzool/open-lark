@@ -30,6 +30,24 @@ pub async fn delete_filter_view(
     sheet_id: &str,
     filter_view_id: &str,
 ) -> SDKResult<DeleteFilterViewResponse> {
+    delete_filter_view_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        filter_view_id,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 删除筛选视图（支持请求选项）
+pub async fn delete_filter_view_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    filter_view_id: &str,
+    option: RequestOption,
+) -> SDKResult<DeleteFilterViewResponse> {
     let api_endpoint = SheetsApiV3::DeleteFilterView(
         spreadsheet_token.to_string(),
         sheet_id.to_string(),
@@ -38,6 +56,6 @@ pub async fn delete_filter_view(
     let api_request: ApiRequest<DeleteFilterViewResponse> =
         ApiRequest::delete(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "删除筛选视图")
 }

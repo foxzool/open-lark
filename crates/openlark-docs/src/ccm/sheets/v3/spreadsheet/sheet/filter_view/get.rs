@@ -33,6 +33,24 @@ pub async fn get_filter_view(
     sheet_id: &str,
     filter_view_id: &str,
 ) -> SDKResult<GetFilterViewResponse> {
+    get_filter_view_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        filter_view_id,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 获取筛选视图（支持请求选项）
+pub async fn get_filter_view_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    filter_view_id: &str,
+    option: RequestOption,
+) -> SDKResult<GetFilterViewResponse> {
     let api_endpoint = SheetsApiV3::GetFilterView(
         spreadsheet_token.to_string(),
         sheet_id.to_string(),
@@ -40,6 +58,6 @@ pub async fn get_filter_view(
     );
     let api_request: ApiRequest<GetFilterViewResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "获取筛选视图")
 }
