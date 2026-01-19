@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -63,6 +64,13 @@ impl SearchSpaceMembersRequest {
     }
 
     pub async fn execute(self) -> SDKResult<SearchSpaceMembersResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<SearchSpaceMembersResp> {
         let query_len = self.query.chars().count();
         if !(1..=100).contains(&query_len) {
             return Err(openlark_core::error::validation_error(
@@ -81,7 +89,7 @@ impl SearchSpaceMembersRequest {
         }
 
         let response: Response<SearchSpaceMembersResp> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
