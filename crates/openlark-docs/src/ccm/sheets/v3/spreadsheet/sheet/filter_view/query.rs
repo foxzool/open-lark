@@ -32,10 +32,26 @@ pub async fn query_filter_views(
     spreadsheet_token: &str,
     sheet_id: &str,
 ) -> SDKResult<QueryFilterViewsResponse> {
+    query_filter_views_with_options(
+        config,
+        spreadsheet_token,
+        sheet_id,
+        RequestOption::default(),
+    )
+    .await
+}
+
+/// 查询筛选视图（支持自定义选项）
+pub async fn query_filter_views_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    sheet_id: &str,
+    option: RequestOption,
+) -> SDKResult<QueryFilterViewsResponse> {
     let api_endpoint =
         SheetsApiV3::QueryFilterViews(spreadsheet_token.to_string(), sheet_id.to_string());
     let api_request: ApiRequest<QueryFilterViewsResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "查询筛选视图")
 }
