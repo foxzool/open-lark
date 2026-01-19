@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/historic-version/id_convert
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use super::models::ConvertCardIdResponse;
@@ -43,6 +45,18 @@ impl ConvertCardIdRequest {
     ///
     /// docPath: https://open.feishu.cn/document/historic-version/id_convert
     pub async fn execute(self, body: ConvertCardIdBody) -> SDKResult<ConvertCardIdResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（支持自定义选项）
+    ///
+    /// docPath: https://open.feishu.cn/document/historic-version/id_convert
+    pub async fn execute_with_options(
+        self,
+        body: ConvertCardIdBody,
+        option: RequestOption,
+    ) -> SDKResult<ConvertCardIdResponse> {
         let mut body = body;
         if let Some(source_id_type) = self.source_id_type {
             body.source_id_type = source_id_type;
@@ -77,7 +91,7 @@ impl ConvertCardIdRequest {
         let req: ApiRequest<ConvertCardIdResponse> =
             ApiRequest::post(CARDKIT_V1_CARD_ID_CONVERT).body(serialize_params(&body, "转换 ID")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "转换 ID")
     }
 }
@@ -135,6 +149,17 @@ impl ConvertCardIdRequestBuilder {
 ///
 /// docPath: https://open.feishu.cn/document/historic-version/id_convert
 pub async fn convert(config: &Config, body: ConvertCardIdBody) -> SDKResult<ConvertCardIdResponse> {
+    convert_with_options(config, body, RequestOption::default()).await
+}
+
+/// 执行请求（支持自定义选项）
+///
+/// docPath: https://open.feishu.cn/document/historic-version/id_convert
+pub async fn convert_with_options(
+    config: &Config,
+    body: ConvertCardIdBody,
+    option: RequestOption,
+) -> SDKResult<ConvertCardIdResponse> {
     if body.source_id_type.trim().is_empty() {
         return Err(openlark_core::error::validation_error(
             "source_id_type 不能为空",
@@ -158,6 +183,6 @@ pub async fn convert(config: &Config, body: ConvertCardIdBody) -> SDKResult<Conv
     let req: ApiRequest<ConvertCardIdResponse> =
         ApiRequest::post(CARDKIT_V1_CARD_ID_CONVERT).body(serialize_params(&body, "转换 ID")?);
 
-    let resp = Transport::request(req, config, None).await?;
+    let resp = Transport::request(req, config, Some(option)).await?;
     extract_response_data(resp, "转换 ID")
 }
