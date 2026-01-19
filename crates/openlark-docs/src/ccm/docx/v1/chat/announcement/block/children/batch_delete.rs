@@ -7,6 +7,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -74,7 +75,7 @@ impl BatchDeleteChatAnnouncementBlockChildrenRequest {
             ApiRequest::delete(&api_endpoint.to_url())
                 .body(serialize_params(&params, "删除群公告中的块")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "删除群公告中的块")
     }
 }

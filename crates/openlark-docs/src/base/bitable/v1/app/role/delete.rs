@@ -7,6 +7,7 @@ use openlark_core::{
     config::Config,
     error::SDKResult,
     http::Transport,
+    req_option::RequestOption,
     validate_required,
 };
 use serde::{Deserialize, Serialize};
@@ -48,7 +49,7 @@ impl DeleteAppRoleRequest {
         let api_request: ApiRequest<DeleteAppRoleResponse> =
             ApiRequest::delete(&api_endpoint.to_url());
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
