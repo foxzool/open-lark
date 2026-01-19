@@ -1,0 +1,120 @@
+//! 搜索空间成员列表
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/baike-v1/search/space_member_list
+
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
+    config::Config,
+    http::Transport,
+    validate_required, SDKResult,
+};
+use serde::{Deserialize, Serialize};
+
+use crate::baike::baike::v1::models::UserIdType;
+use crate::common::api_endpoints::BaikeApiV1;
+
+/// 空间成员列表条目
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SpaceMemberListItem {
+    /// 用户 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    /// 用户名称
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// 角色
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+}
+
+/// 搜索空间成员列表响应（data）
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SearchSpaceMemberListResp {
+    /// 成员列表
+    #[serde(default)]
+    pub items: Vec<SpaceMemberListItem>,
+    /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 是否有更多
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_more: Option<bool>,
+}
+
+impl ApiResponseTrait for SearchSpaceMemberListResp {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 搜索空间成员列表请求
+pub struct SearchSpaceMemberListRequest {
+    config: Config,
+    space_id: String,
+    page_size: Option<i32>,
+    page_token: Option<String>,
+    user_id_type: Option<UserIdType>,
+}
+
+impl SearchSpaceMemberListRequest {
+    pub fn new(config: Config, space_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            space_id: space_id.into(),
+            page_size: None,
+            page_token: None,
+            user_id_type: None,
+        }
+    }
+
+    /// 分页大小
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    /// 分页标记
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.page_token = Some(page_token.into());
+        self
+    }
+
+    /// 用户 ID 类型
+    pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<SearchSpaceMemberListResp> {
+        validate_required!(self.space_id, "space_id 不能为空");
+
+        if let Some(page_size) = self.page_size {
+            if !(1..=100).contains(&page_size) {
+                return Err(openlark_core::error::validation_error(
+                    "page_size",
+                    "page_size 取值范围必须为 1~100",
+                ));
+            }
+        }
+
+        let mut api_request: ApiRequest<SearchSpaceMemberListResp> =
+            ApiRequest::get(&BaikeApiV1::SearchSpaceMemberList.to_url())
+                .query("space_id", &self.space_id);
+
+        if let Some(page_size) = self.page_size {
+            api_request = api_request.query("page_size", page_size.to_string());
+        }
+        if let Some(page_token) = &self.page_token {
+            api_request = api_request.query("page_token", page_token);
+        }
+        if let Some(user_id_type) = &self.user_id_type {
+            api_request = api_request.query("user_id_type", user_id_type.as_str());
+        }
+
+        let response: Response<SearchSpaceMemberListResp> =
+            Transport::request(api_request, &self.config, None).await?;
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
