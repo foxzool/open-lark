@@ -52,8 +52,7 @@ pub mod calendar;
 pub mod meeting_room;
 
 /// Prelude 模块 - 常用导入
-pub mod prelude {
-    pub use openlark_core::{config::Config, SDKResult};
-}
+pub mod prelude;
 
+// 重新导出主要类型
 pub use common::chain::MeetingClient;
