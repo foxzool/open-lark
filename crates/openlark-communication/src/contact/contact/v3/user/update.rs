@@ -64,7 +64,6 @@ impl UpdateUserRequest {
         body: serde_json::Value,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UserResponse> {
-
         validate_required!(self.user_id, "user_id 不能为空");
 
         // url: PUT:/open-apis/contact/v3/users/:user_id
@@ -79,9 +78,8 @@ impl UpdateUserRequest {
             req = req.query("department_id_type", department_id_type.as_str());
         }
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "更新用户所有信息")
-}
+    }
 }

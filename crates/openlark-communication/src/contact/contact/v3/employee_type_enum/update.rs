@@ -59,7 +59,6 @@ impl UpdateEmployeeTypeEnumRequest {
         body: UpdateEmployeeTypeEnumBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmployeeTypeEnumResponse> {
-
         validate_required!(self.enum_id, "enum_id 不能为空");
         validate_required!(body.content, "content 不能为空");
 
@@ -70,9 +69,8 @@ impl UpdateEmployeeTypeEnumRequest {
         ))
         .body(serialize_params(&body, "更新人员类型")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "更新人员类型")
-}
+    }
 }

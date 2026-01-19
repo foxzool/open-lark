@@ -65,7 +65,6 @@ impl UpdateJobLevelRequest {
         body: UpdateJobLevelBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<JobLevelResponse> {
-
         validate_required!(self.job_level_id, "job_level_id 不能为空");
 
         // url: PUT:/open-apis/contact/v3/job_levels/:job_level_id
@@ -73,9 +72,8 @@ impl UpdateJobLevelRequest {
             ApiRequest::put(format!("{}/{}", CONTACT_V3_JOB_LEVELS, self.job_level_id))
                 .body(serialize_params(&body, "更新职级")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "更新职级")
-}
+    }
 }

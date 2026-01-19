@@ -68,7 +68,6 @@ impl ForwardThreadRequest {
         body: ForwardThreadBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
-
         validate_required!(self.thread_id, "thread_id 不能为空");
         validate_required!(body.receive_id, "receive_id 不能为空");
         let receive_id_type = self.receive_id_type.ok_or_else(|| {
@@ -88,9 +87,8 @@ impl ForwardThreadRequest {
             req = req.query("uuid", uuid);
         }
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "转发话题")
-}
+    }
 }

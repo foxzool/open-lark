@@ -45,7 +45,6 @@ impl DeleteChatTabsRequest {
         body: TabIdsBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
-
         validate_required!(self.chat_id, "chat_id 不能为空");
         if body.tab_ids.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -61,9 +60,8 @@ impl DeleteChatTabsRequest {
         ))
         .body(serialize_params(&body, "删除会话标签页")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "删除会话标签页")
-}
+    }
 }

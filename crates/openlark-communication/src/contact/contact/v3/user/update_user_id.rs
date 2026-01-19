@@ -61,7 +61,6 @@ impl UpdateUserIdRequest {
         body: UpdateUserIdBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
-
         validate_required!(self.user_id, "user_id 不能为空");
         validate_required!(body.new_user_id, "new_user_id 不能为空");
 
@@ -76,9 +75,8 @@ impl UpdateUserIdRequest {
             req = req.query("user_id_type", user_id_type.as_str());
         }
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "更新用户 ID")
-}
+    }
 }

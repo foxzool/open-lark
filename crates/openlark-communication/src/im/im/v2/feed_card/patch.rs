@@ -57,7 +57,6 @@ impl PatchFeedCardRequest {
         body: FeedCardTimeSensitiveBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<FeedCardActionResponse> {
-
         validate_required!(self.feed_card_id, "feed_card_id 不能为空");
         if body.user_ids.is_empty() {
             return Err(error::validation_error(
@@ -78,9 +77,8 @@ impl PatchFeedCardRequest {
                 .query("user_id_type", user_id_type.as_str())
                 .body(serialize_params(&body, "即时提醒")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "即时提醒")
-}
+    }
 }

@@ -51,5 +51,5 @@ impl ListDataAssetsRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询数据知识列表")
-}
+    }
 }

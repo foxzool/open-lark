@@ -50,5 +50,5 @@ impl GetMessageRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取 Aily 消息")
-}
+    }
 }

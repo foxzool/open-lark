@@ -144,5 +144,5 @@ mod tests {
         assert_eq!(ROOM_LIST, "/open-apis/vc/v1/rooms");
         assert_eq!(MEETING_LIST, "/open-apis/vc/v1/meetings");
         assert_eq!(MAILGROUP_LIST, "/open-apis/mail/v1/mailgroups");
-}
+    }
 }

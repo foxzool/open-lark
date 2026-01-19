@@ -63,7 +63,6 @@ impl UpdateDepartmentIdRequest {
         body: UpdateDepartmentIdBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
-
         validate_required!(self.department_id, "department_id 不能为空");
         validate_required!(body.new_department_id, "new_department_id 不能为空");
 
@@ -78,9 +77,8 @@ impl UpdateDepartmentIdRequest {
             req = req.query("department_id_type", department_id_type.as_str());
         }
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "更新部门 ID")
-}
+    }
 }

@@ -65,7 +65,6 @@ impl UpdateJobFamilyRequest {
         body: UpdateJobFamilyBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<JobFamilyResponse> {
-
         validate_required!(self.job_family_id, "job_family_id 不能为空");
 
         // url: PUT:/open-apis/contact/v3/job_families/:job_family_id
@@ -75,9 +74,8 @@ impl UpdateJobFamilyRequest {
         ))
         .body(serialize_params(&body, "更新序列")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "更新序列")
-}
+    }
 }

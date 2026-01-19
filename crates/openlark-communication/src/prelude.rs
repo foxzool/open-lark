@@ -3,24 +3,13 @@
 //! 集中导出最常用的类型和特征，简化导入。
 
 // 重新导出核心类型
-pub use openlark_core::{
-    config::Config,
-    SDKResult,
-};
+pub use openlark_core::{config::Config, SDKResult};
 
 // 重新导出通用工具
 pub use crate::common::chain::CommunicationClient;
 
 // 重新导出端点常量
-pub use crate::endpoints::{
-    im::*,
-    contact::*,
-    aily::*,
-    moments::*,
-    mail::*,
-    vc::*,
-    event::*,
-};
+pub use crate::endpoints::{aily::*, contact::*, event::*, im::*, mail::*, moments::*, vc::*};
 
 // 重新导出请求选项
 pub use openlark_core::req_option::RequestOption;

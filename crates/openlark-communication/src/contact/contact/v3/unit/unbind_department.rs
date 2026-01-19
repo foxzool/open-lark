@@ -48,7 +48,6 @@ impl UnbindDepartmentRequest {
         body: UnbindDepartmentBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
-
         validate_required!(body.unit_id, "unit_id 不能为空");
         validate_required!(body.department_id, "department_id 不能为空");
 
@@ -56,9 +55,8 @@ impl UnbindDepartmentRequest {
         let req: ApiRequest<EmptyData> = ApiRequest::post(CONTACT_V3_UNIT_UNBIND_DEPARTMENT)
             .body(serialize_params(&body, "解除部门与单位的绑定关系")?);
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "解除部门与单位的绑定关系")
-}
+    }
 }

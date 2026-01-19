@@ -45,7 +45,6 @@ impl UpdateAppFeedCardsRequest {
         body: serde_json::Value,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
-
         // url: PUT:/open-apis/im/v2/app_feed_card/batch
         let mut req: ApiRequest<serde_json::Value> = ApiRequest::put(IM_V2_APP_FEED_CARD_BATCH)
             .body(serialize_params(&body, "更新应用消息流卡片")?);
@@ -54,9 +53,8 @@ impl UpdateAppFeedCardsRequest {
             req = req.query("user_id_type", user_id_type.as_str());
         }
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "更新应用消息流卡片")
-}
+    }
 }

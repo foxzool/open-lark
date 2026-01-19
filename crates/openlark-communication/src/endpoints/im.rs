@@ -105,5 +105,5 @@ mod tests {
         assert!(IM_V2_APP_FEED_CARD.contains("app_feed_card"));
         assert!(IM_V2_FEED_CARDS.contains("feed_cards"));
         assert!(IM_V2_TAGS.contains("tags"));
-}
+    }
 }

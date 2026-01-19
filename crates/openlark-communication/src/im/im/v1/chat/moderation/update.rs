@@ -56,7 +56,6 @@ impl UpdateChatModerationRequest {
         body: UpdateChatModerationBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
-
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: PUT:/open-apis/im/v1/chats/:chat_id/moderation
@@ -68,9 +67,8 @@ impl UpdateChatModerationRequest {
             req = req.query("user_id_type", user_id_type.as_str());
         }
 
-        
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "更新群发言权限")
-}
+    }
 }
