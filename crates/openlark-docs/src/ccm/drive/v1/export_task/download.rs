@@ -9,6 +9,7 @@ use openlark_core::{
     api::{ApiRequest, Response},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 
@@ -41,7 +42,7 @@ impl DownloadExportRequest {
 
         let api_request = ApiRequest::<Vec<u8>>::get(&api_endpoint.to_url());
 
-        Transport::request(api_request, &self.config, None).await
+        Transport::request(api_request, &self.config, Some(option)).await
     }
 }
 

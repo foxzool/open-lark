@@ -9,6 +9,7 @@ use openlark_core::{
     api::{ApiRequest, Response},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 
@@ -69,7 +70,7 @@ impl DownloadMediaRequest {
             request = request.header("Range", &r);
         }
 
-        Transport::request(request, &self.config, None).await
+        Transport::request(request, &self.config, Some(option)).await
     }
 }
 

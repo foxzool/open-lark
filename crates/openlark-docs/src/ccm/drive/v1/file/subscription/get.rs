@@ -1,8 +1,11 @@
 //! 获取订阅状态
+
 //!
+
 //! docPath: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/get
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
@@ -10,10 +13,13 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 use super::models::Subscription;
 
 /// 获取订阅状态请求
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
+
 pub struct GetSubscriptionRequest {
     /// 文件 token
     pub file_token: String,
+
     /// 订阅 ID
     pub subscription_id: String,
 }
@@ -22,6 +28,7 @@ impl GetSubscriptionRequest {
     pub fn new(file_token: impl Into<String>, subscription_id: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
+
             subscription_id: subscription_id.into(),
         }
     }
@@ -30,9 +37,12 @@ impl GetSubscriptionRequest {
 pub type GetSubscriptionResponse = Subscription;
 
 /// 获取订阅状态
+
 pub async fn get_subscription(
     request: GetSubscriptionRequest,
+
     config: &Config,
+
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<GetSubscriptionResponse> {
     if request.file_token.trim().is_empty() {
@@ -41,6 +51,7 @@ pub async fn get_subscription(
             "file_token 不能为空",
         ));
     }
+
     if request.subscription_id.trim().is_empty() {
         return Err(openlark_core::error::validation_error(
             "subscription_id",
@@ -58,6 +69,7 @@ pub async fn get_subscription(
         api_request = api_request.request_option(opt);
     }
 
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
+
     extract_response_data(response, "获取订阅状态")
 }
