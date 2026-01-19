@@ -91,6 +91,19 @@ pub async fn delete_range(
     spreadsheet_token: &str,
     params: DeleteRangeParams,
 ) -> SDKResult<DeleteRangeResponse> {
+    delete_range_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 删除范围（带选项）
+///
+/// 根据 spreadsheetToken 和 range 删除指定范围的行列。
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/deleting-ranges
+pub async fn delete_range_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: DeleteRangeParams,
+    option: RequestOption,
+) -> SDKResult<DeleteRangeResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
     validate_required!(params.range, "删除范围不能为空");
@@ -103,7 +116,7 @@ pub async fn delete_range(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "删除范围")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "删除范围")
 }
 
@@ -115,6 +128,19 @@ pub async fn insert_dimension(
     config: &Config,
     spreadsheet_token: &str,
     params: InsertDimensionParams,
+) -> SDKResult<InsertDimensionResponse> {
+    insert_dimension_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 插入行列（带选项）
+///
+/// 根据 spreadsheetToken 和 range 在指定位置插入空行或空列。
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/inserting-blank-rows-or-columns
+pub async fn insert_dimension_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: InsertDimensionParams,
+    option: RequestOption,
 ) -> SDKResult<InsertDimensionResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -128,7 +154,7 @@ pub async fn insert_dimension(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "插入行列")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "插入行列")
 }
 
@@ -140,6 +166,19 @@ pub async fn move_dimension(
     config: &Config,
     spreadsheet_token: &str,
     params: MoveDimensionParams,
+) -> SDKResult<MoveDimensionResponse> {
+    move_dimension_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 移动行列（带选项）
+///
+/// 根据 spreadsheetToken 将指定范围的行或列移动到新位置。
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/moving-rows-or-columns
+pub async fn move_dimension_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: MoveDimensionParams,
+    option: RequestOption,
 ) -> SDKResult<MoveDimensionResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -153,7 +192,7 @@ pub async fn move_dimension(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "移动行列")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "移动行列")
 }
 
@@ -165,6 +204,19 @@ pub async fn replace_range(
     config: &Config,
     spreadsheet_token: &str,
     params: ReplaceRangeParams,
+) -> SDKResult<ReplaceRangeResponse> {
+    replace_range_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 替换范围（带选项）
+///
+/// 根据 spreadsheetToken 和 range 替换指定范围的内容。
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/replacing-a-range
+pub async fn replace_range_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: ReplaceRangeParams,
+    option: RequestOption,
 ) -> SDKResult<ReplaceRangeResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -178,7 +230,7 @@ pub async fn replace_range(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "替换范围")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "替换范围")
 }
 
@@ -190,6 +242,19 @@ pub async fn find_replace(
     config: &Config,
     spreadsheet_token: &str,
     params: FindReplaceParams,
+) -> SDKResult<FindReplaceResponse> {
+    find_replace_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 查找替换（带选项）
+///
+/// 根据 spreadsheetToken 和 range 在指定范围内查找并替换内容。
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/finding-and-replacing-values
+pub async fn find_replace_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: FindReplaceParams,
+    option: RequestOption,
 ) -> SDKResult<FindReplaceResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -204,7 +269,7 @@ pub async fn find_replace(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "查找替换")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "查找替换")
 }
 
@@ -216,6 +281,19 @@ pub async fn merge_cells(
     config: &Config,
     spreadsheet_token: &str,
     params: MergeCellsParams,
+) -> SDKResult<MergeCellsResponse> {
+    merge_cells_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 合并单元格（带选项）
+///
+/// 根据 spreadsheetToken 和 range 合并指定范围的单元格。
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/merging-cells
+pub async fn merge_cells_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: MergeCellsParams,
+    option: RequestOption,
 ) -> SDKResult<MergeCellsResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -229,7 +307,7 @@ pub async fn merge_cells(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "合并单元格")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "合并单元格")
 }
 
@@ -241,6 +319,19 @@ pub async fn unmerge_cells(
     config: &Config,
     spreadsheet_token: &str,
     params: UnmergeCellsParams,
+) -> SDKResult<UnmergeCellsResponse> {
+    unmerge_cells_with_options(config, spreadsheet_token, params, RequestOption::default()).await
+}
+
+/// 取消合并单元格（带选项）
+///
+/// 根据 spreadsheetToken 和 range 取消合并指定范围的单元格。
+/// docPath: /document/server-docs/docs/sheets-v3/sheet-operations/unmerging-cells
+pub async fn unmerge_cells_with_options(
+    config: &Config,
+    spreadsheet_token: &str,
+    params: UnmergeCellsParams,
+    option: RequestOption,
 ) -> SDKResult<UnmergeCellsResponse> {
     // 验证必填字段
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
@@ -254,7 +345,7 @@ pub async fn unmerge_cells(
         ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "取消合并单元格")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
+    let response = Transport::request(api_request, config, Some(option)).await?;
     extract_response_data(response, "取消合并单元格")
 }
 

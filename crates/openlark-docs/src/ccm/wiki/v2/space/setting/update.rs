@@ -55,6 +55,16 @@ impl UpdateWikiSpaceSettingRequest {
         self,
         setting: WikiSpaceSetting,
     ) -> SDKResult<UpdateWikiSpaceSettingResponse> {
+        self.execute_with_options(setting, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        setting: WikiSpaceSetting,
+        option: RequestOption,
+    ) -> SDKResult<UpdateWikiSpaceSettingResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
 
@@ -67,7 +77,7 @@ impl UpdateWikiSpaceSettingRequest {
                 .body(serialize_params(&setting, "更新知识空间设置")?);
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "更新知识空间设置")
     }
 }

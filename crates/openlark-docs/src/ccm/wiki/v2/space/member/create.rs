@@ -74,6 +74,16 @@ impl CreateWikiSpaceMemberRequest {
         self,
         params: CreateWikiSpaceMemberParams,
     ) -> SDKResult<CreateWikiSpaceMemberResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        params: CreateWikiSpaceMemberParams,
+        option: RequestOption,
+    ) -> SDKResult<CreateWikiSpaceMemberResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
         validate_required!(params.member_type, "成员类型不能为空");
@@ -93,7 +103,7 @@ impl CreateWikiSpaceMemberRequest {
         }
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "添加知识空间成员")
     }
 }

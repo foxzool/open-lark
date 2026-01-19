@@ -66,6 +66,16 @@ impl UpdateWikiSpaceNodeTitleRequest {
         self,
         params: UpdateWikiSpaceNodeTitleParams,
     ) -> SDKResult<UpdateWikiSpaceNodeTitleResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        params: UpdateWikiSpaceNodeTitleParams,
+        option: RequestOption,
+    ) -> SDKResult<UpdateWikiSpaceNodeTitleResponse> {
         // 验证必填字段
         validate_required!(self.space_id, "知识空间ID不能为空");
         validate_required!(self.node_token, "节点Token不能为空");
@@ -81,7 +91,7 @@ impl UpdateWikiSpaceNodeTitleRequest {
                 .body(serialize_params(&params, "更新知识空间节点标题")?);
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "更新知识空间节点标题")
     }
 }
