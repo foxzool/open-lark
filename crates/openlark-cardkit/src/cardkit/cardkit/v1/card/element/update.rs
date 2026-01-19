@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card-element/update
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 
 use super::models::UpdateCardElementResponse;
 use crate::common::api_utils::{extract_response_data, serialize_params};
@@ -45,6 +47,18 @@ impl UpdateCardElementRequest {
         self,
         body: UpdateCardElementBody,
     ) -> SDKResult<UpdateCardElementResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（支持自定义选项）
+    ///
+    /// docPath: https://open.feishu.cn/document/cardkit-v1/card-element/update
+    pub async fn execute_with_options(
+        self,
+        body: UpdateCardElementBody,
+        option: RequestOption,
+    ) -> SDKResult<UpdateCardElementResponse> {
         let mut body = body;
         if let Some(card_id) = self.card_id {
             body.card_id = card_id;
@@ -74,7 +88,7 @@ impl UpdateCardElementRequest {
             ApiRequest::patch(cardkit_v1_card_element(&body.card_id, &body.element_id))
                 .body(serialize_params(&body, "更新组件属性")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "更新组件属性")
     }
 }

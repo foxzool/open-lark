@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card/create
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -74,6 +76,18 @@ impl CreateCardRequest {
     ///
     /// docPath: https://open.feishu.cn/document/cardkit-v1/card/create
     pub async fn execute(self, body: CreateCardBody) -> SDKResult<CreateCardResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（支持自定义选项）
+    ///
+    /// docPath: https://open.feishu.cn/document/cardkit-v1/card/create
+    pub async fn execute_with_options(
+        self,
+        body: CreateCardBody,
+        option: RequestOption,
+    ) -> SDKResult<CreateCardResponse> {
         body.validate()
             .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
 
@@ -81,7 +95,7 @@ impl CreateCardRequest {
         let req: ApiRequest<CreateCardResponse> =
             ApiRequest::post(CARDKIT_V1_CARDS).body(serialize_params(&body, "创建卡片实体")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "创建卡片实体")
     }
 }
@@ -152,6 +166,17 @@ impl CreateCardRequestBuilder {
 ///
 /// docPath: https://open.feishu.cn/document/cardkit-v1/card/create
 pub async fn create(config: &Config, body: CreateCardBody) -> SDKResult<CreateCardResponse> {
+    create_with_options(config, body, RequestOption::default()).await
+}
+
+/// 执行创建卡片实体请求（支持自定义选项）
+///
+/// docPath: https://open.feishu.cn/document/cardkit-v1/card/create
+pub async fn create_with_options(
+    config: &Config,
+    body: CreateCardBody,
+    option: RequestOption,
+) -> SDKResult<CreateCardResponse> {
     body.validate()
         .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
 
@@ -159,6 +184,6 @@ pub async fn create(config: &Config, body: CreateCardBody) -> SDKResult<CreateCa
     let req: ApiRequest<CreateCardResponse> =
         ApiRequest::post(CARDKIT_V1_CARDS).body(serialize_params(&body, "创建卡片实体")?);
 
-    let resp = Transport::request(req, config, None).await?;
+    let resp = Transport::request(req, config, Some(option)).await?;
     extract_response_data(resp, "创建卡片实体")
 }

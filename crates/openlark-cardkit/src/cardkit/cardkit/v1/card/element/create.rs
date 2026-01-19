@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card-element/create
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 
 use super::models::CreateCardElementResponse;
 use crate::common::api_utils::{extract_response_data, serialize_params};
@@ -39,6 +41,18 @@ impl CreateCardElementRequest {
         self,
         body: CreateCardElementBody,
     ) -> SDKResult<CreateCardElementResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（支持自定义选项）
+    ///
+    /// docPath: https://open.feishu.cn/document/cardkit-v1/card-element/create
+    pub async fn execute_with_options(
+        self,
+        body: CreateCardElementBody,
+        option: RequestOption,
+    ) -> SDKResult<CreateCardElementResponse> {
         let mut body = body;
         if let Some(card_id) = self.card_id {
             body.card_id = card_id;
@@ -56,7 +70,7 @@ impl CreateCardElementRequest {
             ApiRequest::post(cardkit_v1_card_elements(&body.card_id))
                 .body(serialize_params(&body, "新增组件")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "新增组件")
     }
 }
@@ -107,6 +121,17 @@ pub async fn create(
     config: &Config,
     body: CreateCardElementBody,
 ) -> SDKResult<CreateCardElementResponse> {
+    create_with_options(config, body, RequestOption::default()).await
+}
+
+/// 执行请求（支持自定义选项）
+///
+/// docPath: https://open.feishu.cn/document/cardkit-v1/card-element/create
+pub async fn create_with_options(
+    config: &Config,
+    body: CreateCardElementBody,
+    option: RequestOption,
+) -> SDKResult<CreateCardElementResponse> {
     if body.card_id.trim().is_empty() {
         return Err(openlark_core::error::validation_error(
             "card_id 不能为空",
@@ -119,6 +144,6 @@ pub async fn create(
         ApiRequest::post(cardkit_v1_card_elements(&body.card_id))
             .body(serialize_params(&body, "新增组件")?);
 
-    let resp = Transport::request(req, config, None).await?;
+    let resp = Transport::request(req, config, Some(option)).await?;
     extract_response_data(resp, "新增组件")
 }

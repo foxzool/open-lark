@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card/batch_update
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -51,6 +53,18 @@ impl BatchUpdateCardRequest {
     ///
     /// docPath: https://open.feishu.cn/document/cardkit-v1/card/batch_update
     pub async fn execute(self, body: BatchUpdateCardBody) -> SDKResult<BatchUpdateCardResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（支持自定义选项）
+    ///
+    /// docPath: https://open.feishu.cn/document/cardkit-v1/card/batch_update
+    pub async fn execute_with_options(
+        self,
+        body: BatchUpdateCardBody,
+        option: RequestOption,
+    ) -> SDKResult<BatchUpdateCardResponse> {
         let mut body = body;
         if let Some(card_id) = self.card_id {
             body.card_id = card_id;
@@ -77,7 +91,7 @@ impl BatchUpdateCardRequest {
         let req: ApiRequest<BatchUpdateCardResponse> =
             ApiRequest::post(url).body(serialize_params(&body, "局部更新卡片实体")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "局部更新卡片实体")
     }
 }
