@@ -14,12 +14,17 @@
 //!
 //! ## 使用示例
 //!
-//! ```rust
-//! use openlark_communication::endpoints::*;
+//! ```rust,ignore
+//! use openlark_communication::prelude::*;
 //!
+//! // 使用端点常量
 //! let messages_endpoint = IM_V1_MESSAGES;
-//! let meetings_endpoint = VC_V1_MEETING_CREATE;
-//! let mailgroups_endpoint = MAIL_V1_MAILGROUPS;
+//!
+//! // 使用 Builder 模式发送消息
+//! let response = CreateMessageRequest::new(config)
+//!     .receive_id_type(ReceiveIdType::OpenId)
+//!     .execute(body)
+//!     .await?;
 //! ```
 //!
 //! ## 子模块
@@ -65,9 +70,8 @@ pub mod contact;
 #[cfg(feature = "moments")]
 pub mod moments;
 
-// Re-exports from openlark-core for convenience.
-pub mod prelude {
-    pub use openlark_core::{config::Config, SDKResult};
-}
+// Prelude 模块 - 常用导入
+pub mod prelude;
 
+// 重新导出主要类型
 pub use common::chain::CommunicationClient;
