@@ -63,6 +63,18 @@ impl BatchDeleteChatAnnouncementBlockChildrenRequest {
         self,
         params: BatchDeleteChatAnnouncementBlockChildrenParams,
     ) -> SDKResult<BatchDeleteChatAnnouncementBlockChildrenResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（带请求选项）
+    ///
+    /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/batch_delete
+    pub async fn execute_with_options(
+        self,
+        params: BatchDeleteChatAnnouncementBlockChildrenParams,
+        option: RequestOption,
+    ) -> SDKResult<BatchDeleteChatAnnouncementBlockChildrenResponse> {
         validate_required!(params.chat_id, "群聊ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
 
@@ -75,7 +87,7 @@ impl BatchDeleteChatAnnouncementBlockChildrenRequest {
             ApiRequest::delete(&api_endpoint.to_url())
                 .body(serialize_params(&params, "删除群公告中的块")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "删除群公告中的块")
     }
 }
