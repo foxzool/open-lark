@@ -38,44 +38,43 @@ def transform_execute_method(content: str) -> tuple[str, int]:
         fn_close = match.group(6)         # }
 
         # 检查是否有额外的参数（如 params）
-        params_match = re.search(r'pub async fn execute\(\s*self\s*,\s*(\w+\s*:\s*[^)]+)\s*\)', fn_open)
-        has_params = params_match is not None
+        has_body_or_params = re.search(r'pub async fn execute\(\s*self\s*,\s*(\w+\s*:\s*[^)]+)\s*\)', fn_open)
+        has_params = has_body_or_params is not None
 
         if has_params:
             # 函数风格：execute(self, params: Type)
-            params_decl = params_match.group(1)  # 例如 "params: BatchUpdateParams"
+            params_decl = has_body_or_params.group(1)  # 例如 "params: BatchUpdateParams"
 
             # 构建 execute_with_options，保留 params 参数
             new_execute = fn_open.replace(
                 f') -> SDKResult<{response_type}> {{',
-                f') -> SDKResult<{response_type}> {{\n            self.execute_with_options({params_decl.split(":")[0].strip()}, openlark_core::req_option::RequestOption::default()).await\n        }}'
+                f') -> SDKResult<{response_type}> {{\n        self.execute_with_options({params_decl.split(":")[0].strip()}, openlark_core::req_option::RequestOption::default())\n            .await\n    }}'
             )
 
             new_impl = f'''{new_execute}
 
-        pub async fn execute_with_options(
-            self,
-            {params_decl},
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<{response_type}> {{
+    pub async fn execute_with_options(
+        self,
+        {params_decl},
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<{response_type}> {{
 {fn_body}
-            {transport_call.replace('None', 'Some(option)')}
+        {transport_call.replace('None', 'Some(option)')}
 {extract_call}
 {fn_close}'''
         else:
             # Builder 风格：execute(self)
             new_execute = f'''{fn_open}
-            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
-        }}'''
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }}
 
-            new_impl = f'''{new_execute}
-
-        pub async fn execute_with_options(
-            self,
-            option: openlark_core::req_option::RequestOption,
-        ) -> SDKResult<{response_type}> {{
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<{response_type}> {{
 {fn_body}
-            {transport_call.replace('None', 'Some(option)')}
+        {transport_call.replace('None', 'Some(option)')}
 {extract_call}
 {fn_close}'''
 
@@ -84,10 +83,11 @@ def transform_execute_method(content: str) -> tuple[str, int]:
     # 匹配模式：
     #   pub async fn execute(...) -> SDKResult<Type> {
     #       ...验证逻辑...
-    #       let response = Transport::request(..., &self.config, None).await?;
+    #       let resp/response = Transport::request(..., &self.config, None).await?;
     #       extract_response_data(...);
     #   }
-    pattern = r'(pub async fn execute\([^)]*\)\s*->\s*SDKResult<([^>]+)>\s*\{)([\s\S]*?)(let response = Transport::request\([^)]+,\s*&self\.config,\s+)None(\)\.await\?;)([\s\S]*?extract_response_data\([^)]+\)[;]?)(\s*\})'
+    # 支持 let resp 和 let response 两种变量名
+    pattern = r'(pub async fn execute\([^)]*\)\s*->\s*SDKResult<([^>]+)>\s*\{)([\s\S]*?)(let (?:resp|response) = Transport::request\([^)]+,\s*&self\.config,\s+)None(\)\.await\?;)([\s\S]*?extract_response_data\([^)]+\)[;]?)(\s*\})'
 
     new_content = re.sub(pattern, replace_fn, content, flags=re.DOTALL)
 
@@ -97,7 +97,7 @@ def transform_execute_method(content: str) -> tuple[str, int]:
 def main():
     parser = argparse.ArgumentParser(description="批量添加 execute_with_options 方法")
     parser.add_argument("--dry-run", action="store_true", help="预览模式，不修改文件")
-    parser.add_argument("--path", default="crates/openlark-docs/src", help="源代码路径")
+    parser.add_argument("--path", default="crates/openlark-communication/src", help="源代码路径")
     args = parser.parse_args()
 
     src_path = Path(args.path)
