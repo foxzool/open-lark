@@ -54,6 +54,11 @@ impl GetMinuteTranscriptRequest {
 
     /// 成功时返回文件二进制内容（`Response<Vec<u8>>`）。
     pub async fn execute(self) -> SDKResult<Response<Vec<u8>>> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 成功时返回文件二进制内容（支持自定义选项）。
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<Response<Vec<u8>>> {
         let minute_token = self.minute_token.ok_or_else(|| {
             openlark_core::error::validation_error("minute_token", "minute_token 不能为空")
         })?;
