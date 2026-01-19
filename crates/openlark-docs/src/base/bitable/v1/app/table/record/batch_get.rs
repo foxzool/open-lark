@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -68,17 +69,19 @@ impl BatchGetRecordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<BatchGetRecordResponse> {
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "app_token 不能为空"));
-        }
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "table_id 不能为空"));
-        }
-        if self.record_ids.is_empty() {
-            return Err(validation_error("record_ids", "record_ids 不能为空"));
-        }
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<BatchGetRecordResponse> {
+        validate_required!(self.app_token.trim(), "app_token");
+        validate_required!(self.table_id.trim(), "table_id");
+        validate_required!(self.record_ids, "record_ids");
         if self.record_ids.len() > 100 {
-            return Err(validation_error(
+            return Err(openlark_core::error::validation_error(
                 "record_ids",
                 "单次最多批量获取 100 条记录",
             ));
@@ -98,59 +101,16 @@ impl BatchGetRecordRequest {
             automatic_fields: self.automatic_fields,
         })?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 
-/// 批量获取记录 Builder
-pub struct BatchGetRecordRequestBuilder {
-    request: BatchGetRecordRequest,
-}
 
-impl BatchGetRecordRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: BatchGetRecordRequest::new(config),
-        }
-    }
 
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    pub fn record_ids(mut self, record_ids: Vec<String>) -> Self {
-        self.request = self.request.record_ids(record_ids);
-        self
-    }
-
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
-    pub fn with_shared_url(mut self, with_shared_url: bool) -> Self {
-        self.request = self.request.with_shared_url(with_shared_url);
-        self
-    }
-
-    pub fn automatic_fields(mut self, automatic_fields: bool) -> Self {
-        self.request = self.request.automatic_fields(automatic_fields);
-        self
-    }
-
-    pub fn build(self) -> BatchGetRecordRequest {
-        self.request
-    }
-}
 
 #[derive(Serialize)]
 struct BatchGetRecordRequestBody {

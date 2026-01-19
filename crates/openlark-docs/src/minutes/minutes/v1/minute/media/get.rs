@@ -32,6 +32,14 @@ impl GetMinuteMediaRequest {
     }
 
     pub async fn execute(self) -> SDKResult<GetMinuteMediaResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<GetMinuteMediaResponse> {
+
         let minute_token = self.minute_token.ok_or_else(|| {
             openlark_core::error::validation_error("minute_token", "minute_token 不能为空")
         })?;
@@ -46,9 +54,10 @@ impl GetMinuteMediaRequest {
         let api_request: ApiRequest<GetMinuteMediaResponse> =
             ApiRequest::get(&api_endpoint.to_url());
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "下载妙记音视频文件")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "获取")
+        }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -29,13 +29,22 @@ impl GetRootFolderMetaRequest {
     /// docPath: /document/ukTMukTMukTM/ugTNzUjL4UzM14CO1MTN/get-root-folder-meta
     /// doc: https://open.feishu.cn/document/ukTMukTMukTM/ugTNzUjL4UzM14CO1MTN/get-root-folder-meta
     pub async fn execute(self) -> SDKResult<GetRootFolderMetaResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<GetRootFolderMetaResponse> {
+
         let api_endpoint = CcmDriveExplorerApiOld::RootFolderMeta;
         let api_request: ApiRequest<GetRootFolderMetaResponse> =
             ApiRequest::get(&api_endpoint.to_url());
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "获取我的空间（根文件夹）元数据")
-    }
+        
+            let response = Transport::request(api_request, &self.config, 
+Some(option)).await?;
+                extract_response_data(response, "操作")}
 }
 
 /// 获取我的空间（根文件夹）元数据响应

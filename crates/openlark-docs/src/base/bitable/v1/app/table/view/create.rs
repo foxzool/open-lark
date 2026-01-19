@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -58,20 +59,16 @@ impl CreateViewRequest {
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CreateViewResponse> {
         // 参数验证
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "应用token不能为空"));
-        }
+        validate_required!(self.app_token.trim(), "app_token");
 
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "数据表ID不能为空"));
-        }
+        validate_required!(self.table_id.trim(), "table_id");
 
         if self.view.view_name.trim().is_empty() {
-            return Err(validation_error("view.view_name", "视图名称不能为空"));
+            return Err(openlark_core::error::validation_error("view.view_name", "视图名称不能为空"));
         }
 
         if self.view.view_name.len() > 100 {
-            return Err(validation_error(
+            return Err(openlark_core::error::validation_error(
                 "view.view_name",
                 "视图名称长度不能超过100个字符",
             ));
@@ -79,7 +76,7 @@ impl CreateViewRequest {
 
         // 视图名称不能包含 [ ]
         if self.view.view_name.contains('[') || self.view.view_name.contains(']') {
-            return Err(validation_error(
+            return Err(openlark_core::error::validation_error(
                 "view.view_name",
                 "视图名称不能包含 '[' 或 ']'",
             ));
@@ -89,7 +86,7 @@ impl CreateViewRequest {
         if let Some(ref view_type) = self.view.view_type {
             let valid_types = ["grid", "kanban", "gallery", "gantt", "form"];
             if !valid_types.contains(&view_type.as_str()) {
-                return Err(validation_error(
+                return Err(openlark_core::error::validation_error(
                     "view.view_type",
                     "视图类型必须是以下之一: grid, kanban, gallery, gantt, form",
                 ));
@@ -109,46 +106,13 @@ impl CreateViewRequest {
         let response = Transport::request(api_request, &self.config, None).await?;
         response
             .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+            .ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 
-/// 创建视图Builder
-pub struct CreateViewRequestBuilder {
-    request: CreateViewRequest,
-}
 
-impl CreateViewRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: CreateViewRequest::new(config),
-        }
-    }
 
-    /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    /// 设置数据表ID
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    /// 设置视图信息
-    pub fn view(mut self, view: CreateViewData) -> Self {
-        self.request = self.request.view(view);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> CreateViewRequest {
-        self.request
-    }
-}
 
 #[derive(Serialize, Default, Debug, Clone)]
 /// 视图数据

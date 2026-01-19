@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -64,43 +65,49 @@ impl CreateTableRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CreateTableResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateTableResponse> {
         // 参数验证
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "应用token不能为空"));
-        }
+        validate_required!(self.app_token.trim(), "app_token");
 
         if self.table.name.trim().is_empty() {
-            return Err(validation_error("name", "数据表名称不能为空"));
+            return Err(openlark_core::error::validation_error("name", "数据表名称不能为空"));
         }
 
         if self.table.name.len() > 100 {
-            return Err(validation_error("name", "数据表名称长度不能超过100个字符"));
+            return Err(openlark_core::error::validation_error("name", "数据表名称长度不能超过100个字符"));
         }
 
         // 名称不允许包含 `/ \\ ? * : [ ]`
         let name = self.table.name.as_str();
         if name.contains('/') {
-            return Err(validation_error("name", "数据表名称不能包含 '/'"));
+            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 '/'"));
         }
         if name.contains('\\') {
-            return Err(validation_error("name", "数据表名称不能包含 '\\\\'"));
+            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 '\\\\'"));
         }
         if name.contains('?') {
-            return Err(validation_error("name", "数据表名称不能包含 '?'"));
+            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 '?'"));
         }
         if name.contains('*') {
-            return Err(validation_error("name", "数据表名称不能包含 '*'"));
+            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 '*'"));
         }
         if name.contains(':') {
-            return Err(validation_error("name", "数据表名称不能包含 ':'"));
+            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 ':'"));
         }
         if name.contains('[') || name.contains(']') {
-            return Err(validation_error("name", "数据表名称不能包含 '[' 或 ']'"));
+            return Err(openlark_core::error::validation_error("name", "数据表名称不能包含 '[' 或 ']'"));
         }
 
         // 如果传入了 default_view_name，则必须传入 fields
         if self.table.default_view_name.is_some() && self.table.fields.is_none() {
-            return Err(validation_error(
+            return Err(openlark_core::error::validation_error(
                 "fields",
                 "当填写 default_view_name 时，必须同时填写 fields",
             ));
@@ -109,7 +116,7 @@ impl CreateTableRequest {
         // default_view_name 名称中不允许包含 [ ]
         if let Some(ref default_view_name) = self.table.default_view_name {
             if default_view_name.contains('[') || default_view_name.contains(']') {
-                return Err(validation_error(
+                return Err(openlark_core::error::validation_error(
                     "default_view_name",
                     "默认视图名称不能包含 '[' 或 ']'",
                 ));
@@ -129,43 +136,16 @@ impl CreateTableRequest {
             ApiRequest::post(&api_endpoint.to_url()).body(serde_json::to_vec(&request_body)?);
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+            .ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 
-/// 创建数据表Builder
-pub struct CreateTableRequestBuilder {
-    request: CreateTableRequest,
-}
 
-impl CreateTableRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: CreateTableRequest::new(config),
-        }
-    }
 
-    /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    /// 设置数据表信息
-    pub fn table(mut self, table: TableData) -> Self {
-        self.request = self.request.table(table);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> CreateTableRequest {
-        self.request
-    }
-}
 
 /// 数据表数据
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]

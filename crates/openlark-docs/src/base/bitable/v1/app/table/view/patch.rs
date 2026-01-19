@@ -6,8 +6,9 @@ use crate::common::api_endpoints::BitableApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -118,18 +119,12 @@ impl PatchViewRequest {
     }
 
     pub async fn execute(self) -> SDKResult<PatchViewResponse> {
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "app_token 不能为空"));
-        }
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "table_id 不能为空"));
-        }
-        if self.view_id.trim().is_empty() {
-            return Err(validation_error("view_id", "view_id 不能为空"));
-        }
+        validate_required!(self.app_token.trim(), "app_token");
+        validate_required!(self.table_id.trim(), "table_id");
+        validate_required!(self.view_id.trim(), "view_id");
 
         if self.payload.view_name.is_none() && self.payload.property.is_none() {
-            return Err(validation_error(
+            return Err(openlark_core::error::validation_error(
                 "payload",
                 "至少需要提供一个更新字段（view_name 或 property）",
             ));
@@ -137,16 +132,16 @@ impl PatchViewRequest {
 
         if let Some(ref view_name) = self.payload.view_name {
             if view_name.trim().is_empty() {
-                return Err(validation_error("view_name", "视图名称不能为空"));
+                return Err(openlark_core::error::validation_error("view_name", "视图名称不能为空"));
             }
             if view_name.len() > 100 {
-                return Err(validation_error(
+                return Err(openlark_core::error::validation_error(
                     "view_name",
                     "视图名称长度不能超过100个字符",
                 ));
             }
             if view_name.contains('[') || view_name.contains(']') {
-                return Err(validation_error("view_name", "视图名称不能包含 '[' 或 ']'"));
+                return Err(openlark_core::error::validation_error("view_name", "视图名称不能包含 '[' 或 ']'"));
             }
         }
 
@@ -157,43 +152,10 @@ impl PatchViewRequest {
         let response = Transport::request(api_request, &self.config, None).await?;
         response
             .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 
-/// 更新视图 Builder
-pub struct PatchViewRequestBuilder {
-    request: PatchViewRequest,
-}
 
-impl PatchViewRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: PatchViewRequest::new(config),
-        }
-    }
 
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    pub fn view_id(mut self, view_id: String) -> Self {
-        self.request = self.request.view_id(view_id);
-        self
-    }
-
-    pub fn payload(mut self, payload: PatchViewData) -> Self {
-        self.request = self.request.payload(payload);
-        self
-    }
-
-    pub fn build(self) -> PatchViewRequest {
-        self.request
-    }
-}

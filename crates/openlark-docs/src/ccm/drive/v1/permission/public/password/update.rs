@@ -34,6 +34,14 @@ impl UpdatePermissionPublicPasswordRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UpdatePermissionPublicPasswordResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<UpdatePermissionPublicPasswordResponse> {
+
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -68,9 +76,10 @@ impl UpdatePermissionPublicPasswordRequest {
             ApiRequest::<UpdatePermissionPublicPasswordResponse>::put(&api_endpoint.to_url())
                 .query("type", self.r#type);
 
-        let response = Transport::request(request, &self.config, None).await?;
-        extract_response_data(response, "刷新云文档密码")
-    }
+        
+            let response = Transport::request(request, &self.config, Some(option)).await?;
+        extract_response_data(response, "更新")
+        }
 }
 
 /// 刷新云文档密码响应（data）

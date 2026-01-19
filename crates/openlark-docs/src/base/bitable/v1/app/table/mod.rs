@@ -23,41 +23,31 @@ pub use delete::*;
 
 // 字段相关 - 选择性导入以避免命名冲突
 pub use field::{
-    CreateFieldRequest, CreateFieldRequestBuilder, CreateFieldResponse, DeleteFieldRequest,
-    DeleteFieldRequestBuilder, DeleteFieldResponse, Field, FieldType, ListFieldRequest,
-    ListFieldRequestBuilder, ListFieldResponse, UpdateFieldRequest, UpdateFieldRequestBuilder,
-    UpdateFieldResponse,
+    CreateFieldRequest, CreateFieldResponse, DeleteFieldRequest, DeleteFieldResponse, Field,
+    FieldType, ListFieldRequest, ListFieldResponse, UpdateFieldRequest, UpdateFieldResponse,
 };
 
 // 表单相关 - 选择性导入以避免命名冲突
-pub use form::{
-    FormFieldQuestion, FormService, GetFormRequest, GetFormRequestBuilder, GetFormResponse,
-    PatchFormRequest, PatchFormRequestBuilder, PatchFormResponse,
-};
+pub use form::{FormFieldQuestion, FormService, GetFormRequest, GetFormResponse, PatchFormRequest, PatchFormResponse};
 
 pub use list::*;
 pub use patch::*;
 
 // 记录相关 - 选择性导入以避免命名冲突
 pub use record::{
-    AppTableRecordService, BatchCreateRecordRequest, BatchCreateRecordRequestBuilder,
-    BatchCreateRecordResponse, BatchDeleteRecordRequest, BatchDeleteRecordRequestBuilder,
-    BatchDeleteRecordResponse, BatchGetRecordRequest, BatchGetRecordRequestBuilder,
-    BatchGetRecordResponse, BatchUpdateRecordRequest, BatchUpdateRecordRequestBuilder,
-    BatchUpdateRecordResponse, CreateRecordRequest, CreateRecordRequestBuilder,
-    CreateRecordResponse, DeleteRecordRequest, DeleteRecordRequestBuilder, DeleteRecordResponse,
-    GetRecordRequest, GetRecordRequestBuilder, GetRecordResponse, ListRecordRequest,
-    ListRecordRequestBuilder, ListRecordResponse, Record, SearchRecordRequest,
-    SearchRecordRequestBuilder, SearchRecordResponse,
+    AppTableRecordService, BatchCreateRecordRequest, BatchCreateRecordResponse,
+    BatchDeleteRecordRequest, BatchDeleteRecordResponse, BatchGetRecordRequest,
+    BatchGetRecordResponse, BatchUpdateRecordRequest, BatchUpdateRecordResponse,
+    CreateRecordRequest, CreateRecordResponse, DeleteRecordRequest, DeleteRecordResponse,
+    GetRecordRequest, GetRecordResponse, ListRecordRequest, ListRecordResponse, Record,
+    SearchRecordRequest, SearchRecordResponse,
 };
 
 // 视图相关 - 选择性导入以避免命名冲突
 pub use view::{
-    AppTableViewService, CreateViewData, CreateViewRequest, CreateViewRequestBuilder,
-    CreateViewResponse, DeleteViewRequest, DeleteViewRequestBuilder, DeleteViewResponse,
-    GetViewRequest, GetViewRequestBuilder, GetViewResponse, ListViewsRequest,
-    ListViewsRequestBuilder, ListViewsResponse, PatchViewData, PatchViewRequest,
-    PatchViewRequestBuilder, PatchViewResponse,
+    AppTableViewService, CreateViewData, CreateViewRequest, CreateViewResponse, DeleteViewRequest,
+    DeleteViewResponse, GetViewRequest, GetViewResponse, ListViewsRequest, ListViewsResponse,
+    PatchViewData, PatchViewRequest, PatchViewResponse,
 };
 
 /// 数据表服务
@@ -74,16 +64,6 @@ impl TableService {
     /// 获取配置
     pub fn config(&self) -> &Config {
         &self.config
-    }
-
-    /// 创建批量新增数据表请求构建器
-    pub fn batch_create(&self) -> BatchCreateTableRequestBuilder {
-        BatchCreateTableRequestBuilder::new(self.config.clone())
-    }
-
-    /// 创建批量删除数据表请求构建器
-    pub fn batch_delete(&self) -> BatchDeleteTableRequestBuilder {
-        BatchDeleteTableRequestBuilder::new(self.config.clone())
     }
 }
 

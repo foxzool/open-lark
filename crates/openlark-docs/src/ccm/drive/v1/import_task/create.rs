@@ -75,6 +75,14 @@ impl CreateImportTaskRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CreateImportTaskResponse> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<CreateImportTaskResponse> {
+
         if self.file_extension.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_extension",
@@ -109,9 +117,10 @@ impl CreateImportTaskRequest {
         let api_request: ApiRequest<CreateImportTaskResponse> =
             ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&self, "创建导入任务")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "创建导入任务")
-    }
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "创建")
+        }
 }
 
 /// 创建导入任务响应

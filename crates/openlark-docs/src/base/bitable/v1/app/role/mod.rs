@@ -13,12 +13,12 @@ pub mod update;
 #[cfg(test)]
 mod tests;
 
-pub use create::{CreateAppRoleRequest, CreateAppRoleRequestBuilder, CreateAppRoleResponse};
-pub use delete::{DeleteAppRoleRequest, DeleteAppRoleRequestBuilder, DeleteAppRoleResponse};
-pub use list::{ListAppRoleRequest, ListAppRoleRequestBuilder, ListAppRoleResponse};
+pub use create::{CreateAppRoleRequest, CreateAppRoleResponse};
+pub use delete::{DeleteAppRoleRequest, DeleteAppRoleResponse};
+pub use list::{ListAppRoleRequest, ListAppRoleResponse};
 pub use member::*;
 pub use models::{BlockRole, Role, TableRole};
-pub use update::{UpdateAppRoleRequest, UpdateAppRoleRequestBuilder, UpdateAppRoleResponse};
+pub use update::{UpdateAppRoleRequest, UpdateAppRoleResponse};
 
 // 兼容历史导出（在 app/mod.rs 中被引用）
 pub use create::CreateAppRoleRequestBody;
@@ -38,20 +38,24 @@ impl AppRoleService {
         &self.config
     }
 
-    pub fn create(&self) -> CreateAppRoleRequestBuilder {
-        CreateAppRoleRequestBuilder::new(self.config.clone())
+    /// 创建自定义角色请求
+    pub fn create(&self) -> CreateAppRoleRequest {
+        CreateAppRoleRequest::new(self.config.clone())
     }
 
-    pub fn update(&self) -> UpdateAppRoleRequestBuilder {
-        UpdateAppRoleRequestBuilder::new(self.config.clone())
+    /// 更新自定义角色请求
+    pub fn update(&self) -> UpdateAppRoleRequest {
+        UpdateAppRoleRequest::new(self.config.clone())
     }
 
-    pub fn delete(&self) -> DeleteAppRoleRequestBuilder {
-        DeleteAppRoleRequestBuilder::new(self.config.clone())
+    /// 删除自定义角色请求
+    pub fn delete(&self) -> DeleteAppRoleRequest {
+        DeleteAppRoleRequest::new(self.config.clone())
     }
 
-    pub fn list(&self) -> ListAppRoleRequestBuilder {
-        ListAppRoleRequestBuilder::new(self.config.clone())
+    /// 查询自定义角色列表请求
+    pub fn list(&self) -> ListAppRoleRequest {
+        ListAppRoleRequest::new(self.config.clone())
     }
 }
 

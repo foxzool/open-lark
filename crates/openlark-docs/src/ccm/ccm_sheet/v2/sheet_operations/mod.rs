@@ -12,7 +12,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 
 use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
@@ -91,8 +91,8 @@ pub async fn delete_range(
     params: DeleteRangeParams,
 ) -> SDKResult<DeleteRangeResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("删除范围", Some(&params.range), "删除范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "删除范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::DeleteRange(spreadsheet_token.to_string());
@@ -116,8 +116,8 @@ pub async fn insert_dimension(
     params: InsertDimensionParams,
 ) -> SDKResult<InsertDimensionResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("插入范围", Some(&params.range), "插入范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "插入范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::InsertDimension(spreadsheet_token.to_string());
@@ -141,8 +141,8 @@ pub async fn move_dimension(
     params: MoveDimensionParams,
 ) -> SDKResult<MoveDimensionResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("源范围", Some(&params.source_range), "源范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.source_range, "源范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::MoveDimension(spreadsheet_token.to_string());
@@ -166,8 +166,8 @@ pub async fn replace_range(
     params: ReplaceRangeParams,
 ) -> SDKResult<ReplaceRangeResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("替换范围", Some(&params.range), "替换范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "替换范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::ReplaceRange(spreadsheet_token.to_string());
@@ -191,9 +191,9 @@ pub async fn find_replace(
     params: FindReplaceParams,
 ) -> SDKResult<FindReplaceResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("查找范围", Some(&params.range), "查找范围不能为空")?;
-    validate_required_field("查找内容", Some(&params.find), "查找内容不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "查找范围不能为空");
+    validate_required!(params.find, "查找内容不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::FindReplace(spreadsheet_token.to_string());
@@ -217,8 +217,8 @@ pub async fn merge_cells(
     params: MergeCellsParams,
 ) -> SDKResult<MergeCellsResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("合并范围", Some(&params.range), "合并范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "合并范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::MergeCells(spreadsheet_token.to_string());
@@ -242,8 +242,8 @@ pub async fn unmerge_cells(
     params: UnmergeCellsParams,
 ) -> SDKResult<UnmergeCellsResponse> {
     // 验证必填字段
-    validate_required_field("表格Token", Some(spreadsheet_token), "表格Token不能为空")?;
-    validate_required_field("取消合并范围", Some(&params.range), "取消合并范围不能为空")?;
+    validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
+    validate_required!(params.range, "取消合并范围不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::UnmergeCells(spreadsheet_token.to_string());

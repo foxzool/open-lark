@@ -108,13 +108,22 @@ impl CopyFileRequest {
     }
 
     pub async fn execute(self) -> SDKResult<CopyFileResp> {
+            self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        }
+
+        pub async fn execute_with_options(
+            self,
+            option: openlark_core::req_option::RequestOption,
+        ) -> SDKResult<CopyFileResp> {
+
         validate_required!(self.file_token, "fileToken 不能为空");
 
         let api_request: ApiRequest<CopyFileResp> =
             ApiRequest::post(&CcmDriveExplorerApiOld::FileCopy(self.file_token).to_url())
                 .body(serialize_params(&self.req, "复制文档")?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
-        extract_response_data(response, "复制文档")
+        
+            let response = Transport::request(api_request, &self.config, Some(option)).await?;
+            extract_response_data(response, "复制文件")
     }
 }

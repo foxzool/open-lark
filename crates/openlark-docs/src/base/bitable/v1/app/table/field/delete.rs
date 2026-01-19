@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -54,18 +55,20 @@ impl DeleteFieldRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<DeleteFieldResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DeleteFieldResponse> {
         // 参数验证
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "应用token不能为空"));
-        }
+        validate_required!(self.app_token.trim(), "app_token");
 
-        if self.table_id.trim().is_empty() {
-            return Err(validation_error("table_id", "数据表ID不能为空"));
-        }
+        validate_required!(self.table_id.trim(), "table_id");
 
-        if self.field_id.trim().is_empty() {
-            return Err(validation_error("field_id", "字段ID不能为空"));
-        }
+        validate_required!(self.field_id.trim(), "field_id");
 
         // 🚀 使用新的enum+builder系统生成API端点
         // 替代传统的字符串拼接方式，提供类型安全和IDE自动补全
@@ -81,49 +84,16 @@ impl DeleteFieldRequest {
             ApiRequest::delete(&api_endpoint.to_url());
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
-            .ok_or_else(|| validation_error("响应数据为空", "服务器没有返回有效的数据"))
+            .ok_or_else(|| openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据"))
     }
 }
 
-/// 删除字段Builder
-pub struct DeleteFieldRequestBuilder {
-    request: DeleteFieldRequest,
-}
 
-impl DeleteFieldRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: DeleteFieldRequest::new(config),
-        }
-    }
 
-    /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
 
-    /// 设置数据表ID
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    /// 设置字段ID
-    pub fn field_id(mut self, field_id: String) -> Self {
-        self.request = self.request.field_id(field_id);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> DeleteFieldRequest {
-        self.request
-    }
-}
 
 /// 删除字段响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

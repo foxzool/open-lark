@@ -5,8 +5,9 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::SDKResult,
     http::Transport,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -54,15 +55,11 @@ impl ListRoleMembersRequest {
     }
 
     pub async fn execute(self) -> SDKResult<ListRoleMembersResponse> {
-        if self.app_token.trim().is_empty() {
-            return Err(validation_error("app_token", "app_token 不能为空"));
-        }
-        if self.role_id.trim().is_empty() {
-            return Err(validation_error("role_id", "role_id 不能为空"));
-        }
+        validate_required!(self.app_token.trim(), "app_token");
+        validate_required!(self.role_id.trim(), "role_id");
         if let Some(page_size) = self.page_size {
             if page_size < 1 || page_size > 100 {
-                return Err(validation_error("page_size", "page_size 必须在 1~100 之间"));
+                return Err(openlark_core::error::validation_error("page_size", "page_size 必须在 1~100 之间"));
             }
         }
 
@@ -83,7 +80,7 @@ impl ListRoleMembersRequest {
         let response = Transport::request(api_request, &self.config, None).await?;
         response
             .data
-            .ok_or_else(|| validation_error("response", "响应数据为空"))
+            .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
 

@@ -9,7 +9,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 
 use crate::common::{api_endpoints::CcmDrivePermissionApiOld, api_utils::*};
@@ -45,8 +45,8 @@ pub async fn check_member_permission(
     params: CheckMemberPermissionParams,
 ) -> SDKResult<CheckMemberPermissionResponse> {
     // 验证必填字段
-    validate_required_field("文件Token", Some(&params.obj_token), "文件Token不能为空")?;
-    validate_required_field("权限类型", Some(&params.permission), "权限类型不能为空")?;
+    validate_required!(params.obj_token.trim(), "文件Token不能为空");
+    validate_required!(params.permission, "权限类型不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmDrivePermissionApiOld::MemberPermitted;
@@ -71,9 +71,9 @@ pub async fn transfer_owner(
     params: TransferOwnerParams,
 ) -> SDKResult<TransferOwnerResponse> {
     // 验证必填字段
-    validate_required_field("文件Token", Some(&params.obj_token), "文件Token不能为空")?;
-    validate_required_field("新拥有者用户ID", Some(&params.member_id), "新拥有者用户ID不能为空")?;
-    validate_required_field("用户ID类型", Some(&params.member_id_type), "用户ID类型不能为空")?;
+    validate_required!(params.obj_token.trim(), "文件Token不能为空");
+    validate_required!(params.member_id.trim(), "新拥有者用户ID不能为空");
+    validate_required!(params.member_id_type.trim(), "用户ID类型不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmDrivePermissionApiOld::MemberTransfer;
@@ -98,7 +98,7 @@ pub async fn get_public_permission(
     params: GetPublicPermissionParams,
 ) -> SDKResult<GetPublicPermissionResponse> {
     // 验证必填字段
-    validate_required_field("文件Token", Some(&params.obj_token), "文件Token不能为空")?;
+    validate_required!(params.obj_token.trim(), "文件Token不能为空");
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmDrivePermissionApiOld::Public;
