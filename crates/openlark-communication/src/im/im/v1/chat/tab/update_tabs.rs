@@ -37,6 +37,16 @@ impl UpdateChatTabsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/group/chat-tab/update_tabs
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: POST:/open-apis/im/v1/chats/:chat_id/chat_tabs/update_tabs
@@ -46,7 +56,9 @@ impl UpdateChatTabsRequest {
         ))
         .body(serialize_params(&body, "更新会话标签页")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "更新会话标签页")
-    }
+}
 }

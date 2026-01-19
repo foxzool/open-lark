@@ -55,6 +55,14 @@ impl GetGroupRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/group/get
     pub async fn execute(self) -> SDKResult<GetGroupResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<GetGroupResponse> {
         validate_required!(self.group_id, "group_id 不能为空");
 
         // url: GET:/open-apis/contact/v3/group/:group_id
@@ -67,8 +75,7 @@ impl GetGroupRequest {
         if let Some(department_id_type) = self.department_id_type {
             req = req.query("department_id_type", department_id_type.as_str());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询指定用户组")
     }
 }

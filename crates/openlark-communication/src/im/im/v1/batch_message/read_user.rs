@@ -35,6 +35,14 @@ impl GetBatchMessageReadUserRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/batch_message/read_user
     pub async fn execute(self) -> SDKResult<BatchMessageReadUserResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<BatchMessageReadUserResponse> {
         validate_required!(self.batch_message_id, "batch_message_id 不能为空");
 
         // url: GET:/open-apis/im/v1/batch_messages/:batch_message_id/read_user
@@ -43,7 +51,7 @@ impl GetBatchMessageReadUserRequest {
             IM_V1_BATCH_MESSAGES, self.batch_message_id
         ));
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询批量消息推送和阅读人数")
     }
 }

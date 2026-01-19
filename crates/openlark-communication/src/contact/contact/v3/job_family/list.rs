@@ -50,7 +50,14 @@ impl ListJobFamiliesRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/job_family/list
     pub async fn execute(self) -> SDKResult<ListJobFamiliesResponse> {
-        // url: GET:/open-apis/contact/v3/job_families
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListJobFamiliesResponse> {
         let mut req: ApiRequest<ListJobFamiliesResponse> = ApiRequest::get(CONTACT_V3_JOB_FAMILIES);
 
         if let Some(page_size) = self.page_size {
@@ -62,8 +69,7 @@ impl ListJobFamiliesRequest {
         if let Some(name) = self.name {
             req = req.query("name", name);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取租户序列列表")
     }
 }

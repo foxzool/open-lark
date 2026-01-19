@@ -41,7 +41,14 @@ impl ListUnitsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/unit/list
     pub async fn execute(self) -> SDKResult<ListUnitsResponse> {
-        // url: GET:/open-apis/contact/v3/unit
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListUnitsResponse> {
         let mut req: ApiRequest<ListUnitsResponse> = ApiRequest::get(CONTACT_V3_UNIT);
 
         if let Some(page_size) = self.page_size {
@@ -50,8 +57,7 @@ impl ListUnitsRequest {
         if let Some(page_token) = self.page_token {
             req = req.query("page_token", page_token);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取单位列表")
     }
 }

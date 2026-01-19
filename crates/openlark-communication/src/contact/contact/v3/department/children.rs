@@ -69,9 +69,14 @@ impl ListDepartmentChildrenRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/department/children
     pub async fn execute(self) -> SDKResult<DepartmentListResponse> {
-        openlark_core::validate_required!(self.department_id, "department_id 不能为空");
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        // url: GET:/open-apis/contact/v3/departments/:department_id/children
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<DepartmentListResponse> {
         let mut req: ApiRequest<DepartmentListResponse> = ApiRequest::get(format!(
             "{}/{}/children",
             CONTACT_V3_DEPARTMENTS, self.department_id
@@ -89,8 +94,7 @@ impl ListDepartmentChildrenRequest {
         if let Some(page_token) = self.page_token {
             req = req.query("page_token", page_token);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取子部门列表")
     }
 }

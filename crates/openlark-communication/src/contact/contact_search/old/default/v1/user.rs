@@ -27,14 +27,20 @@ impl SearchUserRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/search-users
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        // url: GET:/open-apis/search/v1/user
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(SEARCH_V1_USER);
 
         if let Some(query) = self.query {
             req = req.query("query", &query);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "搜索用户")
     }
 }

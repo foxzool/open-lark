@@ -97,6 +97,15 @@ impl BatchGetIdRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/batch_get_id
     pub async fn execute(self, body: BatchGetIdBody) -> SDKResult<BatchGetIdResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: BatchGetIdBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<BatchGetIdResponse> {
         let has_emails = body.emails.as_ref().map(|v| !v.is_empty()).unwrap_or(false);
         let has_mobiles = body
             .mobiles
@@ -119,7 +128,7 @@ impl BatchGetIdRequest {
             req = req.query("user_id_type", user_id_type.as_str());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "通过手机号或邮箱获取用户 ID")
     }
 }

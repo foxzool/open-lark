@@ -56,6 +56,16 @@ impl UpdateJobLevelRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/job_level/update
     pub async fn execute(self, body: UpdateJobLevelBody) -> SDKResult<JobLevelResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: UpdateJobLevelBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<JobLevelResponse> {
+
         validate_required!(self.job_level_id, "job_level_id 不能为空");
 
         // url: PUT:/open-apis/contact/v3/job_levels/:job_level_id
@@ -63,7 +73,9 @@ impl UpdateJobLevelRequest {
             ApiRequest::put(format!("{}/{}", CONTACT_V3_JOB_LEVELS, self.job_level_id))
                 .body(serialize_params(&body, "更新职级")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "更新职级")
-    }
+}
 }

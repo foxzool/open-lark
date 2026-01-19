@@ -36,6 +36,16 @@ impl CreateMessageReactionRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/message-reaction/create
     pub async fn execute(self, body: CreateMessageReactionBody) -> SDKResult<MessageReaction> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: CreateMessageReactionBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<MessageReaction> {
+
         validate_required!(self.message_id, "message_id 不能为空");
         validate_required!(
             body.reaction_type.emoji_type,
@@ -47,7 +57,9 @@ impl CreateMessageReactionRequest {
             ApiRequest::post(format!("{}/{}/reactions", IM_V1_MESSAGES, self.message_id))
                 .body(serialize_params(&body, "添加消息表情回复")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "添加消息表情回复")
-    }
+}
 }

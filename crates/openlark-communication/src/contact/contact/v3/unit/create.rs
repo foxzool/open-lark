@@ -39,6 +39,16 @@ impl CreateUnitRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/unit/create
     pub async fn execute(self, body: CreateUnitBody) -> SDKResult<CreateUnitResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: CreateUnitBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<CreateUnitResponse> {
+
         validate_required!(body.name, "name 不能为空");
         validate_required!(body.unit_type, "unit_type 不能为空");
 
@@ -46,7 +56,9 @@ impl CreateUnitRequest {
         let req: ApiRequest<CreateUnitResponse> =
             ApiRequest::post(CONTACT_V3_UNIT).body(serialize_params(&body, "创建单位")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "创建单位")
-    }
+}
 }

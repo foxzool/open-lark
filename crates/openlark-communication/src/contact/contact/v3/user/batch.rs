@@ -70,13 +70,20 @@ impl BatchGetUsersRequest {
     ///
     /// docPath: https://open.feishu.cn/document/contact-v3/user/batch
     pub async fn execute(self) -> SDKResult<BatchGetUsersResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<BatchGetUsersResponse> {
         if self.user_ids.is_empty() {
             return Err(error::validation_error(
                 "user_ids 不能为空".to_string(),
                 "请至少传入 1 个 user_ids（最多 50 个）".to_string(),
             ));
         }
-
         // url: GET:/open-apis/contact/v3/users/batch
         let mut req: ApiRequest<BatchGetUsersResponse> = ApiRequest::get(CONTACT_V3_USERS_BATCH);
 
@@ -90,7 +97,7 @@ impl BatchGetUsersRequest {
             req = req.query("department_id_type", department_id_type.as_str());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "批量获取用户信息")
     }
 }

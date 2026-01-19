@@ -50,7 +50,14 @@ impl SimpleListGroupsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/group/simplelist
     pub async fn execute(self) -> SDKResult<SimpleListGroupsResponse> {
-        // url: GET:/open-apis/contact/v3/group/simplelist
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<SimpleListGroupsResponse> {
         let mut req: ApiRequest<SimpleListGroupsResponse> =
             ApiRequest::get(CONTACT_V3_GROUP_SIMPLELIST);
 
@@ -63,8 +70,7 @@ impl SimpleListGroupsRequest {
         if let Some(group_type) = self.r#type {
             req = req.query("type", group_type.to_string());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询用户组列表")
     }
 }

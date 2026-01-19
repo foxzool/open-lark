@@ -67,6 +67,14 @@ impl ListPinsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/im-v1/pin/list
     pub async fn execute(self) -> SDKResult<ListPinsResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListPinsResponse> {
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: GET:/open-apis/im/v1/pins
@@ -85,8 +93,7 @@ impl ListPinsRequest {
         if let Some(page_token) = self.page_token {
             req = req.query("page_token", page_token);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取群内 Pin 消息")
     }
 }

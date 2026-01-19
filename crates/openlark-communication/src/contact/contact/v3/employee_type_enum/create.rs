@@ -40,13 +40,25 @@ impl CreateEmployeeTypeEnumRequest {
         self,
         body: CreateEmployeeTypeEnumBody,
     ) -> SDKResult<EmployeeTypeEnumResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: CreateEmployeeTypeEnumBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<EmployeeTypeEnumResponse> {
+
         validate_required!(body.content, "content 不能为空");
 
         // url: POST:/open-apis/contact/v3/employee_type_enums
         let req: ApiRequest<EmployeeTypeEnumResponse> =
             ApiRequest::post(CONTACT_V3_EMPLOYEE_TYPE_ENUMS)
                 .body(serialize_params(&body, "新增人员类型")?);
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "新增人员类型")
-    }
+}
 }

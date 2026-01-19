@@ -67,5 +67,4 @@ impl CommunicationService {
             return Err(openlark_core::error::api_error(status.as_u16(), url, text, None));
         }
         Ok(value)
-    }
 }

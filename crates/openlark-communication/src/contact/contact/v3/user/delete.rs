@@ -44,6 +44,14 @@ impl DeleteUserRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/delete
     pub async fn execute(self) -> SDKResult<EmptyData> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<EmptyData> {
         validate_required!(self.user_id, "user_id 不能为空");
 
         // url: DELETE:/open-apis/contact/v3/users/:user_id
@@ -53,8 +61,7 @@ impl DeleteUserRequest {
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "删除用户")
     }
 }

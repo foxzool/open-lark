@@ -66,6 +66,14 @@ impl MemberBelongGroupsRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/group/member_belong
     pub async fn execute(self) -> SDKResult<MemberBelongGroupsResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<MemberBelongGroupsResponse> {
         let member_id = self.member_id.ok_or_else(|| {
             error::validation_error(
                 "member_id 不能为空".to_string(),
@@ -89,8 +97,7 @@ impl MemberBelongGroupsRequest {
         if let Some(page_token) = self.page_token {
             req = req.query("page_token", page_token);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询用户所属用户组")
     }
 }

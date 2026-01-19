@@ -55,6 +55,16 @@ impl BatchDeleteRoleMembersRequest {
         self,
         body: BatchDeleteMembersBody,
     ) -> SDKResult<BatchDeleteMembersResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: BatchDeleteMembersBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<BatchDeleteMembersResponse> {
+
         openlark_core::validate_required!(self.role_id, "role_id 不能为空");
 
         // url: PATCH:/open-apis/contact/v3/functional_roles/:role_id/members/batch_delete
@@ -68,7 +78,9 @@ impl BatchDeleteRoleMembersRequest {
             req = req.query("user_id_type", user_id_type.as_str());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "删除角色下的成员")
-    }
+}
 }

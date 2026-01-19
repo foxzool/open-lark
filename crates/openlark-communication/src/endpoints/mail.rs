@@ -91,5 +91,5 @@ mod tests {
         assert!(MAIL_V1_USER_MAILBOX_FOLDERS.contains("folders"));
         assert!(MAIL_V1_USER_MAILBOX_MESSAGES.contains("messages"));
         assert!(MAIL_V1_USER_MAILBOX_RULES.contains("rules"));
-    }
+}
 }

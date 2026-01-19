@@ -42,7 +42,14 @@ impl ListWorkCitiesRequest {
     ///
     /// docPath: https://open.feishu.cn/document/contact-v3/work_city/list
     pub async fn execute(self) -> SDKResult<ListWorkCitiesResponse> {
-        // url: GET:/open-apis/contact/v3/work_cities
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListWorkCitiesResponse> {
         let mut req: ApiRequest<ListWorkCitiesResponse> = ApiRequest::get(CONTACT_V3_WORK_CITIES);
 
         if let Some(page_size) = self.page_size {
@@ -51,8 +58,7 @@ impl ListWorkCitiesRequest {
         if let Some(page_token) = self.page_token {
             req = req.query("page_token", page_token);
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取租户工作城市列表")
     }
 }

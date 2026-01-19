@@ -60,9 +60,14 @@ impl ListRoleMembersRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role-member/list
     pub async fn execute(self) -> SDKResult<ListMembersResponse> {
-        openlark_core::validate_required!(self.role_id, "role_id 不能为空");
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
 
-        // url: GET:/open-apis/contact/v3/functional_roles/:role_id/members
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<ListMembersResponse> {
         let mut req: ApiRequest<ListMembersResponse> = ApiRequest::get(format!(
             "{}/{}/members",
             CONTACT_V3_FUNCTIONAL_ROLES, self.role_id
@@ -77,8 +82,7 @@ impl ListRoleMembersRequest {
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询角色下的所有成员信息")
     }
 }

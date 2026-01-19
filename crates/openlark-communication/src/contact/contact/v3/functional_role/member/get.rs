@@ -54,6 +54,14 @@ impl GetRoleMemberRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role-member/get
     pub async fn execute(self) -> SDKResult<GetMemberResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<GetMemberResponse> {
         validate_required!(self.role_id, "role_id 不能为空");
         validate_required!(self.member_id, "member_id 不能为空");
 
@@ -66,8 +74,7 @@ impl GetRoleMemberRequest {
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());
         }
-
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询角色下某个成员的管理范围")
     }
 }

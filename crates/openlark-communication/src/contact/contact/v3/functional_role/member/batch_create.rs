@@ -56,6 +56,16 @@ impl BatchCreateRoleMembersRequest {
         self,
         body: BatchCreateMembersBody,
     ) -> SDKResult<BatchCreateMembersResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: BatchCreateMembersBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<BatchCreateMembersResponse> {
+
         validate_required!(self.role_id, "role_id 不能为空");
         if body.members.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -75,7 +85,9 @@ impl BatchCreateRoleMembersRequest {
             req = req.query("user_id_type", user_id_type.as_str());
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
         extract_response_data(resp, "批量添加角色成员")
-    }
+}
 }

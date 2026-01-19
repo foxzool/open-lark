@@ -110,6 +110,15 @@ impl CreateUserRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/contact-v3/user/create
     pub async fn execute(self, body: CreateUserBody) -> SDKResult<UserResponse> {
+        self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: CreateUserBody,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<UserResponse> {
         validate_required!(body.name, "name 不能为空");
         validate_required!(body.mobile, "mobile 不能为空");
         if body.department_ids.is_empty() {
@@ -133,7 +142,7 @@ impl CreateUserRequest {
             req = req.query("client_token", client_token);
         }
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "创建用户")
     }
 }
