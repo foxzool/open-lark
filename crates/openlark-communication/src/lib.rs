@@ -46,6 +46,9 @@ mod macros;
 // 通用工具与类型
 pub mod common;
 
+// API 端点常量定义
+pub mod endpoints;
+
 // AILY 模块
 #[cfg(feature = "aily")]
 pub mod aily;
@@ -61,32 +64,6 @@ pub mod contact;
 // Moments 模块
 #[cfg(feature = "moments")]
 pub mod moments;
-
-// V1 版本的历史遗留模块（标记为 deprecated）
-// 注意：这些模块保留用于向后兼容，建议使用新的 v3 版本
-#[cfg(all(feature = "contact", feature = "contact-v1-v2"))]
-pub mod contact_v1_v2;
-
-#[cfg(all(feature = "im", feature = "im-v1-v2"))]
-pub mod im_v1_v2;
-
-#[cfg(all(feature = "contact", feature = "contact-v1-v2"))]
-pub mod contact_user_v1_v2;
-
-#[cfg(all(feature = "contact", feature = "contact-v1-v2"))]
-pub mod contact_search_v1_v2;
-
-#[cfg(all(feature = "im", feature = "im-v1-v2"))]
-pub mod im_message_v1_v2;
-
-#[cfg(all(feature = "im", feature = "im-v1-v2"))]
-pub mod im_card_v1_v2;
-
-#[cfg(all(feature = "im", feature = "im-v1-v2"))]
-pub mod im_ephemeral_v1_v2;
-
-#[cfg(all(feature = "contact", feature = "contact-v1-v2"))]
-pub mod card_v1_v2;
 
 // Re-exports from openlark-core for convenience.
 pub mod prelude {
