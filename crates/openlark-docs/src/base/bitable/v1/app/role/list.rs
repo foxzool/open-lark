@@ -50,6 +50,13 @@ impl ListAppRoleRequest {
     }
 
     pub async fn execute(self) -> SDKResult<ListAppRoleResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListAppRoleResponse> {
         validate_required!(self.app_token.trim(), "app_token");
         if let Some(page_size) = self.page_size {
             if page_size <= 0 {
@@ -68,7 +75,7 @@ impl ListAppRoleRequest {
         api_request = api_request.query_opt("page_token", self.page_token);
         api_request = api_request.query_opt("page_size", self.page_size.map(|v| v.to_string()));
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

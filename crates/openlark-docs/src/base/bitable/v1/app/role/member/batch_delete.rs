@@ -54,6 +54,13 @@ impl BatchDeleteRoleMemberRequest {
     }
 
     pub async fn execute(self) -> SDKResult<BatchDeleteRoleMemberResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<BatchDeleteRoleMemberResponse> {
         validate_required!(self.app_token.trim(), "app_token");
         validate_required!(self.role_id.trim(), "role_id");
         validate_required!(self.member_list, "member_list");
@@ -83,7 +90,7 @@ impl BatchDeleteRoleMemberRequest {
             member_list: self.member_list,
         })?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

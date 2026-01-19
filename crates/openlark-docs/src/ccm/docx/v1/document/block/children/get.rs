@@ -63,6 +63,15 @@ impl GetDocumentBlockChildrenRequest {
         self,
         params: GetDocumentBlockChildrenParams,
     ) -> SDKResult<GetDocumentBlockChildrenResponse> {
+        self.execute_with_options(params, RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        params: GetDocumentBlockChildrenParams,
+        option: RequestOption,
+    ) -> SDKResult<GetDocumentBlockChildrenResponse> {
         validate_required!(params.document_id, "文档ID不能为空");
         validate_required!(params.block_id, "父块ID不能为空");
 
@@ -84,7 +93,7 @@ impl GetDocumentBlockChildrenRequest {
             api_request = api_request.query("page_token", &page_token);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取所有子块")
     }
 }

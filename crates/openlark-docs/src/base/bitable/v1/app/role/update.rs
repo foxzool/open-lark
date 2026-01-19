@@ -63,6 +63,13 @@ impl UpdateAppRoleRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UpdateAppRoleResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<UpdateAppRoleResponse> {
         validate_required!(self.app_token.trim(), "app_token");
         validate_required!(self.role_id.trim(), "role_id");
         validate_required!(self.role_name.trim(), "role_name");
@@ -94,7 +101,7 @@ impl UpdateAppRoleRequest {
             block_roles: self.block_roles,
         })?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
