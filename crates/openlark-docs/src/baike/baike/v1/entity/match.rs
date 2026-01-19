@@ -56,6 +56,10 @@ impl MatchEntityRequest {
     }
 
     pub async fn execute(self) -> SDKResult<MatchEntityResp> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<MatchEntityResp> {
         validate_required!(self.req.word, "word 不能为空");
         let len = self.req.word.chars().count();
         if !(1..=100).contains(&len) {
@@ -70,7 +74,7 @@ impl MatchEntityRequest {
                 .body(serde_json::to_value(&self.req)?);
 
         let response: Response<MatchEntityResp> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))

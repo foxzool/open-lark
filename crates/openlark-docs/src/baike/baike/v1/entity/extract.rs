@@ -49,6 +49,13 @@ impl ExtractEntityRequest {
     }
 
     pub async fn execute(self) -> SDKResult<ExtractEntityResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ExtractEntityResponse> {
         use crate::common::api_endpoints::BaikeApiV1;
         // 文档：text 非必填，但要求最大长度 128
         let len = self.req.text.chars().count();
@@ -64,7 +71,7 @@ impl ExtractEntityRequest {
                 .body(serde_json::to_value(&self.req)?);
 
         let response: Response<ExtractEntityResponse> =
-            Transport::request(api_request, &self.config, None).await?;
+            Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
