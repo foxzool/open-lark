@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, Response},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 
@@ -87,6 +88,6 @@ impl GetMinuteTranscriptRequest {
             api_request = api_request.query("file_format", fmt);
         }
 
-        Transport::request(api_request, &self.config, None).await
+        Transport::request(api_request, &self.config, Some(option)).await
     }
 }
