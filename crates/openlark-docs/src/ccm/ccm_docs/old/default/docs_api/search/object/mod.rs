@@ -1,3 +1,5 @@
+#![allow(deprecated)]
+
 /// 搜索对象请求 - 已废弃
 #[deprecated(note = "使用新架构替代")]
 pub struct SearchObjectRequest {

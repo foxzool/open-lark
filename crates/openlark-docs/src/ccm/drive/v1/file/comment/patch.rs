@@ -140,7 +140,6 @@ pub async fn patch_comment(
 }
 
 #[cfg(test)]
-
 mod tests {
 
     use super::*;

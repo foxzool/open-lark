@@ -36,6 +36,7 @@ impl DocsService {
     }
 
     /// 搜索云文档
+    #[allow(deprecated)]
     pub fn search_object(
         &self,
     ) -> crate::ccm::ccm_docs::old::default::docs_api::search::object::SearchObjectRequest {
@@ -45,6 +46,7 @@ impl DocsService {
     }
 
     /// 获取元数据
+    #[allow(deprecated)]
     pub fn meta(&self) -> crate::ccm::ccm_docs::old::default::docs_api::meta::GetMetaRequest {
         crate::ccm::ccm_docs::old::default::docs_api::meta::GetMetaRequest::new(self.config.clone())
     }

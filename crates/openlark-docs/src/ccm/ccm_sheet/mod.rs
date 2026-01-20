@@ -96,4 +96,5 @@ pub mod v2;
 
 // 重新导出主要类型
 pub use models::*;
+#[allow(deprecated)]
 pub use old::v2::CcmSheetOldV2;
