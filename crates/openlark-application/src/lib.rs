@@ -1,40 +1,27 @@
-//! Open-Lark Application Module
+//! # OpenLark 应用管理模块
 //!
-//! 飞书应用管理相关功能接口，包含应用创建、配置和管理等功能。
+//! OpenLark SDK 的应用管理模块，提供飞书应用 API 的完整访问。
 
-// 注意：legacy_client 已移除，请使用新的客户端架构
-// 当此模块完全实现时，应该使用 DefaultLarkClient 或相应的服务接口
+#![allow(missing_docs)]
 
-use openlark_core::SDKResult;
+mod service;
 
-/// Application服务主入口 - 占位符实现
-///
-/// 此模块等待完全实现，需要使用新的客户端架构
-#[allow(dead_code)]
-pub struct WorkplaceService {
-    // 当实现时，这里应该使用新的客户端类型
-    // client: std::sync::Arc<DefaultLarkClient>,
-}
+pub mod common;
 
-impl Default for WorkplaceService {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+#[cfg(feature = "v1")]
+pub mod v1;
 
-impl WorkplaceService {
-    /// 创建新的应用服务实例
-    pub fn new() -> Self {
-        Self {}
-    }
+pub mod prelude;
 
-    /// TODO: 实现应用创建接口
-    pub async fn create_application(&self) -> SDKResult<String> {
-        todo!("实现应用创建功能 - 需要迁移到新的客户端架构")
-    }
+pub use service::ApplicationService;
 
-    /// TODO: 实现应用配置接口
-    pub async fn configure_application(&self) -> SDKResult<String> {
-        todo!("实现应用配置功能 - 需要迁移到新的客户端架构")
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_version() {
+        assert!(!VERSION.is_empty());
     }
 }
