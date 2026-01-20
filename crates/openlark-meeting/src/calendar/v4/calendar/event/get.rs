@@ -59,7 +59,7 @@ impl GetCalendarEventRequest {
 
         // url: GET:/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id
         let api_endpoint = CalendarApiV4::EventGet(self.calendar_id, self.event_id);
-        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(&api_endpoint.to_url());
+        let req: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }

@@ -37,7 +37,6 @@ impl GetResourceReservationListRequest {
     }
 
     /// 执行请求（带选项）
-
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/vc/v1/resource_reservation_list
         let mut req: ApiRequest<serde_json::Value> =

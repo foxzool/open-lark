@@ -42,17 +42,14 @@ pub struct GetFileViewRecordsRequest {
 
 impl GetFileViewRecordsRequest {
     /// 创建获取文件查看记录请求
-
     ///
-
     /// # 参数
-
+    ///
     /// * `file_token` - 文件token
-
+    ///
     /// * `file_type` - 文件类型（doc/docx/sheet/bitable/mindnote/wiki/file）
-
+    ///
     /// * `page_size` - 分页大小（1~50）
-
     pub fn new(
         file_token: impl Into<String>,
 
@@ -74,7 +71,6 @@ impl GetFileViewRecordsRequest {
     }
 
     /// 设置分页标记
-
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
 
@@ -82,7 +78,6 @@ impl GetFileViewRecordsRequest {
     }
 
     /// 设置访问者 ID 类型
-
     pub fn viewer_id_type(mut self, viewer_id_type: impl Into<String>) -> Self {
         self.viewer_id_type = Some(viewer_id_type.into());
 
@@ -134,11 +129,8 @@ pub struct ViewRecord {
 }
 
 /// 获取文件查看记录
-
 ///
-
 /// 获取文件的访问记录列表。
-
 pub async fn get_file_view_records(
     request: GetFileViewRecordsRequest,
 

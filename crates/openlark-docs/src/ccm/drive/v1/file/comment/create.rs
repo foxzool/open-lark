@@ -65,7 +65,6 @@ struct CreateCommentRequestBody {
 }
 
 /// 添加全文评论
-
 pub async fn create_comment(
     request: CreateCommentRequest,
 

@@ -65,7 +65,6 @@ struct PatchSubscriptionRequestBody {
 pub type PatchSubscriptionResponse = Subscription;
 
 /// 更新订阅状态
-
 pub async fn patch_subscription(
     request: PatchSubscriptionRequest,
 

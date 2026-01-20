@@ -45,7 +45,6 @@ impl DeleteCalendarEventRequest {
     }
 
     /// 执行请求（带选项）
-
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         validate_required!(self.calendar_id, "calendar_id 不能为空");
         validate_required!(self.event_id, "event_id 不能为空");

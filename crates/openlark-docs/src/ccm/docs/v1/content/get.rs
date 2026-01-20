@@ -1,9 +1,6 @@
 /// 获取云文档内容
-
 ///
-
 /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/docs-v1/content/get
-
 /// doc: https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/docs-v1/content/get
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -75,7 +72,6 @@ impl ApiResponseTrait for GetDocsContentResponse {
 }
 
 /// 获取云文档内容
-
 pub async fn get_docs_content(
     request: GetDocsContentRequest,
 
