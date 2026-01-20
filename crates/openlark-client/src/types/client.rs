@@ -51,14 +51,31 @@ impl<T> ApiResponseData<T> {
         }
     }
 
-    /// 🆕 创建错误响应
-    pub fn error(message: String) -> Self {
+    /// 🆕 创建错误响应（需要 `T: Default`）
+    ///
+    /// 注意：
+    /// - 旧实现曾使用 `mem::zeroed()` 为泛型 `T` 构造占位值，这是不安全且可能导致 UB 的。
+    /// - 若 `T` 无法提供默认值，请使用 `error_with_data` 显式传入 `data`。
+    pub fn error(message: impl Into<String>) -> Self
+    where
+        T: Default,
+    {
         Self {
-            // 这里需要T的默认值，但这是一个问题
-            // 实际使用时应该用不同的方法
-            data: unsafe { std::mem::zeroed() },
+            data: T::default(),
             success: false,
-            message: Some(message),
+            message: Some(message.into()),
+            request_id: uuid::Uuid::new_v4().to_string(),
+            timestamp: Some(chrono::Utc::now().timestamp()),
+            extra: std::collections::HashMap::new(),
+        }
+    }
+
+    /// 🆕 创建错误响应（显式传入 `data`，避免对 `T` 施加额外约束）
+    pub fn error_with_data(data: T, message: impl Into<String>) -> Self {
+        Self {
+            data,
+            success: false,
+            message: Some(message.into()),
             request_id: uuid::Uuid::new_v4().to_string(),
             timestamp: Some(chrono::Utc::now().timestamp()),
             extra: std::collections::HashMap::new(),

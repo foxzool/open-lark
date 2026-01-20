@@ -188,18 +188,17 @@ mod tests {
 
     #[test]
     fn test_access_token_expiry() {
-        // 创建一个已过期的令牌
-        let token = AccessToken::new(
-            "expired_token".to_string(),
-            "Bearer".to_string(),
-            1, // 1秒后过期
-        );
-
-        // 等待2秒确保令牌过期
-        std::thread::sleep(std::time::Duration::from_secs(2));
+        // 通过回溯 created_at 构造已过期的令牌，避免 sleep 导致测试变慢/不稳定
+        let token = AccessToken {
+            access_token: "expired_token".to_string(),
+            token_type: "Bearer".to_string(),
+            expires_in: 120, // 2分钟
+            created_at: Utc::now() - chrono::Duration::seconds(61), // 预留 60s 缓冲
+        };
 
         assert!(token.is_expired());
-        assert!(token.remaining_seconds() <= 0);
+        // 注意：is_expired() 采用“提前 60 秒过期”的策略，因此 remaining_seconds 可能仍为正数。
+        assert!(token.remaining_seconds() <= 60);
     }
 
     #[test]
@@ -238,17 +237,16 @@ mod tests {
 
     #[test]
     fn test_user_access_token_expiry() {
-        let user_token = UserAccessToken::new(
-            "expired_user_token".to_string(),
-            "refresh_token".to_string(),
-            "Bearer".to_string(),
-            1, // 访问令牌1秒后过期
-            2, // 刷新令牌2秒后过期
-            "test_scope".to_string(),
-        );
-
-        // 等待3秒确保两个令牌都过期
-        std::thread::sleep(std::time::Duration::from_secs(3));
+        // 通过回溯 created_at 构造已过期的令牌，避免 sleep 导致测试变慢/不稳定
+        let user_token = UserAccessToken {
+            access_token: "expired_user_token".to_string(),
+            refresh_token: "refresh_token".to_string(),
+            token_type: "Bearer".to_string(),
+            expires_in: 120,          // 2分钟
+            refresh_expires_in: 180,  // 3分钟
+            scope: "test_scope".to_string(),
+            created_at: Utc::now() - chrono::Duration::seconds(121),
+        };
 
         assert!(user_token.is_access_token_expired());
         assert!(user_token.is_refresh_token_expired());
