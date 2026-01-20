@@ -1,35 +1,65 @@
-//! Open-Lark Placeholder Module
+//! # OpenLark 邮件模块
 //!
-//! 飞书相关功能接口。
+//! OpenLark SDK 的邮件模块，提供飞书邮件组 API 的完整访问。
+//!
+//! ## 功能特性
+//!
+//! - **邮件组管理**: 创建、更新、删除、查询邮件组
+//! - **成员管理**: 添加、删除邮件组成员
+//! - **别名管理**: 邮件别名配置
+//!
+//! ## 使用示例
+//!
+//! ```rust,no_run
+//! use openlark_mail::MailService;
+//! use openlark_core::config::Config;
+//!
+//! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+//! let config = Config::builder()
+//!     .app_id("your_app_id")
+//!     .app_secret("your_app_secret")
+//!     .build();
+//!
+//! let mail_service = MailService::new(config);
+//!
+//! // 创建邮件组
+//! let result = mail_service
+//!     .mail_group()
+//!     .create()
+//!     .mail_group_id("team@example.com")
+//!     .description("项目团队邮件组")
+//!     .execute()
+//!     .await?;
+//! # Ok(())
+//! # }
+//! ```
 
-// 注意：legacy_client 已移除，请使用新的客户端架构
-// 当此模块完全实现时，应该使用 DefaultLarkClient 或相应的服务接口
+#![allow(missing_docs)]
 
-use openlark_core::SDKResult;
+mod service;
 
-/// 服务主入口 - 占位符实现
-///
-/// 此模块等待完全实现，需要使用新的客户端架构
-#[allow(dead_code)]
-pub struct WorkplaceWorkplaceService {
-    // 当实现时，这里应该使用新的客户端类型
-    // client: std::sync::Arc<DefaultLarkClient>,
-}
+// 通用模块
+pub mod common;
 
-impl Default for WorkplaceWorkplaceService {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+// 版本模块
+#[cfg(feature = "v1")]
+pub mod v1;
 
-impl WorkplaceWorkplaceService {
-    /// 创建新的服务实例
-    pub fn new() -> Self {
-        Self {}
-    }
+// Prelude 模块
+pub mod prelude;
 
-    /// TODO: 实现核心接口
-    pub async fn core_functionality(&self) -> SDKResult<String> {
-        todo!("实现核心功能 - 需要迁移到新的客户端架构")
+// 重新导出核心服务
+pub use service::MailService;
+
+/// 邮件模块版本信息
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_version() {
+        assert!(!VERSION.is_empty());
     }
 }
