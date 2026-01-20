@@ -4,13 +4,27 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "openlark-helpdesk module for OpenLark SDK"
+repository.workspace = true
+documentation.workspace = true
+description = "OpenLark 帮助台模块 - 提供飞书帮助台 API"
 
 [dependencies]
 openlark-core = { workspace = true }
-tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
-anyhow = { workspace = true }
-thiserror = { workspace = true }
-async-trait = { workspace = true }
+reqwest = { workspace = true }
+tokio = { workspace = true, optional = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }
+
+[features]
+default = ["v1", "async"]
+async = ["tokio"]
+
+# 帮助台 API 版本
+v1 = []
+
+# 完整功能集
+full = ["v1", "async"]
