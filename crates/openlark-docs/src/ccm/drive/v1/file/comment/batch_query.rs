@@ -137,7 +137,6 @@ pub async fn batch_query_comment(
 }
 
 #[cfg(test)]
-
 mod tests {
 
     use super::*;
