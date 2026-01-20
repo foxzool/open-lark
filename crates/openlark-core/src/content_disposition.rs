@@ -75,10 +75,7 @@ mod tests {
     #[test]
     fn extract_filename_multiple_parts() {
         let raw = "attachment; charset=utf-8; filename*=UTF-8''complex%20name.txt; other=value";
-        assert_eq!(
-            extract_filename(raw).as_deref(),
-            Some("complex%20name.txt")
-        );
+        assert_eq!(extract_filename(raw).as_deref(), Some("complex%20name.txt"));
     }
 
     #[test]

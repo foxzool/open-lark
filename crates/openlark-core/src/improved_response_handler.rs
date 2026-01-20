@@ -271,7 +271,6 @@ impl ImprovedResponseHandler {
             data,
         })
     }
-
 }
 
 /// 优化的BaseResponse，使用更好的serde特性
