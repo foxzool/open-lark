@@ -155,8 +155,8 @@ pub trait DiscoverableService: ServiceTrait {
 
     /// 🔍 检查依赖是否满足
     fn dependencies_satisfied(&self) -> bool {
-        // 默认实现：所有依赖都需要被满足
-        !self.dependencies().is_empty()
+        // 默认实现：若没有声明依赖，则认为满足；否则交由具体实现/外部注册表判断。
+        self.dependencies().is_empty()
     }
 }
 
@@ -199,8 +199,8 @@ impl ServiceMetadata {
 
     /// ⏰ 获取距离上次健康检查的时间
     pub fn time_since_last_health_check(&self) -> Option<std::time::Duration> {
-        self.last_health_check?
-            .duration_since(SystemTime::now())
+        SystemTime::now()
+            .duration_since(self.last_health_check?)
             .ok()
     }
 }
@@ -451,9 +451,11 @@ mod tests {
         };
 
         assert!(!metadata.is_healthy());
+        assert!(metadata.time_since_last_health_check().is_none());
 
         metadata.mark_healthy();
         assert!(metadata.is_healthy());
+        assert!(metadata.time_since_last_health_check().is_some());
 
         metadata.mark_unhealthy();
         assert!(!metadata.is_healthy());
