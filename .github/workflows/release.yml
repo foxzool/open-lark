@@ -118,13 +118,25 @@ jobs:
 
       - name: Verify Cargo.toml version matches tag
         run: |
-          CARGO_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = "\(.*\)"/\1/')
+          set -euo pipefail
+
+          # workspace 使用 `version.workspace = true`，这里用 `cargo metadata` 获取实际发布包(open-lark)版本
+          CARGO_VERSION=$(
+            cargo metadata --no-deps --format-version 1 \
+              | python3 -c 'import json,sys; d=json.load(sys.stdin); print(next((p["version"] for p in d.get("packages", []) if p.get("name")=="open-lark"), ""))'
+          )
           TAG_VERSION="${{ steps.extract_version.outputs.VERSION }}"
-          echo "Cargo.toml version: ${CARGO_VERSION}"
+
+          if [ -z "${CARGO_VERSION}" ]; then
+            echo "❌ Failed to detect open-lark version from cargo metadata"
+            exit 1
+          fi
+
+          echo "Cargo (open-lark) version: ${CARGO_VERSION}"
           echo "Tag version: ${TAG_VERSION}"
 
           if [ "${CARGO_VERSION}" != "${TAG_VERSION}" ]; then
-            echo "❌ Version mismatch: Cargo.toml has ${CARGO_VERSION}, but tag is v${TAG_VERSION}"
+            echo "❌ Version mismatch: open-lark is ${CARGO_VERSION}, but tag is v${TAG_VERSION}"
             exit 1
           fi
           echo "✅ Version verification passed"
