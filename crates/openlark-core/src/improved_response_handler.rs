@@ -4,6 +4,7 @@ use tracing::{info_span, Instrument};
 
 use crate::{
     api::{ApiResponseTrait, BaseResponse, RawResponse, Response, ResponseFormat},
+    content_disposition,
     error::{network_error, validation_error},
     observability::ResponseTracker,
     SDKResult,
@@ -112,29 +113,12 @@ impl ImprovedResponseHandler {
                                         Some(parsed_data)
                                     }
                                     Err(data_parse_err) => {
-                                        tracing::debug!("Failed to parse data field as type T: {data_parse_err:?}");
-
-                                        // 特殊处理：如果T是CreateMessageResp但data直接是Message，尝试包装
-                                        if std::any::type_name::<T>().contains("CreateMessageResp")
-                                        {
-                                            // 尝试将data值包装为 {"data": data_value} 结构
-                                            let wrapped_value = serde_json::json!({
-                                                "data": data_value
-                                            });
-                                            match serde_json::from_value::<T>(wrapped_value) {
-                                                Ok(wrapped_data) => {
-                                                    tracing::debug!("Successfully parsed data by wrapping Message in CreateMessageResp");
-                                                    Some(wrapped_data)
-                                                }
-                                                Err(_) => {
-                                                    tracing::warn!("Failed to parse even after wrapping, but response contains valid message data");
-                                                    // API调用成功了，数据存在，只是结构不匹配
-                                                    None
-                                                }
-                                            }
-                                        } else {
-                                            None
-                                        }
+                                        tracing::debug!(
+                                            "Failed to parse data field as type T: {data_parse_err:?}"
+                                        );
+                                        // 保持 core 通用性：不在这里做“按具体业务类型名”的特殊兼容。
+                                        // 若某个业务 API 存在历史字段差异，请在对应业务 crate 的响应模型上做兼容反序列化。
+                                        None
                                     }
                                 }
                             } else {
@@ -238,7 +222,7 @@ impl ImprovedResponseHandler {
             .headers()
             .get("Content-Disposition")
             .and_then(|header| header.to_str().ok())
-            .and_then(Self::extract_filename)
+            .and_then(content_disposition::extract_filename)
             .unwrap_or_default();
 
         // 记录解析阶段完成（文件名提取）
@@ -288,25 +272,6 @@ impl ImprovedResponseHandler {
         })
     }
 
-    /// 提取文件名的辅助函数
-    fn extract_filename(content_disposition: &str) -> Option<String> {
-        // 支持多种文件名格式
-        for part in content_disposition.split(';') {
-            let part = part.trim();
-
-            // 支持 filename*=UTF-8''filename 格式
-            if let Some(filename) = part.strip_prefix("filename*=UTF-8''") {
-                return Some(filename.to_string());
-            }
-
-            // 支持 filename="filename" 格式
-            if let Some(filename) = part.strip_prefix("filename=") {
-                let filename = filename.trim_matches('"');
-                return Some(filename.to_string());
-            }
-        }
-        None
-    }
 }
 
 /// 优化的BaseResponse，使用更好的serde特性
@@ -650,7 +615,7 @@ mod tests {
         ];
 
         for (input, expected) in cases {
-            let result = ImprovedResponseHandler::extract_filename(input);
+            let result = crate::content_disposition::extract_filename(input);
             assert_eq!(result, expected, "Failed for input: {input}");
         }
     }
@@ -658,34 +623,34 @@ mod tests {
     #[test]
     fn test_filename_extraction_edge_cases() {
         // Test empty and whitespace-only strings
-        assert_eq!(ImprovedResponseHandler::extract_filename(""), None);
-        assert_eq!(ImprovedResponseHandler::extract_filename("   "), None);
-        assert_eq!(ImprovedResponseHandler::extract_filename(";;;"), None);
+        assert_eq!(crate::content_disposition::extract_filename(""), None);
+        assert_eq!(crate::content_disposition::extract_filename("   "), None);
+        assert_eq!(crate::content_disposition::extract_filename(";;;"), None);
 
         // Test malformed headers - based on implementation behavior
         assert_eq!(
-            ImprovedResponseHandler::extract_filename("filename="),
+            crate::content_disposition::extract_filename("filename="),
             Some("".to_string())
         );
         assert_eq!(
-            ImprovedResponseHandler::extract_filename("filename*="),
+            crate::content_disposition::extract_filename("filename*="),
             None
-        ); // Doesn't match UTF-8 prefix, doesn't match filename= exactly
+        );
         assert_eq!(
-            ImprovedResponseHandler::extract_filename("filename=\""),
+            crate::content_disposition::extract_filename("filename=\""),
             Some("".to_string())
         );
 
         // Test with only quotes - the current implementation extracts empty string
         assert_eq!(
-            ImprovedResponseHandler::extract_filename("filename=\"\""),
+            crate::content_disposition::extract_filename("filename=\"\""),
             Some("".to_string())
         );
 
         // Test multiple filename directives (should return first valid one)
         let multi_filename = "filename=\"first.txt\"; filename=\"second.txt\"";
         assert_eq!(
-            ImprovedResponseHandler::extract_filename(multi_filename),
+            crate::content_disposition::extract_filename(multi_filename),
             Some("first.txt".to_string())
         );
     }
@@ -975,12 +940,12 @@ mod tests {
             // Both UTF-8 and regular filename (current implementation returns first match)
             (
                 "attachment; filename=\"test.txt\"; filename*=UTF-8''better.txt",
-                Some("test.txt".to_string()),
+                Some("better.txt".to_string()),
             ),
         ];
 
         for (input, expected) in edge_cases {
-            let result = ImprovedResponseHandler::extract_filename(input);
+            let result = crate::content_disposition::extract_filename(input);
             assert_eq!(result, expected, "Failed for input: {}", input);
         }
     }
