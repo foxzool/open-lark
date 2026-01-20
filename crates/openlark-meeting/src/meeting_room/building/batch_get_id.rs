@@ -35,7 +35,6 @@ impl BatchGetBuildingIdRequest {
     }
 
     /// 执行请求（带选项）
-
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/meeting_room/building/batch_get_id
         let mut req: ApiRequest<serde_json::Value> =
