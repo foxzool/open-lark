@@ -94,7 +94,7 @@ pub async fn patch_subscription(
         request.subscription_id.clone(),
     );
 
-    let mut api_request: ApiRequest<PatchSubscriptionResponse> =
+    let api_request: ApiRequest<PatchSubscriptionResponse> =
         ApiRequest::patch(&api_endpoint.to_url()).body(serialize_params(
             &PatchSubscriptionRequestBody {
                 is_subscribe: request.is_subscribe,
