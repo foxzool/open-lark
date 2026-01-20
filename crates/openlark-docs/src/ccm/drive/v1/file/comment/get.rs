@@ -61,7 +61,6 @@ impl GetCommentRequest {
 pub type GetCommentResponse = Comment;
 
 /// 获取全文评论
-
 pub async fn get_comment(
     request: GetCommentRequest,
 

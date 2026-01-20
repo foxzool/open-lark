@@ -33,15 +33,12 @@ pub struct GetFileStatisticsRequest {
 
 impl GetFileStatisticsRequest {
     /// 创建获取文件统计信息请求
-
     ///
-
     /// # 参数
-
+    ///
     /// * `file_token` - 文件token
-
+    ///
     /// * `file_type` - 文件类型（doc/sheet/mindnote/bitable/wiki/file/docx）
-
     pub fn new(file_token: impl Into<String>, file_type: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
@@ -100,11 +97,8 @@ impl ApiResponseTrait for GetFileStatisticsResponse {
 }
 
 /// 获取文件统计信息
-
 ///
-
 /// 获取文件统计信息，包括文档阅读人数、次数和点赞数。
-
 pub async fn get_file_statistics(
     request: GetFileStatisticsRequest,
 

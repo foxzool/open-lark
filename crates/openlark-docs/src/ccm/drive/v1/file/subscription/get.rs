@@ -37,7 +37,6 @@ impl GetSubscriptionRequest {
 pub type GetSubscriptionResponse = Subscription;
 
 /// 获取订阅状态
-
 pub async fn get_subscription(
     request: GetSubscriptionRequest,
 

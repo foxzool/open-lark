@@ -146,7 +146,6 @@ impl ApiResponseTrait for BatchQueryMetaResponse {
 }
 
 /// 批量获取文件元数据
-
 pub async fn batch_query(
     request: BatchQueryMetaRequest,
 

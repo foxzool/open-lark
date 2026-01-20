@@ -84,7 +84,6 @@ struct CreateFileSubscriptionRequestBody {
 pub type CreateFileSubscriptionResponse = Subscription;
 
 /// 创建订阅
-
 pub async fn create_file_subscription(
     request: CreateFileSubscriptionRequest,
 

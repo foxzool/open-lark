@@ -85,7 +85,6 @@ impl ApiResponseTrait for BatchQueryCommentResponse {
 }
 
 /// 批量获取评论
-
 pub async fn batch_query_comment(
     request: BatchQueryCommentRequest,
 

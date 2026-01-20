@@ -87,7 +87,6 @@ impl ApiResponseTrait for PatchCommentResponse {
 }
 
 /// 解决/恢复评论
-
 pub async fn patch_comment(
     request: PatchCommentRequest,
 
