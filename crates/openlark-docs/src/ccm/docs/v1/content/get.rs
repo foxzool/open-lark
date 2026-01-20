@@ -100,7 +100,6 @@ pub async fn get_docs_content(
 }
 
 #[cfg(test)]
-
 mod tests {
 
     use super::*;

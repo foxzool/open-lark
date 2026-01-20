@@ -1,3 +1,5 @@
+#![allow(deprecated)]
+
 /// 获取元数据请求 - 已废弃
 #[deprecated(note = "使用新架构替代")]
 pub struct GetMetaRequest {
