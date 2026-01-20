@@ -21,6 +21,7 @@ pub mod validation;
 
 // crate 内部实现细节：不对外暴露（避免把 core 变成“全家桶”）
 mod app_ticket_manager;
+mod content_disposition;
 mod improved_response_handler;
 mod performance;
 mod req_translator;
