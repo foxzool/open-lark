@@ -42,7 +42,7 @@ impl DeleteRoomRequest {
         validate_required!(self.room_id, "room_id 不能为空");
 
         // url: DELETE:/open-apis/meeting_room/rooms/:room_id
-        let api_endpoint = MeetingRoomApi::RoomDelete(self.room_id);
+        let api_endpoint = MeetingRoomApi::RoomDelete(self.room_id.clone());
         let req: ApiRequest<serde_json::Value> =
             ApiRequest::delete(api_endpoint.to_url()).body(serde_json::json!({
                 "room_id": self.room_id
