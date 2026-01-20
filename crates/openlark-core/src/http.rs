@@ -307,25 +307,6 @@ fn validate(
     Ok(())
 }
 
-/// 解析文件名
-#[allow(dead_code)]
-fn decode_file_name(file_name: &str) -> Option<String> {
-    let parts = file_name.split(';');
-
-    for part in parts {
-        if part.trim().starts_with("filename*=") {
-            let filename = part
-                .trim()
-                .strip_prefix("filename*=UTF-8''")
-                .unwrap_or("")
-                .to_string();
-            return Some(filename);
-        }
-    }
-
-    None
-}
-
 #[cfg(test)]
 #[allow(clippy::field_reassign_with_default)]
 mod test {
@@ -334,7 +315,7 @@ mod test {
     use crate::{
         config::Config,
         constants::{AccessTokenType, AppType, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID},
-        http::{decode_file_name, determine_token_type, validate, validate_token_type},
+        http::{determine_token_type, validate, validate_token_type},
         req_option::RequestOption,
     };
 
@@ -351,34 +332,6 @@ mod test {
             .app_secret("test_app_secret")
             .app_type(AppType::Marketplace)
             .build()
-    }
-
-    #[test]
-    fn test_decode_file_name() {
-        let raw = "attachment; filename=\"upload_all.rs\"; filename*=UTF-8''upload_all.rs";
-        let file_name = decode_file_name(raw).unwrap();
-        assert_eq!(file_name, "upload_all.rs");
-    }
-
-    #[test]
-    fn test_decode_file_name_no_utf8() {
-        let raw = "attachment; filename=\"simple.txt\"";
-        let file_name = decode_file_name(raw);
-        assert!(file_name.is_none());
-    }
-
-    #[test]
-    fn test_decode_file_name_multiple_parts() {
-        let raw = "attachment; charset=utf-8; filename*=UTF-8''complex%20name.txt; other=value";
-        let file_name = decode_file_name(raw).unwrap();
-        assert_eq!(file_name, "complex%20name.txt");
-    }
-
-    #[test]
-    fn test_decode_file_name_empty() {
-        let raw = "";
-        let file_name = decode_file_name(raw);
-        assert!(file_name.is_none());
     }
 
     #[test]
@@ -692,14 +645,14 @@ mod test {
     #[test]
     fn test_decode_file_name_whitespace_handling() {
         let raw = " attachment ; filename=\"test.txt\" ; filename*=UTF-8''spaced%20file.txt ";
-        let file_name = decode_file_name(raw).unwrap();
+        let file_name = crate::content_disposition::extract_filename(raw).unwrap();
         assert_eq!(file_name, "spaced%20file.txt");
     }
 
     #[test]
     fn test_decode_file_name_no_equals() {
         let raw = "attachment; filename*UTF-8''invalid.txt";
-        let file_name = decode_file_name(raw);
+        let file_name = crate::content_disposition::extract_filename(raw);
         assert!(file_name.is_none());
     }
 
@@ -910,22 +863,21 @@ mod test {
     #[test]
     fn test_decode_file_name_missing_utf8_prefix() {
         let raw = "attachment; filename*=''missing_utf8.txt";
-        let file_name = decode_file_name(raw);
-        // The function returns Some("") when the UTF-8'' prefix is missing
-        assert_eq!(file_name, Some("".to_string()));
+        let file_name = crate::content_disposition::extract_filename(raw);
+        assert_eq!(file_name, Some("missing_utf8.txt".to_string()));
     }
 
     #[test]
     fn test_decode_file_name_malformed_filename_star() {
         let raw = "attachment; filename*=UTF-8";
-        let file_name = decode_file_name(raw);
-        assert_eq!(file_name, Some("".to_string()));
+        let file_name = crate::content_disposition::extract_filename(raw);
+        assert_eq!(file_name, None);
     }
 
     #[test]
     fn test_decode_file_name_multiple_filename_star_entries() {
         let raw = "attachment; filename*=UTF-8''first.txt; filename*=UTF-8''second.txt";
-        let file_name = decode_file_name(raw).unwrap();
+        let file_name = crate::content_disposition::extract_filename(raw).unwrap();
         // Should return the first match
         assert_eq!(file_name, "first.txt");
     }
@@ -933,14 +885,14 @@ mod test {
     #[test]
     fn test_decode_file_name_special_characters() {
         let raw = "attachment; filename*=UTF-8''special%20%21%40%23.txt";
-        let file_name = decode_file_name(raw).unwrap();
+        let file_name = crate::content_disposition::extract_filename(raw).unwrap();
         assert_eq!(file_name, "special%20%21%40%23.txt");
     }
 
     #[test]
     fn test_decode_file_name_empty_filename() {
         let raw = "attachment; filename*=UTF-8''";
-        let file_name = decode_file_name(raw).unwrap();
+        let file_name = crate::content_disposition::extract_filename(raw).unwrap();
         assert_eq!(file_name, "");
     }
 
