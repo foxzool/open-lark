@@ -10,6 +10,7 @@ use thiserror::Error;
 pub mod dependency_resolver;
 pub mod feature_flags;
 pub mod service_factory;
+pub(crate) mod bootstrap;
 
 pub use dependency_resolver::*;
 pub use feature_flags::{
@@ -219,8 +220,7 @@ impl DefaultServiceRegistry {
                 self.update_service_status(&service_name, ServiceStatus::Initializing)?;
 
                 // 这里应该调用服务的初始化逻辑
-                // 现在只是模拟初始化
-                std::thread::sleep(std::time::Duration::from_millis(10));
+                // openlark-client 作为 SDK 聚合层，不在此处做阻塞式“模拟初始化”。
 
                 self.update_service_status(&service_name, ServiceStatus::Ready)?;
             }

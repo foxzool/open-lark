@@ -64,8 +64,8 @@ pub trait ServiceFactory: Send + Sync {
         &self,
         metadata: &ServiceMetadata,
         config: &Config,
-        dependencies: &HashMap<String, Box<dyn std::any::Any + Send + Sync>>,
-    ) -> FactoryResult<Box<dyn std::any::Any + Send + Sync>>;
+        dependencies: &HashMap<String, Arc<dyn std::any::Any + Send + Sync>>,
+    ) -> FactoryResult<Arc<dyn std::any::Any + Send + Sync>>;
 
     /// 验证服务配置
     fn validate_config(&self, metadata: &ServiceMetadata, config: &Config) -> FactoryResult<()>;
@@ -74,7 +74,7 @@ pub trait ServiceFactory: Send + Sync {
     fn check_dependencies(
         &self,
         metadata: &ServiceMetadata,
-        available_services: &HashMap<String, Box<dyn std::any::Any + Send + Sync>>,
+        available_services: &HashMap<String, Arc<dyn std::any::Any + Send + Sync>>,
     ) -> FactoryResult<()>;
 }
 
@@ -106,7 +106,7 @@ pub struct ServiceInstance {
     /// 服务名称
     pub name: String,
     /// 服务实例
-    pub instance: Box<dyn std::any::Any + Send + Sync>,
+    pub instance: Arc<dyn std::any::Any + Send + Sync>,
     /// 创建时间
     pub created_at: chrono::DateTime<chrono::Utc>,
     /// 最后访问时间
@@ -137,14 +137,14 @@ impl ServiceInstanceManager {
     pub async fn get_or_create_service(
         &self,
         metadata: &ServiceMetadata,
-        dependencies: &HashMap<String, Box<dyn std::any::Any + Send + Sync>>,
-    ) -> FactoryResult<Box<dyn std::any::Any + Send + Sync>> {
+        dependencies: &HashMap<String, Arc<dyn std::any::Any + Send + Sync>>,
+    ) -> FactoryResult<Arc<dyn std::any::Any + Send + Sync>> {
         // 检查是否已有实例（单例模式）
         {
             let instances = self.instances.read().unwrap_or_else(|e| e.into_inner());
             if metadata.status == ServiceStatus::Running {
                 if let Some(instance) = instances.get(&metadata.name) {
-                    return Ok(self.clone_instance(instance));
+                    return Ok(Arc::clone(&instance.instance));
                 }
             }
         }
@@ -157,8 +157,8 @@ impl ServiceInstanceManager {
     async fn create_service_instance(
         &self,
         metadata: &ServiceMetadata,
-        dependencies: &HashMap<String, Box<dyn std::any::Any + Send + Sync>>,
-    ) -> FactoryResult<Box<dyn std::any::Any + Send + Sync>> {
+        dependencies: &HashMap<String, Arc<dyn std::any::Any + Send + Sync>>,
+    ) -> FactoryResult<Arc<dyn std::any::Any + Send + Sync>> {
         // 在 async 调用前获取工厂，避免 await_holding_lock
         let factory = {
             let factories = self.factories.read().unwrap_or_else(|e| e.into_inner());
@@ -185,7 +185,7 @@ impl ServiceInstanceManager {
         if metadata.status == ServiceStatus::Running {
             let service_instance = ServiceInstance {
                 name: metadata.name.clone(),
-                instance: self.clone_any(&instance),
+                instance: Arc::clone(&instance),
                 created_at: chrono::Utc::now(),
                 last_accessed: chrono::Utc::now(),
                 access_count: 1,
@@ -197,23 +197,6 @@ impl ServiceInstanceManager {
         }
 
         Ok(instance)
-    }
-
-    /// 克隆实例（简化实现）
-    fn clone_instance(&self, instance: &ServiceInstance) -> Box<dyn std::any::Any + Send + Sync> {
-        // 这里应该实现实际的克隆逻辑
-        // 现在只是返回一个引用的副本
-        self.clone_any(&instance.instance)
-    }
-
-    /// 简化的Any克隆
-    fn clone_any(
-        &self,
-        _any: &Box<dyn std::any::Any + Send + Sync>,
-    ) -> Box<dyn std::any::Any + Send + Sync> {
-        // 这是一个简化实现，实际应该根据具体类型进行克隆
-        // 或者使用 Arc 包装来实现共享
-        Box::new(())
     }
 
     /// 获取服务统计信息
@@ -268,55 +251,55 @@ impl ServiceFactory for DefaultServiceFactory {
         &self,
         metadata: &ServiceMetadata,
         _config: &Config,
-        _dependencies: &HashMap<String, Box<dyn std::any::Any + Send + Sync>>,
-    ) -> FactoryResult<Box<dyn std::any::Any + Send + Sync>> {
+        _dependencies: &HashMap<String, Arc<dyn std::any::Any + Send + Sync>>,
+    ) -> FactoryResult<Arc<dyn std::any::Any + Send + Sync>> {
         // 这里应该根据服务类型创建实际的服务实例
         // 现在只是返回一个占位符
         match metadata.name.as_str() {
             "communication" => {
                 // 创建通讯服务实例
                 let service = PlaceholderService::new(&metadata.name);
-                Ok(Box::new(service))
+                Ok(Arc::new(service))
             }
             "docs" => {
                 // 创建文档服务实例
                 let service = PlaceholderService::new(&metadata.name);
-                Ok(Box::new(service))
+                Ok(Arc::new(service))
             }
             "auth" => {
                 // 创建认证服务实例
                 let service = PlaceholderService::new(&metadata.name);
-                Ok(Box::new(service))
+                Ok(Arc::new(service))
             }
             "hr" => {
                 // 创建人力资源服务实例
                 let service = PlaceholderService::new(&metadata.name);
-                Ok(Box::new(service))
+                Ok(Arc::new(service))
             }
             "ai" => {
                 // 创建AI服务实例
                 let service = PlaceholderService::new(&metadata.name);
-                Ok(Box::new(service))
+                Ok(Arc::new(service))
             }
             "calendar" => {
                 // 创建日历服务实例
                 let service = PlaceholderService::new(&metadata.name);
-                Ok(Box::new(service))
+                Ok(Arc::new(service))
             }
             "admin" => {
                 // 创建管理服务实例
                 let service = PlaceholderService::new(&metadata.name);
-                Ok(Box::new(service))
+                Ok(Arc::new(service))
             }
             "approval" => {
                 // 创建审批服务实例
                 let service = PlaceholderService::new(&metadata.name);
-                Ok(Box::new(service))
+                Ok(Arc::new(service))
             }
             "helpdesk" => {
                 // 创建帮助台服务实例
                 let service = PlaceholderService::new(&metadata.name);
-                Ok(Box::new(service))
+                Ok(Arc::new(service))
             }
             _ => Err(FactoryError::UnsupportedService {
                 name: metadata.name.clone(),
@@ -359,7 +342,7 @@ impl ServiceFactory for DefaultServiceFactory {
     fn check_dependencies(
         &self,
         metadata: &ServiceMetadata,
-        available_services: &HashMap<String, Box<dyn std::any::Any + Send + Sync>>,
+        available_services: &HashMap<String, Arc<dyn std::any::Any + Send + Sync>>,
     ) -> FactoryResult<()> {
         for dep in &metadata.dependencies {
             if !available_services.contains_key(dep) {
