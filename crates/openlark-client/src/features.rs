@@ -18,51 +18,9 @@ impl FeatureLoader {
         registry: &mut DefaultServiceRegistry,
     ) -> Result<()> {
         tracing::debug!("开始加载启用的服务");
-
-        // 注册核心层服务
-        self.register_core_services(registry)?;
-
-        // 注册专业层服务
-        self.register_professional_services(registry)?;
-
-        // 注册企业层服务
-        self.register_enterprise_services(registry)?;
+        crate::registry::bootstrap::register_compiled_services(registry)?;
 
         tracing::info!("所有启用的服务加载完成");
-        Ok(())
-    }
-
-    /// 注册核心层服务
-    fn register_core_services(&self, _registry: &mut DefaultServiceRegistry) -> Result<()> {
-        // #[cfg(feature = "auth")]  // auth 功能暂未启用
-        // {
-        //     tracing::debug!("注册认证服务");
-        //     let metadata = ServiceMetadata {
-        //         name: "auth".to_string(),
-        //         version: "1.0.0".to_string(),
-        //         description: Some("飞书认证服务，提供令牌管理、身份验证等功能".to_string()),
-        //         dependencies: vec![],
-        //         provides: vec!["token-management".to_string()],
-        //         status: ServiceStatus::Uninitialized,
-        //         priority: 1,
-        //     };
-        //     registry.register_service(metadata)?;
-        // }
-
-        Ok(())
-    }
-
-    /// 注册专业层服务
-    fn register_professional_services(&self, _registry: &mut DefaultServiceRegistry) -> Result<()> {
-        // 在这里添加专业层服务的注册逻辑
-        // 由于与 client.rs 中的逻辑重复，这里暂时简化
-        Ok(())
-    }
-
-    /// 注册企业层服务
-    fn register_enterprise_services(&self, _registry: &mut DefaultServiceRegistry) -> Result<()> {
-        // 在这里添加企业层服务的注册逻辑
-        // 由于与 client.rs 中的逻辑重复，这里暂时简化
         Ok(())
     }
 }
@@ -107,7 +65,7 @@ impl FeatureSet {
 
     /// 检查功能是否启用
     pub fn is_enabled(&self, feature: &str) -> bool {
-        self.enabled_features.contains(&feature.to_string())
+        self.enabled_features.iter().any(|f| f == feature)
     }
 
     /// 获取功能统计信息
