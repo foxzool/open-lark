@@ -1,4 +1,8 @@
-name: Quality
+name: Quality (Badge Status)
+
+# NOTE: 此工作流仅用于显示README中的质量徽章
+# 实际质量检查由 ci.yml、coverage.yml、security.yml、quality-gates.yml 执行
+# 此工作流作为轻量级状态镜像，避免重复运行昂贵的CI任务
 
 on:
   workflow_run:
@@ -11,61 +15,10 @@ permissions:
   contents: read
 
 jobs:
-  fmt:
-    name: Format Check
+  # 轻量级状态镜像 - 继承上游CI结果
+  quality-status:
+    name: Quality Status
     if: ${{ github.event.workflow_run.event == 'pull_request' || github.event.workflow_run.event == 'push' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Mirror CI result
-        run: |
-          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
-            echo "Upstream CI 运行失败，请查看 CI 工作流日志。"
-            exit 1
-          fi
-          echo "CI 通过，继承状态。"
-
-  clippy:
-    name: Clippy Lint
-    needs: fmt
-    runs-on: ubuntu-latest
-    steps:
-      - name: Mirror CI result
-        run: |
-          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
-            echo "Upstream CI 运行失败，请查看 CI 工作流日志。"
-            exit 1
-          fi
-          echo "CI 通过，继承状态。"
-
-  tests:
-    name: Tests
-    needs: clippy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Mirror CI result
-        run: |
-          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
-            echo "Upstream CI 运行失败，请查看 CI 工作流日志。"
-            exit 1
-          fi
-          echo "CI 通过，继承状态。"
-
-  coverage:
-    name: Coverage (llvm-cov)
-    needs: tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Mirror CI result
-        run: |
-          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
-            echo "Upstream CI 运行失败，请查看 CI 工作流日志。"
-            exit 1
-          fi
-          echo "CI 通过，继承状态。"
-
-  docs:
-    name: Docs Build
-    needs: coverage
     runs-on: ubuntu-latest
     steps:
       - name: Mirror CI result
