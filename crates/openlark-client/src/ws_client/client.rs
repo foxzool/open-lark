@@ -25,7 +25,6 @@ use url::Url;
 use super::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine};
 use openlark_core::{
     api::Response,
-    constants::FEISHU_BASE_URL,
     // event::dispatcher::EventDispatcherHandler, // TODO: 需要实现 event 模块
 };
 
@@ -320,8 +319,9 @@ impl LarkWsClient {
 
         let http_client = Client::builder().timeout(config.timeout).build()?;
 
+        let base_url = config.base_url.trim_end_matches('/');
         let req = http_client
-            .post(format!("{FEISHU_BASE_URL}/{END_POINT_URL}"))
+            .post(format!("{base_url}{END_POINT_URL}"))
             .header("locale", "zh")
             .json(&body)
             .send()

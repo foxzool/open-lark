@@ -1034,6 +1034,7 @@ mod tests {
         assert!(logs_contain("CSV data cannot be empty"));
     }
 
+    #[traced_test]
     #[test]
     fn test_init_tracing_functions() {
         // Note: These functions are hard to test in unit tests because they affect global state
