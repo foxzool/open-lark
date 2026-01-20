@@ -92,18 +92,23 @@ jobs:
             audit-results.json
           retention-days: 30
 
-      # Fail job only on high/critical vulnerabilities
+      # Enhanced security check: fail on high/critical, warn on medium
       - name: Check for critical vulnerabilities
         run: |
           if [ -f audit-results.json ]; then
-            # Count only critical and high severity vulnerabilities
-            CRITICAL_COUNT=$(cat audit-results.json | jq '[.vulnerabilities[]? | select(.advisory.severity == "Critical" or .advisory.severity == "High")] | length' 2>/dev/null || echo "0")
+            # Count by severity level
+            CRITICAL_COUNT=$(cat audit-results.json | jq '[.vulnerabilities[]? | select(.advisory.severity == "Critical")] | length' 2>/dev/null || echo "0")
+            HIGH_COUNT=$(cat audit-results.json | jq '[.vulnerabilities[]? | select(.advisory.severity == "High")] | length' 2>/dev/null || echo "0")
+            MEDIUM_COUNT=$(cat audit-results.json | jq '[.vulnerabilities[]? | select(.advisory.severity == "Medium")] | length' 2>/dev/null || echo "0")
 
-            if [ "$CRITICAL_COUNT" -gt "0" ]; then
-              echo "❌ Found $CRITICAL_COUNT critical/high security vulnerabilities"
+            if [ "$CRITICAL_COUNT" -gt "0" ] || [ "$HIGH_COUNT" -gt "0" ]; then
+              echo "❌ Found $CRITICAL_COUNT critical and $HIGH_COUNT high security vulnerabilities"
               echo "Please review and update vulnerable dependencies"
               exit 1
+            elif [ "$MEDIUM_COUNT" -gt "0" ]; then
+              echo "⚠️  Found $MEDIUM_COUNT medium security vulnerabilities"
+              echo "Recommendation: Review and update vulnerable dependencies soon"
             else
-              echo "✅ No critical or high security vulnerabilities found"
+              echo "✅ No critical, high, or medium security vulnerabilities found"
             fi
           fi

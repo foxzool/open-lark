@@ -13,7 +13,7 @@ env:
   CARGO_TERM_COLOR: always
   CARGO_TOOLCHAIN: stable
   CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
-  MIN_COVERAGE: "25.0"
+  MIN_COVERAGE: "60.0"
 
 jobs:
   coverage:
