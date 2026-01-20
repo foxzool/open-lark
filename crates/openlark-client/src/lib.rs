@@ -227,6 +227,9 @@ pub mod registry;
 pub mod traits;
 pub mod types;
 
+#[cfg(test)]
+mod test_utils;
+
 // meta.Project 维度的 API 调用链（数据源：api_list_export.csv）
 // CardKit 由 openlark-cardkit 提供链式调用；openlark-client 仅负责挂载到 Client 上。
 

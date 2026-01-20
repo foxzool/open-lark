@@ -97,56 +97,57 @@ impl Config {
     ///
     /// 只设置存在且非空的环境变量
     pub fn load_from_env(&mut self) {
-        if let Ok(app_id) = std::env::var("OPENLARK_APP_ID") {
-            if !app_id.is_empty() {
-                self.app_id = app_id;
-            }
+        for (key, value) in std::env::vars() {
+            self.apply_env_var(&key, &value);
         }
+    }
 
-        if let Ok(app_secret) = std::env::var("OPENLARK_APP_SECRET") {
-            if !app_secret.is_empty() {
-                self.app_secret = app_secret;
+    fn apply_env_var(&mut self, key: &str, value: &str) {
+        match key {
+            "OPENLARK_APP_ID" => {
+                if !value.is_empty() {
+                    self.app_id = value.to_string();
+                }
             }
-        }
-
-        if let Ok(app_type) = std::env::var("OPENLARK_APP_TYPE") {
-            let v = app_type.trim().to_lowercase();
-            match v.as_str() {
-                "self_build" | "selfbuild" | "self" => self.app_type = AppType::SelfBuild,
-                "marketplace" | "store" => self.app_type = AppType::Marketplace,
-                _ => {}
+            "OPENLARK_APP_SECRET" => {
+                if !value.is_empty() {
+                    self.app_secret = value.to_string();
+                }
             }
-        }
-
-        if let Ok(base_url) = std::env::var("OPENLARK_BASE_URL") {
-            if !base_url.is_empty() {
-                self.base_url = base_url;
+            "OPENLARK_APP_TYPE" => {
+                let v = value.trim().to_lowercase();
+                match v.as_str() {
+                    "self_build" | "selfbuild" | "self" => self.app_type = AppType::SelfBuild,
+                    "marketplace" | "store" => self.app_type = AppType::Marketplace,
+                    _ => {}
+                }
             }
-        }
-
-        if let Ok(setting) = std::env::var("OPENLARK_ENABLE_TOKEN_CACHE") {
-            if !setting.trim().is_empty() {
-                let s = setting.trim().to_lowercase();
-                self.enable_token_cache = !(s.starts_with('f') || s == "0");
+            "OPENLARK_BASE_URL" => {
+                if !value.is_empty() {
+                    self.base_url = value.to_string();
+                }
             }
-        }
-
-        // 可选的环境变量
-        if let Ok(timeout_str) = std::env::var("OPENLARK_TIMEOUT") {
-            if let Ok(timeout_secs) = timeout_str.parse::<u64>() {
-                self.timeout = Duration::from_secs(timeout_secs);
+            "OPENLARK_ENABLE_TOKEN_CACHE" => {
+                let s = value.trim().to_lowercase();
+                if !s.is_empty() {
+                    self.enable_token_cache = !(s.starts_with('f') || s == "0");
+                }
             }
-        }
-
-        if let Ok(retry_str) = std::env::var("OPENLARK_RETRY_COUNT") {
-            if let Ok(retry_count) = retry_str.parse::<u32>() {
-                self.retry_count = retry_count;
+            "OPENLARK_TIMEOUT" => {
+                if let Ok(timeout_secs) = value.parse::<u64>() {
+                    self.timeout = Duration::from_secs(timeout_secs);
+                }
             }
-        }
-
-        // 日志开关（默认启用，只有设置为"false"时才禁用）
-        if let Ok(log_setting) = std::env::var("OPENLARK_ENABLE_LOG") {
-            self.enable_log = !log_setting.to_lowercase().starts_with('f');
+            "OPENLARK_RETRY_COUNT" => {
+                if let Ok(retry_count) = value.parse::<u32>() {
+                    self.retry_count = retry_count;
+                }
+            }
+            // 日志开关（默认启用，只有设置为"false"时才禁用）
+            "OPENLARK_ENABLE_LOG" => {
+                self.enable_log = !value.to_lowercase().starts_with('f');
+            }
+            _ => {}
         }
     }
 
@@ -438,54 +439,9 @@ impl std::fmt::Display for ConfigSummary {
 impl From<std::env::Vars> for Config {
     fn from(env_vars: std::env::Vars) -> Self {
         let mut config = Config::default();
-
-        // 解析环境变量
-        let env_map: std::collections::HashMap<String, String> = env_vars.collect();
-
-        if let Some(app_id) = env_map.get("OPENLARK_APP_ID") {
-            config.app_id = app_id.clone();
+        for (key, value) in env_vars {
+            config.apply_env_var(&key, &value);
         }
-
-        if let Some(app_secret) = env_map.get("OPENLARK_APP_SECRET") {
-            config.app_secret = app_secret.clone();
-        }
-
-        if let Some(base_url) = env_map.get("OPENLARK_BASE_URL") {
-            config.base_url = base_url.clone();
-        }
-
-        if let Some(app_type) = env_map.get("OPENLARK_APP_TYPE") {
-            let v = app_type.trim().to_lowercase();
-            match v.as_str() {
-                "self_build" | "selfbuild" | "self" => config.app_type = AppType::SelfBuild,
-                "marketplace" | "store" => config.app_type = AppType::Marketplace,
-                _ => {}
-            }
-        }
-
-        if let Some(enable) = env_map.get("OPENLARK_ENABLE_TOKEN_CACHE") {
-            let s = enable.trim().to_lowercase();
-            if !s.is_empty() {
-                config.enable_token_cache = !(s.starts_with('f') || s == "0");
-            }
-        }
-
-        if let Some(timeout_str) = env_map.get("OPENLARK_TIMEOUT") {
-            if let Ok(timeout_secs) = timeout_str.parse::<u64>() {
-                config.timeout = Duration::from_secs(timeout_secs);
-            }
-        }
-
-        if let Some(retry_str) = env_map.get("OPENLARK_RETRY_COUNT") {
-            if let Ok(retry_count) = retry_str.parse::<u32>() {
-                config.retry_count = retry_count;
-            }
-        }
-
-        if let Some(log_setting) = env_map.get("OPENLARK_ENABLE_LOG") {
-            config.enable_log = !log_setting.to_lowercase().starts_with('f');
-        }
-
         config
     }
 }
@@ -530,35 +486,29 @@ mod tests {
 
     #[test]
     fn test_config_from_env() {
-        // 设置环境变量
-        std::env::set_var("OPENLARK_APP_ID", "test_app_id");
-        std::env::set_var("OPENLARK_APP_SECRET", "test_app_secret");
-        std::env::set_var("OPENLARK_APP_TYPE", "marketplace");
-        std::env::set_var("OPENLARK_BASE_URL", "https://test.feishu.cn");
-        std::env::set_var("OPENLARK_ENABLE_TOKEN_CACHE", "false");
-        std::env::set_var("OPENLARK_TIMEOUT", "60");
-        std::env::set_var("OPENLARK_RETRY_COUNT", "5");
-        std::env::set_var("OPENLARK_ENABLE_LOG", "false");
-
-        let config = Config::from_env();
-        assert_eq!(config.app_id, "test_app_id");
-        assert_eq!(config.app_secret, "test_app_secret");
-        assert_eq!(config.app_type, AppType::Marketplace);
-        assert_eq!(config.base_url, "https://test.feishu.cn");
-        assert!(!config.enable_token_cache);
-        assert_eq!(config.timeout, Duration::from_secs(60));
-        assert_eq!(config.retry_count, 5);
-        assert!(!config.enable_log);
-
-        // 清理环境变量
-        std::env::remove_var("OPENLARK_APP_ID");
-        std::env::remove_var("OPENLARK_APP_SECRET");
-        std::env::remove_var("OPENLARK_APP_TYPE");
-        std::env::remove_var("OPENLARK_BASE_URL");
-        std::env::remove_var("OPENLARK_ENABLE_TOKEN_CACHE");
-        std::env::remove_var("OPENLARK_TIMEOUT");
-        std::env::remove_var("OPENLARK_RETRY_COUNT");
-        std::env::remove_var("OPENLARK_ENABLE_LOG");
+        crate::test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", Some("test_app_id")),
+                ("OPENLARK_APP_SECRET", Some("test_app_secret")),
+                ("OPENLARK_APP_TYPE", Some("marketplace")),
+                ("OPENLARK_BASE_URL", Some("https://test.feishu.cn")),
+                ("OPENLARK_ENABLE_TOKEN_CACHE", Some("false")),
+                ("OPENLARK_TIMEOUT", Some("60")),
+                ("OPENLARK_RETRY_COUNT", Some("5")),
+                ("OPENLARK_ENABLE_LOG", Some("false")),
+            ],
+            || {
+                let config = Config::from_env();
+                assert_eq!(config.app_id, "test_app_id");
+                assert_eq!(config.app_secret, "test_app_secret");
+                assert_eq!(config.app_type, AppType::Marketplace);
+                assert_eq!(config.base_url, "https://test.feishu.cn");
+                assert!(!config.enable_token_cache);
+                assert_eq!(config.timeout, Duration::from_secs(60));
+                assert_eq!(config.retry_count, 5);
+                assert!(!config.enable_log);
+            },
+        );
     }
 
     #[test]
