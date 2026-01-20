@@ -39,7 +39,7 @@ impl UpdateBuildingRequest {
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
         validate_required!(self.building_id, "building_id 不能为空");
 
-        let api_endpoint = MeetingRoomApi::BuildingUpdate;
+        let api_endpoint = MeetingRoomApi::BuildingPatch(self.building_id.clone());
         let req: ApiRequest<serde_json::Value> =
             ApiRequest::post(api_endpoint.to_url()).body(serialize_params(&body, "更新建筑物")?);
 
