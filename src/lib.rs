@@ -40,3 +40,6 @@ pub use openlark_application;
 
 #[cfg(feature = "openlark-security")]
 pub use openlark_security;
+
+#[cfg(feature = "task")]
+pub use openlark_task;
