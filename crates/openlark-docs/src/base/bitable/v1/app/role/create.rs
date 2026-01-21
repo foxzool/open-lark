@@ -63,9 +63,12 @@ impl CreateAppRoleRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateAppRoleResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "应用令牌不能为空");
         validate_required!(self.role_name.trim(), "角色名称不能为空");
         validate_required!(self.table_roles, "表格角色列表不能为空");
+
+        // === 边界值验证 ===
         if self.table_roles.len() > 100 {
             return Err(openlark_core::error::validation_error(
                 "table_roles",
@@ -117,5 +120,54 @@ pub struct CreateAppRoleResponse {
 impl ApiResponseTrait for CreateAppRoleResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let request = CreateAppRoleRequest::new(config)
+            .app_token("".to_string())
+            .role_name("角色名".to_string())
+            .table_roles(vec![]);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_empty_role_name() {
+        let config = Config::default();
+        let request = CreateAppRoleRequest::new(config)
+            .app_token("app_token".to_string())
+            .role_name("".to_string())
+            .table_roles(vec![]);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_empty_table_roles() {
+        let config = Config::default();
+        let request = CreateAppRoleRequest::new(config)
+            .app_token("app_token".to_string())
+            .role_name("角色名".to_string())
+            .table_roles(vec![]);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(
+            CreateAppRoleResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

@@ -73,6 +73,7 @@ impl BatchCreatePermissionMemberRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchCreatePermissionMemberResponse> {
+        // === 必填字段验证 ===
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -85,6 +86,14 @@ impl BatchCreatePermissionMemberRequest {
                 "file_type 不能为空",
             ));
         }
+        if self.members.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "members",
+                "members 不能为空",
+            ));
+        }
+
+        // === 枚举值验证 ===
         match self.file_type.as_str() {
             "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "folder" | "mindnote"
             | "minutes" | "slides" => {}
@@ -95,12 +104,8 @@ impl BatchCreatePermissionMemberRequest {
                 ));
             }
         }
-        if self.members.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "members",
-                "members 不能为空",
-            ));
-        }
+
+        // === 成员列表验证 ===
         for member in &self.members {
             if member.member_type.is_empty() {
                 return Err(openlark_core::error::validation_error(
@@ -139,6 +144,8 @@ impl BatchCreatePermissionMemberRequest {
                     ));
                 }
             }
+
+            // === 业务规则验证 ===
             if self.file_type == "minutes" && member.perm == "full_access" {
                 return Err(openlark_core::error::validation_error(
                     "members.perm",
@@ -238,5 +245,89 @@ mod tests {
             BatchCreatePermissionMemberResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    #[test]
+    fn test_empty_token() {
+        let config = Config::default();
+        let member = PermissionMember::new("openid", "ou_123", "view");
+        let request =
+            BatchCreatePermissionMemberRequest::new(config, "", "docx", vec![member]);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("token"));
+    }
+
+    #[test]
+    fn test_empty_file_type() {
+        let config = Config::default();
+        let member = PermissionMember::new("openid", "ou_123", "view");
+        let request =
+            BatchCreatePermissionMemberRequest::new(config, "file_token", "", vec![member]);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("file_type"));
+    }
+
+    #[test]
+    fn test_empty_members() {
+        let config = Config::default();
+        let request =
+            BatchCreatePermissionMemberRequest::new(config, "file_token", "docx", vec![]);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("members"));
+    }
+
+    #[test]
+    fn test_invalid_member_type() {
+        let config = Config::default();
+        let mut member = PermissionMember::new("openid", "ou_123", "view");
+        member.member_type = "invalid_type".to_string();
+        let request =
+            BatchCreatePermissionMemberRequest::new(config, "file_token", "docx", vec![member]);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("member_type"));
+    }
+
+    #[test]
+    fn test_invalid_perm() {
+        let config = Config::default();
+        let mut member = PermissionMember::new("openid", "ou_123", "invalid_perm");
+        let request =
+            BatchCreatePermissionMemberRequest::new(config, "file_token", "docx", vec![member]);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("perm"));
+    }
+
+    #[test]
+    fn test_minutes_with_full_access() {
+        let config = Config::default();
+        let member = PermissionMember::new("openid", "ou_123", "full_access");
+        let request =
+            BatchCreatePermissionMemberRequest::new(config, "file_token", "minutes", vec![member]);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("full_access"));
     }
 }

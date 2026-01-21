@@ -31,6 +31,45 @@ impl ApiResponseTrait for DeleteTableResponse {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let request = DeleteTableRequest::new(config)
+            .app_token("".to_string())
+            .table_id("table_id".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("app_token"));
+    }
+
+    #[test]
+    fn test_empty_table_id() {
+        let config = Config::default();
+        let request = DeleteTableRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("table_id"));
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(
+            DeleteTableResponse::data_format(),
+            ResponseFormat::Data
+        );
+    }
+}
+
 impl DeleteTableRequest {
     /// 创建删除数据表请求
     pub fn new(config: Config) -> Self {
@@ -63,9 +102,8 @@ impl DeleteTableRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteTableResponse> {
-        // 参数验证
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "app_token");
-
         validate_required!(self.table_id.trim(), "table_id");
 
         // 🚀 使用新的enum+builder系统生成API端点

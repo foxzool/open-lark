@@ -86,3 +86,58 @@ impl ApiResponseTrait for GetFormResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let request = GetFormRequest::new(config)
+            .app_token("".to_string())
+            .table_id("table_id".to_string())
+            .form_id("form_id".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("app_token"));
+    }
+
+    #[test]
+    fn test_empty_table_id() {
+        let config = Config::default();
+        let request = GetFormRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("".to_string())
+            .form_id("form_id".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("table_id"));
+    }
+
+    #[test]
+    fn test_empty_form_id() {
+        let config = Config::default();
+        let request = GetFormRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .form_id("".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("form_id"));
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(
+            GetFormResponse::data_format(),
+            ResponseFormat::Data
+        );
+    }
+}
