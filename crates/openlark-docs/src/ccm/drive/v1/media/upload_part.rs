@@ -15,6 +15,34 @@ use serde::{Deserialize, Serialize};
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 分片上传素材-上传分片请求
+///
+/// 根据预上传接口返回的 upload_id 和分片策略上传对应的素材分片。
+///
+/// # 字段说明
+///
+/// - `upload_id`: 分片上传事务的 ID，由预上传接口返回
+/// - `seq`: 块号，从 0 开始计数，不能为负数
+/// - `size`: 块大小（字节），必须在 1~4194304 之间
+/// - `checksum`: 素材文件的 Adler-32 校验和（可选）
+/// - `file`: 素材文件分片的二进制内容，长度必须与 size 一致
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_docs::ccm::drive::v1::media::upload_part::UploadPartMediaRequest;
+/// use openlark_core::Config;
+///
+/// let config = Config::default();
+/// let file_data = vec![0u8; 1024];
+/// let request = UploadPartMediaRequest::new(
+///     config,
+///     "upload_id_xyz",
+///     0, // 第一片
+///     1024,
+///     file_data
+/// )
+/// .checksum("3248270248");
+/// ```
 #[derive(Debug)]
 pub struct UploadPartMediaRequest {
     config: Config,
@@ -63,12 +91,15 @@ impl UploadPartMediaRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UploadPartMediaResponse> {
+        // === 必填字段验证 ===
         if self.upload_id.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "upload_id",
                 "upload_id 不能为空",
             ));
         }
+
+        // === 业务规则验证 ===
         if self.seq < 0 {
             return Err(openlark_core::error::validation_error(
                 "seq",
@@ -152,5 +183,76 @@ mod tests {
     #[test]
     fn test_response_trait() {
         assert_eq!(UploadPartMediaResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_empty_upload_id() {
+        let config = Config::default();
+        let request = UploadPartMediaRequest::new(config, "", 0, 1024, vec![0; 1024]);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("upload_id"));
+    }
+
+    #[test]
+    fn test_negative_seq() {
+        let config = Config::default();
+        let request = UploadPartMediaRequest::new(config, "upload_id", -1, 1024, vec![0; 1024]);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("seq"));
+    }
+
+    #[test]
+    fn test_invalid_size_zero() {
+        let config = Config::default();
+        let request = UploadPartMediaRequest::new(config, "upload_id", 0, 0, vec![]);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("size"));
+    }
+
+    #[test]
+    fn test_invalid_size_too_large() {
+        let config = Config::default();
+        let request = UploadPartMediaRequest::new(
+            config,
+            "upload_id",
+            0,
+            4 * 1024 * 1024 + 1,
+            vec![0; 4 * 1024 * 1024 + 1],
+        );
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("4194304"));
+    }
+
+    #[test]
+    fn test_size_mismatch() {
+        let config = Config::default();
+        let request = UploadPartMediaRequest::new(config, "upload_id", 0, 1024, vec![0; 512]);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("一致"));
     }
 }
