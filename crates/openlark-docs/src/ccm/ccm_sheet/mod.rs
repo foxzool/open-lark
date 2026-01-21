@@ -88,13 +88,9 @@ impl CcmSheetV2 {
 /// 数据模型定义
 pub mod models;
 
-/// Old版本API (v2) - 已废弃，使用新架构
-pub mod old;
-
+/// Old版本API已废弃并删除，使用新架构
 /// V2版本API
 pub mod v2;
 
 // 重新导出主要类型
 pub use models::*;
-#[allow(deprecated)]
-pub use old::v2::CcmSheetOldV2;

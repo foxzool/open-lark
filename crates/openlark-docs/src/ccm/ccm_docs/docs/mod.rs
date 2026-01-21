@@ -35,21 +35,23 @@ impl DocsService {
         Self { config }
     }
 
-    /// 搜索云文档
-    #[allow(deprecated)]
-    pub fn search_object(
-        &self,
-    ) -> crate::ccm::ccm_docs::old::default::docs_api::search::object::SearchObjectRequest {
-        crate::ccm::ccm_docs::old::default::docs_api::search::object::SearchObjectRequest::new(
-            self.config.clone(),
-        )
-    }
-
-    /// 获取元数据
-    #[allow(deprecated)]
-    pub fn meta(&self) -> crate::ccm::ccm_docs::old::default::docs_api::meta::GetMetaRequest {
-        crate::ccm::ccm_docs::old::default::docs_api::meta::GetMetaRequest::new(self.config.clone())
-    }
+    // TODO: search_object 和 meta 方法依赖已废弃的 old 模块
+    // 需要按照新规范重新实现这些 API
+    // /// 搜索云文档
+    // #[allow(deprecated)]
+    // pub fn search_object(
+    //     &self,
+    // ) -> crate::ccm::ccm_docs::old::default::docs_api::search::object::SearchObjectRequest {
+    //     crate::ccm::ccm_docs::old::default::docs_api::search::object::SearchObjectRequest::new(
+    //         self.config.clone(),
+    //     )
+    // }
+    //
+    // /// 获取元数据
+    // #[allow(deprecated)]
+    // pub fn meta(&self) -> crate::ccm::ccm_docs::old::default::docs_api::meta::GetMetaRequest {
+    //     crate::ccm::ccm_docs::old::default::docs_api::meta::GetMetaRequest::new(self.config.clone())
+    // }
 }
 
 impl openlark_core::trait_system::service::Service for DocsService {

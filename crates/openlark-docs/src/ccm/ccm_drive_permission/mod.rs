@@ -15,8 +15,8 @@ use openlark_core::config::Config;
 pub use permission::*;
 
 // 子模块
-pub mod old;
 pub mod permission;
+// old 模块已废弃并删除
 
 /// CCM Drive Permission 服务
 ///

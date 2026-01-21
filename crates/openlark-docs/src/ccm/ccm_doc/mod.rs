@@ -30,5 +30,4 @@ impl CcmDocService {
     }
 }
 
-// old 模块已废弃，使用新架构
-pub mod old;
+// old 模块已废弃并删除，使用新架构
