@@ -84,6 +84,7 @@ impl CreateDraftRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CreateDraftResp> {
+        // ===== 参数校验 =====
         validate_required!(self.req.main_keys, "main_keys 不能为空");
         if self.req.main_keys.len() > 1 {
             return Err(openlark_core::error::validation_error(
@@ -122,6 +123,7 @@ impl CreateDraftRequest {
             ));
         }
 
+        // ===== 构建请求 =====
         let mut api_request: ApiRequest<CreateDraftResp> =
             ApiRequest::post(&BaikeApiV1::DraftCreate.to_url())
                 .body(serde_json::to_value(&self.req)?);
@@ -129,10 +131,110 @@ impl CreateDraftRequest {
             api_request = api_request.query("user_id_type", user_id_type.as_str());
         }
 
+        // ===== 发送请求并返回结果 =====
         let response: Response<CreateDraftResp> =
             Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::baike::baike::v1::models::{Term, UserIdType};
+
+    #[test]
+    fn test_create_draft_request_builder() {
+        let config = Config::default();
+        let req = CreateDraftReq {
+            main_keys: vec![Term {
+                text: "测试词条".to_string(),
+                key: "test_key".to_string(),
+            }],
+            description: Some("词条描述".to_string()),
+            ..Default::default()
+        };
+        let request = CreateDraftRequest::new(config, req).user_id_type(UserIdType::OpenId);
+
+        assert_eq!(request.req.main_keys.len(), 1);
+        assert_eq!(request.req.description, Some("词条描述".to_string()));
+        assert!(request.user_id_type.is_some());
+    }
+
+    #[test]
+    fn test_create_draft_request_with_id() {
+        let config = Config::default();
+        let req = CreateDraftReq {
+            id: Some("entity_123".to_string()),
+            main_keys: vec![Term {
+                text: "更新词条".to_string(),
+                key: "update_key".to_string(),
+            }],
+            rich_text: Some("<p>富文本内容</p>".to_string()),
+            ..Default::default()
+        };
+        let request = CreateDraftRequest::new(config, req);
+
+        assert_eq!(request.req.id, Some("entity_123".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_create_draft_request_validation() {
+        let config = Config::default();
+
+        // 测试 main_keys 为空
+        let req = CreateDraftReq {
+            main_keys: vec![],
+            ..Default::default()
+        };
+        let request = CreateDraftRequest::new(config.clone(), req);
+        assert!(request.execute_with_options(RequestOption::default()).await.is_err());
+
+        // 测试 main_keys 超过 1 个
+        let req2 = CreateDraftReq {
+            main_keys: vec![
+                Term {
+                    text: "词条1".to_string(),
+                    key: "key1".to_string(),
+                },
+                Term {
+                    text: "词条2".to_string(),
+                    key: "key2".to_string(),
+                },
+            ],
+            description: Some("描述".to_string()),
+            ..Default::default()
+        };
+        let request2 = CreateDraftRequest::new(config.clone(), req2);
+        assert!(request2.execute_with_options(RequestOption::default()).await.is_err());
+
+        // 测试 description 和 rich_text 都为空
+        let req3 = CreateDraftReq {
+            main_keys: vec![Term {
+                text: "测试词条".to_string(),
+                key: "test_key".to_string(),
+            }],
+            description: None,
+            rich_text: None,
+            ..Default::default()
+        };
+        let request3 = CreateDraftRequest::new(config, req3);
+        assert!(request3.execute_with_options(RequestOption::default()).await.is_err());
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(CreateDraftResp::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_create_draft_req_default() {
+        let req = CreateDraftReq::default();
+        assert!(req.main_keys.is_empty());
+        assert!(req.aliases.is_none());
+        assert!(req.description.is_none());
+        assert!(req.rich_text.is_none());
     }
 }
