@@ -14,6 +14,38 @@ use serde::{Deserialize, Serialize};
 use super::models::Record;
 
 /// 列出记录请求
+///
+/// 用于获取多维表格数据表中的记录列表，支持分页、筛选、排序等功能。
+///
+/// # 字段说明
+///
+/// - `app_token`: 多维表格的 app_token，不能为空
+/// - `table_id`: 数据表的 table_id，不能为空
+/// - `page_token`: 分页标记，用于获取下一页数据
+/// - `page_size`: 分页大小，最大 500
+/// - `view_id`: 视图的唯一标识符
+/// - `filter`: 筛选参数（公式字符串）
+/// - `sort`: 排序参数（JSON 数组字符串）
+/// - `field_names`: 字段名称（JSON 数组字符串）
+/// - `text_field_as_array`: 多行文本字段数据是否以数组形式返回
+/// - `user_id_type`: 用户 ID 类型
+/// - `display_formula_ref`: 公式和查找引用字段是否以被引用字段格式返回
+/// - `automatic_fields`: 是否返回自动计算字段
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_docs::base::bitable::v1::app::table::record::ListRecordRequest;
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let request = ListRecordRequest::new(config)
+///     .app_token("app_token")
+///     .table_id("table_id")
+///     .page_size(100)
+///     .user_id_type("open_id");
+/// let response = request.execute().await?;
+/// ```
 #[derive(Debug, Clone)]
 pub struct ListRecordRequest {
     /// 配置信息
@@ -146,10 +178,11 @@ impl ListRecordRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListRecordResponse> {
-        // 参数验证
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "应用token不能为空");
         validate_required!(self.table_id.trim(), "数据表ID不能为空");
 
+        // === 业务规则验证 ===
         // 验证分页大小
         if let Some(page_size) = self.page_size {
             if page_size <= 0 {
@@ -228,5 +261,118 @@ pub struct ListRecordResponse {
 impl ApiResponseTrait for ListRecordResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_record_request_builder() {
+        let config = Config::default();
+        let request = ListRecordRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .page_size(100)
+            .user_id_type("open_id".to_string());
+
+        assert_eq!(request.app_token, "app_token");
+        assert_eq!(request.table_id, "table_id");
+        assert_eq!(request.page_size, Some(100));
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_page_size_auto_clamp() {
+        let config = Config::default();
+        let request = ListRecordRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .page_size(600); // 超过最大值500
+        assert_eq!(request.page_size, Some(500)); // 自动限制为500
+    }
+
+    #[test]
+    fn test_optional_fields() {
+        let config = Config::default();
+        let request = ListRecordRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .page_token("page_token".to_string())
+            .view_id("view_id".to_string())
+            .filter("status == 'active'")
+            .sort(vec!["field1".to_string(), "field2".to_string()])
+            .field_names(vec!["field1".to_string(), "field2".to_string()])
+            .text_field_as_array(true)
+            .display_formula_ref(true)
+            .automatic_fields(true);
+
+        assert_eq!(request.page_token, Some("page_token".to_string()));
+        assert_eq!(request.view_id, Some("view_id".to_string()));
+        assert_eq!(request.filter, Some("status == 'active'".to_string()));
+        assert_eq!(request.sort, Some(vec!["field1".to_string(), "field2".to_string()]));
+        assert_eq!(request.field_names, Some(vec!["field1".to_string(), "field2".to_string()]));
+        assert_eq!(request.text_field_as_array, Some(true));
+        assert_eq!(request.display_formula_ref, Some(true));
+        assert_eq!(request.automatic_fields, Some(true));
+    }
+
+    #[test]
+    fn test_empty_app_token_validation() {
+        let config = Config::default();
+        let request = ListRecordRequest::new(config)
+            .table_id("table_id".to_string());
+        assert_eq!(request.app_token, "");
+    }
+
+    #[test]
+    fn test_empty_table_id_validation() {
+        let config = Config::default();
+        let request = ListRecordRequest::new(config)
+            .app_token("app_token".to_string());
+        assert_eq!(request.table_id, "");
+    }
+
+    #[test]
+    fn test_invalid_page_size() {
+        let config = Config::default();
+        let request = ListRecordRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .page_size(0);
+        assert_eq!(request.page_size, Some(0));
+    }
+
+    #[test]
+    fn test_negative_page_size() {
+        let config = Config::default();
+        let request = ListRecordRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .page_size(-10);
+        assert_eq!(request.page_size, Some(-10));
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(
+            ListRecordResponse::data_format(),
+            ResponseFormat::Data
+        );
+    }
+
+    #[test]
+    fn test_response_fields() {
+        let response = ListRecordResponse {
+            has_more: true,
+            page_token: Some("next_page".to_string()),
+            total: 100,
+            items: vec![],
+        };
+        assert_eq!(response.has_more, true);
+        assert_eq!(response.page_token, Some("next_page".to_string()));
+        assert_eq!(response.total, 100);
+        assert_eq!(response.items.len(), 0);
     }
 }
