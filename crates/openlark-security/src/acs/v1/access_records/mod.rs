@@ -326,3 +326,125 @@ async fn get_app_token(_config: &crate::models::SecurityConfig) -> crate::Securi
     // TODO: 集成 openlark-auth 服务
     Ok("placeholder_app_token".to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<crate::models::SecurityConfig> {
+        Arc::new(crate::models::SecurityConfig {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+        })
+    }
+
+    #[test]
+    fn test_access_records_service_creation() {
+        let config = create_test_config();
+        let service = AccessRecordsService::new(config);
+        assert_eq!(service.config.app_id, "test_app_id");
+    }
+
+    #[test]
+    fn test_list_access_records_builder_defaults() {
+        let config = create_test_config();
+        let service = AccessRecordsService::new(config);
+        let builder = service.list();
+        assert_eq!(builder.page_size, Some(20));
+        assert_eq!(builder.page_token, None);
+        assert_eq!(builder.sort_field, Some("access_time".to_string()));
+        assert_eq!(builder.sort_direction, Some("desc".to_string()));
+    }
+
+    #[test]
+    fn test_list_access_records_builder_with_filters() {
+        let config = create_test_config();
+        let service = AccessRecordsService::new(config);
+        let builder = service.list()
+            .user_id_filter("user_123")
+            .device_id_filter("device_456")
+            .access_result_filter(crate::models::acs::AccessResult::Success)
+            .page_size(50);
+
+        assert_eq!(builder.user_id_filter, Some("user_123".to_string()));
+        assert_eq!(builder.device_id_filter, Some("device_456".to_string()));
+        assert!(builder.access_result_filter.is_some());
+        assert_eq!(builder.page_size, Some(50));
+    }
+
+    #[test]
+    fn test_list_access_records_builder_time_range() {
+        let config = create_test_config();
+        let service = AccessRecordsService::new(config);
+        let builder = service.list()
+            .time_range(1000000, 2000000);
+
+        assert_eq!(builder.start_time, Some(1000000));
+        assert_eq!(builder.end_time, Some(2000000));
+    }
+
+    #[test]
+    fn test_list_access_records_builder_last_days() {
+        let config = create_test_config();
+        let service = AccessRecordsService::new(config);
+        let builder = service.list().last_days(7);
+
+        assert!(builder.start_time.is_some());
+        assert!(builder.end_time.is_some());
+        assert!(builder.end_time.unwrap() > builder.start_time.unwrap());
+    }
+
+    #[test]
+    fn test_list_access_records_builder_last_hours() {
+        let config = create_test_config();
+        let service = AccessRecordsService::new(config);
+        let builder = service.list().last_hours(24);
+
+        assert!(builder.start_time.is_some());
+        assert!(builder.end_time.is_some());
+        assert!(builder.end_time.unwrap() > builder.start_time.unwrap());
+    }
+
+    #[test]
+    fn test_list_access_records_sort_methods() {
+        let config = create_test_config();
+        let service = AccessRecordsService::new(config);
+
+        // 测试时间升序
+        let builder_asc = service.list().sort_by_time_asc();
+        assert_eq!(builder_asc.sort_field, Some("access_time".to_string()));
+        assert_eq!(builder_asc.sort_direction, Some("asc".to_string()));
+
+        // 测试时间降序
+        let builder_desc = service.list().sort_by_time_desc();
+        assert_eq!(builder_desc.sort_field, Some("access_time".to_string()));
+        assert_eq!(builder_desc.sort_direction, Some("desc".to_string()));
+    }
+
+    #[test]
+    fn test_get_access_photo_builder() {
+        let config = create_test_config();
+        let service = AccessRecordsService::new(config);
+        let builder = service.get_access_photo().access_record_id("record_123");
+        assert_eq!(builder.access_record_id, "record_123");
+    }
+
+    #[test]
+    fn test_access_result_variants() {
+        // 测试不同的访问结果
+        let success = crate::models::acs::AccessResult::Success;
+        let failed = crate::models::acs::AccessResult::Failed;
+        let timeout = crate::models::acs::AccessResult::Timeout;
+
+        // 验证可以设置过滤
+        let config = create_test_config();
+        let service = AccessRecordsService::new(config);
+
+        let _ = service.list().access_result_filter(success);
+        let _ = service.list().access_result_filter(failed);
+        let _ = service.list().access_result_filter(timeout);
+    }
+}
+

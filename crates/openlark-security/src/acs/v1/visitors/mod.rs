@@ -223,3 +223,93 @@ async fn get_app_token(_config: &crate::models::SecurityConfig) -> crate::Securi
     // TODO: 集成 openlark-auth 服务
     Ok("placeholder_app_token".to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<crate::models::SecurityConfig> {
+        Arc::new(crate::models::SecurityConfig {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+        })
+    }
+
+    #[test]
+    fn test_visitors_service_creation() {
+        let config = create_test_config();
+        let service = VisitorsService::new(config);
+        assert_eq!(service.config.app_id, "test_app_id");
+    }
+
+    #[test]
+    fn test_create_visitor_builder() {
+        let config = create_test_config();
+        let service = VisitorsService::new(config);
+        let host_info = crate::models::acs::HostInfo {
+            user_id: "host_123".to_string(),
+            name: "张三".to_string(),
+            mobile: Some("13800138000".to_string()),
+        };
+        let builder = service.create()
+            .name("访客李四")
+            .mobile("13900139000")
+            .email("lisi@example.com".to_string())
+            .visit_reason("商务拜访".to_string())
+            .host_info(host_info)
+            .rule_ids(vec!["rule_1".to_string()])
+            .valid_from(1000000)
+            .valid_until(2000000);
+
+        assert_eq!(builder.name, "访客李四");
+        assert_eq!(builder.mobile, "13900139000");
+        assert_eq!(builder.email, Some("lisi@example.com".to_string()));
+        assert_eq!(builder.visit_reason, Some("商务拜访".to_string()));
+        assert!(builder.host_info.is_some());
+        assert_eq!(builder.rule_ids.len(), 1);
+        assert_eq!(builder.valid_from, 1000000);
+        assert_eq!(builder.valid_until, 2000000);
+    }
+
+    #[test]
+    fn test_create_visitor_builder_with_duration() {
+        let config = create_test_config();
+        let service = VisitorsService::new(config);
+        let builder = service.create()
+            .name("访客王五")
+            .mobile("13700137000")
+            .valid_duration_hours(8);
+
+        assert_eq!(builder.name, "访客王五");
+        assert_eq!(builder.mobile, "13700137000");
+        assert!(builder.valid_until > builder.valid_from);
+        assert!(builder.valid_until - builder.valid_from <= 8 * 3600);
+    }
+
+    #[test]
+    fn test_delete_visitor_builder() {
+        let config = create_test_config();
+        let service = VisitorsService::new(config);
+        let builder = service.delete().visitor_id("visitor_123");
+        assert_eq!(builder.visitor_id, "visitor_123");
+    }
+
+    #[test]
+    fn test_create_visitor_builder_defaults() {
+        let config = create_test_config();
+        let service = VisitorsService::new(config);
+        let builder = service.create();
+
+        assert_eq!(builder.name, String::new());
+        assert_eq!(builder.mobile, String::new());
+        assert!(builder.email.is_none());
+        assert!(builder.visit_reason.is_none());
+        assert!(builder.host_info.is_none());
+        assert!(builder.rule_ids.is_empty());
+        assert_eq!(builder.valid_from, 0);
+        assert_eq!(builder.valid_until, 0);
+    }
+}
+
