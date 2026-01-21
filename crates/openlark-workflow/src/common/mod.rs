@@ -1,6 +1,6 @@
 /// 通用模块
 ///
-/// 提供openlark-task项目中通用的工具、宏和类型定义。
+/// 提供openlark-workflow项目中通用的工具、宏和类型定义。
 pub mod api_endpoints;
 pub mod api_utils;
 

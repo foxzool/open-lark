@@ -6,7 +6,7 @@ authors.workspace = true
 license.workspace = true
 repository.workspace = true
 documentation.workspace = true
-description = "OpenLark 工作流模块 - task/approval/board API"
+description = "OpenLark 工作流模块 - 提供飞书任务/审批/看板 API"
 
 [dependencies]
 openlark-core = { workspace = true }
@@ -14,7 +14,18 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 reqwest = { workspace = true }
 tokio = { workspace = true, optional = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }
 
 [features]
-default = []
+default = ["v1", "v2", "async"]
 async = ["tokio"]
+
+# 任务 API 版本
+v1 = []
+v2 = []
+
+# 完整功能集
+full = ["v1", "v2", "async"]
