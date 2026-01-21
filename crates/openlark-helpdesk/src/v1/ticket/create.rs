@@ -42,7 +42,7 @@ impl CreateTicketRequest {
         validate_required!(self.body.title.trim(), "工单标题不能为空");
 
         let api_endpoint = HelpdeskApiV1::TicketCreate;
-        let mut request = ApiRequest::<CreateTicketResponse>::post(&api_endpoint.to_url());
+        let mut request = ApiRequest::<CreateTicketResponse>::post(api_endpoint.to_url());
 
         request = request.body(serialize_params(&self.body, "创建工单")?);
 

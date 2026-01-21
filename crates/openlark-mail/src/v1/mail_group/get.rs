@@ -36,7 +36,7 @@ impl GetMailGroupRequest {
         validate_required!(self.mail_group_id.trim(), "邮件组ID不能为空");
 
         let api_endpoint = MailApiV1::MailGroupGet(self.mail_group_id.clone());
-        let request = ApiRequest::<GetMailGroupResponse>::get(&api_endpoint.to_url());
+        let request = ApiRequest::<GetMailGroupResponse>::get(api_endpoint.to_url());
 
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;

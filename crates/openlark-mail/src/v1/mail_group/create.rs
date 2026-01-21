@@ -73,7 +73,7 @@ impl CreateMailGroupRequest {
         validate_required!(self.body.mail_group_id.trim(), "邮件组ID不能为空");
 
         let api_endpoint = MailApiV1::MailGroupCreate;
-        let mut request = ApiRequest::<CreateMailGroupResponse>::post(&api_endpoint.to_url());
+        let mut request = ApiRequest::<CreateMailGroupResponse>::post(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "创建邮件组")?);
