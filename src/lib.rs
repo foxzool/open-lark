@@ -43,3 +43,12 @@ pub use openlark_security;
 
 #[cfg(feature = "task")]
 pub use openlark_task;
+
+#[cfg(feature = "platform")]
+pub use openlark_platform;
+
+#[cfg(feature = "analytics")]
+pub use openlark_analytics;
+
+#[cfg(feature = "user")]
+pub use openlark_user;

@@ -1,0 +1,78 @@
+[package]
+name = "openlark-platform"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+description = "飞书开放平台服务模块 - 应用管理、目录服务、系统管理 API (72 APIs)"
+keywords = ["feishu", "lark", "platform", "api", "admin", "directory"]
+categories = ["api-bindings", "web-programming"]
+
+[features]
+default = ["app-engine", "directory", "admin"]
+
+# === 核心功能模块 ===
+core = []
+
+# === 业务域功能 ===
+# 应用引擎 (37 APIs)
+app-engine-core = []
+app-engine = ["app-engine-core", "core"]
+
+# 目录服务 (21 APIs)
+directory-core = []
+directory = ["directory-core", "core"]
+
+# 系统管理 (14 APIs)
+admin-core = []
+admin = ["admin-core", "core"]
+
+# === API版本支持 ===
+v1 = ["core"]
+v2 = ["v1"]
+v3 = ["v2"]
+v4 = ["v3"]
+
+# === 功能组合 ===
+# 完整平台功能
+full = ["app-engine", "directory", "admin", "v4"]
+
+# 向后兼容别名
+platform = ["app-engine", "directory", "admin"]
+all-platform = ["full"]
+
+[dependencies]
+# 核心依赖
+openlark-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+once_cell = "1.19"
+
+# 工具依赖
+uuid = { workspace = true }
+url = { workspace = true }
+urlencoding = { workspace = true }
+futures = { workspace = true }
+regex = { workspace = true }
+rand = { workspace = true }
+serde_repr = { workspace = true }
+log = { workspace = true }
+
+# 可选依赖
+parking_lot = { version = "0.12", optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+wiremock = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }
+mockall = { workspace = true }
