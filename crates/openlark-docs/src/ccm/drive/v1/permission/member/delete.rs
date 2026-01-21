@@ -15,6 +15,35 @@ use serde::{Deserialize, Serialize};
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 移除协作者权限请求
+///
+/// 用于移除文件或文件夹中指定协作者的权限。
+///
+/// # 字段说明
+///
+/// - `token`: 文件 token，不能为空
+/// - `member_id`: 成员 ID，不能为空
+/// - `file_type`: 云文档类型，必须为 doc/sheet/file/wiki/bitable/docx/folder/mindnote/minutes/slides 之一
+/// - `member_type`: 协作者 ID 类型，必须为 email/openid/unionid/openchat/opendepartmentid/userid/groupid/wikispaceid 之一
+/// - `perm_type`: 权限角色类型，可选值为 container/single_page
+/// - `member_kind`: 协作者类型，当 member_type 为 wikispaceid 时通常需要指定
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_docs::ccm::drive::v1::permission::member::DeletePermissionMemberRequest;
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let request = DeletePermissionMemberRequest::new(
+///     config,
+///     "file_token",
+///     "member_id",
+///     "docx",
+///     "openid",
+/// )
+/// .perm_type("container");
+/// let response = request.execute().await?;
+/// ```
 #[derive(Debug, Clone)]
 pub struct DeletePermissionMemberRequest {
     config: Config,
@@ -83,6 +112,7 @@ impl DeletePermissionMemberRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeletePermissionMemberResponse> {
+        // === 必填字段验证 ===
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -101,6 +131,14 @@ impl DeletePermissionMemberRequest {
                 "file_type 不能为空",
             ));
         }
+        if self.member_type.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "member_type",
+                "member_type 不能为空",
+            ));
+        }
+
+        // === 枚举值验证 ===
         match self.file_type.as_str() {
             "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "folder" | "mindnote"
             | "minutes" | "slides" => {}
@@ -110,12 +148,6 @@ impl DeletePermissionMemberRequest {
                     "file_type 必须为 doc/sheet/file/wiki/bitable/docx/folder/mindnote/minutes/slides",
                 ));
             }
-        }
-        if self.member_type.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "member_type",
-                "member_type 不能为空",
-            ));
         }
         match self.member_type.as_str() {
             "email" | "openid" | "unionid" | "openchat" | "opendepartmentid" | "userid"
@@ -150,6 +182,8 @@ impl DeletePermissionMemberRequest {
                 }
             }
         }
+
+        // === 业务规则验证 ===
         if self.member_type == "wikispaceid" {
             match self.member_kind.as_deref() {
                 Some("wiki_space_member" | "wiki_space_viewer" | "wiki_space_editor") => {}
@@ -223,5 +257,95 @@ mod tests {
             DeletePermissionMemberResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    #[test]
+    fn test_empty_token_validation() {
+        let config = Config::default();
+        let request =
+            DeletePermissionMemberRequest::new(config, "", "member_id", "docx", "openid");
+        assert_eq!(request.token, "");
+    }
+
+    #[test]
+    fn test_empty_member_id_validation() {
+        let config = Config::default();
+        let request =
+            DeletePermissionMemberRequest::new(config, "file_token", "", "docx", "openid");
+        assert_eq!(request.member_id, "");
+    }
+
+    #[test]
+    fn test_empty_file_type_validation() {
+        let config = Config::default();
+        let request =
+            DeletePermissionMemberRequest::new(config, "file_token", "member_id", "", "openid");
+        assert_eq!(request.file_type, "");
+    }
+
+    #[test]
+    fn test_invalid_file_type_validation() {
+        let config = Config::default();
+        let request = DeletePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "invalid_type",
+            "openid",
+        );
+        assert_eq!(request.file_type, "invalid_type");
+    }
+
+    #[test]
+    fn test_empty_member_type_validation() {
+        let config = Config::default();
+        let request =
+            DeletePermissionMemberRequest::new(config, "file_token", "member_id", "docx", "");
+        assert_eq!(request.member_type, "");
+    }
+
+    #[test]
+    fn test_invalid_member_type_validation() {
+        let config = Config::default();
+        let request = DeletePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "docx",
+            "invalid_type",
+        );
+        assert_eq!(request.member_type, "invalid_type");
+    }
+
+    #[test]
+    fn test_invalid_perm_type_validation() {
+        let config = Config::default();
+        let request =
+            DeletePermissionMemberRequest::new(config, "file_token", "member_id", "docx", "openid")
+                .perm_type("invalid_perm_type");
+        assert_eq!(request.perm_type, Some("invalid_perm_type".to_string()));
+    }
+
+    #[test]
+    fn test_invalid_member_kind_validation() {
+        let config = Config::default();
+        let request =
+            DeletePermissionMemberRequest::new(config, "file_token", "member_id", "docx", "openid")
+                .member_kind("invalid_kind");
+        assert_eq!(request.member_kind, Some("invalid_kind".to_string()));
+    }
+
+    #[test]
+    fn test_wikispaceid_without_member_kind_validation() {
+        let config = Config::default();
+        let request = DeletePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "docx",
+            "wikispaceid",
+        );
+        assert_eq!(request.member_type, "wikispaceid");
+        assert_eq!(request.member_kind, None);
     }
 }
