@@ -75,6 +75,7 @@ impl CreateEntityRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CreateEntityResp> {
+        // ===== 参数校验 =====
         validate_required!(self.req.main_keys, "main_keys 不能为空");
         if self.req.main_keys.len() > 1 {
             return Err(openlark_core::error::validation_error(
@@ -113,6 +114,8 @@ impl CreateEntityRequest {
             ));
         }
 
+        // ===== 构建请求 =====
+
         let mut api_request: ApiRequest<CreateEntityResp> =
             ApiRequest::post(&BaikeApiV1::EntityCreate.to_url())
                 .body(serde_json::to_value(&self.req)?);
@@ -120,10 +123,96 @@ impl CreateEntityRequest {
             api_request = api_request.query("user_id_type", user_id_type.as_str());
         }
 
+        // ===== 发送请求并返回结果 =====
         let response: Response<CreateEntityResp> =
             Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::baike::baike::v1::models::{Term, UserIdType};
+
+    #[test]
+    fn test_create_entity_request_builder() {
+        let config = Config::default();
+        let req = CreateEntityReq {
+            main_keys: vec![Term {
+                text: "测试词条".to_string(),
+                key: "test_key".to_string(),
+            }],
+            description: Some("词条描述".to_string()),
+            ..Default::default()
+        };
+        let request = CreateEntityRequest::new(config, req).user_id_type(UserIdType::OpenId);
+
+        assert_eq!(request.req.main_keys.len(), 1);
+        assert_eq!(request.req.description, Some("词条描述".to_string()));
+        assert!(request.user_id_type.is_some());
+    }
+
+    #[test]
+    fn test_create_entity_request_with_aliases() {
+        let config = Config::default();
+        let req = CreateEntityReq {
+            main_keys: vec![Term {
+                text: "测试词条".to_string(),
+                key: "test_key".to_string(),
+            }],
+            aliases: Some(vec![Term {
+                text: "别名".to_string(),
+                key: "alias_key".to_string(),
+            }]),
+            rich_text: Some("<p>富文本内容</p>".to_string()),
+            ..Default::default()
+        };
+        let request = CreateEntityRequest::new(config, req);
+
+        assert!(request.req.aliases.is_some());
+        assert_eq!(request.req.aliases.as_ref().unwrap().len(), 1);
+    }
+
+    #[tokio::test]
+    async fn test_create_entity_request_validation() {
+        let config = Config::default();
+
+        // 测试 main_keys 为空
+        let req = CreateEntityReq {
+            main_keys: vec![],
+            ..Default::default()
+        };
+        let request = CreateEntityRequest::new(config.clone(), req);
+        assert!(request.execute_with_options(RequestOption::default()).await.is_err());
+
+        // 测试 description 和 rich_text 都为空
+        let req2 = CreateEntityReq {
+            main_keys: vec![Term {
+                text: "测试词条".to_string(),
+                key: "test_key".to_string(),
+            }],
+            description: None,
+            rich_text: None,
+            ..Default::default()
+        };
+        let request2 = CreateEntityRequest::new(config, req2);
+        assert!(request2.execute_with_options(RequestOption::default()).await.is_err());
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(CreateEntityResp::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_create_entity_req_default() {
+        let req = CreateEntityReq::default();
+        assert!(req.main_keys.is_empty());
+        assert!(req.aliases.is_none());
+        assert!(req.description.is_none());
+        assert!(req.rich_text.is_none());
     }
 }

@@ -76,6 +76,7 @@ impl UpdateEntityRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<UpdateEntityResp> {
+        // ===== 参数校验 =====
         validate_required!(self.entity_id, "entity_id 不能为空");
         validate_required!(self.req.main_keys, "main_keys 不能为空");
         if self.req.main_keys.len() > 1 {
@@ -115,6 +116,7 @@ impl UpdateEntityRequest {
             ));
         }
 
+        // ===== 构建请求 =====
         let mut api_request: ApiRequest<UpdateEntityResp> =
             ApiRequest::put(&BaikeApiV1::EntityUpdate(self.entity_id).to_url())
                 .body(serde_json::to_value(&self.req)?);
@@ -122,10 +124,109 @@ impl UpdateEntityRequest {
             api_request = api_request.query("user_id_type", user_id_type.as_str());
         }
 
+        // ===== 发送请求并返回结果 =====
         let response: Response<UpdateEntityResp> =
             Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::baike::baike::v1::models::{Term, UserIdType};
+
+    #[test]
+    fn test_update_entity_request_builder() {
+        let config = Config::default();
+        let req = UpdateEntityReq {
+            main_keys: vec![Term {
+                text: "更新词条".to_string(),
+                key: "update_key".to_string(),
+            }],
+            description: Some("更新描述".to_string()),
+            ..Default::default()
+        };
+        let request = UpdateEntityRequest::new(config, "entity_123", req).user_id_type(UserIdType::OpenId);
+
+        assert_eq!(request.entity_id, "entity_123");
+        assert_eq!(request.req.main_keys.len(), 1);
+        assert_eq!(request.req.description, Some("更新描述".to_string()));
+        assert!(request.user_id_type.is_some());
+    }
+
+    #[test]
+    fn test_update_entity_request_with_aliases() {
+        let config = Config::default();
+        let req = UpdateEntityReq {
+            main_keys: vec![Term {
+                text: "更新词条".to_string(),
+                key: "update_key".to_string(),
+            }],
+            aliases: Some(vec![Term {
+                text: "新别名".to_string(),
+                key: "new_alias_key".to_string(),
+            }]),
+            rich_text: Some("<p>更新富文本</p>".to_string()),
+            ..Default::default()
+        };
+        let request = UpdateEntityRequest::new(config, "entity_456", req);
+
+        assert!(request.req.aliases.is_some());
+        assert_eq!(request.req.aliases.as_ref().unwrap().len(), 1);
+    }
+
+    #[tokio::test]
+    async fn test_update_entity_request_validation() {
+        let config = Config::default();
+
+        // 测试 entity_id 为空
+        let req = UpdateEntityReq {
+            main_keys: vec![Term {
+                text: "测试词条".to_string(),
+                key: "test_key".to_string(),
+            }],
+            description: Some("描述".to_string()),
+            ..Default::default()
+        };
+        let request = UpdateEntityRequest::new(config.clone(), "", req);
+        assert!(request.execute_with_options(RequestOption::default()).await.is_err());
+
+        // 测试 main_keys 为空
+        let req2 = UpdateEntityReq {
+            main_keys: vec![],
+            ..Default::default()
+        };
+        let request2 = UpdateEntityRequest::new(config.clone(), "entity_123", req2);
+        assert!(request2.execute_with_options(RequestOption::default()).await.is_err());
+
+        // 测试 description 和 rich_text 都为空
+        let req3 = UpdateEntityReq {
+            main_keys: vec![Term {
+                text: "测试词条".to_string(),
+                key: "test_key".to_string(),
+            }],
+            description: None,
+            rich_text: None,
+            ..Default::default()
+        };
+        let request3 = UpdateEntityRequest::new(config, "entity_123", req3);
+        assert!(request3.execute_with_options(RequestOption::default()).await.is_err());
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(UpdateEntityResp::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_update_entity_req_default() {
+        let req = UpdateEntityReq::default();
+        assert!(req.main_keys.is_empty());
+        assert!(req.aliases.is_none());
+        assert!(req.description.is_none());
+        assert!(req.rich_text.is_none());
     }
 }
