@@ -43,14 +43,16 @@ class APIInfo:
 class APIValidator:
     """API 验证器"""
 
-    def __init__(self, csv_path: str, src_path: str, filter_tags: List[str] = None):
+    def __init__(self, csv_path: str, src_path: str, filter_tags: List[str] = None, skip_old_versions: bool = True):
         self.csv_path = csv_path
         self.src_path = Path(src_path)
         self.filter_tags = filter_tags
+        self.skip_old_versions = skip_old_versions
         self.apis: List[APIInfo] = []
         self.implemented_files: Set[str] = set()
         self.missing_apis: List[APIInfo] = []
         self.extra_files: Set[str] = set()
+        self.skipped_old_count: int = 0
 
     @staticmethod
     def _camel_to_snake(name: str) -> str:
@@ -87,12 +89,20 @@ class APIValidator:
         if self.filter_tags:
             print(f"🏷️  过滤业务标签: {', '.join(self.filter_tags)}")
 
+        if self.skip_old_versions:
+            print(f"🔧 跳过旧版本 API: version='old'")
+
         with open(self.csv_path, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
 
             for row in reader:
                 # 如果设置了过滤器，只处理匹配的业务标签
                 if self.filter_tags and row['bizTag'] not in self.filter_tags:
+                    continue
+
+                # 跳过旧版本 API
+                if self.skip_old_versions and row['meta.Version'] == 'old':
+                    self.skipped_old_count += 1
                     continue
 
                 api = APIInfo(
@@ -113,6 +123,8 @@ class APIValidator:
                 self.apis.append(api)
 
         print(f"✅ 解析完成，共 {len(self.apis)} 个 API")
+        if self.skip_old_versions and self.skipped_old_count > 0:
+            print(f"   📋 已跳过 {self.skipped_old_count} 个旧版本 API")
 
     def _generate_expected_file_path(self, api: APIInfo) -> str:
         """
@@ -356,6 +368,10 @@ def main():
                         help='crate→bizTag 映射文件路径 (默认: tools/api_coverage.toml)')
     parser.add_argument('--list-crates', action='store_true',
                         help='列出映射文件中的 crate 与 bizTag，然后退出')
+    parser.add_argument('--skip-old', dest='skip_old', action='store_true', default=True,
+                        help='跳过旧版本 API (version=old，默认启用)')
+    parser.add_argument('--include-old', dest='skip_old', action='store_false',
+                        help='包含旧版本 API (version=old)')
 
     args = parser.parse_args()
 
@@ -426,7 +442,7 @@ def main():
         return 1
 
     # 执行验证
-    validator = APIValidator(args.csv, args.src, args.filter)
+    validator = APIValidator(args.csv, args.src, args.filter, args.skip_old)
 
     validator.parse_csv()
     validator.scan_implementations()
