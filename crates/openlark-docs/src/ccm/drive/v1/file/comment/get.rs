@@ -1,7 +1,23 @@
 //! 获取全文评论
-
 //!
-
+//! 获取指定云文档的单条全文评论详情。
+//!
+//! ## 功能说明
+//! - 根据 file_token 和 comment_id 获取单条评论的详细信息
+//! - 支持多种文档类型
+//!
+//! ## 字段说明
+//! - `file_token`: 文件 token，标识文档
+//! - `comment_id`: 评论 ID，标识要获取的评论
+//! - `file_type`: 文件类型，如 docx、sheet、bitable、wiki 等
+//! - `user_id_type`: 用户 ID 类型，默认为 open_id
+//!
+//! ## 使用示例
+//! ```ignore
+//! let request = GetCommentRequest::new("file_token", "comment_123", "docx");
+//! let comment = get_comment(request, &config, None).await?;
+//! ```
+//!
 //! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/get
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
@@ -68,6 +84,8 @@ pub async fn get_comment(
 
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<GetCommentResponse> {
+    // ========== 参数校验 ==========
+
     if request.file_token.trim().is_empty() {
         return Err(openlark_core::error::validation_error(
             "file_token",
@@ -91,6 +109,8 @@ pub async fn get_comment(
 
     super::validate_comment_file_type_for_get(&request.file_type)?;
 
+    // ========== 构建 API 请求 ==========
+
     let api_endpoint = DriveApi::GetComment(request.file_token.clone(), request.comment_id.clone());
 
     let mut api_request: ApiRequest<GetCommentResponse> = ApiRequest::get(&api_endpoint.to_url());
@@ -101,6 +121,7 @@ pub async fn get_comment(
         api_request = api_request.query("user_id_type", user_id_type);
     }
 
+    // ========== 发送请求并返回响应 ==========
     let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "获取全文评论")
@@ -108,18 +129,34 @@ pub async fn get_comment(
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]
-
     fn test_get_comment_request_builder() {
         let request = GetCommentRequest::new("file_token", "comment_123", "docx");
 
         assert_eq!(request.file_token, "file_token");
-
         assert_eq!(request.comment_id, "comment_123");
-
         assert_eq!(request.file_type, "docx");
+    }
+
+    #[test]
+    fn test_get_comment_request_with_user_id_type() {
+        let request = GetCommentRequest::new("file_token", "comment_123", "docx")
+            .user_id_type("union_id");
+
+        assert_eq!(request.user_id_type, Some("union_id".to_string()));
+    }
+
+    #[test]
+    fn test_get_comment_request_empty_fields() {
+        let request = GetCommentRequest::new("", "comment_123", "docx");
+        assert!(request.file_token.is_empty());
+
+        let request2 = GetCommentRequest::new("token", "", "docx");
+        assert!(request2.comment_id.is_empty());
+
+        let request3 = GetCommentRequest::new("token", "comment_123", "");
+        assert!(request3.file_type.is_empty());
     }
 }

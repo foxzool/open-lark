@@ -1,7 +1,20 @@
 //! 获取订阅状态
-
 //!
-
+//! 获取指定文档的订阅状态详情。
+//!
+//! ## 功能说明
+//! - 根据 file_token 和 subscription_id 获取订阅详情
+//!
+//! ## 字段说明
+//! - `file_token`: 文件 token，标识文档
+//! - `subscription_id`: 订阅 ID，标识订阅关系
+//!
+//! ## 使用示例
+//! ```ignore
+//! let request = GetSubscriptionRequest::new("file_token", "sub_123");
+//! let subscription = get_subscription(request, &config, None).await?;
+//! ```
+//!
 //! docPath: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/get
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
@@ -44,6 +57,8 @@ pub async fn get_subscription(
 
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<GetSubscriptionResponse> {
+    // ========== 参数校验 ==========
+
     if request.file_token.trim().is_empty() {
         return Err(openlark_core::error::validation_error(
             "file_token",
@@ -58,12 +73,36 @@ pub async fn get_subscription(
         ));
     }
 
+    // ========== 构建 API 请求 ==========
     let api_endpoint =
         DriveApi::GetFileSubscription(request.file_token.clone(), request.subscription_id.clone());
 
     let api_request: ApiRequest<GetSubscriptionResponse> = ApiRequest::get(&api_endpoint.to_url());
 
+    // ========== 发送请求并返回响应 ==========
     let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "获取订阅状态")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_subscription_request_builder() {
+        let request = GetSubscriptionRequest::new("file_token", "sub_123");
+
+        assert_eq!(request.file_token, "file_token");
+        assert_eq!(request.subscription_id, "sub_123");
+    }
+
+    #[test]
+    fn test_get_subscription_request_empty_fields() {
+        let request = GetSubscriptionRequest::new("", "sub_123");
+        assert!(request.file_token.is_empty());
+
+        let request2 = GetSubscriptionRequest::new("token", "");
+        assert!(request2.subscription_id.is_empty());
+    }
 }

@@ -1,7 +1,25 @@
 //! 创建订阅
-
 //!
-
+//! 为云文档创建订阅关系，用于接收文档变更通知。
+//!
+//! ## 功能说明
+//! - 为文档创建订阅关系
+//! - 支持订阅评论更新等事件
+//!
+//! ## 字段说明
+//! - `file_token`: 文件 token，标识要订阅的文档
+//! - `subscription_id`: 订阅关系 ID（可选）
+//! - `subscription_type`: 订阅类型，如 comment_update
+//! - `is_subcribe`: 是否订阅（可选）
+//! - `file_type`: 文档类型，支持 doc/docx/wiki
+//!
+//! ## 使用示例
+//! ```ignore
+//! let request = CreateFileSubscriptionRequest::new("file_token", "comment_update", "docx")
+//!     .is_subcribe(true);
+//! let subscription = create_file_subscription(request, &config, None).await?;
+//! ```
+//!
 //! docPath: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/create
 
 use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
@@ -91,6 +109,8 @@ pub async fn create_file_subscription(
 
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<CreateFileSubscriptionResponse> {
+    // ========== 参数校验 ==========
+
     if request.file_token.trim().is_empty() {
         return Err(openlark_core::error::validation_error(
             "file_token",
@@ -134,6 +154,7 @@ pub async fn create_file_subscription(
         }
     }
 
+    // ========== 构建 API 请求 ==========
     let api_endpoint = DriveApi::CreateFileSubscription(request.file_token.clone());
 
     let api_request: ApiRequest<CreateFileSubscriptionResponse> =
@@ -150,7 +171,46 @@ pub async fn create_file_subscription(
             "创建订阅",
         )?);
 
+    // ========== 发送请求并返回响应 ==========
     let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "创建订阅")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_file_subscription_request_builder() {
+        let request = CreateFileSubscriptionRequest::new("file_token", "comment_update", "docx");
+
+        assert_eq!(request.file_token, "file_token");
+        assert_eq!(request.subscription_type, "comment_update");
+        assert_eq!(request.file_type, "docx");
+        assert!(request.subscription_id.is_none());
+        assert!(request.is_subcribe.is_none());
+    }
+
+    #[test]
+    fn test_create_file_subscription_request_with_params() {
+        let request = CreateFileSubscriptionRequest::new("file_token", "comment_update", "docx")
+            .subscription_id("sub_123")
+            .is_subcribe(true);
+
+        assert_eq!(request.subscription_id, Some("sub_123".to_string()));
+        assert_eq!(request.is_subcribe, Some(true));
+    }
+
+    #[test]
+    fn test_create_file_subscription_request_empty_fields() {
+        let request = CreateFileSubscriptionRequest::new("", "comment_update", "docx");
+        assert!(request.file_token.is_empty());
+
+        let request2 = CreateFileSubscriptionRequest::new("token", "", "docx");
+        assert!(request2.subscription_type.is_empty());
+
+        let request3 = CreateFileSubscriptionRequest::new("token", "comment_update", "");
+        assert!(request3.file_type.is_empty());
+    }
 }

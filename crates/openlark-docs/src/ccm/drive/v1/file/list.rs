@@ -141,6 +141,8 @@ impl ListFilesRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListFilesResponse> {
+        // ========== 参数校验 ==========
+
         // 不填写或填空字符串表示根目录；根目录不支持分页
         let is_root = self
             .folder_token
@@ -183,6 +185,7 @@ impl ListFilesRequest {
                 }
             }
         }
+
         if let Some(direction) = &self.direction {
             match direction.as_str() {
                 "ASC" | "DESC" => {}
@@ -194,6 +197,7 @@ impl ListFilesRequest {
                 }
             }
         }
+
         if let Some(user_id_type) = &self.user_id_type {
             match user_id_type.as_str() {
                 "open_id" | "union_id" | "user_id" => {}
@@ -205,6 +209,8 @@ impl ListFilesRequest {
                 }
             }
         }
+
+        // ========== 构建 API 请求 ==========
 
         let api_endpoint = DriveApi::ListFiles;
         let mut request = ApiRequest::<ListFilesResponse>::get(&api_endpoint.to_url());
@@ -228,7 +234,44 @@ impl ListFilesRequest {
             request = request.query("user_id_type", user_id_type);
         }
 
+        // ========== 发送请求并返回响应 ==========
         let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取文件夹中的文件清单")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_files_request_builder() {
+        let config = Config::default();
+        let request = ListFilesRequest::new(config)
+            .folder_token("folder_token")
+            .page_size(50)
+            .order_by("EditedTime")
+            .direction("DESC")
+            .user_id_type("open_id");
+
+        assert_eq!(request.folder_token, Some("folder_token".to_string()));
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.order_by, Some("EditedTime".to_string()));
+        assert_eq!(request.direction, Some("DESC".to_string()));
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_list_files_request_root() {
+        let config = Config::default();
+        let request = ListFilesRequest::new(config);
+
+        assert_eq!(request.folder_token, None);
+        assert_eq!(request.page_token, None);
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(ListFilesResponse::data_format(), ResponseFormat::Data);
     }
 }
