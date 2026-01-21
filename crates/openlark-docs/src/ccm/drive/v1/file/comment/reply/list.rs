@@ -1,7 +1,27 @@
 //! 获取回复信息
-
 //!
-
+//! 获取指定评论的所有回复列表。
+//!
+//! ## 功能说明
+//! - 获取评论下的所有回复
+//! - 支持分页查询
+//!
+//! ## 字段说明
+//! - `file_token`: 文件 token，标识文档
+//! - `comment_id`: 评论 ID，标识评论
+//! - `file_type`: 文件类型，如 docx、sheet、bitable 等
+//! - `page_size`: 分页大小，1~100
+//! - `page_token`: 分页标记
+//! - `user_id_type`: 用户 ID 类型，默认为 open_id
+//!
+//! ## 使用示例
+//! ```ignore
+//! let request = ListCommentReplyRequest::new("file_token", "comment_123", "docx")
+//!     .page_size(20)
+//!     .page_token("token");
+//! let response = list_comment_reply(request, &config, None).await?;
+//! ```
+//!
 //! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/list-2
 
 use openlark_core::{
@@ -101,6 +121,8 @@ pub async fn list_comment_reply(
 
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<ListCommentReplyResponse> {
+    // ========== 参数校验 ==========
+
     if request.file_token.trim().is_empty() {
         return Err(openlark_core::error::validation_error(
             "file_token",
@@ -133,6 +155,8 @@ pub async fn list_comment_reply(
         }
     }
 
+    // ========== 构建 API 请求 ==========
+
     let api_endpoint =
         DriveApi::ListCommentReplies(request.file_token.clone(), request.comment_id.clone());
 
@@ -153,7 +177,53 @@ pub async fn list_comment_reply(
         api_request = api_request.query("user_id_type", user_id_type);
     }
 
+    // ========== 发送请求并返回响应 ==========
     let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "获取回复信息")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_comment_reply_request_builder() {
+        let request = ListCommentReplyRequest::new("file_token", "comment_123", "docx");
+
+        assert_eq!(request.file_token, "file_token");
+        assert_eq!(request.comment_id, "comment_123");
+        assert_eq!(request.file_type, "docx");
+        assert!(request.page_size.is_none());
+        assert!(request.page_token.is_none());
+    }
+
+    #[test]
+    fn test_list_comment_reply_request_with_params() {
+        let request = ListCommentReplyRequest::new("file_token", "comment_123", "docx")
+            .page_size(20)
+            .page_token("next_page_token")
+            .user_id_type("union_id");
+
+        assert_eq!(request.page_size, Some(20));
+        assert_eq!(request.page_token, Some("next_page_token".to_string()));
+        assert_eq!(request.user_id_type, Some("union_id".to_string()));
+    }
+
+    #[test]
+    fn test_list_comment_reply_request_empty_fields() {
+        let request = ListCommentReplyRequest::new("", "comment_123", "docx");
+        assert!(request.file_token.is_empty());
+
+        let request2 = ListCommentReplyRequest::new("token", "", "docx");
+        assert!(request2.comment_id.is_empty());
+
+        let request3 = ListCommentReplyRequest::new("token", "comment_123", "");
+        assert!(request3.file_type.is_empty());
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(ListCommentReplyResponse::data_format(), ResponseFormat::Data);
+    }
 }

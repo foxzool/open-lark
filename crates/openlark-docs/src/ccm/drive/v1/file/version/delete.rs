@@ -58,6 +58,8 @@ impl DeleteFileVersionRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteFileVersionResponse> {
+        // ========== 参数校验 ==========
+
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -80,11 +82,13 @@ impl DeleteFileVersionRequest {
             }
         }
 
+        // ========== 构建 API 请求 ==========
         let api_endpoint = DriveApi::DeleteFileVersion(self.file_token, self.version_id);
         let request = ApiRequest::<DeleteFileVersionResponse>::delete(&api_endpoint.to_url())
             .query("obj_type", self.obj_type)
             .query_opt("user_id_type", self.user_id_type);
 
+        // ========== 发送请求并返回响应 ==========
         let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "删除")
     }
@@ -122,5 +126,15 @@ mod tests {
             DeleteFileVersionResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    #[test]
+    fn test_delete_file_version_request_empty_fields() {
+        let config = Config::default();
+        let request = DeleteFileVersionRequest::new(config.clone(), "", "fnJfyX", "docx");
+        assert!(request.file_token.is_empty());
+
+        let request2 = DeleteFileVersionRequest::new(config, "token", "", "docx");
+        assert!(request2.version_id.is_empty());
     }
 }
