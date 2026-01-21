@@ -51,6 +51,7 @@ impl UploadFileRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<UploadFileResp> {
+        // ===== 参数校验 =====
         validate_required!(self.name, "name 不能为空");
         validate_required!(self.file, "file 不能为空");
 
@@ -64,6 +65,7 @@ impl UploadFileRequest {
             "__file_name": name,
         });
 
+        // ===== 构建请求并发送 =====
         let api_request: ApiRequest<UploadFileResp> =
             ApiRequest::post(&LingoApiV1::FileUpload.to_url())
                 .body(body)
@@ -74,5 +76,43 @@ impl UploadFileRequest {
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_upload_file_request_builder() {
+        let config = Config::default();
+        let file_data = vec![0u8, 1, 2, 3];
+        let request = UploadFileRequest::new(config, "image.png", file_data);
+
+        assert_eq!(request.name, "image.png");
+        assert_eq!(request.file.len(), 4);
+    }
+
+    #[test]
+    fn test_upload_file_response_structure() {
+        let response = UploadFileResp {
+            file_token: Some("token_123".to_string()),
+        };
+
+        assert_eq!(response.file_token, Some("token_123".to_string()));
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(UploadFileResp::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_upload_file_empty_response() {
+        let response = UploadFileResp {
+            file_token: None,
+        };
+
+        assert!(response.file_token.is_none());
     }
 }

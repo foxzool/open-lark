@@ -1,5 +1,7 @@
 //! 获取词典分类
 //!
+//! 获取百科知识库的分类列表。
+//!
 //! docPath: https://open.feishu.cn/document/server-docs/baike-v1/classification/list
 
 use openlark_core::{
@@ -15,6 +17,21 @@ use super::super::models::ClassificationItem;
 use crate::common::api_endpoints::BaikeApiV1;
 
 /// 获取词典分类请求
+///
+/// 用于获取百科知识库的分类列表，支持分页。
+///
+/// # 字段说明
+///
+/// - `page_size`: 分页大小，范围 1~500
+/// - `page_token`: 分页标记
+///
+/// # 示例
+///
+/// ```rust,no_run
+/// use openlark_docs::baike::baike::v1::classification::ListClassificationRequest;
+///
+/// let request = ListClassificationRequest::new(config).page_size(50);
+/// ```
 pub struct ListClassificationRequest {
     config: Config,
     page_size: Option<i32>,
@@ -50,6 +67,7 @@ impl ListClassificationRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<ListClassificationResponse> {
+        // ===== 参数校验 =====
         if let Some(page_size) = self.page_size {
             if !(1..=500).contains(&page_size) {
                 return Err(openlark_core::error::validation_error(
@@ -59,6 +77,7 @@ impl ListClassificationRequest {
             }
         }
 
+        // ===== 构建请求 =====
         let mut api_request: ApiRequest<ListClassificationResponse> =
             ApiRequest::get(&BaikeApiV1::ClassificationList.to_url());
         if let Some(page_size) = self.page_size {
@@ -68,6 +87,7 @@ impl ListClassificationRequest {
             api_request = api_request.query("page_token", page_token);
         }
 
+        // ===== 发送请求 =====
         let response: Response<ListClassificationResponse> =
             Transport::request(api_request, &self.config, Some(option)).await?;
         response
@@ -77,6 +97,13 @@ impl ListClassificationRequest {
 }
 
 /// 获取词典分类响应（data）
+///
+/// 包含分类列表和分页信息。
+///
+/// # 字段说明
+///
+/// - `items`: 分类列表
+/// - `page_token`: 下一页的分页标记
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ListClassificationResponse {
     #[serde(default)]
@@ -88,5 +115,56 @@ pub struct ListClassificationResponse {
 impl ApiResponseTrait for ListClassificationResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_classification_request_builder() {
+        let config = Config::default();
+        let request = ListClassificationRequest::new(config);
+
+        assert!(request.page_size.is_none());
+        assert!(request.page_token.is_none());
+    }
+
+    #[test]
+    fn test_list_classification_request_with_params() {
+        let config = Config::default();
+        let request = ListClassificationRequest::new(config)
+            .page_size(100)
+            .page_token("token123");
+
+        assert_eq!(request.page_size, Some(100));
+        assert_eq!(request.page_token, Some("token123".to_string()));
+    }
+
+    #[test]
+    fn test_list_classification_response_structure() {
+        let response = ListClassificationResponse {
+            items: vec![],
+            page_token: Some("next_token".to_string()),
+        };
+
+        assert!(response.items.is_empty());
+        assert_eq!(response.page_token, Some("next_token".to_string()));
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(ListClassificationResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_page_size_validation() {
+        let sizes = vec![1, 50, 100, 500];
+        for size in sizes {
+            let config = Config::default();
+            let request = ListClassificationRequest::new(config).page_size(size);
+            assert_eq!(request.page_size, Some(size));
+        }
     }
 }
