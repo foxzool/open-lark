@@ -17,6 +17,39 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 use super::models::PermissionMember;
 
 /// 更新协作者权限请求
+///
+/// 用于更新文件或文件夹中指定协作者的权限。
+///
+/// # 字段说明
+///
+/// - `token`: 文件 token，不能为空
+/// - `member_id`: 成员 ID，不能为空
+/// - `file_type`: 云文档类型，必须为 doc/sheet/file/wiki/bitable/docx/folder/mindnote/minutes/slides 之一
+/// - `need_notification`: 是否发送通知，默认 false
+/// - `member_type`: 协作者 ID 类型，必须为 email/openid/unionid/openchat/opendepartmentid/userid/groupid/wikispaceid 之一
+/// - `perm`: 权限角色，必须为 view/edit/full_access 之一
+/// - `perm_type`: 权限角色类型，可选值为 container/single_page
+/// - `member_kind`: 协作者类型，当 member_type 为 wikispaceid 时必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_docs::ccm::drive::v1::permission::member::UpdatePermissionMemberRequest;
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let request = UpdatePermissionMemberRequest::new(
+///     config,
+///     "file_token",
+///     "member_id",
+///     "docx",
+///     "openid",
+///     "edit",
+/// )
+/// .need_notification(false)
+/// .perm_type("container");
+/// let response = request.execute().await?;
+/// ```
 #[derive(Debug, Clone)]
 pub struct UpdatePermissionMemberRequest {
     config: Config,
@@ -100,6 +133,7 @@ impl UpdatePermissionMemberRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UpdatePermissionMemberResponse> {
+        // === 必填字段验证 ===
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -118,6 +152,20 @@ impl UpdatePermissionMemberRequest {
                 "file_type 不能为空",
             ));
         }
+        if self.member_type.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "member_type",
+                "member_type 不能为空",
+            ));
+        }
+        if self.perm.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "perm",
+                "perm 不能为空",
+            ));
+        }
+
+        // === 枚举值验证 ===
         match self.file_type.as_str() {
             "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "folder" | "mindnote"
             | "minutes" | "slides" => {}
@@ -127,12 +175,6 @@ impl UpdatePermissionMemberRequest {
                     "file_type 必须为 doc/sheet/file/wiki/bitable/docx/folder/mindnote/minutes/slides",
                 ));
             }
-        }
-        if self.member_type.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "member_type",
-                "member_type 不能为空",
-            ));
         }
         match self.member_type.as_str() {
             "email" | "openid" | "unionid" | "openchat" | "opendepartmentid" | "userid"
@@ -144,12 +186,6 @@ impl UpdatePermissionMemberRequest {
                 ));
             }
         }
-        if self.perm.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "perm",
-                "perm 不能为空",
-            ));
-        }
         match self.perm.as_str() {
             "view" | "edit" | "full_access" => {}
             _ => {
@@ -158,12 +194,6 @@ impl UpdatePermissionMemberRequest {
                     "perm 必须为 view/edit/full_access",
                 ));
             }
-        }
-        if self.file_type == "minutes" && self.perm == "full_access" {
-            return Err(openlark_core::error::validation_error(
-                "perm",
-                "当 file_type=minutes 时，不支持 full_access",
-            ));
         }
         if let Some(perm_type) = &self.perm_type {
             match perm_type.as_str() {
@@ -187,6 +217,14 @@ impl UpdatePermissionMemberRequest {
                     ));
                 }
             }
+        }
+
+        // === 业务规则验证 ===
+        if self.file_type == "minutes" && self.perm == "full_access" {
+            return Err(openlark_core::error::validation_error(
+                "perm",
+                "当 file_type=minutes 时，不支持 full_access",
+            ));
         }
         if self.member_type == "wikispaceid" {
             match self.member_kind.as_deref() {
@@ -280,5 +318,177 @@ mod tests {
             UpdatePermissionMemberResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    #[test]
+    fn test_empty_token_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "",
+            "member_id",
+            "docx",
+            "openid",
+            "edit",
+        );
+        assert_eq!(request.token, "");
+    }
+
+    #[test]
+    fn test_empty_member_id_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "",
+            "docx",
+            "openid",
+            "edit",
+        );
+        assert_eq!(request.member_id, "");
+    }
+
+    #[test]
+    fn test_empty_file_type_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "",
+            "openid",
+            "edit",
+        );
+        assert_eq!(request.file_type, "");
+    }
+
+    #[test]
+    fn test_invalid_file_type_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "invalid_type",
+            "openid",
+            "edit",
+        );
+        assert_eq!(request.file_type, "invalid_type");
+    }
+
+    #[test]
+    fn test_empty_member_type_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "docx",
+            "",
+            "edit",
+        );
+        assert_eq!(request.member_type, "");
+    }
+
+    #[test]
+    fn test_invalid_member_type_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "docx",
+            "invalid_type",
+            "edit",
+        );
+        assert_eq!(request.member_type, "invalid_type");
+    }
+
+    #[test]
+    fn test_empty_perm_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "docx",
+            "openid",
+            "",
+        );
+        assert_eq!(request.perm, "");
+    }
+
+    #[test]
+    fn test_invalid_perm_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "docx",
+            "openid",
+            "invalid_perm",
+        );
+        assert_eq!(request.perm, "invalid_perm");
+    }
+
+    #[test]
+    fn test_minutes_with_full_access_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "minutes",
+            "openid",
+            "full_access",
+        );
+        assert_eq!(request.file_type, "minutes");
+        assert_eq!(request.perm, "full_access");
+    }
+
+    #[test]
+    fn test_wikispaceid_without_member_kind_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "docx",
+            "wikispaceid",
+            "edit",
+        );
+        assert_eq!(request.member_type, "wikispaceid");
+        assert_eq!(request.member_kind, None);
+    }
+
+    #[test]
+    fn test_invalid_perm_type_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "docx",
+            "openid",
+            "edit",
+        )
+        .perm_type("invalid_perm_type");
+        assert_eq!(request.perm_type, Some("invalid_perm_type".to_string()));
+    }
+
+    #[test]
+    fn test_invalid_member_kind_validation() {
+        let config = Config::default();
+        let request = UpdatePermissionMemberRequest::new(
+            config,
+            "file_token",
+            "member_id",
+            "docx",
+            "openid",
+            "edit",
+        )
+        .member_kind("invalid_kind");
+        assert_eq!(request.member_kind, Some("invalid_kind".to_string()));
     }
 }

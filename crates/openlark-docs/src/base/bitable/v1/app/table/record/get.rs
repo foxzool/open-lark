@@ -14,6 +14,34 @@ use serde::{Deserialize, Serialize};
 use super::models::Record;
 
 /// 获取记录请求
+///
+/// 用于获取多维表格数据表中的单条记录详情。
+///
+/// # 字段说明
+///
+/// - `app_token`: 多维表格的 app_token，不能为空
+/// - `table_id`: 数据表的 table_id，不能为空
+/// - `record_id`: 记录 ID，不能为空
+/// - `text_field_as_array`: 多行文本字段数据是否以数组形式返回
+/// - `user_id_type`: 用户 ID 类型
+/// - `display_formula_ref`: 公式、查找引用是否显示完整原样的返回结果
+/// - `with_shared_url`: 是否返回该记录的链接（record_url）
+/// - `automatic_fields`: 是否返回自动计算字段
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_docs::base::bitable::v1::app::table::record::GetRecordRequest;
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let request = GetRecordRequest::new(config)
+///     .app_token("app_token")
+///     .table_id("table_id")
+///     .record_id("record_id")
+///     .user_id_type("open_id");
+/// let response = request.execute().await?;
+/// ```
 #[derive(Debug, Clone)]
 pub struct GetRecordRequest {
     config: Config,
@@ -96,6 +124,7 @@ impl GetRecordRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetRecordResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "app_token");
         validate_required!(self.table_id.trim(), "table_id");
         validate_required!(self.record_id.trim(), "record_id");
@@ -145,5 +174,81 @@ pub struct GetRecordResponse {
 impl ApiResponseTrait for GetRecordResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_record_request_builder() {
+        let config = Config::default();
+        let request = GetRecordRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .record_id("record_id".to_string())
+            .user_id_type("open_id".to_string());
+
+        assert_eq!(request.app_token, "app_token");
+        assert_eq!(request.table_id, "table_id");
+        assert_eq!(request.record_id, "record_id");
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_optional_fields() {
+        let config = Config::default();
+        let request = GetRecordRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .record_id("record_id".to_string())
+            .text_field_as_array(true)
+            .display_formula_ref(true)
+            .with_shared_url(true)
+            .automatic_fields(true);
+
+        assert_eq!(request.text_field_as_array, Some(true));
+        assert_eq!(request.display_formula_ref, Some(true));
+        assert_eq!(request.with_shared_url, Some(true));
+        assert_eq!(request.automatic_fields, Some(true));
+    }
+
+    #[test]
+    fn test_empty_app_token_validation() {
+        let config = Config::default();
+        let request = GetRecordRequest::new(config)
+            .app_token("".to_string())
+            .table_id("table_id".to_string())
+            .record_id("record_id".to_string());
+        assert_eq!(request.app_token, "");
+    }
+
+    #[test]
+    fn test_empty_table_id_validation() {
+        let config = Config::default();
+        let request = GetRecordRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("".to_string())
+            .record_id("record_id".to_string());
+        assert_eq!(request.table_id, "");
+    }
+
+    #[test]
+    fn test_empty_record_id_validation() {
+        let config = Config::default();
+        let request = GetRecordRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .record_id("".to_string());
+        assert_eq!(request.record_id, "");
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(
+            GetRecordResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

@@ -17,6 +17,24 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 use super::models::PermissionPublic;
 
 /// 获取云文档权限设置请求
+///
+/// 用于获取指定云文档的公共访问与协作权限设置。
+///
+/// # 字段说明
+///
+/// - `token`: 云文档 token，不能为空
+/// - `type`: 云文档类型，必须为 doc/sheet/file/wiki/bitable/docx/mindnote/minutes/slides 之一
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_docs::ccm::drive::v1::permission::public::GetPublicPermissionRequest;
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let request = GetPublicPermissionRequest::new(config, "doc_token", "docx");
+/// let response = request.execute().await?;
+/// ```
 #[derive(Debug, Clone)]
 pub struct GetPublicPermissionRequest {
     config: Config,
@@ -44,6 +62,7 @@ impl GetPublicPermissionRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetPublicPermissionResponse> {
+        // === 必填字段验证 ===
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -56,6 +75,8 @@ impl GetPublicPermissionRequest {
                 "type 不能为空",
             ));
         }
+
+        // === 枚举值验证 ===
         match self.r#type.as_str() {
             "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "mindnote" | "minutes"
             | "slides" => {}
@@ -108,5 +129,37 @@ mod tests {
             GetPublicPermissionResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    #[test]
+    fn test_empty_token_validation() {
+        let config = Config::default();
+        let request = GetPublicPermissionRequest::new(config, "", "docx");
+        assert_eq!(request.token, "");
+    }
+
+    #[test]
+    fn test_empty_type_validation() {
+        let config = Config::default();
+        let request = GetPublicPermissionRequest::new(config, "doc_token", "");
+        assert_eq!(request.r#type, "");
+    }
+
+    #[test]
+    fn test_invalid_type_validation() {
+        let config = Config::default();
+        let request = GetPublicPermissionRequest::new(config, "doc_token", "invalid_type");
+        assert_eq!(request.r#type, "invalid_type");
+    }
+
+    #[test]
+    fn test_valid_file_types() {
+        let config = Config::default();
+        let valid_types = vec!["doc", "sheet", "file", "wiki", "bitable", "docx", "mindnote", "minutes", "slides"];
+
+        for file_type in valid_types {
+            let request = GetPublicPermissionRequest::new(config.clone(), "doc_token", file_type);
+            assert_eq!(request.r#type, file_type);
+        }
     }
 }
