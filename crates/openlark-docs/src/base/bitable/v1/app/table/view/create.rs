@@ -16,6 +16,28 @@ use serde::{Deserialize, Serialize};
 use super::patch::View;
 
 /// 新增视图请求
+///
+/// 用于在多维表格的数据表中创建新视图。
+///
+/// # 字段说明
+///
+/// - `app_token`: 多维表格的 app_token
+/// - `table_id`: 数据表的 table_id
+/// - `view`: 视图信息，包含视图名称和类型
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_docs::base::bitable::v1::app::table::view::create::{CreateViewRequest, CreateViewData};
+/// use openlark_core::Config;
+///
+/// let config = Config::default();
+/// let view_data = CreateViewData::grid_view("我的表格视图");
+/// let request = CreateViewRequest::new(config)
+///     .app_token("app_token_xyz".to_string())
+///     .table_id("table_id_xyz".to_string())
+///     .view(view_data);
+/// ```
 #[derive(Debug, Clone)]
 pub struct CreateViewRequest {
     /// 配置信息
@@ -66,7 +88,7 @@ impl CreateViewRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<CreateViewResponse> {
-        // 参数验证
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "app_token");
 
         validate_required!(self.table_id.trim(), "table_id");
@@ -78,6 +100,7 @@ impl CreateViewRequest {
             ));
         }
 
+        // === 业务规则验证 ===
         if self.view.view_name.len() > 100 {
             return Err(openlark_core::error::validation_error(
                 "view.view_name",
@@ -93,6 +116,7 @@ impl CreateViewRequest {
             ));
         }
 
+        // === 枚举值验证 ===
         // 验证视图类型
         if let Some(ref view_type) = self.view.view_type {
             let valid_types = ["grid", "kanban", "gallery", "gantt", "form"];
@@ -187,5 +211,125 @@ pub struct CreateViewResponse {
 impl ApiResponseTrait for CreateViewResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let view_data = CreateViewData::grid_view("测试视图");
+        let request = CreateViewRequest::new(config)
+            .app_token("".to_string())
+            .table_id("table_id".to_string())
+            .view(view_data);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("app_token") || err.to_string().contains("app_token"));
+    }
+
+    #[test]
+    fn test_empty_table_id() {
+        let config = Config::default();
+        let view_data = CreateViewData::grid_view("测试视图");
+        let request = CreateViewRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("".to_string())
+            .view(view_data);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("table_id"));
+    }
+
+    #[test]
+    fn test_empty_view_name() {
+        let config = Config::default();
+        let view_data = CreateViewData {
+            view_name: "".to_string(),
+            view_type: Some("grid".to_string()),
+        };
+        let request = CreateViewRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .view(view_data);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("view_name"));
+    }
+
+    #[test]
+    fn test_view_name_too_long() {
+        let config = Config::default();
+        let long_name = "a".repeat(101);
+        let view_data = CreateViewData {
+            view_name: long_name,
+            view_type: Some("grid".to_string()),
+        };
+        let request = CreateViewRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .view(view_data);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("100"));
+    }
+
+    #[test]
+    fn test_invalid_view_type() {
+        let config = Config::default();
+        let view_data = CreateViewData {
+            view_name: "测试视图".to_string(),
+            view_type: Some("invalid_type".to_string()),
+        };
+        let request = CreateViewRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .view(view_data);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("view_type"));
+    }
+
+    #[test]
+    fn test_view_name_with_brackets() {
+        let config = Config::default();
+        let view_data = CreateViewData {
+            view_name: "测试[视图]".to_string(),
+            view_type: Some("grid".to_string()),
+        };
+        let request = CreateViewRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .view(view_data);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("[") || err.to_string().contains("]"));
     }
 }
