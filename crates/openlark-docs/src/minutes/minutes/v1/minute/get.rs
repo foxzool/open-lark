@@ -47,6 +47,7 @@ impl GetMinuteRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetMinuteResponse> {
+        // ===== 参数校验 =====
         let minute_token = self.minute_token.ok_or_else(|| {
             openlark_core::error::validation_error("minute_token", "minute_token 不能为空")
         })?;
@@ -68,6 +69,7 @@ impl GetMinuteRequest {
             }
         }
 
+        // ===== 构建请求 =====
         let api_endpoint = MinutesApiV1::Get(minute_token);
         let mut api_request: ApiRequest<GetMinuteResponse> =
             ApiRequest::get(&api_endpoint.to_url());
@@ -76,8 +78,70 @@ impl GetMinuteRequest {
             api_request = api_request.query("user_id_type", user_id_type);
         }
 
+        // ===== 发送请求 =====
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_minute_request_builder() {
+        let config = Config::default();
+        let request = GetMinuteRequest::new(config)
+            .minute_token("123456789012345678901234");
+
+        assert_eq!(request.minute_token, Some("123456789012345678901234".to_string()));
+    }
+
+    #[test]
+    fn test_get_minute_request_with_user_id_type() {
+        let config = Config::default();
+        let request = GetMinuteRequest::new(config)
+            .minute_token("123456789012345678901234")
+            .user_id_type("union_id");
+
+        assert_eq!(request.user_id_type, Some("union_id".to_string()));
+    }
+
+    #[test]
+    fn test_minute_info_structure() {
+        let info = MinuteInfo {
+            token: "token_123".to_string(),
+            owner_id: "owner_456".to_string(),
+            create_time: "1234567890".to_string(),
+            title: "会议标题".to_string(),
+            cover: "cover_url".to_string(),
+            duration: "3600000".to_string(),
+            url: "https://example.com".to_string(),
+        };
+
+        assert_eq!(info.token, "token_123");
+        assert_eq!(info.title, "会议标题");
+    }
+
+    #[test]
+    fn test_get_minute_response_structure() {
+        let info = MinuteInfo {
+            token: "token_123".to_string(),
+            owner_id: "owner_456".to_string(),
+            create_time: "1234567890".to_string(),
+            title: "会议标题".to_string(),
+            cover: "cover_url".to_string(),
+            duration: "3600000".to_string(),
+            url: "https://example.com".to_string(),
+        };
+        let response = GetMinuteResponse { minute: info };
+
+        assert_eq!(response.minute.token, "token_123");
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(GetMinuteResponse::data_format(), ResponseFormat::Data);
     }
 }
 
