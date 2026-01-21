@@ -1,11 +1,11 @@
 pub mod create;
 pub mod get;
-pub mod update;
 pub mod list;
 pub mod models;
+pub mod update;
 
-use std::sync::Arc;
 use openlark_core::config::Config;
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct Ticket {
@@ -36,6 +36,6 @@ impl Ticket {
 
 pub use create::CreateTicketRequest;
 pub use get::GetTicketRequest;
-pub use update::UpdateTicketRequest;
 pub use list::TicketListRequest;
 pub use models::*;
+pub use update::UpdateTicketRequest;

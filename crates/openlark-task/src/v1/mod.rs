@@ -1,7 +1,7 @@
 pub mod task;
 
-use std::sync::Arc;
 use openlark_core::config::Config;
+use std::sync::Arc;
 
 /// TaskV1：任务 API v1 访问入口
 #[derive(Clone)]

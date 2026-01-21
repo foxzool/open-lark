@@ -8,8 +8,8 @@ mod tests {
 
     #[test]
     fn test_prelude_imports() {
-        use openlark_task::prelude::*;
         use openlark_core::config::Config;
         use openlark_core::SDKResult;
+        use openlark_task::prelude::*;
     }
 }

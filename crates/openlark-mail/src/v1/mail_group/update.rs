@@ -1,12 +1,11 @@
 //! 更新邮件组
 
-use crate::v1::mail_group::models::{UpdateMailGroupBody, UpdateMailGroupResponse};
 use crate::common::{api_endpoints::MailApiV1, api_utils::*};
+use crate::v1::mail_group::models::{UpdateMailGroupBody, UpdateMailGroupResponse};
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use std::sync::Arc;
 
@@ -38,7 +37,8 @@ impl UpdateMailGroupRequest {
     }
 
     pub async fn execute(self) -> SDKResult<UpdateMailGroupResponse> {
-        self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
     }
 
     pub async fn execute_with_options(
@@ -53,7 +53,8 @@ impl UpdateMailGroupRequest {
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "更新邮件组")?);
 
-        let response = openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;
+        let response =
+            openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "更新邮件组")
     }
 }

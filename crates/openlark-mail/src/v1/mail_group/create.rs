@@ -2,13 +2,12 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/docs/mail-v1/mail_group/create
 
-use crate::v1::mail_group::models::{CreateMailGroupBody, CreateMailGroupResponse};
 use crate::common::{api_endpoints::MailApiV1, api_utils::*};
+use crate::v1::mail_group::models::{CreateMailGroupBody, CreateMailGroupResponse};
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use std::sync::Arc;
 
@@ -97,10 +96,12 @@ mod tests {
 
     #[test]
     fn test_create_mail_group_builder() {
-        let config = Arc::new(openlark_core::config::Config::builder()
-            .app_id("test")
-            .app_secret("test")
-            .build());
+        let config = Arc::new(
+            openlark_core::config::Config::builder()
+                .app_id("test")
+                .app_secret("test")
+                .build(),
+        );
 
         let request = CreateMailGroupRequest::new(config)
             .mail_group_id("team@example.com")

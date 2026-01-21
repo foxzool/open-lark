@@ -48,4 +48,3 @@ pub(crate) fn with_env_vars<R>(vars: &[(&str, Option<&str>)], f: impl FnOnce() -
     let _restore = EnvRestore { saved };
     f()
 }
-

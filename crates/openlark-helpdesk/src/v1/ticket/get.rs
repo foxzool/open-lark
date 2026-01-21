@@ -1,12 +1,11 @@
 //! 获取工单详情
 
-use crate::v1::ticket::models::GetTicketResponse;
 use crate::common::{api_endpoints::HelpdeskApiV1, api_utils::*};
+use crate::v1::ticket::models::GetTicketResponse;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use std::sync::Arc;
 

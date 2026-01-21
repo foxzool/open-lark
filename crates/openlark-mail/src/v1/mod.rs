@@ -1,7 +1,7 @@
 pub mod mail_group;
 
-use std::sync::Arc;
 use openlark_core::config::Config;
+use std::sync::Arc;
 
 /// MailV1：邮件 API v1 访问入口
 #[derive(Clone)]
