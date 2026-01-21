@@ -41,7 +41,7 @@ impl DeleteTaskRequest {
         validate_required!(self.task_guid.trim(), "任务GUID不能为空");
 
         let api_endpoint = TaskApiV2::TaskDelete(self.task_guid.clone());
-        let request = ApiRequest::<DeleteTaskResponse>::delete(&api_endpoint.to_url());
+        let request = ApiRequest::<DeleteTaskResponse>::delete(api_endpoint.to_url());
 
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;

@@ -3,6 +3,7 @@ use openlark_core::config::Config;
 
 /// CustomField：自定义字段资源
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct CustomField {
     config: Arc<Config>,
 }

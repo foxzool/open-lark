@@ -101,7 +101,7 @@ impl UpdateTaskRequest {
         validate_required!(self.task_guid.trim(), "任务GUID不能为空");
 
         let api_endpoint = TaskApiV2::TaskUpdate(self.task_guid.clone());
-        let mut request = ApiRequest::<UpdateTaskResponse>::patch(&api_endpoint.to_url());
+        let mut request = ApiRequest::<UpdateTaskResponse>::patch(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "更新任务")?);

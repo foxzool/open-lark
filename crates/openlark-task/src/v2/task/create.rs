@@ -122,7 +122,7 @@ impl CreateTaskRequest {
         validate_required!(self.body.summary.trim(), "任务标题不能为空");
 
         let api_endpoint = TaskApiV2::TaskCreate;
-        let mut request = ApiRequest::<CreateTaskResponse>::post(&api_endpoint.to_url());
+        let mut request = ApiRequest::<CreateTaskResponse>::post(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "创建任务")?);

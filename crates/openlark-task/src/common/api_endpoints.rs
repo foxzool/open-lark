@@ -2,6 +2,22 @@
 //!
 //! 本模块提供基于枚举的 API 端点定义，用于生产代码中的类型安全调用。
 
+/// 任务 API V1 端点枚举
+#[derive(Debug, Clone, PartialEq)]
+pub enum TaskApiV1 {
+    /// 创建任务
+    TaskCreate,
+}
+
+impl TaskApiV1 {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            TaskApiV1::TaskCreate => "/open-apis/task/v1/tasks".to_string(),
+        }
+    }
+}
+
 /// 任务 API V2 端点枚举
 #[derive(Debug, Clone, PartialEq)]
 pub enum TaskApiV2 {

@@ -3,6 +3,7 @@ use openlark_core::config::Config;
 
 /// Tasklist：任务清单资源
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct Tasklist {
     config: Arc<Config>,
 }
