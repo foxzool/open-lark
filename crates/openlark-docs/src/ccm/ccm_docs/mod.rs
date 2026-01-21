@@ -16,7 +16,7 @@ pub use docs::*;
 
 // 子模块
 pub mod docs;
-pub mod old;
+// old 模块已废弃并删除
 
 /// CCM 文档服务
 ///

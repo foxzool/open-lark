@@ -8,7 +8,7 @@ pub use explorer::*;
 
 // 子模块
 pub mod explorer;
-pub mod old;
+// old 模块已废弃并删除
 
 /// 云盘浏览器服务
 #[derive(Clone)]
