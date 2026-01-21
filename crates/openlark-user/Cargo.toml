@@ -1,0 +1,73 @@
+[package]
+name = "openlark-user"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+description = "飞书开放平台用户设置模块 - 个人设置、用户偏好 API (21 APIs)"
+keywords = ["feishu", "lark", "user", "api", "settings", "preferences"]
+categories = ["api-bindings", "web-programming"]
+
+[features]
+default = ["settings", "preferences"]
+
+# === 核心功能模块 ===
+core = []
+
+# === 业务域功能 ===
+# 个人设置 (21 APIs)
+settings-core = []
+settings = ["settings-core", "core"]
+
+# 用户偏好
+preferences-core = []
+preferences = ["preferences-core", "core"]
+
+# === API版本支持 ===
+v1 = ["core"]
+v2 = ["v1"]
+v3 = ["v2"]
+v4 = ["v3"]
+
+# === 功能组合 ===
+# 完整用户设置功能
+full = ["settings", "preferences", "v4"]
+
+# 向后兼容别名
+user = ["settings", "preferences"]
+all-user = ["full"]
+
+[dependencies]
+# 核心依赖
+openlark-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+once_cell = "1.19"
+
+# 工具依赖
+uuid = { workspace = true }
+url = { workspace = true }
+futures = { workspace = true }
+regex = { workspace = true }
+rand = { workspace = true }
+serde_repr = { workspace = true }
+log = { workspace = true }
+
+# 可选依赖
+parking_lot = { version = "0.12", optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+wiremock = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }
+mockall = { workspace = true }
