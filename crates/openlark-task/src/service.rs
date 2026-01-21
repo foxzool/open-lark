@@ -5,6 +5,7 @@ use std::sync::Arc;
 ///
 /// 提供对任务 API v1 和 v2 的访问能力
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct TaskService {
     config: Arc<Config>,
 }
