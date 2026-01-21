@@ -70,6 +70,7 @@ impl GetEntityRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetEntityResp> {
+        // ===== 参数校验 =====
         validate_required!(self.entity_id, "entity_id 不能为空");
 
         let using_outer = self.provider.is_some() || self.outer_id.is_some();
@@ -106,6 +107,7 @@ impl GetEntityRequest {
             }
         }
 
+        // ===== 构建请求 =====
         let mut api_request: ApiRequest<GetEntityResp> =
             ApiRequest::get(&BaikeApiV1::EntityGet(self.entity_id).to_url());
         if let Some(provider) = &self.provider {
@@ -118,10 +120,77 @@ impl GetEntityRequest {
             api_request = api_request.query("user_id_type", user_id_type.as_str());
         }
 
+        // ===== 发送请求并返回结果 =====
         let response: Response<GetEntityResp> =
             Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::baike::baike::v1::models::UserIdType;
+
+    #[test]
+    fn test_get_entity_request_builder() {
+        let config = Config::default();
+        let request = GetEntityRequest::new(config, "entity_123")
+            .user_id_type(UserIdType::OpenId);
+
+        assert_eq!(request.entity_id, "entity_123");
+        assert!(request.user_id_type.is_some());
+    }
+
+    #[test]
+    fn test_get_entity_request_with_outer_id() {
+        let config = Config::default();
+        let request = GetEntityRequest::new(config, "enterprise_0")
+            .provider("my_system")
+            .outer_id("outer_12345")
+            .user_id_type(UserIdType::UserId);
+
+        assert_eq!(request.entity_id, "enterprise_0");
+        assert_eq!(request.provider, Some("my_system".to_string()));
+        assert_eq!(request.outer_id, Some("outer_12345".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_get_entity_request_validation() {
+        let config = Config::default();
+
+        // 测试 entity_id 为空
+        let request = GetEntityRequest::new(config.clone(), "");
+        assert!(request.execute_with_options(RequestOption::default()).await.is_err());
+
+        // 测试 provider 过短
+        let request2 = GetEntityRequest::new(config.clone(), "enterprise_0")
+            .provider("a")
+            .outer_id("outer_123");
+        assert!(request2.execute_with_options(RequestOption::default()).await.is_err());
+
+        // 测试 provider 过长
+        let request3 = GetEntityRequest::new(config.clone(), "enterprise_0")
+            .provider("a".repeat(33))
+            .outer_id("outer_123");
+        assert!(request3.execute_with_options(RequestOption::default()).await.is_err());
+
+        // 测试 outer_id 过长
+        let request4 = GetEntityRequest::new(config.clone(), "enterprise_0")
+            .provider("my_system")
+            .outer_id("a".repeat(65));
+        assert!(request4.execute_with_options(RequestOption::default()).await.is_err());
+
+        // 测试缺少 outer_id
+        let request5 = GetEntityRequest::new(config.clone(), "enterprise_0")
+            .provider("my_system");
+        assert!(request5.execute_with_options(RequestOption::default()).await.is_err());
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(GetEntityResp::data_format(), ResponseFormat::Data);
     }
 }
