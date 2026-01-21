@@ -1,64 +1,39 @@
-//! 工作流服务主模块
-//!
-//! 提供统一的 HTTP 请求封装，供 task/approval/board 等 project 使用。
-
+use openlark_core::config::Config;
 use std::sync::Arc;
 
-use openlark_core::config::Config;
-use openlark_core::SDKResult;
-use reqwest::Method;
-
+/// WorkflowService：工作流服务的统一入口
+///
+/// 提供对任务、审批、看板 API 的访问能力
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct WorkflowService {
     config: Arc<Config>,
-    http_client: Arc<reqwest::Client>,
 }
 
 impl WorkflowService {
     pub fn new(config: Config) -> Self {
         Self {
             config: Arc::new(config),
-            http_client: Arc::new(reqwest::Client::new()),
         }
     }
 
-    pub fn from_config(config: Config) -> SDKResult<Self> {
-        Ok(Self::new(config))
+    #[cfg(feature = "v1")]
+    pub fn v1(&self) -> crate::v1::TaskV1 {
+        crate::v1::TaskV1::new(self.config.clone())
     }
 
-    pub fn config(&self) -> &Config {
-        &self.config
+    #[cfg(feature = "v2")]
+    pub fn v2(&self) -> crate::v2::TaskV2 {
+        crate::v2::TaskV2::new(self.config.clone())
     }
 
-    /// 通用请求发送器（GET/DELETE 用 query，其他用 body）
-    pub async fn request_value<Q: serde::Serialize + ?Sized, B: serde::Serialize + ?Sized>(
-        &self,
-        method: Method,
-        path: &str,
-        query: Option<&Q>,
-        body: Option<&B>,
-    ) -> SDKResult<serde_json::Value> {
-        let url = format!("{}{}", self.config.base_url, path);
-        let mut builder = self.http_client.request(method.clone(), url.clone());
-        if let Some(q) = query {
-            builder = builder.query(q);
-        }
-        if let Some(b) = body {
-            builder = builder.json(b);
-        }
-        let resp = builder
-            .send()
-            .await
-            .map_err(|e| openlark_core::error::network_error_with_details(e.to_string(), None, Some(url.clone())))?;
-        let status = resp.status();
-        let text = resp
-            .text()
-            .await
-            .map_err(|e| openlark_core::error::network_error_with_details(e.to_string(), None, Some(url.clone())))?;
-        let value: serde_json::Value = serde_json::from_str(&text).unwrap_or_else(|_| serde_json::json!({ "raw": text }));
-        if !status.is_success() {
-            return Err(openlark_core::error::api_error(status.as_u16(), url, text, None));
-        }
-        Ok(value)
+    #[cfg(feature = "v2")]
+    pub fn task(&self) -> crate::v2::task::Task {
+        crate::v2::task::Task::new(self.config.clone())
+    }
+
+    #[cfg(feature = "v2")]
+    pub fn tasklist(&self) -> crate::v2::tasklist::Tasklist {
+        crate::v2::tasklist::Tasklist::new(self.config.clone())
     }
 }

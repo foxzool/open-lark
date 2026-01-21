@@ -41,8 +41,8 @@ pub use openlark_application;
 #[cfg(feature = "openlark-security")]
 pub use openlark_security;
 
-#[cfg(feature = "task")]
-pub use openlark_task;
+#[cfg(feature = "workflow")]
+pub use openlark_workflow;
 
 #[cfg(feature = "platform")]
 pub use openlark_platform;

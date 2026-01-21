@@ -1,8 +1,8 @@
-/// 示例：使用任务 API
+/// 示例：使用工作流 API
 ///
-/// 此示例展示如何使用 openlark-task 模块创建和查询任务
-use openlark_task::prelude::*;
-use openlark_task::TaskService;
+/// 此示例展示如何使用 openlark-workflow 模块创建和查询任务
+use openlark_workflow::prelude::*;
+use openlark_workflow::WorkflowService;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -12,16 +12,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .base_url("https://open.feishu.cn")
         .build();
 
-    let task_service = TaskService::new(config);
+    let workflow_service = WorkflowService::new(config);
 
-    #[cfg(feature = "task")]
+    #[cfg(feature = "workflow")]
     {
-        let response = task_service
+        let response = workflow_service
             .v2()
             .task()
             .create()
             .summary("完成项目文档")
-            .description("编写并完成 OpenLark SDK 的任务模块文档")
+            .description("编写并完成 OpenLark SDK 的工作流模块文档")
             .priority(3)
             .execute()
             .await?;
