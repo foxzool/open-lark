@@ -348,3 +348,89 @@ async fn get_app_token(_config: &crate::models::SecurityConfig) -> crate::Securi
     // TODO: 集成 openlark-auth 服务
     Ok("placeholder_app_token".to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<crate::models::SecurityConfig> {
+        Arc::new(crate::models::SecurityConfig {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+        })
+    }
+
+    #[test]
+    fn test_rule_external_service_creation() {
+        let config = create_test_config();
+        let service = RuleExternalService::new(config);
+        assert_eq!(service.config.app_id, "test_app_id");
+    }
+
+    #[test]
+    fn test_create_rule_builder() {
+        let config = create_test_config();
+        let service = RuleExternalService::new(config);
+        let builder = service.create()
+            .name("测试权限组")
+            .description("这是一个测试权限组")
+            .device_ids(vec!["device_1".to_string(), "device_2".to_string()])
+            .user_ids(vec!["user_1".to_string()])
+            .valid_from(1000000)
+            .valid_until(2000000);
+
+        assert_eq!(builder.name, "测试权限组");
+        assert_eq!(builder.description, Some("这是一个测试权限组".to_string()));
+        assert_eq!(builder.device_ids.len(), 2);
+        assert_eq!(builder.user_ids.len(), 1);
+        assert_eq!(builder.valid_from, Some(1000000));
+        assert_eq!(builder.valid_until, Some(2000000));
+    }
+
+    #[test]
+    fn test_get_rule_builder() {
+        let config = create_test_config();
+        let service = RuleExternalService::new(config);
+        let builder = service.get().rule_id("rule_123");
+        assert_eq!(builder.rule_id, "rule_123");
+    }
+
+    #[test]
+    fn test_delete_rule_builder() {
+        let config = create_test_config();
+        let service = RuleExternalService::new(config);
+        let builder = service.delete().rule_id("rule_456");
+        assert_eq!(builder.rule_id, "rule_456");
+    }
+
+    #[test]
+    fn test_device_bind_rule_builder() {
+        let config = create_test_config();
+        let service = RuleExternalService::new(config);
+        let builder = service.device_bind()
+            .rule_id("rule_789")
+            .device_ids(vec!["device_1".to_string()])
+            .overwrite(true);
+
+        assert_eq!(builder.rule_id, "rule_789");
+        assert_eq!(builder.device_ids.len(), 1);
+        assert_eq!(builder.overwrite, Some(true));
+    }
+
+    #[test]
+    fn test_create_rule_builder_defaults() {
+        let config = create_test_config();
+        let service = RuleExternalService::new(config);
+        let builder = service.create();
+
+        assert_eq!(builder.name, String::new());
+        assert!(builder.description.is_none());
+        assert!(builder.device_ids.is_empty());
+        assert!(builder.user_ids.is_empty());
+        assert!(builder.valid_from.is_none());
+        assert!(builder.valid_until.is_none());
+    }
+}
+

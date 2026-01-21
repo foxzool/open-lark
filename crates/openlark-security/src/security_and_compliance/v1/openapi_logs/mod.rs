@@ -279,3 +279,166 @@ async fn get_app_token(_config: &crate::models::SecurityConfig) -> crate::Securi
     // TODO: 集成 openlark-auth 服务
     Ok("placeholder_app_token".to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn create_test_config() -> Arc<crate::models::SecurityConfig> {
+        Arc::new(crate::models::SecurityConfig {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+        })
+    }
+
+    #[test]
+    fn test_openapi_logs_service_creation() {
+        let config = create_test_config();
+        let service = OpenApiLogsService::new(config);
+        assert_eq!(service.config.app_id, "test_app_id");
+    }
+
+    #[test]
+    fn test_list_openapi_logs_builder_defaults() {
+        let config = create_test_config();
+        let service = OpenApiLogsService::new(config);
+        let builder = service.list_data();
+        assert_eq!(builder.page_size, Some(20));
+        assert_eq!(builder.page_token, None);
+        assert_eq!(builder.start_time, None);
+        assert_eq!(builder.end_time, None);
+        assert_eq!(builder.sort_field, Some("request_time".to_string()));
+        assert_eq!(builder.sort_direction, Some("desc".to_string()));
+    }
+
+    #[test]
+    fn test_list_openapi_logs_builder_with_filters() {
+        let config = create_test_config();
+        let service = OpenApiLogsService::new(config);
+        let builder = service
+            .list_data()
+            .user_id_filter("user_123")
+            .api_path_filter("/open-apis/contact/v3/users")
+            .status_code_filter(200)
+            .app_id_filter("cli_123456")
+            .page_size(50)
+            .page_token("token_abc");
+
+        assert_eq!(builder.user_id_filter, Some("user_123".to_string()));
+        assert_eq!(
+            builder.api_path_filter,
+            Some("/open-apis/contact/v3/users".to_string())
+        );
+        assert_eq!(builder.status_code_filter, Some(200));
+        assert_eq!(builder.app_id_filter, Some("cli_123456".to_string()));
+        assert_eq!(builder.page_size, Some(50));
+        assert_eq!(builder.page_token, Some("token_abc".to_string()));
+    }
+
+    #[test]
+    fn test_list_openapi_logs_builder_time_range() {
+        let config = create_test_config();
+        let service = OpenApiLogsService::new(config);
+        let builder = service.list_data().time_range(1000000, 2000000);
+
+        assert_eq!(builder.start_time, Some(1000000));
+        assert_eq!(builder.end_time, Some(2000000));
+    }
+
+    #[test]
+    fn test_list_openapi_logs_builder_last_days() {
+        let config = create_test_config();
+        let service = OpenApiLogsService::new(config);
+        let builder = service.list_data().last_days(7);
+
+        assert!(builder.start_time.is_some());
+        assert!(builder.end_time.is_some());
+        assert!(builder.end_time.unwrap() > builder.start_time.unwrap());
+    }
+
+    #[test]
+    fn test_list_openapi_logs_builder_last_hours() {
+        let config = create_test_config();
+        let service = OpenApiLogsService::new(config);
+        let builder = service.list_data().last_hours(24);
+
+        assert!(builder.start_time.is_some());
+        assert!(builder.end_time.is_some());
+        assert!(builder.end_time.unwrap() > builder.start_time.unwrap());
+    }
+
+    #[test]
+    fn test_list_openapi_logs_builder_api_path_contains() {
+        let config = create_test_config();
+        let service = OpenApiLogsService::new(config);
+        let builder = service.list_data().api_path_contains("users");
+
+        assert_eq!(builder.api_path_filter, Some("*users*".to_string()));
+    }
+
+    #[test]
+    fn test_list_openapi_logs_sort_methods() {
+        let config = create_test_config();
+        let service = OpenApiLogsService::new(config);
+
+        // 测试时间升序
+        let builder_asc = service.list_data().sort_by_time_asc();
+        assert_eq!(builder_asc.sort_field, Some("request_time".to_string()));
+        assert_eq!(builder_asc.sort_direction, Some("asc".to_string()));
+
+        // 测试时间降序
+        let builder_desc = service.list_data().sort_by_time_desc();
+        assert_eq!(builder_desc.sort_field, Some("request_time".to_string()));
+        assert_eq!(builder_desc.sort_direction, Some("desc".to_string()));
+    }
+
+    #[test]
+    fn test_list_openapi_logs_builder_chaining() {
+        let config = create_test_config();
+        let service = OpenApiLogsService::new(config);
+        let builder = service
+            .list_data()
+            .last_days(30)
+            .user_id_filter("user_456")
+            .status_code_filter(500)
+            .page_size(100)
+            .sort_by_time_desc();
+
+        assert!(builder.start_time.is_some());
+        assert!(builder.end_time.is_some());
+        assert_eq!(builder.user_id_filter, Some("user_456".to_string()));
+        assert_eq!(builder.status_code_filter, Some(500));
+        assert_eq!(builder.page_size, Some(100));
+        assert_eq!(builder.sort_direction, Some("desc".to_string()));
+    }
+
+    #[test]
+    fn test_list_openapi_logs_status_code_variants() {
+        let config = create_test_config();
+        let service = OpenApiLogsService::new(config);
+
+        // 测试不同的状态码
+        let builder_200 = service.list_data().status_code_filter(200);
+        assert_eq!(builder_200.status_code_filter, Some(200));
+
+        let builder_400 = service.list_data().status_code_filter(400);
+        assert_eq!(builder_400.status_code_filter, Some(400));
+
+        let builder_500 = service.list_data().status_code_filter(500);
+        assert_eq!(builder_500.status_code_filter, Some(500));
+    }
+
+    #[test]
+    fn test_list_openapi_logs_custom_sort() {
+        let config = create_test_config();
+        let service = OpenApiLogsService::new(config);
+        let builder = service
+            .list_data()
+            .sort_field("user_id")
+            .sort_direction("asc");
+
+        assert_eq!(builder.sort_field, Some("user_id".to_string()));
+        assert_eq!(builder.sort_direction, Some("asc".to_string()));
+    }
+}

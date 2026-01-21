@@ -766,3 +766,221 @@ async fn get_app_token(_config: &crate::models::SecurityConfig) -> crate::Securi
     // TODO: 集成 openlark-auth 服务
     Ok("placeholder_app_token".to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn create_test_config() -> Arc<crate::models::SecurityConfig> {
+        Arc::new(crate::models::SecurityConfig {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+        })
+    }
+
+    #[test]
+    fn test_device_records_service_creation() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        assert_eq!(service.config.app_id, "test_app_id");
+    }
+
+    #[test]
+    fn test_get_my_device_records_builder_defaults() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        let builder = service.mine();
+        assert_eq!(builder.page_size, Some(20));
+        assert_eq!(builder.page_token, None);
+        assert_eq!(builder.status, None);
+    }
+
+    #[test]
+    fn test_get_my_device_records_builder_with_params() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        let builder = service
+            .mine()
+            .page_size(50)
+            .page_token("token_123")
+            .status(crate::models::security_and_compliance::DeviceRecordStatus::Approved);
+
+        assert_eq!(builder.page_size, Some(50));
+        assert_eq!(builder.page_token, Some("token_123".to_string()));
+        assert!(builder.status.is_some());
+    }
+
+    #[test]
+    fn test_create_device_record_builder_defaults() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        let builder = service.create();
+        assert_eq!(builder.device_name, String::new());
+        assert_eq!(builder.device_type, String::new());
+        assert_eq!(builder.device_brand, None);
+        assert_eq!(builder.personal_device, None);
+    }
+
+    #[test]
+    fn test_create_device_record_builder_with_params() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        let builder = service
+            .create()
+            .device_name("测试设备")
+            .device_type("laptop")
+            .device_brand("Apple")
+            .device_model("MacBook Pro")
+            .os_type("macOS")
+            .os_version("14.0")
+            .serial_number("SN123456")
+            .mac_address("00:1A:2B:3C:4D:5E")
+            .personal_device(false);
+
+        assert_eq!(builder.device_name, "测试设备");
+        assert_eq!(builder.device_type, "laptop");
+        assert_eq!(builder.device_brand, Some("Apple".to_string()));
+        assert_eq!(builder.device_model, Some("MacBook Pro".to_string()));
+        assert_eq!(builder.os_type, Some("macOS".to_string()));
+        assert_eq!(builder.os_version, Some("14.0".to_string()));
+        assert_eq!(builder.serial_number, Some("SN123456".to_string()));
+        assert_eq!(builder.mac_address, Some("00:1A:2B:3C:4D:5E".to_string()));
+        assert_eq!(builder.personal_device, Some(false));
+    }
+
+    #[test]
+    fn test_list_device_records_builder_defaults() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        let builder = service.list();
+        assert_eq!(builder.page_size, Some(20));
+        assert_eq!(builder.user_id, None);
+        assert_eq!(builder.device_type, None);
+        assert_eq!(builder.status, None);
+    }
+
+    #[test]
+    fn test_list_device_records_builder_with_filters() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        let builder = service
+            .list()
+            .page_size(100)
+            .user_id("user_123")
+            .device_type("mobile")
+            .status(crate::models::security_and_compliance::DeviceRecordStatus::Pending)
+            .personal_device(true)
+            .compliance_status(crate::models::security_and_compliance::ComplianceStatus::Compliant);
+
+        assert_eq!(builder.page_size, Some(100));
+        assert_eq!(builder.user_id, Some("user_123".to_string()));
+        assert_eq!(builder.device_type, Some("mobile".to_string()));
+        assert!(builder.status.is_some());
+        assert_eq!(builder.personal_device, Some(true));
+        assert!(builder.compliance_status.is_some());
+    }
+
+    #[test]
+    fn test_get_device_record_builder() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        let builder = service.get().device_record_id("record_123");
+        assert_eq!(builder.device_record_id, "record_123");
+    }
+
+    #[test]
+    fn test_update_device_record_builder_defaults() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        let builder = service.update();
+        assert_eq!(builder.device_record_id, String::new());
+        assert_eq!(builder.device_name, None);
+        assert_eq!(builder.compliance_status, None);
+    }
+
+    #[test]
+    fn test_update_device_record_builder_with_params() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        let builder = service
+            .update()
+            .device_record_id("record_456")
+            .device_name("更新后的设备名称")
+            .os_version("15.0")
+            .compliance_status(crate::models::security_and_compliance::ComplianceStatus::NonCompliant);
+
+        assert_eq!(builder.device_record_id, "record_456");
+        assert_eq!(builder.device_name, Some("更新后的设备名称".to_string()));
+        assert_eq!(builder.os_version, Some("15.0".to_string()));
+        assert!(builder.compliance_status.is_some());
+    }
+
+    #[test]
+    fn test_delete_device_record_builder() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        let builder = service.delete().device_record_id("record_789");
+        assert_eq!(builder.device_record_id, "record_789");
+    }
+
+    #[test]
+    fn test_device_record_status_variants() {
+        // 测试不同的设备记录状态
+        let pending = crate::models::security_and_compliance::DeviceRecordStatus::Pending;
+        let approved = crate::models::security_and_compliance::DeviceRecordStatus::Approved;
+        let rejected = crate::models::security_and_compliance::DeviceRecordStatus::Rejected;
+        let expired = crate::models::security_and_compliance::DeviceRecordStatus::Expired;
+        let revoked = crate::models::security_and_compliance::DeviceRecordStatus::Revoked;
+        let non_compliant =
+            crate::models::security_and_compliance::DeviceRecordStatus::NonCompliant;
+
+        // 验证可以设置过滤
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+
+        let _ = service.mine().status(pending);
+        let _ = service.mine().status(approved);
+        let _ = service.mine().status(rejected);
+        let _ = service.mine().status(expired);
+        let _ = service.mine().status(revoked);
+        let _ = service.mine().status(non_compliant);
+    }
+
+    #[test]
+    fn test_compliance_status_variants() {
+        // 测试不同的合规状态
+        let compliant =
+            crate::models::security_and_compliance::ComplianceStatus::Compliant;
+        let non_compliant =
+            crate::models::security_and_compliance::ComplianceStatus::NonCompliant;
+        let pending = crate::models::security_and_compliance::ComplianceStatus::Pending;
+        let unknown = crate::models::security_and_compliance::ComplianceStatus::Unknown;
+
+        // 验证可以设置过滤
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+
+        let _ = service.list().compliance_status(compliant);
+        let _ = service.list().compliance_status(non_compliant);
+        let _ = service.list().compliance_status(pending);
+        let _ = service.list().compliance_status(unknown);
+    }
+
+    #[test]
+    fn test_create_device_record_builder_chaining() {
+        let config = create_test_config();
+        let service = DeviceRecordsService::new(config);
+        let builder = service
+            .create()
+            .device_name("链式调用测试")
+            .device_type("tablet")
+            .device_brand("Huawei")
+            .device_model("MatePad Pro");
+
+        assert_eq!(builder.device_name, "链式调用测试");
+        assert_eq!(builder.device_type, "tablet");
+        assert_eq!(builder.device_brand, Some("Huawei".to_string()));
+        assert_eq!(builder.device_model, Some("MatePad Pro".to_string()));
+    }
+}

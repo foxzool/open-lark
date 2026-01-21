@@ -155,3 +155,121 @@ async fn get_app_token(_config: &crate::models::SecurityConfig) -> crate::Securi
     // TODO: 集成 openlark-auth 服务
     Ok("placeholder_app_token".to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<crate::models::SecurityConfig> {
+        Arc::new(crate::models::SecurityConfig {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+        })
+    }
+
+    #[test]
+    fn test_devices_service_creation() {
+        let config = create_test_config();
+        let service = DevicesService::new(config.clone());
+        assert_eq!(service.config.app_id, "test_app_id");
+    }
+
+    #[test]
+    fn test_list_devices_builder_defaults() {
+        let config = create_test_config();
+        let service = DevicesService::new(config);
+        let builder = service.list();
+        assert_eq!(builder.page_size, Some(20));
+        assert_eq!(builder.page_token, None);
+        assert_eq!(builder.device_type, None);
+        assert_eq!(builder.status, None);
+        assert_eq!(builder.online, None);
+    }
+
+    #[test]
+    fn test_list_devices_builder_with_pagination() {
+        let config = create_test_config();
+        let service = DevicesService::new(config);
+        let builder = service.list()
+            .page_size(50)
+            .page_token("token_123");
+
+        assert_eq!(builder.page_size, Some(50));
+        assert_eq!(builder.page_token, Some("token_123".to_string()));
+    }
+
+    #[test]
+    fn test_list_devices_builder_with_device_type() {
+        let config = create_test_config();
+        let service = DevicesService::new(config);
+
+        // 测试不同的设备类型
+        let builder_face = service.list().device_type(crate::models::acs::DeviceType::FaceRecognition);
+        assert!(builder_face.device_type.is_some());
+
+        let builder_card = service.list().device_type(crate::models::acs::DeviceType::CardReader);
+        assert!(builder_card.device_type.is_some());
+
+        let builder_lock = service.list().device_type(crate::models::acs::DeviceType::DoorLock);
+        assert!(builder_lock.device_type.is_some());
+    }
+
+    #[test]
+    fn test_list_devices_builder_with_status() {
+        let config = create_test_config();
+        let service = DevicesService::new(config);
+
+        // 测试不同的设备状态
+        let builder_normal = service.list().status(crate::models::acs::DeviceStatus::Normal);
+        assert!(builder_normal.status.is_some());
+
+        let builder_offline = service.list().status(crate::models::acs::DeviceStatus::Offline);
+        assert!(builder_offline.status.is_some());
+
+        let builder_fault = service.list().status(crate::models::acs::DeviceStatus::Fault);
+        assert!(builder_fault.status.is_some());
+    }
+
+    #[test]
+    fn test_list_devices_builder_with_online_status() {
+        let config = create_test_config();
+        let service = DevicesService::new(config);
+
+        let builder_online = service.list().online(true);
+        assert_eq!(builder_online.online, Some(true));
+
+        let builder_offline = service.list().online(false);
+        assert_eq!(builder_offline.online, Some(false));
+    }
+
+    #[test]
+    fn test_list_devices_builder_full_chaining() {
+        let config = create_test_config();
+        let service = DevicesService::new(config);
+        let builder = service.list()
+            .page_size(100)
+            .page_token("token_456")
+            .device_type(crate::models::acs::DeviceType::FingerprintReader)
+            .status(crate::models::acs::DeviceStatus::Normal)
+            .online(true);
+
+        assert_eq!(builder.page_size, Some(100));
+        assert_eq!(builder.page_token, Some("token_456".to_string()));
+        assert!(builder.device_type.is_some());
+        assert!(builder.status.is_some());
+        assert_eq!(builder.online, Some(true));
+    }
+
+    #[test]
+    fn test_device_type_other_variant() {
+        let other_type = crate::models::acs::DeviceType::Other("custom_device".to_string());
+        if let crate::models::acs::DeviceType::Other(name) = other_type {
+            assert_eq!(name, "custom_device");
+        } else {
+            panic!("Expected Other variant");
+        }
+    }
+}
+
