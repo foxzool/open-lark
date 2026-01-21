@@ -2258,9 +2258,6 @@ pub enum BaikeApiV1 {
     EntitySearch,
     EntityHighlight,
     EntityExtract,
-    EntityApprove(String),   // entity_id
-    EntityReject(String),    // entity_id
-    EntityAuditList(String), // space_id
 
     /// 分类管理
     ClassificationList,
@@ -2268,22 +2265,6 @@ pub enum BaikeApiV1 {
     /// 文件管理
     FileUpload,
     FileDownload(String), // file_token
-
-    /// 搜索相关
-    SearchEntity,
-    SearchUser,
-    SearchHistory,
-    SearchHistoryDelete,
-    SearchEntityHistory,
-    SearchSpace,
-    SearchSpaceMember,
-    SearchSpaceAccess,
-    SearchSpaceAccessList,
-    SearchSpaceRecommend,
-    SearchSpaceMemberList,
-    SearchSpaceOperation,
-    SearchSpaceOperationLog,
-    SearchSpaceOperationStatus,
 }
 
 impl BaikeApiV1 {
@@ -2304,15 +2285,6 @@ impl BaikeApiV1 {
                 format!("/open-apis/baike/v1/entities/{}", entity_id)
             }
             BaikeApiV1::EntityList => "/open-apis/baike/v1/entities".to_string(),
-            BaikeApiV1::EntityApprove(entity_id) => {
-                format!("/open-apis/baike/v1/entities/{}/approve", entity_id)
-            }
-            BaikeApiV1::EntityReject(entity_id) => {
-                format!("/open-apis/baike/v1/entities/{}/reject", entity_id)
-            }
-            BaikeApiV1::EntityAuditList(space_id) => {
-                format!("/open-apis/baike/v1/spaces/{}/entities:audit", space_id)
-            }
             BaikeApiV1::EntityMatch => "/open-apis/baike/v1/entities/match".to_string(),
             BaikeApiV1::EntitySearch => "/open-apis/baike/v1/entities/search".to_string(),
             BaikeApiV1::EntityHighlight => "/open-apis/baike/v1/entities/highlight".to_string(),
@@ -2321,34 +2293,6 @@ impl BaikeApiV1 {
             BaikeApiV1::FileUpload => "/open-apis/baike/v1/files/upload".to_string(),
             BaikeApiV1::FileDownload(file_token) => {
                 format!("/open-apis/baike/v1/files/{}/download", file_token)
-            }
-            BaikeApiV1::SearchEntity => "/open-apis/baike/v1/search/entities".to_string(),
-            BaikeApiV1::SearchUser => "/open-apis/baike/v1/search/users".to_string(),
-            BaikeApiV1::SearchHistory => "/open-apis/baike/v1/search/history".to_string(),
-            BaikeApiV1::SearchHistoryDelete => "/open-apis/baike/v1/search/history".to_string(),
-            BaikeApiV1::SearchEntityHistory => {
-                "/open-apis/baike/v1/search/entity_history".to_string()
-            }
-            BaikeApiV1::SearchSpace => "/open-apis/baike/v1/search/spaces".to_string(),
-            BaikeApiV1::SearchSpaceMember => "/open-apis/baike/v1/search/space_members".to_string(),
-            BaikeApiV1::SearchSpaceAccess => "/open-apis/baike/v1/search/space_access".to_string(),
-            BaikeApiV1::SearchSpaceAccessList => {
-                "/open-apis/baike/v1/search/space_access_list".to_string()
-            }
-            BaikeApiV1::SearchSpaceRecommend => {
-                "/open-apis/baike/v1/search/space_recommend".to_string()
-            }
-            BaikeApiV1::SearchSpaceMemberList => {
-                "/open-apis/baike/v1/search/space_member_list".to_string()
-            }
-            BaikeApiV1::SearchSpaceOperation => {
-                "/open-apis/baike/v1/search/space_operations".to_string()
-            }
-            BaikeApiV1::SearchSpaceOperationLog => {
-                "/open-apis/baike/v1/search/space_operation_logs".to_string()
-            }
-            BaikeApiV1::SearchSpaceOperationStatus => {
-                "/open-apis/baike/v1/search/space_operation_status".to_string()
             }
         }
     }
