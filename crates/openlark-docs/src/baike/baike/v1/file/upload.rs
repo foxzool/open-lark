@@ -52,6 +52,8 @@ impl UploadFileRequest {
         option: RequestOption,
     ) -> SDKResult<UploadFileResponse> {
         use crate::common::api_endpoints::BaikeApiV1;
+
+        // ===== 参数校验 =====
         validate_required!(self.name, "name 不能为空");
         validate_required!(self.file, "file 不能为空");
         let name_len = self.name.chars().count();
@@ -96,6 +98,7 @@ impl UploadFileRequest {
             "__file_name": name,
         });
 
+        // ===== 构建请求并发送 =====
         let api_request: ApiRequest<UploadFileResponse> =
             ApiRequest::post(&BaikeApiV1::FileUpload.to_url())
                 .body(body)
@@ -106,5 +109,45 @@ impl UploadFileRequest {
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_upload_file_request_builder() {
+        let config = Config::default();
+        let file_data = vec![0u8; 10 * 1024]; // 10KB
+        let request = UploadFileRequest::new(config, "test.png", file_data);
+
+        assert_eq!(request.name, "test.png");
+        assert_eq!(request.file.len(), 10 * 1024);
+    }
+
+    #[test]
+    fn test_upload_file_response_structure() {
+        let response = UploadFileResponse {
+            file_token: Some("file_token_123".to_string()),
+        };
+
+        assert_eq!(response.file_token, Some("file_token_123".to_string()));
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(UploadFileResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_upload_file_valid_extensions() {
+        let valid_extensions = vec!["test.png", "test.jpg", "test.jpeg", "test.gif", "test.webp", "test.bmp", "test.ico"];
+        for name in valid_extensions {
+            let config = Config::default();
+            let file_data = vec![0u8; 5 * 1024]; // 5KB
+            let request = UploadFileRequest::new(config, name, file_data);
+            assert_eq!(request.name, name);
+        }
     }
 }

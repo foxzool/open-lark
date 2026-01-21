@@ -78,6 +78,7 @@ impl ListClassificationRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<ListClassificationResp> {
+        // ===== 构建请求 =====
         let mut api_request: ApiRequest<ListClassificationResp> =
             ApiRequest::get(&LingoApiV1::ClassificationList.to_url());
         if let Some(page_size) = self.page_size {
@@ -90,10 +91,57 @@ impl ListClassificationRequest {
             api_request = api_request.query("repo_id", repo_id);
         }
 
+        // ===== 发送请求 =====
         let response: Response<ListClassificationResp> =
             Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_classification_request_builder() {
+        let config = Config::default();
+        let request = ListClassificationRequest::new(config);
+
+        assert!(request.page_size.is_none());
+        assert!(request.page_token.is_none());
+        assert!(request.repo_id.is_none());
+    }
+
+    #[test]
+    fn test_list_classification_request_with_params() {
+        let config = Config::default();
+        let request = ListClassificationRequest::new(config)
+            .page_size(50)
+            .page_token("token")
+            .repo_id("repo_123");
+
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.page_token, Some("token".to_string()));
+        assert_eq!(request.repo_id, Some("repo_123".to_string()));
+    }
+
+    #[test]
+    fn test_response_structure() {
+        let response = ListClassificationResp {
+            items: vec![],
+            page_token: Some("next".to_string()),
+            has_more: Some(true),
+        };
+
+        assert!(response.items.is_empty());
+        assert_eq!(response.page_token, Some("next".to_string()));
+        assert_eq!(response.has_more, Some(true));
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(ListClassificationResp::data_format(), ResponseFormat::Data);
     }
 }
