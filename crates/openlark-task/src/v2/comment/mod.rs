@@ -3,6 +3,7 @@ use openlark_core::config::Config;
 
 /// Comment：评论资源
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct Comment {
     config: Arc<Config>,
 }

@@ -41,7 +41,7 @@ impl UncompleteTaskRequest {
         validate_required!(self.task_guid.trim(), "任务GUID不能为空");
 
         let api_endpoint = TaskApiV2::TaskUncomplete(self.task_guid.clone());
-        let request = ApiRequest::<UncompleteTaskResponse>::post(&api_endpoint.to_url());
+        let request = ApiRequest::<UncompleteTaskResponse>::post(api_endpoint.to_url());
 
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;

@@ -3,6 +3,7 @@ use openlark_core::config::Config;
 
 /// Attachment：附件资源
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct Attachment {
     config: Arc<Config>,
 }
