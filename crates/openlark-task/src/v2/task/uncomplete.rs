@@ -2,13 +2,12 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/docs/task-v2/task/uncomplete
 
-use crate::v2::task::models::UncompleteTaskResponse;
 use crate::common::{api_endpoints::TaskApiV2, api_utils::*};
+use crate::v2::task::models::UncompleteTaskResponse;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use std::sync::Arc;
 

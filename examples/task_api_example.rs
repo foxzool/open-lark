@@ -1,7 +1,6 @@
 /// 示例：使用任务 API
 ///
 /// 此示例展示如何使用 openlark-task 模块创建和查询任务
-
 use openlark_task::prelude::*;
 use openlark_task::TaskService;
 
@@ -18,7 +17,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     #[cfg(feature = "v2")]
     {
         use openlark_task::v2;
-        
+
         let response = task_service
             .v2()
             .task()

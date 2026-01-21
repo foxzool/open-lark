@@ -1,12 +1,11 @@
 //! 创建工单
 
-use crate::v1::ticket::models::{CreateTicketBody, CreateTicketResponse};
 use crate::common::{api_endpoints::HelpdeskApiV1, api_utils::*};
+use crate::v1::ticket::models::{CreateTicketBody, CreateTicketResponse};
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use std::sync::Arc;
 
@@ -47,8 +46,7 @@ impl CreateTicketRequest {
 
         request = request.body(serialize_params(&self.body, "创建工单")?);
 
-        let response =
-            openlark_core::http::Transport::request(request, &self.config, None).await?;
+        let response = openlark_core::http::Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "创建工单")
     }
 }

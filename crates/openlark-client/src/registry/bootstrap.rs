@@ -49,7 +49,10 @@ fn register_auth(registry: &mut DefaultServiceRegistry) -> Result<()> {
         version: "1.0.0".to_string(),
         description: Some("飞书认证服务，提供令牌管理、身份验证等功能".to_string()),
         dependencies: vec![],
-        provides: vec!["token-management".to_string(), "permission-control".to_string()],
+        provides: vec![
+            "token-management".to_string(),
+            "permission-control".to_string(),
+        ],
         status: ServiceStatus::Uninitialized,
         priority: 1,
     };
@@ -63,7 +66,11 @@ fn register_communication(registry: &mut DefaultServiceRegistry) -> Result<()> {
         version: "1.0.0".to_string(),
         description: Some("飞书通讯服务，提供消息、联系人、群组等功能".to_string()),
         dependencies: vec!["auth".to_string()],
-        provides: vec!["im".to_string(), "contacts".to_string(), "groups".to_string()],
+        provides: vec![
+            "im".to_string(),
+            "contacts".to_string(),
+            "groups".to_string(),
+        ],
         status: ServiceStatus::Uninitialized,
         priority: 2,
     };
@@ -137,7 +144,11 @@ fn register_hr(registry: &mut DefaultServiceRegistry) -> Result<()> {
         version: "1.0.0".to_string(),
         description: Some("飞书人力资源服务，提供员工、考勤、薪酬等功能".to_string()),
         dependencies: vec!["auth".to_string()],
-        provides: vec!["attendance".to_string(), "corehr".to_string(), "ehr".to_string()],
+        provides: vec![
+            "attendance".to_string(),
+            "corehr".to_string(),
+            "ehr".to_string(),
+        ],
         status: ServiceStatus::Uninitialized,
         priority: 4,
     };
@@ -157,4 +168,3 @@ fn register_ai(registry: &mut DefaultServiceRegistry) -> Result<()> {
     };
     register(registry, metadata)
 }
-

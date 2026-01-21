@@ -2,13 +2,12 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/docs/task-v2/task/create
 
-use crate::v2::task::models::{CreateTaskBody, CreateTaskResponse};
 use crate::common::{api_endpoints::TaskApiV2, api_utils::*};
+use crate::v2::task::models::{CreateTaskBody, CreateTaskResponse};
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use std::sync::Arc;
 
@@ -145,10 +144,12 @@ mod tests {
 
     #[test]
     fn test_create_task_builder() {
-        let config = Arc::new(openlark_core::config::Config::builder()
-            .app_id("test")
-            .app_secret("test")
-            .build());
+        let config = Arc::new(
+            openlark_core::config::Config::builder()
+                .app_id("test")
+                .app_secret("test")
+                .build(),
+        );
 
         let request = CreateTaskRequest::new(config)
             .summary("测试任务")

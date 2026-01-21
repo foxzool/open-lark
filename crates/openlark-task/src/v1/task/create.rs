@@ -2,14 +2,13 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/docs/task-v1/task/create
 
-use std::sync::Arc;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
 
 /// 创建任务请求体（v1）
 #[derive(Debug, Clone, Serialize, Default)]
@@ -105,8 +104,9 @@ impl CreateTaskRequestV1 {
         let api_endpoint = crate::common::api_endpoints::TaskApiV1::TaskCreate;
         let mut request = ApiRequest::<CreateTaskResponseV1>::post(api_endpoint.to_url());
 
-        let body_json = serde_json::to_value(&self.body)
-            .map_err(|e| openlark_core::error::validation_error("序列化请求体失败", e.to_string().as_str()))?;
+        let body_json = serde_json::to_value(&self.body).map_err(|e| {
+            openlark_core::error::validation_error("序列化请求体失败", e.to_string().as_str())
+        })?;
 
         request = request.body(body_json);
 
@@ -130,10 +130,12 @@ mod tests {
 
     #[test]
     fn test_create_task_v1_builder() {
-        let config = Arc::new(openlark_core::config::Config::builder()
-            .app_id("test")
-            .app_secret("test")
-            .build());
+        let config = Arc::new(
+            openlark_core::config::Config::builder()
+                .app_id("test")
+                .app_secret("test")
+                .build(),
+        );
 
         let request = CreateTaskRequestV1::new(config)
             .summary("测试任务")
