@@ -342,3 +342,96 @@ async fn get_app_token(_config: &crate::models::SecurityConfig) -> crate::Securi
     // TODO: 集成 openlark-auth 服务
     Ok("placeholder_app_token".to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<crate::models::SecurityConfig> {
+        Arc::new(crate::models::SecurityConfig {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+        })
+    }
+
+    #[test]
+    fn test_users_service_creation() {
+        let config = create_test_config();
+        let service = UsersService::new(config.clone());
+        assert_eq!(service.config.app_id, "test_app_id");
+    }
+
+    #[test]
+    fn test_get_user_builder() {
+        let config = create_test_config();
+        let service = UsersService::new(config);
+        let builder = service.get().user_id("user_123");
+        assert_eq!(builder.user_id, "user_123");
+    }
+
+    #[test]
+    fn test_list_users_builder_defaults() {
+        let config = create_test_config();
+        let service = UsersService::new(config);
+        let builder = service.list();
+        assert_eq!(builder.page_size, Some(20));
+        assert_eq!(builder.page_token, None);
+        assert_eq!(builder.department_id, None);
+        assert_eq!(builder.status, None);
+    }
+
+    #[test]
+    fn test_list_users_builder_with_params() {
+        let config = create_test_config();
+        let service = UsersService::new(config);
+        let builder = service.list()
+            .page_size(50)
+            .page_token("token_123")
+            .department_id("dept_456")
+            .status(crate::models::Status::Active);
+
+        assert_eq!(builder.page_size, Some(50));
+        assert_eq!(builder.page_token, Some("token_123".to_string()));
+        assert_eq!(builder.department_id, Some("dept_456".to_string()));
+        assert!(builder.status.is_some());
+    }
+
+    #[test]
+    fn test_patch_user_builder() {
+        let config = create_test_config();
+        let service = UsersService::new(config);
+        let builder = service.patch()
+            .user_id("user_789")
+            .name("张三")
+            .email("zhangsan@example.com")
+            .mobile("13800138000")
+            .department_ids(vec!["dept_1".to_string(), "dept_2".to_string()])
+            .status(crate::models::Status::Active)
+            .rule_ids(vec!["rule_1".to_string()]);
+
+        assert_eq!(builder.user_id, "user_789");
+        assert_eq!(builder.name, Some("张三".to_string()));
+        assert_eq!(builder.email, Some("zhangsan@example.com".to_string()));
+        assert_eq!(builder.mobile, Some("13800138000".to_string()));
+        assert_eq!(builder.department_ids, Some(vec!["dept_1".to_string(), "dept_2".to_string()]));
+        assert!(builder.status.is_some());
+        assert_eq!(builder.rule_ids, Some(vec!["rule_1".to_string()]));
+    }
+
+    #[test]
+    fn test_patch_user_builder_chaining() {
+        let config = create_test_config();
+        let service = UsersService::new(config);
+        let builder = service.patch()
+            .user_id("user_123")
+            .name("李四")
+            .email("lisi@example.com");
+
+        assert_eq!(builder.user_id, "user_123");
+        assert_eq!(builder.name, Some("李四".to_string()));
+        assert_eq!(builder.email, Some("lisi@example.com".to_string()));
+        assert!(builder.mobile.is_none()); // 未设置的字段应保持 None
+    }
+}

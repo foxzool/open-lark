@@ -196,3 +196,89 @@ async fn get_app_token(_config: &crate::models::SecurityConfig) -> crate::Securi
     // TODO: 集成 openlark-auth 服务
     Ok("placeholder_app_token".to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<crate::models::SecurityConfig> {
+        Arc::new(crate::models::SecurityConfig {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+        })
+    }
+
+    #[test]
+    fn test_user_faces_service_creation() {
+        let config = create_test_config();
+        let service = UserFacesService::new(config.clone());
+        assert_eq!(service.config.app_id, "test_app_id");
+    }
+
+    #[test]
+    fn test_get_user_face_builder() {
+        let config = create_test_config();
+        let service = UserFacesService::new(config);
+        let builder = service.get().user_id("user_123");
+        assert_eq!(builder.user_id, "user_123");
+    }
+
+    #[test]
+    fn test_update_user_face_builder_defaults() {
+        let config = create_test_config();
+        let service = UserFacesService::new(config);
+        let builder = service.update();
+        assert_eq!(builder.user_id, String::new());
+        assert!(builder.face_image.is_empty());
+        assert_eq!(builder.image_format, "jpeg");
+    }
+
+    #[test]
+    fn test_update_user_face_builder_with_params() {
+        let config = create_test_config();
+        let service = UserFacesService::new(config);
+        let image_data = vec![0x01, 0x02, 0x03, 0x04];
+        let builder = service.update()
+            .user_id("user_456")
+            .face_image(image_data.clone())
+            .image_format("png");
+
+        assert_eq!(builder.user_id, "user_456");
+        assert_eq!(builder.face_image, image_data);
+        assert_eq!(builder.image_format, "png");
+    }
+
+    #[test]
+    fn test_update_user_face_builder_chaining() {
+        let config = create_test_config();
+        let service = UserFacesService::new(config);
+        let builder = service.update()
+            .user_id("user_789")
+            .image_format("jpeg");
+
+        assert_eq!(builder.user_id, "user_789");
+        assert_eq!(builder.image_format, "jpeg");
+        assert!(builder.face_image.is_empty()); // 默认为空
+    }
+
+    #[test]
+    fn test_update_user_face_image_format_variants() {
+        let config = create_test_config();
+        let service = UserFacesService::new(config);
+
+        // 测试 jpeg 格式
+        let builder_jpeg = service.update().image_format("jpeg");
+        assert_eq!(builder_jpeg.image_format, "jpeg");
+
+        // 测试 png 格式
+        let builder_png = service.update().image_format("png");
+        assert_eq!(builder_png.image_format, "png");
+
+        // 测试 webp 格式
+        let builder_webp = service.update().image_format("webp");
+        assert_eq!(builder_webp.image_format, "webp");
+    }
+}
+
