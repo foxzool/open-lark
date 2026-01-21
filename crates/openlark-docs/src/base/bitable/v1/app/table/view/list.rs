@@ -16,6 +16,29 @@ use serde::{Deserialize, Serialize};
 use super::patch::View;
 
 /// 列出视图请求
+///
+/// 用于获取多维表格数据表中的所有视图列表。
+///
+/// # 字段说明
+///
+/// - `app_token`: 多维表格的 app_token
+/// - `table_id`: 数据表的 table_id
+/// - `user_id_type`: 用户 ID 类型（可选）
+/// - `page_token`: 分页标记（可选）
+/// - `page_size`: 分页大小，必须大于0，最大100（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_docs::base::bitable::v1::app::table::view::list::ListViewsRequest;
+/// use openlark_core::Config;
+///
+/// let config = Config::default();
+/// let request = ListViewsRequest::new(config)
+///     .app_token("app_token_xyz".to_string())
+///     .table_id("table_id_xyz".to_string())
+///     .page_size(50);
+/// ```
 #[derive(Debug, Clone)]
 pub struct ListViewsRequest {
     /// 配置信息
@@ -81,11 +104,12 @@ impl ListViewsRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListViewsResponse> {
-        // 参数验证
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "app_token");
 
         validate_required!(self.table_id.trim(), "table_id");
 
+        // === 业务规则验证 ===
         // 验证分页大小
         if let Some(page_size) = self.page_size {
             if page_size <= 0 {
@@ -191,5 +215,96 @@ pub struct ListViewsResponse {
 impl ApiResponseTrait for ListViewsResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let request = ListViewsRequest::new(config)
+            .app_token("".to_string())
+            .table_id("table_id".to_string());
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("app_token"));
+    }
+
+    #[test]
+    fn test_empty_table_id() {
+        let config = Config::default();
+        let request = ListViewsRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("".to_string());
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("table_id"));
+    }
+
+    #[test]
+    fn test_invalid_page_size_zero() {
+        let config = Config::default();
+        let request = ListViewsRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .page_size(0);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("page_size"));
+    }
+
+    #[test]
+    fn test_invalid_page_size_negative() {
+        let config = Config::default();
+        let request = ListViewsRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .page_size(-1);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("page_size"));
+    }
+
+    #[test]
+    fn test_list_views_request_builder() {
+        let config = Config::default();
+        let request = ListViewsRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .page_size(50);
+
+        assert_eq!(request.app_token, "app_token");
+        assert_eq!(request.table_id, "table_id");
+        assert_eq!(request.page_size, Some(50));
+    }
+
+    #[test]
+    fn test_page_size_limit() {
+        let config = Config::default();
+        let request = ListViewsRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .page_size(150); // 超过100，会被限制
+
+        assert_eq!(request.page_size, Some(100)); // 应该被限制为100
     }
 }

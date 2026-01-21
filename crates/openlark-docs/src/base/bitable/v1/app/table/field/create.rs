@@ -43,6 +43,33 @@ pub enum FieldType {
 pub type FieldProperty = Value;
 
 /// 创建字段请求
+///
+/// 用于在多维表格数据表中创建新字段。
+///
+/// # 字段说明
+///
+/// - `app_token`: 多维表格的 app_token
+/// - `table_id`: 数据表的 table_id
+/// - `client_token`: 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作（可选）
+/// - `field_name`: 多维表格字段名
+/// - `type`: 多维表格字段类型
+/// - `property`: 字段属性（可选）
+/// - `description`: 字段的描述（可选）
+/// - `ui_type`: 字段在界面上的展示类型（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_docs::base::bitable::v1::app::table::field::create::{CreateFieldRequest, FieldType};
+/// use openlark_core::Config;
+///
+/// let config = Config::default();
+/// let request = CreateFieldRequest::new(config)
+///     .app_token("app_token_xyz".to_string())
+///     .table_id("table_id_xyz".to_string())
+///     .field_name("任务名称".to_string())
+///     .field_type(FieldType::Text);
+/// ```
 #[derive(Debug, Clone)]
 pub struct CreateFieldRequest {
     /// 配置信息
@@ -139,7 +166,7 @@ impl CreateFieldRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateFieldResponse> {
-        // 参数验证
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "app_token");
 
         validate_required!(self.table_id.trim(), "table_id");
@@ -220,5 +247,97 @@ pub struct CreateFieldResponse {
 impl ApiResponseTrait for CreateFieldResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let request = CreateFieldRequest::new(config)
+            .app_token("".to_string())
+            .table_id("table_id".to_string())
+            .field_name("字段名".to_string());
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("app_token"));
+    }
+
+    #[test]
+    fn test_empty_table_id() {
+        let config = Config::default();
+        let request = CreateFieldRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("".to_string())
+            .field_name("字段名".to_string());
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("table_id"));
+    }
+
+    #[test]
+    fn test_empty_field_name() {
+        let config = Config::default();
+        let request = CreateFieldRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .field_name("".to_string());
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("field_name"));
+    }
+
+    #[test]
+    fn test_create_field_request_builder() {
+        let config = Config::default();
+        let request = CreateFieldRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .field_name("任务名称".to_string())
+            .field_type(FieldType::Text);
+
+        assert_eq!(request.app_token, "app_token");
+        assert_eq!(request.table_id, "table_id");
+        assert_eq!(request.field_name, "任务名称");
+        assert_eq!(request.r#type, FieldType::Text);
+    }
+
+    #[test]
+    fn test_field_type_variants() {
+        assert_eq!(FieldType::Text as i32, 1);
+        assert_eq!(FieldType::Number as i32, 2);
+        assert_eq!(FieldType::SingleSelect as i32, 3);
+        assert_eq!(FieldType::MultiSelect as i32, 4);
+        assert_eq!(FieldType::DateTime as i32, 5);
+        assert_eq!(FieldType::Checkbox as i32, 7);
+        assert_eq!(FieldType::User as i32, 11);
+        assert_eq!(FieldType::PhoneNumber as i32, 13);
+        assert_eq!(FieldType::Url as i32, 15);
+        assert_eq!(FieldType::Attachment as i32, 17);
+        assert_eq!(FieldType::Link as i32, 18);
+        assert_eq!(FieldType::Formula as i32, 20);
+        assert_eq!(FieldType::DuplexLink as i32, 21);
+        assert_eq!(FieldType::Location as i32, 22);
+        assert_eq!(FieldType::GroupChat as i32, 23);
+        assert_eq!(FieldType::CreatedTime as i32, 1001);
+        assert_eq!(FieldType::ModifiedTime as i32, 1002);
+        assert_eq!(FieldType::CreatedUser as i32, 1003);
+        assert_eq!(FieldType::ModifiedUser as i32, 1004);
+        assert_eq!(FieldType::AutoNumber as i32, 1005);
     }
 }

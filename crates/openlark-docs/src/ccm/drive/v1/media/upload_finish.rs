@@ -15,6 +15,27 @@ use serde::{Deserialize, Serialize};
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 分片上传素材-完成上传请求
+///
+/// 上传分片全部完成后，调用该接口触发完成上传。
+///
+/// # 字段说明
+///
+/// - `upload_id`: 分片上传事务 ID，由预上传接口返回
+/// - `block_num`: 分片数量，必须为正整数
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_docs::ccm::drive::v1::media::upload_finish::UploadFinishMediaRequest;
+/// use openlark_core::Config;
+///
+/// let config = Config::default();
+/// let request = UploadFinishMediaRequest::new(
+///     config,
+///     "upload_id_xyz",
+///     10 // 分成了10片
+/// );
+/// ```
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UploadFinishMediaRequest {
     #[serde(skip)]
@@ -43,12 +64,15 @@ impl UploadFinishMediaRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UploadFinishMediaResponse> {
+        // === 必填字段验证 ===
         if self.upload_id.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "upload_id",
                 "upload_id 不能为空",
             ));
         }
+
+        // === 业务规则验证 ===
         if self.block_num <= 0 {
             return Err(openlark_core::error::validation_error(
                 "block_num",
@@ -96,5 +120,54 @@ mod tests {
             UploadFinishMediaResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    #[test]
+    fn test_empty_upload_id() {
+        let config = Config::default();
+        let request = UploadFinishMediaRequest::new(config, "", 10);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("upload_id"));
+    }
+
+    #[test]
+    fn test_invalid_block_num_zero() {
+        let config = Config::default();
+        let request = UploadFinishMediaRequest::new(config, "upload_id", 0);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("block_num"));
+    }
+
+    #[test]
+    fn test_invalid_block_num_negative() {
+        let config = Config::default();
+        let request = UploadFinishMediaRequest::new(config, "upload_id", -1);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("block_num"));
+    }
+
+    #[test]
+    fn test_valid_block_num_boundary() {
+        let config = Config::default();
+        let request = UploadFinishMediaRequest::new(config, "upload_id", 1);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        // 只验证请求构建成功，不实际执行
+        assert_eq!(request.block_num, 1);
     }
 }

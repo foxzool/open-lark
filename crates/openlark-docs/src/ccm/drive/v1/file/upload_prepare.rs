@@ -15,6 +15,30 @@ use serde::{Deserialize, Serialize};
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 /// 分片上传预备请求
+///
+/// 用于初始化分片上传，获取上传事务 ID 和分片策略。
+///
+/// # 字段说明
+///
+/// - `file_name`: 文件名，长度不能超过 250 字符
+/// - `parent_type`: 上传点的类型，固定为 "explorer"（云空间）
+/// - `parent_node`: 云空间中文件夹的 token
+/// - `size`: 文件大小（字节），不能为负数
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_docs::ccm::drive::v1::file::upload_prepare::UploadPrepareRequest;
+/// use openlark_core::Config;
+///
+/// let config = Config::default();
+/// let request = UploadPrepareRequest::new(
+///     config,
+///     "large_file.zip",
+///     "folder_token_xyz",
+///     104857600 // 100MB
+/// );
+/// ```
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UploadPrepareRequest {
     #[serde(skip)]
@@ -60,10 +84,11 @@ impl UploadPrepareRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UploadPrepareResponse> {
-        // 验证必填字段
+        // === 必填字段验证 ===
         validate_required!(self.file_name.trim(), "file_name 不能为空");
         validate_required!(self.parent_node.trim(), "parent_node 不能为空");
 
+        // === 业务规则验证 ===
         // 自定义验证逻辑
         let file_name_len = self.file_name.chars().count();
         if file_name_len > 250 {
@@ -124,5 +149,72 @@ mod tests {
         assert_eq!(request.file_name, "test.txt");
         assert_eq!(request.parent_node, "folder_token");
         assert_eq!(request.size, 1024);
+    }
+
+    #[test]
+    fn test_empty_file_name() {
+        let config = Config::default();
+        let request = UploadPrepareRequest::new(config, "", "folder_token", 1024);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("file_name"));
+    }
+
+    #[test]
+    fn test_empty_parent_node() {
+        let config = Config::default();
+        let request = UploadPrepareRequest::new(config, "test.txt".to_string(), "", 1024);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("parent_node"));
+    }
+
+    #[test]
+    fn test_file_name_too_long() {
+        let config = Config::default();
+        let long_name = "a".repeat(251);
+        let request = UploadPrepareRequest::new(config, long_name, "folder_token", 1024);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("250"));
+    }
+
+    #[test]
+    fn test_negative_size() {
+        let config = Config::default();
+        let request = UploadPrepareRequest::new(config, "test.txt", "folder_token", -1);
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("size"));
+    }
+
+    #[test]
+    fn test_invalid_parent_type() {
+        let config = Config::default();
+        let request = UploadPrepareRequest::new(config, "test.txt", "folder_token", 1024)
+            .parent_type("invalid_type");
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("explorer"));
     }
 }

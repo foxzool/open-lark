@@ -16,6 +16,27 @@ use serde::{Deserialize, Serialize};
 use super::patch::View;
 
 /// 获取视图请求
+///
+/// 用于获取多维表格数据表中的指定视图信息。
+///
+/// # 字段说明
+///
+/// - `app_token`: 多维表格的 app_token
+/// - `table_id`: 数据表的 table_id
+/// - `view_id`: 视图的 view_id
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_docs::base::bitable::v1::app::table::view::get::GetViewRequest;
+/// use openlark_core::Config;
+///
+/// let config = Config::default();
+/// let request = GetViewRequest::new(config)
+///     .app_token("app_token_xyz".to_string())
+///     .table_id("table_id_xyz".to_string())
+///     .view_id("view_id_xyz".to_string());
+/// ```
 #[derive(Debug, Clone)]
 pub struct GetViewRequest {
     /// 配置信息
@@ -63,7 +84,7 @@ impl GetViewRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetViewResponse> {
-        // 参数验证
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "app_token");
 
         validate_required!(self.table_id.trim(), "table_id");
@@ -100,5 +121,71 @@ pub struct GetViewResponse {
 impl ApiResponseTrait for GetViewResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let request = GetViewRequest::new(config)
+            .app_token("".to_string())
+            .table_id("table_id".to_string())
+            .view_id("view_id".to_string());
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("app_token"));
+    }
+
+    #[test]
+    fn test_empty_table_id() {
+        let config = Config::default();
+        let request = GetViewRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("".to_string())
+            .view_id("view_id".to_string());
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("table_id"));
+    }
+
+    #[test]
+    fn test_empty_view_id() {
+        let config = Config::default();
+        let request = GetViewRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .view_id("".to_string());
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("view_id"));
+    }
+
+    #[test]
+    fn test_get_view_request_builder() {
+        let config = Config::default();
+        let request = GetViewRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .view_id("view_id".to_string());
+
+        assert_eq!(request.app_token, "app_token");
+        assert_eq!(request.table_id, "table_id");
+        assert_eq!(request.view_id, "view_id");
     }
 }
