@@ -1,42 +1,70 @@
+//! # OpenLark 工作流模块
+//!
+//! OpenLark SDK 的工作流模块，提供飞书任务、审批和看板 API 的完整访问。
+//!
+//! ## 功能特性
+//!
+//! - **任务管理**: 创建、更新、删除、查询待办事项
+//! - **审批流程**: 审批定义、审批实例管理
+//! - **看板管理**: 看板创建、任务卡片管理
+//! - **协作支持**: 添加执行者、关注者、提醒
+//! - **版本支持**: 支持 v1 和 v2 两种 API 版本
+//!
+//! ## 使用示例
+//!
+//! ```rust,no_run
+//! use openlark_workflow::WorkflowService;
+//! use openlark_core::config::Config;
+//!
+//! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+//! let config = Config::builder()
+//!     .app_id("your_app_id")
+//!     .app_secret("your_app_secret")
+//!     .build();
+//!
+//! let workflow_service = WorkflowService::new(config);
+//!
+//! // 创建任务
+//! let result = workflow_service
+//!     .v2()
+//!     .task()
+//!     .create()
+//!     .summary("完成项目文档")
+//!     .execute()
+//!     .await?;
+//! # Ok(())
+//! # }
+//! ```
+
 #![allow(missing_docs)]
 
-// Core service
-pub mod service;
+mod service;
 
-// 项目模块（按 meta.Project）
-pub mod task;
-pub mod approval;
-pub mod board;
+// 通用模块
+pub mod common;
 
-pub mod prelude {
-    pub use openlark_core::{config::Config, SDKResult};
-}
+// 版本模块
+#[cfg(feature = "v1")]
+pub mod v1;
 
-use std::sync::Arc;
-use service::WorkflowService;
+#[cfg(feature = "v2")]
+pub mod v2;
 
-/// WorkflowClient：统一入口，提供 project-version-resource 链式访问
-#[derive(Clone)]
-pub struct WorkflowClient {
-    service: Arc<WorkflowService>,
-}
+// Prelude 模块
+pub mod prelude;
 
-impl WorkflowClient {
-    pub fn new(config: openlark_core::config::Config) -> Self {
-        Self {
-            service: Arc::new(WorkflowService::new(config)),
-        }
-    }
+// 重新导出核心服务
+pub use service::WorkflowService;
 
-    pub fn task(&self) -> task::Task {
-        task::Task::new(self.service.clone())
-    }
+/// 工作流模块版本信息
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
-    pub fn approval(&self) -> approval::Approval {
-        approval::Approval::new(self.service.clone())
-    }
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    pub fn board(&self) -> board::Board {
-        board::Board::new(self.service.clone())
+    #[test]
+    fn test_version() {
+        assert!(!VERSION.is_empty());
     }
 }
