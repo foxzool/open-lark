@@ -243,3 +243,78 @@ pub struct UncompleteTaskResponse {
     /// 更新时间
     pub updated_at: String,
 }
+
+/// 任务列表项
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct TaskItem {
+    /// 任务 GUID
+    pub task_guid: String,
+
+    /// 任务标题
+    pub summary: String,
+
+    /// 任务描述
+    #[serde(default)]
+    pub description: Option<String>,
+
+    /// 任务状态
+    pub status: String,
+
+    /// 任务清单 GUID
+    #[serde(default)]
+    pub tasklist_guid: Option<String>,
+
+    /// 分组 GUID
+    #[serde(default)]
+    pub section_guid: Option<String>,
+
+    /// 任务优先级
+    #[serde(default)]
+    pub priority: Option<i32>,
+
+    /// 任务开始时间
+    #[serde(default)]
+    pub start: Option<String>,
+
+    /// 任务截止时间
+    #[serde(default)]
+    pub due: Option<String>,
+
+    /// 创建时间
+    pub created_at: String,
+
+    /// 更新时间
+    pub updated_at: String,
+
+    /// 完成时间
+    #[serde(default)]
+    pub completed_at: Option<String>,
+
+    /// 任务执行者
+    #[serde(default)]
+    pub assignee: Option<String>,
+
+    /// 任务创建者
+    #[serde(default)]
+    pub creator: Option<String>,
+}
+
+/// 获取任务列表响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ListTasksResponse {
+    /// 是否还有更多项
+    #[serde(default)]
+    pub has_more: bool,
+
+    /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+
+    /// 总数
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total: Option<i32>,
+
+    /// 列表项
+    #[serde(default)]
+    pub items: Vec<TaskItem>,
+}
