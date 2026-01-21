@@ -5,6 +5,7 @@ use std::sync::Arc;
 ///
 /// 提供对应用 API v1 的访问能力
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct ApplicationService {
     config: Arc<Config>,
 }

@@ -2,6 +2,7 @@ use openlark_core::config::Config;
 use std::sync::Arc;
 
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct HelpdeskService {
     config: Arc<Config>,
 }
