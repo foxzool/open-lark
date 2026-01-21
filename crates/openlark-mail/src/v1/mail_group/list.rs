@@ -1,7 +1,7 @@
 //! 获取邮件组列表
 
-use crate::v1::mail_group::models::MailGroupListResponse;
 use crate::common::{api_endpoints::MailApiV1, api_utils::*};
+use crate::v1::mail_group::models::MailGroupListResponse;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -37,7 +37,8 @@ impl MailGroupListRequest {
     }
 
     pub async fn execute(self) -> SDKResult<MailGroupListResponse> {
-        self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
     }
 
     pub async fn execute_with_options(
@@ -55,7 +56,8 @@ impl MailGroupListRequest {
             request = request.query("page_token", page_token);
         }
 
-        let response = openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;
+        let response =
+            openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取邮件组列表")
     }
 }

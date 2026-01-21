@@ -192,7 +192,7 @@ mod tests {
         let token = AccessToken {
             access_token: "expired_token".to_string(),
             token_type: "Bearer".to_string(),
-            expires_in: 120, // 2分钟
+            expires_in: 120,                                        // 2分钟
             created_at: Utc::now() - chrono::Duration::seconds(61), // 预留 60s 缓冲
         };
 
@@ -242,8 +242,8 @@ mod tests {
             access_token: "expired_user_token".to_string(),
             refresh_token: "refresh_token".to_string(),
             token_type: "Bearer".to_string(),
-            expires_in: 120,          // 2分钟
-            refresh_expires_in: 180,  // 3分钟
+            expires_in: 120,         // 2分钟
+            refresh_expires_in: 180, // 3分钟
             scope: "test_scope".to_string(),
             created_at: Utc::now() - chrono::Duration::seconds(121),
         };

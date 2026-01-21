@@ -1,12 +1,12 @@
 pub mod create;
-pub mod get;
-pub mod update;
 pub mod delete;
+pub mod get;
 pub mod list;
 pub mod models;
+pub mod update;
 
-use std::sync::Arc;
 use openlark_core::config::Config;
+use std::sync::Arc;
 
 /// MailGroup：邮件组资源（v1）
 #[derive(Clone)]
@@ -42,15 +42,13 @@ impl MailGroup {
 
 // 重新导出请求类型
 pub use create::CreateMailGroupRequest;
-pub use get::GetMailGroupRequest;
-pub use update::UpdateMailGroupRequest;
 pub use delete::DeleteMailGroupRequest;
+pub use get::GetMailGroupRequest;
 pub use list::MailGroupListRequest;
+pub use update::UpdateMailGroupRequest;
 
 // 重新导出响应类型
 pub use models::{
-    CreateMailGroupBody, CreateMailGroupResponse,
-    GetMailGroupResponse, UpdateMailGroupBody,
-    UpdateMailGroupResponse, DeleteMailGroupResponse,
-    MailGroupListResponse, MailGroupItem,
+    CreateMailGroupBody, CreateMailGroupResponse, DeleteMailGroupResponse, GetMailGroupResponse,
+    MailGroupItem, MailGroupListResponse, UpdateMailGroupBody, UpdateMailGroupResponse,
 };

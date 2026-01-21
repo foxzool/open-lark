@@ -1,12 +1,11 @@
 //! 更新工单
 
-use crate::v1::ticket::models::{UpdateTicketBody, UpdateTicketResponse};
 use crate::common::{api_endpoints::HelpdeskApiV1, api_utils::*};
+use crate::v1::ticket::models::{UpdateTicketBody, UpdateTicketResponse};
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use std::sync::Arc;
 
@@ -49,8 +48,7 @@ impl UpdateTicketRequest {
 
         request = request.body(serialize_params(&self.body, "更新工单")?);
 
-        let response =
-            openlark_core::http::Transport::request(request, &self.config, None).await?;
+        let response = openlark_core::http::Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "更新工单")
     }
 }

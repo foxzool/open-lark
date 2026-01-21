@@ -1,12 +1,11 @@
 //! 删除邮件组
 
-use crate::v1::mail_group::models::DeleteMailGroupResponse;
 use crate::common::{api_endpoints::MailApiV1, api_utils::*};
+use crate::v1::mail_group::models::DeleteMailGroupResponse;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use std::sync::Arc;
 
@@ -19,11 +18,15 @@ pub struct DeleteMailGroupRequest {
 
 impl DeleteMailGroupRequest {
     pub fn new(config: Arc<Config>, mail_group_id: String) -> Self {
-        Self { config, mail_group_id }
+        Self {
+            config,
+            mail_group_id,
+        }
     }
 
     pub async fn execute(self) -> SDKResult<DeleteMailGroupResponse> {
-        self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
     }
 
     pub async fn execute_with_options(
@@ -35,7 +38,8 @@ impl DeleteMailGroupRequest {
         let api_endpoint = MailApiV1::MailGroupDelete(self.mail_group_id.clone());
         let request = ApiRequest::<DeleteMailGroupResponse>::delete(&api_endpoint.to_url());
 
-        let response = openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;
+        let response =
+            openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "删除邮件组")
     }
 }

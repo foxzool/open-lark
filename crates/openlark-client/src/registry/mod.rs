@@ -7,10 +7,10 @@ use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 use thiserror::Error;
 
+pub(crate) mod bootstrap;
 pub mod dependency_resolver;
 pub mod feature_flags;
 pub mod service_factory;
-pub(crate) mod bootstrap;
 
 pub use dependency_resolver::*;
 pub use feature_flags::{

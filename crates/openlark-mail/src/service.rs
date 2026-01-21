@@ -1,5 +1,5 @@
-use std::sync::Arc;
 use openlark_core::config::Config;
+use std::sync::Arc;
 
 /// MailService：邮件服务的统一入口
 ///

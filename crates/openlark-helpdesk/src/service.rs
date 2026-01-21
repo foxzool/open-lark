@@ -1,5 +1,5 @@
-use std::sync::Arc;
 use openlark_core::config::Config;
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct HelpdeskService {

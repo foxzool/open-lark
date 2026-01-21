@@ -1,5 +1,5 @@
-use std::sync::Arc;
 use openlark_core::config::Config;
+use std::sync::Arc;
 
 /// Attachment：附件资源
 #[derive(Clone)]

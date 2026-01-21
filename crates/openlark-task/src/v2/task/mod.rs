@@ -1,13 +1,13 @@
+pub mod complete;
 pub mod create;
-pub mod update;
 pub mod delete;
 pub mod get;
-pub mod complete;
-pub mod uncomplete;
 pub mod models;
+pub mod uncomplete;
+pub mod update;
 
-use std::sync::Arc;
 use openlark_core::config::Config;
+use std::sync::Arc;
 
 /// Task：任务资源（v2）
 #[derive(Clone)]
@@ -46,17 +46,15 @@ impl Task {
 }
 
 // 重新导出请求类型
+pub use complete::CompleteTaskRequest;
 pub use create::CreateTaskRequest;
-pub use update::UpdateTaskRequest;
 pub use delete::DeleteTaskRequest;
 pub use get::GetTaskRequest;
-pub use complete::CompleteTaskRequest;
 pub use uncomplete::UncompleteTaskRequest;
+pub use update::UpdateTaskRequest;
 
 // 重新导出响应类型
 pub use models::{
-    CreateTaskBody, CreateTaskResponse,
-    UpdateTaskBody, UpdateTaskResponse,
-    DeleteTaskResponse, GetTaskResponse,
-    CompleteTaskResponse, UncompleteTaskResponse,
+    CompleteTaskResponse, CreateTaskBody, CreateTaskResponse, DeleteTaskResponse, GetTaskResponse,
+    UncompleteTaskResponse, UpdateTaskBody, UpdateTaskResponse,
 };

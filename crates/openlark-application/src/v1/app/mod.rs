@@ -1,8 +1,8 @@
 pub mod get;
 pub mod models;
 
-use std::sync::Arc;
 use openlark_core::config::Config;
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct App {
