@@ -37,10 +37,10 @@ impl TicketListRequest {
 
     pub async fn execute(self) -> SDKResult<TicketListResponse> {
         let api_endpoint = HelpdeskApiV1::TicketList;
-        let mut request = ApiRequest::<TicketListResponse>::get(&api_endpoint.to_url());
+        let mut request = ApiRequest::<TicketListResponse>::get(api_endpoint.to_url());
 
         if let Some(page_size) = self.page_size {
-            request = request.query("page_size", &page_size.to_string());
+            request = request.query("page_size", page_size.to_string().as_str());
         }
 
         if let Some(ref page_token) = self.page_token {

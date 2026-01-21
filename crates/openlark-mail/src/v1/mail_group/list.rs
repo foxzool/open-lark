@@ -46,10 +46,10 @@ impl MailGroupListRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<MailGroupListResponse> {
         let api_endpoint = MailApiV1::MailGroupList;
-        let mut request = ApiRequest::<MailGroupListResponse>::get(&api_endpoint.to_url());
+        let mut request = ApiRequest::<MailGroupListResponse>::get(api_endpoint.to_url());
 
         if let Some(page_size) = self.page_size {
-            request = request.query("page_size", &page_size.to_string());
+            request = request.query("page_size", page_size.to_string().as_str());
         }
 
         if let Some(ref page_token) = self.page_token {
