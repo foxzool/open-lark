@@ -2,6 +2,7 @@ pub mod complete;
 pub mod create;
 pub mod delete;
 pub mod get;
+pub mod list;
 pub mod models;
 pub mod uncomplete;
 pub mod update;
@@ -36,6 +37,10 @@ impl Task {
         get::GetTaskRequest::new(self.config.clone(), task_guid.into())
     }
 
+    pub fn list(&self) -> list::ListTasksRequest {
+        list::ListTasksRequest::new(self.config.clone())
+    }
+
     pub fn complete(&self, task_guid: impl Into<String>) -> complete::CompleteTaskRequest {
         complete::CompleteTaskRequest::new(self.config.clone(), task_guid.into())
     }
@@ -50,11 +55,12 @@ pub use complete::CompleteTaskRequest;
 pub use create::CreateTaskRequest;
 pub use delete::DeleteTaskRequest;
 pub use get::GetTaskRequest;
+pub use list::ListTasksRequest;
 pub use uncomplete::UncompleteTaskRequest;
 pub use update::UpdateTaskRequest;
 
 // 重新导出响应类型
 pub use models::{
     CompleteTaskResponse, CreateTaskBody, CreateTaskResponse, DeleteTaskResponse, GetTaskResponse,
-    UncompleteTaskResponse, UpdateTaskBody, UpdateTaskResponse,
+    ListTasksResponse, TaskItem, UncompleteTaskResponse, UpdateTaskBody, UpdateTaskResponse,
 };
