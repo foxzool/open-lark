@@ -40,6 +40,7 @@ impl DeletePermissionPublicPasswordRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeletePermissionPublicPasswordResponse> {
+        // === 必填字段验证 ===
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -52,6 +53,8 @@ impl DeletePermissionPublicPasswordRequest {
                 "type 不能为空",
             ));
         }
+
+        // === 枚举值验证 ===
         match self.r#type.as_str() {
             "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "mindnote" | "minutes"
             | "slides" => {}
@@ -62,6 +65,8 @@ impl DeletePermissionPublicPasswordRequest {
                 ));
             }
         }
+
+        // === 业务规则验证 ===
         if self.r#type == "minutes" {
             return Err(openlark_core::error::validation_error(
                 "type",
@@ -96,9 +101,9 @@ mod tests {
     #[test]
     fn test_delete_permission_public_password_request_builder() {
         let config = Config::default();
-        let request = DeletePermissionPublicPasswordRequest::new(config, "token", "type");
+        let request = DeletePermissionPublicPasswordRequest::new(config, "token", "docx");
         assert_eq!(request.token, "token");
-        assert_eq!(request.r#type, "type");
+        assert_eq!(request.r#type, "docx");
     }
 
     #[test]
@@ -107,5 +112,53 @@ mod tests {
             DeletePermissionPublicPasswordResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    #[test]
+    fn test_empty_token() {
+        let config = Config::default();
+        let request = DeletePermissionPublicPasswordRequest::new(config, "", "docx");
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("token"));
+    }
+
+    #[test]
+    fn test_empty_type() {
+        let config = Config::default();
+        let request = DeletePermissionPublicPasswordRequest::new(config, "token", "");
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("type"));
+    }
+
+    #[test]
+    fn test_invalid_type() {
+        let config = Config::default();
+        let request = DeletePermissionPublicPasswordRequest::new(config, "token", "invalid_type");
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("type"));
+    }
+
+    #[test]
+    fn test_minutes_not_supported() {
+        let config = Config::default();
+        let request = DeletePermissionPublicPasswordRequest::new(config, "token", "minutes");
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("minutes"));
     }
 }

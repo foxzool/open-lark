@@ -47,6 +47,7 @@ impl DeleteAppRoleRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<DeleteAppRoleResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "app_token");
         validate_required!(self.role_id.trim(), "role_id");
 
@@ -97,5 +98,44 @@ pub struct DeleteAppRoleResponse {}
 impl ApiResponseTrait for DeleteAppRoleResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let request = DeleteAppRoleRequest::new(config)
+            .app_token("".to_string())
+            .role_id("role_id".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("app_token"));
+    }
+
+    #[test]
+    fn test_empty_role_id() {
+        let config = Config::default();
+        let request = DeleteAppRoleRequest::new(config)
+            .app_token("app_token".to_string())
+            .role_id("".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("role_id"));
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(
+            DeleteAppRoleResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

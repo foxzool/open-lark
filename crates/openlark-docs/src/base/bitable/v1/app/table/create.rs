@@ -73,9 +73,10 @@ impl CreateTableRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateTableResponse> {
-        // 参数验证
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "app_token");
 
+        // === 业务规则验证 ===
         if self.table.name.trim().is_empty() {
             return Err(openlark_core::error::validation_error(
                 "name",
@@ -216,6 +217,71 @@ pub struct TableField {
     /// 字段描述
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<FieldDescription>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let table = TableData::new("测试表");
+        let request = CreateTableRequest::new(config)
+            .app_token("".to_string())
+            .table(table);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_empty_table_name() {
+        let config = Config::default();
+        let table = TableData::new("");
+        let request = CreateTableRequest::new(config)
+            .app_token("app_token".to_string())
+            .table(table);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("数据表名称不能为空"));
+    }
+
+    #[test]
+    fn test_table_name_too_long() {
+        let config = Config::default();
+        let table = TableData::new("a".repeat(101));
+        let request = CreateTableRequest::new(config)
+            .app_token("app_token".to_string())
+            .table(table);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("数据表名称长度"));
+    }
+
+    #[test]
+    fn test_table_name_with_invalid_chars() {
+        let config = Config::default();
+        let table = TableData::new("test/table");
+        let request = CreateTableRequest::new(config)
+            .app_token("app_token".to_string())
+            .table(table);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(
+            CreateTableResponse::data_format(),
+            ResponseFormat::Data
+        );
+    }
 }
 
 impl TableField {

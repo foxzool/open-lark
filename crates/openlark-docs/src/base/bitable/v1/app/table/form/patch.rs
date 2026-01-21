@@ -89,6 +89,7 @@ impl PatchFormRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<PatchFormResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "app_token");
         validate_required!(self.table_id.trim(), "table_id");
         validate_required!(self.form_id.trim(), "form_id");
@@ -147,5 +148,47 @@ pub struct PatchFormResponse {
 impl ApiResponseTrait for PatchFormResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let request = PatchFormRequest::new(config)
+            .app_token("".to_string())
+            .table_id("table_id".to_string())
+            .form_id("form_id".to_string())
+            .name("表单名".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("app_token"));
+    }
+
+    #[test]
+    fn test_no_update_fields() {
+        let config = Config::default();
+        let request = PatchFormRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .form_id("form_id".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("至少需要提供一个要更新的字段"));
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(
+            PatchFormResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

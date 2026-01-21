@@ -75,6 +75,7 @@ impl PatchPublicPermissionRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<PatchPublicPermissionResponse> {
+        // === 必填字段验证 ===
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -87,6 +88,8 @@ impl PatchPublicPermissionRequest {
                 "type 不能为空",
             ));
         }
+
+        // === 枚举值验证 ===
         match self.r#type.as_str() {
             "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "mindnote" | "minutes"
             | "slides" => {}
@@ -143,6 +146,8 @@ impl PatchPublicPermissionRequest {
                 }
             }
         }
+
+        // === 业务规则验证 ===
         if self.r#type == "wiki" {
             if self.permission_public_request.external_access.is_some() {
                 return Err(openlark_core::error::validation_error(
@@ -226,5 +231,131 @@ mod tests {
             PatchPublicPermissionResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    #[test]
+    fn test_empty_token() {
+        let config = Config::default();
+        let body = PermissionPublicRequest {
+            external_access: Some(true),
+            security_entity: None,
+            comment_entity: None,
+            share_entity: None,
+            link_share_entity: None,
+            invite_external: None,
+        };
+
+        let request = PatchPublicPermissionRequest::new(config, "", "docx", body);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("token"));
+    }
+
+    #[test]
+    fn test_empty_type() {
+        let config = Config::default();
+        let body = PermissionPublicRequest {
+            external_access: Some(true),
+            security_entity: None,
+            comment_entity: None,
+            share_entity: None,
+            link_share_entity: None,
+            invite_external: None,
+        };
+
+        let request = PatchPublicPermissionRequest::new(config, "doc_token", "", body);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("type"));
+    }
+
+    #[test]
+    fn test_invalid_type() {
+        let config = Config::default();
+        let body = PermissionPublicRequest {
+            external_access: None,
+            security_entity: None,
+            comment_entity: None,
+            share_entity: None,
+            link_share_entity: None,
+            invite_external: None,
+        };
+
+        let request = PatchPublicPermissionRequest::new(config, "doc_token", "invalid_type", body);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("type"));
+    }
+
+    #[test]
+    fn test_invalid_security_entity() {
+        let config = Config::default();
+        let body = PermissionPublicRequest {
+            external_access: None,
+            security_entity: Some("invalid_entity".to_string()),
+            comment_entity: None,
+            share_entity: None,
+            link_share_entity: None,
+            invite_external: None,
+        };
+
+        let request = PatchPublicPermissionRequest::new(config, "doc_token", "docx", body);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("security_entity"));
+    }
+
+    #[test]
+    fn test_wiki_with_external_access() {
+        let config = Config::default();
+        let body = PermissionPublicRequest {
+            external_access: Some(true),
+            security_entity: None,
+            comment_entity: None,
+            share_entity: None,
+            link_share_entity: None,
+            invite_external: None,
+        };
+
+        let request = PatchPublicPermissionRequest::new(config, "wiki_token", "wiki", body);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("external_access"));
+    }
+
+    #[test]
+    fn test_wiki_with_anyone_readable() {
+        let config = Config::default();
+        let body = PermissionPublicRequest {
+            external_access: None,
+            security_entity: None,
+            comment_entity: None,
+            share_entity: None,
+            link_share_entity: Some("anyone_readable".to_string()),
+            invite_external: None,
+        };
+
+        let request = PatchPublicPermissionRequest::new(config, "wiki_token", "wiki", body);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("link_share_entity"));
     }
 }

@@ -80,9 +80,12 @@ impl ListFormFieldQuestionRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListFormFieldQuestionResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "应用令牌不能为空");
         validate_required!(self.table_id.trim(), "数据表ID不能为空");
         validate_required!(self.form_id.trim(), "表单ID不能为空");
+
+        // === 边界值验证 ===
         if let Some(page_size) = self.page_size {
             if page_size < 1 || page_size > 100 {
                 return Err(openlark_core::error::validation_error(
@@ -127,5 +130,45 @@ pub struct ListFormFieldQuestionResponse {
 impl ApiResponseTrait for ListFormFieldQuestionResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let request = ListFormFieldQuestionRequest::new(config)
+            .app_token("".to_string())
+            .table_id("table_id".to_string())
+            .form_id("form_id".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_page_size_out_of_range() {
+        let config = Config::default();
+        let request = ListFormFieldQuestionRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string())
+            .form_id("form_id".to_string())
+            .page_size(101);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("page_size"));
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(
+            ListFormFieldQuestionResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 }
