@@ -9,24 +9,26 @@
 //!
 //! 飞书开放平台云文档服务模块，提供文档、表格、知识库等 API 访问能力。
 //!
-//! ## CCM业务域模块结构 (严格按照project-version-resource组织)
+//! ## 文档模块业务域结构 (严格按照 bizTag/project/version/resource 组织)
 //!
-//! - **ccm**: 云内容管理（174 APIs）- 文档、表格、知识库、云盘
-//!   - **ccm_doc**: 旧版文档（6 APIs）
-//!   - **ccm_docs**: 云文档管理（2 APIs）
-//!   - **ccm_drive_explorer**: 云盘浏览器（8 APIs）
-//!   - **ccm_drive_permission**: 云文档权限（3 APIs）
-//!   - **ccm_sheet**: 表格（33 APIs）
-//!   - **docs**: 文档内容（1 API）
-//!   - **docx**: 新版文档块与群公告（19 APIs）
-//!   - **drive**: 云空间文件（59 APIs）
-//!   - **sheets**: 表格（27 APIs）
-//!   - **wiki**: Wiki（16 APIs）
-//! - **base**: 基础服务（3 APIs）
+//! ### CCM - 云文档协同 (174 APIs)
+//! - **docx**: 新版文档块与群公告（19 APIs）
+//! - **drive**: 云空间文件管理（59 APIs）
+//! - **sheets**: 电子表格（27 APIs）
+//! - **wiki**: 知识库（16 APIs）
+//! - **doc**: 文档基础服务
+//! - **docs**: 云文档管理
+//!
+//! ### BASE - 基础服务 (49 APIs)
+//! - **base**: 基础应用服务
 //! - **bitable**: 多维表格（46 APIs）
-//! - **baike**: 百科（13 APIs）
-//! - **lingo**: 词典（14 APIs）
-//! - **minutes**: 妙记（4 APIs）
+//!
+//! ### BAIKE - 企业知识库 (27 APIs)
+//! - **baike**: 知识库空间和节点
+//! - **lingo**: 知识库分类和实体
+//!
+//! ### MINUTES - 会议纪要 (4 APIs)
+//! - **minutes**: 会议转录和纪要管理
 //!
 //! ## 快速开始
 //!
@@ -122,8 +124,9 @@ pub use baike::lingo::LingoService;
 #[cfg(feature = "minutes")]
 pub use minutes::MinutesService;
 
+// Wiki服务通过ccm::wiki模块导出
 #[cfg(feature = "ccm-wiki")]
-pub use wiki::WikiService;
+pub use ccm::wiki::WikiService;
 
 // docs和docx服务通过ccm模块导出
 // #[cfg(feature = "docs")]
