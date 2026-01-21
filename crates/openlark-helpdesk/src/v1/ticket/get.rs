@@ -24,7 +24,7 @@ impl GetTicketRequest {
         validate_required!(self.ticket_id.trim(), "工单ID不能为空");
 
         let api_endpoint = HelpdeskApiV1::TicketGet(self.ticket_id.clone());
-        let request = ApiRequest::<GetTicketResponse>::get(&api_endpoint.to_url());
+        let request = ApiRequest::<GetTicketResponse>::get(api_endpoint.to_url());
 
         let response = openlark_core::http::Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "获取工单")

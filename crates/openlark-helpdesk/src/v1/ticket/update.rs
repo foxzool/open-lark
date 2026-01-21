@@ -44,7 +44,7 @@ impl UpdateTicketRequest {
         validate_required!(self.ticket_id.trim(), "工单ID不能为空");
 
         let api_endpoint = HelpdeskApiV1::TicketUpdate(self.ticket_id.clone());
-        let mut request = ApiRequest::<UpdateTicketResponse>::patch(&api_endpoint.to_url());
+        let mut request = ApiRequest::<UpdateTicketResponse>::patch(api_endpoint.to_url());
 
         request = request.body(serialize_params(&self.body, "更新工单")?);
 

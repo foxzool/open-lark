@@ -10,14 +10,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .app_id("your_app_id")
         .app_secret("your_app_secret")
         .base_url("https://open.feishu.cn")
-        .build()?;
+        .build();
 
     let task_service = TaskService::new(config);
 
-    #[cfg(feature = "v2")]
+    #[cfg(feature = "task")]
     {
-        use openlark_task::v2;
-
         let response = task_service
             .v2()
             .task()
