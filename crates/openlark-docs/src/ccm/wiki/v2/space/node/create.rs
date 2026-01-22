@@ -135,7 +135,7 @@ impl CreateWikiSpaceNodeRequest {
         params: CreateWikiSpaceNodeParams,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateWikiSpaceNodeResponse> {
-        // 验证必填字段
+        // ===== 参数校验 =====
         validate_required!(self.space_id, "知识空间ID不能为空");
 
         let valid_types = [
@@ -152,16 +152,122 @@ impl CreateWikiSpaceNodeRequest {
 
         validate_required!(params.obj_type, "obj_type不能为空");
 
-        // 使用新的enum+builder系统生成API端点
+        // ===== 构建请求 =====
         let api_endpoint = WikiApiV2::SpaceNodeCreate(self.space_id.clone());
 
-        // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<CreateWikiSpaceNodeResponse> =
             ApiRequest::post(&api_endpoint.to_url())
                 .body(serialize_params(&params, "创建知识空间节点")?);
 
-        // 发送请求
+        // ===== 发送请求 =====
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "创建知识空间节点")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// 测试构建器模式
+    #[test]
+    fn test_create_wiki_space_node_builder() {
+        let config = Config::default();
+        let request = CreateWikiSpaceNodeRequest::new(config)
+            .space_id("wiki_space_123");
+
+        assert_eq!(request.space_id, "wiki_space_123");
+    }
+
+    /// 测试创建文档节点参数
+    #[test]
+    fn test_create_doc_node_params() {
+        let params = CreateWikiSpaceNodeParams {
+            obj_type: "docx".to_string(),
+            parent_node_token: Some("parent_token".to_string()),
+            node_type: Some("origin".to_string()),
+            title: Some("测试文档".to_string()),
+            obj_token: None,
+        };
+
+        assert_eq!(params.obj_type, "docx");
+        assert_eq!(params.title, Some("测试文档".to_string()));
+    }
+
+    /// 测试创建电子表格节点
+    #[test]
+    fn test_create_sheet_node_params() {
+        let params = CreateWikiSpaceNodeParams {
+            obj_type: "sheet".to_string(),
+            parent_node_token: Some("parent_token".to_string()),
+            title: Some("项目进度表".to_string()),
+            obj_token: None,
+            node_type: None,
+        };
+
+        assert_eq!(params.obj_type, "sheet");
+        assert_eq!(params.title, Some("项目进度表".to_string()));
+    }
+
+    /// 测试响应数据结构
+    #[test]
+    fn test_create_wiki_space_node_response() {
+        let response = CreateWikiSpaceNodeResponse {
+            node: None,
+        };
+
+        assert!(response.node.is_none());
+    }
+
+    /// 测试响应trait实现
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(CreateWikiSpaceNodeResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试支持的文档类型
+    #[test]
+    fn test_supported_object_types() {
+        let valid_types = ["doc", "docx", "sheet", "slide", "mindnote", "bitable", "file"];
+
+        for obj_type in valid_types {
+            let params = CreateWikiSpaceNodeParams {
+                obj_type: obj_type.to_string(),
+                parent_node_token: None,
+                node_type: None,
+                title: None,
+                obj_token: None,
+            };
+            assert_eq!(params.obj_type, obj_type);
+        }
+    }
+
+    /// 测试快捷方式节点
+    #[test]
+    fn test_shortcut_node_type() {
+        let params = CreateWikiSpaceNodeParams {
+            obj_type: "docx".to_string(),
+            parent_node_token: Some("parent_token".to_string()),
+            node_type: Some("shortcut".to_string()),
+            title: Some("快捷方式".to_string()),
+            obj_token: Some("original_doc_token".to_string()),
+        };
+
+        assert_eq!(params.node_type, Some("shortcut".to_string()));
+        assert_eq!(params.obj_token, Some("original_doc_token".to_string()));
+    }
+
+    /// 测试根目录节点（无父节点）
+    #[test]
+    fn test_root_node_no_parent() {
+        let params = CreateWikiSpaceNodeParams {
+            obj_type: "docx".to_string(),
+            parent_node_token: None,
+            node_type: Some("origin".to_string()),
+            title: Some("根目录文档".to_string()),
+            obj_token: None,
+        };
+
+        assert!(params.parent_node_token.is_none());
     }
 }

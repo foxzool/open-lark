@@ -106,6 +106,7 @@ pub async fn get_file_statistics(
 
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<GetFileStatisticsResponse> {
+    // ===== 参数校验 =====
     if request.file_token.is_empty() {
         return Err(openlark_core::error::validation_error(
             "file_token",
@@ -131,18 +132,14 @@ pub async fn get_file_statistics(
         }
     }
 
-    // 创建API请求
-
+    // ===== 构建请求 =====
     let url = DriveApi::GetFileStatistics(request.file_token.clone()).to_url();
 
     let mut api_request: ApiRequest<GetFileStatisticsResponse> = ApiRequest::get(&url);
 
     api_request = api_request.query("file_type", &request.file_type);
 
-    // 如果有请求选项，应用它们
-
-    // 发送请求
-
+    // ===== 发送请求 =====
     let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "获取文件统计信息")
@@ -153,6 +150,7 @@ mod tests {
 
     use super::*;
 
+    /// 测试构建器模式
     #[test]
 
     fn test_get_file_statistics_request_builder() {
@@ -163,6 +161,7 @@ mod tests {
         assert_eq!(request.file_type, "doc");
     }
 
+    /// 测试统计数据结构
     #[test]
 
     fn test_file_statistics_structure() {
@@ -189,6 +188,7 @@ mod tests {
         assert_eq!(stats.like_count, 2);
     }
 
+    /// 测试响应trait实现
     #[test]
 
     fn test_response_trait() {
@@ -196,5 +196,55 @@ mod tests {
             GetFileStatisticsResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    /// 测试sheet类型统计
+    #[test]
+    fn test_sheet_file_type() {
+        let request = GetFileStatisticsRequest::new("sheet_token", "sheet");
+
+        assert_eq!(request.file_type, "sheet");
+    }
+
+    /// 测试bitable类型统计
+    #[test]
+    fn test_bitable_file_type() {
+        let request = GetFileStatisticsRequest::new("bitable_token", "bitable");
+
+        assert_eq!(request.file_type, "bitable");
+    }
+
+    /// 测试不支持点赞的文档
+    #[test]
+    fn test_unsupported_like_count() {
+        let stats = FileStatistics {
+            uv: 100,
+            pv: 200,
+            like_count: -1, // 表示不支持点赞
+            timestamp: 1627367349,
+            uv_today: 5,
+            pv_today: 10,
+            like_count_today: 0,
+        };
+
+        assert_eq!(stats.like_count, -1);
+    }
+
+    /// 测试今日统计数据
+    #[test]
+    fn test_today_statistics() {
+        let stats = FileStatistics {
+            uv: 100,
+            pv: 200,
+            like_count: 10,
+            timestamp: 1627367349,
+            uv_today: 5,
+            pv_today: 8,
+            like_count_today: 2,
+        };
+
+        assert_eq!(stats.uv_today, 5);
+        assert_eq!(stats.pv_today, 8);
+        assert_eq!(stats.like_count_today, 2);
     }
 }

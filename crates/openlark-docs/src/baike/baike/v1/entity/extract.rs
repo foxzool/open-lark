@@ -58,8 +58,7 @@ impl ExtractEntityRequest {
         option: RequestOption,
     ) -> SDKResult<ExtractEntityResponse> {
         use crate::common::api_endpoints::BaikeApiV1;
-        // ===== 验证字段长度 =====
-        // 文档：text 非必填，但要求最大长度 128
+        // ===== 参数校验 =====
         let len = self.req.text.chars().count();
         if len > 128 {
             return Err(openlark_core::error::validation_error(
@@ -68,10 +67,12 @@ impl ExtractEntityRequest {
             ));
         }
 
+        // ===== 构建请求 =====
         let api_request: ApiRequest<ExtractEntityResponse> =
             ApiRequest::post(&BaikeApiV1::EntityExtract.to_url())
                 .body(serde_json::to_value(&self.req)?);
 
+        // ===== 发送请求 =====
         let response: Response<ExtractEntityResponse> =
             Transport::request(api_request, &self.config, Some(option)).await?;
         response
@@ -104,7 +105,7 @@ mod tests {
 
         // 超过 128
         let text_129 = "a".repeat(129);
-        let request2 = ExtractEntityRequest::new(config, text_129);
+        let request2 = ExtractEntityRequest::new(config.clone(), text_129);
 
         let result = std::thread::spawn(move || {
             let rt = tokio::runtime::Runtime::new().unwrap();
@@ -115,6 +116,11 @@ mod tests {
         .join();
 
         assert!(result.is_ok());
+
+        // 测试边界情况
+        let text_127 = "a".repeat(127);
+        let request3 = ExtractEntityRequest::new(config, text_127);
+        assert_eq!(request3.req.text.chars().count(), 127);
     }
 
     /// 测试空文本
@@ -132,5 +138,54 @@ mod tests {
         let text = "🎉🎊🎈"; // 3 个 Unicode 码点
         let request = ExtractEntityRequest::new(config, text);
         assert_eq!(request.req.text.chars().count(), 3);
+    }
+
+    /// 测试响应数据结构
+    #[test]
+    fn test_extract_entity_response() {
+        let response = ExtractEntityResponse {
+            entity_word: vec![
+                ExtractedWord {
+                    name: "词条1".to_string(),
+                    aliases: Some(vec!["别名1".to_string()]),
+                },
+                ExtractedWord {
+                    name: "词条2".to_string(),
+                    aliases: None,
+                },
+            ],
+        };
+
+        assert_eq!(response.entity_word.len(), 2);
+        assert_eq!(response.entity_word[0].name, "词条1");
+    }
+
+    /// 测试响应trait实现
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(ExtractEntityResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试ExtractedWord结构
+    #[test]
+    fn test_extracted_word_structure() {
+        let word = ExtractedWord {
+            name: "测试词条".to_string(),
+            aliases: Some(vec!["别名A".to_string(), "别名B".to_string()]),
+        };
+
+        assert_eq!(word.name, "测试词条");
+        assert_eq!(word.aliases.unwrap().len(), 2);
+    }
+
+    /// 测试无别名场景
+    #[test]
+    fn test_extracted_word_no_aliases() {
+        let word = ExtractedWord {
+            name: "无别名词条".to_string(),
+            aliases: None,
+        };
+
+        assert!(word.aliases.is_none());
     }
 }
