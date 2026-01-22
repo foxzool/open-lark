@@ -2,49 +2,47 @@
 //!
 //! 提供目录数据同步功能
 
-use crate::{PlatformConfig, LarkClient};
+use crate::PlatformConfig;
 use openlark_core::Result;
+use std::sync::Arc;
 
 /// 目录同步 API
 #[derive(Debug, Clone)]
 pub struct SyncApi {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
 }
 
 impl SyncApi {
-    pub fn new(config: PlatformConfig, client: LarkClient) -> Self {
-        Self { config, client }
+    pub fn new(config: Arc<PlatformConfig>) -> Self {
+        Self { config }
     }
 
     /// 获取同步任务
     pub fn get_task(&self) -> GetSyncTaskRequest {
-        GetSyncTaskRequest::new(self.config.clone(), self.client.clone())
+        GetSyncTaskRequest::new(self.config.clone())
     }
 
     /// 创建同步任务
     pub fn create_task(&self) -> CreateSyncTaskRequest {
-        CreateSyncTaskRequest::new(self.config.clone(), self.client.clone())
+        CreateSyncTaskRequest::new(self.config.clone())
     }
 
     /// 获取同步进度
     pub fn get_progress(&self) -> GetSyncProgressRequest {
-        GetSyncProgressRequest::new(self.config.clone(), self.client.clone())
+        GetSyncProgressRequest::new(self.config.clone())
     }
 }
 
 /// 获取同步任务请求
 pub struct GetSyncTaskRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     task_id: Option<String>,
 }
 
 impl GetSyncTaskRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             task_id: None,
         }
     }
@@ -64,16 +62,14 @@ impl GetSyncTaskRequest {
 
 /// 创建同步任务请求
 pub struct CreateSyncTaskRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     sync_type: Option<String>,
 }
 
 impl CreateSyncTaskRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             sync_type: None,
         }
     }
@@ -93,16 +89,14 @@ impl CreateSyncTaskRequest {
 
 /// 获取同步进度请求
 pub struct GetSyncProgressRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     task_id: Option<String>,
 }
 
 impl GetSyncProgressRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             task_id: None,
         }
     }

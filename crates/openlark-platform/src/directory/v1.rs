@@ -34,6 +34,6 @@ impl DirectoryV1 {
     }
 }
 
-pub mod users;
 pub mod departments;
 pub mod sync;
+pub mod users;
