@@ -119,8 +119,7 @@ mod tests {
     #[test]
     fn test_update_chat_request_without_user_id_type() {
         let config = Config::default();
-        let request = UpdateChatRequest::new(config)
-            .chat_id("oc_xxx");
+        let request = UpdateChatRequest::new(config).chat_id("oc_xxx");
         assert_eq!(request.chat_id, "oc_xxx");
         assert_eq!(request.user_id_type, None);
     }

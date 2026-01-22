@@ -138,8 +138,7 @@ mod tests {
     #[test]
     fn test_create_group_request_with_user_id_type() {
         let config = Config::default();
-        let request = CreateGroupRequest::new(config)
-            .user_id_type(UserIdType::OpenId);
+        let request = CreateGroupRequest::new(config).user_id_type(UserIdType::OpenId);
         assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
     }
 
@@ -170,6 +169,9 @@ mod tests {
             .user_id_type(UserIdType::UnionId)
             .department_id_type(DepartmentIdType::OpenDepartmentId);
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
     }
 }

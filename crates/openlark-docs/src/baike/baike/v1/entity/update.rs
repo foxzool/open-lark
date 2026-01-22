@@ -149,7 +149,8 @@ mod tests {
             description: Some("更新描述".to_string()),
             ..Default::default()
         };
-        let request = UpdateEntityRequest::new(config, "entity_123", req).user_id_type(UserIdType::OpenId);
+        let request =
+            UpdateEntityRequest::new(config, "entity_123", req).user_id_type(UserIdType::OpenId);
 
         assert_eq!(request.entity_id, "entity_123");
         assert_eq!(request.req.main_keys.len(), 1);
@@ -192,7 +193,10 @@ mod tests {
             ..Default::default()
         };
         let request = UpdateEntityRequest::new(config.clone(), "", req);
-        assert!(request.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         // 测试 main_keys 为空
         let req2 = UpdateEntityReq {
@@ -200,7 +204,10 @@ mod tests {
             ..Default::default()
         };
         let request2 = UpdateEntityRequest::new(config.clone(), "entity_123", req2);
-        assert!(request2.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request2
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         // 测试 description 和 rich_text 都为空
         let req3 = UpdateEntityReq {
@@ -213,7 +220,10 @@ mod tests {
             ..Default::default()
         };
         let request3 = UpdateEntityRequest::new(config, "entity_123", req3);
-        assert!(request3.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request3
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
     }
 
     #[test]

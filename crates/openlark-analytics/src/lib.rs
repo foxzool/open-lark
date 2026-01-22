@@ -57,7 +57,6 @@ pub use service::AnalyticsService;
 // 配置类型
 pub use openlark_core::config::Config;
 
-
 /// 数据分析模块版本信息
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 

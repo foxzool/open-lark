@@ -88,12 +88,9 @@ mod tests {
                 .build(),
         );
 
-        let request = UpdateCommentRequest::new(
-            config,
-            "task_123".to_string(),
-            "comment_456".to_string(),
-        )
-        .content("更新的评论内容");
+        let request =
+            UpdateCommentRequest::new(config, "task_123".to_string(), "comment_456".to_string())
+                .content("更新的评论内容");
 
         assert_eq!(request.task_guid, "task_123");
         assert_eq!(request.comment_guid, "comment_456");

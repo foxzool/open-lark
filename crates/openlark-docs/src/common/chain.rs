@@ -47,11 +47,6 @@ impl DocsClient {
     pub fn config(&self) -> &Config {
         &self.config
     }
-
-    /// 与现有 `service::DocsService` 保持一致：需要时返回 Service 实例（按 feature 裁剪）。
-    pub fn service(&self) -> crate::service::DocsService {
-        crate::service::DocsService::new((*self.config).clone())
-    }
 }
 
 /// ccm：`docs.ccm`
@@ -92,10 +87,6 @@ impl CcmClient {
 
     pub fn config(&self) -> &Config {
         &self.config
-    }
-
-    pub fn service(&self) -> crate::ccm::CcmService {
-        crate::ccm::CcmService::new((*self.config).clone())
     }
 }
 

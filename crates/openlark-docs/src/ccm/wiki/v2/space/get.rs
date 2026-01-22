@@ -81,8 +81,7 @@ mod tests {
     #[test]
     fn test_get_wiki_space_builder() {
         let config = Config::default();
-        let request = GetWikiSpaceRequest::new(config)
-            .space_id("wiki_space_123");
+        let request = GetWikiSpaceRequest::new(config).space_id("wiki_space_123");
 
         assert_eq!(request.space_id, "wiki_space_123");
     }
@@ -90,9 +89,7 @@ mod tests {
     /// 测试响应数据结构
     #[test]
     fn test_get_wiki_space_response() {
-        let response = GetWikiSpaceResponse {
-            space: None,
-        };
+        let response = GetWikiSpaceResponse { space: None };
 
         assert!(response.space.is_none());
     }
@@ -116,8 +113,7 @@ mod tests {
     #[test]
     fn test_special_characters_space_id() {
         let config = Config::default();
-        let request = GetWikiSpaceRequest::new(config)
-            .space_id("wiki_123-456_abc");
+        let request = GetWikiSpaceRequest::new(config).space_id("wiki_123-456_abc");
 
         assert_eq!(request.space_id, "wiki_123-456_abc");
     }

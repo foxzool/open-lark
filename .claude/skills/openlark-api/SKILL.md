@@ -6,6 +6,20 @@ allowed-tools: Bash, Read, Grep, Glob, Edit
 
 # OpenLark API 接口实现规范（速查）
 
+## 🧭 技能路由指南
+
+**本技能适用场景：**
+- 添加/重构单个飞书开放平台 API
+- 需要确定 API 落盘路径（bizTag → crate → 文件路径）
+- 需要参考代码模板（Body/Response + Builder）
+- 需要了解端点规范、RequestOption 约定、Service 链式调用
+
+**其他技能：**
+- 审查整体设计规范 → `Skill(openlark-design-review)`
+- 统一 `validate()` 写法 → `Skill(openlark-validation-style)`
+
+---
+
 本文件只保留"可执行的最小流程"，标准示例与 docPath 抓取能力见 `references/` 与 `scripts/`。
 
 ## 0. 快速工作流（新增一个 API）
@@ -36,13 +50,67 @@ python3 tools/validate_apis.py --crate openlark-docs
 
 ## 2. Service 链式调用（实现 + 调用约定）
 
+> 本节提供"如何实现"的技术规范。若需要审查"是否应该统一范式"（Request 自持 Config vs Builder → Service），见 `Skill(openlark-design-review) §1`。
+
 ### 2.1 实现侧：service.rs
 
 目标：让 `openlark-client` 能走 `client.<biz>.service().<project>().<version>()...<api>()`
 
 - 若 crate 已有 `src/service.rs`：在顶层 service 新增 `pub fn {bizTag}(&self) -> ...`
 - 若没有：创建 `src/service.rs` 并在 `lib.rs` 中 `pub mod service;`
-- `openlark-docs` 特例：为避免 strict API 校验脚本把“链式入口”计为 API 实现文件，链式入口放在 `crates/openlark-docs/src/common/chain.rs`，只做模块级入口与 Config 透传，不为 200+ API 手写方法。
+- `openlark-docs` 特例：为避免 strict API 校验脚本把"链式入口"计为 API 实现文件，链式入口放在 `crates/openlark-docs/src/common/chain.rs`，只做模块级入口与 Config 透传，不为 200+ API 手写方法。
+
+#### ⚠️ Service 层标准模式
+
+**正确示例**（参考 `openlark-docs/src/common/chain.rs`）：
+
+```rust
+use std::sync::Arc;
+use openlark_core::config::Config;
+
+/// DocClient 只持有 Arc<Config>
+#[derive(Debug, Clone)]
+pub struct DocClient {
+    config: Arc<Config>,
+}
+
+impl DocClient {
+    pub fn new(config: Config) -> Self {
+        Self { config: Arc::new(config) }
+    }
+
+    /// 子 Service 只透传 Arc<Config>
+    pub fn drive(&self) -> DriveService {
+        DriveService::new(self.config.clone())
+    }
+}
+
+/// Service 层只持有 Arc<Config>，不持有独立 HTTP client
+#[derive(Debug, Clone)]
+pub struct DriveService {
+    config: Arc<Config>,
+}
+
+impl DriveService {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+
+    pub fn v1(&self) -> DriveV1 {
+        DriveV1::new(self.config.clone())
+    }
+}
+```
+
+**❌ 禁止模式**：
+- ❌ Service 持有独立的 HTTP client 字段
+- ❌ 使用 `LarkClient` 作为具体类型（它是 trait）
+- ❌ 在测试中使用 `.unwrap()` 调用 `Config::build()`（build() 直接返回 Config）
+
+**✅ 正确模式**：
+- ✅ Service 只持有 `Arc<Config>`
+- ✅ `Config::build()` 直接返回 `Config`，不需要 `.unwrap()`
+- ✅ HTTP 传输由 `openlark_core::Transport` 处理
 
 ### 2.2 调用侧：RequestOption 约定
 
@@ -58,6 +126,10 @@ python3 tools/validate_apis.py --crate openlark-docs
 详细示例见 `references/standard-example.md`
 
 ## 3. API 模板（以仓库现有风格为准）
+
+> 以下提供两种仓库中真实存在的风格。**实现时优先模仿目标 crate 的现有文件风格**，避免在同一 project/version 内混用多种范式。
+>
+> 范式一致性审查见 `Skill(openlark-design-review) §1`。
 
 ### 3.1 Request / Response
 
@@ -81,13 +153,15 @@ pub struct {Name}Response {
 ### 3.2 Builder + execute/send
 
 ```rust
+use std::sync::Arc;
+
 pub struct {Name}Request {
-    config: Config,
+    config: Arc<Config>,
     // 路径/查询参数（按需）
 }
 
 impl {Name}Request {
-    pub fn new(config: Config) -> Self { /* ... */ }
+    pub fn new(config: Arc<Config>) -> Self { /* ... */ }
 
     pub async fn execute(self, body: {Name}Body) -> SDKResult<{Name}Response> {
         self.execute_with_options(body, RequestOption::default()).await

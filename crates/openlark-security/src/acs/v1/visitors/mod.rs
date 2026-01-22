@@ -253,7 +253,8 @@ mod tests {
             name: "张三".to_string(),
             mobile: Some("13800138000".to_string()),
         };
-        let builder = service.create()
+        let builder = service
+            .create()
             .name("访客李四")
             .mobile("13900139000")
             .email("lisi@example.com".to_string())
@@ -277,7 +278,8 @@ mod tests {
     fn test_create_visitor_builder_with_duration() {
         let config = create_test_config();
         let service = VisitorsService::new(config);
-        let builder = service.create()
+        let builder = service
+            .create()
             .name("访客王五")
             .mobile("13700137000")
             .valid_duration_hours(8);
@@ -312,4 +314,3 @@ mod tests {
         assert_eq!(builder.valid_until, 0);
     }
 }
-

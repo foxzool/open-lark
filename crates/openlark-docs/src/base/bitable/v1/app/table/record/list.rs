@@ -311,8 +311,14 @@ mod tests {
         assert_eq!(request.page_token, Some("page_token".to_string()));
         assert_eq!(request.view_id, Some("view_id".to_string()));
         assert_eq!(request.filter, Some("status == 'active'".to_string()));
-        assert_eq!(request.sort, Some(vec!["field1".to_string(), "field2".to_string()]));
-        assert_eq!(request.field_names, Some(vec!["field1".to_string(), "field2".to_string()]));
+        assert_eq!(
+            request.sort,
+            Some(vec!["field1".to_string(), "field2".to_string()])
+        );
+        assert_eq!(
+            request.field_names,
+            Some(vec!["field1".to_string(), "field2".to_string()])
+        );
         assert_eq!(request.text_field_as_array, Some(true));
         assert_eq!(request.display_formula_ref, Some(true));
         assert_eq!(request.automatic_fields, Some(true));
@@ -321,16 +327,14 @@ mod tests {
     #[test]
     fn test_empty_app_token_validation() {
         let config = Config::default();
-        let request = ListRecordRequest::new(config)
-            .table_id("table_id".to_string());
+        let request = ListRecordRequest::new(config).table_id("table_id".to_string());
         assert_eq!(request.app_token, "");
     }
 
     #[test]
     fn test_empty_table_id_validation() {
         let config = Config::default();
-        let request = ListRecordRequest::new(config)
-            .app_token("app_token".to_string());
+        let request = ListRecordRequest::new(config).app_token("app_token".to_string());
         assert_eq!(request.table_id, "");
     }
 
@@ -356,10 +360,7 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            ListRecordResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(ListRecordResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]

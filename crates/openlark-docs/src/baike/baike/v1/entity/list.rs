@@ -153,18 +153,30 @@ mod tests {
 
         // 测试 page_size 超出范围
         let request = ListEntityRequest::new(config.clone()).page_size(0);
-        assert!(request.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         let request2 = ListEntityRequest::new(config.clone()).page_size(101);
-        assert!(request2.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request2
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         // 测试 provider 过短
         let request3 = ListEntityRequest::new(config.clone()).provider("a");
-        assert!(request3.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request3
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         // 测试 provider 过长
         let request4 = ListEntityRequest::new(config.clone()).provider("a".repeat(33));
-        assert!(request4.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request4
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
     }
 
     #[test]

@@ -33,15 +33,27 @@ impl Comment {
     }
 
     pub fn get(&self, comment_guid: impl Into<String>) -> get::GetCommentRequest {
-        get::GetCommentRequest::new(self.config.clone(), self.task_guid.clone(), comment_guid.into())
+        get::GetCommentRequest::new(
+            self.config.clone(),
+            self.task_guid.clone(),
+            comment_guid.into(),
+        )
     }
 
     pub fn update(&self, comment_guid: impl Into<String>) -> update::UpdateCommentRequest {
-        update::UpdateCommentRequest::new(self.config.clone(), self.task_guid.clone(), comment_guid.into())
+        update::UpdateCommentRequest::new(
+            self.config.clone(),
+            self.task_guid.clone(),
+            comment_guid.into(),
+        )
     }
 
     pub fn delete(&self, comment_guid: impl Into<String>) -> delete::DeleteCommentRequest {
-        delete::DeleteCommentRequest::new(self.config.clone(), self.task_guid.clone(), comment_guid.into())
+        delete::DeleteCommentRequest::new(
+            self.config.clone(),
+            self.task_guid.clone(),
+            comment_guid.into(),
+        )
     }
 
     pub fn list(&self) -> list::ListCommentsRequest {

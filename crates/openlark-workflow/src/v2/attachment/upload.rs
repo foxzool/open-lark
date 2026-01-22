@@ -66,15 +66,13 @@ impl UploadAttachmentRequest {
         })?;
 
         // 使用文件名（如果提供）或从路径中提取
-        let filename = self
-            .file_name
-            .unwrap_or_else(|| {
-                std::path::Path::new(&self.file_path)
-                    .file_name()
-                    .and_then(|n| n.to_str())
-                    .unwrap_or("attachment")
-                    .to_string()
-            });
+        let filename = self.file_name.unwrap_or_else(|| {
+            std::path::Path::new(&self.file_path)
+                .file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or("attachment")
+                .to_string()
+        });
 
         // 获取文件大小
         let file_size = file_content.len();

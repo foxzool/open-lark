@@ -163,8 +163,7 @@ mod tests {
     #[test]
     fn test_create_department_request_with_user_id_type() {
         let config = Config::default();
-        let request = CreateDepartmentRequest::new(config)
-            .user_id_type(UserIdType::OpenId);
+        let request = CreateDepartmentRequest::new(config).user_id_type(UserIdType::OpenId);
         assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
     }
 
@@ -182,7 +181,10 @@ mod tests {
             department_id: Some("custom_dept_id".to_string()),
             ..body
         };
-        assert_eq!(body_with_id.department_id, Some("custom_dept_id".to_string()));
+        assert_eq!(
+            body_with_id.department_id,
+            Some("custom_dept_id".to_string())
+        );
     }
 
     #[test]
@@ -193,7 +195,10 @@ mod tests {
             .department_id_type(DepartmentIdType::DepartmentId)
             .client_token("uuid123");
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::DepartmentId)
+        );
         assert_eq!(request.client_token, Some("uuid123".to_string()));
     }
 }

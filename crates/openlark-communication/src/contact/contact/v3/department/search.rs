@@ -166,8 +166,7 @@ mod tests {
     #[test]
     fn test_search_departments_request_with_user_id_type() {
         let config = Config::default();
-        let request = SearchDepartmentsRequest::new(config)
-            .user_id_type(UserIdType::OpenId);
+        let request = SearchDepartmentsRequest::new(config).user_id_type(UserIdType::OpenId);
         assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
     }
 
@@ -180,8 +179,7 @@ mod tests {
     #[test]
     fn test_search_departments_request_with_page_size() {
         let config = Config::default();
-        let request = SearchDepartmentsRequest::new(config)
-            .page_size(30);
+        let request = SearchDepartmentsRequest::new(config).page_size(30);
         assert_eq!(request.page_size, Some(30));
     }
 
@@ -194,7 +192,10 @@ mod tests {
             .page_size(50)
             .page_token("token789");
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
         assert_eq!(request.page_size, Some(50));
         assert_eq!(request.page_token, Some("token789".to_string()));
     }

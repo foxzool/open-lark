@@ -7,9 +7,6 @@ pub use openlark_core::prelude::{
     ResponseFormat, SDKResult,
 };
 
-// 重新导出文档服务核心类型（避免冲突）
-pub use crate::error::{DocsError, DocsResult};
-
 // 显式导出常用模型，避免歧义
 pub use crate::models::{
     DepartmentInfo, DocumentBase, DocumentStats, ErrorInfo, FileInfo, Permission, SearchResult,
@@ -29,26 +26,5 @@ pub use crate::baike::BaikeService;
 #[cfg(feature = "minutes")]
 pub use crate::minutes::MinutesService;
 
-#[cfg(feature = "docs")]
-pub use crate::service::DocsService;
-
 #[cfg(feature = "docx")]
 pub use crate::ccm::docx::DocxService;
-
-#[cfg(feature = "ccm-wiki")]
-pub use crate::wiki::WikiService;
-
-// 为了向后兼容性，保留类型别名
-pub type APIResult<T> = DocsResult<T>;
-
-// 重新导出常用外部crate
-pub use chrono::{DateTime, Utc};
-pub use serde::{Deserialize, Serialize};
-pub use std::collections::HashMap;
-pub use std::sync::Arc;
-pub use uuid::Uuid;
-
-/// 文档服务预导入trait
-pub trait DocsPrelude {}
-
-impl<T> DocsPrelude for T {}

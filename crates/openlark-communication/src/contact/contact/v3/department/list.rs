@@ -146,32 +146,28 @@ mod tests {
     #[test]
     fn test_list_departments_request_with_user_id_type() {
         let config = Config::default();
-        let request = ListDepartmentsRequest::new(config)
-            .user_id_type(UserIdType::OpenId);
+        let request = ListDepartmentsRequest::new(config).user_id_type(UserIdType::OpenId);
         assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
     }
 
     #[test]
     fn test_list_departments_request_with_parent_department_id() {
         let config = Config::default();
-        let request = ListDepartmentsRequest::new(config)
-            .parent_department_id("dept_xxx");
+        let request = ListDepartmentsRequest::new(config).parent_department_id("dept_xxx");
         assert_eq!(request.parent_department_id, Some("dept_xxx".to_string()));
     }
 
     #[test]
     fn test_list_departments_request_with_fetch_child() {
         let config = Config::default();
-        let request = ListDepartmentsRequest::new(config)
-            .fetch_child(true);
+        let request = ListDepartmentsRequest::new(config).fetch_child(true);
         assert_eq!(request.fetch_child, Some(true));
     }
 
     #[test]
     fn test_list_departments_request_with_page_size() {
         let config = Config::default();
-        let request = ListDepartmentsRequest::new(config)
-            .page_size(50);
+        let request = ListDepartmentsRequest::new(config).page_size(50);
         assert_eq!(request.page_size, Some(50));
     }
 
@@ -186,7 +182,10 @@ mod tests {
             .page_size(100)
             .page_token("token789");
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
         assert_eq!(request.parent_department_id, Some("dept_456".to_string()));
         assert_eq!(request.fetch_child, Some(false));
         assert_eq!(request.page_size, Some(100));

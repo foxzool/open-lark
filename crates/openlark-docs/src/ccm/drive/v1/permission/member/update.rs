@@ -323,28 +323,16 @@ mod tests {
     #[test]
     fn test_empty_token_validation() {
         let config = Config::default();
-        let request = UpdatePermissionMemberRequest::new(
-            config,
-            "",
-            "member_id",
-            "docx",
-            "openid",
-            "edit",
-        );
+        let request =
+            UpdatePermissionMemberRequest::new(config, "", "member_id", "docx", "openid", "edit");
         assert_eq!(request.token, "");
     }
 
     #[test]
     fn test_empty_member_id_validation() {
         let config = Config::default();
-        let request = UpdatePermissionMemberRequest::new(
-            config,
-            "file_token",
-            "",
-            "docx",
-            "openid",
-            "edit",
-        );
+        let request =
+            UpdatePermissionMemberRequest::new(config, "file_token", "", "docx", "openid", "edit");
         assert_eq!(request.member_id, "");
     }
 

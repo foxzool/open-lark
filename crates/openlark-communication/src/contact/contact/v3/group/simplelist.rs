@@ -106,8 +106,7 @@ mod tests {
     #[test]
     fn test_simple_list_groups_request_with_page_token() {
         let config = Config::default();
-        let request = SimpleListGroupsRequest::new(config)
-            .page_token("token123");
+        let request = SimpleListGroupsRequest::new(config).page_token("token123");
         assert_eq!(request.page_token, Some("token123".to_string()));
     }
 

@@ -125,8 +125,7 @@ mod tests {
     #[test]
     fn test_search_chats_request_with_query() {
         let config = Config::default();
-        let request = SearchChatsRequest::new(config)
-            .query("测试群");
+        let request = SearchChatsRequest::new(config).query("测试群");
         assert_eq!(request.query, Some("测试群".to_string()));
     }
 
@@ -142,16 +141,14 @@ mod tests {
     #[test]
     fn test_search_chats_request_with_page_size() {
         let config = Config::default();
-        let request = SearchChatsRequest::new(config)
-            .page_size(50);
+        let request = SearchChatsRequest::new(config).page_size(50);
         assert_eq!(request.page_size, Some(50));
     }
 
     #[test]
     fn test_search_chats_request_with_page_token() {
         let config = Config::default();
-        let request = SearchChatsRequest::new(config)
-            .page_token("token789");
+        let request = SearchChatsRequest::new(config).page_token("token789");
         assert_eq!(request.page_token, Some("token789".to_string()));
     }
 

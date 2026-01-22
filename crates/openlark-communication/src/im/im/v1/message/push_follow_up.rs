@@ -150,8 +150,7 @@ mod tests {
     #[test]
     fn test_push_follow_up_request_builder() {
         let config = Config::default();
-        let request = PushFollowUpRequest::new(config)
-            .message_id("om_xxx");
+        let request = PushFollowUpRequest::new(config).message_id("om_xxx");
         assert_eq!(request.message_id, "om_xxx");
     }
 
@@ -169,12 +168,10 @@ mod tests {
     fn test_follow_up_with_i18n() {
         let follow_up = FollowUp {
             content: "查看详情".to_string(),
-            i18n_contents: Some(vec![
-                FollowUpI18nContent {
-                    content: "View Details".to_string(),
-                    language: "en_US".to_string(),
-                },
-            ]),
+            i18n_contents: Some(vec![FollowUpI18nContent {
+                content: "View Details".to_string(),
+                language: "en_US".to_string(),
+            }]),
         };
         assert_eq!(follow_up.i18n_contents.as_ref().unwrap().len(), 1);
     }
@@ -199,8 +196,7 @@ mod tests {
     #[test]
     fn test_empty_message_id() {
         let config = Config::default();
-        let request = PushFollowUpRequest::new(config)
-            .message_id("");
+        let request = PushFollowUpRequest::new(config).message_id("");
         assert_eq!(request.message_id, "");
     }
 

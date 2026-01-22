@@ -135,9 +135,6 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            GetFormResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(GetFormResponse::data_format(), ResponseFormat::Data);
     }
 }

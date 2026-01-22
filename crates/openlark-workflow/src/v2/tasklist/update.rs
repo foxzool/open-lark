@@ -94,8 +94,8 @@ mod tests {
                 .build(),
         );
 
-        let request = UpdateTasklistRequest::new(config, "tasklist_123".to_string())
-            .summary("更新的标题");
+        let request =
+            UpdateTasklistRequest::new(config, "tasklist_123".to_string()).summary("更新的标题");
 
         assert_eq!(request.tasklist_guid, "tasklist_123");
         assert_eq!(request.body.summary, Some("更新的标题".to_string()));

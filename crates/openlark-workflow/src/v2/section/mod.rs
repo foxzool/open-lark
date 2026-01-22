@@ -33,15 +33,27 @@ impl Section {
     }
 
     pub fn get(&self, section_guid: impl Into<String>) -> get::GetSectionRequest {
-        get::GetSectionRequest::new(self.config.clone(), self.tasklist_guid.clone(), section_guid.into())
+        get::GetSectionRequest::new(
+            self.config.clone(),
+            self.tasklist_guid.clone(),
+            section_guid.into(),
+        )
     }
 
     pub fn update(&self, section_guid: impl Into<String>) -> update::UpdateSectionRequest {
-        update::UpdateSectionRequest::new(self.config.clone(), self.tasklist_guid.clone(), section_guid.into())
+        update::UpdateSectionRequest::new(
+            self.config.clone(),
+            self.tasklist_guid.clone(),
+            section_guid.into(),
+        )
     }
 
     pub fn delete(&self, section_guid: impl Into<String>) -> delete::DeleteSectionRequest {
-        delete::DeleteSectionRequest::new(self.config.clone(), self.tasklist_guid.clone(), section_guid.into())
+        delete::DeleteSectionRequest::new(
+            self.config.clone(),
+            self.tasklist_guid.clone(),
+            section_guid.into(),
+        )
     }
 
     pub fn list(&self) -> list::ListSectionsRequest {

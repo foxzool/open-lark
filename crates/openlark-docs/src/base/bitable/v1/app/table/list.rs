@@ -183,8 +183,7 @@ mod tests {
     #[test]
     fn test_empty_app_token() {
         let config = Config::default();
-        let request = ListTablesRequest::new(config)
-            .app_token("".to_string());
+        let request = ListTablesRequest::new(config).app_token("".to_string());
         let rt = tokio::runtime::Runtime::new().unwrap();
         let result = rt.block_on(request.execute());
         assert!(result.is_err());
@@ -207,9 +206,6 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            ListTablesResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(ListTablesResponse::data_format(), ResponseFormat::Data);
     }
 }

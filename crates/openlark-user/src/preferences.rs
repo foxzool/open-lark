@@ -28,7 +28,7 @@ impl PreferencesService {
     /// V1 版本 API
     #[cfg(feature = "v1")]
     pub fn v1(&self) -> crate::preferences::v1::PreferencesV1 {
-        crate::preferences::v1::PreferencesV1::new(self.config.clone(), self.client.clone())
+        crate::preferences::v1::PreferencesV1::new(self.config.clone())
     }
 }
 
@@ -44,11 +44,10 @@ mod tests {
         let config = UserConfig::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build()
-            .unwrap();
+            .build();
 
-        let client = LarkClient::new(config.clone()).unwrap();
-        let service = PreferencesService::new(config, client);
-        assert_eq!(service.config().app_id, "test_app_id");
+        let service = PreferencesService::new(std::sync::Arc::new(config));
+        // UserConfig 实现了 Deref，可以直接访问 app_id
+        assert_eq!(service.config().app_id(), "test_app_id");
     }
 }

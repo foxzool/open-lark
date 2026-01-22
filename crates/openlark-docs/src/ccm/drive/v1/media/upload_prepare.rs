@@ -238,13 +238,7 @@ mod tests {
     #[test]
     fn test_empty_parent_node() {
         let config = Config::default();
-        let request = UploadPrepareMediaRequest::new(
-            config,
-            "demo.jpeg",
-            "docx_image",
-            "",
-            1024,
-        );
+        let request = UploadPrepareMediaRequest::new(config, "demo.jpeg", "docx_image", "", 1024);
 
         let rt = tokio::runtime::Runtime::new().unwrap();
         let result = rt.block_on(request.execute());

@@ -139,8 +139,7 @@ mod tests {
     #[test]
     fn test_resurrect_user_request_builder() {
         let config = Config::default();
-        let request = ResurrectUserRequest::new(config)
-            .user_id("user_xxx");
+        let request = ResurrectUserRequest::new(config).user_id("user_xxx");
         assert_eq!(request.user_id, "user_xxx");
     }
 
@@ -165,7 +164,10 @@ mod tests {
             subscription_ids: None,
         };
         assert_eq!(body.departments.as_ref().unwrap().len(), 1);
-        assert_eq!(body.departments.as_ref().unwrap()[0].department_id, "dept_1");
+        assert_eq!(
+            body.departments.as_ref().unwrap()[0].department_id,
+            "dept_1"
+        );
     }
 
     #[test]
@@ -186,6 +188,9 @@ mod tests {
             .department_id_type(DepartmentIdType::DepartmentId);
         assert_eq!(request.user_id, "user_123");
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::DepartmentId)
+        );
     }
 }

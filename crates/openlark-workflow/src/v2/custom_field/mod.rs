@@ -33,15 +33,27 @@ impl CustomField {
     }
 
     pub fn get(&self, field_guid: impl Into<String>) -> get::GetCustomFieldRequest {
-        get::GetCustomFieldRequest::new(self.config.clone(), self.tasklist_guid.clone(), field_guid.into())
+        get::GetCustomFieldRequest::new(
+            self.config.clone(),
+            self.tasklist_guid.clone(),
+            field_guid.into(),
+        )
     }
 
     pub fn update(&self, field_guid: impl Into<String>) -> update::UpdateCustomFieldRequest {
-        update::UpdateCustomFieldRequest::new(self.config.clone(), self.tasklist_guid.clone(), field_guid.into())
+        update::UpdateCustomFieldRequest::new(
+            self.config.clone(),
+            self.tasklist_guid.clone(),
+            field_guid.into(),
+        )
     }
 
     pub fn delete(&self, field_guid: impl Into<String>) -> delete::DeleteCustomFieldRequest {
-        delete::DeleteCustomFieldRequest::new(self.config.clone(), self.tasklist_guid.clone(), field_guid.into())
+        delete::DeleteCustomFieldRequest::new(
+            self.config.clone(),
+            self.tasklist_guid.clone(),
+            field_guid.into(),
+        )
     }
 
     pub fn list(&self) -> list::ListCustomFieldsRequest {

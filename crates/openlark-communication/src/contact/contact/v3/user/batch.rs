@@ -150,7 +150,10 @@ mod tests {
         let request = BatchGetUsersRequest::new(config)
             .push_user_id("user_1")
             .department_id_type(DepartmentIdType::DepartmentId);
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::DepartmentId)
+        );
     }
 
     #[test]
@@ -172,6 +175,9 @@ mod tests {
             .department_id_type(DepartmentIdType::OpenDepartmentId);
         assert_eq!(request.user_ids.len(), 2);
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
     }
 }

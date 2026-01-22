@@ -93,8 +93,7 @@ mod tests {
     #[test]
     fn test_get_chat_link_request_builder() {
         let config = Config::default();
-        let request = GetChatLinkRequest::new(config)
-            .chat_id("oc_xxx");
+        let request = GetChatLinkRequest::new(config).chat_id("oc_xxx");
         assert_eq!(request.chat_id, "oc_xxx");
     }
 
