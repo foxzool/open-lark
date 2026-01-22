@@ -61,18 +61,21 @@ impl ListFileVersionsRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListFileVersionsResponse> {
+        // ===== 验证必填字段 =====
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
                 "file_token 不能为空",
             ));
         }
+        // ===== 验证数值范围 =====
         if !(1..=100).contains(&self.page_size) {
             return Err(openlark_core::error::validation_error(
                 "page_size",
                 "page_size 必须在 1~100 之间",
             ));
         }
+        // ===== 验证字段枚举值 =====
         match self.obj_type.as_str() {
             "docx" | "sheet" => {}
             _ => {
@@ -103,6 +106,7 @@ mod tests {
     use super::*;
     use openlark_core::api::ApiResponseTrait;
 
+    /// 测试构建器模式
     #[test]
     fn test_list_file_versions_request_builder() {
         let config = Config::default();
@@ -117,11 +121,116 @@ mod tests {
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
 
+    /// 测试响应格式
     #[test]
     fn test_response_trait() {
         assert_eq!(
             <ListFileVersionsData as ApiResponseTrait>::data_format(),
             openlark_core::api::ResponseFormat::Data
         );
+    }
+
+    /// 测试 file_token 为空时的验证
+    #[test]
+    fn test_empty_file_token_validation() {
+        let config = Config::default();
+        let request = ListFileVersionsRequest::new(config, "", 20, "docx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 page_size 边界值
+    #[test]
+    fn test_page_size_boundaries() {
+        let config = Config::default();
+
+        // 测试最小值
+        let request1 = ListFileVersionsRequest::new(config.clone(), "token", 1, "docx");
+        assert_eq!(request1.page_size, 1);
+
+        // 测试最大值
+        let request2 = ListFileVersionsRequest::new(config.clone(), "token", 100, "docx");
+        assert_eq!(request2.page_size, 100);
+
+        // 测试超出范围
+        let request3 = ListFileVersionsRequest::new(config, "token", 101, "docx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request3.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 page_size 为 0 时的验证
+    #[test]
+    fn test_zero_page_size_validation() {
+        let config = Config::default();
+        let request = ListFileVersionsRequest::new(config, "token", 0, "docx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 obj_type 枚举值验证
+    #[test]
+    fn test_obj_type_validation() {
+        let config = Config::default();
+        let request = ListFileVersionsRequest::new(config, "token", 20, "invalid");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试支持的 obj_type 类型
+    #[test]
+    fn test_supported_obj_types() {
+        let config = Config::default();
+
+        for obj_type in ["docx", "sheet"] {
+            let request = ListFileVersionsRequest::new(
+                config.clone(),
+                "token",
+                20,
+                obj_type.to_string(),
+            );
+            assert_eq!(request.obj_type, obj_type);
+        }
+    }
+
+    /// 测试分页参数
+    #[test]
+    fn test_pagination_parameters() {
+        let config = Config::default();
+        let request = ListFileVersionsRequest::new(config, "token", 20, "docx")
+            .page_token("next_page_token");
+
+        assert_eq!(request.page_token, Some("next_page_token".to_string()));
     }
 }

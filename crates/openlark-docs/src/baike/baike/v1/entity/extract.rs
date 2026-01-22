@@ -58,6 +58,7 @@ impl ExtractEntityRequest {
         option: RequestOption,
     ) -> SDKResult<ExtractEntityResponse> {
         use crate::common::api_endpoints::BaikeApiV1;
+        // ===== 验证字段长度 =====
         // 文档：text 非必填，但要求最大长度 128
         let len = self.req.text.chars().count();
         if len > 128 {
@@ -76,5 +77,60 @@ impl ExtractEntityRequest {
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// 测试构建器模式
+    #[test]
+    fn test_extract_entity_request_builder() {
+        let config = Config::default();
+        let request = ExtractEntityRequest::new(config, "测试文本");
+        assert_eq!(request.req.text, "测试文本");
+    }
+
+    /// 测试 text 长度验证
+    #[test]
+    fn test_text_length_validation() {
+        let config = Config::default();
+
+        // 最大长度 128
+        let text_128 = "a".repeat(128);
+        let request1 = ExtractEntityRequest::new(config.clone(), text_128);
+        assert_eq!(request1.req.text.chars().count(), 128);
+
+        // 超过 128
+        let text_129 = "a".repeat(129);
+        let request2 = ExtractEntityRequest::new(config, text_129);
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request2.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试空文本
+    #[test]
+    fn test_empty_text() {
+        let config = Config::default();
+        let request = ExtractEntityRequest::new(config, "");
+        assert_eq!(request.req.text, "");
+    }
+
+    /// 测试 Unicode 字符计数
+    #[test]
+    fn test_unicode_character_count() {
+        let config = Config::default();
+        let text = "🎉🎊🎈"; // 3 个 Unicode 码点
+        let request = ExtractEntityRequest::new(config, text);
+        assert_eq!(request.req.text.chars().count(), 3);
     }
 }

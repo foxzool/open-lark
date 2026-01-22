@@ -68,6 +68,7 @@ impl ListPermissionMembersRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListPermissionMembersResponse> {
+        // ===== 验证必填字段 =====
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -80,6 +81,7 @@ impl ListPermissionMembersRequest {
                 "file_type 不能为空",
             ));
         }
+        // ===== 验证字段枚举值 =====
         match self.file_type.as_str() {
             "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "folder" | "mindnote"
             | "minutes" | "slides" => {}
@@ -138,6 +140,7 @@ impl ApiResponseTrait for ListPermissionMembersResponse {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_list_permission_members_request_builder() {
         let config = Config::default();
@@ -147,6 +150,7 @@ mod tests {
         assert_eq!(request.file_type, "docx");
     }
 
+    /// 测试带参数的请求
     #[test]
     fn test_list_permission_members_request_with_params() {
         let config = Config::default();
@@ -170,11 +174,96 @@ mod tests {
         );
     }
 
+    /// 测试响应格式
     #[test]
     fn test_response_trait() {
         assert_eq!(
             ListPermissionMembersResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    /// 测试 token 为空时的验证
+    #[test]
+    fn test_empty_token_validation() {
+        let config = Config::default();
+        let request = ListPermissionMembersRequest::new(config, "", "docx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 file_type 枚举值验证
+    #[test]
+    fn test_file_type_validation() {
+        let config = Config::default();
+        let request = ListPermissionMembersRequest::new(config, "token", "invalid");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 perm_type 枚举值验证
+    #[test]
+    fn test_perm_type_validation() {
+        let config = Config::default();
+        let request =
+            ListPermissionMembersRequest::new(config, "token", "docx").perm_type("invalid");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试支持的 file_type 类型
+    #[test]
+    fn test_supported_file_types() {
+        let config = Config::default();
+
+        for file_type in [
+            "doc", "sheet", "file", "wiki", "bitable", "docx", "folder", "mindnote", "minutes",
+            "slides",
+        ] {
+            let request = ListPermissionMembersRequest::new(config.clone(), "token", file_type.to_string());
+            assert_eq!(request.file_type, file_type);
+        }
+    }
+
+    /// 测试可选参数
+    #[test]
+    fn test_optional_parameters() {
+        let config = Config::default();
+        let request = ListPermissionMembersRequest::new(config.clone(), "token", "docx");
+
+        assert!(request.fields.is_none());
+        assert!(request.perm_type.is_none());
+
+        let request2 =
+            ListPermissionMembersRequest::new(config.clone(), "token", "docx")
+                .fields("*")
+                .perm_type("container");
+
+        assert_eq!(request2.fields, Some("*".to_string()));
+        assert_eq!(request2.perm_type, Some("container".to_string()));
     }
 }

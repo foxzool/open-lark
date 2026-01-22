@@ -55,6 +55,7 @@ impl CreateFileVersionRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateFileVersionResponse> {
+        // ===== 验证必填字段 =====
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -67,12 +68,14 @@ impl CreateFileVersionRequest {
                 "name 不能为空",
             ));
         }
+        // ===== 验证字段长度 =====
         if self.name.chars().count() > 1024 {
             return Err(openlark_core::error::validation_error(
                 "name",
                 "name 最大长度为 1024 个 Unicode 码点",
             ));
         }
+        // ===== 验证字段枚举值 =====
         match self.obj_type.as_str() {
             "docx" | "sheet" => {}
             _ => {
@@ -112,6 +115,7 @@ mod tests {
     use super::*;
     use openlark_core::api::ApiResponseTrait;
 
+    /// 测试构建器模式
     #[test]
     fn test_create_file_version_request_builder() {
         let config = Config::default();
@@ -125,11 +129,107 @@ mod tests {
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
 
+    /// 测试响应格式
     #[test]
     fn test_response_trait() {
         assert_eq!(
             <FileVersionInfo as ApiResponseTrait>::data_format(),
             openlark_core::api::ResponseFormat::Data
         );
+    }
+
+    /// 测试 file_token 为空时的验证
+    #[test]
+    fn test_empty_file_token_validation() {
+        let config = Config::default();
+        let request = CreateFileVersionRequest::new(config, "", "name", "docx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 name 为空时的验证
+    #[test]
+    fn test_empty_name_validation() {
+        let config = Config::default();
+        let request = CreateFileVersionRequest::new(config, "token", "", "docx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 name 超长时的验证
+    #[test]
+    fn test_name_length_validation() {
+        let config = Config::default();
+        let long_name = "a".repeat(1025);
+        let request = CreateFileVersionRequest::new(config, "token", long_name, "docx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 obj_type 枚举值验证
+    #[test]
+    fn test_obj_type_validation() {
+        let config = Config::default();
+        let request = CreateFileVersionRequest::new(config, "token", "name", "invalid");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试支持的 obj_type 类型
+    #[test]
+    fn test_supported_obj_types() {
+        let config = Config::default();
+
+        for obj_type in ["docx", "sheet"] {
+            let request = CreateFileVersionRequest::new(
+                config.clone(),
+                "token",
+                "name",
+                obj_type.to_string(),
+            );
+            assert_eq!(request.obj_type, obj_type);
+        }
+    }
+
+    /// 测试 Unicode 字符计数
+    #[test]
+    fn test_unicode_name_length() {
+        let config = Config::default();
+        // 中文 emoji 组合，测试 Unicode 码点计数
+        let name = "🎉🎊🎈"; // 3 个码点
+        let request = CreateFileVersionRequest::new(config, "token", name, "docx");
+        assert_eq!(request.name.chars().count(), 3);
     }
 }

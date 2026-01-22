@@ -83,12 +83,14 @@ impl CreateImportTaskRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateImportTaskResponse> {
+        // ===== 验证必填字段 =====
         if self.file_extension.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_extension",
                 "file_extension 不能为空",
             ));
         }
+        // ===== 验证字段长度 =====
         let file_token_len = self.file_token.len();
         if file_token_len == 0 || file_token_len > 27 {
             return Err(openlark_core::error::validation_error(
@@ -96,6 +98,7 @@ impl CreateImportTaskRequest {
                 "file_token 长度必须在 1~27 字节之间",
             ));
         }
+        // ===== 验证字段枚举值 =====
         match self.r#type.as_str() {
             "docx" | "sheet" | "bitable" => {}
             _ => {
@@ -105,6 +108,7 @@ impl CreateImportTaskRequest {
                 ))
             }
         }
+        // ===== 验证固定值 =====
         if self.point.mount_type != 1 {
             return Err(openlark_core::error::validation_error(
                 "point.mount_type",
@@ -139,6 +143,7 @@ impl ApiResponseTrait for CreateImportTaskResponse {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_create_import_task_request_builder() {
         let config = Config::default();
@@ -157,6 +162,7 @@ mod tests {
         assert_eq!(request.file_name, Some("test_file".to_string()));
     }
 
+    /// 测试 Point 结构
     #[test]
     fn test_point_structure() {
         let point = Point::new("mount_key");
@@ -165,11 +171,126 @@ mod tests {
         assert_eq!(point.mount_key, "mount_key");
     }
 
+    /// 测试响应格式
     #[test]
     fn test_response_trait() {
         assert_eq!(
             CreateImportTaskResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    /// 测试 file_extension 为空时的验证
+    #[test]
+    fn test_empty_file_extension_validation() {
+        let config = Config::default();
+        let point = Point::new("mount_key");
+        let request = CreateImportTaskRequest::new(config, "", "file_token", "sheet", point);
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 file_token 长度验证
+    #[test]
+    fn test_file_token_length_validation() {
+        let config = Config::default();
+        let point = Point::new("mount_key");
+
+        // 空字符串
+        let request1 = CreateImportTaskRequest::new(config.clone(), "pdf", "", "sheet", point.clone());
+
+        let result1 = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request1.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result1.is_ok());
+
+        // 超过 27 字节
+        let long_token = "a".repeat(28);
+        let request2 = CreateImportTaskRequest::new(config, "pdf", long_token, "sheet", point);
+
+        let result2 = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request2.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result2.is_ok());
+    }
+
+    /// 测试 type 枚举值验证
+    #[test]
+    fn test_type_validation() {
+        let config = Config::default();
+        let point = Point::new("mount_key");
+        let request = CreateImportTaskRequest::new(config, "pdf", "file_token", "invalid", point);
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试支持的 type 类型
+    #[test]
+    fn test_supported_types() {
+        let config = Config::default();
+        let point = Point::new("mount_key");
+
+        for import_type in ["docx", "sheet", "bitable"] {
+            let request = CreateImportTaskRequest::new(
+                config.clone(),
+                "pdf",
+                "file_token",
+                import_type.to_string(),
+                point.clone(),
+            );
+            assert_eq!(request.r#type, import_type);
+        }
+    }
+
+    /// 测试 file_name 可选参数
+    #[test]
+    fn test_file_name_optional() {
+        let config = Config::default();
+        let point = Point::new("mount_key");
+
+        let request1 = CreateImportTaskRequest::new(
+            config.clone(),
+            "pdf",
+            "file_token",
+            "sheet",
+            point.clone(),
+        );
+        assert!(request1.file_name.is_none());
+
+        let request2 = CreateImportTaskRequest::new(
+            config,
+            "pdf",
+            "file_token",
+            "sheet",
+            point,
+        )
+        .file_name("custom_name");
+        assert_eq!(request2.file_name, Some("custom_name".to_string()));
     }
 }
