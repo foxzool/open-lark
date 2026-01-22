@@ -2,49 +2,47 @@
 //!
 //! 提供后台用户管理功能
 
-use crate::{PlatformConfig, LarkClient};
+use crate::PlatformConfig;
 use openlark_core::Result;
+use std::sync::Arc;
 
 /// 用户管理 API
 #[derive(Debug, Clone)]
 pub struct UsersApi {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
 }
 
 impl UsersApi {
-    pub fn new(config: PlatformConfig, client: LarkClient) -> Self {
-        Self { config, client }
+    pub fn new(config: Arc<PlatformConfig>) -> Self {
+        Self { config }
     }
 
     /// 获取用户列表
     pub fn list(&self) -> ListAdminUsersRequest {
-        ListAdminUsersRequest::new(self.config.clone(), self.client.clone())
+        ListAdminUsersRequest::new(self.config.clone())
     }
 
     /// 禁用用户
     pub fn disable(&self) -> DisableUserRequest {
-        DisableUserRequest::new(self.config.clone(), self.client.clone())
+        DisableUserRequest::new(self.config.clone())
     }
 
     /// 启用用户
     pub fn enable(&self) -> EnableUserRequest {
-        EnableUserRequest::new(self.config.clone(), self.client.clone())
+        EnableUserRequest::new(self.config.clone())
     }
 }
 
 /// 获取用户列表请求
 pub struct ListAdminUsersRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     page_size: Option<u32>,
 }
 
 impl ListAdminUsersRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             page_size: None,
         }
     }
@@ -64,16 +62,14 @@ impl ListAdminUsersRequest {
 
 /// 禁用用户请求
 pub struct DisableUserRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     user_id: Option<String>,
 }
 
 impl DisableUserRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             user_id: None,
         }
     }
@@ -93,16 +89,14 @@ impl DisableUserRequest {
 
 /// 启用用户请求
 pub struct EnableUserRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     user_id: Option<String>,
 }
 
 impl EnableUserRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             user_id: None,
         }
     }

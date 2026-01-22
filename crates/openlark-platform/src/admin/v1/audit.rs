@@ -2,46 +2,44 @@
 //!
 //! 提供审计日志查询功能
 
-use crate::{PlatformConfig, LarkClient};
+use crate::PlatformConfig;
 use openlark_core::Result;
+use std::sync::Arc;
 
 /// 审计日志 API
 #[derive(Debug, Clone)]
 pub struct AuditApi {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
 }
 
 impl AuditApi {
-    pub fn new(config: PlatformConfig, client: LarkClient) -> Self {
-        Self { config, client }
+    pub fn new(config: Arc<PlatformConfig>) -> Self {
+        Self { config }
     }
 
     /// 查询审计日志
     pub fn query(&self) -> QueryAuditLogsRequest {
-        QueryAuditLogsRequest::new(self.config.clone(), self.client.clone())
+        QueryAuditLogsRequest::new(self.config.clone())
     }
 
     /// 获取日志详情
     pub fn get(&self) -> GetAuditLogRequest {
-        GetAuditLogRequest::new(self.config.clone(), self.client.clone())
+        GetAuditLogRequest::new(self.config.clone())
     }
 }
 
 /// 查询审计日志请求
 pub struct QueryAuditLogsRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     start_time: Option<String>,
     end_time: Option<String>,
     page_size: Option<u32>,
 }
 
 impl QueryAuditLogsRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             start_time: None,
             end_time: None,
             page_size: None,
@@ -75,16 +73,14 @@ impl QueryAuditLogsRequest {
 
 /// 获取日志详情请求
 pub struct GetAuditLogRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     log_id: Option<String>,
 }
 
 impl GetAuditLogRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             log_id: None,
         }
     }

@@ -2,50 +2,48 @@
 //!
 //! 提供部门搜索和查找功能
 
-use crate::{PlatformConfig, LarkClient};
+use crate::PlatformConfig;
 use openlark_core::Result;
+use std::sync::Arc;
 
 /// 部门搜索 API
 #[derive(Debug, Clone)]
 pub struct DepartmentsApi {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
 }
 
 impl DepartmentsApi {
-    pub fn new(config: PlatformConfig, client: LarkClient) -> Self {
-        Self { config, client }
+    pub fn new(config: Arc<PlatformConfig>) -> Self {
+        Self { config }
     }
 
     /// 搜索部门
     pub fn search(&self) -> SearchDepartmentsRequest {
-        SearchDepartmentsRequest::new(self.config.clone(), self.client.clone())
+        SearchDepartmentsRequest::new(self.config.clone())
     }
 
     /// 获取部门详情
     pub fn get(&self) -> GetDepartmentRequest {
-        GetDepartmentRequest::new(self.config.clone(), self.client.clone())
+        GetDepartmentRequest::new(self.config.clone())
     }
 
     /// 获取子部门列表
     pub fn list(&self) -> ListDepartmentsRequest {
-        ListDepartmentsRequest::new(self.config.clone(), self.client.clone())
+        ListDepartmentsRequest::new(self.config.clone())
     }
 }
 
 /// 搜索部门请求
 pub struct SearchDepartmentsRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     query: Option<String>,
     page_size: Option<u32>,
 }
 
 impl SearchDepartmentsRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             query: None,
             page_size: None,
         }
@@ -72,16 +70,14 @@ impl SearchDepartmentsRequest {
 
 /// 获取部门详情请求
 pub struct GetDepartmentRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     department_id: Option<String>,
 }
 
 impl GetDepartmentRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             department_id: None,
         }
     }
@@ -101,17 +97,15 @@ impl GetDepartmentRequest {
 
 /// 获取子部门列表请求
 pub struct ListDepartmentsRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     parent_department_id: Option<String>,
     page_size: Option<u32>,
 }
 
 impl ListDepartmentsRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             parent_department_id: None,
             page_size: None,
         }

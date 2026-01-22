@@ -2,50 +2,48 @@
 //!
 //! 提供用户搜索和查找功能
 
-use crate::{PlatformConfig, LarkClient};
+use crate::PlatformConfig;
 use openlark_core::Result;
+use std::sync::Arc;
 
 /// 用户搜索 API
 #[derive(Debug, Clone)]
 pub struct UsersApi {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
 }
 
 impl UsersApi {
-    pub fn new(config: PlatformConfig, client: LarkClient) -> Self {
-        Self { config, client }
+    pub fn new(config: Arc<PlatformConfig>) -> Self {
+        Self { config }
     }
 
     /// 搜索用户
     pub fn search(&self) -> SearchUsersRequest {
-        SearchUsersRequest::new(self.config.clone(), self.client.clone())
+        SearchUsersRequest::new(self.config.clone())
     }
 
     /// 获取用户详情
     pub fn get(&self) -> GetUserRequest {
-        GetUserRequest::new(self.config.clone(), self.client.clone())
+        GetUserRequest::new(self.config.clone())
     }
 
     /// 获取用户列表
     pub fn list(&self) -> ListUsersRequest {
-        ListUsersRequest::new(self.config.clone(), self.client.clone())
+        ListUsersRequest::new(self.config.clone())
     }
 }
 
 /// 搜索用户请求
 pub struct SearchUsersRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     query: Option<String>,
     page_size: Option<u32>,
 }
 
 impl SearchUsersRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             query: None,
             page_size: None,
         }
@@ -72,16 +70,14 @@ impl SearchUsersRequest {
 
 /// 获取用户详情请求
 pub struct GetUserRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     user_id: Option<String>,
 }
 
 impl GetUserRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             user_id: None,
         }
     }
@@ -101,17 +97,15 @@ impl GetUserRequest {
 
 /// 获取用户列表请求
 pub struct ListUsersRequest {
-    config: PlatformConfig,
-    client: LarkClient,
+    config: Arc<PlatformConfig>,
     department_id: Option<String>,
     page_size: Option<u32>,
 }
 
 impl ListUsersRequest {
-    fn new(config: PlatformConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<PlatformConfig>) -> Self {
         Self {
             config,
-            client,
             department_id: None,
             page_size: None,
         }

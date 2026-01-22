@@ -34,6 +34,6 @@ impl AdminV1 {
     }
 }
 
+pub mod audit;
 pub mod settings;
 pub mod users;
-pub mod audit;
