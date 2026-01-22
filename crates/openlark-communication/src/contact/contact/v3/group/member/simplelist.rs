@@ -13,6 +13,25 @@ use crate::{
 };
 
 /// 查询用户组成员列表请求
+///
+/// 用于分页查询指定用户组的成员列表。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `group_id`: 用户组 ID，必填
+/// - `page_size`: 分页大小（可选，默认 50，最大 100）
+/// - `page_token`: 分页标记（可选）
+/// - `member_id_type`: 成员 ID 类型（可选）
+/// - `member_type`: 成员类型（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = SimpleListGroupMembersRequest::new(config)
+///     .group_id("group_xxx")
+///     .page_size(50);
+/// ```
 pub struct SimpleListGroupMembersRequest {
     config: Config,
     group_id: String,
@@ -76,6 +95,7 @@ impl SimpleListGroupMembersRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<SimpleListGroupMembersResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.group_id, "group_id 不能为空");
 
         // url: GET:/open-apis/contact/v3/group/:group_id/member/simplelist
@@ -98,5 +118,60 @@ impl SimpleListGroupMembersRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询用户组成员列表")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_simple_list_group_members_request_builder() {
+        let config = Config::default();
+        let request = SimpleListGroupMembersRequest::new(config).group_id("group_xxx");
+        assert_eq!(request.group_id, "group_xxx");
+    }
+
+    #[test]
+    fn test_simple_list_group_members_request_with_page_size() {
+        let config = Config::default();
+        let request = SimpleListGroupMembersRequest::new(config)
+            .group_id("group_xxx")
+            .page_size(50);
+        assert_eq!(request.page_size, Some(50));
+    }
+
+    #[test]
+    fn test_simple_list_group_members_request_with_all_options() {
+        let config = Config::default();
+        let request = SimpleListGroupMembersRequest::new(config)
+            .group_id("group_123")
+            .page_size(100)
+            .page_token("token789")
+            .member_id_type("open_id")
+            .member_type("user");
+        assert_eq!(request.group_id, "group_123");
+        assert_eq!(request.page_size, Some(100));
+        assert_eq!(request.page_token, Some("token789".to_string()));
+        assert_eq!(request.member_id_type, Some("open_id".to_string()));
+        assert_eq!(request.member_type, Some("user".to_string()));
+    }
+
+    #[test]
+    fn test_simple_list_group_members_request_default_values() {
+        let config = Config::default();
+        let request = SimpleListGroupMembersRequest::new(config);
+        assert_eq!(request.group_id, "");
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.member_id_type, None);
+    }
+
+    #[test]
+    fn test_simple_list_group_members_request_with_member_type() {
+        let config = Config::default();
+        let request = SimpleListGroupMembersRequest::new(config)
+            .group_id("group_xxx")
+            .member_type("user");
+        assert_eq!(request.member_type, Some("user".to_string()));
     }
 }

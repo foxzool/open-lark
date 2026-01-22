@@ -10,6 +10,31 @@ use crate::{
 };
 
 /// 搜索对用户或机器人可见的群列表请求
+///
+/// 用于根据关键词搜索用户或机器人可见的群聊列表。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `user_id_type`: 用户 ID 类型（可选，默认 open_id）
+/// - `query`: 搜索关键词（可选）
+/// - `page_token`: 分页标记（可选）
+/// - `page_size`: 分页大小（可选，默认 20，最大 100）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_communication::im::im::v1::chat::SearchChatsRequest;
+/// use openlark_communication::im::im::v1::message::models::UserIdType;
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let request = SearchChatsRequest::new(config)
+///     .query("项目群")
+///     .user_id_type(UserIdType::OpenId)
+///     .page_size(20);
+/// let response = request.execute().await?;
+/// ```
 pub struct SearchChatsRequest {
     config: Config,
     user_id_type: Option<UserIdType>,
@@ -82,5 +107,65 @@ impl SearchChatsRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "搜索对用户或机器人可见的群列表")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_search_chats_request_builder() {
+        let config = Config::default();
+        let request = SearchChatsRequest::new(config);
+        assert_eq!(request.query, None);
+        assert_eq!(request.user_id_type, None);
+    }
+
+    #[test]
+    fn test_search_chats_request_with_query() {
+        let config = Config::default();
+        let request = SearchChatsRequest::new(config)
+            .query("测试群");
+        assert_eq!(request.query, Some("测试群".to_string()));
+    }
+
+    #[test]
+    fn test_search_chats_request_with_user_id_type() {
+        let config = Config::default();
+        let request = SearchChatsRequest::new(config)
+            .query("项目群")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_search_chats_request_with_page_size() {
+        let config = Config::default();
+        let request = SearchChatsRequest::new(config)
+            .page_size(50);
+        assert_eq!(request.page_size, Some(50));
+    }
+
+    #[test]
+    fn test_search_chats_request_with_page_token() {
+        let config = Config::default();
+        let request = SearchChatsRequest::new(config)
+            .page_token("token789");
+        assert_eq!(request.page_token, Some("token789".to_string()));
+    }
+
+    #[test]
+    fn test_search_chats_request_with_all_options() {
+        let config = Config::default();
+        let request = SearchChatsRequest::new(config)
+            .query("开发群")
+            .user_id_type(UserIdType::UnionId)
+            .page_size(100)
+            .page_token("token999");
+        assert_eq!(request.query, Some("开发群".to_string()));
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.page_size, Some(100));
+        assert_eq!(request.page_token, Some("token999".to_string()));
     }
 }

@@ -28,7 +28,41 @@ pub struct CreateGroupBody {
     pub group_id: Option<String>,
 }
 
+impl CreateGroupBody {
+    pub fn new(name: impl Into<String>) -> Self {
+        Self {
+            name: name.into(),
+            description: None,
+            r#type: None,
+            group_id: None,
+        }
+    }
+}
+
 /// 创建用户组请求
+///
+/// 用于在通讯录中创建新的用户组。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `user_id_type`: 用户 ID 类型（可选）
+/// - `department_id_type`: 部门 ID 类型（可选）
+///
+/// # 请求体字段
+///
+/// - `name`: 用户组名称，必填
+/// - `description`: 用户组描述（可选）
+/// - `type`: 用户组类型（可选）
+/// - `group_id`: 自定义用户组 ID（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = CreateGroupBody::new("研发组");
+/// let request = CreateGroupRequest::new(config)
+///     .user_id_type(UserIdType::OpenId);
+/// ```
 pub struct CreateGroupRequest {
     config: Config,
     user_id_type: Option<UserIdType>,
@@ -69,6 +103,7 @@ impl CreateGroupRequest {
         body: CreateGroupBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateGroupResponse> {
+        // === 必填字段验证 ===
         validate_required!(body.name, "name 不能为空");
 
         // url: POST:/open-apis/contact/v3/group
@@ -85,5 +120,56 @@ impl CreateGroupRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "创建用户组")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_group_request_builder() {
+        let config = Config::default();
+        let request = CreateGroupRequest::new(config);
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_create_group_request_with_user_id_type() {
+        let config = Config::default();
+        let request = CreateGroupRequest::new(config)
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_create_group_body_builder() {
+        let body = CreateGroupBody::new("研发组");
+        assert_eq!(body.name, "研发组");
+    }
+
+    #[test]
+    fn test_create_group_body_with_all_fields() {
+        let body = CreateGroupBody {
+            name: "产品组".to_string(),
+            description: Some("产品研发组".to_string()),
+            r#type: Some(1),
+            group_id: Some("custom_group_id".to_string()),
+        };
+        assert_eq!(body.name, "产品组");
+        assert_eq!(body.description, Some("产品研发组".to_string()));
+        assert_eq!(body.r#type, Some(1));
+        assert_eq!(body.group_id, Some("custom_group_id".to_string()));
+    }
+
+    #[test]
+    fn test_create_group_request_with_all_options() {
+        let config = Config::default();
+        let request = CreateGroupRequest::new(config)
+            .user_id_type(UserIdType::UnionId)
+            .department_id_type(DepartmentIdType::OpenDepartmentId);
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
     }
 }

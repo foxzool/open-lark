@@ -13,6 +13,22 @@ use crate::{
 };
 
 /// 删除部门请求
+///
+/// 用于删除通讯录中的部门。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `department_id`: 部门 ID，必填
+/// - `department_id_type`: 部门 ID 类型（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = DeleteDepartmentRequest::new(config)
+///     .department_id("dept_xxx")
+///     .department_id_type(DepartmentIdType::OpenDepartmentId);
+/// ```
 pub struct DeleteDepartmentRequest {
     config: Config,
     department_id: String,
@@ -52,6 +68,7 @@ impl DeleteDepartmentRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
+        // === 必填字段验证 ===
         validate_required!(self.department_id, "department_id 不能为空");
 
         // url: DELETE:/open-apis/contact/v3/departments/:department_id
@@ -63,5 +80,45 @@ impl DeleteDepartmentRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "删除部门")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_delete_department_request_builder() {
+        let config = Config::default();
+        let request = DeleteDepartmentRequest::new(config)
+            .department_id("dept_xxx");
+        assert_eq!(request.department_id, "dept_xxx");
+    }
+
+    #[test]
+    fn test_delete_department_request_with_department_id_type() {
+        let config = Config::default();
+        let request = DeleteDepartmentRequest::new(config)
+            .department_id("dept_xxx")
+            .department_id_type(DepartmentIdType::OpenDepartmentId);
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+    }
+
+    #[test]
+    fn test_delete_department_request_default_values() {
+        let config = Config::default();
+        let request = DeleteDepartmentRequest::new(config);
+        assert_eq!(request.department_id, "");
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_delete_department_request_with_all_options() {
+        let config = Config::default();
+        let request = DeleteDepartmentRequest::new(config)
+            .department_id("dept_123")
+            .department_id_type(DepartmentIdType::DepartmentId);
+        assert_eq!(request.department_id, "dept_123");
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
     }
 }

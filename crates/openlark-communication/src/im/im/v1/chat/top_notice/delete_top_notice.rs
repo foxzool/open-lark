@@ -12,6 +12,19 @@ use crate::{
 };
 
 /// 撤销群置顶请求
+///
+/// 用于撤销群聊的置顶消息。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `chat_id`: 群 ID，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = DeleteTopNoticeRequest::new(config).chat_id("oc_xxx");
+/// ```
 pub struct DeleteTopNoticeRequest {
     config: Config,
     chat_id: String,
@@ -43,6 +56,7 @@ impl DeleteTopNoticeRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
+        // === 必填字段验证 ===
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: POST:/open-apis/im/v1/chats/:chat_id/top_notice/delete_top_notice
@@ -53,5 +67,35 @@ impl DeleteTopNoticeRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "撤销群置顶")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_delete_top_notice_request_builder() {
+        let config = Config::default();
+        let request = DeleteTopNoticeRequest::new(config).chat_id("oc_xxx");
+        assert_eq!(request.chat_id, "oc_xxx");
+    }
+
+    #[test]
+    fn test_delete_top_notice_request_default_values() {
+        let config = Config::default();
+        let request = DeleteTopNoticeRequest::new(config);
+        assert_eq!(request.chat_id, "");
+    }
+
+    #[test]
+    fn test_delete_top_notice_request_multiple_chats() {
+        let config = Config::default();
+        let request1 = DeleteTopNoticeRequest::new(config.clone())
+            .chat_id("oc_111");
+        let request2 = DeleteTopNoticeRequest::new(config)
+            .chat_id("oc_222");
+        assert_eq!(request1.chat_id, "oc_111");
+        assert_eq!(request2.chat_id, "oc_222");
     }
 }

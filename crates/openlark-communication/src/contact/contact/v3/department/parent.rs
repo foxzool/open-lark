@@ -14,6 +14,26 @@ use crate::{
 };
 
 /// 获取父部门信息请求
+///
+/// 用于获取指定部门的父部门链信息。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `department_id`: 部门 ID，必填
+/// - `user_id_type`: 用户 ID 类型（可选）
+/// - `department_id_type`: 部门 ID 类型（可选）
+/// - `page_size`: 分页大小（可选）
+/// - `page_token`: 分页标记（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = GetDepartmentParentsRequest::new(config)
+///     .department_id("dept_xxx")
+///     .page_size(20)
+///     .user_id_type(UserIdType::OpenId);
+/// ```
 pub struct GetDepartmentParentsRequest {
     config: Config,
     department_id: Option<String>,
@@ -77,6 +97,7 @@ impl GetDepartmentParentsRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DepartmentListResponse> {
+        // === 必填字段验证 ===
         let department_id = self.department_id.ok_or_else(|| {
             error::validation_error(
                 "department_id 不能为空".to_string(),
@@ -102,5 +123,61 @@ impl GetDepartmentParentsRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取父部门信息")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_department_parents_request_builder() {
+        let config = Config::default();
+        let request = GetDepartmentParentsRequest::new(config)
+            .department_id("dept_xxx");
+        assert_eq!(request.department_id, Some("dept_xxx".to_string()));
+    }
+
+    #[test]
+    fn test_get_department_parents_request_with_user_id_type() {
+        let config = Config::default();
+        let request = GetDepartmentParentsRequest::new(config)
+            .department_id("dept_xxx")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_get_department_parents_request_with_page_size() {
+        let config = Config::default();
+        let request = GetDepartmentParentsRequest::new(config)
+            .department_id("dept_xxx")
+            .page_size(20);
+        assert_eq!(request.page_size, Some(20));
+    }
+
+    #[test]
+    fn test_get_department_parents_request_default_values() {
+        let config = Config::default();
+        let request = GetDepartmentParentsRequest::new(config);
+        assert_eq!(request.department_id, None);
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.page_size, None);
+    }
+
+    #[test]
+    fn test_get_department_parents_request_with_all_options() {
+        let config = Config::default();
+        let request = GetDepartmentParentsRequest::new(config)
+            .department_id("dept_456")
+            .user_id_type(UserIdType::UnionId)
+            .department_id_type(DepartmentIdType::OpenDepartmentId)
+            .page_size(50)
+            .page_token("token789");
+        assert_eq!(request.department_id, Some("dept_456".to_string()));
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.page_token, Some("token789".to_string()));
     }
 }

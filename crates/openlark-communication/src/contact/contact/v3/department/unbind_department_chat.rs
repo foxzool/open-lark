@@ -22,7 +22,34 @@ pub struct UnbindDepartmentChatBody {
     pub department_id: String,
 }
 
+impl UnbindDepartmentChatBody {
+    pub fn new(department_id: impl Into<String>) -> Self {
+        Self {
+            department_id: department_id.into(),
+        }
+    }
+}
+
 /// 部门群转为普通群请求
+///
+/// 用于将部门群转换为普通群。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `department_id_type`: 部门 ID 类型（可选）
+///
+/// # 请求体字段
+///
+/// - `department_id`: 部门 ID，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = UnbindDepartmentChatBody::new("dept_xxx");
+/// let request = UnbindDepartmentChatRequest::new(config)
+///     .department_id_type(DepartmentIdType::OpenDepartmentId);
+/// ```
 pub struct UnbindDepartmentChatRequest {
     config: Config,
     department_id_type: Option<DepartmentIdType>,
@@ -55,6 +82,7 @@ impl UnbindDepartmentChatRequest {
         body: UnbindDepartmentChatBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
+        // === 必填字段验证 ===
         validate_required!(body.department_id, "department_id 不能为空");
 
         // url: POST:/open-apis/contact/v3/departments/unbind_department_chat
@@ -69,5 +97,39 @@ impl UnbindDepartmentChatRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "部门群转为普通群")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_unbind_department_chat_request_builder() {
+        let config = Config::default();
+        let request = UnbindDepartmentChatRequest::new(config);
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_unbind_department_chat_request_with_department_id_type() {
+        let config = Config::default();
+        let request = UnbindDepartmentChatRequest::new(config)
+            .department_id_type(DepartmentIdType::OpenDepartmentId);
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+    }
+
+    #[test]
+    fn test_unbind_department_chat_body_builder() {
+        let body = UnbindDepartmentChatBody::new("dept_xxx");
+        assert_eq!(body.department_id, "dept_xxx");
+    }
+
+    #[test]
+    fn test_unbind_department_chat_request_with_all_options() {
+        let config = Config::default();
+        let request = UnbindDepartmentChatRequest::new(config)
+            .department_id_type(DepartmentIdType::DepartmentId);
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
     }
 }

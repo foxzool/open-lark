@@ -9,6 +9,21 @@ use openlark_core::{
 use crate::{common::api_utils::extract_response_data, endpoints::IM_V1_FILES};
 
 /// 下载文件请求
+///
+/// 用于从飞书服务器下载文件。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `file_key`: 文件 key，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = GetFileRequest::new(config)
+///     .file_key("file_key_xxx")
+///     .execute().await?;
+/// ```
 pub struct GetFileRequest {
     config: Config,
     file_key: String,
@@ -40,6 +55,7 @@ impl GetFileRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<Vec<u8>> {
+        // === 必填字段验证 ===
         validate_required!(self.file_key, "file_key 不能为空");
 
         // url: GET:/open-apis/im/v1/files/:file_key
@@ -48,5 +64,33 @@ impl GetFileRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "下载文件")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_file_request_builder() {
+        let config = Config::default();
+        let request = GetFileRequest::new(config).file_key("file_key_xxx");
+        assert_eq!(request.file_key, "file_key_xxx");
+    }
+
+    #[test]
+    fn test_get_file_request_default_values() {
+        let config = Config::default();
+        let request = GetFileRequest::new(config);
+        assert_eq!(request.file_key, "");
+    }
+
+    #[test]
+    fn test_get_file_request_with_different_keys() {
+        let config = Config::default();
+        let request1 = GetFileRequest::new(config.clone()).file_key("file_111");
+        let request2 = GetFileRequest::new(config).file_key("file_222");
+        assert_eq!(request1.file_key, "file_111");
+        assert_eq!(request2.file_key, "file_222");
     }
 }

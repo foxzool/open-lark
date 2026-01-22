@@ -41,6 +41,23 @@ pub struct Post {
 }
 
 /// 查询帖子信息请求
+///
+/// 用于查询指定帖子的详细信息。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `post_id`: 帖子 ID，必填
+/// - `user_id_type`: 用户 ID 类型，可选
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = GetPostRequest::new(config)
+///     .post_id("post_xxx")
+///     .user_id_type("open_id")
+///     .execute().await?;
+/// ```
 pub struct GetPostRequest {
     config: Config,
     post_id: String,
@@ -80,6 +97,7 @@ impl GetPostRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetPostResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.post_id, "post_id 不能为空");
 
         // url: GET:/open-apis/moments/v1/posts/:post_id
@@ -99,11 +117,49 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_builder() {
+    fn test_get_post_request_builder() {
         let config = Config::default();
-        let req = GetPostRequest::new(config)
-            .post_id("post_id")
+        let request = GetPostRequest::new(config)
+            .post_id("post_xxx")
             .user_id_type("open_id");
-        let _ = req;
+        assert_eq!(request.post_id, "post_xxx");
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_get_post_request_default_values() {
+        let config = Config::default();
+        let request = GetPostRequest::new(config);
+        assert_eq!(request.post_id, "");
+        assert!(request.user_id_type.is_none());
+    }
+
+    #[test]
+    fn test_get_post_request_with_post_id_only() {
+        let config = Config::default();
+        let request = GetPostRequest::new(config).post_id("post_123");
+        assert_eq!(request.post_id, "post_123");
+        assert!(request.user_id_type.is_none());
+    }
+
+    #[test]
+    fn test_get_post_request_chaining() {
+        let config = Config::default();
+        let request = GetPostRequest::new(config)
+            .post_id("post_xxx")
+            .user_id_type("user_id");
+        assert_eq!(request.post_id, "post_xxx");
+        assert_eq!(request.user_id_type, Some("user_id".to_string()));
+    }
+
+    #[test]
+    fn test_get_post_request_with_different_user_id_types() {
+        let config = Config::default();
+        let request1 = GetPostRequest::new(config.clone())
+            .user_id_type("open_id");
+        let request2 = GetPostRequest::new(config)
+            .user_id_type("union_id");
+        assert_eq!(request1.user_id_type, Some("open_id".to_string()));
+        assert_eq!(request2.user_id_type, Some("union_id".to_string()));
     }
 }

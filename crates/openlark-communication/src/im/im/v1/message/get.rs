@@ -12,6 +12,26 @@ use crate::{
 };
 
 /// 获取指定消息的内容请求
+///
+/// 用于获取指定消息的详细内容。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `message_id`: 消息 ID，必填
+/// - `user_id_type`: 用户 ID 类型（可选，默认 open_id）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_communication::im::im::v1::message::GetMessageRequest;
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let request = GetMessageRequest::new(config)
+///     .message_id("om_xxx");
+/// let response = request.execute().await?;
+/// ```
 pub struct GetMessageRequest {
     config: Config,
     message_id: String,
@@ -51,6 +71,7 @@ impl GetMessageRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
+        // === 必填字段验证 ===
         validate_required!(self.message_id, "message_id 不能为空");
 
         // url: GET:/open-apis/im/v1/messages/:message_id
@@ -61,5 +82,65 @@ impl GetMessageRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取指定消息的内容")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_message_request_builder() {
+        let config = Config::default();
+        let request = GetMessageRequest::new(config)
+            .message_id("om_xxx")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.message_id, "om_xxx");
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_get_message_request_without_user_id_type() {
+        let config = Config::default();
+        let request = GetMessageRequest::new(config)
+            .message_id("om_xxx");
+        assert_eq!(request.message_id, "om_xxx");
+        assert_eq!(request.user_id_type, None);
+    }
+
+    #[test]
+    fn test_empty_message_id() {
+        let config = Config::default();
+        let request = GetMessageRequest::new(config)
+            .message_id("");
+        assert_eq!(request.message_id, "");
+    }
+
+    #[test]
+    fn test_get_message_request_with_user_id() {
+        let config = Config::default();
+        let request = GetMessageRequest::new(config)
+            .message_id("om_xxx")
+            .user_id_type(UserIdType::UserId);
+        assert_eq!(request.user_id_type, Some(UserIdType::UserId));
+    }
+
+    #[test]
+    fn test_get_message_request_with_union_id() {
+        let config = Config::default();
+        let request = GetMessageRequest::new(config)
+            .message_id("om_xxx")
+            .user_id_type(UserIdType::UnionId);
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+    }
+
+    #[test]
+    fn test_get_message_request_builder_chaining() {
+        let config = Config::default();
+        let request = GetMessageRequest::new(config)
+            .message_id("om_test_123")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.message_id, "om_test_123");
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
     }
 }

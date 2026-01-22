@@ -12,6 +12,25 @@ use crate::{
 };
 
 /// 解散群请求
+///
+/// 用于解散指定的群聊。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `chat_id`: 群 ID，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_communication::im::im::v1::chat::DeleteChatRequest;
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let request = DeleteChatRequest::new(config)
+///     .chat_id("oc_xxx");
+/// let response = request.execute().await?;
+/// ```
 pub struct DeleteChatRequest {
     config: Config,
     chat_id: String,
@@ -43,6 +62,7 @@ impl DeleteChatRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
+        // === 必填字段验证 ===
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: DELETE:/open-apis/im/v1/chats/:chat_id
@@ -51,5 +71,41 @@ impl DeleteChatRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "解散群")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_delete_chat_request_builder() {
+        let config = Config::default();
+        let request = DeleteChatRequest::new(config)
+            .chat_id("oc_xxx");
+        assert_eq!(request.chat_id, "oc_xxx");
+    }
+
+    #[test]
+    fn test_empty_chat_id() {
+        let config = Config::default();
+        let request = DeleteChatRequest::new(config);
+        assert_eq!(request.chat_id, "");
+    }
+
+    #[test]
+    fn test_chat_id_with_string() {
+        let config = Config::default();
+        let request = DeleteChatRequest::new(config)
+            .chat_id(String::from("oc_test_123"));
+        assert_eq!(request.chat_id, "oc_test_123");
+    }
+
+    #[test]
+    fn test_delete_chat_request_builder_chaining() {
+        let config = Config::default();
+        let request = DeleteChatRequest::new(config)
+            .chat_id("oc_aaaaa");
+        assert_eq!(request.chat_id, "oc_aaaaa");
     }
 }

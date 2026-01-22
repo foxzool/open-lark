@@ -12,6 +12,21 @@ use crate::{
 };
 
 /// 批量撤回消息请求
+///
+/// 用于撤回指定的批量消息任务。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `batch_message_id`: 批量消息任务 ID，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = DeleteBatchMessageRequest::new(config)
+///     .batch_message_id("batch_xxx")
+///     .execute().await?;
+/// ```
 pub struct DeleteBatchMessageRequest {
     config: Config,
     batch_message_id: String,
@@ -43,6 +58,7 @@ impl DeleteBatchMessageRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
+        // === 必填字段验证 ===
         validate_required!(self.batch_message_id, "batch_message_id 不能为空");
 
         // url: DELETE:/open-apis/im/v1/batch_messages/:batch_message_id
@@ -53,5 +69,41 @@ impl DeleteBatchMessageRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "批量撤回消息")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_delete_batch_message_request_builder() {
+        let config = Config::default();
+        let request = DeleteBatchMessageRequest::new(config).batch_message_id("batch_xxx");
+        assert_eq!(request.batch_message_id, "batch_xxx");
+    }
+
+    #[test]
+    fn test_delete_batch_message_request_default_values() {
+        let config = Config::default();
+        let request = DeleteBatchMessageRequest::new(config);
+        assert_eq!(request.batch_message_id, "");
+    }
+
+    #[test]
+    fn test_delete_batch_message_request_with_different_ids() {
+        let config = Config::default();
+        let request1 = DeleteBatchMessageRequest::new(config.clone()).batch_message_id("batch_111");
+        let request2 = DeleteBatchMessageRequest::new(config).batch_message_id("batch_222");
+        assert_eq!(request1.batch_message_id, "batch_111");
+        assert_eq!(request2.batch_message_id, "batch_222");
+    }
+
+    #[test]
+    fn test_delete_batch_message_request_chaining() {
+        let config = Config::default();
+        let request = DeleteBatchMessageRequest::new(config)
+            .batch_message_id("batch_xxx");
+        assert_eq!(request.batch_message_id, "batch_xxx");
     }
 }

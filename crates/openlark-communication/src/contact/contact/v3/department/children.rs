@@ -2,7 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/department/children
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
 
 use crate::{
     common::api_utils::extract_response_data,
@@ -14,6 +14,26 @@ use crate::{
 };
 
 /// 获取子部门列表请求
+///
+/// 用于获取指定部门的直接子部门列表。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `department_id`: 部门 ID，必填
+/// - `user_id_type`: 用户 ID 类型（可选）
+/// - `department_id_type`: 部门 ID 类型（可选）
+/// - `page_size`: 分页大小（可选，默认 10，最大 50）
+/// - `page_token`: 分页标记（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = ListDepartmentChildrenRequest::new(config)
+///     .department_id("dept_xxx")
+///     .page_size(20)
+///     .user_id_type(UserIdType::OpenId);
+/// ```
 pub struct ListDepartmentChildrenRequest {
     config: Config,
     department_id: String,
@@ -77,6 +97,9 @@ impl ListDepartmentChildrenRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DepartmentListResponse> {
+        // === 必填字段验证 ===
+        validate_required!(self.department_id, "department_id 不能为空");
+
         let mut req: ApiRequest<DepartmentListResponse> = ApiRequest::get(format!(
             "{}/{}/children",
             CONTACT_V3_DEPARTMENTS, self.department_id
@@ -96,5 +119,61 @@ impl ListDepartmentChildrenRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取子部门列表")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_department_children_request_builder() {
+        let config = Config::default();
+        let request = ListDepartmentChildrenRequest::new(config)
+            .department_id("dept_xxx");
+        assert_eq!(request.department_id, "dept_xxx");
+    }
+
+    #[test]
+    fn test_list_department_children_request_with_user_id_type() {
+        let config = Config::default();
+        let request = ListDepartmentChildrenRequest::new(config)
+            .department_id("dept_xxx")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_list_department_children_request_with_page_size() {
+        let config = Config::default();
+        let request = ListDepartmentChildrenRequest::new(config)
+            .department_id("dept_xxx")
+            .page_size(20);
+        assert_eq!(request.page_size, Some(20));
+    }
+
+    #[test]
+    fn test_list_department_children_request_default_values() {
+        let config = Config::default();
+        let request = ListDepartmentChildrenRequest::new(config);
+        assert_eq!(request.department_id, "");
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.page_size, None);
+    }
+
+    #[test]
+    fn test_list_department_children_request_with_all_options() {
+        let config = Config::default();
+        let request = ListDepartmentChildrenRequest::new(config)
+            .department_id("dept_456")
+            .user_id_type(UserIdType::UnionId)
+            .department_id_type(DepartmentIdType::OpenDepartmentId)
+            .page_size(50)
+            .page_token("token789");
+        assert_eq!(request.department_id, "dept_456");
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.page_token, Some("token789".to_string()));
     }
 }

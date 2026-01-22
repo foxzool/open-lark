@@ -21,7 +21,50 @@ pub struct BatchCreateMembersBody {
     pub members: Vec<String>,
 }
 
+impl BatchCreateMembersBody {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn member(mut self, member_id: impl Into<String>) -> Self {
+        self.members.push(member_id.into());
+        self
+    }
+}
+
+impl Default for BatchCreateMembersBody {
+    fn default() -> Self {
+        Self {
+            members: Vec::new(),
+        }
+    }
+}
+
 /// 批量添加角色成员请求
+///
+/// 用于向指定角色批量添加成员。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `role_id`: 角色 ID，必填
+/// - `user_id_type`: 用户 ID 类型（可选）
+///
+/// # 请求体字段
+///
+/// - `members`: 用户 ID 列表，至少包含 1 个用户 ID
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = BatchCreateMembersBody::new()
+///     .member("user_1")
+///     .member("user_2");
+/// let request = BatchCreateRoleMembersRequest::new(config)
+///     .role_id("role_xxx")
+///     .user_id_type(UserIdType::OpenId)
+///     .execute(body).await?;
+/// ```
 pub struct BatchCreateRoleMembersRequest {
     config: Config,
     role_id: String,
@@ -65,6 +108,7 @@ impl BatchCreateRoleMembersRequest {
         body: BatchCreateMembersBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchCreateMembersResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.role_id, "role_id 不能为空");
         if body.members.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -87,5 +131,49 @@ impl BatchCreateRoleMembersRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "批量添加角色成员")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_batch_create_role_members_request_builder() {
+        let config = Config::default();
+        let request = BatchCreateRoleMembersRequest::new(config).role_id("role_xxx");
+        assert_eq!(request.role_id, "role_xxx");
+    }
+
+    #[test]
+    fn test_batch_create_members_body_builder() {
+        let body = BatchCreateMembersBody::new()
+            .member("user_1")
+            .member("user_2");
+        assert_eq!(body.members.len(), 2);
+        assert_eq!(body.members[0], "user_1");
+    }
+
+    #[test]
+    fn test_batch_create_members_body_default() {
+        let body = BatchCreateMembersBody::new();
+        assert_eq!(body.members.len(), 0);
+    }
+
+    #[test]
+    fn test_batch_create_role_members_request_with_user_id_type() {
+        let config = Config::default();
+        let request = BatchCreateRoleMembersRequest::new(config)
+            .role_id("role_xxx")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_batch_create_role_members_request_default_values() {
+        let config = Config::default();
+        let request = BatchCreateRoleMembersRequest::new(config);
+        assert_eq!(request.role_id, "");
+        assert_eq!(request.user_id_type, None);
     }
 }

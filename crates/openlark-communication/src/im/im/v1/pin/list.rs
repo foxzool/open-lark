@@ -12,6 +12,26 @@ use crate::{
 };
 
 /// 获取群内 Pin 消息请求
+///
+/// 用于获取指定群组的 Pin 消息列表。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `chat_id`: 群 ID，必填
+/// - `start_time`: 起始时间，可选（毫秒级时间戳）
+/// - `end_time`: 结束时间，可选（毫秒级时间戳）
+/// - `page_size`: 分页大小，可选，默认 20，范围 1~50
+/// - `page_token`: 分页标记，可选
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = ListPinsRequest::new(config)
+///     .chat_id("oc_xxx")
+///     .page_size(50)
+///     .execute().await?;
+/// ```
 pub struct ListPinsRequest {
     config: Config,
     chat_id: String,
@@ -75,6 +95,7 @@ impl ListPinsRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListPinsResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.chat_id, "chat_id 不能为空");
 
         // url: GET:/open-apis/im/v1/pins
@@ -95,5 +116,52 @@ impl ListPinsRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取群内 Pin 消息")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_pins_request_builder() {
+        let config = Config::default();
+        let request = ListPinsRequest::new(config).chat_id("oc_xxx");
+        assert_eq!(request.chat_id, "oc_xxx");
+    }
+
+    #[test]
+    fn test_list_pins_request_default_values() {
+        let config = Config::default();
+        let request = ListPinsRequest::new(config);
+        assert_eq!(request.chat_id, "");
+        assert!(request.start_time.is_none());
+        assert!(request.end_time.is_none());
+        assert!(request.page_size.is_none());
+        assert!(request.page_token.is_none());
+    }
+
+    #[test]
+    fn test_list_pins_request_with_optional_params() {
+        let config = Config::default();
+        let request = ListPinsRequest::new(config)
+            .chat_id("oc_xxx")
+            .start_time("1234567890")
+            .end_time("1234567899")
+            .page_size(50)
+            .page_token("token123");
+        assert_eq!(request.chat_id, "oc_xxx");
+        assert_eq!(request.start_time, Some("1234567890".to_string()));
+        assert_eq!(request.page_size, Some(50));
+    }
+
+    #[test]
+    fn test_list_pins_request_chaining() {
+        let config = Config::default();
+        let request = ListPinsRequest::new(config)
+            .chat_id("oc_xxx")
+            .page_size(30);
+        assert_eq!(request.chat_id, "oc_xxx");
+        assert_eq!(request.page_size, Some(30));
     }
 }

@@ -13,6 +13,22 @@ use crate::{
 };
 
 /// 添加消息表情回复请求
+///
+/// 用于为指定消息添加表情回复（emoji reaction）。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `message_id`: 消息 ID，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = CreateMessageReactionBody::new(...);
+/// let request = CreateMessageReactionRequest::new(config)
+///     .message_id("msg_xxx")
+///     .execute(body).await?;
+/// ```
 pub struct CreateMessageReactionRequest {
     config: Config,
     message_id: String,
@@ -45,6 +61,7 @@ impl CreateMessageReactionRequest {
         body: CreateMessageReactionBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<MessageReaction> {
+        // === 必填字段验证 ===
         validate_required!(self.message_id, "message_id 不能为空");
         validate_required!(
             body.reaction_type.emoji_type,
@@ -59,5 +76,33 @@ impl CreateMessageReactionRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "添加消息表情回复")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_message_reaction_request_builder() {
+        let config = Config::default();
+        let request = CreateMessageReactionRequest::new(config).message_id("msg_xxx");
+        assert_eq!(request.message_id, "msg_xxx");
+    }
+
+    #[test]
+    fn test_create_message_reaction_request_default_values() {
+        let config = Config::default();
+        let request = CreateMessageReactionRequest::new(config);
+        assert_eq!(request.message_id, "");
+    }
+
+    #[test]
+    fn test_create_message_reaction_request_with_different_ids() {
+        let config = Config::default();
+        let request1 = CreateMessageReactionRequest::new(config.clone()).message_id("msg_111");
+        let request2 = CreateMessageReactionRequest::new(config).message_id("msg_222");
+        assert_eq!(request1.message_id, "msg_111");
+        assert_eq!(request2.message_id, "msg_222");
     }
 }

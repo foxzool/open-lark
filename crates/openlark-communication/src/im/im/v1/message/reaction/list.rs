@@ -15,6 +15,26 @@ use crate::{
 };
 
 /// 获取消息表情回复请求
+///
+/// 用于获取指定消息的表情回复列表。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `message_id`: 消息 ID，必填
+/// - `reaction_type`: 待查询的表情类型，可选
+/// - `page_token`: 分页标记，可选
+/// - `page_size`: 分页大小，可选，默认 20，最大 50
+/// - `user_id_type`: 用户 ID 类型，可选，默认 open_id
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = ListMessageReactionsRequest::new(config)
+///     .message_id("msg_xxx")
+///     .page_size(50)
+///     .execute().await?;
+/// ```
 pub struct ListMessageReactionsRequest {
     config: Config,
     message_id: String,
@@ -78,6 +98,7 @@ impl ListMessageReactionsRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListMessageReactionsResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.message_id, "message_id 不能为空");
 
         // url: GET:/open-apis/im/v1/messages/:message_id/reactions
@@ -98,5 +119,53 @@ impl ListMessageReactionsRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取消息表情回复")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_message_reactions_request_builder() {
+        let config = Config::default();
+        let request = ListMessageReactionsRequest::new(config).message_id("msg_xxx");
+        assert_eq!(request.message_id, "msg_xxx");
+    }
+
+    #[test]
+    fn test_list_message_reactions_request_default_values() {
+        let config = Config::default();
+        let request = ListMessageReactionsRequest::new(config);
+        assert_eq!(request.message_id, "");
+        assert!(request.reaction_type.is_none());
+        assert!(request.page_token.is_none());
+        assert!(request.page_size.is_none());
+        assert!(request.user_id_type.is_none());
+    }
+
+    #[test]
+    fn test_list_message_reactions_request_with_optional_params() {
+        let config = Config::default();
+        let request = ListMessageReactionsRequest::new(config)
+            .message_id("msg_xxx")
+            .reaction_type("smile")
+            .page_size(50)
+            .page_token("token123")
+            .user_id_type(UserIdType::UserId);
+        assert_eq!(request.message_id, "msg_xxx");
+        assert_eq!(request.reaction_type, Some("smile".to_string()));
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.user_id_type, Some(UserIdType::UserId));
+    }
+
+    #[test]
+    fn test_list_message_reactions_request_chaining() {
+        let config = Config::default();
+        let request = ListMessageReactionsRequest::new(config)
+            .message_id("msg_xxx")
+            .page_size(30);
+        assert_eq!(request.message_id, "msg_xxx");
+        assert_eq!(request.page_size, Some(30));
     }
 }

@@ -11,6 +11,23 @@ use crate::{
 };
 
 /// 查询用户组列表请求
+///
+/// 用于分页查询租户下的所有用户组信息。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `page_size`: 分页大小（可选，默认 50，最大 100）
+/// - `page_token`: 分页标记（可选）
+/// - `group_type`: 用户组类型（可选，默认 1）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = SimpleListGroupsRequest::new(config)
+///     .page_size(50)
+///     .group_type(1);
+/// ```
 pub struct SimpleListGroupsRequest {
     config: Config,
     page_size: Option<i32>,
@@ -72,5 +89,53 @@ impl SimpleListGroupsRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询用户组列表")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_simple_list_groups_request_builder() {
+        let config = Config::default();
+        let request = SimpleListGroupsRequest::new(config).page_size(50);
+        assert_eq!(request.page_size, Some(50));
+    }
+
+    #[test]
+    fn test_simple_list_groups_request_with_page_token() {
+        let config = Config::default();
+        let request = SimpleListGroupsRequest::new(config)
+            .page_token("token123");
+        assert_eq!(request.page_token, Some("token123".to_string()));
+    }
+
+    #[test]
+    fn test_simple_list_groups_request_with_group_type() {
+        let config = Config::default();
+        let request = SimpleListGroupsRequest::new(config).group_type(1);
+        assert_eq!(request.r#type, Some(1));
+    }
+
+    #[test]
+    fn test_simple_list_groups_request_default_values() {
+        let config = Config::default();
+        let request = SimpleListGroupsRequest::new(config);
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.page_token, None);
+        assert_eq!(request.r#type, None);
+    }
+
+    #[test]
+    fn test_simple_list_groups_request_with_all_options() {
+        let config = Config::default();
+        let request = SimpleListGroupsRequest::new(config)
+            .page_size(100)
+            .page_token("next_token")
+            .group_type(2);
+        assert_eq!(request.page_size, Some(100));
+        assert_eq!(request.page_token, Some("next_token".to_string()));
+        assert_eq!(request.r#type, Some(2));
     }
 }

@@ -34,6 +34,26 @@ impl ApiResponseTrait for ListUsersResponse {
 }
 
 /// 获取用户列表请求
+///
+/// 用于分页获取通讯录中的用户列表。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `user_id_type`: 用户 ID 类型（可选）
+/// - `department_id_type`: 部门 ID 类型（可选）
+/// - `department_id`: 部门 ID（可选）
+/// - `page_token`: 分页标记（可选）
+/// - `page_size`: 分页大小（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = ListUsersRequest::new(config)
+///     .department_id("dept_xxx")
+///     .page_size(50)
+///     .user_id_type(UserIdType::OpenId);
+/// ```
 pub struct ListUsersRequest {
     config: Config,
     user_id_type: Option<UserIdType>,
@@ -116,5 +136,66 @@ impl ListUsersRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取用户列表")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_users_request_builder() {
+        let config = Config::default();
+        let request = ListUsersRequest::new(config);
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_list_users_request_with_user_id_type() {
+        let config = Config::default();
+        let request = ListUsersRequest::new(config)
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_list_users_request_with_department_id() {
+        let config = Config::default();
+        let request = ListUsersRequest::new(config)
+            .department_id("dept_xxx");
+        assert_eq!(request.department_id, Some("dept_xxx".to_string()));
+    }
+
+    #[test]
+    fn test_list_users_request_with_page_size() {
+        let config = Config::default();
+        let request = ListUsersRequest::new(config)
+            .page_size(50);
+        assert_eq!(request.page_size, Some(50));
+    }
+
+    #[test]
+    fn test_list_users_request_with_page_token() {
+        let config = Config::default();
+        let request = ListUsersRequest::new(config)
+            .page_token("token123");
+        assert_eq!(request.page_token, Some("token123".to_string()));
+    }
+
+    #[test]
+    fn test_list_users_request_with_all_options() {
+        let config = Config::default();
+        let request = ListUsersRequest::new(config)
+            .user_id_type(UserIdType::UnionId)
+            .department_id_type(DepartmentIdType::OpenDepartmentId)
+            .department_id("dept_456")
+            .page_size(100)
+            .page_token("token789");
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(request.department_id, Some("dept_456".to_string()));
+        assert_eq!(request.page_size, Some(100));
+        assert_eq!(request.page_token, Some("token789".to_string()));
     }
 }

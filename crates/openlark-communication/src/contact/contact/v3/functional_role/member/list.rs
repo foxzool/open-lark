@@ -13,6 +13,24 @@ use crate::{
 };
 
 /// 查询角色下的所有成员信息请求
+///
+/// 用于分页查询指定角色下的所有成员信息。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `role_id`: 角色 ID，必填
+/// - `page_size`: 分页大小（可选）
+/// - `page_token`: 分页标记（可选）
+/// - `user_id_type`: 用户 ID 类型（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = ListRoleMembersRequest::new(config)
+///     .role_id("role_xxx")
+///     .page_size(50);
+/// ```
 pub struct ListRoleMembersRequest {
     config: Config,
     role_id: String,
@@ -84,5 +102,58 @@ impl ListRoleMembersRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询角色下的所有成员信息")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_role_members_request_builder() {
+        let config = Config::default();
+        let request = ListRoleMembersRequest::new(config).role_id("role_xxx");
+        assert_eq!(request.role_id, "role_xxx");
+    }
+
+    #[test]
+    fn test_list_role_members_request_with_page_size() {
+        let config = Config::default();
+        let request = ListRoleMembersRequest::new(config)
+            .role_id("role_xxx")
+            .page_size(50);
+        assert_eq!(request.page_size, Some(50));
+    }
+
+    #[test]
+    fn test_list_role_members_request_default_values() {
+        let config = Config::default();
+        let request = ListRoleMembersRequest::new(config);
+        assert_eq!(request.role_id, "");
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.user_id_type, None);
+    }
+
+    #[test]
+    fn test_list_role_members_request_with_user_id_type() {
+        let config = Config::default();
+        let request = ListRoleMembersRequest::new(config)
+            .role_id("role_xxx")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_list_role_members_request_with_all_options() {
+        let config = Config::default();
+        let request = ListRoleMembersRequest::new(config)
+            .role_id("role_123")
+            .page_size(100)
+            .page_token("token789")
+            .user_id_type(UserIdType::UnionId);
+        assert_eq!(request.role_id, "role_123");
+        assert_eq!(request.page_size, Some(100));
+        assert_eq!(request.page_token, Some("token789".to_string()));
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
     }
 }

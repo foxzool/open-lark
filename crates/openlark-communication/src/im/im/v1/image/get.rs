@@ -9,6 +9,21 @@ use openlark_core::{
 use crate::{common::api_utils::extract_response_data, endpoints::IM_V1_IMAGES};
 
 /// 下载图片请求
+///
+/// 用于从飞书服务器下载图片。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `image_key`: 图片 key，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = GetImageRequest::new(config)
+///     .image_key("img_key_xxx")
+///     .execute().await?;
+/// ```
 pub struct GetImageRequest {
     config: Config,
     image_key: String,
@@ -40,6 +55,7 @@ impl GetImageRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<Vec<u8>> {
+        // === 必填字段验证 ===
         validate_required!(self.image_key, "image_key 不能为空");
 
         // url: GET:/open-apis/im/v1/images/:image_key
@@ -48,5 +64,33 @@ impl GetImageRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "下载图片")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_image_request_builder() {
+        let config = Config::default();
+        let request = GetImageRequest::new(config).image_key("img_key_xxx");
+        assert_eq!(request.image_key, "img_key_xxx");
+    }
+
+    #[test]
+    fn test_get_image_request_default_values() {
+        let config = Config::default();
+        let request = GetImageRequest::new(config);
+        assert_eq!(request.image_key, "");
+    }
+
+    #[test]
+    fn test_get_image_request_with_different_keys() {
+        let config = Config::default();
+        let request1 = GetImageRequest::new(config.clone()).image_key("img_111");
+        let request2 = GetImageRequest::new(config).image_key("img_222");
+        assert_eq!(request1.image_key, "img_111");
+        assert_eq!(request2.image_key, "img_222");
     }
 }

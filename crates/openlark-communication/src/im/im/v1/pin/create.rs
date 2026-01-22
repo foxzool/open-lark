@@ -13,6 +13,20 @@ use crate::{
 };
 
 /// Pin 消息请求
+///
+///用于在群组中 Pin 一条消息，使其固定显示在聊天界面顶部。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = CreatePinBody::new("msg_xxx", "oc_xxx");
+/// let request = CreatePinRequest::new(config)
+///     .execute(body).await?;
+/// ```
 pub struct CreatePinRequest {
     config: Config,
 }
@@ -35,6 +49,7 @@ impl CreatePinRequest {
         body: CreatePinBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreatePinResponse> {
+        // === 必填字段验证 ===
         validate_required!(body.message_id, "message_id 不能为空");
 
         // url: POST:/open-apis/im/v1/pins
@@ -44,5 +59,26 @@ impl CreatePinRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "Pin 消息")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_pin_request_builder() {
+        let config = Config::default();
+        let request = CreatePinRequest::new(config);
+        // Just verify the request can be created
+        assert_eq!(request.config.app_id, "");
+    }
+
+    #[test]
+    fn test_create_pin_request_new() {
+        let config = Config::default();
+        let request = CreatePinRequest::new(config);
+        // Verify the request struct is properly initialized
+        assert_eq!(request.config.app_id, "");
     }
 }
