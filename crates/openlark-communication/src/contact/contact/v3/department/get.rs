@@ -16,6 +16,23 @@ use crate::{
 };
 
 /// 获取单个部门信息请求
+///
+/// 用于根据部门 ID 获取部门详细信息。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `department_id`: 部门 ID，必填
+/// - `user_id_type`: 用户 ID 类型（可选）
+/// - `department_id_type`: 部门 ID 类型（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = GetDepartmentRequest::new(config)
+///     .department_id("dept_xxx")
+///     .user_id_type(UserIdType::OpenId);
+/// ```
 pub struct GetDepartmentRequest {
     config: Config,
     department_id: String,
@@ -63,6 +80,7 @@ impl GetDepartmentRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DepartmentResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.department_id, "department_id 不能为空");
 
         // url: GET:/open-apis/contact/v3/departments/:department_id
@@ -77,5 +95,57 @@ impl GetDepartmentRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取单个部门信息")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_department_request_builder() {
+        let config = Config::default();
+        let request = GetDepartmentRequest::new(config)
+            .department_id("dept_xxx");
+        assert_eq!(request.department_id, "dept_xxx");
+    }
+
+    #[test]
+    fn test_get_department_request_with_user_id_type() {
+        let config = Config::default();
+        let request = GetDepartmentRequest::new(config)
+            .department_id("dept_xxx")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_get_department_request_with_department_id_type() {
+        let config = Config::default();
+        let request = GetDepartmentRequest::new(config)
+            .department_id("dept_xxx")
+            .department_id_type(DepartmentIdType::DepartmentId);
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+    }
+
+    #[test]
+    fn test_get_department_request_default_values() {
+        let config = Config::default();
+        let request = GetDepartmentRequest::new(config);
+        assert_eq!(request.department_id, "");
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_get_department_request_with_all_options() {
+        let config = Config::default();
+        let request = GetDepartmentRequest::new(config)
+            .department_id("dept_123")
+            .user_id_type(UserIdType::UnionId)
+            .department_id_type(DepartmentIdType::OpenDepartmentId);
+        assert_eq!(request.department_id, "dept_123");
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
     }
 }

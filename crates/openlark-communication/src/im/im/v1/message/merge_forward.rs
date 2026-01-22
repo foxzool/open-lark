@@ -14,13 +14,46 @@ use crate::{
 };
 
 /// 合并转发消息请求体
+///
+/// 表示合并转发消息所需的请求参数。
+///
+/// # 字段说明
+///
+/// - `receive_id`: 消息接收者 ID，类型与 receive_id_type 一致
+/// - `message_id_list`: 待转发的消息 ID 列表，至少包含 1 条消息
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MergeForwardMessageBody {
+    /// 消息接收者 ID
     pub receive_id: String,
+    /// 待转发的消息 ID 列表
     pub message_id_list: Vec<String>,
 }
 
 /// 合并转发消息请求
+///
+/// 用于将多条消息合并后转发给指定接收者。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `receive_id_type`: 消息接收者 ID 类型，必填
+/// - `uuid`: 幂等 uuid，可选
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_communication::im::im::v1::message::{MergeForwardMessageRequest, MergeForwardMessageBody};
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let body = MergeForwardMessageBody {
+///     receive_id: "ou_xxx".to_string(),
+///     message_id_list: vec!["om_xxx1".to_string(), "om_xxx2".to_string()],
+/// };
+/// let request = MergeForwardMessageRequest::new(config)
+///     .receive_id_type(ReceiveIdType::OpenId);
+/// let response = request.execute(body).await?;
+/// ```
 pub struct MergeForwardMessageRequest {
     config: Config,
     receive_id_type: Option<ReceiveIdType>,
@@ -61,6 +94,7 @@ impl MergeForwardMessageRequest {
         body: MergeForwardMessageBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
+        // === 必填字段验证 ===
         validate_required!(body.receive_id, "receive_id 不能为空");
         if body.message_id_list.is_empty() {
             return Err(error::validation_error(
@@ -88,5 +122,63 @@ impl MergeForwardMessageRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "合并转发消息")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_merge_forward_message_request_builder() {
+        let config = Config::default();
+        let request = MergeForwardMessageRequest::new(config)
+            .receive_id_type(ReceiveIdType::OpenId);
+        assert_eq!(request.receive_id_type, Some(ReceiveIdType::OpenId));
+    }
+
+    #[test]
+    fn test_merge_forward_message_body() {
+        let body = MergeForwardMessageBody {
+            receive_id: "ou_xxx".to_string(),
+            message_id_list: vec!["om_xxx1".to_string(), "om_xxx2".to_string()],
+        };
+        assert_eq!(body.receive_id, "ou_xxx");
+        assert_eq!(body.message_id_list.len(), 2);
+    }
+
+    #[test]
+    fn test_merge_forward_message_body_with_single_message() {
+        let body = MergeForwardMessageBody {
+            receive_id: "ou_xxx".to_string(),
+            message_id_list: vec!["om_xxx1".to_string()],
+        };
+        assert_eq!(body.message_id_list.len(), 1);
+    }
+
+    #[test]
+    fn test_merge_forward_message_request_with_uuid() {
+        let config = Config::default();
+        let request = MergeForwardMessageRequest::new(config)
+            .receive_id_type(ReceiveIdType::OpenId)
+            .uuid("uuid-123");
+        assert_eq!(request.uuid, Some("uuid-123".to_string()));
+    }
+
+    #[test]
+    fn test_merge_forward_message_body_empty_list() {
+        let body = MergeForwardMessageBody {
+            receive_id: "ou_xxx".to_string(),
+            message_id_list: vec![],
+        };
+        assert_eq!(body.message_id_list.len(), 0);
+    }
+
+    #[test]
+    fn test_merge_forward_message_request_with_chat_id() {
+        let config = Config::default();
+        let request = MergeForwardMessageRequest::new(config)
+            .receive_id_type(ReceiveIdType::ChatId);
+        assert_eq!(request.receive_id_type, Some(ReceiveIdType::ChatId));
     }
 }

@@ -25,6 +25,25 @@ impl MessageResourceType {
 }
 
 /// 获取消息中的资源文件请求
+///
+/// 用于获取指定消息中的资源文件（图片或文件）。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `message_id`: 消息 ID，必填
+/// - `file_key`: 资源 Key，必填
+/// - `resource_type`: 资源类型，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = GetMessageResourceRequest::new(config)
+///     .message_id("msg_xxx")
+///     .file_key("file_key_xxx")
+///     .resource_type(MessageResourceType::Image)
+///     .execute().await?;
+/// ```
 pub struct GetMessageResourceRequest {
     config: Config,
     message_id: String,
@@ -72,6 +91,7 @@ impl GetMessageResourceRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<Vec<u8>> {
+        // === 必填字段验证 ===
         validate_required!(self.message_id, "message_id 不能为空");
         validate_required!(self.file_key, "file_key 不能为空");
         let resource_type = self.resource_type.ok_or_else(|| {
@@ -90,5 +110,47 @@ impl GetMessageResourceRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取消息中的资源文件")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_message_resource_request_builder() {
+        let config = Config::default();
+        let request = GetMessageResourceRequest::new(config)
+            .message_id("msg_xxx")
+            .file_key("file_key_xxx")
+            .resource_type(MessageResourceType::Image);
+        assert_eq!(request.message_id, "msg_xxx");
+        assert_eq!(request.file_key, "file_key_xxx");
+        assert_eq!(request.resource_type, Some(MessageResourceType::Image));
+    }
+
+    #[test]
+    fn test_get_message_resource_request_default_values() {
+        let config = Config::default();
+        let request = GetMessageResourceRequest::new(config);
+        assert_eq!(request.message_id, "");
+        assert_eq!(request.file_key, "");
+        assert!(request.resource_type.is_none());
+    }
+
+    #[test]
+    fn test_get_message_resource_request_with_file_type() {
+        let config = Config::default();
+        let request = GetMessageResourceRequest::new(config)
+            .message_id("msg_xxx")
+            .file_key("file_key_xxx")
+            .resource_type(MessageResourceType::File);
+        assert_eq!(request.resource_type, Some(MessageResourceType::File));
+    }
+
+    #[test]
+    fn test_message_resource_type_as_str() {
+        assert_eq!(MessageResourceType::Image.as_str(), "image");
+        assert_eq!(MessageResourceType::File.as_str(), "file");
     }
 }

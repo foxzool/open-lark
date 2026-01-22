@@ -18,9 +18,33 @@ use crate::{
 };
 
 /// 发送短信加急请求体
+///
+/// # 字段说明
+///
+/// - `user_id_list`: 用户 ID 列表，必填，至少包含 1 项
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = UrgentSmsBody::new()
+///     .user_id_list(vec!["ou_xxx".to_string()]);
+/// ```
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UrgentSmsBody {
-    pub user_id_list: Vec<String>,
+    user_id_list: Vec<String>,
+}
+
+impl UrgentSmsBody {
+    pub fn new() -> Self {
+        Self {
+            user_id_list: Vec::new(),
+        }
+    }
+
+    pub fn user_id_list(mut self, user_id_list: Vec<String>) -> Self {
+        self.user_id_list = user_id_list;
+        self
+    }
 }
 
 /// 发送短信加急响应 data
@@ -37,6 +61,25 @@ impl ApiResponseTrait for UrgentSmsResponse {
 }
 
 /// 发送短信加急请求
+///
+/// 用于对指定消息发送短信加急通知。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `message_id`: 待加急的消息 ID，必填
+/// - `user_id_type`: 用户 ID 类型，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = UrgentSmsBody::new()
+///     .user_id_list(vec!["ou_xxx".to_string()]);
+/// let request = UrgentSmsRequest::new(config)
+///     .message_id("msg_xxx")
+///     .user_id_type(UserIdType::OpenId)
+///     .execute(body).await?;
+/// ```
 pub struct UrgentSmsRequest {
     config: Config,
     message_id: String,
@@ -77,6 +120,7 @@ impl UrgentSmsRequest {
         body: UrgentSmsBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UrgentSmsResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.message_id, "message_id 不能为空");
         if body.user_id_list.is_empty() {
             return Err(error::validation_error(
@@ -99,5 +143,52 @@ impl UrgentSmsRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "发送短信加急")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_urgent_sms_body_builder() {
+        let body = UrgentSmsBody::new()
+            .user_id_list(vec!["ou_xxx".to_string(), "ou_yyy".to_string()]);
+        assert_eq!(body.user_id_list.len(), 2);
+    }
+
+    #[test]
+    fn test_urgent_sms_body_default() {
+        let body = UrgentSmsBody::new();
+        assert!(body.user_id_list.is_empty());
+    }
+
+    #[test]
+    fn test_urgent_sms_request_builder() {
+        let config = Config::default();
+        let request = UrgentSmsRequest::new(config)
+            .message_id("msg_xxx")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.message_id, "msg_xxx");
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_urgent_sms_request_default_values() {
+        let config = Config::default();
+        let request = UrgentSmsRequest::new(config);
+        assert_eq!(request.message_id, "");
+        assert!(request.user_id_type.is_none());
+    }
+
+    #[test]
+    fn test_urgent_sms_request_with_different_user_id_types() {
+        let config = Config::default();
+        let request1 = UrgentSmsRequest::new(config.clone())
+            .user_id_type(UserIdType::UserId);
+        let request2 = UrgentSmsRequest::new(config)
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request1.user_id_type, Some(UserIdType::UserId));
+        assert_eq!(request2.user_id_type, Some(UserIdType::OpenId));
     }
 }

@@ -11,6 +11,23 @@ use crate::{
 };
 
 /// 上传图片请求
+///
+/// 用于上传图片到飞书服务器。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `image_type`: 图片类型，必填
+/// - `file_name`: 文件名，可选（仅用于 multipart 的文件名）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let image_bytes = vec![...]; // 图片二进制内容
+/// let request = CreateImageRequest::new(config)
+///     .image_type(ImageType::Message)
+///     .execute(image_bytes).await?;
+/// ```
 pub struct CreateImageRequest {
     config: Config,
     image_type: Option<ImageType>,
@@ -56,6 +73,7 @@ impl CreateImageRequest {
         image_bytes: Vec<u8>,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateImageResponse> {
+        // === 必填字段验证 ===
         let image_type = self.image_type.ok_or_else(|| {
             error::validation_error(
                 "image_type 不能为空".to_string(),
@@ -85,5 +103,47 @@ impl CreateImageRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "上传图片")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_image_request_builder() {
+        let config = Config::default();
+        let request = CreateImageRequest::new(config)
+            .image_type(ImageType::Message);
+        assert_eq!(request.image_type, Some(ImageType::Message));
+        assert!(request.file_name.is_none());
+    }
+
+    #[test]
+    fn test_create_image_request_default_values() {
+        let config = Config::default();
+        let request = CreateImageRequest::new(config);
+        assert!(request.image_type.is_none());
+        assert!(request.file_name.is_none());
+    }
+
+    #[test]
+    fn test_create_image_request_with_file_name() {
+        let config = Config::default();
+        let request = CreateImageRequest::new(config)
+            .image_type(ImageType::Avatar)
+            .file_name("photo.jpg");
+        assert_eq!(request.image_type, Some(ImageType::Avatar));
+        assert_eq!(request.file_name, Some("photo.jpg".to_string()));
+    }
+
+    #[test]
+    fn test_create_image_request_chaining() {
+        let config = Config::default();
+        let request = CreateImageRequest::new(config)
+            .image_type(ImageType::Message)
+            .file_name("image.png");
+        assert_eq!(request.image_type, Some(ImageType::Message));
+        assert_eq!(request.file_name, Some("image.png".to_string()));
     }
 }

@@ -11,6 +11,32 @@ use crate::{
 };
 
 /// 创建群请求
+///
+/// 用于创建一个新的群聊。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `user_id_type`: 用户 ID 类型（可选，默认 open_id）
+/// - `set_bot_manager`: 是否同时设置创建群的机器人为管理员（可选，默认 false）
+/// - `uuid`: 幂等 uuid（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_communication::im::im::v1::chat::CreateChatRequest;
+/// use serde_json::json;
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let body = json!({
+///     "name": "群聊名称",
+///     "user_id_list": ["ou_xxx", "ou_yyy"]
+/// });
+/// let request = CreateChatRequest::new(config)
+///     .user_id_type(UserIdType::OpenId);
+/// let response = request.execute(body).await?;
+/// ```
 pub struct CreateChatRequest {
     config: Config,
     user_id_type: Option<UserIdType>,
@@ -78,5 +104,63 @@ impl CreateChatRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "创建群")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_chat_request_builder() {
+        let config = Config::default();
+        let request = CreateChatRequest::new(config)
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_create_chat_request_with_bot_manager() {
+        let config = Config::default();
+        let request = CreateChatRequest::new(config)
+            .set_bot_manager(true);
+        assert_eq!(request.set_bot_manager, Some(true));
+    }
+
+    #[test]
+    fn test_create_chat_request_with_uuid() {
+        let config = Config::default();
+        let request = CreateChatRequest::new(config)
+            .uuid("uuid-123");
+        assert_eq!(request.uuid, Some("uuid-123".to_string()));
+    }
+
+    #[test]
+    fn test_create_chat_request_with_user_id() {
+        let config = Config::default();
+        let request = CreateChatRequest::new(config)
+            .user_id_type(UserIdType::UserId);
+        assert_eq!(request.user_id_type, Some(UserIdType::UserId));
+    }
+
+    #[test]
+    fn test_create_chat_request_with_all_options() {
+        let config = Config::default();
+        let request = CreateChatRequest::new(config)
+            .user_id_type(UserIdType::UnionId)
+            .set_bot_manager(false)
+            .uuid("test-uuid");
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.set_bot_manager, Some(false));
+        assert_eq!(request.uuid, Some("test-uuid".to_string()));
+    }
+
+    #[test]
+    fn test_create_chat_request_default_values() {
+        let config = Config::default();
+        let request = CreateChatRequest::new(config);
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.set_bot_manager, None);
+        assert_eq!(request.uuid, None);
     }
 }

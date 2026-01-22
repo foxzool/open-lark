@@ -11,6 +11,26 @@ use crate::{
 };
 
 /// 查询用户所属用户组请求
+///
+/// 用于查询指定用户所属的所有用户组。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `member_id`: 成员 ID，必填
+/// - `member_id_type`: 成员 ID 类型（可选，默认 open_id）
+/// - `group_type`: 用户组类型（可选）
+/// - `page_size`: 分页大小（可选）
+/// - `page_token`: 分页标记（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = MemberBelongGroupsRequest::new(config)
+///     .member_id("user_xxx")
+///     .group_type(1)
+///     .page_size(20);
+/// ```
 pub struct MemberBelongGroupsRequest {
     config: Config,
     member_id: Option<String>,
@@ -74,6 +94,7 @@ impl MemberBelongGroupsRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<MemberBelongGroupsResponse> {
+        // === 必填字段验证 ===
         let member_id = self.member_id.ok_or_else(|| {
             error::validation_error(
                 "member_id 不能为空".to_string(),
@@ -99,5 +120,61 @@ impl MemberBelongGroupsRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询用户所属用户组")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_member_belong_groups_request_builder() {
+        let config = Config::default();
+        let request = MemberBelongGroupsRequest::new(config)
+            .member_id("user_xxx");
+        assert_eq!(request.member_id, Some("user_xxx".to_string()));
+    }
+
+    #[test]
+    fn test_member_belong_groups_request_with_member_id_type() {
+        let config = Config::default();
+        let request = MemberBelongGroupsRequest::new(config)
+            .member_id("user_xxx")
+            .member_id_type(UserIdType::OpenId);
+        assert_eq!(request.member_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_member_belong_groups_request_with_group_type() {
+        let config = Config::default();
+        let request = MemberBelongGroupsRequest::new(config)
+            .member_id("user_xxx")
+            .group_type(1);
+        assert_eq!(request.group_type, Some(1));
+    }
+
+    #[test]
+    fn test_member_belong_groups_request_default_values() {
+        let config = Config::default();
+        let request = MemberBelongGroupsRequest::new(config);
+        assert_eq!(request.member_id, None);
+        assert_eq!(request.member_id_type, None);
+        assert_eq!(request.page_size, None);
+    }
+
+    #[test]
+    fn test_member_belong_groups_request_with_all_options() {
+        let config = Config::default();
+        let request = MemberBelongGroupsRequest::new(config)
+            .member_id("user_123")
+            .member_id_type(UserIdType::UnionId)
+            .group_type(2)
+            .page_size(50)
+            .page_token("token789");
+        assert_eq!(request.member_id, Some("user_123".to_string()));
+        assert_eq!(request.member_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.group_type, Some(2));
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.page_token, Some("token789".to_string()));
     }
 }

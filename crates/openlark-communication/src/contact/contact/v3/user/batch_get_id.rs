@@ -74,6 +74,31 @@ impl ApiResponseTrait for BatchGetIdResponse {
 }
 
 /// 通过手机号或邮箱获取用户 ID 请求
+///
+/// 用于通过手机号或邮箱批量查询对应的用户 ID。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `user_id_type`: 用户 ID 类型（可选）
+///
+/// # 请求体字段
+///
+/// - `emails`: 邮箱列表（可选）
+/// - `mobiles`: 手机号列表（可选）
+/// - `include_resigned`: 是否包含离职用户（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = BatchGetIdBody {
+///     emails: Some(vec!["test@example.com".to_string()]),
+///     mobiles: None,
+///     include_resigned: Some(false),
+/// };
+/// let request = BatchGetIdRequest::new(config)
+///     .user_id_type(UserIdType::OpenId);
+/// ```
 pub struct BatchGetIdRequest {
     config: Config,
     user_id_type: Option<UserIdType>,
@@ -106,6 +131,7 @@ impl BatchGetIdRequest {
         body: BatchGetIdBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchGetIdResponse> {
+        // === 必填字段验证 ===
         let has_emails = body.emails.as_ref().map(|v| !v.is_empty()).unwrap_or(false);
         let has_mobiles = body
             .mobiles
@@ -130,5 +156,45 @@ impl BatchGetIdRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "通过手机号或邮箱获取用户 ID")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_batch_get_id_request_builder() {
+        let config = Config::default();
+        let request = BatchGetIdRequest::new(config);
+        assert_eq!(request.user_id_type, None);
+    }
+
+    #[test]
+    fn test_batch_get_id_request_with_user_id_type() {
+        let config = Config::default();
+        let request = BatchGetIdRequest::new(config)
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_batch_get_id_body_with_emails() {
+        let body = BatchGetIdBody {
+            emails: Some(vec!["test@example.com".to_string()]),
+            mobiles: None,
+            include_resigned: Some(false),
+        };
+        assert_eq!(body.emails, Some(vec!["test@example.com".to_string()]));
+    }
+
+    #[test]
+    fn test_batch_get_id_body_with_mobiles() {
+        let body = BatchGetIdBody {
+            emails: None,
+            mobiles: Some(vec!["13800138000".to_string()]),
+            include_resigned: None,
+        };
+        assert_eq!(body.mobiles, Some(vec!["13800138000".to_string()]));
     }
 }

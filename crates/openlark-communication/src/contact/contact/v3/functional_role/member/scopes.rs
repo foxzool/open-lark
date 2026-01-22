@@ -23,7 +23,59 @@ pub struct PatchMembersScopesBody {
     pub departments: Vec<String>,
 }
 
+impl PatchMembersScopesBody {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn member(mut self, member_id: impl Into<String>) -> Self {
+        self.members.push(member_id.into());
+        self
+    }
+
+    pub fn department(mut self, department_id: impl Into<String>) -> Self {
+        self.departments.push(department_id.into());
+        self
+    }
+}
+
+impl Default for PatchMembersScopesBody {
+    fn default() -> Self {
+        Self {
+            members: Vec::new(),
+            departments: Vec::new(),
+        }
+    }
+}
+
 /// 批量设置角色成员管理范围请求
+///
+/// 用于批量设置指定角色成员的管理范围。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `role_id`: 角色 ID，必填
+/// - `user_id_type`: 用户 ID 类型（可选）
+/// - `department_id_type`: 部门 ID 类型（可选）
+///
+/// # 请求体字段
+///
+/// - `members`: 用户 ID 列表，至少包含 1 个用户 ID
+/// - `departments`: 部门 ID 列表，至少包含 1 个部门 ID
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = PatchMembersScopesBody::new()
+///     .member("user_1")
+///     .member("user_2")
+///     .department("dept_1")
+///     .department("dept_2");
+/// let request = PatchRoleMembersScopesRequest::new(config)
+///     .role_id("role_xxx")
+///     .execute(body).await?;
+/// ```
 pub struct PatchRoleMembersScopesRequest {
     config: Config,
     role_id: String,
@@ -75,6 +127,7 @@ impl PatchRoleMembersScopesRequest {
         body: PatchMembersScopesBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<PatchMembersScopesResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.role_id, "role_id 不能为空");
         if body.members.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -106,5 +159,76 @@ impl PatchRoleMembersScopesRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "批量设置角色成员管理范围")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_patch_role_members_scopes_request_builder() {
+        let config = Config::default();
+        let request = PatchRoleMembersScopesRequest::new(config).role_id("role_xxx");
+        assert_eq!(request.role_id, "role_xxx");
+    }
+
+    #[test]
+    fn test_patch_members_scopes_body_builder() {
+        let body = PatchMembersScopesBody::new()
+            .member("user_1")
+            .member("user_2")
+            .department("dept_1")
+            .department("dept_2");
+        assert_eq!(body.members.len(), 2);
+        assert_eq!(body.departments.len(), 2);
+        assert_eq!(body.members[0], "user_1");
+        assert_eq!(body.departments[0], "dept_1");
+    }
+
+    #[test]
+    fn test_patch_members_scopes_body_default() {
+        let body = PatchMembersScopesBody::new();
+        assert_eq!(body.members.len(), 0);
+        assert_eq!(body.departments.len(), 0);
+    }
+
+    #[test]
+    fn test_patch_role_members_scopes_request_with_user_id_type() {
+        let config = Config::default();
+        let request = PatchRoleMembersScopesRequest::new(config)
+            .role_id("role_xxx")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_patch_role_members_scopes_request_with_department_id_type() {
+        let config = Config::default();
+        let request = PatchRoleMembersScopesRequest::new(config)
+            .role_id("role_xxx")
+            .department_id_type(DepartmentIdType::DepartmentId);
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+    }
+
+    #[test]
+    fn test_patch_role_members_scopes_request_default_values() {
+        let config = Config::default();
+        let request = PatchRoleMembersScopesRequest::new(config);
+        assert_eq!(request.role_id, "");
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_patch_role_members_scopes_request_with_all_options() {
+        let config = Config::default();
+        let request = PatchRoleMembersScopesRequest::new(config)
+            .role_id("role_123")
+            .user_id_type(UserIdType::UnionId)
+            .department_id_type(DepartmentIdType::OpenDepartmentId);
+        assert_eq!(request.role_id, "role_123");
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
     }
 }

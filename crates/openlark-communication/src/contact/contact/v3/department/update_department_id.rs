@@ -22,7 +22,36 @@ pub struct UpdateDepartmentIdBody {
     pub new_department_id: String,
 }
 
+impl UpdateDepartmentIdBody {
+    pub fn new(new_department_id: impl Into<String>) -> Self {
+        Self {
+            new_department_id: new_department_id.into(),
+        }
+    }
+}
+
 /// 更新部门 ID 请求
+///
+/// 用于更新部门的自定义 ID。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `department_id`: 部门 ID，必填
+/// - `department_id_type`: 部门 ID 类型（可选）
+///
+/// # 请求体字段
+///
+/// - `new_department_id`: 新部门 ID，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = UpdateDepartmentIdBody::new("new_dept_id_123");
+/// let request = UpdateDepartmentIdRequest::new(config)
+///     .department_id("old_dept_id")
+///     .department_id_type(DepartmentIdType::OpenDepartmentId);
+/// ```
 pub struct UpdateDepartmentIdRequest {
     config: Config,
     department_id: String,
@@ -63,6 +92,7 @@ impl UpdateDepartmentIdRequest {
         body: UpdateDepartmentIdBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
+        // === 必填字段验证 ===
         validate_required!(self.department_id, "department_id 不能为空");
         validate_required!(body.new_department_id, "new_department_id 不能为空");
 
@@ -80,5 +110,51 @@ impl UpdateDepartmentIdRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "更新部门 ID")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_update_department_id_request_builder() {
+        let config = Config::default();
+        let request = UpdateDepartmentIdRequest::new(config)
+            .department_id("old_dept_id");
+        assert_eq!(request.department_id, "old_dept_id");
+    }
+
+    #[test]
+    fn test_update_department_id_request_with_department_id_type() {
+        let config = Config::default();
+        let request = UpdateDepartmentIdRequest::new(config)
+            .department_id("old_dept_id")
+            .department_id_type(DepartmentIdType::OpenDepartmentId);
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+    }
+
+    #[test]
+    fn test_update_department_id_body_builder() {
+        let body = UpdateDepartmentIdBody::new("new_dept_id_123");
+        assert_eq!(body.new_department_id, "new_dept_id_123");
+    }
+
+    #[test]
+    fn test_update_department_id_request_default_values() {
+        let config = Config::default();
+        let request = UpdateDepartmentIdRequest::new(config);
+        assert_eq!(request.department_id, "");
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_update_department_id_request_with_all_options() {
+        let config = Config::default();
+        let request = UpdateDepartmentIdRequest::new(config)
+            .department_id("dept_123")
+            .department_id_type(DepartmentIdType::DepartmentId);
+        assert_eq!(request.department_id, "dept_123");
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
     }
 }

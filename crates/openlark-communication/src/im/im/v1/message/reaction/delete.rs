@@ -12,6 +12,23 @@ use crate::{
 };
 
 /// 删除消息表情回复请求
+///
+/// 用于删除指定消息的表情回复。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `message_id`: 消息 ID，必填
+/// - `reaction_id`: 表情回复 ID，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = DeleteMessageReactionRequest::new(config)
+///     .message_id("msg_xxx")
+///     .reaction_id("reaction_xxx")
+///     .execute().await?;
+/// ```
 pub struct DeleteMessageReactionRequest {
     config: Config,
     message_id: String,
@@ -51,6 +68,7 @@ impl DeleteMessageReactionRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<MessageReaction> {
+        // === 必填字段验证 ===
         validate_required!(self.message_id, "message_id 不能为空");
         validate_required!(self.reaction_id, "reaction_id 不能为空");
 
@@ -62,5 +80,38 @@ impl DeleteMessageReactionRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "删除消息表情回复")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_delete_message_reaction_request_builder() {
+        let config = Config::default();
+        let request = DeleteMessageReactionRequest::new(config)
+            .message_id("msg_xxx")
+            .reaction_id("reaction_xxx");
+        assert_eq!(request.message_id, "msg_xxx");
+        assert_eq!(request.reaction_id, "reaction_xxx");
+    }
+
+    #[test]
+    fn test_delete_message_reaction_request_default_values() {
+        let config = Config::default();
+        let request = DeleteMessageReactionRequest::new(config);
+        assert_eq!(request.message_id, "");
+        assert_eq!(request.reaction_id, "");
+    }
+
+    #[test]
+    fn test_delete_message_reaction_request_chaining() {
+        let config = Config::default();
+        let request = DeleteMessageReactionRequest::new(config)
+            .message_id("msg_xxx")
+            .reaction_id("reaction_xxx");
+        assert_eq!(request.message_id, "msg_xxx");
+        assert_eq!(request.reaction_id, "reaction_xxx");
     }
 }
