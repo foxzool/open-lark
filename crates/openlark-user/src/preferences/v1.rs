@@ -2,56 +2,53 @@
 //!
 //! 提供用户偏好 V1 版本的 API 访问
 
-use crate::{UserConfig, LarkClient};
+use crate::{UserConfig};
+use std::sync::Arc;
 
 /// 用户偏好 V1 API
 #[derive(Debug, Clone)]
 pub struct PreferencesV1 {
     /// 客户端配置
-    config: UserConfig,
-    /// HTTP 客户端
-    client: LarkClient,
+    config: Arc<UserConfig>,
 }
 
 impl PreferencesV1 {
     /// 创建新的用户偏好 V1 实例
-    pub fn new(config: UserConfig, client: LarkClient) -> Self {
-        Self { config, client }
+    pub fn new(config: Arc<UserConfig>) -> Self {
+        Self { config }
     }
 
     /// 获取偏好
     pub fn get(&self) -> GetPreferenceRequest {
-        GetPreferenceRequest::new(self.config.clone(), self.client.clone())
+        GetPreferenceRequest::new(self.config.clone())
     }
 
     /// 更新偏好
     pub fn update(&self) -> UpdatePreferenceRequest {
-        UpdatePreferenceRequest::new(self.config.clone(), self.client.clone())
+        UpdatePreferenceRequest::new(self.config.clone())
     }
 
     /// 删除偏好
     pub fn delete(&self) -> DeletePreferenceRequest {
-        DeletePreferenceRequest::new(self.config.clone(), self.client.clone())
+        DeletePreferenceRequest::new(self.config.clone())
     }
 
     /// 获取所有偏好
     pub fn list(&self) -> ListPreferencesRequest {
-        ListPreferencesRequest::new(self.config.clone(), self.client.clone())
+        ListPreferencesRequest::new(self.config.clone())
     }
 }
 
 /// 获取偏好请求
 pub struct GetPreferenceRequest {
-    config: UserConfig,
-    client: LarkClient,
+    config: Arc<UserConfig>,
     key: Option<String>,
 }
 
 impl GetPreferenceRequest {
-    fn new(config: UserConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<UserConfig>) -> Self {
         Self {
             config,
-            client,
             key: None,
         }
     }
@@ -71,18 +68,16 @@ impl GetPreferenceRequest {
 
 /// 更新偏好请求
 pub struct UpdatePreferenceRequest {
-    config: UserConfig,
-    client: LarkClient,
+    config: Arc<UserConfig>,
     key: Option<String>,
     value: Option<String>,
     category: Option<String>,
 }
 
 impl UpdatePreferenceRequest {
-    fn new(config: UserConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<UserConfig>) -> Self {
         Self {
             config,
-            client,
             key: None,
             value: None,
             category: None,
@@ -116,16 +111,14 @@ impl UpdatePreferenceRequest {
 
 /// 删除偏好请求
 pub struct DeletePreferenceRequest {
-    config: UserConfig,
-    client: LarkClient,
+    config: Arc<UserConfig>,
     key: Option<String>,
 }
 
 impl DeletePreferenceRequest {
-    fn new(config: UserConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<UserConfig>) -> Self {
         Self {
             config,
-            client,
             key: None,
         }
     }
@@ -145,16 +138,14 @@ impl DeletePreferenceRequest {
 
 /// 获取所有偏好请求
 pub struct ListPreferencesRequest {
-    config: UserConfig,
-    client: LarkClient,
+    config: Arc<UserConfig>,
     category: Option<String>,
 }
 
 impl ListPreferencesRequest {
-    fn new(config: UserConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<UserConfig>) -> Self {
         Self {
             config,
-            client,
             category: None,
         }
     }

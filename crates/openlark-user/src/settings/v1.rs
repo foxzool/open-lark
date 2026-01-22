@@ -2,51 +2,48 @@
 //!
 //! 提供个人设置 V1 版本的 API 访问
 
-use crate::{UserConfig, LarkClient};
+use crate::{UserConfig};
+use std::sync::Arc;
 
 /// 个人设置 V1 API
 #[derive(Debug, Clone)]
 pub struct SettingsV1 {
     /// 客户端配置
-    config: UserConfig,
-    /// HTTP 客户端
-    client: LarkClient,
+    config: Arc<UserConfig>,
 }
 
 impl SettingsV1 {
     /// 创建新的个人设置 V1 实例
-    pub fn new(config: UserConfig, client: LarkClient) -> Self {
-        Self { config, client }
+    pub fn new(config: Arc<UserConfig>) -> Self {
+        Self { config }
     }
 
     /// 获取设置
     pub fn get(&self) -> GetSettingRequest {
-        GetSettingRequest::new(self.config.clone(), self.client.clone())
+        GetSettingRequest::new(self.config.clone())
     }
 
     /// 更新设置
     pub fn update(&self) -> UpdateSettingRequest {
-        UpdateSettingRequest::new(self.config.clone(), self.client.clone())
+        UpdateSettingRequest::new(self.config.clone())
     }
 
     /// 获取所有设置
     pub fn list(&self) -> ListSettingsRequest {
-        ListSettingsRequest::new(self.config.clone(), self.client.clone())
+        ListSettingsRequest::new(self.config.clone())
     }
 }
 
 /// 获取设置请求
 pub struct GetSettingRequest {
-    config: UserConfig,
-    client: LarkClient,
+    config: Arc<UserConfig>,
     key: Option<String>,
 }
 
 impl GetSettingRequest {
-    fn new(config: UserConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<UserConfig>) -> Self {
         Self {
             config,
-            client,
             key: None,
         }
     }
@@ -66,17 +63,15 @@ impl GetSettingRequest {
 
 /// 更新设置请求
 pub struct UpdateSettingRequest {
-    config: UserConfig,
-    client: LarkClient,
+    config: Arc<UserConfig>,
     key: Option<String>,
     value: Option<String>,
 }
 
 impl UpdateSettingRequest {
-    fn new(config: UserConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<UserConfig>) -> Self {
         Self {
             config,
-            client,
             key: None,
             value: None,
         }
@@ -103,13 +98,12 @@ impl UpdateSettingRequest {
 
 /// 获取所有设置请求
 pub struct ListSettingsRequest {
-    config: UserConfig,
-    client: LarkClient,
+    config: Arc<UserConfig>,
 }
 
 impl ListSettingsRequest {
-    fn new(config: UserConfig, client: LarkClient) -> Self {
-        Self { config, client }
+    fn new(config: Arc<UserConfig>) -> Self {
+        Self { config }
     }
 
     /// 执行请求
