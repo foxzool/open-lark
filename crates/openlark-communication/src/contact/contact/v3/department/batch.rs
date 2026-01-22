@@ -125,7 +125,10 @@ mod tests {
         let request = BatchGetDepartmentsRequest::new(config)
             .push_department_id("dept_1")
             .department_id_type(DepartmentIdType::DepartmentId);
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::DepartmentId)
+        );
     }
 
     #[test]
@@ -155,7 +158,10 @@ mod tests {
             .department_id_type(DepartmentIdType::OpenDepartmentId)
             .user_id_type(UserIdType::UnionId);
         assert_eq!(request.department_ids.len(), 2);
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
     }
 }

@@ -117,8 +117,7 @@ mod tests {
     #[test]
     fn test_reply_message_request_builder() {
         let config = Config::default();
-        let request = ReplyMessageRequest::new(config)
-            .message_id("om_xxx");
+        let request = ReplyMessageRequest::new(config).message_id("om_xxx");
         assert_eq!(request.message_id, "om_xxx");
     }
 
@@ -162,8 +161,7 @@ mod tests {
     #[test]
     fn test_empty_message_id() {
         let config = Config::default();
-        let request = ReplyMessageRequest::new(config)
-            .message_id("");
+        let request = ReplyMessageRequest::new(config).message_id("");
         assert_eq!(request.message_id, "");
     }
 

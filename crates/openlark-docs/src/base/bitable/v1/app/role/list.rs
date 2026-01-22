@@ -143,8 +143,7 @@ mod tests {
     #[test]
     fn test_empty_app_token() {
         let config = Config::default();
-        let request = ListAppRoleRequest::new(config)
-            .app_token("".to_string());
+        let request = ListAppRoleRequest::new(config).app_token("".to_string());
         let rt = tokio::runtime::Runtime::new().unwrap();
         let result = rt.block_on(request.execute());
         assert!(result.is_err());
@@ -167,9 +166,6 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            ListAppRoleResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(ListAppRoleResponse::data_format(), ResponseFormat::Data);
     }
 }

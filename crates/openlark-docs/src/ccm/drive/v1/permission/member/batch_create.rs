@@ -251,8 +251,7 @@ mod tests {
     fn test_empty_token() {
         let config = Config::default();
         let member = PermissionMember::new("openid", "ou_123", "view");
-        let request =
-            BatchCreatePermissionMemberRequest::new(config, "", "docx", vec![member]);
+        let request = BatchCreatePermissionMemberRequest::new(config, "", "docx", vec![member]);
         let rt = tokio::runtime::Runtime::new().unwrap();
         let result = rt.block_on(request.execute());
 
@@ -278,8 +277,7 @@ mod tests {
     #[test]
     fn test_empty_members() {
         let config = Config::default();
-        let request =
-            BatchCreatePermissionMemberRequest::new(config, "file_token", "docx", vec![]);
+        let request = BatchCreatePermissionMemberRequest::new(config, "file_token", "docx", vec![]);
         let rt = tokio::runtime::Runtime::new().unwrap();
         let result = rt.block_on(request.execute());
 

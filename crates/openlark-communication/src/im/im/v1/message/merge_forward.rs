@@ -132,8 +132,8 @@ mod tests {
     #[test]
     fn test_merge_forward_message_request_builder() {
         let config = Config::default();
-        let request = MergeForwardMessageRequest::new(config)
-            .receive_id_type(ReceiveIdType::OpenId);
+        let request =
+            MergeForwardMessageRequest::new(config).receive_id_type(ReceiveIdType::OpenId);
         assert_eq!(request.receive_id_type, Some(ReceiveIdType::OpenId));
     }
 
@@ -177,8 +177,8 @@ mod tests {
     #[test]
     fn test_merge_forward_message_request_with_chat_id() {
         let config = Config::default();
-        let request = MergeForwardMessageRequest::new(config)
-            .receive_id_type(ReceiveIdType::ChatId);
+        let request =
+            MergeForwardMessageRequest::new(config).receive_id_type(ReceiveIdType::ChatId);
         assert_eq!(request.receive_id_type, Some(ReceiveIdType::ChatId));
     }
 }

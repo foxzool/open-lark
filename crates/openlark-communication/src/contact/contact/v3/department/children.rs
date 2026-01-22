@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/department/children
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::extract_response_data,
@@ -129,8 +131,7 @@ mod tests {
     #[test]
     fn test_list_department_children_request_builder() {
         let config = Config::default();
-        let request = ListDepartmentChildrenRequest::new(config)
-            .department_id("dept_xxx");
+        let request = ListDepartmentChildrenRequest::new(config).department_id("dept_xxx");
         assert_eq!(request.department_id, "dept_xxx");
     }
 
@@ -172,7 +173,10 @@ mod tests {
             .page_token("token789");
         assert_eq!(request.department_id, "dept_456");
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
         assert_eq!(request.page_size, Some(50));
         assert_eq!(request.page_token, Some("token789".to_string()));
     }

@@ -192,9 +192,7 @@ mod tests {
     fn test_list_devices_builder_with_pagination() {
         let config = create_test_config();
         let service = DevicesService::new(config);
-        let builder = service.list()
-            .page_size(50)
-            .page_token("token_123");
+        let builder = service.list().page_size(50).page_token("token_123");
 
         assert_eq!(builder.page_size, Some(50));
         assert_eq!(builder.page_token, Some("token_123".to_string()));
@@ -206,13 +204,19 @@ mod tests {
         let service = DevicesService::new(config);
 
         // 测试不同的设备类型
-        let builder_face = service.list().device_type(crate::models::acs::DeviceType::FaceRecognition);
+        let builder_face = service
+            .list()
+            .device_type(crate::models::acs::DeviceType::FaceRecognition);
         assert!(builder_face.device_type.is_some());
 
-        let builder_card = service.list().device_type(crate::models::acs::DeviceType::CardReader);
+        let builder_card = service
+            .list()
+            .device_type(crate::models::acs::DeviceType::CardReader);
         assert!(builder_card.device_type.is_some());
 
-        let builder_lock = service.list().device_type(crate::models::acs::DeviceType::DoorLock);
+        let builder_lock = service
+            .list()
+            .device_type(crate::models::acs::DeviceType::DoorLock);
         assert!(builder_lock.device_type.is_some());
     }
 
@@ -222,13 +226,19 @@ mod tests {
         let service = DevicesService::new(config);
 
         // 测试不同的设备状态
-        let builder_normal = service.list().status(crate::models::acs::DeviceStatus::Normal);
+        let builder_normal = service
+            .list()
+            .status(crate::models::acs::DeviceStatus::Normal);
         assert!(builder_normal.status.is_some());
 
-        let builder_offline = service.list().status(crate::models::acs::DeviceStatus::Offline);
+        let builder_offline = service
+            .list()
+            .status(crate::models::acs::DeviceStatus::Offline);
         assert!(builder_offline.status.is_some());
 
-        let builder_fault = service.list().status(crate::models::acs::DeviceStatus::Fault);
+        let builder_fault = service
+            .list()
+            .status(crate::models::acs::DeviceStatus::Fault);
         assert!(builder_fault.status.is_some());
     }
 
@@ -248,7 +258,8 @@ mod tests {
     fn test_list_devices_builder_full_chaining() {
         let config = create_test_config();
         let service = DevicesService::new(config);
-        let builder = service.list()
+        let builder = service
+            .list()
             .page_size(100)
             .page_token("token_456")
             .device_type(crate::models::acs::DeviceType::FingerprintReader)
@@ -272,4 +283,3 @@ mod tests {
         }
     }
 }
-

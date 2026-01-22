@@ -194,19 +194,13 @@ mod tests {
     #[test]
     fn test_create_user_request_with_user_id_type() {
         let config = Config::default();
-        let request = CreateUserRequest::new(config)
-            .user_id_type(UserIdType::OpenId);
+        let request = CreateUserRequest::new(config).user_id_type(UserIdType::OpenId);
         assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
     }
 
     #[test]
     fn test_create_user_body_builder() {
-        let body = CreateUserBody::new(
-            "张三",
-            "13800138000",
-            vec!["dept_1".to_string()],
-            1,
-        );
+        let body = CreateUserBody::new("张三", "13800138000", vec!["dept_1".to_string()], 1);
         assert_eq!(body.name, "张三");
         assert_eq!(body.mobile, "13800138000");
         assert_eq!(body.department_ids.len(), 1);
@@ -215,12 +209,7 @@ mod tests {
 
     #[test]
     fn test_create_user_body_with_custom_user_id() {
-        let body = CreateUserBody::new(
-            "李四",
-            "13900139000",
-            vec!["dept_2".to_string()],
-            2,
-        );
+        let body = CreateUserBody::new("李四", "13900139000", vec!["dept_2".to_string()], 2);
         let body_with_id = CreateUserBody {
             user_id: Some("custom_user_id".to_string()),
             ..body
@@ -236,7 +225,10 @@ mod tests {
             .department_id_type(DepartmentIdType::DepartmentId)
             .client_token("uuid123");
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::DepartmentId)
+        );
         assert_eq!(request.client_token, Some("uuid123".to_string()));
     }
 }

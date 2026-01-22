@@ -105,8 +105,7 @@ mod tests {
     #[test]
     fn test_update_message_request_builder() {
         let config = Config::default();
-        let request = UpdateMessageRequest::new(config)
-            .message_id("om_xxx");
+        let request = UpdateMessageRequest::new(config).message_id("om_xxx");
         assert_eq!(request.message_id, "om_xxx");
     }
 

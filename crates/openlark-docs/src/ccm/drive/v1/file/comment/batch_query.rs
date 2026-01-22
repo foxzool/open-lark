@@ -209,9 +209,7 @@ mod tests {
 
     #[test]
     fn test_batch_query_response_structure() {
-        let response = BatchQueryCommentResponse {
-            items: vec![],
-        };
+        let response = BatchQueryCommentResponse { items: vec![] };
 
         assert!(response.items.is_empty());
     }

@@ -153,8 +153,7 @@ mod tests {
         let config = Config::default();
 
         // 标准格式
-        let request1 =
-            DownloadMediaRequest::new(config.clone(), "token").range("bytes=0-1024");
+        let request1 = DownloadMediaRequest::new(config.clone(), "token").range("bytes=0-1024");
         assert_eq!(request1.range, Some("bytes=0-1024".to_string()));
 
         // 单字节
@@ -162,8 +161,7 @@ mod tests {
         assert_eq!(request2.range, Some("bytes=0-0".to_string()));
 
         // 大范围
-        let request3 =
-            DownloadMediaRequest::new(config.clone(), "token").range("bytes=0-999999");
+        let request3 = DownloadMediaRequest::new(config.clone(), "token").range("bytes=0-999999");
         assert_eq!(request3.range, Some("bytes=0-999999".to_string()));
     }
 

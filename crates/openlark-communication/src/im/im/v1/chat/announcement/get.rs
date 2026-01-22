@@ -86,8 +86,7 @@ mod tests {
     #[test]
     fn test_get_chat_announcement_request_builder() {
         let config = Config::default();
-        let request = GetChatAnnouncementRequest::new(config)
-            .chat_id("oc_xxx");
+        let request = GetChatAnnouncementRequest::new(config).chat_id("oc_xxx");
         assert_eq!(request.chat_id, "oc_xxx");
     }
 

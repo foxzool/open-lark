@@ -362,7 +362,8 @@ mod tests {
     fn test_list_access_records_builder_with_filters() {
         let config = create_test_config();
         let service = AccessRecordsService::new(config);
-        let builder = service.list()
+        let builder = service
+            .list()
             .user_id_filter("user_123")
             .device_id_filter("device_456")
             .access_result_filter(crate::models::acs::AccessResult::Success)
@@ -378,8 +379,7 @@ mod tests {
     fn test_list_access_records_builder_time_range() {
         let config = create_test_config();
         let service = AccessRecordsService::new(config);
-        let builder = service.list()
-            .time_range(1000000, 2000000);
+        let builder = service.list().time_range(1000000, 2000000);
 
         assert_eq!(builder.start_time, Some(1000000));
         assert_eq!(builder.end_time, Some(2000000));
@@ -447,4 +447,3 @@ mod tests {
         let _ = service.list().access_result_filter(timeout);
     }
 }
-

@@ -152,8 +152,8 @@ mod tests {
 
     #[test]
     fn test_urgent_app_body_builder() {
-        let body = UrgentAppBody::new()
-            .user_id_list(vec!["ou_xxx".to_string(), "ou_yyy".to_string()]);
+        let body =
+            UrgentAppBody::new().user_id_list(vec!["ou_xxx".to_string(), "ou_yyy".to_string()]);
         assert_eq!(body.user_id_list.len(), 2);
     }
 
@@ -184,10 +184,8 @@ mod tests {
     #[test]
     fn test_urgent_app_request_with_different_user_id_types() {
         let config = Config::default();
-        let request1 = UrgentAppRequest::new(config.clone())
-            .user_id_type(UserIdType::OpenId);
-        let request2 = UrgentAppRequest::new(config)
-            .user_id_type(UserIdType::UserId);
+        let request1 = UrgentAppRequest::new(config.clone()).user_id_type(UserIdType::OpenId);
+        let request2 = UrgentAppRequest::new(config).user_id_type(UserIdType::UserId);
         assert_eq!(request1.user_id_type, Some(UserIdType::OpenId));
         assert_eq!(request2.user_id_type, Some(UserIdType::UserId));
     }

@@ -140,7 +140,8 @@ mod tests {
 
     #[test]
     fn test_delete_comment_reply_request_builder() {
-        let request = DeleteCommentReplyRequest::new("file_token", "comment_123", "reply_456", "docx");
+        let request =
+            DeleteCommentReplyRequest::new("file_token", "comment_123", "reply_456", "docx");
 
         assert_eq!(request.file_token, "file_token");
         assert_eq!(request.comment_id, "comment_123");

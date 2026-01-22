@@ -165,9 +165,6 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            CreateAppRoleResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(CreateAppRoleResponse::data_format(), ResponseFormat::Data);
     }
 }

@@ -91,10 +91,8 @@ mod tests {
     #[test]
     fn test_delete_top_notice_request_multiple_chats() {
         let config = Config::default();
-        let request1 = DeleteTopNoticeRequest::new(config.clone())
-            .chat_id("oc_111");
-        let request2 = DeleteTopNoticeRequest::new(config)
-            .chat_id("oc_222");
+        let request1 = DeleteTopNoticeRequest::new(config.clone()).chat_id("oc_111");
+        let request2 = DeleteTopNoticeRequest::new(config).chat_id("oc_222");
         assert_eq!(request1.chat_id, "oc_111");
         assert_eq!(request2.chat_id, "oc_222");
     }

@@ -262,8 +262,7 @@ mod tests {
     #[test]
     fn test_empty_token_validation() {
         let config = Config::default();
-        let request =
-            DeletePermissionMemberRequest::new(config, "", "member_id", "docx", "openid");
+        let request = DeletePermissionMemberRequest::new(config, "", "member_id", "docx", "openid");
         assert_eq!(request.token, "");
     }
 

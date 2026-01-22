@@ -132,8 +132,7 @@ mod tests {
     #[test]
     fn test_find_users_by_department_request_builder() {
         let config = Config::default();
-        let request = FindUsersByDepartmentRequest::new(config)
-            .department_id("dept_xxx");
+        let request = FindUsersByDepartmentRequest::new(config).department_id("dept_xxx");
         assert_eq!(request.department_id, Some("dept_xxx".to_string()));
     }
 
@@ -184,7 +183,10 @@ mod tests {
             .page_token("token789");
         assert_eq!(request.department_id, Some("dept_456".to_string()));
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
         assert_eq!(request.page_size, Some(50));
         assert_eq!(request.page_token, Some("token789".to_string()));
     }

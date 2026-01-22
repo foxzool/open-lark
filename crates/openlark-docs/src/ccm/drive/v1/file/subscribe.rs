@@ -169,7 +169,10 @@ mod tests {
         let request = SubscribeFileRequest::new(config, "folder_token", "folder")
             .event_type("file.created_in_folder_v1");
 
-        assert_eq!(request.event_type, Some("file.created_in_folder_v1".to_string()));
+        assert_eq!(
+            request.event_type,
+            Some("file.created_in_folder_v1".to_string())
+        );
     }
 
     /// 测试folder类型订阅

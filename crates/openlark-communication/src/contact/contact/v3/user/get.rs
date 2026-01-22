@@ -103,8 +103,7 @@ mod tests {
     #[test]
     fn test_get_user_request_builder() {
         let config = Config::default();
-        let request = GetUserRequest::new(config)
-            .user_id("user_xxx");
+        let request = GetUserRequest::new(config).user_id("user_xxx");
         assert_eq!(request.user_id, "user_xxx");
     }
 
@@ -123,7 +122,10 @@ mod tests {
         let request = GetUserRequest::new(config)
             .user_id("user_xxx")
             .department_id_type(DepartmentIdType::DepartmentId);
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::DepartmentId)
+        );
     }
 
     #[test]
@@ -144,6 +146,9 @@ mod tests {
             .department_id_type(DepartmentIdType::OpenDepartmentId);
         assert_eq!(request.user_id, "user_123");
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
     }
 }

@@ -30,7 +30,11 @@ impl Attachment {
     }
 
     pub fn delete(&self, attachment_guid: impl Into<String>) -> delete::DeleteAttachmentRequest {
-        delete::DeleteAttachmentRequest::new(self.config.clone(), self.task_guid.clone(), attachment_guid.into())
+        delete::DeleteAttachmentRequest::new(
+            self.config.clone(),
+            self.task_guid.clone(),
+            attachment_guid.into(),
+        )
     }
 }
 

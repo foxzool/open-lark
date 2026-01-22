@@ -126,32 +126,28 @@ mod tests {
     #[test]
     fn test_list_chats_request_with_user_id_type() {
         let config = Config::default();
-        let request = ListChatsRequest::new(config)
-            .user_id_type(UserIdType::OpenId);
+        let request = ListChatsRequest::new(config).user_id_type(UserIdType::OpenId);
         assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
     }
 
     #[test]
     fn test_list_chats_request_with_sort_type() {
         let config = Config::default();
-        let request = ListChatsRequest::new(config)
-            .sort_type(ChatSortType::ByCreateTimeAsc);
+        let request = ListChatsRequest::new(config).sort_type(ChatSortType::ByCreateTimeAsc);
         assert_eq!(request.sort_type, Some(ChatSortType::ByCreateTimeAsc));
     }
 
     #[test]
     fn test_list_chats_request_with_page_size() {
         let config = Config::default();
-        let request = ListChatsRequest::new(config)
-            .page_size(50);
+        let request = ListChatsRequest::new(config).page_size(50);
         assert_eq!(request.page_size, Some(50));
     }
 
     #[test]
     fn test_list_chats_request_with_page_token() {
         let config = Config::default();
-        let request = ListChatsRequest::new(config)
-            .page_token("token123");
+        let request = ListChatsRequest::new(config).page_token("token123");
         assert_eq!(request.page_token, Some("token123".to_string()));
     }
 

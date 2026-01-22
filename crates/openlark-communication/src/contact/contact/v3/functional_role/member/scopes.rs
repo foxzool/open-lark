@@ -208,7 +208,10 @@ mod tests {
         let request = PatchRoleMembersScopesRequest::new(config)
             .role_id("role_xxx")
             .department_id_type(DepartmentIdType::DepartmentId);
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::DepartmentId)
+        );
     }
 
     #[test]
@@ -229,6 +232,9 @@ mod tests {
             .department_id_type(DepartmentIdType::OpenDepartmentId);
         assert_eq!(request.role_id, "role_123");
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
     }
 }

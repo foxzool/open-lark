@@ -190,7 +190,10 @@ mod tests {
             ..Default::default()
         };
         let request = CreateDraftRequest::new(config.clone(), req);
-        assert!(request.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         // 测试 main_keys 超过 1 个
         let req2 = CreateDraftReq {
@@ -208,7 +211,10 @@ mod tests {
             ..Default::default()
         };
         let request2 = CreateDraftRequest::new(config.clone(), req2);
-        assert!(request2.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request2
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         // 测试 description 和 rich_text 都为空
         let req3 = CreateDraftReq {
@@ -221,7 +227,10 @@ mod tests {
             ..Default::default()
         };
         let request3 = CreateDraftRequest::new(config, req3);
-        assert!(request3.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request3
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
     }
 
     #[test]

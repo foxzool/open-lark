@@ -127,8 +127,8 @@ mod tests {
             rich_text: None,
             ..Default::default()
         };
-        let request = UpdateDraftRequest::new(config, "draft_123", body)
-            .user_id_type(UserIdType::UnionId);
+        let request =
+            UpdateDraftRequest::new(config, "draft_123", body).user_id_type(UserIdType::UnionId);
 
         assert!(request.user_id_type.is_some());
     }
@@ -136,9 +136,7 @@ mod tests {
     /// 测试响应数据结构
     #[test]
     fn test_response_structure() {
-        let response = UpdateDraftResp {
-            draft: None,
-        };
+        let response = UpdateDraftResp { draft: None };
 
         assert!(response.draft.is_none());
     }
@@ -162,7 +160,10 @@ mod tests {
         let request = UpdateDraftRequest::new(config, "draft_456", body);
 
         assert_eq!(request.draft_id, "draft_456");
-        assert_eq!(request.body.rich_text, Some("<p>富文本内容</p>".to_string()));
+        assert_eq!(
+            request.body.rich_text,
+            Some("<p>富文本内容</p>".to_string())
+        );
     }
 
     /// 测试同时设置description和rich_text

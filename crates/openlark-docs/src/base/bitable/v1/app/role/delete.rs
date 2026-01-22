@@ -133,9 +133,6 @@ mod tests {
 
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            DeleteAppRoleResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(DeleteAppRoleResponse::data_format(), ResponseFormat::Data);
     }
 }

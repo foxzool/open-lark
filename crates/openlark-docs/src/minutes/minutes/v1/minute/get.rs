@@ -91,10 +91,12 @@ mod tests {
     #[test]
     fn test_get_minute_request_builder() {
         let config = Config::default();
-        let request = GetMinuteRequest::new(config)
-            .minute_token("123456789012345678901234");
+        let request = GetMinuteRequest::new(config).minute_token("123456789012345678901234");
 
-        assert_eq!(request.minute_token, Some("123456789012345678901234".to_string()));
+        assert_eq!(
+            request.minute_token,
+            Some("123456789012345678901234".to_string())
+        );
     }
 
     #[test]

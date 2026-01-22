@@ -94,8 +94,8 @@ mod tests {
             .app_secret("test")
             .build();
 
-        let request = ListSectionsRequest::new(Arc::new(config), "tasklist_123".to_string())
-            .page_size(20);
+        let request =
+            ListSectionsRequest::new(Arc::new(config), "tasklist_123".to_string()).page_size(20);
 
         assert_eq!(request.tasklist_guid, "tasklist_123");
         assert_eq!(request.page_size, Some(20));

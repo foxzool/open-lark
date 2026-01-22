@@ -103,8 +103,7 @@ mod tests {
     #[test]
     fn test_get_lingo_entity_request_builder() {
         let config = Config::default();
-        let request = GetEntityRequest::new(config, "entity_123")
-            .user_id_type(UserIdType::OpenId);
+        let request = GetEntityRequest::new(config, "entity_123").user_id_type(UserIdType::OpenId);
 
         assert_eq!(request.entity_id, "entity_123");
         assert!(request.user_id_type.is_some());
@@ -128,7 +127,10 @@ mod tests {
 
         // 测试 entity_id 为空
         let request = GetEntityRequest::new(config, "");
-        assert!(request.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
     }
 
     #[test]

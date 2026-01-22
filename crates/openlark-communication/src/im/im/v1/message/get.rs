@@ -102,8 +102,7 @@ mod tests {
     #[test]
     fn test_get_message_request_without_user_id_type() {
         let config = Config::default();
-        let request = GetMessageRequest::new(config)
-            .message_id("om_xxx");
+        let request = GetMessageRequest::new(config).message_id("om_xxx");
         assert_eq!(request.message_id, "om_xxx");
         assert_eq!(request.user_id_type, None);
     }
@@ -111,8 +110,7 @@ mod tests {
     #[test]
     fn test_empty_message_id() {
         let config = Config::default();
-        let request = GetMessageRequest::new(config)
-            .message_id("");
+        let request = GetMessageRequest::new(config).message_id("");
         assert_eq!(request.message_id, "");
     }
 

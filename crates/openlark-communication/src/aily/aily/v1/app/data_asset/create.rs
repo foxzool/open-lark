@@ -3,7 +3,9 @@
 //! docPath: https://open.feishu.cn/document/aily-v1/data-knowledge/data-knowledge-management/create
 
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_DATA_ASSETS};
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 /// 创建数据知识请求体

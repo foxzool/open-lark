@@ -96,7 +96,10 @@ mod tests {
             .minute_token("123456789012345678901234")
             .user_id_type("open_id");
 
-        assert_eq!(request.minute_token, Some("123456789012345678901234".to_string()));
+        assert_eq!(
+            request.minute_token,
+            Some("123456789012345678901234".to_string())
+        );
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
 
@@ -106,12 +109,10 @@ mod tests {
         let stats = MinuteStatistics {
             user_view_count: "10".to_string(),
             page_view_count: "20".to_string(),
-            user_view_list: vec![
-                UserViewDetail {
-                    user_id: "user_123".to_string(),
-                    view_time: "1679284285000".to_string(),
-                },
-            ],
+            user_view_list: vec![UserViewDetail {
+                user_id: "user_123".to_string(),
+                view_time: "1679284285000".to_string(),
+            }],
         };
 
         assert_eq!(stats.user_view_count, "10");
@@ -145,8 +146,7 @@ mod tests {
     fn test_valid_minute_token_length() {
         let config = Config::default();
         let valid_token = "a".repeat(24);
-        let request = GetMinuteStatisticsRequest::new(config)
-            .minute_token(&valid_token);
+        let request = GetMinuteStatisticsRequest::new(config).minute_token(&valid_token);
 
         assert_eq!(request.minute_token.unwrap().len(), 24);
     }
@@ -156,12 +156,11 @@ mod tests {
     fn test_different_user_id_types() {
         let config = Config::default();
 
-        let union_id_request = GetMinuteStatisticsRequest::new(config.clone())
-            .user_id_type("union_id");
+        let union_id_request =
+            GetMinuteStatisticsRequest::new(config.clone()).user_id_type("union_id");
         assert_eq!(union_id_request.user_id_type, Some("union_id".to_string()));
 
-        let user_id_request = GetMinuteStatisticsRequest::new(config)
-            .user_id_type("user_id");
+        let user_id_request = GetMinuteStatisticsRequest::new(config).user_id_type("user_id");
         assert_eq!(user_id_request.user_id_type, Some("user_id".to_string()));
     }
 

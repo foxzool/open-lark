@@ -132,8 +132,7 @@ mod tests {
     #[test]
     fn test_create_wiki_space_name_only() {
         let config = Config::default();
-        let request = CreateWikiSpaceRequest::new(config)
-            .name("简单知识库");
+        let request = CreateWikiSpaceRequest::new(config).name("简单知识库");
 
         assert_eq!(request.name, "简单知识库");
         assert!(request.description.is_none());
@@ -142,9 +141,7 @@ mod tests {
     /// 测试响应数据结构
     #[test]
     fn test_create_wiki_space_response() {
-        let response = CreateWikiSpaceResponse {
-            space: None,
-        };
+        let response = CreateWikiSpaceResponse { space: None };
 
         assert!(response.space.is_none());
     }

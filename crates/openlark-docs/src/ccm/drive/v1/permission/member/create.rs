@@ -293,14 +293,8 @@ mod tests {
     #[test]
     fn test_empty_token_validation() {
         let config = Config::default();
-        let request = CreatePermissionMemberRequest::new(
-            config,
-            "",
-            "docx",
-            "openid",
-            "ou_xxx",
-            "view",
-        );
+        let request =
+            CreatePermissionMemberRequest::new(config, "", "docx", "openid", "ou_xxx", "view");
         assert_eq!(request.token, "");
     }
 
@@ -335,14 +329,8 @@ mod tests {
     #[test]
     fn test_empty_member_type_validation() {
         let config = Config::default();
-        let request = CreatePermissionMemberRequest::new(
-            config,
-            "file_token",
-            "docx",
-            "",
-            "ou_xxx",
-            "view",
-        );
+        let request =
+            CreatePermissionMemberRequest::new(config, "file_token", "docx", "", "ou_xxx", "view");
         assert_eq!(request.member_type, "");
     }
 
@@ -363,14 +351,8 @@ mod tests {
     #[test]
     fn test_empty_member_id_validation() {
         let config = Config::default();
-        let request = CreatePermissionMemberRequest::new(
-            config,
-            "file_token",
-            "docx",
-            "openid",
-            "",
-            "view",
-        );
+        let request =
+            CreatePermissionMemberRequest::new(config, "file_token", "docx", "openid", "", "view");
         assert_eq!(request.member_id, "");
     }
 

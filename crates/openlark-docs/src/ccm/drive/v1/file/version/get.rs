@@ -191,8 +191,8 @@ mod tests {
         let request1 = GetFileVersionRequest::new(config.clone(), "token", "version", "docx");
         assert!(request1.user_id_type.is_none());
 
-        let request2 = GetFileVersionRequest::new(config, "token", "version", "docx")
-            .user_id_type("user_id");
+        let request2 =
+            GetFileVersionRequest::new(config, "token", "version", "docx").user_id_type("user_id");
         assert_eq!(request2.user_id_type, Some("user_id".to_string()));
     }
 }

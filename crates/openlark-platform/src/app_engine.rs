@@ -44,11 +44,10 @@ mod tests {
         let config = PlatformConfig::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build()
-            .unwrap();
+            .build();
 
-        let client = LarkClient::new(config.clone()).unwrap();
-        let service = AppEngineService::new(config, client);
-        assert_eq!(service.config().app_id, "test_app_id");
+        let service = AppEngineService::new(std::sync::Arc::new(config));
+        // PlatformConfig 实现了 Deref，可以直接访问 app_id
+        assert_eq!(service.config().app_id(), "test_app_id");
     }
 }
