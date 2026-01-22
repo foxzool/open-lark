@@ -200,14 +200,10 @@ mod tests {
     /// 测试响应结构
     #[test]
     fn test_response_structure() {
-        let response = AuthPermissionMemberResponse {
-            auth_result: true,
-        };
+        let response = AuthPermissionMemberResponse { auth_result: true };
         assert_eq!(response.auth_result, true);
 
-        let response2 = AuthPermissionMemberResponse {
-            auth_result: false,
-        };
+        let response2 = AuthPermissionMemberResponse { auth_result: false };
         assert_eq!(response2.auth_result, false);
     }
 }

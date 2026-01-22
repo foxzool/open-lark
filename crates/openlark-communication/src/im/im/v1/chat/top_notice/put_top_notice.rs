@@ -77,8 +77,7 @@ mod tests {
     #[test]
     fn test_put_top_notice_request_builder() {
         let config = Config::default();
-        let request = PutTopNoticeRequest::new(config)
-            .chat_id("oc_xxx");
+        let request = PutTopNoticeRequest::new(config).chat_id("oc_xxx");
         assert_eq!(request.chat_id, "oc_xxx");
     }
 
@@ -92,10 +91,8 @@ mod tests {
     #[test]
     fn test_put_top_notice_request_multiple_chats() {
         let config = Config::default();
-        let request1 = PutTopNoticeRequest::new(config.clone())
-            .chat_id("oc_111");
-        let request2 = PutTopNoticeRequest::new(config)
-            .chat_id("oc_222");
+        let request1 = PutTopNoticeRequest::new(config.clone()).chat_id("oc_111");
+        let request2 = PutTopNoticeRequest::new(config).chat_id("oc_222");
         assert_eq!(request1.chat_id, "oc_111");
         assert_eq!(request2.chat_id, "oc_222");
     }

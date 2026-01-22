@@ -170,8 +170,8 @@ mod tests {
             }],
         };
 
-        let request = CreateCommentRequest::new("file_token", "docx", reply_list)
-            .user_id_type("union_id");
+        let request =
+            CreateCommentRequest::new("file_token", "docx", reply_list).user_id_type("union_id");
 
         assert_eq!(request.user_id_type, Some("union_id".to_string()));
     }

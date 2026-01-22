@@ -5,7 +5,9 @@
 use std::collections::HashMap;
 
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_RUNS};
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 /// 列出运行请求
 ///
@@ -125,8 +127,7 @@ mod tests {
 
     #[test]
     fn test_list_runs_request_empty_query() {
-        let request = ListRunsRequest::new(Config::default())
-            .aily_session_id("test_id");
+        let request = ListRunsRequest::new(Config::default()).aily_session_id("test_id");
         assert!(request.query.is_empty());
     }
 

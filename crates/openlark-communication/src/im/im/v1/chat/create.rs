@@ -114,32 +114,28 @@ mod tests {
     #[test]
     fn test_create_chat_request_builder() {
         let config = Config::default();
-        let request = CreateChatRequest::new(config)
-            .user_id_type(UserIdType::OpenId);
+        let request = CreateChatRequest::new(config).user_id_type(UserIdType::OpenId);
         assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
     }
 
     #[test]
     fn test_create_chat_request_with_bot_manager() {
         let config = Config::default();
-        let request = CreateChatRequest::new(config)
-            .set_bot_manager(true);
+        let request = CreateChatRequest::new(config).set_bot_manager(true);
         assert_eq!(request.set_bot_manager, Some(true));
     }
 
     #[test]
     fn test_create_chat_request_with_uuid() {
         let config = Config::default();
-        let request = CreateChatRequest::new(config)
-            .uuid("uuid-123");
+        let request = CreateChatRequest::new(config).uuid("uuid-123");
         assert_eq!(request.uuid, Some("uuid-123".to_string()));
     }
 
     #[test]
     fn test_create_chat_request_with_user_id() {
         let config = Config::default();
-        let request = CreateChatRequest::new(config)
-            .user_id_type(UserIdType::UserId);
+        let request = CreateChatRequest::new(config).user_id_type(UserIdType::UserId);
         assert_eq!(request.user_id_type, Some(UserIdType::UserId));
     }
 

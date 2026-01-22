@@ -173,8 +173,7 @@ mod tests {
     #[test]
     fn test_batch_get_id_request_with_user_id_type() {
         let config = Config::default();
-        let request = BatchGetIdRequest::new(config)
-            .user_id_type(UserIdType::OpenId);
+        let request = BatchGetIdRequest::new(config).user_id_type(UserIdType::OpenId);
         assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
     }
 

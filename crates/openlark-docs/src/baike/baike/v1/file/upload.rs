@@ -142,7 +142,15 @@ mod tests {
 
     #[test]
     fn test_upload_file_valid_extensions() {
-        let valid_extensions = vec!["test.png", "test.jpg", "test.jpeg", "test.gif", "test.webp", "test.bmp", "test.ico"];
+        let valid_extensions = vec![
+            "test.png",
+            "test.jpg",
+            "test.jpeg",
+            "test.gif",
+            "test.webp",
+            "test.bmp",
+            "test.ico",
+        ];
         for name in valid_extensions {
             let config = Config::default();
             let file_data = vec![0u8; 5 * 1024]; // 5KB

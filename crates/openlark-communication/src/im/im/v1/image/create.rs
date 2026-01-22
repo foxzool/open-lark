@@ -113,8 +113,7 @@ mod tests {
     #[test]
     fn test_create_image_request_builder() {
         let config = Config::default();
-        let request = CreateImageRequest::new(config)
-            .image_type(ImageType::Message);
+        let request = CreateImageRequest::new(config).image_type(ImageType::Message);
         assert_eq!(request.image_type, Some(ImageType::Message));
         assert!(request.file_name.is_none());
     }

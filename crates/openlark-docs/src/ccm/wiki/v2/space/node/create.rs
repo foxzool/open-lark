@@ -173,8 +173,7 @@ mod tests {
     #[test]
     fn test_create_wiki_space_node_builder() {
         let config = Config::default();
-        let request = CreateWikiSpaceNodeRequest::new(config)
-            .space_id("wiki_space_123");
+        let request = CreateWikiSpaceNodeRequest::new(config).space_id("wiki_space_123");
 
         assert_eq!(request.space_id, "wiki_space_123");
     }
@@ -212,9 +211,7 @@ mod tests {
     /// 测试响应数据结构
     #[test]
     fn test_create_wiki_space_node_response() {
-        let response = CreateWikiSpaceNodeResponse {
-            node: None,
-        };
+        let response = CreateWikiSpaceNodeResponse { node: None };
 
         assert!(response.node.is_none());
     }
@@ -222,13 +219,18 @@ mod tests {
     /// 测试响应trait实现
     #[test]
     fn test_response_trait() {
-        assert_eq!(CreateWikiSpaceNodeResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            CreateWikiSpaceNodeResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 
     /// 测试支持的文档类型
     #[test]
     fn test_supported_object_types() {
-        let valid_types = ["doc", "docx", "sheet", "slide", "mindnote", "bitable", "file"];
+        let valid_types = [
+            "doc", "docx", "sheet", "slide", "mindnote", "bitable", "file",
+        ];
 
         for obj_type in valid_types {
             let params = CreateWikiSpaceNodeParams {

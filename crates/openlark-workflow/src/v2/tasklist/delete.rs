@@ -22,7 +22,10 @@ pub struct DeleteTasklistRequest {
 
 impl DeleteTasklistRequest {
     pub fn new(config: Arc<Config>, tasklist_guid: String) -> Self {
-        Self { config, tasklist_guid }
+        Self {
+            config,
+            tasklist_guid,
+        }
     }
 
     /// 执行请求

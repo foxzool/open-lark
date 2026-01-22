@@ -5,7 +5,9 @@
 use std::collections::HashMap;
 
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_MESSAGES};
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 /// 列出 Aily 消息请求
 ///
@@ -117,13 +119,15 @@ mod tests {
             .query_param("page_size", "50")
             .query_param("page_token", "token123");
         assert_eq!(request.query.len(), 2);
-        assert_eq!(request.query.get("page_token"), Some(&"token123".to_string()));
+        assert_eq!(
+            request.query.get("page_token"),
+            Some(&"token123".to_string())
+        );
     }
 
     #[test]
     fn test_list_aily_messages_request_empty_query() {
-        let request = ListAilyMessagesRequest::new(Config::default())
-            .aily_session_id("test_id");
+        let request = ListAilyMessagesRequest::new(Config::default()).aily_session_id("test_id");
         assert!(request.query.is_empty());
     }
 }

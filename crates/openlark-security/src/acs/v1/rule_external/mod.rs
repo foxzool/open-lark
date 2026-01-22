@@ -373,7 +373,8 @@ mod tests {
     fn test_create_rule_builder() {
         let config = create_test_config();
         let service = RuleExternalService::new(config);
-        let builder = service.create()
+        let builder = service
+            .create()
             .name("测试权限组")
             .description("这是一个测试权限组")
             .device_ids(vec!["device_1".to_string(), "device_2".to_string()])
@@ -409,7 +410,8 @@ mod tests {
     fn test_device_bind_rule_builder() {
         let config = create_test_config();
         let service = RuleExternalService::new(config);
-        let builder = service.device_bind()
+        let builder = service
+            .device_bind()
             .rule_id("rule_789")
             .device_ids(vec!["device_1".to_string()])
             .overwrite(true);
@@ -433,4 +435,3 @@ mod tests {
         assert!(builder.valid_until.is_none());
     }
 }
-

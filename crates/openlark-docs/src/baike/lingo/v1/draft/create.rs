@@ -157,7 +157,10 @@ mod tests {
             ..Default::default()
         };
         let request = CreateDraftRequest::new(config.clone(), body);
-        assert!(request.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         // 测试 description 和 rich_text 都为空
         let body2 = DraftEntityInput {
@@ -170,7 +173,10 @@ mod tests {
             ..Default::default()
         };
         let request2 = CreateDraftRequest::new(config, body2);
-        assert!(request2.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request2
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
     }
 
     #[test]

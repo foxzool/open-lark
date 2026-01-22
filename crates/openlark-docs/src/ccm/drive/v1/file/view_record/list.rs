@@ -281,13 +281,16 @@ mod tests {
     /// 测试不同viewer_id_type
     #[test]
     fn test_viewer_id_types() {
-        let user_id_request = GetFileViewRecordsRequest::new("file_token", "docx", 10)
-            .viewer_id_type("user_id");
+        let user_id_request =
+            GetFileViewRecordsRequest::new("file_token", "docx", 10).viewer_id_type("user_id");
         assert_eq!(user_id_request.viewer_id_type, Some("user_id".to_string()));
 
-        let union_id_request = GetFileViewRecordsRequest::new("file_token", "docx", 10)
-            .viewer_id_type("union_id");
-        assert_eq!(union_id_request.viewer_id_type, Some("union_id".to_string()));
+        let union_id_request =
+            GetFileViewRecordsRequest::new("file_token", "docx", 10).viewer_id_type("union_id");
+        assert_eq!(
+            union_id_request.viewer_id_type,
+            Some("union_id".to_string())
+        );
     }
 
     /// 测试响应分页信息

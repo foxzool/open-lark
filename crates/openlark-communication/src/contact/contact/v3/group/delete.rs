@@ -75,8 +75,7 @@ mod tests {
     #[test]
     fn test_delete_group_request_builder() {
         let config = Config::default();
-        let request = DeleteGroupRequest::new(config)
-            .group_id("group_xxx");
+        let request = DeleteGroupRequest::new(config).group_id("group_xxx");
         assert_eq!(request.group_id, "group_xxx");
     }
 
@@ -90,10 +89,8 @@ mod tests {
     #[test]
     fn test_delete_group_request_with_multiple_ids() {
         let config = Config::default();
-        let request1 = DeleteGroupRequest::new(config.clone())
-            .group_id("group_111");
-        let request2 = DeleteGroupRequest::new(config)
-            .group_id("group_222");
+        let request1 = DeleteGroupRequest::new(config.clone()).group_id("group_111");
+        let request2 = DeleteGroupRequest::new(config).group_id("group_222");
         assert_eq!(request1.group_id, "group_111");
         assert_eq!(request2.group_id, "group_222");
     }

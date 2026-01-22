@@ -114,7 +114,10 @@ mod tests {
             .need_timestamp(true)
             .file_format("txt");
 
-        assert_eq!(request.minute_token, Some("123456789012345678901234".to_string()));
+        assert_eq!(
+            request.minute_token,
+            Some("123456789012345678901234".to_string())
+        );
         assert_eq!(request.need_speaker, Some(true));
         assert_eq!(request.need_timestamp, Some(true));
         assert_eq!(request.file_format, Some("txt".to_string()));
@@ -125,8 +128,7 @@ mod tests {
     fn test_valid_minute_token() {
         let config = Config::default();
         let valid_token = "a".repeat(24);
-        let request = GetMinuteTranscriptRequest::new(config)
-            .minute_token(&valid_token);
+        let request = GetMinuteTranscriptRequest::new(config).minute_token(&valid_token);
 
         assert_eq!(request.minute_token.unwrap().len(), 24);
     }
@@ -164,8 +166,8 @@ mod tests {
     #[test]
     fn test_request_without_optional_params() {
         let config = Config::default();
-        let request = GetMinuteTranscriptRequest::new(config)
-            .minute_token("123456789012345678901234");
+        let request =
+            GetMinuteTranscriptRequest::new(config).minute_token("123456789012345678901234");
 
         assert!(request.need_speaker.is_none());
         assert!(request.need_timestamp.is_none());

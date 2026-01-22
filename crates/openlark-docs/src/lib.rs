@@ -65,9 +65,7 @@
 mod macros;
 
 // Core modules
-pub mod error;
 pub mod models;
-pub mod service;
 
 // 功能模块按业务域组织
 #[cfg(feature = "ccm-core")]
@@ -103,16 +101,11 @@ pub mod versions;
 // 通用模块 - 工具宏和类型
 pub mod common;
 
-// 端点定义模块
-pub mod endpoints;
-
 // Prelude模块 - 常用导入
 pub mod prelude;
 
 // 重新导出主要类型
 pub use common::chain::DocsClient;
-pub use error::{DocsError, DocsResult};
-pub use service::DocsService as MainDocsService;
 
 // 重新导出各域服务
 #[cfg(feature = "ccm-core")]

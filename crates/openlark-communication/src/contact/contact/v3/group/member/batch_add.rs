@@ -32,7 +32,11 @@ impl BatchAddGroupMembersBody {
         Self::default()
     }
 
-    pub fn member(mut self, member_id: impl Into<String>, member_id_type: impl Into<String>) -> Self {
+    pub fn member(
+        mut self,
+        member_id: impl Into<String>,
+        member_id_type: impl Into<String>,
+    ) -> Self {
         self.members.push(MemberListItem {
             member_id: member_id.into(),
             member_id_type: member_id_type.into(),

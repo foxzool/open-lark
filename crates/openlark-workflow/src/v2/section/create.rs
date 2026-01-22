@@ -89,8 +89,8 @@ mod tests {
                 .build(),
         );
 
-        let request = CreateSectionRequest::new(config, "tasklist_123".to_string())
-            .summary("测试分组");
+        let request =
+            CreateSectionRequest::new(config, "tasklist_123".to_string()).summary("测试分组");
 
         assert_eq!(request.tasklist_guid, "tasklist_123");
         assert_eq!(request.body.summary, "测试分组");

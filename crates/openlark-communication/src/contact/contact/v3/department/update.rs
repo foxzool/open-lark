@@ -115,8 +115,7 @@ mod tests {
     #[test]
     fn test_update_department_request_builder() {
         let config = Config::default();
-        let request = UpdateDepartmentRequest::new(config)
-            .department_id("dept_xxx");
+        let request = UpdateDepartmentRequest::new(config).department_id("dept_xxx");
         assert_eq!(request.department_id, "dept_xxx");
     }
 
@@ -147,6 +146,9 @@ mod tests {
             .department_id_type(DepartmentIdType::OpenDepartmentId);
         assert_eq!(request.department_id, "dept_123");
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
     }
 }

@@ -142,8 +142,7 @@ mod tests {
     #[test]
     fn test_patch_group_request_builder() {
         let config = Config::default();
-        let request = PatchGroupRequest::new(config)
-            .group_id("group_xxx");
+        let request = PatchGroupRequest::new(config).group_id("group_xxx");
         assert_eq!(request.group_id, "group_xxx");
     }
 
@@ -180,6 +179,9 @@ mod tests {
             .department_id_type(DepartmentIdType::DepartmentId);
         assert_eq!(request.group_id, "group_123");
         assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::DepartmentId)
+        );
     }
 }

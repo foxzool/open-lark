@@ -109,9 +109,7 @@ mod tests {
 
     #[test]
     fn test_upload_file_empty_response() {
-        let response = UploadFileResp {
-            file_token: None,
-        };
+        let response = UploadFileResp { file_token: None };
 
         assert!(response.file_token.is_none());
     }

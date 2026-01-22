@@ -165,15 +165,16 @@ mod tests {
         let request = GetSubscribeRequest::new(config, "folder_token", "folder")
             .event_type("file.created_in_folder_v1");
 
-        assert_eq!(request.event_type, Some("file.created_in_folder_v1".to_string()));
+        assert_eq!(
+            request.event_type,
+            Some("file.created_in_folder_v1".to_string())
+        );
     }
 
     /// 测试响应数据结构
     #[test]
     fn test_subscribe_response_data() {
-        let response = GetSubscribeResponse {
-            is_subscribe: true,
-        };
+        let response = GetSubscribeResponse { is_subscribe: true };
 
         assert_eq!(response.is_subscribe, true);
     }

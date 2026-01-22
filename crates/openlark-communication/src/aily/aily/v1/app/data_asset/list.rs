@@ -5,7 +5,9 @@
 use std::collections::HashMap;
 
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_DATA_ASSETS};
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 /// 查询数据知识列表请求
 ///
@@ -117,13 +119,15 @@ mod tests {
             .query_param("page_size", "50")
             .query_param("page_token", "token123");
         assert_eq!(request.query.len(), 2);
-        assert_eq!(request.query.get("page_token"), Some(&"token123".to_string()));
+        assert_eq!(
+            request.query.get("page_token"),
+            Some(&"token123".to_string())
+        );
     }
 
     #[test]
     fn test_list_data_assets_request_empty_query() {
-        let request = ListDataAssetsRequest::new(Config::default())
-            .app_id("test_app");
+        let request = ListDataAssetsRequest::new(Config::default()).app_id("test_app");
         assert!(request.query.is_empty());
     }
 }

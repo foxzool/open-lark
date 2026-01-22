@@ -115,8 +115,7 @@ mod tests {
     #[test]
     fn test_list_wiki_space_nodes_builder() {
         let config = Config::default();
-        let request = ListWikiSpaceNodesRequest::new(config)
-            .space_id("wiki_space_123");
+        let request = ListWikiSpaceNodesRequest::new(config).space_id("wiki_space_123");
 
         assert_eq!(request.space_id, "wiki_space_123");
     }
@@ -125,8 +124,7 @@ mod tests {
     #[test]
     fn test_list_with_params() {
         let config = Config::default();
-        let request = ListWikiSpaceNodesRequest::new(config)
-            .space_id("wiki_space_123");
+        let request = ListWikiSpaceNodesRequest::new(config).space_id("wiki_space_123");
 
         let params = ListWikiSpaceNodesParams {
             parent_node_token: Some("parent_node".to_string()),
@@ -154,15 +152,17 @@ mod tests {
     /// 测试响应trait实现
     #[test]
     fn test_response_trait() {
-        assert_eq!(ListWikiSpaceNodesResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            ListWikiSpaceNodesResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 
     /// 测试空参数场景
     #[test]
     fn test_list_without_params() {
         let config = Config::default();
-        let _request = ListWikiSpaceNodesRequest::new(config)
-            .space_id("wiki_space_123");
+        let _request = ListWikiSpaceNodesRequest::new(config).space_id("wiki_space_123");
 
         // 不传入参数，获取所有节点
         let _params: Option<ListWikiSpaceNodesParams> = None;
@@ -186,8 +186,7 @@ mod tests {
     #[test]
     fn test_pagination_params() {
         let config = Config::default();
-        let _request = ListWikiSpaceNodesRequest::new(config)
-            .space_id("wiki_space_123");
+        let _request = ListWikiSpaceNodesRequest::new(config).space_id("wiki_space_123");
 
         let params = ListWikiSpaceNodesParams {
             parent_node_token: None,

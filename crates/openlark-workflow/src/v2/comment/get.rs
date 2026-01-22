@@ -46,8 +46,7 @@ impl GetCommentRequest {
         validate_required!(self.task_guid.trim(), "任务GUID不能为空");
         validate_required!(self.comment_guid.trim(), "评论GUID不能为空");
 
-        let api_endpoint =
-            TaskApiV2::CommentGet(self.task_guid.clone(), self.comment_guid.clone());
+        let api_endpoint = TaskApiV2::CommentGet(self.task_guid.clone(), self.comment_guid.clone());
         let request = ApiRequest::<GetCommentResponse>::get(api_endpoint.to_url());
 
         let response =

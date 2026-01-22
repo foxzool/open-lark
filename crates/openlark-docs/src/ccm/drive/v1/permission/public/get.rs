@@ -155,7 +155,9 @@ mod tests {
     #[test]
     fn test_valid_file_types() {
         let config = Config::default();
-        let valid_types = vec!["doc", "sheet", "file", "wiki", "bitable", "docx", "mindnote", "minutes", "slides"];
+        let valid_types = vec![
+            "doc", "sheet", "file", "wiki", "bitable", "docx", "mindnote", "minutes", "slides",
+        ];
 
         for file_type in valid_types {
             let request = GetPublicPermissionRequest::new(config.clone(), "doc_token", file_type);

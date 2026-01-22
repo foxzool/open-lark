@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role-member/batch_delete
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -26,7 +28,9 @@ impl BatchDeleteMembersBody {
     }
 
     pub fn member(mut self, member_id: impl Into<String>) -> Self {
-        self.members.get_or_insert_with(Vec::new).push(member_id.into());
+        self.members
+            .get_or_insert_with(Vec::new)
+            .push(member_id.into());
         self
     }
 }

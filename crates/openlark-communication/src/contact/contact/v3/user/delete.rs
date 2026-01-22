@@ -90,8 +90,7 @@ mod tests {
     #[test]
     fn test_delete_user_request_builder() {
         let config = Config::default();
-        let request = DeleteUserRequest::new(config)
-            .user_id("user_xxx");
+        let request = DeleteUserRequest::new(config).user_id("user_xxx");
         assert_eq!(request.user_id, "user_xxx");
     }
 

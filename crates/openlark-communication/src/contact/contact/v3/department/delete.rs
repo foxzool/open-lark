@@ -90,8 +90,7 @@ mod tests {
     #[test]
     fn test_delete_department_request_builder() {
         let config = Config::default();
-        let request = DeleteDepartmentRequest::new(config)
-            .department_id("dept_xxx");
+        let request = DeleteDepartmentRequest::new(config).department_id("dept_xxx");
         assert_eq!(request.department_id, "dept_xxx");
     }
 
@@ -101,7 +100,10 @@ mod tests {
         let request = DeleteDepartmentRequest::new(config)
             .department_id("dept_xxx")
             .department_id_type(DepartmentIdType::OpenDepartmentId);
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
     }
 
     #[test]
@@ -119,6 +121,9 @@ mod tests {
             .department_id("dept_123")
             .department_id_type(DepartmentIdType::DepartmentId);
         assert_eq!(request.department_id, "dept_123");
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::DepartmentId)
+        );
     }
 }

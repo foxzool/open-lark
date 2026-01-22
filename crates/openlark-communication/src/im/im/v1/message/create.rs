@@ -123,8 +123,7 @@ mod tests {
     #[test]
     fn test_create_message_request_builder() {
         let config = Config::default();
-        let request = CreateMessageRequest::new(config)
-            .receive_id_type(ReceiveIdType::OpenId);
+        let request = CreateMessageRequest::new(config).receive_id_type(ReceiveIdType::OpenId);
         assert_eq!(request.receive_id_type, Some(ReceiveIdType::OpenId));
     }
 

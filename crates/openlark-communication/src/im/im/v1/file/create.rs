@@ -142,8 +142,7 @@ mod tests {
 
     #[test]
     fn test_create_file_body_with_duration() {
-        let body = CreateFileBody::new("mp4", "video.mp4")
-            .duration(120);
+        let body = CreateFileBody::new("mp4", "video.mp4").duration(120);
         assert_eq!(body.duration, Some(120));
     }
 

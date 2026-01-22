@@ -79,8 +79,7 @@ mod tests {
     #[test]
     fn test_delete_message_request_builder() {
         let config = Config::default();
-        let request = DeleteMessageRequest::new(config)
-            .message_id("om_xxx");
+        let request = DeleteMessageRequest::new(config).message_id("om_xxx");
         assert_eq!(request.message_id, "om_xxx");
     }
 
@@ -94,16 +93,14 @@ mod tests {
     #[test]
     fn test_message_id_with_str() {
         let config = Config::default();
-        let request = DeleteMessageRequest::new(config)
-            .message_id("msg_12345");
+        let request = DeleteMessageRequest::new(config).message_id("msg_12345");
         assert_eq!(request.message_id, "msg_12345");
     }
 
     #[test]
     fn test_message_id_with_string() {
         let config = Config::default();
-        let request = DeleteMessageRequest::new(config)
-            .message_id(String::from("msg_67890"));
+        let request = DeleteMessageRequest::new(config).message_id(String::from("msg_67890"));
         assert_eq!(request.message_id, "msg_67890");
     }
 }

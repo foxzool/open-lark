@@ -116,7 +116,10 @@ mod tests {
         let config = Config::default();
         let request = UnbindDepartmentChatRequest::new(config)
             .department_id_type(DepartmentIdType::OpenDepartmentId);
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::OpenDepartmentId)
+        );
     }
 
     #[test]
@@ -130,6 +133,9 @@ mod tests {
         let config = Config::default();
         let request = UnbindDepartmentChatRequest::new(config)
             .department_id_type(DepartmentIdType::DepartmentId);
-        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+        assert_eq!(
+            request.department_id_type,
+            Some(DepartmentIdType::DepartmentId)
+        );
     }
 }

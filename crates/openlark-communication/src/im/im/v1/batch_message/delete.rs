@@ -102,8 +102,7 @@ mod tests {
     #[test]
     fn test_delete_batch_message_request_chaining() {
         let config = Config::default();
-        let request = DeleteBatchMessageRequest::new(config)
-            .batch_message_id("batch_xxx");
+        let request = DeleteBatchMessageRequest::new(config).batch_message_id("batch_xxx");
         assert_eq!(request.batch_message_id, "batch_xxx");
     }
 }

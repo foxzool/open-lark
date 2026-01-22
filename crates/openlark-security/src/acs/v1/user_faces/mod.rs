@@ -240,7 +240,8 @@ mod tests {
         let config = create_test_config();
         let service = UserFacesService::new(config);
         let image_data = vec![0x01, 0x02, 0x03, 0x04];
-        let builder = service.update()
+        let builder = service
+            .update()
             .user_id("user_456")
             .face_image(image_data.clone())
             .image_format("png");
@@ -254,9 +255,7 @@ mod tests {
     fn test_update_user_face_builder_chaining() {
         let config = create_test_config();
         let service = UserFacesService::new(config);
-        let builder = service.update()
-            .user_id("user_789")
-            .image_format("jpeg");
+        let builder = service.update().user_id("user_789").image_format("jpeg");
 
         assert_eq!(builder.user_id, "user_789");
         assert_eq!(builder.image_format, "jpeg");
@@ -281,4 +280,3 @@ mod tests {
         assert_eq!(builder_webp.image_format, "webp");
     }
 }
-

@@ -3,8 +3,8 @@
 //! 提供数据分析相关的服务入口
 
 use crate::AnalyticsConfig;
-use std::sync::Arc;
 use openlark_core::SDKResult;
+use std::sync::Arc;
 
 /// 数据分析服务
 ///

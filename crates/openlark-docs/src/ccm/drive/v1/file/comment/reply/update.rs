@@ -186,11 +186,10 @@ mod tests {
 
     #[test]
     fn test_update_reply_request_builder() {
-        let content = ReplyContent {
-            elements: vec![],
-        };
+        let content = ReplyContent { elements: vec![] };
 
-        let request = UpdateReplyRequest::new("file_token", "comment_123", "reply_456", "docx", content);
+        let request =
+            UpdateReplyRequest::new("file_token", "comment_123", "reply_456", "docx", content);
 
         assert_eq!(request.file_token, "file_token");
         assert_eq!(request.comment_id, "comment_123");
@@ -200,40 +199,31 @@ mod tests {
 
     #[test]
     fn test_update_reply_request_with_user_id_type() {
-        let content = ReplyContent {
-            elements: vec![],
-        };
+        let content = ReplyContent { elements: vec![] };
 
-        let request = UpdateReplyRequest::new("file_token", "comment_123", "reply_456", "docx", content)
-            .user_id_type("union_id");
+        let request =
+            UpdateReplyRequest::new("file_token", "comment_123", "reply_456", "docx", content)
+                .user_id_type("union_id");
 
         assert_eq!(request.user_id_type, Some("union_id".to_string()));
     }
 
     #[test]
     fn test_update_reply_request_empty_fields() {
-        let content = ReplyContent {
-            elements: vec![],
-        };
+        let content = ReplyContent { elements: vec![] };
 
         let request = UpdateReplyRequest::new("", "comment_123", "reply_456", "docx", content);
         assert!(request.file_token.is_empty());
 
-        let content2 = ReplyContent {
-            elements: vec![],
-        };
+        let content2 = ReplyContent { elements: vec![] };
         let request2 = UpdateReplyRequest::new("token", "", "reply_456", "docx", content2);
         assert!(request2.comment_id.is_empty());
 
-        let content3 = ReplyContent {
-            elements: vec![],
-        };
+        let content3 = ReplyContent { elements: vec![] };
         let request3 = UpdateReplyRequest::new("token", "comment_123", "", "docx", content3);
         assert!(request3.reply_id.is_empty());
 
-        let content4 = ReplyContent {
-            elements: vec![],
-        };
+        let content4 = ReplyContent { elements: vec![] };
         let request4 = UpdateReplyRequest::new("token", "comment_123", "reply_456", "", content4);
         assert!(request4.file_type.is_empty());
     }

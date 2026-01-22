@@ -214,12 +214,8 @@ mod tests {
         let config = Config::default();
 
         for obj_type in ["docx", "sheet"] {
-            let request = ListFileVersionsRequest::new(
-                config.clone(),
-                "token",
-                20,
-                obj_type.to_string(),
-            );
+            let request =
+                ListFileVersionsRequest::new(config.clone(), "token", 20, obj_type.to_string());
             assert_eq!(request.obj_type, obj_type);
         }
     }
@@ -228,8 +224,8 @@ mod tests {
     #[test]
     fn test_pagination_parameters() {
         let config = Config::default();
-        let request = ListFileVersionsRequest::new(config, "token", 20, "docx")
-            .page_token("next_page_token");
+        let request =
+            ListFileVersionsRequest::new(config, "token", 20, "docx").page_token("next_page_token");
 
         assert_eq!(request.page_token, Some("next_page_token".to_string()));
     }

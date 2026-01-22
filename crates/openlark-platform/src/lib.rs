@@ -86,7 +86,6 @@ pub use service::PlatformService;
 // 配置类型
 pub use openlark_core::config::Config;
 
-
 /// 平台服务模块版本信息
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 

@@ -908,7 +908,9 @@ mod tests {
             .device_record_id("record_456")
             .device_name("更新后的设备名称")
             .os_version("15.0")
-            .compliance_status(crate::models::security_and_compliance::ComplianceStatus::NonCompliant);
+            .compliance_status(
+                crate::models::security_and_compliance::ComplianceStatus::NonCompliant,
+            );
 
         assert_eq!(builder.device_record_id, "record_456");
         assert_eq!(builder.device_name, Some("更新后的设备名称".to_string()));
@@ -950,10 +952,8 @@ mod tests {
     #[test]
     fn test_compliance_status_variants() {
         // 测试不同的合规状态
-        let compliant =
-            crate::models::security_and_compliance::ComplianceStatus::Compliant;
-        let non_compliant =
-            crate::models::security_and_compliance::ComplianceStatus::NonCompliant;
+        let compliant = crate::models::security_and_compliance::ComplianceStatus::Compliant;
+        let non_compliant = crate::models::security_and_compliance::ComplianceStatus::NonCompliant;
         let pending = crate::models::security_and_compliance::ComplianceStatus::Pending;
         let unknown = crate::models::security_and_compliance::ComplianceStatus::Unknown;
 

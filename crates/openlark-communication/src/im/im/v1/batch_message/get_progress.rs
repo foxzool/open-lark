@@ -90,7 +90,8 @@ mod tests {
     #[test]
     fn test_get_batch_message_progress_request_with_different_ids() {
         let config = Config::default();
-        let request1 = GetBatchMessageProgressRequest::new(config.clone()).batch_message_id("batch_111");
+        let request1 =
+            GetBatchMessageProgressRequest::new(config.clone()).batch_message_id("batch_111");
         let request2 = GetBatchMessageProgressRequest::new(config).batch_message_id("batch_222");
         assert_eq!(request1.batch_message_id, "batch_111");
         assert_eq!(request2.batch_message_id, "batch_222");
@@ -99,8 +100,7 @@ mod tests {
     #[test]
     fn test_get_batch_message_progress_request_chaining() {
         let config = Config::default();
-        let request = GetBatchMessageProgressRequest::new(config)
-            .batch_message_id("batch_xxx");
+        let request = GetBatchMessageProgressRequest::new(config).batch_message_id("batch_xxx");
         assert_eq!(request.batch_message_id, "batch_xxx");
     }
 }

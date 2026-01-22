@@ -215,12 +215,8 @@ mod tests {
         let config = Config::default();
 
         for ext in ["docx", "pdf", "xlsx", "csv"] {
-            let request = CreateExportTaskRequest::new(
-                config.clone(),
-                ext.to_string(),
-                "token",
-                "docx",
-            );
+            let request =
+                CreateExportTaskRequest::new(config.clone(), ext.to_string(), "token", "docx");
             assert_eq!(request.file_extension, ext);
         }
     }

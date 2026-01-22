@@ -200,8 +200,7 @@ mod tests {
             exclude: Some(vec!["分类3".to_string()]),
         };
 
-        let request = SearchEntityRequest::new(config)
-            .classification_filter(filter);
+        let request = SearchEntityRequest::new(config).classification_filter(filter);
 
         assert!(request.body.classification_filter.is_some());
     }
@@ -210,8 +209,7 @@ mod tests {
     #[test]
     fn test_sources_filter() {
         let config = Config::default();
-        let request = SearchEntityRequest::new(config)
-            .sources(vec![1, 2, 3]);
+        let request = SearchEntityRequest::new(config).sources(vec![1, 2, 3]);
 
         assert_eq!(request.body.sources, Some(vec![1, 2, 3]));
     }
@@ -223,7 +221,10 @@ mod tests {
         let request = SearchEntityRequest::new(config)
             .creators(vec!["user1".to_string(), "user2".to_string()]);
 
-        assert_eq!(request.body.creators, Some(vec!["user1".to_string(), "user2".to_string()]));
+        assert_eq!(
+            request.body.creators,
+            Some(vec!["user1".to_string(), "user2".to_string()])
+        );
     }
 
     /// 测试响应数据结构
@@ -260,8 +261,7 @@ mod tests {
     #[test]
     fn test_pagination_token() {
         let config = Config::default();
-        let request = SearchEntityRequest::new(config)
-            .page_token("token_123");
+        let request = SearchEntityRequest::new(config).page_token("token_123");
 
         assert_eq!(request.page_token, Some("token_123".to_string()));
     }
@@ -270,8 +270,7 @@ mod tests {
     #[test]
     fn test_repo_id() {
         let config = Config::default();
-        let request = SearchEntityRequest::new(config)
-            .repo_id("repo_abc");
+        let request = SearchEntityRequest::new(config).repo_id("repo_abc");
 
         assert_eq!(request.repo_id, Some("repo_abc".to_string()));
     }

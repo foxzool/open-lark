@@ -233,14 +233,8 @@ mod tests {
     #[test]
     fn test_empty_file_name() {
         let config = Config::default();
-        let request = UploadAllMediaRequest::new(
-            config,
-            "",
-            "docx_image",
-            "doc_token",
-            100,
-            vec![0; 100],
-        );
+        let request =
+            UploadAllMediaRequest::new(config, "", "docx_image", "doc_token", 100, vec![0; 100]);
 
         let rt = tokio::runtime::Runtime::new().unwrap();
         let result = rt.block_on(request.execute());
@@ -274,14 +268,8 @@ mod tests {
     #[test]
     fn test_empty_parent_node() {
         let config = Config::default();
-        let request = UploadAllMediaRequest::new(
-            config,
-            "test.png",
-            "docx_image",
-            "",
-            100,
-            vec![0; 100],
-        );
+        let request =
+            UploadAllMediaRequest::new(config, "test.png", "docx_image", "", 100, vec![0; 100]);
 
         let rt = tokio::runtime::Runtime::new().unwrap();
         let result = rt.block_on(request.execute());
@@ -314,14 +302,8 @@ mod tests {
     #[test]
     fn test_invalid_size_zero() {
         let config = Config::default();
-        let request = UploadAllMediaRequest::new(
-            config,
-            "test.png",
-            "docx_image",
-            "doc_token",
-            0,
-            vec![],
-        );
+        let request =
+            UploadAllMediaRequest::new(config, "test.png", "docx_image", "doc_token", 0, vec![]);
 
         let rt = tokio::runtime::Runtime::new().unwrap();
         let result = rt.block_on(request.execute());

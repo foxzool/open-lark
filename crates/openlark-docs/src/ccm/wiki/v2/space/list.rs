@@ -189,8 +189,7 @@ mod tests {
     #[test]
     fn test_page_token_setting() {
         let config = Config::default();
-        let request = ListWikiSpacesRequest::new(config)
-            .page_token("custom_token_456");
+        let request = ListWikiSpacesRequest::new(config).page_token("custom_token_456");
 
         assert_eq!(request.page_token, Some("custom_token_456".to_string()));
     }

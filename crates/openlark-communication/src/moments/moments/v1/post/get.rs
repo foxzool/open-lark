@@ -155,10 +155,8 @@ mod tests {
     #[test]
     fn test_get_post_request_with_different_user_id_types() {
         let config = Config::default();
-        let request1 = GetPostRequest::new(config.clone())
-            .user_id_type("open_id");
-        let request2 = GetPostRequest::new(config)
-            .user_id_type("union_id");
+        let request1 = GetPostRequest::new(config.clone()).user_id_type("open_id");
+        let request2 = GetPostRequest::new(config).user_id_type("union_id");
         assert_eq!(request1.user_id_type, Some("open_id".to_string()));
         assert_eq!(request2.user_id_type, Some("union_id".to_string()));
     }

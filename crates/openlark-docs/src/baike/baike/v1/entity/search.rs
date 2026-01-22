@@ -220,25 +220,38 @@ mod tests {
 
         // 测试 page_size 超出范围
         let request = SearchEntityRequest::new(config.clone()).page_size(0);
-        assert!(request.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         let request2 = SearchEntityRequest::new(config.clone()).page_size(101);
-        assert!(request2.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request2
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         // 测试 query 过长
-        let request3 = SearchEntityRequest::new(config.clone())
-            .query("a".repeat(101));
-        assert!(request3.execute_with_options(RequestOption::default()).await.is_err());
+        let request3 = SearchEntityRequest::new(config.clone()).query("a".repeat(101));
+        assert!(request3
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         // 测试 sources 包含无效值
-        let request4 = SearchEntityRequest::new(config.clone())
-            .sources(vec![1, 5, 3]);
-        assert!(request4.execute_with_options(RequestOption::default()).await.is_err());
+        let request4 = SearchEntityRequest::new(config.clone()).sources(vec![1, 5, 3]);
+        assert!(request4
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         // 测试 creators 包含空字符串
         let request5 = SearchEntityRequest::new(config.clone())
             .creators(vec!["user_123".to_string(), "".to_string()]);
-        assert!(request5.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request5
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
     }
 
     #[test]

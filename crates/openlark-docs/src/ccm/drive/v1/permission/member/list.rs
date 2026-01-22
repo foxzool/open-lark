@@ -244,7 +244,8 @@ mod tests {
             "doc", "sheet", "file", "wiki", "bitable", "docx", "folder", "mindnote", "minutes",
             "slides",
         ] {
-            let request = ListPermissionMembersRequest::new(config.clone(), "token", file_type.to_string());
+            let request =
+                ListPermissionMembersRequest::new(config.clone(), "token", file_type.to_string());
             assert_eq!(request.file_type, file_type);
         }
     }
@@ -258,10 +259,9 @@ mod tests {
         assert!(request.fields.is_none());
         assert!(request.perm_type.is_none());
 
-        let request2 =
-            ListPermissionMembersRequest::new(config.clone(), "token", "docx")
-                .fields("*")
-                .perm_type("container");
+        let request2 = ListPermissionMembersRequest::new(config.clone(), "token", "docx")
+            .fields("*")
+            .perm_type("container");
 
         assert_eq!(request2.fields, Some("*".to_string()));
         assert_eq!(request2.perm_type, Some("container".to_string()));

@@ -142,8 +142,8 @@ mod tests {
 
     #[test]
     fn test_get_comment_request_with_user_id_type() {
-        let request = GetCommentRequest::new("file_token", "comment_123", "docx")
-            .user_id_type("union_id");
+        let request =
+            GetCommentRequest::new("file_token", "comment_123", "docx").user_id_type("union_id");
 
         assert_eq!(request.user_id_type, Some("union_id".to_string()));
     }

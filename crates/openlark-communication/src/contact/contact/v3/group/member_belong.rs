@@ -130,8 +130,7 @@ mod tests {
     #[test]
     fn test_member_belong_groups_request_builder() {
         let config = Config::default();
-        let request = MemberBelongGroupsRequest::new(config)
-            .member_id("user_xxx");
+        let request = MemberBelongGroupsRequest::new(config).member_id("user_xxx");
         assert_eq!(request.member_id, Some("user_xxx".to_string()));
     }
 

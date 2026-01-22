@@ -118,8 +118,7 @@ mod tests {
     #[test]
     fn test_update_user_id_request_builder() {
         let config = Config::default();
-        let request = UpdateUserIdRequest::new(config)
-            .user_id("old_user_id");
+        let request = UpdateUserIdRequest::new(config).user_id("old_user_id");
         assert_eq!(request.user_id, "old_user_id");
     }
 

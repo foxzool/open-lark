@@ -3,8 +3,8 @@
 //! 提供用户设置相关的服务入口
 
 use crate::UserConfig;
-use std::sync::Arc;
 use openlark_core::SDKResult;
+use std::sync::Arc;
 
 /// 用户设置服务
 ///

@@ -104,16 +104,11 @@ mod tests {
     #[test]
     fn test_highlight_entity_response() {
         let response = HighlightEntityResponse {
-            phrases: vec![
-                Phrase {
-                    name: "关键词1".to_string(),
-                    entity_ids: vec!["id1".to_string(), "id2".to_string()],
-                    span: Span {
-                        start: 0,
-                        end: 3,
-                    },
-                },
-            ],
+            phrases: vec![Phrase {
+                name: "关键词1".to_string(),
+                entity_ids: vec!["id1".to_string(), "id2".to_string()],
+                span: Span { start: 0, end: 3 },
+            }],
         };
 
         assert_eq!(response.phrases.len(), 1);
@@ -123,10 +118,7 @@ mod tests {
     /// 测试Span结构
     #[test]
     fn test_span_structure() {
-        let span = Span {
-            start: 0,
-            end: 10,
-        };
+        let span = Span { start: 0, end: 10 };
 
         assert_eq!(span.start, 0);
         assert_eq!(span.end, 10);
@@ -163,10 +155,7 @@ mod tests {
         let phrase = Phrase {
             name: "多义词".to_string(),
             entity_ids: vec!["id1".to_string(), "id2".to_string(), "id3".to_string()],
-            span: Span {
-                start: 0,
-                end: 3,
-            },
+            span: Span { start: 0, end: 3 },
         };
 
         assert_eq!(phrase.entity_ids.len(), 3);
@@ -175,9 +164,7 @@ mod tests {
     /// 测试空短语列表
     #[test]
     fn test_empty_phrases() {
-        let response = HighlightEntityResponse {
-            phrases: vec![],
-        };
+        let response = HighlightEntityResponse { phrases: vec![] };
 
         assert!(response.phrases.is_empty());
     }

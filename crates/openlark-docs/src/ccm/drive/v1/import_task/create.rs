@@ -205,7 +205,8 @@ mod tests {
         let point = Point::new("mount_key");
 
         // 空字符串
-        let request1 = CreateImportTaskRequest::new(config.clone(), "pdf", "", "sheet", point.clone());
+        let request1 =
+            CreateImportTaskRequest::new(config.clone(), "pdf", "", "sheet", point.clone());
 
         let result1 = std::thread::spawn(move || {
             let rt = tokio::runtime::Runtime::new().unwrap();
@@ -283,14 +284,8 @@ mod tests {
         );
         assert!(request1.file_name.is_none());
 
-        let request2 = CreateImportTaskRequest::new(
-            config,
-            "pdf",
-            "file_token",
-            "sheet",
-            point,
-        )
-        .file_name("custom_name");
+        let request2 = CreateImportTaskRequest::new(config, "pdf", "file_token", "sheet", point)
+            .file_name("custom_name");
         assert_eq!(request2.file_name, Some("custom_name".to_string()));
     }
 }

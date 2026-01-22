@@ -177,10 +177,16 @@ mod tests {
 
         // 测试 page_size 超出范围
         let request = ListEntityRequest::new(config.clone()).page_size(0);
-        assert!(request.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
 
         let request2 = ListEntityRequest::new(config.clone()).page_size(101);
-        assert!(request2.execute_with_options(RequestOption::default()).await.is_err());
+        assert!(request2
+            .execute_with_options(RequestOption::default())
+            .await
+            .is_err());
     }
 
     #[test]

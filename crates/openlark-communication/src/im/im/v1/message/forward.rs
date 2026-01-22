@@ -170,8 +170,7 @@ mod tests {
     #[test]
     fn test_empty_message_id() {
         let config = Config::default();
-        let request = ForwardMessageRequest::new(config)
-            .message_id("");
+        let request = ForwardMessageRequest::new(config).message_id("");
         assert_eq!(request.message_id, "");
     }
 

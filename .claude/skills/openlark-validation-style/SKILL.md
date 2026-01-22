@@ -6,6 +6,20 @@ allowed-tools: Read, Grep
 
 # OpenLark Validation Style
 
+## 🧭 技能路由指南
+
+**本技能适用场景：**
+- 需要统一/评审 `validate()` 方法写法
+- 不确定使用 `validate_required!`（宏）还是 `validate_required()`（函数）
+- 需要处理空白字符串校验
+- 需要聚合多条校验错误
+
+**其他技能：**
+- 添加/重构 API → `Skill(openlark-api)`
+- 审查整体设计规范 → `Skill(openlark-design-review)`
+
+---
+
 ## 目标
 
 在各 feature crate 的请求/Builder `validate(&self) -> SDKResult<()>` 中统一：

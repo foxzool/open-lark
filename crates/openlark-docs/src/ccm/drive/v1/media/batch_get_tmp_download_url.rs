@@ -202,8 +202,10 @@ mod tests {
     #[test]
     fn test_empty_token_in_list_validation() {
         let config = Config::default();
-        let request =
-            BatchGetTmpDownloadUrlRequest::new(config, vec!["valid_token".to_string(), "".to_string()]);
+        let request = BatchGetTmpDownloadUrlRequest::new(
+            config,
+            vec!["valid_token".to_string(), "".to_string()],
+        );
 
         let result = std::thread::spawn(move || {
             let rt = tokio::runtime::Runtime::new().unwrap();
@@ -231,17 +233,12 @@ mod tests {
     fn test_extra_optional() {
         let config = Config::default();
 
-        let request1 = BatchGetTmpDownloadUrlRequest::new(
-            config.clone(),
-            vec!["token".to_string()],
-        );
+        let request1 =
+            BatchGetTmpDownloadUrlRequest::new(config.clone(), vec!["token".to_string()]);
         assert!(request1.extra.is_none());
 
-        let request2 = BatchGetTmpDownloadUrlRequest::new(
-            config,
-            vec!["token".to_string()],
-        )
-        .extra("extra_param");
+        let request2 = BatchGetTmpDownloadUrlRequest::new(config, vec!["token".to_string()])
+            .extra("extra_param");
         assert_eq!(request2.extra, Some("extra_param".to_string()));
     }
 }

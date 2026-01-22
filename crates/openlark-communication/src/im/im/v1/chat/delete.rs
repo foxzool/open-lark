@@ -81,8 +81,7 @@ mod tests {
     #[test]
     fn test_delete_chat_request_builder() {
         let config = Config::default();
-        let request = DeleteChatRequest::new(config)
-            .chat_id("oc_xxx");
+        let request = DeleteChatRequest::new(config).chat_id("oc_xxx");
         assert_eq!(request.chat_id, "oc_xxx");
     }
 
@@ -96,16 +95,14 @@ mod tests {
     #[test]
     fn test_chat_id_with_string() {
         let config = Config::default();
-        let request = DeleteChatRequest::new(config)
-            .chat_id(String::from("oc_test_123"));
+        let request = DeleteChatRequest::new(config).chat_id(String::from("oc_test_123"));
         assert_eq!(request.chat_id, "oc_test_123");
     }
 
     #[test]
     fn test_delete_chat_request_builder_chaining() {
         let config = Config::default();
-        let request = DeleteChatRequest::new(config)
-            .chat_id("oc_aaaaa");
+        let request = DeleteChatRequest::new(config).chat_id("oc_aaaaa");
         assert_eq!(request.chat_id, "oc_aaaaa");
     }
 }

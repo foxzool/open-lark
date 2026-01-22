@@ -98,8 +98,7 @@ mod tests {
     #[test]
     fn test_patch_message_card_request_builder() {
         let config = Config::default();
-        let request = PatchMessageCardRequest::new(config)
-            .message_id("om_xxx");
+        let request = PatchMessageCardRequest::new(config).message_id("om_xxx");
         assert_eq!(request.message_id, "om_xxx");
     }
 
@@ -126,16 +125,14 @@ mod tests {
     #[test]
     fn test_empty_message_id() {
         let config = Config::default();
-        let request = PatchMessageCardRequest::new(config)
-            .message_id("");
+        let request = PatchMessageCardRequest::new(config).message_id("");
         assert_eq!(request.message_id, "");
     }
 
     #[test]
     fn test_patch_message_card_request_builder_chaining() {
         let config = Config::default();
-        let request = PatchMessageCardRequest::new(config)
-            .message_id("om_test_123");
+        let request = PatchMessageCardRequest::new(config).message_id("om_test_123");
         assert_eq!(request.message_id, "om_test_123");
     }
 

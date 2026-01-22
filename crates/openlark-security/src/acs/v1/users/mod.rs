@@ -386,7 +386,8 @@ mod tests {
     fn test_list_users_builder_with_params() {
         let config = create_test_config();
         let service = UsersService::new(config);
-        let builder = service.list()
+        let builder = service
+            .list()
             .page_size(50)
             .page_token("token_123")
             .department_id("dept_456")
@@ -402,7 +403,8 @@ mod tests {
     fn test_patch_user_builder() {
         let config = create_test_config();
         let service = UsersService::new(config);
-        let builder = service.patch()
+        let builder = service
+            .patch()
             .user_id("user_789")
             .name("张三")
             .email("zhangsan@example.com")
@@ -415,7 +417,10 @@ mod tests {
         assert_eq!(builder.name, Some("张三".to_string()));
         assert_eq!(builder.email, Some("zhangsan@example.com".to_string()));
         assert_eq!(builder.mobile, Some("13800138000".to_string()));
-        assert_eq!(builder.department_ids, Some(vec!["dept_1".to_string(), "dept_2".to_string()]));
+        assert_eq!(
+            builder.department_ids,
+            Some(vec!["dept_1".to_string(), "dept_2".to_string()])
+        );
         assert!(builder.status.is_some());
         assert_eq!(builder.rule_ids, Some(vec!["rule_1".to_string()]));
     }
@@ -424,7 +429,8 @@ mod tests {
     fn test_patch_user_builder_chaining() {
         let config = create_test_config();
         let service = UsersService::new(config);
-        let builder = service.patch()
+        let builder = service
+            .patch()
             .user_id("user_123")
             .name("李四")
             .email("lisi@example.com");

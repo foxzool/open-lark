@@ -158,9 +158,7 @@ mod tests {
     #[test]
     fn test_list_pins_request_chaining() {
         let config = Config::default();
-        let request = ListPinsRequest::new(config)
-            .chat_id("oc_xxx")
-            .page_size(30);
+        let request = ListPinsRequest::new(config).chat_id("oc_xxx").page_size(30);
         assert_eq!(request.chat_id, "oc_xxx");
         assert_eq!(request.page_size, Some(30));
     }

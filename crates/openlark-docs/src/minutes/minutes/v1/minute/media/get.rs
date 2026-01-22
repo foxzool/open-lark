@@ -70,10 +70,12 @@ mod tests {
     #[test]
     fn test_get_minute_media_builder() {
         let config = Config::default();
-        let request = GetMinuteMediaRequest::new(config)
-            .minute_token("123456789012345678901234");
+        let request = GetMinuteMediaRequest::new(config).minute_token("123456789012345678901234");
 
-        assert_eq!(request.minute_token, Some("123456789012345678901234".to_string()));
+        assert_eq!(
+            request.minute_token,
+            Some("123456789012345678901234".to_string())
+        );
     }
 
     /// 测试响应数据结构
@@ -89,10 +91,7 @@ mod tests {
     /// 测试响应trait实现
     #[test]
     fn test_response_trait() {
-        assert_eq!(
-            GetMinuteMediaResponse::data_format(),
-            ResponseFormat::Data
-        );
+        assert_eq!(GetMinuteMediaResponse::data_format(), ResponseFormat::Data);
     }
 
     /// 测试有效的minute_token
@@ -100,8 +99,7 @@ mod tests {
     fn test_valid_minute_token() {
         let config = Config::default();
         let valid_token = "a".repeat(24);
-        let request = GetMinuteMediaRequest::new(config)
-            .minute_token(&valid_token);
+        let request = GetMinuteMediaRequest::new(config).minute_token(&valid_token);
 
         assert_eq!(request.minute_token.unwrap().len(), 24);
     }

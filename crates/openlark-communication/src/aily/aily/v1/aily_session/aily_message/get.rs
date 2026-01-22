@@ -3,7 +3,9 @@
 //! docPath: https://open.feishu.cn/document/aily-v1/aily_session-aily_message/get
 
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_MESSAGES};
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 /// 获取 Aily 消息请求
 ///
