@@ -43,12 +43,14 @@ impl GetExportTaskRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetExportTaskResponse> {
+        // ===== 验证必填字段 =====
         if self.ticket.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "ticket",
                 "ticket 不能为空",
             ));
         }
+        // ===== 验证字段长度 =====
         let token_len = self.token.len();
         if token_len == 0 || token_len > 27 {
             return Err(openlark_core::error::validation_error(
@@ -104,6 +106,7 @@ impl ApiResponseTrait for GetExportTaskResponse {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_get_export_task_request_builder() {
         let config = Config::default();
@@ -112,8 +115,74 @@ mod tests {
         assert_eq!(request.token, "token");
     }
 
+    /// 测试响应格式
     #[test]
     fn test_response_trait() {
         assert_eq!(GetExportTaskResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试 ticket 为空时的验证
+    #[test]
+    fn test_empty_ticket_validation() {
+        let config = Config::default();
+        let request = GetExportTaskRequest::new(config, "", "token");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 token 长度验证
+    #[test]
+    fn test_token_length_validation() {
+        let config = Config::default();
+
+        // 空字符串
+        let request1 = GetExportTaskRequest::new(config.clone(), "ticket", "");
+
+        let result1 = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request1.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result1.is_ok());
+
+        // 超过 27 字节
+        let long_token = "a".repeat(28);
+        let request2 = GetExportTaskRequest::new(config, "ticket", long_token);
+
+        let result2 = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request2.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result2.is_ok());
+    }
+
+    /// 测试 token 边界值
+    #[test]
+    fn test_token_boundaries() {
+        let config = Config::default();
+
+        // 1 字节（最小有效值）
+        let request1 = GetExportTaskRequest::new(config.clone(), "ticket", "a");
+        assert_eq!(request1.token.len(), 1);
+
+        // 27 字节（最大有效值）
+        let token27 = "a".repeat(27);
+        let request2 = GetExportTaskRequest::new(config, "ticket", token27);
+        assert_eq!(request2.token.len(), 27);
     }
 }

@@ -99,6 +99,7 @@ impl TransferOwnerRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<TransferOwnerResponse> {
+        // ===== 验证必填字段 =====
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -111,6 +112,19 @@ impl TransferOwnerRequest {
                 "file_type 不能为空",
             ));
         }
+        if self.member_type.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "member_type",
+                "member_type 不能为空",
+            ));
+        }
+        if self.member_id.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "member_id",
+                "member_id 不能为空",
+            ));
+        }
+        // ===== 验证字段枚举值 =====
         match self.file_type.as_str() {
             "doc" | "sheet" | "file" | "wiki" | "bitable" | "docx" | "folder" | "mindnote"
             | "minutes" | "slides" => {}
@@ -121,12 +135,6 @@ impl TransferOwnerRequest {
                 ));
             }
         }
-        if self.member_type.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "member_type",
-                "member_type 不能为空",
-            ));
-        }
         match self.member_type.as_str() {
             "email" | "openid" | "userid" => {}
             _ => {
@@ -135,12 +143,6 @@ impl TransferOwnerRequest {
                     "member_type 必须为 email/openid/userid",
                 ));
             }
-        }
-        if self.member_id.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "member_id",
-                "member_id 不能为空",
-            ));
         }
         if let Some(old_owner_perm) = &self.old_owner_perm {
             match old_owner_perm.as_str() {
@@ -204,6 +206,7 @@ impl ApiResponseTrait for TransferOwnerResponse {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_transfer_owner_request_builder() {
         let config = Config::default();
@@ -219,8 +222,126 @@ mod tests {
         assert_eq!(request.member_id, "ou_xxx");
     }
 
+    /// 测试响应格式
     #[test]
     fn test_response_trait() {
         assert_eq!(TransferOwnerResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试 token 为空时的验证
+    #[test]
+    fn test_empty_token_validation() {
+        let config = Config::default();
+        let request = TransferOwnerRequest::new(config, "", "docx", "openid", "ou_xxx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 file_type 枚举值验证
+    #[test]
+    fn test_file_type_validation() {
+        let config = Config::default();
+        let request = TransferOwnerRequest::new(config, "token", "invalid", "openid", "ou_xxx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 member_type 枚举值验证
+    #[test]
+    fn test_member_type_validation() {
+        let config = Config::default();
+        let request = TransferOwnerRequest::new(config, "token", "docx", "invalid", "ou_xxx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 member_id 为空时的验证
+    #[test]
+    fn test_empty_member_id_validation() {
+        let config = Config::default();
+        let request = TransferOwnerRequest::new(config, "token", "docx", "openid", "");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试支持的 file_type 类型
+    #[test]
+    fn test_supported_file_types() {
+        let config = Config::default();
+
+        for file_type in [
+            "doc", "sheet", "file", "wiki", "bitable", "docx", "folder", "mindnote", "minutes",
+            "slides",
+        ] {
+            let request = TransferOwnerRequest::new(
+                config.clone(),
+                "token",
+                file_type.to_string(),
+                "openid",
+                "ou_xxx",
+            );
+            assert_eq!(request.file_type, file_type);
+        }
+    }
+
+    /// 测试支持的 member_type 类型
+    #[test]
+    fn test_supported_member_types() {
+        let config = Config::default();
+
+        for member_type in ["email", "openid", "userid"] {
+            let request = TransferOwnerRequest::new(
+                config.clone(),
+                "token",
+                "docx",
+                member_type.to_string(),
+                "ou_xxx",
+            );
+            assert_eq!(request.member_type, member_type);
+        }
+    }
+
+    /// 测试可选参数
+    #[test]
+    fn test_optional_parameters() {
+        let config = Config::default();
+        let request = TransferOwnerRequest::new(config, "token", "docx", "openid", "ou_xxx");
+
+        assert!(request.need_notification.is_none());
+        assert!(request.remove_old_owner.is_none());
+        assert!(request.stay_put.is_none());
+        assert!(request.old_owner_perm.is_none());
     }
 }

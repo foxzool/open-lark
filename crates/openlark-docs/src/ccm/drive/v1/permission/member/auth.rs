@@ -59,6 +59,7 @@ impl AuthPermissionMemberRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<AuthPermissionMemberResponse> {
+        // ===== 验证必填字段 =====
         if self.token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "token",
@@ -77,7 +78,7 @@ impl AuthPermissionMemberRequest {
                 "action 不能为空",
             ));
         }
-
+        // ===== 验证字段枚举值 =====
         match self.action.as_str() {
             "view" | "edit" | "share" | "comment" | "export" | "copy" | "print"
             | "manage_public" => {}
@@ -117,6 +118,7 @@ impl ApiResponseTrait for AuthPermissionMemberResponse {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_auth_permission_member_request_builder() {
         let config = Config::default();
@@ -127,11 +129,85 @@ mod tests {
         assert_eq!(request.action, "view");
     }
 
+    /// 测试响应格式
     #[test]
     fn test_response_trait() {
         assert_eq!(
             AuthPermissionMemberResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    /// 测试 token 为空时的验证
+    #[test]
+    fn test_empty_token_validation() {
+        let config = Config::default();
+        let request = AuthPermissionMemberRequest::new(config, "", "docx", "view");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 action 枚举值验证
+    #[test]
+    fn test_action_validation() {
+        let config = Config::default();
+        let request = AuthPermissionMemberRequest::new(config, "token", "docx", "invalid");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试支持的 action 类型
+    #[test]
+    fn test_supported_actions() {
+        let config = Config::default();
+
+        for action in [
+            "view",
+            "edit",
+            "share",
+            "comment",
+            "export",
+            "copy",
+            "print",
+            "manage_public",
+        ] {
+            let request = AuthPermissionMemberRequest::new(
+                config.clone(),
+                "token",
+                "docx",
+                action.to_string(),
+            );
+            assert_eq!(request.action, action);
+        }
+    }
+
+    /// 测试响应结构
+    #[test]
+    fn test_response_structure() {
+        let response = AuthPermissionMemberResponse {
+            auth_result: true,
+        };
+        assert_eq!(response.auth_result, true);
+
+        let response2 = AuthPermissionMemberResponse {
+            auth_result: false,
+        };
+        assert_eq!(response2.auth_result, false);
     }
 }

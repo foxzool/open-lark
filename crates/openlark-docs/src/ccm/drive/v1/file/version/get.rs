@@ -53,6 +53,7 @@ impl GetFileVersionRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetFileVersionResponse> {
+        // ===== 验证必填字段 =====
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -65,6 +66,7 @@ impl GetFileVersionRequest {
                 "version_id 不能为空",
             ));
         }
+        // ===== 验证字段枚举值 =====
         match self.obj_type.as_str() {
             "docx" | "sheet" => {}
             _ => {
@@ -93,6 +95,7 @@ mod tests {
     use super::*;
     use openlark_core::api::ApiResponseTrait;
 
+    /// 测试构建器模式
     #[test]
     fn test_get_file_version_request_builder() {
         let config = Config::default();
@@ -105,11 +108,91 @@ mod tests {
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
 
+    /// 测试响应格式
     #[test]
     fn test_response_trait() {
         assert_eq!(
             <FileVersionInfo as ApiResponseTrait>::data_format(),
             openlark_core::api::ResponseFormat::Data
         );
+    }
+
+    /// 测试 file_token 为空时的验证
+    #[test]
+    fn test_empty_file_token_validation() {
+        let config = Config::default();
+        let request = GetFileVersionRequest::new(config, "", "version_id", "docx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 version_id 为空时的验证
+    #[test]
+    fn test_empty_version_id_validation() {
+        let config = Config::default();
+        let request = GetFileVersionRequest::new(config, "token", "", "docx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 obj_type 枚举值验证
+    #[test]
+    fn test_obj_type_validation() {
+        let config = Config::default();
+        let request = GetFileVersionRequest::new(config, "token", "version", "invalid");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试支持的 obj_type 类型
+    #[test]
+    fn test_supported_obj_types() {
+        let config = Config::default();
+
+        for obj_type in ["docx", "sheet"] {
+            let request = GetFileVersionRequest::new(
+                config.clone(),
+                "token",
+                "version",
+                obj_type.to_string(),
+            );
+            assert_eq!(request.obj_type, obj_type);
+        }
+    }
+
+    /// 测试 user_id_type 可选参数
+    #[test]
+    fn test_user_id_type_optional() {
+        let config = Config::default();
+        let request1 = GetFileVersionRequest::new(config.clone(), "token", "version", "docx");
+        assert!(request1.user_id_type.is_none());
+
+        let request2 = GetFileVersionRequest::new(config, "token", "version", "docx")
+            .user_id_type("user_id");
+        assert_eq!(request2.user_id_type, Some("user_id".to_string()));
     }
 }

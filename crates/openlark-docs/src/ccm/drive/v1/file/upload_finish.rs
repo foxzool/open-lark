@@ -158,7 +158,7 @@ mod tests {
         let config = Config::default();
         let request = UploadFinishRequest::new(config, "upload_id", 1);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let _rt = tokio::runtime::Runtime::new().unwrap();
         // 只验证请求构建成功，不实际执行
         assert_eq!(request.block_num, 1);
     }

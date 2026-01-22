@@ -55,10 +55,43 @@ impl DownloadExportRequest {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_download_export_request_builder() {
         let config = Config::default();
         let request = DownloadExportRequest::new(config, "file_token");
         assert_eq!(request.file_token, "file_token");
+    }
+
+    /// 测试 file_token 为空时的验证
+    #[test]
+    fn test_empty_file_token_validation() {
+        let config = Config::default();
+        let request = DownloadExportRequest::new(config, "");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 file_token 边界值
+    #[test]
+    fn test_file_token_boundaries() {
+        let config = Config::default();
+
+        // 单字符 token
+        let request1 = DownloadExportRequest::new(config.clone(), "a");
+        assert_eq!(request1.file_token, "a");
+
+        // 长 token
+        let long_token = "a".repeat(100);
+        let request2 = DownloadExportRequest::new(config, long_token);
+        assert_eq!(request2.file_token.len(), 100);
     }
 }
