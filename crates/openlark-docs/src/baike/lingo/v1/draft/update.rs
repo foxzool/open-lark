@@ -102,6 +102,7 @@ mod tests {
     use super::*;
     use crate::baike::lingo::v1::models::{DraftUpdateEntityInput, UserIdType};
 
+    /// 测试构建器模式
     #[test]
     fn test_update_draft_request_builder() {
         let config = Config::default();
@@ -116,6 +117,7 @@ mod tests {
         assert_eq!(request.draft_id, "draft_123");
     }
 
+    /// 测试设置user_id_type
     #[test]
     fn test_update_draft_with_user_id_type() {
         let config = Config::default();
@@ -131,6 +133,7 @@ mod tests {
         assert!(request.user_id_type.is_some());
     }
 
+    /// 测试响应数据结构
     #[test]
     fn test_response_structure() {
         let response = UpdateDraftResp {
@@ -140,8 +143,71 @@ mod tests {
         assert!(response.draft.is_none());
     }
 
+    /// 测试响应trait实现
     #[test]
     fn test_response_trait() {
         assert_eq!(UpdateDraftResp::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试rich_text场景
+    #[test]
+    fn test_update_with_rich_text() {
+        let config = Config::default();
+        let body = DraftUpdateEntityInput {
+            main_keys: vec![],
+            description: None,
+            rich_text: Some("<p>富文本内容</p>".to_string()),
+            ..Default::default()
+        };
+        let request = UpdateDraftRequest::new(config, "draft_456", body);
+
+        assert_eq!(request.draft_id, "draft_456");
+        assert_eq!(request.body.rich_text, Some("<p>富文本内容</p>".to_string()));
+    }
+
+    /// 测试同时设置description和rich_text
+    #[test]
+    fn test_update_with_both_fields() {
+        let config = Config::default();
+        let body = DraftUpdateEntityInput {
+            main_keys: vec![],
+            description: Some("描述".to_string()),
+            rich_text: Some("<p>富文本</p>".to_string()),
+            ..Default::default()
+        };
+        let request = UpdateDraftRequest::new(config, "draft_789", body);
+
+        assert!(request.body.description.is_some());
+        assert!(request.body.rich_text.is_some());
+    }
+
+    /// 测试空main_keys
+    #[test]
+    fn test_empty_main_keys() {
+        let config = Config::default();
+        let body = DraftUpdateEntityInput {
+            main_keys: vec![],
+            description: Some("描述".to_string()),
+            rich_text: None,
+            ..Default::default()
+        };
+        let request = UpdateDraftRequest::new(config, "draft_abc", body);
+
+        assert_eq!(request.body.main_keys.len(), 0);
+    }
+
+    /// 测试非空main_keys
+    #[test]
+    fn test_non_empty_main_keys() {
+        let config = Config::default();
+        let body = DraftUpdateEntityInput {
+            main_keys: vec!["key1".to_string(), "key2".to_string()],
+            description: Some("描述".to_string()),
+            rich_text: None,
+            ..Default::default()
+        };
+        let request = UpdateDraftRequest::new(config, "draft_xyz", body);
+
+        assert_eq!(request.body.main_keys.len(), 2);
     }
 }

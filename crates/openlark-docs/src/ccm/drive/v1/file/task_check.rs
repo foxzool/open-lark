@@ -42,6 +42,7 @@ impl CheckTaskStatusRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CheckTaskStatusResponse> {
+        // ===== 参数校验 =====
         if self.task_id.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "task_id",
@@ -49,10 +50,12 @@ impl CheckTaskStatusRequest {
             ));
         }
 
+        // ===== 构建请求 =====
         let api_endpoint = DriveApi::TaskCheck;
         let api_request = ApiRequest::<CheckTaskStatusResponse>::get(&api_endpoint.to_url())
             .query("task_id", &self.task_id);
 
+        // ===== 发送请求 =====
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "任务检查")
     }
@@ -78,6 +81,7 @@ impl ApiResponseTrait for CheckTaskStatusResponse {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_check_task_status_request_builder() {
         let config = Config::default();
@@ -86,6 +90,7 @@ mod tests {
         assert_eq!(request.task_id, "task_123");
     }
 
+    /// 测试响应数据结构
     #[test]
     fn test_task_check_status_response() {
         let data = CheckTaskStatusResponse {
@@ -95,8 +100,38 @@ mod tests {
         assert_eq!(data.status, "success".to_string());
     }
 
+    /// 测试响应trait实现
     #[test]
     fn test_response_trait_implementation() {
         assert_eq!(CheckTaskStatusResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试process状态
+    #[test]
+    fn test_task_status_process() {
+        let data = CheckTaskStatusResponse {
+            status: "process".to_string(),
+        };
+
+        assert_eq!(data.status, "process");
+    }
+
+    /// 测试fail状态
+    #[test]
+    fn test_task_status_fail() {
+        let data = CheckTaskStatusResponse {
+            status: "fail".to_string(),
+        };
+
+        assert_eq!(data.status, "fail");
+    }
+
+    /// 测试空task_id场景
+    #[test]
+    fn test_empty_task_id() {
+        let config = Config::default();
+        let request = CheckTaskStatusRequest::new(config, "");
+
+        assert_eq!(request.task_id, "");
     }
 }

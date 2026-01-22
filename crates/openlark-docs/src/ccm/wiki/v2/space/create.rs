@@ -77,8 +77,10 @@ impl CreateWikiSpaceRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateWikiSpaceResponse> {
+        // ===== 参数校验 =====
         validate_required!(self.name, "知识空间名称不能为空");
 
+        // ===== 构建请求 =====
         let api_endpoint = WikiApiV2::SpaceCreate;
 
         let request_body = CreateWikiSpaceRequestBody {
@@ -90,6 +92,7 @@ impl CreateWikiSpaceRequest {
             ApiRequest::post(&api_endpoint.to_url())
                 .body(serialize_params(&request_body, "创建知识空间")?);
 
+        // ===== 发送请求 =====
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "创建知识空间")
     }
@@ -107,4 +110,83 @@ pub struct CreateWikiSpaceParams {
     /// 知识空间描述
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// 测试构建器模式 - 创建知识空间
+    #[test]
+    fn test_create_wiki_space_builder() {
+        let config = Config::default();
+        let request = CreateWikiSpaceRequest::new(config)
+            .name("测试知识库")
+            .description("这是一个测试知识库");
+
+        assert_eq!(request.name, "测试知识库");
+        assert_eq!(request.description, Some("这是一个测试知识库".to_string()));
+    }
+
+    /// 测试只有名称的创建请求
+    #[test]
+    fn test_create_wiki_space_name_only() {
+        let config = Config::default();
+        let request = CreateWikiSpaceRequest::new(config)
+            .name("简单知识库");
+
+        assert_eq!(request.name, "简单知识库");
+        assert!(request.description.is_none());
+    }
+
+    /// 测试响应数据结构
+    #[test]
+    fn test_create_wiki_space_response() {
+        let response = CreateWikiSpaceResponse {
+            space: None,
+        };
+
+        assert!(response.space.is_none());
+    }
+
+    /// 测试响应trait实现
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(CreateWikiSpaceResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试空描述场景
+    #[test]
+    fn test_empty_description() {
+        let config = Config::default();
+        let request = CreateWikiSpaceRequest::new(config)
+            .name("知识库")
+            .description("");
+
+        assert_eq!(request.description, Some("".to_string()));
+    }
+
+    /// 测试长描述
+    #[test]
+    fn test_long_description() {
+        let config = Config::default();
+        let long_desc = "这是一个很长的描述，".repeat(10);
+        let request = CreateWikiSpaceRequest::new(config)
+            .name("知识库")
+            .description(&long_desc);
+
+        assert_eq!(request.description.unwrap().len(), long_desc.len());
+    }
+
+    /// 测试已弃用的参数结构
+    #[test]
+    fn test_deprecated_params() {
+        let params = CreateWikiSpaceParams {
+            name: "旧API知识库".to_string(),
+            description: Some("使用旧API创建".to_string()),
+        };
+
+        assert_eq!(params.name, "旧API知识库");
+        assert_eq!(params.description, Some("使用旧API创建".to_string()));
+    }
 }

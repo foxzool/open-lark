@@ -62,6 +62,7 @@ impl SubscribeFileRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<SubscribeFileResponse> {
+        // ===== 参数校验 =====
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -108,6 +109,7 @@ impl SubscribeFileRequest {
             ));
         }
 
+        // ===== 构建请求 =====
         let api_endpoint = DriveApi::SubscribeFile(self.file_token.clone());
         let mut request = ApiRequest::<SubscribeFileResponse>::post(&api_endpoint.to_url());
 
@@ -116,6 +118,7 @@ impl SubscribeFileRequest {
             request = request.query("event_type", et);
         }
 
+        // ===== 发送请求 =====
         let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "订阅文件")
     }
@@ -137,6 +140,7 @@ impl ApiResponseTrait for SubscribeFileResponse {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_subscribe_file_request_builder() {
         let config = Config::default();
@@ -146,13 +150,44 @@ mod tests {
         assert_eq!(request.file_type, "docx");
     }
 
+    /// 测试响应数据结构
     #[test]
     fn test_subscribe_data_structure() {
         let _subscribe_data = SubscribeFileResponse {};
     }
 
+    /// 测试响应trait实现
     #[test]
     fn test_response_trait() {
         assert_eq!(SubscribeFileResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试设置event_type
+    #[test]
+    fn test_subscribe_with_event_type() {
+        let config = Config::default();
+        let request = SubscribeFileRequest::new(config, "folder_token", "folder")
+            .event_type("file.created_in_folder_v1");
+
+        assert_eq!(request.event_type, Some("file.created_in_folder_v1".to_string()));
+    }
+
+    /// 测试folder类型订阅
+    #[test]
+    fn test_subscribe_folder_type() {
+        let config = Config::default();
+        let request = SubscribeFileRequest::new(config, "folder_token", "folder");
+
+        assert_eq!(request.file_type, "folder");
+    }
+
+    /// 测试sheet类型订阅
+    #[test]
+    fn test_subscribe_sheet_type() {
+        let config = Config::default();
+        let request = SubscribeFileRequest::new(config, "sheet_token", "sheet");
+
+        assert_eq!(request.file_type, "sheet");
+        assert!(request.event_type.is_none());
     }
 }

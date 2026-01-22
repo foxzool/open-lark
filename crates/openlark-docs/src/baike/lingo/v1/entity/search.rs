@@ -136,6 +136,17 @@ impl SearchEntityRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<SearchEntityResp> {
+        // ===== 参数校验 =====
+        if let Some(page_size) = self.page_size {
+            if page_size < 1 || page_size > 100 {
+                return Err(openlark_core::error::validation_error(
+                    "page_size",
+                    "page_size 必须在 1~100 之间",
+                ));
+            }
+        }
+
+        // ===== 构建请求 =====
         let body = serde_json::to_value(&self.body).map_err(|e| {
             openlark_core::error::serialization_error("序列化模糊搜索词条请求体失败", Some(e))
         })?;
@@ -155,10 +166,113 @@ impl SearchEntityRequest {
             api_request = api_request.query("user_id_type", user_id_type.as_str());
         }
 
+        // ===== 发送请求 =====
         let response: Response<SearchEntityResp> =
             Transport::request(api_request, &self.config, Some(option)).await?;
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// 测试构建器模式
+    #[test]
+    fn test_search_entity_builder() {
+        let config = Config::default();
+        let request = SearchEntityRequest::new(config)
+            .query("搜索关键词")
+            .page_size(20);
+
+        assert_eq!(request.body.query, Some("搜索关键词".to_string()));
+        assert_eq!(request.page_size, Some(20));
+    }
+
+    /// 测试分类筛选
+    #[test]
+    fn test_classification_filter() {
+        let config = Config::default();
+        let filter = ClassificationFilter {
+            include: Some(vec!["分类1".to_string(), "分类2".to_string()]),
+            exclude: Some(vec!["分类3".to_string()]),
+        };
+
+        let request = SearchEntityRequest::new(config)
+            .classification_filter(filter);
+
+        assert!(request.body.classification_filter.is_some());
+    }
+
+    /// 测试创建来源过滤
+    #[test]
+    fn test_sources_filter() {
+        let config = Config::default();
+        let request = SearchEntityRequest::new(config)
+            .sources(vec![1, 2, 3]);
+
+        assert_eq!(request.body.sources, Some(vec![1, 2, 3]));
+    }
+
+    /// 测试创建者过滤
+    #[test]
+    fn test_creators_filter() {
+        let config = Config::default();
+        let request = SearchEntityRequest::new(config)
+            .creators(vec!["user1".to_string(), "user2".to_string()]);
+
+        assert_eq!(request.body.creators, Some(vec!["user1".to_string(), "user2".to_string()]));
+    }
+
+    /// 测试响应数据结构
+    #[test]
+    fn test_search_entity_response() {
+        let response = SearchEntityResp {
+            entities: vec![],
+            page_token: Some("next_token".to_string()),
+            has_more: Some(true),
+        };
+
+        assert!(response.entities.is_empty());
+        assert_eq!(response.has_more, Some(true));
+    }
+
+    /// 测试响应trait实现
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(SearchEntityResp::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试边界page_size
+    #[test]
+    fn test_page_size_boundaries() {
+        let config = Config::default();
+        let min_request = SearchEntityRequest::new(config.clone()).page_size(1);
+        assert_eq!(min_request.page_size, Some(1));
+
+        let max_request = SearchEntityRequest::new(config).page_size(100);
+        assert_eq!(max_request.page_size, Some(100));
+    }
+
+    /// 测试分页token
+    #[test]
+    fn test_pagination_token() {
+        let config = Config::default();
+        let request = SearchEntityRequest::new(config)
+            .page_token("token_123");
+
+        assert_eq!(request.page_token, Some("token_123".to_string()));
+    }
+
+    /// 测试词库ID
+    #[test]
+    fn test_repo_id() {
+        let config = Config::default();
+        let request = SearchEntityRequest::new(config)
+            .repo_id("repo_abc");
+
+        assert_eq!(request.repo_id, Some("repo_abc".to_string()));
     }
 }

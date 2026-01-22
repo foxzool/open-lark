@@ -62,6 +62,7 @@ impl DeleteSubscribeRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteSubscribeResponse> {
+        // ===== 参数校验 =====
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -108,6 +109,7 @@ impl DeleteSubscribeRequest {
             ));
         }
 
+        // ===== 构建请求 =====
         let api_endpoint = DriveApi::DeleteFileSubscribe(self.file_token.clone());
         let mut request = ApiRequest::<DeleteSubscribeResponse>::delete(&api_endpoint.to_url());
 
@@ -116,6 +118,7 @@ impl DeleteSubscribeRequest {
             request = request.query("event_type", event_type);
         }
 
+        // ===== 发送请求 =====
         let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "订阅文件")
     }
@@ -137,6 +140,7 @@ impl ApiResponseTrait for DeleteSubscribeResponse {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_delete_subscribe_request_builder() {
         let config = Config::default();
@@ -146,8 +150,46 @@ mod tests {
         assert_eq!(request.file_type, "docx");
     }
 
+    /// 测试响应trait实现
     #[test]
     fn test_response_trait() {
         assert_eq!(DeleteSubscribeResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试设置event_type
+    #[test]
+    fn test_delete_subscribe_with_event_type() {
+        let config = Config::default();
+        let request = DeleteSubscribeRequest::new(config, "folder_token", "folder")
+            .event_type("file.created_in_folder_v1");
+
+        assert_eq!(request.event_type, Some("file.created_in_folder_v1".to_string()));
+    }
+
+    /// 测试响应数据结构
+    #[test]
+    fn test_delete_subscribe_response() {
+        let response = DeleteSubscribeResponse::default();
+
+        // DeleteSubscribeResponse 是空结构体，测试默认值
+        let _ = response;
+    }
+
+    /// 测试bitable类型取消订阅
+    #[test]
+    fn test_delete_subscribe_bitable_type() {
+        let config = Config::default();
+        let request = DeleteSubscribeRequest::new(config, "bitable_token", "bitable");
+
+        assert_eq!(request.file_type, "bitable");
+    }
+
+    /// 测试空event_type（非folder类型）
+    #[test]
+    fn test_delete_subscribe_without_event_type() {
+        let config = Config::default();
+        let request = DeleteSubscribeRequest::new(config, "docx_token", "docx");
+
+        assert!(request.event_type.is_none());
     }
 }

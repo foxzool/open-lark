@@ -59,6 +59,7 @@ impl GetMinuteTranscriptRequest {
 
     /// 成功时返回文件二进制内容（支持自定义选项）。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<Response<Vec<u8>>> {
+        // ===== 参数校验 =====
         let minute_token = self.minute_token.ok_or_else(|| {
             openlark_core::error::validation_error("minute_token", "minute_token 不能为空")
         })?;
@@ -80,6 +81,7 @@ impl GetMinuteTranscriptRequest {
             }
         }
 
+        // ===== 构建请求 =====
         let api_endpoint = MinutesApiV1::TranscriptGet(minute_token);
         let mut api_request: ApiRequest<Vec<u8>> = ApiRequest::get(&api_endpoint.to_url());
 
@@ -93,6 +95,105 @@ impl GetMinuteTranscriptRequest {
             api_request = api_request.query("file_format", fmt);
         }
 
+        // ===== 发送请求 =====
         Transport::request(api_request, &self.config, Some(option)).await
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// 测试构建器模式
+    #[test]
+    fn test_get_minute_transcript_builder() {
+        let config = Config::default();
+        let request = GetMinuteTranscriptRequest::new(config)
+            .minute_token("123456789012345678901234")
+            .need_speaker(true)
+            .need_timestamp(true)
+            .file_format("txt");
+
+        assert_eq!(request.minute_token, Some("123456789012345678901234".to_string()));
+        assert_eq!(request.need_speaker, Some(true));
+        assert_eq!(request.need_timestamp, Some(true));
+        assert_eq!(request.file_format, Some("txt".to_string()));
+    }
+
+    /// 测试有效的minute_token
+    #[test]
+    fn test_valid_minute_token() {
+        let config = Config::default();
+        let valid_token = "a".repeat(24);
+        let request = GetMinuteTranscriptRequest::new(config)
+            .minute_token(&valid_token);
+
+        assert_eq!(request.minute_token.unwrap().len(), 24);
+    }
+
+    /// 测试不同file_format
+    #[test]
+    fn test_different_file_formats() {
+        let config = Config::default();
+
+        let txt_request = GetMinuteTranscriptRequest::new(config.clone())
+            .minute_token("123456789012345678901234")
+            .file_format("txt");
+        assert_eq!(txt_request.file_format, Some("txt".to_string()));
+
+        let srt_request = GetMinuteTranscriptRequest::new(config)
+            .minute_token("123456789012345678901234")
+            .file_format("srt");
+        assert_eq!(srt_request.file_format, Some("srt".to_string()));
+    }
+
+    /// 测试need_speaker和need_timestamp
+    #[test]
+    fn test_speaker_and_timestamp_flags() {
+        let config = Config::default();
+        let request = GetMinuteTranscriptRequest::new(config)
+            .minute_token("123456789012345678901234")
+            .need_speaker(false)
+            .need_timestamp(false);
+
+        assert_eq!(request.need_speaker, Some(false));
+        assert_eq!(request.need_timestamp, Some(false));
+    }
+
+    /// 测试空参数场景
+    #[test]
+    fn test_request_without_optional_params() {
+        let config = Config::default();
+        let request = GetMinuteTranscriptRequest::new(config)
+            .minute_token("123456789012345678901234");
+
+        assert!(request.need_speaker.is_none());
+        assert!(request.need_timestamp.is_none());
+        assert!(request.file_format.is_none());
+    }
+
+    /// 测试空minute_token
+    #[test]
+    fn test_empty_minute_token() {
+        let config = Config::default();
+        let request = GetMinuteTranscriptRequest::new(config);
+
+        assert!(request.minute_token.is_none());
+    }
+
+    /// 测试设置所有参数
+    #[test]
+    fn test_request_with_all_params() {
+        let config = Config::default();
+        let request = GetMinuteTranscriptRequest::new(config)
+            .minute_token("123456789012345678901234")
+            .need_speaker(true)
+            .need_timestamp(true)
+            .file_format("srt");
+
+        assert!(request.minute_token.is_some());
+        assert!(request.need_speaker.is_some());
+        assert!(request.need_timestamp.is_some());
+        assert!(request.file_format.is_some());
     }
 }

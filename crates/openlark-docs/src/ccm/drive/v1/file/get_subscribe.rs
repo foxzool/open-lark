@@ -62,6 +62,7 @@ impl GetSubscribeRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetSubscribeResponse> {
+        // ===== 参数校验 =====
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
@@ -108,6 +109,7 @@ impl GetSubscribeRequest {
             ));
         }
 
+        // ===== 构建请求 =====
         let api_endpoint = DriveApi::GetFileSubscribe(self.file_token.clone());
         let mut request = ApiRequest::<GetSubscribeResponse>::get(&api_endpoint.to_url());
 
@@ -116,6 +118,7 @@ impl GetSubscribeRequest {
             request = request.query("event_type", et);
         }
 
+        // ===== 发送请求 =====
         let response = Transport::request(request, &self.config, Some(option)).await?;
         extract_response_data(response, "订阅文件")
     }
@@ -138,6 +141,7 @@ impl ApiResponseTrait for GetSubscribeResponse {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_get_subscribe_request_builder() {
         let config = Config::default();
@@ -148,8 +152,48 @@ mod tests {
         assert!(request.event_type.is_none());
     }
 
+    /// 测试响应trait实现
     #[test]
     fn test_response_trait() {
         assert_eq!(GetSubscribeResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试设置event_type
+    #[test]
+    fn test_get_subscribe_with_event_type() {
+        let config = Config::default();
+        let request = GetSubscribeRequest::new(config, "folder_token", "folder")
+            .event_type("file.created_in_folder_v1");
+
+        assert_eq!(request.event_type, Some("file.created_in_folder_v1".to_string()));
+    }
+
+    /// 测试响应数据结构
+    #[test]
+    fn test_subscribe_response_data() {
+        let response = GetSubscribeResponse {
+            is_subscribe: true,
+        };
+
+        assert_eq!(response.is_subscribe, true);
+    }
+
+    /// 测试未订阅状态
+    #[test]
+    fn test_not_subscribed_status() {
+        let response = GetSubscribeResponse {
+            is_subscribe: false,
+        };
+
+        assert!(!response.is_subscribe);
+    }
+
+    /// 测试folder类型查询
+    #[test]
+    fn test_get_subscribe_folder_type() {
+        let config = Config::default();
+        let request = GetSubscribeRequest::new(config, "folder_token", "folder");
+
+        assert_eq!(request.file_type, "folder");
     }
 }
