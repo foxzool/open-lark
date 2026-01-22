@@ -6,14 +6,12 @@
 //!   为避免为 200+ API 手写方法，这里先提供“模块级链式入口 + Config 透传”。
 //! - 具体 API 调用仍使用各 `*RequestBuilder/*Request` 的 `new(config)` / `execute(...)`。
 
-use std::sync::Arc;
-
 use openlark_core::config::Config;
 
 /// Docs 链式入口：`docs.ccm.drive...` / `docs.bitable...`（按 feature 裁剪）
 #[derive(Debug, Clone)]
 pub struct DocsClient {
-    config: Arc<Config>,
+    config: Config,
 
     #[cfg(feature = "ccm-core")]
     pub ccm: CcmClient,
@@ -30,7 +28,6 @@ pub struct DocsClient {
 
 impl DocsClient {
     pub fn new(config: Config) -> Self {
-        let config = Arc::new(config);
         Self {
             config: config.clone(),
             #[cfg(feature = "ccm-core")]
@@ -53,7 +50,7 @@ impl DocsClient {
 #[cfg(feature = "ccm-core")]
 #[derive(Debug, Clone)]
 pub struct CcmClient {
-    config: Arc<Config>,
+    config: Config,
 
     pub ccm_doc: CcmDocClient,
     pub ccm_docs: CcmDocsClient,
@@ -69,7 +66,7 @@ pub struct CcmClient {
 
 #[cfg(feature = "ccm-core")]
 impl CcmClient {
-    fn new(config: Arc<Config>) -> Self {
+    fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
             ccm_doc: CcmDocClient::new(config.clone()),
@@ -95,11 +92,11 @@ macro_rules! impl_ccm_project_client {
     ($name:ident, $service:path) => {
         #[derive(Debug, Clone)]
         pub struct $name {
-            config: Arc<Config>,
+            config: Config,
         }
 
         impl $name {
-            fn new(config: Arc<Config>) -> Self {
+            fn new(config: Config) -> Self {
                 Self { config }
             }
 
@@ -108,7 +105,7 @@ macro_rules! impl_ccm_project_client {
             }
 
             pub fn service(&self) -> $service {
-                <$service>::new((*self.config).clone())
+                <$service>::new(self.config.clone())
             }
         }
     };
@@ -145,12 +142,12 @@ impl_ccm_project_client!(WikiClient, crate::ccm::wiki::WikiService);
 #[cfg(any(feature = "base", feature = "bitable"))]
 #[derive(Debug, Clone)]
 pub struct BaseClient {
-    config: Arc<Config>,
+    config: Config,
 }
 
 #[cfg(any(feature = "base", feature = "bitable"))]
 impl BaseClient {
-    fn new(config: Arc<Config>) -> Self {
+    fn new(config: Config) -> Self {
         Self { config }
     }
 
@@ -159,12 +156,12 @@ impl BaseClient {
     }
 
     pub fn service(&self) -> crate::base::BaseService {
-        crate::base::BaseService::new((*self.config).clone())
+        crate::base::BaseService::new(self.config.clone())
     }
 
     #[cfg(feature = "bitable")]
     pub fn bitable(&self) -> crate::base::bitable::BitableService {
-        crate::base::bitable::BitableService::new((*self.config).clone())
+        crate::base::bitable::BitableService::new(self.config.clone())
     }
 }
 
@@ -172,12 +169,12 @@ impl BaseClient {
 #[cfg(any(feature = "baike", feature = "lingo"))]
 #[derive(Debug, Clone)]
 pub struct BaikeClient {
-    config: Arc<Config>,
+    config: Config,
 }
 
 #[cfg(any(feature = "baike", feature = "lingo"))]
 impl BaikeClient {
-    fn new(config: Arc<Config>) -> Self {
+    fn new(config: Config) -> Self {
         Self { config }
     }
 
@@ -187,7 +184,7 @@ impl BaikeClient {
 
     #[cfg(feature = "baike")]
     pub fn service(&self) -> crate::baike::BaikeService {
-        crate::baike::BaikeService::new((*self.config).clone())
+        crate::baike::BaikeService::new(self.config.clone())
     }
 }
 
@@ -195,12 +192,12 @@ impl BaikeClient {
 #[cfg(feature = "minutes")]
 #[derive(Debug, Clone)]
 pub struct MinutesClient {
-    config: Arc<Config>,
+    config: Config,
 }
 
 #[cfg(feature = "minutes")]
 impl MinutesClient {
-    fn new(config: Arc<Config>) -> Self {
+    fn new(config: Config) -> Self {
         Self { config }
     }
 
@@ -209,6 +206,6 @@ impl MinutesClient {
     }
 
     pub fn service(&self) -> crate::minutes::MinutesService {
-        crate::minutes::MinutesService::new((*self.config).clone())
+        crate::minutes::MinutesService::new(self.config.clone())
     }
 }

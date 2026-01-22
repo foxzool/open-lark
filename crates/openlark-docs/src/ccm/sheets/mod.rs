@@ -138,12 +138,8 @@ pub mod v3;
 #[cfg(any(feature = "ccm-sheets", feature = "ccm-sheets-v3"))]
 pub use v3::*;
 
-// V2模块作为实验性功能，单独启用
-#[cfg(feature = "ccm-sheets-v2")]
-pub mod v2;
-
-#[cfg(feature = "ccm-sheets-v2")]
-pub use v2::*;
+// V2模块已弃用，已移除 feature 支持
+// 如需使用 v2 功能，请联系维护团队评估迁移需求
 
 use openlark_core::config::Config;
 
@@ -172,11 +168,6 @@ impl SheetsService {
         crate::ccm::sheets::v3::SheetsService::new(self.config.clone())
     }
 
-    /// 获取V2版本API（实验性）
-    #[cfg(feature = "ccm-sheets-v2")]
-    pub fn v2(&self) -> crate::ccm::sheets::v2::SheetsV2Service {
-        crate::ccm::sheets::v2::SheetsV2Service::new(self.config.clone())
-    }
 }
 
 impl openlark_core::trait_system::Service for SheetsService {
