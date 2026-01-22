@@ -13,18 +13,11 @@ pub use crate::models::{
     ShareInfo, UserInfo, VersionInfo,
 };
 
-// 重新导出服务类型（如果启用了相应功能）
-#[cfg(feature = "ccm-core")]
-pub use crate::ccm::CcmService;
-
-#[cfg(feature = "base")]
-pub use crate::base::BaseService;
-
-#[cfg(feature = "baike")]
-pub use crate::baike::BaikeService;
-
-#[cfg(feature = "minutes")]
-pub use crate::minutes::MinutesService;
-
-#[cfg(feature = "docx")]
-pub use crate::ccm::docx::DocxService;
+// 已移除 Service 的 prelude 导出，统一使用 DocsClient 作为唯一入口
+// 如需访问特定 Service，可通过完整路径访问：
+// - CcmService: crate::ccm::CcmService
+// - BaseService: crate::base::BaseService
+// - BitableService: crate::base::bitable::BitableService
+// - BaikeService: crate::baike::BaikeService
+// - MinutesService: crate::minutes::MinutesService
+// - WikiService: crate::ccm::wiki::WikiService
