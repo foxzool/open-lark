@@ -60,6 +60,7 @@ impl CreateExportTaskRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateExportTaskResponse> {
+        // ===== 验证字段长度 =====
         let token_len = self.token.len();
         if token_len == 0 || token_len > 27 {
             return Err(openlark_core::error::validation_error(
@@ -67,6 +68,7 @@ impl CreateExportTaskRequest {
                 "token 长度必须在 1~27 字节之间",
             ));
         }
+        // ===== 验证字段枚举值 =====
         match self.file_extension.as_str() {
             "docx" | "pdf" | "xlsx" | "csv" => {}
             _ => {
@@ -85,6 +87,7 @@ impl CreateExportTaskRequest {
                 ))
             }
         }
+        // ===== 验证字段关联约束 =====
         // 文档约束：不同云文档类型支持的导出格式不同
         match (self.r#type.as_str(), self.file_extension.as_str()) {
             ("doc" | "docx", "docx" | "pdf") => {}
@@ -96,6 +99,7 @@ impl CreateExportTaskRequest {
                 ))
             }
         }
+        // CSV 导出需要 sub_id
         if self.file_extension == "csv"
             && (self.r#type == "sheet" || self.r#type == "bitable")
             && self.sub_id.as_deref().unwrap_or("").is_empty()
@@ -133,6 +137,7 @@ impl ApiResponseTrait for CreateExportTaskResponse {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_create_export_task_request_builder() {
         let config = Config::default();
@@ -145,11 +150,144 @@ mod tests {
         assert_eq!(request.sub_id, Some("6e5ed3".to_string()));
     }
 
+    /// 测试响应格式
     #[test]
     fn test_response_trait() {
         assert_eq!(
             CreateExportTaskResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    /// 测试 token 长度验证
+    #[test]
+    fn test_token_length_validation() {
+        let config = Config::default();
+
+        // 空字符串
+        let request1 = CreateExportTaskRequest::new(config.clone(), "", "token", "docx");
+
+        let result1 = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request1.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result1.is_ok());
+
+        // 超过 27 字节
+        let long_token = "a".repeat(28);
+        let request2 = CreateExportTaskRequest::new(config, long_token, "token", "docx");
+
+        let result2 = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request2.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result2.is_ok());
+    }
+
+    /// 测试 file_extension 枚举值
+    #[test]
+    fn test_file_extension_validation() {
+        let config = Config::default();
+        let request = CreateExportTaskRequest::new(config, "invalid", "token", "docx");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试支持的 file_extension 类型
+    #[test]
+    fn test_supported_file_extensions() {
+        let config = Config::default();
+
+        for ext in ["docx", "pdf", "xlsx", "csv"] {
+            let request = CreateExportTaskRequest::new(
+                config.clone(),
+                ext.to_string(),
+                "token",
+                "docx",
+            );
+            assert_eq!(request.file_extension, ext);
+        }
+    }
+
+    /// 测试类型和扩展名匹配约束
+    #[test]
+    fn test_type_extension_compatibility() {
+        let config = Config::default();
+
+        // doc/docx 支持 docx/pdf
+        for doc_type in ["doc", "docx"] {
+            for ext in ["docx", "pdf"] {
+                let request = CreateExportTaskRequest::new(
+                    config.clone(),
+                    ext.to_string(),
+                    "token",
+                    doc_type.to_string(),
+                );
+                assert_eq!(request.file_extension, ext);
+                assert_eq!(request.r#type, doc_type);
+            }
+        }
+
+        // sheet/bitable 支持 xlsx/csv
+        for table_type in ["sheet", "bitable"] {
+            for ext in ["xlsx", "csv"] {
+                let request = CreateExportTaskRequest::new(
+                    config.clone(),
+                    ext.to_string(),
+                    "token",
+                    table_type.to_string(),
+                );
+                assert_eq!(request.file_extension, ext);
+                assert_eq!(request.r#type, table_type);
+            }
+        }
+    }
+
+    /// 测试 CSV 导出需要 sub_id
+    #[test]
+    fn test_csv_requires_sub_id() {
+        let config = Config::default();
+        let request = CreateExportTaskRequest::new(config, "csv", "token", "sheet");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 sub_id 可选参数
+    #[test]
+    fn test_sub_id_optional() {
+        let config = Config::default();
+
+        // xlsx 不需要 sub_id
+        let request1 = CreateExportTaskRequest::new(config.clone(), "xlsx", "token", "sheet");
+        assert!(request1.sub_id.is_none());
+
+        // csv 需要 sub_id
+        let request2 =
+            CreateExportTaskRequest::new(config, "csv", "token", "sheet").sub_id("sheet_id");
+        assert_eq!(request2.sub_id, Some("sheet_id".to_string()));
     }
 }

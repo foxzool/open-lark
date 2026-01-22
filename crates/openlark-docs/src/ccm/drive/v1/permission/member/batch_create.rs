@@ -306,7 +306,7 @@ mod tests {
     #[test]
     fn test_invalid_perm() {
         let config = Config::default();
-        let mut member = PermissionMember::new("openid", "ou_123", "invalid_perm");
+        let member = PermissionMember::new("openid", "ou_123", "invalid_perm");
         let request =
             BatchCreatePermissionMemberRequest::new(config, "file_token", "docx", vec![member]);
         let rt = tokio::runtime::Runtime::new().unwrap();

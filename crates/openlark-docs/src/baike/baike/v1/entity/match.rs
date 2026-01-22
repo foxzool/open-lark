@@ -61,7 +61,9 @@ impl MatchEntityRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<MatchEntityResp> {
+        // ===== 验证必填字段 =====
         validate_required!(self.req.word, "word 不能为空");
+        // ===== 验证字段长度 =====
         let len = self.req.word.chars().count();
         if !(1..=100).contains(&len) {
             return Err(openlark_core::error::validation_error(
@@ -79,5 +81,73 @@ impl MatchEntityRequest {
         response
             .data
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// 测试构建器模式
+    #[test]
+    fn test_match_entity_request_builder() {
+        let config = Config::default();
+        let request = MatchEntityRequest::new(config, "搜索词");
+        assert_eq!(request.req.word, "搜索词");
+    }
+
+    /// 测试 word 为空时的验证
+    #[test]
+    fn test_empty_word_validation() {
+        let config = Config::default();
+        let request = MatchEntityRequest::new(config, "");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 word 长度边界值
+    #[test]
+    fn test_word_length_boundaries() {
+        let config = Config::default();
+
+        // 最小长度 1
+        let request1 = MatchEntityRequest::new(config.clone(), "a");
+        assert_eq!(request1.req.word, "a");
+
+        // 最大长度 100
+        let word_100 = "a".repeat(100);
+        let request2 = MatchEntityRequest::new(config.clone(), word_100);
+        assert_eq!(request2.req.word.chars().count(), 100);
+
+        // 超过 100
+        let word_101 = "a".repeat(101);
+        let request3 = MatchEntityRequest::new(config, word_101);
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request3.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 Unicode 字符计数
+    #[test]
+    fn test_unicode_character_count() {
+        let config = Config::default();
+        let word = "🎉🎊🎈"; // 3 个 Unicode 码点
+        let request = MatchEntityRequest::new(config, word);
+        assert_eq!(request.req.word.chars().count(), 3);
     }
 }

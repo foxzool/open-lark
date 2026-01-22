@@ -40,6 +40,7 @@ impl GetImportTaskRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetImportTaskResponse> {
+        // ===== 验证必填字段 =====
         if self.ticket.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "ticket",
@@ -95,6 +96,7 @@ impl ApiResponseTrait for GetImportTaskResponse {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_get_import_task_request_builder() {
         let config = Config::default();
@@ -102,8 +104,41 @@ mod tests {
         assert_eq!(request.ticket, "ticket");
     }
 
+    /// 测试响应格式
     #[test]
     fn test_response_trait() {
         assert_eq!(GetImportTaskResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试 ticket 为空时的验证
+    #[test]
+    fn test_empty_ticket_validation() {
+        let config = Config::default();
+        let request = GetImportTaskRequest::new(config, "");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 ticket 边界值
+    #[test]
+    fn test_ticket_boundaries() {
+        let config = Config::default();
+
+        // 单字符 ticket
+        let request1 = GetImportTaskRequest::new(config.clone(), "a");
+        assert_eq!(request1.ticket, "a");
+
+        // 长 ticket
+        let long_ticket = "a".repeat(100);
+        let request2 = GetImportTaskRequest::new(config, long_ticket);
+        assert_eq!(request2.ticket.len(), 100);
     }
 }

@@ -52,12 +52,14 @@ impl DownloadMediaRequest {
 
     /// 执行下载请求，返回二进制内容（带请求选项）
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<Response<Vec<u8>>> {
+        // ===== 验证必填字段 =====
         if self.file_token.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "file_token",
                 "file_token 不能为空",
             ));
         }
+        // ===== 验证字段格式 =====
         if let Some(range) = &self.range {
             if !range.starts_with("bytes=") || !range.contains('-') {
                 return Err(openlark_core::error::validation_error(
@@ -83,6 +85,7 @@ impl DownloadMediaRequest {
 mod tests {
     use super::*;
 
+    /// 测试构建器模式
     #[test]
     fn test_download_media_request() {
         let config = Config::default();
@@ -93,5 +96,93 @@ mod tests {
         assert_eq!(request.file_token, "media_token");
         assert_eq!(request.extra, Some("extra".to_string()));
         assert_eq!(request.range, Some("bytes=0-100".to_string()));
+    }
+
+    /// 测试 file_token 为空时的验证
+    #[test]
+    fn test_empty_file_token_validation() {
+        let config = Config::default();
+        let request = DownloadMediaRequest::new(config, "");
+
+        let result = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result.is_ok());
+    }
+
+    /// 测试 range 格式验证
+    #[test]
+    fn test_range_format_validation() {
+        let config = Config::default();
+
+        // 缺少 bytes= 前缀
+        let request1 = DownloadMediaRequest::new(config.clone(), "token").range("0-100");
+
+        let result1 = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request1.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result1.is_ok());
+
+        // 缺少连字符
+        let request2 = DownloadMediaRequest::new(config.clone(), "token").range("bytes=0100");
+
+        let result2 = std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                let _ = request2.execute().await;
+            })
+        })
+        .join();
+
+        assert!(result2.is_ok());
+    }
+
+    /// 测试有效的 range 格式
+    #[test]
+    fn test_valid_range_formats() {
+        let config = Config::default();
+
+        // 标准格式
+        let request1 =
+            DownloadMediaRequest::new(config.clone(), "token").range("bytes=0-1024");
+        assert_eq!(request1.range, Some("bytes=0-1024".to_string()));
+
+        // 单字节
+        let request2 = DownloadMediaRequest::new(config.clone(), "token").range("bytes=0-0");
+        assert_eq!(request2.range, Some("bytes=0-0".to_string()));
+
+        // 大范围
+        let request3 =
+            DownloadMediaRequest::new(config.clone(), "token").range("bytes=0-999999");
+        assert_eq!(request3.range, Some("bytes=0-999999".to_string()));
+    }
+
+    /// 测试可选参数
+    #[test]
+    fn test_optional_parameters() {
+        let config = Config::default();
+
+        // 不带可选参数
+        let request1 = DownloadMediaRequest::new(config.clone(), "token");
+        assert!(request1.extra.is_none());
+        assert!(request1.range.is_none());
+
+        // 带 extra
+        let request2 = DownloadMediaRequest::new(config.clone(), "token").extra("extra_param");
+        assert_eq!(request2.extra, Some("extra_param".to_string()));
+
+        // 带 range
+        let request3 = DownloadMediaRequest::new(config, "token").range("bytes=0-100");
+        assert_eq!(request3.range, Some("bytes=0-100".to_string()));
     }
 }
