@@ -47,6 +47,7 @@ impl GetMinuteStatisticsRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetMinuteStatisticsResponse> {
+        // ===== 参数校验 =====
         let minute_token = self.minute_token.ok_or_else(|| {
             openlark_core::error::validation_error("minute_token", "minute_token 不能为空")
         })?;
@@ -68,6 +69,7 @@ impl GetMinuteStatisticsRequest {
             }
         }
 
+        // ===== 构建请求 =====
         let api_endpoint = MinutesApiV1::StatisticsGet(minute_token);
         let mut api_request: ApiRequest<GetMinuteStatisticsResponse> =
             ApiRequest::get(&api_endpoint.to_url());
@@ -76,8 +78,129 @@ impl GetMinuteStatisticsRequest {
             api_request = api_request.query("user_id_type", user_id_type);
         }
 
+        // ===== 发送请求 =====
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// 测试构建器模式
+    #[test]
+    fn test_get_minute_statistics_builder() {
+        let config = Config::default();
+        let request = GetMinuteStatisticsRequest::new(config)
+            .minute_token("123456789012345678901234")
+            .user_id_type("open_id");
+
+        assert_eq!(request.minute_token, Some("123456789012345678901234".to_string()));
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+    }
+
+    /// 测试响应数据结构
+    #[test]
+    fn test_minute_statistics_structure() {
+        let stats = MinuteStatistics {
+            user_view_count: "10".to_string(),
+            page_view_count: "20".to_string(),
+            user_view_list: vec![
+                UserViewDetail {
+                    user_id: "user_123".to_string(),
+                    view_time: "1679284285000".to_string(),
+                },
+            ],
+        };
+
+        assert_eq!(stats.user_view_count, "10");
+        assert_eq!(stats.page_view_count, "20");
+        assert_eq!(stats.user_view_list.len(), 1);
+    }
+
+    /// 测试响应trait实现
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(
+            GetMinuteStatisticsResponse::data_format(),
+            ResponseFormat::Data
+        );
+    }
+
+    /// 测试UserViewDetail结构
+    #[test]
+    fn test_user_view_detail() {
+        let detail = UserViewDetail {
+            user_id: "user_abc".to_string(),
+            view_time: "1679284285000".to_string(),
+        };
+
+        assert_eq!(detail.user_id, "user_abc");
+        assert_eq!(detail.view_time, "1679284285000");
+    }
+
+    /// 测试有效的minute_token长度
+    #[test]
+    fn test_valid_minute_token_length() {
+        let config = Config::default();
+        let valid_token = "a".repeat(24);
+        let request = GetMinuteStatisticsRequest::new(config)
+            .minute_token(&valid_token);
+
+        assert_eq!(request.minute_token.unwrap().len(), 24);
+    }
+
+    /// 测试不同user_id_type
+    #[test]
+    fn test_different_user_id_types() {
+        let config = Config::default();
+
+        let union_id_request = GetMinuteStatisticsRequest::new(config.clone())
+            .user_id_type("union_id");
+        assert_eq!(union_id_request.user_id_type, Some("union_id".to_string()));
+
+        let user_id_request = GetMinuteStatisticsRequest::new(config)
+            .user_id_type("user_id");
+        assert_eq!(user_id_request.user_id_type, Some("user_id".to_string()));
+    }
+
+    /// 测试空查看列表
+    #[test]
+    fn test_empty_user_view_list() {
+        let stats = MinuteStatistics {
+            user_view_count: "0".to_string(),
+            page_view_count: "0".to_string(),
+            user_view_list: vec![],
+        };
+
+        assert!(stats.user_view_list.is_empty());
+        assert_eq!(stats.user_view_count, "0");
+    }
+
+    /// 测试多个查看记录
+    #[test]
+    fn test_multiple_user_views() {
+        let stats = MinuteStatistics {
+            user_view_count: "3".to_string(),
+            page_view_count: "10".to_string(),
+            user_view_list: vec![
+                UserViewDetail {
+                    user_id: "user1".to_string(),
+                    view_time: "1000".to_string(),
+                },
+                UserViewDetail {
+                    user_id: "user2".to_string(),
+                    view_time: "2000".to_string(),
+                },
+                UserViewDetail {
+                    user_id: "user3".to_string(),
+                    view_time: "3000".to_string(),
+                },
+            ],
+        };
+
+        assert_eq!(stats.user_view_list.len(), 3);
     }
 }
 

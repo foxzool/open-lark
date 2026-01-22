@@ -79,13 +79,12 @@ impl ListWikiSpaceNodesRequest {
         params: Option<ListWikiSpaceNodesParams>,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListWikiSpaceNodesResponse> {
-        // 验证必填字段
+        // ===== 参数校验 =====
         validate_required!(self.space_id, "知识空间ID不能为空");
 
-        // 使用新的enum+builder系统生成API端点
+        // ===== 构建请求 =====
         let api_endpoint = WikiApiV2::SpaceNodeList(self.space_id.clone());
 
-        // 创建API请求 - 使用类型安全的URL生成
         let mut api_request: ApiRequest<ListWikiSpaceNodesResponse> =
             ApiRequest::get(&api_endpoint.to_url());
 
@@ -102,8 +101,113 @@ impl ListWikiSpaceNodesRequest {
             }
         }
 
-        // 发送请求
+        // ===== 发送请求 =====
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取知识空间节点列表")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// 测试构建器模式
+    #[test]
+    fn test_list_wiki_space_nodes_builder() {
+        let config = Config::default();
+        let request = ListWikiSpaceNodesRequest::new(config)
+            .space_id("wiki_space_123");
+
+        assert_eq!(request.space_id, "wiki_space_123");
+    }
+
+    /// 测试带参数的请求
+    #[test]
+    fn test_list_with_params() {
+        let config = Config::default();
+        let request = ListWikiSpaceNodesRequest::new(config)
+            .space_id("wiki_space_123");
+
+        let params = ListWikiSpaceNodesParams {
+            parent_node_token: Some("parent_node".to_string()),
+            page_size: Some(20),
+            page_token: Some("token123".to_string()),
+        };
+
+        assert_eq!(params.parent_node_token, Some("parent_node".to_string()));
+        assert_eq!(params.page_size, Some(20));
+    }
+
+    /// 测试响应数据结构
+    #[test]
+    fn test_list_wiki_space_nodes_response() {
+        let response = ListWikiSpaceNodesResponse {
+            items: vec![],
+            page_token: Some("next_token".to_string()),
+            has_more: Some(true),
+        };
+
+        assert!(response.items.is_empty());
+        assert_eq!(response.has_more, Some(true));
+    }
+
+    /// 测试响应trait实现
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(ListWikiSpaceNodesResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试空参数场景
+    #[test]
+    fn test_list_without_params() {
+        let config = Config::default();
+        let _request = ListWikiSpaceNodesRequest::new(config)
+            .space_id("wiki_space_123");
+
+        // 不传入参数，获取所有节点
+        let _params: Option<ListWikiSpaceNodesParams> = None;
+    }
+
+    /// 测试只指定父节点
+    #[test]
+    fn test_list_with_parent_only() {
+        let params = ListWikiSpaceNodesParams {
+            parent_node_token: Some("parent_node".to_string()),
+            page_size: None,
+            page_token: None,
+        };
+
+        assert_eq!(params.parent_node_token, Some("parent_node".to_string()));
+        assert!(params.page_size.is_none());
+        assert!(params.page_token.is_none());
+    }
+
+    /// 测试分页参数
+    #[test]
+    fn test_pagination_params() {
+        let config = Config::default();
+        let _request = ListWikiSpaceNodesRequest::new(config)
+            .space_id("wiki_space_123");
+
+        let params = ListWikiSpaceNodesParams {
+            parent_node_token: None,
+            page_size: Some(50),
+            page_token: Some("page_token_abc".to_string()),
+        };
+
+        assert_eq!(params.page_size, Some(50));
+        assert_eq!(params.page_token, Some("page_token_abc".to_string()));
+    }
+
+    /// 测试无更多数据场景
+    #[test]
+    fn test_no_more_data() {
+        let response = ListWikiSpaceNodesResponse {
+            items: vec![],
+            page_token: None,
+            has_more: Some(false),
+        };
+
+        assert!(!response.has_more.unwrap());
     }
 }

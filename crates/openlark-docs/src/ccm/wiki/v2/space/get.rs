@@ -59,17 +59,66 @@ impl GetWikiSpaceRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetWikiSpaceResponse> {
-        // 验证必填字段
+        // ===== 参数校验 =====
         validate_required!(self.space_id, "知识空间ID不能为空");
 
-        // 使用新的enum+builder系统生成API端点
+        // ===== 构建请求 =====
         let api_endpoint = WikiApiV2::SpaceGet(self.space_id.clone());
 
-        // 创建API请求 - 使用类型安全的URL生成
         let api_request: ApiRequest<GetWikiSpaceResponse> = ApiRequest::get(&api_endpoint.to_url());
 
-        // 发送请求
+        // ===== 发送请求 =====
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取知识空间信息")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// 测试构建器模式
+    #[test]
+    fn test_get_wiki_space_builder() {
+        let config = Config::default();
+        let request = GetWikiSpaceRequest::new(config)
+            .space_id("wiki_space_123");
+
+        assert_eq!(request.space_id, "wiki_space_123");
+    }
+
+    /// 测试响应数据结构
+    #[test]
+    fn test_get_wiki_space_response() {
+        let response = GetWikiSpaceResponse {
+            space: None,
+        };
+
+        assert!(response.space.is_none());
+    }
+
+    /// 测试响应trait实现
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(GetWikiSpaceResponse::data_format(), ResponseFormat::Data);
+    }
+
+    /// 测试空space_id
+    #[test]
+    fn test_empty_space_id() {
+        let config = Config::default();
+        let request = GetWikiSpaceRequest::new(config);
+
+        assert_eq!(request.space_id, "");
+    }
+
+    /// 测试特殊字符space_id
+    #[test]
+    fn test_special_characters_space_id() {
+        let config = Config::default();
+        let request = GetWikiSpaceRequest::new(config)
+            .space_id("wiki_123-456_abc");
+
+        assert_eq!(request.space_id, "wiki_123-456_abc");
     }
 }

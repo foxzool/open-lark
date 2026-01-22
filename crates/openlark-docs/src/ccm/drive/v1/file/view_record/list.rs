@@ -138,6 +138,7 @@ pub async fn get_file_view_records(
 
     option: Option<openlark_core::req_option::RequestOption>,
 ) -> SDKResult<GetFileViewRecordsResponse> {
+    // ===== 参数校验 =====
     if request.file_token.is_empty() {
         return Err(openlark_core::error::validation_error(
             "file_token",
@@ -170,13 +171,10 @@ pub async fn get_file_view_records(
         ));
     }
 
-    // 创建API请求
-
+    // ===== 构建请求 =====
     let url = DriveApi::ListFileViewRecords(request.file_token.clone()).to_url();
 
     let mut api_request: ApiRequest<GetFileViewRecordsResponse> = ApiRequest::get(&url);
-
-    // 添加查询参数
 
     api_request = api_request.query("page_size", &request.page_size.to_string());
 
@@ -201,10 +199,7 @@ pub async fn get_file_view_records(
         api_request = api_request.query("viewer_id_type", viewer_id_type);
     }
 
-    // 如果有请求选项，应用它们
-
-    // 发送请求
-
+    // ===== 发送请求 =====
     let response = Transport::request(api_request, config, option).await?;
 
     extract_response_data(response, "获取文件访问记录")
@@ -215,6 +210,7 @@ mod tests {
 
     use super::*;
 
+    /// 测试构建器模式
     #[test]
 
     fn test_get_file_view_records_request_builder() {
@@ -233,6 +229,7 @@ mod tests {
         assert_eq!(request.viewer_id_type, Some("open_id".to_string()));
     }
 
+    /// 测试访问记录数据结构
     #[test]
 
     fn test_view_record_structure() {
@@ -251,6 +248,7 @@ mod tests {
         assert_eq!(record.last_view_time, "1679284285".to_string());
     }
 
+    /// 测试响应trait实现
     #[test]
 
     fn test_response_trait() {
@@ -258,5 +256,63 @@ mod tests {
             GetFileViewRecordsResponse::data_format(),
             ResponseFormat::Data
         );
+    }
+
+    /// 测试不同file_type
+    #[test]
+    fn test_different_file_types() {
+        let sheet_request = GetFileViewRecordsRequest::new("sheet_token", "sheet", 20);
+        assert_eq!(sheet_request.file_type, "sheet");
+
+        let wiki_request = GetFileViewRecordsRequest::new("wiki_token", "wiki", 15);
+        assert_eq!(wiki_request.file_type, "wiki");
+    }
+
+    /// 测试边界page_size
+    #[test]
+    fn test_page_size_boundaries() {
+        let min_request = GetFileViewRecordsRequest::new("file_token", "docx", 1);
+        assert_eq!(min_request.page_size, 1);
+
+        let max_request = GetFileViewRecordsRequest::new("file_token", "docx", 50);
+        assert_eq!(max_request.page_size, 50);
+    }
+
+    /// 测试不同viewer_id_type
+    #[test]
+    fn test_viewer_id_types() {
+        let user_id_request = GetFileViewRecordsRequest::new("file_token", "docx", 10)
+            .viewer_id_type("user_id");
+        assert_eq!(user_id_request.viewer_id_type, Some("user_id".to_string()));
+
+        let union_id_request = GetFileViewRecordsRequest::new("file_token", "docx", 10)
+            .viewer_id_type("union_id");
+        assert_eq!(union_id_request.viewer_id_type, Some("union_id".to_string()));
+    }
+
+    /// 测试响应分页信息
+    #[test]
+    fn test_response_pagination() {
+        let response = GetFileViewRecordsResponse {
+            items: vec![],
+            page_token: Some("next_token".to_string()),
+            has_more: true,
+        };
+
+        assert!(response.has_more);
+        assert_eq!(response.page_token, Some("next_token".to_string()));
+    }
+
+    /// 测试无更多数据场景
+    #[test]
+    fn test_no_more_data() {
+        let response = GetFileViewRecordsResponse {
+            items: vec![],
+            page_token: None,
+            has_more: false,
+        };
+
+        assert!(!response.has_more);
+        assert!(response.page_token.is_none());
     }
 }
