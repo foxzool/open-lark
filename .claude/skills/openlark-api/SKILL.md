@@ -1,14 +1,7 @@
 ---
 name: openlark-api
 description: OpenLark 项目 API 接口实现规范（速查）。用于添加/重构飞书开放平台 API：确定落盘路径、实现 Body/Response + Builder(Request)、对齐 endpoints 常量/enum、补齐 mod.rs 导出，并明确"调用服务端 API"的方法签名/RequestOption 传递约定。触发关键词：API 接口、API 文件、飞书 API、添加 API、调用服务端 API
-allowed-tools:
-  - Bash
-  - Read
-  - Write
-  - Edit
-  - Glob
-  - LspDocumentSymbols
-  - LspDiagnostics
+allowed-tools: Bash, Read, Grep, Glob, Edit
 ---
 
 # OpenLark API 接口实现规范（速查）
@@ -24,7 +17,7 @@ allowed-tools:
 4) **写代码**：`Body/Response` + Builder（`execute/send`）+ 端点常量/enum
    - **必须支持 RequestOption**：用于 `user_access_token` / `tenant_key` / 自定义 header
 5) **补导出**：在 `mod.rs` 中 `pub mod ...` / `pub use ...`
-6) **补链路**：在 `service.rs` 中添加链式调用方法（见 §2）
+6) **补链路**：在约定入口补齐链式调用（默认 `service.rs`，但 `openlark-docs` 例外，见 §2）
 7) **验证**：`just fmt && just lint && just test`
 
 ## 1. Feature Crate ↔ bizTag
@@ -49,6 +42,7 @@ python3 tools/validate_apis.py --crate openlark-docs
 
 - 若 crate 已有 `src/service.rs`：在顶层 service 新增 `pub fn {bizTag}(&self) -> ...`
 - 若没有：创建 `src/service.rs` 并在 `lib.rs` 中 `pub mod service;`
+- `openlark-docs` 特例：为避免 strict API 校验脚本把“链式入口”计为 API 实现文件，链式入口放在 `crates/openlark-docs/src/common/chain.rs`，只做模块级入口与 Config 透传，不为 200+ API 手写方法。
 
 ### 2.2 调用侧：RequestOption 约定
 

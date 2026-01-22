@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(openlark-api:*)",
+      "Skill(openlark-validation-style:*)",
+      "Skill(openlark-design-review:*)"
+    ]
+  }
+}
