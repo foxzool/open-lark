@@ -28,7 +28,6 @@ biz_tags = ["cardkit"]
 src = "crates/openlark-hr/src"
 biz_tags = [
   "hire",
-  "corehr",
   "feishu_people",
   "attendance",
   "compensation_management",
@@ -40,11 +39,31 @@ biz_tags = [
 
 [crates.openlark-security]
 src = "crates/openlark-security/src"
-biz_tags = ["acs", "auth", "security_and_compliance"]
+biz_tags = ["acs", "security_and_compliance"]
 
 [crates.openlark-ai]
 src = "crates/openlark-ai/src"
 biz_tags = ["ai"]
+
+[crates.openlark-auth]
+src = "crates/openlark-auth/src"
+biz_tags = ["auth", "passport"]
+
+[crates.openlark-platform]
+src = "crates/openlark-platform/src"
+biz_tags = ["admin", "directory", "app_engine"]
+
+[crates.openlark-workflow]
+src = "crates/openlark-workflow/src"
+biz_tags = ["task", "approval", "board"]
+
+[crates.openlark-analytics]
+src = "crates/openlark-analytics/src"
+biz_tags = ["search", "report"]
+
+[crates.openlark-user]
+src = "crates/openlark-user/src"
+biz_tags = ["personal_settings"]
 
 [crates.openlark-mail]
 src = "crates/openlark-mail/src"
