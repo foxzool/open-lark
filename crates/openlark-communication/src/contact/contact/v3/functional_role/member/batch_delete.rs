@@ -2,7 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role-member/batch_delete
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -20,7 +20,42 @@ pub struct BatchDeleteMembersBody {
     pub members: Option<Vec<String>>,
 }
 
+impl BatchDeleteMembersBody {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn member(mut self, member_id: impl Into<String>) -> Self {
+        self.members.get_or_insert_with(Vec::new).push(member_id.into());
+        self
+    }
+}
+
 /// 删除角色下的成员请求
+///
+/// 用于从指定角色批量删除成员。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `role_id`: 角色 ID，必填
+/// - `user_id_type`: 用户 ID 类型（可选）
+///
+/// # 请求体字段
+///
+/// - `members`: 用户 ID 列表（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = BatchDeleteMembersBody::new()
+///     .member("user_1")
+///     .member("user_2");
+/// let request = BatchDeleteRoleMembersRequest::new(config)
+///     .role_id("role_xxx")
+///     .user_id_type(UserIdType::OpenId)
+///     .execute(body).await?;
+/// ```
 pub struct BatchDeleteRoleMembersRequest {
     config: Config,
     role_id: String,
@@ -64,7 +99,8 @@ impl BatchDeleteRoleMembersRequest {
         body: BatchDeleteMembersBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchDeleteMembersResponse> {
-        openlark_core::validate_required!(self.role_id, "role_id 不能为空");
+        // === 必填字段验证 ===
+        validate_required!(self.role_id, "role_id 不能为空");
 
         // url: PATCH:/open-apis/contact/v3/functional_roles/:role_id/members/batch_delete
         let mut req: ApiRequest<BatchDeleteMembersResponse> = ApiRequest::patch(format!(
@@ -80,5 +116,49 @@ impl BatchDeleteRoleMembersRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "删除角色下的成员")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_batch_delete_role_members_request_builder() {
+        let config = Config::default();
+        let request = BatchDeleteRoleMembersRequest::new(config).role_id("role_xxx");
+        assert_eq!(request.role_id, "role_xxx");
+    }
+
+    #[test]
+    fn test_batch_delete_members_body_builder() {
+        let body = BatchDeleteMembersBody::new()
+            .member("user_1")
+            .member("user_2");
+        assert_eq!(body.members.as_ref().map(|v| v.len()), Some(2));
+        assert_eq!(body.members.as_ref().map(|v| v[0].as_str()), Some("user_1"));
+    }
+
+    #[test]
+    fn test_batch_delete_members_body_default() {
+        let body = BatchDeleteMembersBody::new();
+        assert_eq!(body.members, None);
+    }
+
+    #[test]
+    fn test_batch_delete_role_members_request_with_user_id_type() {
+        let config = Config::default();
+        let request = BatchDeleteRoleMembersRequest::new(config)
+            .role_id("role_xxx")
+            .user_id_type(UserIdType::UnionId);
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+    }
+
+    #[test]
+    fn test_batch_delete_role_members_request_default_values() {
+        let config = Config::default();
+        let request = BatchDeleteRoleMembersRequest::new(config);
+        assert_eq!(request.role_id, "");
+        assert_eq!(request.user_id_type, None);
     }
 }

@@ -11,6 +11,32 @@ use crate::{
 };
 
 /// 获取用户或机器人所在的群列表请求
+///
+/// 用于获取当前用户或机器人所在的所有群聊列表。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `user_id_type`: 用户 ID 类型（可选，默认 open_id）
+/// - `sort_type`: 群组排序方式（可选，默认 ByCreateTimeAsc）
+/// - `page_token`: 分页标记（可选）
+/// - `page_size`: 分页大小（可选，默认 20，最大 100）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_communication::im::im::v1::chat::ListChatsRequest;
+/// use openlark_communication::im::im::v1::message::models::UserIdType;
+/// use openlark_communication::im::im::v1::chat::models::ChatSortType;
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let request = ListChatsRequest::new(config)
+///     .user_id_type(UserIdType::OpenId)
+///     .sort_type(ChatSortType::ByCreateTimeAsc)
+///     .page_size(50);
+/// let response = request.execute().await?;
+/// ```
 pub struct ListChatsRequest {
     config: Config,
     user_id_type: Option<UserIdType>,
@@ -82,5 +108,64 @@ impl ListChatsRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "获取用户或机器人所在的群列表")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_chats_request_builder() {
+        let config = Config::default();
+        let request = ListChatsRequest::new(config);
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.sort_type, None);
+    }
+
+    #[test]
+    fn test_list_chats_request_with_user_id_type() {
+        let config = Config::default();
+        let request = ListChatsRequest::new(config)
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_list_chats_request_with_sort_type() {
+        let config = Config::default();
+        let request = ListChatsRequest::new(config)
+            .sort_type(ChatSortType::ByCreateTimeAsc);
+        assert_eq!(request.sort_type, Some(ChatSortType::ByCreateTimeAsc));
+    }
+
+    #[test]
+    fn test_list_chats_request_with_page_size() {
+        let config = Config::default();
+        let request = ListChatsRequest::new(config)
+            .page_size(50);
+        assert_eq!(request.page_size, Some(50));
+    }
+
+    #[test]
+    fn test_list_chats_request_with_page_token() {
+        let config = Config::default();
+        let request = ListChatsRequest::new(config)
+            .page_token("token123");
+        assert_eq!(request.page_token, Some("token123".to_string()));
+    }
+
+    #[test]
+    fn test_list_chats_request_with_all_options() {
+        let config = Config::default();
+        let request = ListChatsRequest::new(config)
+            .user_id_type(UserIdType::UnionId)
+            .sort_type(ChatSortType::ByActiveTimeDesc)
+            .page_size(100)
+            .page_token("token456");
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.sort_type, Some(ChatSortType::ByActiveTimeDesc));
+        assert_eq!(request.page_size, Some(100));
+        assert_eq!(request.page_token, Some("token456".to_string()));
     }
 }

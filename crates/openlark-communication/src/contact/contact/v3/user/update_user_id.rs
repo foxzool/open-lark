@@ -20,7 +20,36 @@ pub struct UpdateUserIdBody {
     pub new_user_id: String,
 }
 
+impl UpdateUserIdBody {
+    pub fn new(new_user_id: impl Into<String>) -> Self {
+        Self {
+            new_user_id: new_user_id.into(),
+        }
+    }
+}
+
 /// 更新用户 ID 请求
+///
+/// 用于更新用户的自定义 ID。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `user_id`: 用户 ID，必填
+/// - `user_id_type`: 用户 ID 类型（可选）
+///
+/// # 请求体字段
+///
+/// - `new_user_id`: 新用户 ID，必填
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = UpdateUserIdBody::new("new_user_id_123");
+/// let request = UpdateUserIdRequest::new(config)
+///     .user_id("old_user_id")
+///     .user_id_type(UserIdType::OpenId);
+/// ```
 pub struct UpdateUserIdRequest {
     config: Config,
     user_id: String,
@@ -61,6 +90,7 @@ impl UpdateUserIdRequest {
         body: UpdateUserIdBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EmptyData> {
+        // === 必填字段验证 ===
         validate_required!(self.user_id, "user_id 不能为空");
         validate_required!(body.new_user_id, "new_user_id 不能为空");
 
@@ -78,5 +108,51 @@ impl UpdateUserIdRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "更新用户 ID")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_update_user_id_request_builder() {
+        let config = Config::default();
+        let request = UpdateUserIdRequest::new(config)
+            .user_id("old_user_id");
+        assert_eq!(request.user_id, "old_user_id");
+    }
+
+    #[test]
+    fn test_update_user_id_request_with_user_id_type() {
+        let config = Config::default();
+        let request = UpdateUserIdRequest::new(config)
+            .user_id("old_user_id")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_update_user_id_body_builder() {
+        let body = UpdateUserIdBody::new("new_user_id_123");
+        assert_eq!(body.new_user_id, "new_user_id_123");
+    }
+
+    #[test]
+    fn test_update_user_id_request_default_values() {
+        let config = Config::default();
+        let request = UpdateUserIdRequest::new(config);
+        assert_eq!(request.user_id, "");
+        assert_eq!(request.user_id_type, None);
+    }
+
+    #[test]
+    fn test_update_user_id_request_with_all_options() {
+        let config = Config::default();
+        let request = UpdateUserIdRequest::new(config)
+            .user_id("user_123")
+            .user_id_type(UserIdType::UnionId);
+        assert_eq!(request.user_id, "user_123");
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
     }
 }

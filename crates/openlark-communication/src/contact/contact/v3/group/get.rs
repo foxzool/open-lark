@@ -16,6 +16,23 @@ use crate::{
 };
 
 /// 查询指定用户组请求
+///
+/// 用于根据用户组 ID 获取用户组详细信息。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `group_id`: 用户组 ID，必填
+/// - `user_id_type`: 用户 ID 类型（可选）
+/// - `department_id_type`: 部门 ID 类型（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let request = GetGroupRequest::new(config)
+///     .group_id("group_xxx")
+///     .user_id_type(UserIdType::OpenId);
+/// ```
 pub struct GetGroupRequest {
     config: Config,
     group_id: String,
@@ -63,6 +80,7 @@ impl GetGroupRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetGroupResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.group_id, "group_id 不能为空");
 
         // url: GET:/open-apis/contact/v3/group/:group_id
@@ -77,5 +95,48 @@ impl GetGroupRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询指定用户组")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_group_request_builder() {
+        let config = Config::default();
+        let request = GetGroupRequest::new(config)
+            .group_id("group_xxx");
+        assert_eq!(request.group_id, "group_xxx");
+    }
+
+    #[test]
+    fn test_get_group_request_with_user_id_type() {
+        let config = Config::default();
+        let request = GetGroupRequest::new(config)
+            .group_id("group_xxx")
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_get_group_request_default_values() {
+        let config = Config::default();
+        let request = GetGroupRequest::new(config);
+        assert_eq!(request.group_id, "");
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_get_group_request_with_all_options() {
+        let config = Config::default();
+        let request = GetGroupRequest::new(config)
+            .group_id("group_123")
+            .user_id_type(UserIdType::UnionId)
+            .department_id_type(DepartmentIdType::OpenDepartmentId);
+        assert_eq!(request.group_id, "group_123");
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::OpenDepartmentId));
     }
 }

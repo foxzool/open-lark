@@ -27,7 +27,55 @@ pub struct BatchAddGroupMembersBody {
     pub members: Vec<MemberListItem>,
 }
 
+impl BatchAddGroupMembersBody {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn member(mut self, member_id: impl Into<String>, member_id_type: impl Into<String>) -> Self {
+        self.members.push(MemberListItem {
+            member_id: member_id.into(),
+            member_id_type: member_id_type.into(),
+            member_type: "user".to_string(),
+        });
+        self
+    }
+}
+
+impl Default for BatchAddGroupMembersBody {
+    fn default() -> Self {
+        Self {
+            members: Vec::new(),
+        }
+    }
+}
+
 /// 批量添加用户组成员请求
+///
+/// 用于向指定用户组批量添加成员。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `group_id`: 用户组 ID，必填
+///
+/// # 请求体字段
+///
+/// - `members`: 成员列表，至少包含 1 个成员
+///   - `member_id`: 成员 ID
+///   - `member_id_type`: 成员 ID 类型
+///   - `member_type`: 成员类型（目前仅支持 user）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = BatchAddGroupMembersBody::new()
+///     .member("user_1", "open_id")
+///     .member("user_2", "open_id");
+/// let request = BatchAddGroupMembersRequest::new(config)
+///     .group_id("group_xxx")
+///     .execute(body).await?;
+/// ```
 pub struct BatchAddGroupMembersRequest {
     config: Config,
     group_id: String,
@@ -63,6 +111,7 @@ impl BatchAddGroupMembersRequest {
         body: BatchAddGroupMembersBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchAddGroupMembersResponse> {
+        // === 必填字段验证 ===
         validate_required!(self.group_id, "group_id 不能为空");
         if body.members.is_empty() {
             return Err(openlark_core::error::validation_error(
@@ -81,5 +130,50 @@ impl BatchAddGroupMembersRequest {
         let resp = Transport::request(req, &self.config, Some(option)).await?;
 
         extract_response_data(resp, "批量添加用户组成员")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_batch_add_group_members_request_builder() {
+        let config = Config::default();
+        let request = BatchAddGroupMembersRequest::new(config).group_id("group_xxx");
+        assert_eq!(request.group_id, "group_xxx");
+    }
+
+    #[test]
+    fn test_batch_add_group_members_body_builder() {
+        let body = BatchAddGroupMembersBody::new()
+            .member("user_1", "open_id")
+            .member("user_2", "open_id");
+        assert_eq!(body.members.len(), 2);
+        assert_eq!(body.members[0].member_id, "user_1");
+    }
+
+    #[test]
+    fn test_batch_add_group_members_body_default() {
+        let body = BatchAddGroupMembersBody::new();
+        assert_eq!(body.members.len(), 0);
+    }
+
+    #[test]
+    fn test_batch_add_group_members_request_default_values() {
+        let config = Config::default();
+        let request = BatchAddGroupMembersRequest::new(config);
+        assert_eq!(request.group_id, "");
+    }
+
+    #[test]
+    fn test_member_list_item_structure() {
+        let item = MemberListItem {
+            member_id: "user_123".to_string(),
+            member_id_type: "open_id".to_string(),
+            member_type: "user".to_string(),
+        };
+        assert_eq!(item.member_id, "user_123");
+        assert_eq!(item.member_type, "user");
     }
 }

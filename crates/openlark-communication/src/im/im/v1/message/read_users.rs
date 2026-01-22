@@ -12,6 +12,30 @@ use crate::{
 };
 
 /// 查询消息已读信息请求
+///
+/// 用于查询指定消息的已读用户信息，支持分页查询。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `message_id`: 消息 ID，必填
+/// - `user_id_type`: 用户 ID 类型（可选，默认 open_id）
+/// - `page_size`: 分页大小（可选，范围 1~100）
+/// - `page_token`: 分页标记（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// use openlark_core::config::Config;
+/// use openlark_communication::im::im::v1::message::ReadMessageUsersRequest;
+///
+/// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
+/// let request = ReadMessageUsersRequest::new(config)
+///     .message_id("om_xxx")
+///     .user_id_type(UserIdType::OpenId)
+///     .page_size(50);
+/// let response = request.execute().await?;
+/// ```
 pub struct ReadMessageUsersRequest {
     config: Config,
     message_id: String,
@@ -67,6 +91,7 @@ impl ReadMessageUsersRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
+        // === 必填字段验证 ===
         validate_required!(self.message_id, "message_id 不能为空");
 
         // url: GET:/open-apis/im/v1/messages/:message_id/read_users
@@ -85,5 +110,73 @@ impl ReadMessageUsersRequest {
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询消息已读信息")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_read_message_users_request_builder() {
+        let config = Config::default();
+        let request = ReadMessageUsersRequest::new(config)
+            .message_id("om_xxx")
+            .user_id_type(UserIdType::OpenId)
+            .page_size(50);
+        assert_eq!(request.message_id, "om_xxx");
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+        assert_eq!(request.page_size, Some(50));
+    }
+
+    #[test]
+    fn test_read_message_users_request_with_pagination() {
+        let config = Config::default();
+        let request = ReadMessageUsersRequest::new(config)
+            .message_id("om_xxx")
+            .page_size(20)
+            .page_token("token_123");
+        assert_eq!(request.page_size, Some(20));
+        assert_eq!(request.page_token, Some("token_123".to_string()));
+    }
+
+    #[test]
+    fn test_read_message_users_request_with_user_id() {
+        let config = Config::default();
+        let request = ReadMessageUsersRequest::new(config)
+            .message_id("om_xxx")
+            .user_id_type(UserIdType::UserId);
+        assert_eq!(request.user_id_type, Some(UserIdType::UserId));
+    }
+
+    #[test]
+    fn test_empty_message_id() {
+        let config = Config::default();
+        let request = ReadMessageUsersRequest::new(config)
+            .message_id("");
+        assert_eq!(request.message_id, "");
+    }
+
+    #[test]
+    fn test_read_message_users_request_with_union_id() {
+        let config = Config::default();
+        let request = ReadMessageUsersRequest::new(config)
+            .message_id("om_xxx")
+            .user_id_type(UserIdType::UnionId);
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+    }
+
+    #[test]
+    fn test_read_message_users_request_builder_chaining() {
+        let config = Config::default();
+        let request = ReadMessageUsersRequest::new(config)
+            .message_id("om_test_123")
+            .user_id_type(UserIdType::OpenId)
+            .page_size(100)
+            .page_token("page_token_456");
+        assert_eq!(request.message_id, "om_test_123");
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+        assert_eq!(request.page_size, Some(100));
+        assert_eq!(request.page_token, Some("page_token_456".to_string()));
     }
 }

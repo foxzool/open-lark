@@ -71,6 +71,37 @@ impl ApiResponseTrait for UserResponse {
 }
 
 /// 创建用户请求
+///
+/// 用于在通讯录中创建新用户。
+///
+/// # 字段说明
+///
+/// - `config`: 配置信息
+/// - `user_id_type`: 用户 ID 类型（可选）
+/// - `department_id_type`: 部门 ID 类型（可选）
+/// - `client_token`: 幂等 token（可选）
+///
+/// # 请求体字段
+///
+/// - `name`: 用户名，必填
+/// - `mobile`: 手机号，必填
+/// - `department_ids`: 用户所属部门 ID 列表，必填
+/// - `employee_type`: 员工类型，必填
+/// - `user_id`: 自定义 user_id（可选）
+///
+/// # 示例
+///
+/// ```rust,ignore
+/// let body = CreateUserBody::new(
+///     "张三",
+///     "13800138000",
+///     vec!["dept_1".to_string()],
+///     1,
+/// );
+/// let request = CreateUserRequest::new(config)
+///     .user_id_type(UserIdType::OpenId)
+///     .client_token("uuid");
+/// ```
 pub struct CreateUserRequest {
     config: Config,
     user_id_type: Option<UserIdType>,
@@ -119,6 +150,7 @@ impl CreateUserRequest {
         body: CreateUserBody,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UserResponse> {
+        // === 必填字段验证 ===
         validate_required!(body.name, "name 不能为空");
         validate_required!(body.mobile, "mobile 不能为空");
         if body.department_ids.is_empty() {
@@ -144,5 +176,67 @@ impl CreateUserRequest {
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "创建用户")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_user_request_builder() {
+        let config = Config::default();
+        let request = CreateUserRequest::new(config);
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_create_user_request_with_user_id_type() {
+        let config = Config::default();
+        let request = CreateUserRequest::new(config)
+            .user_id_type(UserIdType::OpenId);
+        assert_eq!(request.user_id_type, Some(UserIdType::OpenId));
+    }
+
+    #[test]
+    fn test_create_user_body_builder() {
+        let body = CreateUserBody::new(
+            "张三",
+            "13800138000",
+            vec!["dept_1".to_string()],
+            1,
+        );
+        assert_eq!(body.name, "张三");
+        assert_eq!(body.mobile, "13800138000");
+        assert_eq!(body.department_ids.len(), 1);
+        assert_eq!(body.employee_type, 1);
+    }
+
+    #[test]
+    fn test_create_user_body_with_custom_user_id() {
+        let body = CreateUserBody::new(
+            "李四",
+            "13900139000",
+            vec!["dept_2".to_string()],
+            2,
+        );
+        let body_with_id = CreateUserBody {
+            user_id: Some("custom_user_id".to_string()),
+            ..body
+        };
+        assert_eq!(body_with_id.user_id, Some("custom_user_id".to_string()));
+    }
+
+    #[test]
+    fn test_create_user_request_with_all_options() {
+        let config = Config::default();
+        let request = CreateUserRequest::new(config)
+            .user_id_type(UserIdType::UnionId)
+            .department_id_type(DepartmentIdType::DepartmentId)
+            .client_token("uuid123");
+        assert_eq!(request.user_id_type, Some(UserIdType::UnionId));
+        assert_eq!(request.department_id_type, Some(DepartmentIdType::DepartmentId));
+        assert_eq!(request.client_token, Some("uuid123".to_string()));
     }
 }
