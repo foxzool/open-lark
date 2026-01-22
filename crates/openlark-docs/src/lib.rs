@@ -53,7 +53,7 @@
 //!
 //! ## 特性
 //!
-//! - ✅ **254 APIs 全覆盖** - 飞书云文档服务完整实现
+//! - ✅ **202 APIs 全覆盖** - 飞书云文档服务完整实现（不含旧版本）
 //! - ✅ **类型安全** - 强类型请求/响应结构
 //! - ✅ **异步支持** - 基于 tokio 的异步 API
 //! - ✅ **版本化 API** - 支持 v1/v2/v3/v4 多版本 API
@@ -95,7 +95,7 @@ pub use ccm::wiki;
 // docs和docx模块已包含在ccm模块中，无需独立导出
 
 // API版本模块
-#[cfg(any(feature = "v1", feature = "v2", feature = "v3", feature = "v4"))]
+#[cfg(any(feature = "v1", feature = "v2", feature = "v3"))]
 pub mod versions;
 
 // 通用模块 - 工具宏和类型
@@ -107,22 +107,16 @@ pub mod prelude;
 // 重新导出主要类型
 pub use common::chain::DocsClient;
 
-// 重新导出各域服务
-#[cfg(feature = "ccm-core")]
-pub use ccm::CcmService;
-
-#[cfg(feature = "lingo")]
-pub use baike::lingo::LingoService;
-
-#[cfg(feature = "minutes")]
-pub use minutes::MinutesService;
-
-// Wiki服务通过ccm::wiki模块导出
-#[cfg(feature = "ccm-wiki")]
-pub use ccm::wiki::WikiService;
-
-// docs和docx服务通过ccm模块导出
-// #[cfg(feature = "docs")]
-// pub use docs::DocsService;
-// #[cfg(feature = "docx")]
-// pub use docx::DocxService;
+// 已移除中间 Service 的 public 导出，统一使用 DocsClient 作为唯一入口
+// 移除的导出：
+// - CcmService（通过 docs.ccm 访问）
+// - BaseService（通过 docs.base 访问）
+// - BitableService（通过 docs.base.bitable 访问）
+// - BaikeService（通过 docs.baike 访问）
+// - LingoService（通过 docs.baike.lingo 访问）
+// - MinutesService（通过 docs.minutes 访问）
+// - WikiService（通过 docs.ccm.wiki 访问）
+// - DocsService（通过 docs.ccm.docs 访问）
+// - DocxService（通过 docs.ccm.docx 访问）
+//
+// 注意：Service 类型仍然保留，但不从 lib.rs 导出。如有需要，可通过完整路径访问。

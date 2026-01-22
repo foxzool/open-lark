@@ -7,7 +7,7 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 documentation.workspace = true
-description = "飞书开放平台云文档服务模块 - 文档、表格、知识库API (254 APIs)"
+description = "飞书开放平台云文档服务模块 - 文档、表格、知识库API (202 APIs, 100% 覆盖，不含旧版本)"
 keywords = ["feishu", "lark", "docs", "api", "cloud-docs", "sheets"]
 categories = ["api-bindings", "web-programming"]
 
@@ -23,7 +23,7 @@ ccm-core = []
 ccm-doc = ["ccm-core"]           # 文档处理
 ccm-docx = ["ccm-core"]          # DOCX文档
 ccm-drive = ["ccm-core"]         # 云盘文件
-ccm-sheets-v2 = ["ccm-core"]     # 表格 v2
+# ccm-sheets-v2 = ["ccm-core"]  # 表格 v2（已弃用，使用 v3）
 ccm-sheets-v3 = ["ccm-core"]     # 表格 v3
 ccm-sheets = ["ccm-sheets-v3"]   # 表格 (默认v3)
 ccm-wiki = ["ccm-core"]          # 知识库
@@ -62,11 +62,11 @@ docx = ["ccm-docx"]
 v1 = ["core"]
 v2 = ["v1"]
 v3 = ["v2"]
-v4 = ["v3"]
+# v4 = ["v3"]  # 未实现，已移除
 
 # === 功能组合 ===
 # 完整云文档功能
-full = ["ccm", "bitable", "base", "baike", "minutes", "v4"]
+full = ["ccm", "bitable", "base", "baike", "minutes", "v3"]
 
 # 向后兼容别名
 cloud-docs = ["ccm", "bitable", "base"]
