@@ -3,7 +3,8 @@
     "allow": [
       "Skill(openlark-api:*)",
       "Skill(openlark-validation-style:*)",
-      "Skill(openlark-design-review:*)"
+      "Skill(openlark-design-review:*)",
+      "Skill(openlark-naming:*)"
     ]
   }
 }

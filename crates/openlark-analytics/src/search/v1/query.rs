@@ -18,29 +18,27 @@ impl QueryApi {
 
     /// 搜索
     pub fn search(&self) -> SearchRequest {
-        SearchRequest::new(self.config.clone(), self.client.clone())
+        SearchRequest::new(self.config.clone())
     }
 
     /// 获取搜索建议
     pub fn suggest(&self) -> SuggestRequest {
-        SuggestRequest::new(self.config.clone(), self.client.clone())
+        SuggestRequest::new(self.config.clone())
     }
 }
 
 /// 搜索请求
 pub struct SearchRequest {
-    config: AnalyticsConfig,
-    client: LarkClient,
+    config: Arc<AnalyticsConfig>,
     search_term: Option<String>,
     search_type: Option<String>,
     page_size: Option<u32>,
 }
 
 impl SearchRequest {
-    fn new(config: AnalyticsConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<AnalyticsConfig>) -> Self {
         Self {
             config,
-            client,
             search_term: None,
             search_type: None,
             page_size: None,
@@ -74,16 +72,14 @@ impl SearchRequest {
 
 /// 搜索建议请求
 pub struct SuggestRequest {
-    config: AnalyticsConfig,
-    client: LarkClient,
+    config: Arc<AnalyticsConfig>,
     query: Option<String>,
 }
 
 impl SuggestRequest {
-    fn new(config: AnalyticsConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<AnalyticsConfig>) -> Self {
         Self {
             config,
-            client,
             query: None,
         }
     }

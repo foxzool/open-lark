@@ -28,7 +28,7 @@ impl SearchService {
     /// V1 版本 API
     #[cfg(feature = "v1")]
     pub fn v1(&self) -> crate::search::v1::SearchV1 {
-        crate::search::v1::SearchV1::new(self.config.clone(), self.client.clone())
+        crate::search::v1::SearchV1::new(self.config.clone())
     }
 }
 
@@ -44,11 +44,10 @@ mod tests {
         let config = AnalyticsConfig::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build()
-            .unwrap();
+            .build();
 
-        let client = LarkClient::new(config.clone()).unwrap();
-        let service = SearchService::new(config, client);
-        assert_eq!(service.config().app_id, "test_app_id");
+        let service = SearchService::new(std::sync::Arc::new(config));
+        // AnalyticsConfig 实现了 Deref，可以直接访问 app_id
+        assert_eq!(service.config().app_id(), "test_app_id");
     }
 }

@@ -18,23 +18,21 @@ impl UserSearchApi {
 
     /// 搜索用户
     pub fn search(&self) -> SearchUserRequest {
-        SearchUserRequest::new(self.config.clone(), self.client.clone())
+        SearchUserRequest::new(self.config.clone())
     }
 }
 
 /// 搜索用户请求
 pub struct SearchUserRequest {
-    config: AnalyticsConfig,
-    client: LarkClient,
+    config: Arc<AnalyticsConfig>,
     query: Option<String>,
     page_size: Option<u32>,
 }
 
 impl SearchUserRequest {
-    fn new(config: AnalyticsConfig, client: LarkClient) -> Self {
+    fn new(config: Arc<AnalyticsConfig>) -> Self {
         Self {
             config,
-            client,
             query: None,
             page_size: None,
         }
