@@ -4,8 +4,7 @@
 //! - 避免并行测试读写环境变量导致的相互污染与随机失败
 //! - 用 RAII 保证环境变量在测试结束后可恢复
 
-#![cfg(test)]
-
+// 注意：#[cfg(test)] 已在 lib.rs:230 定义，此处移除重复属性
 use std::sync::{Mutex, OnceLock};
 
 static ENV_LOCK: OnceLock<Mutex<()>> = OnceLock::new();

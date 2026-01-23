@@ -143,15 +143,18 @@ impl CreateDraftRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::baike::baike::v1::models::{Term, UserIdType};
+    use crate::baike::baike::v1::models::{Term, UserIdType, DisplayStatus};
 
     #[test]
     fn test_create_draft_request_builder() {
         let config = Config::default();
         let req = CreateDraftReq {
             main_keys: vec![Term {
-                text: "测试词条".to_string(),
                 key: "test_key".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
             }],
             description: Some("词条描述".to_string()),
             ..Default::default()
@@ -169,8 +172,11 @@ mod tests {
         let req = CreateDraftReq {
             id: Some("entity_123".to_string()),
             main_keys: vec![Term {
-                text: "更新词条".to_string(),
                 key: "update_key".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
             }],
             rich_text: Some("<p>富文本内容</p>".to_string()),
             ..Default::default()
@@ -199,12 +205,18 @@ mod tests {
         let req2 = CreateDraftReq {
             main_keys: vec![
                 Term {
-                    text: "词条1".to_string(),
                     key: "key1".to_string(),
+                    display_status: DisplayStatus {
+                        allow_highlight: true,
+                        allow_search: true,
+                    },
                 },
                 Term {
-                    text: "词条2".to_string(),
                     key: "key2".to_string(),
+                    display_status: DisplayStatus {
+                        allow_highlight: false,
+                        allow_search: false,
+                    },
                 },
             ],
             description: Some("描述".to_string()),
@@ -219,8 +231,11 @@ mod tests {
         // 测试 description 和 rich_text 都为空
         let req3 = CreateDraftReq {
             main_keys: vec![Term {
-                text: "测试词条".to_string(),
                 key: "test_key".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
             }],
             description: None,
             rich_text: None,

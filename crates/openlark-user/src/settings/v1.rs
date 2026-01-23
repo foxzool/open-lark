@@ -2,7 +2,8 @@
 //!
 //! 提供个人设置 V1 版本的 API 访问
 
-use crate::{UserConfig};
+use crate::UserConfig;
+use openlark_core::SDKResult;
 use std::sync::Arc;
 
 /// 个人设置 V1 API
@@ -36,16 +37,14 @@ impl SettingsV1 {
 
 /// 获取设置请求
 pub struct GetSettingRequest {
+    #[allow(dead_code)]
     config: Arc<UserConfig>,
     key: Option<String>,
 }
 
 impl GetSettingRequest {
     fn new(config: Arc<UserConfig>) -> Self {
-        Self {
-            config,
-            key: None,
-        }
+        Self { config, key: None }
     }
 
     /// 设置键
@@ -55,7 +54,7 @@ impl GetSettingRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"key": "test"}))
     }
@@ -63,6 +62,7 @@ impl GetSettingRequest {
 
 /// 更新设置请求
 pub struct UpdateSettingRequest {
+    #[allow(dead_code)]
     config: Arc<UserConfig>,
     key: Option<String>,
     value: Option<String>,
@@ -90,7 +90,7 @@ impl UpdateSettingRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"success": true}))
     }
@@ -98,6 +98,7 @@ impl UpdateSettingRequest {
 
 /// 获取所有设置请求
 pub struct ListSettingsRequest {
+    #[allow(dead_code)]
     config: Arc<UserConfig>,
 }
 
@@ -107,7 +108,7 @@ impl ListSettingsRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"items": []}))
     }

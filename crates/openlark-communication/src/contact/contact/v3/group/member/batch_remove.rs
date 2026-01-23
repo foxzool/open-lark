@@ -22,7 +22,7 @@ pub struct MemberListItem {
 }
 
 /// 批量移除用户组成员请求体
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchRemoveGroupMembersBody {
     pub members: Vec<MemberListItem>,
 }
@@ -43,14 +43,6 @@ impl BatchRemoveGroupMembersBody {
             member_type: "user".to_string(),
         });
         self
-    }
-}
-
-impl Default for BatchRemoveGroupMembersBody {
-    fn default() -> Self {
-        Self {
-            members: Vec::new(),
-        }
     }
 }
 

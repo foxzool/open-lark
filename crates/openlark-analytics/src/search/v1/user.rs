@@ -3,6 +3,7 @@
 //! 提供用户搜索相关功能
 
 use crate::AnalyticsConfig;
+use openlark_core::SDKResult;
 use std::sync::Arc;
 
 /// 用户搜索 API
@@ -24,6 +25,7 @@ impl UserSearchApi {
 
 /// 搜索用户请求
 pub struct SearchUserRequest {
+    #[allow(dead_code)]
     config: Arc<AnalyticsConfig>,
     query: Option<String>,
     page_size: Option<u32>,
@@ -51,7 +53,7 @@ impl SearchUserRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"items": []}))
     }

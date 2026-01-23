@@ -3,7 +3,7 @@
 //! 提供审计日志查询功能
 
 use crate::PlatformConfig;
-use openlark_core::Result;
+use openlark_core::SDKResult;
 use std::sync::Arc;
 
 /// 审计日志 API
@@ -65,7 +65,7 @@ impl QueryAuditLogsRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"items": []}))
     }
@@ -92,7 +92,7 @@ impl GetAuditLogRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"log_id": "test"}))
     }

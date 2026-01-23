@@ -139,7 +139,7 @@ mod tests {
     fn test_create_job_family_body_builder() {
         let body = CreateJobFamilyBody::new("技术序列", true);
         assert_eq!(body.name, "技术序列");
-        assert_eq!(body.status, true);
+        assert!(body.status);
         assert!(body.description.is_none());
     }
 

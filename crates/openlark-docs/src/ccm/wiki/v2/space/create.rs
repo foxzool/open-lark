@@ -175,8 +175,9 @@ mod tests {
         assert_eq!(request.description.unwrap().len(), long_desc.len());
     }
 
-    /// 测试已弃用的参数结构
+    /// 测试已弃用的参数结构（保留以测试向后兼容性）
     #[test]
+    #[allow(deprecated)]
     fn test_deprecated_params() {
         let params = CreateWikiSpaceParams {
             name: "旧API知识库".to_string(),

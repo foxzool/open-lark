@@ -161,7 +161,7 @@ mod tests {
             deleted: true,
             record_id: "rec123".to_string(),
         };
-        assert_eq!(result.deleted, true);
+        assert!(result.deleted);
         assert_eq!(result.record_id, "rec123");
     }
 

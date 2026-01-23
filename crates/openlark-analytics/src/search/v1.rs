@@ -20,12 +20,12 @@ impl SearchV1 {
 
     /// 查询搜索
     pub fn query(&self) -> super::v1::query::QueryApi {
-        super::v1::query::QueryApi::new(self.config.clone(), self.client.clone())
+        super::v1::query::QueryApi::new(self.config.clone())
     }
 
     /// 用户搜索
     pub fn user(&self) -> super::v1::user::UserSearchApi {
-        super::v1::user::UserSearchApi::new(self.config.clone(), self.client.clone())
+        super::v1::user::UserSearchApi::new(self.config.clone())
     }
 }
 

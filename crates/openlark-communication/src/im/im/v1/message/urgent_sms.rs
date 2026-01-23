@@ -34,6 +34,12 @@ pub struct UrgentSmsBody {
     user_id_list: Vec<String>,
 }
 
+impl Default for UrgentSmsBody {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl UrgentSmsBody {
     pub fn new() -> Self {
         Self {

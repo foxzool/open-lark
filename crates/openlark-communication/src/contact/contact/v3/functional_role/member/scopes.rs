@@ -17,7 +17,7 @@ use crate::{
 };
 
 /// 批量设置角色成员管理范围请求体
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct PatchMembersScopesBody {
     pub members: Vec<String>,
     pub departments: Vec<String>,
@@ -36,15 +36,6 @@ impl PatchMembersScopesBody {
     pub fn department(mut self, department_id: impl Into<String>) -> Self {
         self.departments.push(department_id.into());
         self
-    }
-}
-
-impl Default for PatchMembersScopesBody {
-    fn default() -> Self {
-        Self {
-            members: Vec::new(),
-            departments: Vec::new(),
-        }
     }
 }
 

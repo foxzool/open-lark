@@ -3,7 +3,7 @@
 //! 提供后台用户管理功能
 
 use crate::PlatformConfig;
-use openlark_core::Result;
+use openlark_core::SDKResult;
 use std::sync::Arc;
 
 /// 用户管理 API
@@ -54,7 +54,7 @@ impl ListAdminUsersRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"items": []}))
     }
@@ -81,7 +81,7 @@ impl DisableUserRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"success": true}))
     }
@@ -108,7 +108,7 @@ impl EnableUserRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"success": true}))
     }

@@ -50,11 +50,12 @@ pub fn serialize_params<T: serde::Serialize>(
 /// # 使用示例
 /// ```rust
 /// # fn main() {
-/// use openlark_task::api_url;
+/// // openlark_task 模块暂未实现
+/// // use openlark_task::api_url;
 ///
-/// let task_guid = "task_guid";
-/// let url = api_url!("/open-apis/task/v2/tasks/{}", task_guid);
-/// assert!(url.contains(task_guid));
+/// // let task_guid = "task_guid";
+/// // let url = api_url!("/open-apis/task/v2/tasks/{}", task_guid);
+/// // assert!(url.contains(task_guid));
 /// # }
 /// ```
 #[macro_export]

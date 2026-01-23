@@ -16,7 +16,7 @@ use crate::{
 };
 
 /// 批量添加角色成员请求体
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchCreateMembersBody {
     pub members: Vec<String>,
 }
@@ -29,14 +29,6 @@ impl BatchCreateMembersBody {
     pub fn member(mut self, member_id: impl Into<String>) -> Self {
         self.members.push(member_id.into());
         self
-    }
-}
-
-impl Default for BatchCreateMembersBody {
-    fn default() -> Self {
-        Self {
-            members: Vec::new(),
-        }
     }
 }
 

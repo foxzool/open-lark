@@ -3,7 +3,7 @@
 //! 提供用户搜索和查找功能
 
 use crate::PlatformConfig;
-use openlark_core::Result;
+use openlark_core::SDKResult;
 use std::sync::Arc;
 
 /// 用户搜索 API
@@ -62,7 +62,7 @@ impl SearchUsersRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"items": []}))
     }
@@ -89,7 +89,7 @@ impl GetUserRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"user_id": "test"}))
     }
@@ -124,7 +124,7 @@ impl ListUsersRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"items": []}))
     }

@@ -100,7 +100,7 @@ impl UpdateDraftRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::baike::lingo::v1::models::{DraftUpdateEntityInput, UserIdType};
+    use crate::baike::lingo::v1::models::{DraftUpdateEntityInput, UserIdType, DisplayStatus, Term};
 
     /// 测试构建器模式
     #[test]
@@ -202,7 +202,22 @@ mod tests {
     fn test_non_empty_main_keys() {
         let config = Config::default();
         let body = DraftUpdateEntityInput {
-            main_keys: vec!["key1".to_string(), "key2".to_string()],
+            main_keys: vec![
+                Term {
+                    key: "key1".to_string(),
+                    display_status: DisplayStatus {
+                        allow_highlight: true,
+                        allow_search: true,
+                    },
+                },
+                Term {
+                    key: "key2".to_string(),
+                    display_status: DisplayStatus {
+                        allow_highlight: false,
+                        allow_search: false,
+                    },
+                },
+            ],
             description: Some("描述".to_string()),
             rich_text: None,
             ..Default::default()

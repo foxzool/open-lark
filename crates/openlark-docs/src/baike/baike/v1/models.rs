@@ -34,8 +34,6 @@ pub struct DisplayStatus {
 
 /// 名称（词条名/别名）
 #[derive(Debug, Clone, Serialize, Deserialize)]
-/// 词条名/别名（term）
-#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Term {
     /// 名称的值
     pub key: String,

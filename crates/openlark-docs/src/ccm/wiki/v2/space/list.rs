@@ -194,8 +194,9 @@ mod tests {
         assert_eq!(request.page_token, Some("custom_token_456".to_string()));
     }
 
-    /// 测试已弃用的参数结构
+    /// 测试已弃用的参数结构（保留以测试向后兼容性）
     #[test]
+    #[allow(deprecated)]
     fn test_deprecated_params() {
         let params = ListWikiSpacesParams {
             page_size: Some(30),
