@@ -70,9 +70,7 @@ mod tests {
         let config = PlatformConfig::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .build()
-            .unwrap();
-
+            .build();
         let service = PlatformService::new(config);
         assert!(service.is_ok());
     }

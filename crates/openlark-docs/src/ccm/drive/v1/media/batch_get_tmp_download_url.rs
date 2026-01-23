@@ -179,12 +179,12 @@ mod tests {
         let config = Config::default();
 
         // 最大 5 个 token
-        let tokens_5: Vec<String> = vec!["a"; 5].iter().map(|s| s.to_string()).collect();
+        let tokens_5: Vec<String> = ["a"; 5].iter().map(|s| s.to_string()).collect();
         let request1 = BatchGetTmpDownloadUrlRequest::new(config.clone(), tokens_5);
         assert_eq!(request1.file_tokens.len(), 5);
 
         // 超过 5 个
-        let tokens_6: Vec<String> = vec!["a"; 6].iter().map(|s| s.to_string()).collect();
+        let tokens_6: Vec<String> = ["a"; 6].iter().map(|s| s.to_string()).collect();
         let request2 = BatchGetTmpDownloadUrlRequest::new(config, tokens_6);
 
         let result = std::thread::spawn(move || {

@@ -3,6 +3,7 @@
 //! 提供通用搜索查询功能
 
 use crate::AnalyticsConfig;
+use openlark_core::SDKResult;
 use std::sync::Arc;
 
 /// 查询搜索 API
@@ -29,6 +30,7 @@ impl QueryApi {
 
 /// 搜索请求
 pub struct SearchRequest {
+    #[allow(dead_code)]
     config: Arc<AnalyticsConfig>,
     search_term: Option<String>,
     search_type: Option<String>,
@@ -64,7 +66,7 @@ impl SearchRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"items": []}))
     }
@@ -72,6 +74,7 @@ impl SearchRequest {
 
 /// 搜索建议请求
 pub struct SuggestRequest {
+    #[allow(dead_code)]
     config: Arc<AnalyticsConfig>,
     query: Option<String>,
 }
@@ -91,7 +94,7 @@ impl SuggestRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> Result<serde_json::Value> {
+    pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"suggestions": []}))
     }

@@ -225,7 +225,7 @@ mod tests {
             deleted: true,
             record_id: "rec123".to_string(),
         };
-        assert_eq!(response.deleted, true);
+        assert!(response.deleted);
         assert_eq!(response.record_id, "rec123");
     }
 

@@ -371,7 +371,7 @@ mod tests {
             total: 100,
             items: vec![],
         };
-        assert_eq!(response.has_more, true);
+        assert!(response.has_more);
         assert_eq!(response.page_token, Some("next_page".to_string()));
         assert_eq!(response.total, 100);
         assert_eq!(response.items.len(), 0);

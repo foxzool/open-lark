@@ -124,7 +124,7 @@ mod tests {
     #[test]
     fn test_list_with_params() {
         let config = Config::default();
-        let request = ListWikiSpaceNodesRequest::new(config).space_id("wiki_space_123");
+        ListWikiSpaceNodesRequest::new(config).space_id("wiki_space_123");
 
         let params = ListWikiSpaceNodesParams {
             parent_node_token: Some("parent_node".to_string()),
@@ -134,6 +134,7 @@ mod tests {
 
         assert_eq!(params.parent_node_token, Some("parent_node".to_string()));
         assert_eq!(params.page_size, Some(20));
+        assert_eq!(params.page_token, Some("token123".to_string()));
     }
 
     /// 测试响应数据结构
