@@ -3,7 +3,8 @@
 /// 提供多维表格应用、数据表、视图管理等功能。
 use openlark_core::config::Config;
 
-/// 多维表格服务
+/// 多维表格服务（内部实现，通过 DocsClient 访问）
+#[doc(hidden)]
 #[derive(Debug, Clone)]
 pub struct BitableService {
     config: Config,
