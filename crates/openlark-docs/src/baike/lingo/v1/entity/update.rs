@@ -101,15 +101,18 @@ impl UpdateEntityRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::baike::lingo::v1::models::{Term, UserIdType};
+    use crate::baike::lingo::v1::models::{Term, DisplayStatus, UserIdType};
 
     #[test]
     fn test_update_lingo_entity_request_builder() {
         let config = Config::default();
         let body = EntityInput {
             main_keys: vec![Term {
-                text: "更新词条".to_string(),
                 key: "update_key".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
             }],
             description: Some("更新描述".to_string()),
             ..Default::default()
@@ -127,8 +130,11 @@ mod tests {
         let config = Config::default();
         let body = EntityInput {
             main_keys: vec![Term {
-                text: "富文本词条".to_string(),
                 key: "rich_key".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
             }],
             rich_text: Some("<p>富文本内容</p>".to_string()),
             ..Default::default()
@@ -146,8 +152,11 @@ mod tests {
         // 测试 entity_id 为空
         let body = EntityInput {
             main_keys: vec![Term {
-                text: "测试词条".to_string(),
                 key: "test_key".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
             }],
             description: Some("描述".to_string()),
             ..Default::default()
@@ -160,7 +169,6 @@ mod tests {
 
         // 测试 main_keys 为空
         let body2 = EntityInput {
-            main_keys: vec![],
             ..Default::default()
         };
         let request2 = UpdateEntityRequest::new(config.clone(), "entity_123", body2);
@@ -172,8 +180,11 @@ mod tests {
         // 测试 description 和 rich_text 都为空
         let body3 = EntityInput {
             main_keys: vec![Term {
-                text: "测试词条".to_string(),
                 key: "test_key".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
             }],
             description: None,
             rich_text: None,
