@@ -15,25 +15,20 @@ jobs:
       startsWith(github.event.comment.body, '/opencode')
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      pull-requests: write
-      issues: read
       id-token: write
+      contents: write
+      pull-requests: write
+      issues: write
     steps:
-      - name: Verify secrets
-        run: |
-          if [ -z "${{ secrets.ZHIPU_API_KEY }}" ]; then
-            echo "❌ ZHIPU_API_KEY not configured in repository secrets"
-            exit 1
-          fi
-
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Run opencode
-        uses: anomalyco/opencode/github@v1
+        uses: anomalyco/opencode/github@latest
         env:
           ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: zhipuai-coding-plan/glm-4.7
+          github_token: ${{ secrets.GITHUB_TOKEN }}
