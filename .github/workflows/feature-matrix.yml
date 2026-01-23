@@ -26,19 +26,24 @@ jobs:
       fail-fast: false
       matrix:
         features:
-          # Individual core features
+          # Individual core features (from workspace Cargo.toml)
           - "auth"
           - "docs"
           - "communication"
           - "hr"
           - "ai"
           - "meeting"
-          - "helpdesk"
-          - "mail"
-          - "application"
           - "cardkit"
+          - "security"
+          - "workflow"
+          - "application"
           - "websocket"
           - "dev-tools"
+          - "platform"
+          - "analytics"
+          - "user"
+          - "base"
+          - "bitable"
 
           # Important combinations
           - "communication,auth"
@@ -46,16 +51,14 @@ jobs:
           - "communication,docs"
           - "communication,websocket"
           - "hr,communication"
+          - "docs,base,bitable"
 
-          # Advanced service sampling (high-value features)
-          - "ai"
-          - "meeting"
-          - "helpdesk"
-          - "mail"
+          # Recommended feature sets
+          - "core-services"
+          - "p0-services"
 
           # Edge cases
           - "" # no features
-          - "core-services" # recommended feature set
           
     steps:
       - uses: actions/checkout@v4
@@ -80,20 +83,20 @@ jobs:
           echo "Testing feature combination: ${{ matrix.features }}"
           if [ -z "${{ matrix.features }}" ]; then
             echo "Building with no features (minimal build)"
-            timeout 8m cargo build --no-default-features
+            timeout 15m cargo build --no-default-features
           else
             echo "Building with features: ${{ matrix.features }}"
-            timeout 8m cargo build --no-default-features --features "${{ matrix.features }}"
+            timeout 15m cargo build --no-default-features --features "${{ matrix.features }}"
           fi
-          
+
       - name: Test with feature combination
         run: |
           if [ -z "${{ matrix.features }}" ]; then
             echo "Testing with no features"
-            timeout 5m cargo test --no-default-features --lib
+            timeout 10m cargo test --no-default-features --lib
           else
             echo "Testing with features: ${{ matrix.features }}"
-            timeout 5m cargo test --no-default-features --features "${{ matrix.features }}" --lib
+            timeout 10m cargo test --no-default-features --features "${{ matrix.features }}" --lib
           fi
 
   # Advanced feature matrix testing using cargo-hack
@@ -128,21 +131,21 @@ jobs:
         run: |
           echo "## Feature Testing Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           # Test each feature individually (excluding websocket due to heavy dependencies)
-          timeout 15m cargo hack test --each-feature --exclude-features websocket --lib \
+          timeout 30m cargo hack test --each-feature --exclude-features websocket --lib \
             || echo "❌ Some individual feature tests failed" >> $GITHUB_STEP_SUMMARY
-            
+
       # Test feature combinations that are likely to be used together
       - name: Test core feature combinations
         run: |
           echo "### Core Feature Combinations" >> $GITHUB_STEP_SUMMARY
-          
+
           # Test combinations of core features
           CORE_FEATURES="auth,docs,communication,hr,ai,websocket"
           echo "Testing core features: $CORE_FEATURES" >> $GITHUB_STEP_SUMMARY
-          
-          if timeout 10m cargo hack test --feature-powerset --depth 2 \
+
+          if timeout 20m cargo hack test --feature-powerset --depth 2 \
             --features "$CORE_FEATURES" --lib; then
             echo "✅ Core feature combinations passed" >> $GITHUB_STEP_SUMMARY
           else

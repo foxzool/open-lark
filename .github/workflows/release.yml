@@ -141,6 +141,15 @@ jobs:
           fi
           echo "✅ Version verification passed"
 
+      - name: Verify crates.io token
+        run: |
+          if [ -z "${{ secrets.CRATES_IO_TOKEN }}" ]; then
+            echo "❌ CRATES_IO_TOKEN not configured in repository secrets"
+            echo "Please add CRATES_IO_TOKEN to repository secrets"
+            exit 1
+          fi
+          echo "✅ CRATES_IO_TOKEN is configured"
+
       - name: Build release
         run: cargo build --release --all-features
 

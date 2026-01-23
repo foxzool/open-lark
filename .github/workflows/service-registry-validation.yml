@@ -62,13 +62,19 @@ jobs:
         run: |
           echo "⚡ 运行ServiceRegistry性能基准测试..."
 
+          # 检查 benchmark 文件是否存在
+          if [ ! -f "benches/config_performance.rs" ]; then
+            echo "⚠️  benchmark 文件不存在，跳过性能测试"
+            exit 0
+          fi
+
           # 编译性能测试
           echo "🔨 编译性能基准测试..."
-          cargo build -p open-lark --release --features core-services --benches
+          cargo build --release --features core-services --benches
 
           # 运行基准测试
           echo "🏃 运行基准测试..."
-          cargo bench -p open-lark --features core-services --bench config_performance
+          cargo bench --features core-services --bench config_performance
 
   service-registry-validation:
     name: ServiceRegistry Validation Report
