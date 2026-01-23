@@ -6,8 +6,8 @@ on:
   push:
     branches: [main]
   schedule:
-    # Run feature matrix testing weekly on Sundays at 00:00 UTC
-    - cron: '0 0 * * 0'
+    # Run feature matrix testing every 3 days at 00:00 UTC
+    - cron: '0 0 */3 * *'
 
 permissions:
   contents: read
@@ -64,31 +64,9 @@ jobs:
         uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
-          
-      - name: Cache Cargo registry
-        uses: actions/cache@v4
-        with:
-          path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-registry-
-            
-      - name: Cache Cargo index
-        uses: actions/cache@v4
-        with:
-          path: ~/.cargo/git
-          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-index-
-            
-      - name: Cache target directory
-        uses: actions/cache@v4
-        with:
-          path: target
-          key: ${{ runner.os }}-target-feat-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-target-feat-
-            ${{ runner.os }}-target-
+
+      - name: Cache Cargo build files
+        uses: Swatinem/rust-cache@v2
 
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
@@ -129,28 +107,14 @@ jobs:
         uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
-          
+
       - name: Install cargo-hack
         uses: taiki-e/install-action@v2
         with:
           tool: cargo-hack
-        
-      - name: Cache Cargo registry
-        uses: actions/cache@v4
-        with:
-          path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-registry-
-            
-      - name: Cache target directory
-        uses: actions/cache@v4
-        with:
-          path: target
-          key: ${{ runner.os }}-target-hack-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-target-hack-
-            ${{ runner.os }}-target-
+
+      - name: Cache Cargo build files
+        uses: Swatinem/rust-cache@v2
 
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
