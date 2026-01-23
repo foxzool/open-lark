@@ -132,18 +132,22 @@ impl CreateEntityRequest {
     }
 }
 
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::baike::baike::v1::models::{Term, UserIdType};
+    use crate::baike::baike::v1::models::{Term, DisplayStatus, UserIdType};
 
     #[test]
     fn test_create_entity_request_builder() {
         let config = Config::default();
         let req = CreateEntityReq {
             main_keys: vec![Term {
-                text: "测试词条".to_string(),
                 key: "test_key".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
             }],
             description: Some("词条描述".to_string()),
             ..Default::default()
@@ -160,12 +164,18 @@ mod tests {
         let config = Config::default();
         let req = CreateEntityReq {
             main_keys: vec![Term {
-                text: "测试词条".to_string(),
-                key: "test_key".to_string(),
+                key: "public_key".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
             }],
             aliases: Some(vec![Term {
-                text: "别名".to_string(),
                 key: "alias_key".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
             }]),
             rich_text: Some("<p>富文本内容</p>".to_string()),
             ..Default::default()
@@ -194,8 +204,11 @@ mod tests {
         // 测试 description 和 rich_text 都为空
         let req2 = CreateEntityReq {
             main_keys: vec![Term {
-                text: "测试词条".to_string(),
                 key: "test_key".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
             }],
             description: None,
             rich_text: None,
