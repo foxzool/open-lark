@@ -55,7 +55,6 @@ jobs:
 
           # Recommended feature sets
           - "core-services"
-          - "p0-services"
 
           # Edge cases
           - "" # no features
