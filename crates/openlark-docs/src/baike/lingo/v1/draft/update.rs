@@ -100,7 +100,9 @@ impl UpdateDraftRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::baike::lingo::v1::models::{DraftUpdateEntityInput, UserIdType, DisplayStatus, Term};
+    use crate::baike::lingo::v1::models::{
+        DisplayStatus, DraftUpdateEntityInput, Term, UserIdType,
+    };
 
     /// 测试构建器模式
     #[test]
