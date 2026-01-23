@@ -12,7 +12,7 @@ keywords = ["feishu", "lark", "docs", "api", "cloud-docs", "sheets"]
 categories = ["api-bindings", "web-programming"]
 
 [features]
-default = ["ccm", "bitable", "base"]
+default = []
 
 # === 核心功能模块 ===
 core = []
