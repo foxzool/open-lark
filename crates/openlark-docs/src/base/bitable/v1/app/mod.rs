@@ -17,13 +17,11 @@ pub mod role;
 pub mod table;
 pub mod workflow;
 
-// 导出所有API，但避免命名冲突
-pub use copy::*;
-pub use create::*;
-#[allow(ambiguous_glob_reexports)]
-pub use dashboard::*;
-pub use get::*;
-pub use update::*;
+// 仪表盘相关 - 选择性导入以避免命名冲突
+pub use dashboard::AppDashboardService;
+
+// 数据表相关 - 选择性导入以避免命名冲突
+pub use table::TableService;
 
 // 角色相关 - 选择性导入以避免命名冲突
 pub use role::{
@@ -35,14 +33,14 @@ pub use role::{
     UpdateAppRoleRequestBody, UpdateAppRoleResponse,
 };
 
-#[allow(ambiguous_glob_reexports)]
-pub use table::*;
-
 // 工作流相关 - 选择性导入以避免命名冲突
 pub use workflow::{
     AppWorkflowService, ListWorkflowRequest, ListWorkflowResponse, UpdateWorkflowRequest,
     UpdateWorkflowResponse,
 };
+
+#[allow(ambiguous_glob_reexports)]
+pub use table::*;
 
 /// 多维表格应用服务
 pub struct AppService {
