@@ -29,6 +29,6 @@ jobs:
         uses: anomalyco/opencode/github@latest
         env:
           ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
+          USE_GITHUB_TOKEN: true
         with:
           model: zhipuai-coding-plan/glm-4.7
-          github_token: ${{ secrets.GITHUB_TOKEN }}
