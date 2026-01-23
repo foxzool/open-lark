@@ -29,12 +29,11 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: false
 
       - name: Run opencode
         uses: anomalyco/opencode/github@v1
         env:
           ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: zhipuai-coding-plan/glm-4.7
