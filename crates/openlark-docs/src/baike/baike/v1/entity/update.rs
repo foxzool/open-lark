@@ -136,7 +136,7 @@ impl UpdateEntityRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::baike::baike::v1::models::{Term, UserIdType, DisplayStatus};
+    use crate::baike::baike::v1::models::{DisplayStatus, Term, UserIdType};
 
     #[test]
     fn test_update_entity_request_builder() {
