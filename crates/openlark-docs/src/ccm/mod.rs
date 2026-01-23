@@ -3,7 +3,8 @@
 /// 包含docs、docx、ccm_doc、ccm_docs、ccm_drive_explorer、ccm_drive_permission、sheets、wiki等子项目的API实现
 use openlark_core::config::Config;
 
-/// 云内容管理服务
+/// 云内容管理服务（内部实现，通过 DocsClient 访问）
+#[doc(hidden)]
 #[derive(Debug, Clone)]
 pub struct CcmService {
     config: Config,
