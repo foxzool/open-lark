@@ -16,22 +16,18 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: write
-      pull-requests: write
-      issues: write
-      actions: read
+      contents: read
+      pull-requests: read
+      issues: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
           persist-credentials: false
 
       - name: Run opencode
-        uses: anomalyco/opencode/github@v1.1.34
+        uses: anomalyco/opencode/github@latest
         env:
           ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: zhipuai-coding-plan/glm-4.7
-          use_github_token: true
