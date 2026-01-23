@@ -31,42 +31,6 @@ impl ApiResponseTrait for DeleteTableResponse {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_empty_app_token() {
-        let config = Config::default();
-        let request = DeleteTableRequest::new(config)
-            .app_token("".to_string())
-            .table_id("table_id".to_string());
-        let rt = tokio::runtime::Runtime::new().unwrap();
-        let result = rt.block_on(request.execute());
-        assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.to_string().contains("app_token"));
-    }
-
-    #[test]
-    fn test_empty_table_id() {
-        let config = Config::default();
-        let request = DeleteTableRequest::new(config)
-            .app_token("app_token".to_string())
-            .table_id("".to_string());
-        let rt = tokio::runtime::Runtime::new().unwrap();
-        let result = rt.block_on(request.execute());
-        assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.to_string().contains("table_id"));
-    }
-
-    #[test]
-    fn test_response_trait() {
-        assert_eq!(DeleteTableResponse::data_format(), ResponseFormat::Data);
-    }
-}
-
 impl DeleteTableRequest {
     /// 创建删除数据表请求
     pub fn new(config: Config) -> Self {
@@ -117,5 +81,41 @@ impl DeleteTableRequest {
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_app_token() {
+        let config = Config::default();
+        let request = DeleteTableRequest::new(config)
+            .app_token("".to_string())
+            .table_id("table_id".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("app_token"));
+    }
+
+    #[test]
+    fn test_empty_table_id() {
+        let config = Config::default();
+        let request = DeleteTableRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("".to_string());
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert!(err.to_string().contains("table_id"));
+    }
+
+    #[test]
+    fn test_response_trait() {
+        assert_eq!(DeleteTableResponse::data_format(), ResponseFormat::Data);
     }
 }

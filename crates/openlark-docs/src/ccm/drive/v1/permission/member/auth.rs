@@ -201,9 +201,9 @@ mod tests {
     #[test]
     fn test_response_structure() {
         let response = AuthPermissionMemberResponse { auth_result: true };
-        assert_eq!(response.auth_result, true);
+        assert!(response.auth_result);
 
         let response2 = AuthPermissionMemberResponse { auth_result: false };
-        assert_eq!(response2.auth_result, false);
+        assert!(!response2.auth_result);
     }
 }

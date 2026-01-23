@@ -176,7 +176,7 @@ mod tests {
     fn test_subscribe_response_data() {
         let response = GetSubscribeResponse { is_subscribe: true };
 
-        assert_eq!(response.is_subscribe, true);
+        assert!(response.is_subscribe);
     }
 
     /// 测试未订阅状态

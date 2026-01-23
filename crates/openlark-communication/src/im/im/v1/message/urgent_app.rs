@@ -34,6 +34,12 @@ pub struct UrgentAppBody {
     user_id_list: Vec<String>,
 }
 
+impl Default for UrgentAppBody {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl UrgentAppBody {
     pub fn new() -> Self {
         Self {
