@@ -168,61 +168,83 @@ pub struct Statistics {
 }
 
 /// 创建/更新免审词条请求体（entity）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct EntityInput {
     /// 词条名（最大 1 个）
+    #[serde(default)]
     pub main_keys: Vec<Term>,
     /// 别名
+    #[serde(default)]
     pub aliases: Option<Vec<Term>>,
     /// 纯文本释义（当填写 rich_text 时会失效）
+    #[serde(default)]
     pub description: Option<String>,
     /// 关联信息
+    #[serde(default)]
     pub related_meta: Option<RelatedMeta>,
     /// 外部系统关联数据
+    #[serde(default)]
     pub outer_info: Option<OuterInfo>,
     /// 富文本释义
+    #[serde(default)]
     pub rich_text: Option<String>,
     /// 国际化的词条释义
+    #[serde(default)]
     pub i18n_descs: Option<Vec<I18nEntryDesc>>,
 }
 
 /// 创建/更新草稿请求体（entity）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DraftEntityInput {
     /// 词条 ID（可选）
+    #[serde(default)]
     pub id: Option<String>,
     /// 词条名（最大 1 个）
+    #[serde(default)]
     pub main_keys: Vec<Term>,
     /// 别名
+    #[serde(default)]
     pub aliases: Option<Vec<Term>>,
     /// 纯文本释义（当填写 rich_text 时会失效）
+    #[serde(default)]
     pub description: Option<String>,
     /// 关联信息
+    #[serde(default)]
     pub related_meta: Option<RelatedMeta>,
     /// 外部系统关联数据（仅创建草稿时支持）
+    #[serde(default)]
     pub outer_info: Option<OuterInfo>,
     /// 富文本释义
+    #[serde(default)]
     pub rich_text: Option<String>,
     /// 国际化的词条释义
+    #[serde(default)]
     pub i18n_descs: Option<Vec<I18nEntryDesc>>,
 }
 
 /// 更新草稿请求体（entity）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DraftUpdateEntityInput {
     /// 词条 ID（可选）
+    #[serde(default)]
     pub id: Option<String>,
     /// 词条名（最大 1 个）
+    #[serde(default)]
     pub main_keys: Vec<Term>,
     /// 别名
+    #[serde(default)]
     pub aliases: Option<Vec<Term>>,
     /// 纯文本释义（当填写 rich_text 时会失效）
+    #[serde(default)]
     pub description: Option<String>,
     /// 关联信息
+    #[serde(default)]
     pub related_meta: Option<RelatedMeta>,
     /// 富文本释义
+    #[serde(default)]
     pub rich_text: Option<String>,
     /// 国际化的词条释义
+    #[serde(default)]
     pub i18n_descs: Option<Vec<I18nEntryDesc>>,
 }
 
