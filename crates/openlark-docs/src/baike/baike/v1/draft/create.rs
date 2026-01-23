@@ -143,7 +143,7 @@ impl CreateDraftRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::baike::baike::v1::models::{Term, UserIdType, DisplayStatus};
+    use crate::baike::baike::v1::models::{DisplayStatus, Term, UserIdType};
 
     #[test]
     fn test_create_draft_request_builder() {

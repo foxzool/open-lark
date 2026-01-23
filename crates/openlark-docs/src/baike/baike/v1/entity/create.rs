@@ -182,7 +182,10 @@ mod tests {
         let request = CreateEntityRequest::new(config, req);
 
         assert!(request.req.aliases.is_some());
-        assert_eq!(request.req.aliases.as_ref().map(|v| v.len()).unwrap_or(0), 1);
+        assert_eq!(
+            request.req.aliases.as_ref().map(|v| v.len()).unwrap_or(0),
+            1
+        );
     }
 
     #[tokio::test]

@@ -109,7 +109,7 @@ impl CreateEntityRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::baike::lingo::v1::models::{Term, DisplayStatus, UserIdType};
+    use crate::baike::lingo::v1::models::{DisplayStatus, Term, UserIdType};
 
     #[test]
     fn test_create_lingo_entity_request_builder() {
