@@ -28,13 +28,8 @@ jobs:
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
 
-      - name: Cache Cargo registry
-        uses: actions/cache@v4
-        with:
-          path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-registry-
+      - name: Cache Cargo build files
+        uses: Swatinem/rust-cache@v2
 
       - name: Install cargo-audit and cargo-deny
         uses: taiki-e/install-action@v2
