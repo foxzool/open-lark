@@ -2,7 +2,30 @@
 
 // 重新导出子模块
 pub mod minutes;
-pub use minutes::*;
+// minutes 模块显式导出
+pub use minutes::{
+    GetMinuteMediaRequest,
+    GetMinuteMediaResponse,
+    GetMinuteRequest,
+    GetMinuteResponse,
+    GetMinuteStatisticsRequest,
+    GetMinuteStatisticsResponse,
+    GetMinuteTranscriptRequest,
+    MinuteInfo,
+    MinuteMediaInfo,
+    MinuteStatistics,
+    UserIdType,
+    UserViewDetail,
+    as_str,
+    execute,
+    execute_with_options,
+    file_format,
+    minute_token,
+    need_speaker,
+    need_timestamp,
+    new,
+    user_id_type,
+};
 
 use crate::minutes::v1::minute::get::GetMinuteRequest;
 use crate::minutes::v1::minute::media::get::GetMinuteMediaRequest;

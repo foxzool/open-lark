@@ -1,4 +1,3 @@
-#![allow(ambiguous_glob_reexports)]
 
 /// Lingo语言服务 v1
 ///
@@ -14,12 +13,6 @@ pub mod models;
 pub mod repo;
 
 // 重新导出所有服务类型
-pub use classification::*;
-pub use draft::*;
-pub use entity::*;
-pub use file::*;
-pub use models::*;
-pub use repo::*;
 
 /// Lingo 语言服务主结构
 pub struct LingoServiceV1 {

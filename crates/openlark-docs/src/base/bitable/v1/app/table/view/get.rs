@@ -127,6 +127,7 @@ impl ApiResponseTrait for GetViewResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use openlark_core::testing::prelude::test_runtime;
 
     #[test]
     fn test_empty_app_token() {
@@ -136,12 +137,11 @@ mod tests {
             .table_id("table_id".to_string())
             .view_id("view_id".to_string());
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.to_string().contains("app_token"));
+        assert!(result.unwrap_err().to_string().contains("app_token"));
     }
 
     #[test]
@@ -152,12 +152,11 @@ mod tests {
             .table_id("".to_string())
             .view_id("view_id".to_string());
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.to_string().contains("table_id"));
+        assert!(result.unwrap_err().to_string().contains("table_id"));
     }
 
     #[test]
@@ -168,12 +167,11 @@ mod tests {
             .table_id("table_id".to_string())
             .view_id("".to_string());
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.to_string().contains("view_id"));
+        assert!(result.unwrap_err().to_string().contains("view_id"));
     }
 
     #[test]

@@ -216,6 +216,7 @@ impl ApiResponseTrait for CreateViewResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
@@ -227,7 +228,7 @@ mod tests {
             .table_id("table_id".to_string())
             .view(view_data);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -244,7 +245,7 @@ mod tests {
             .table_id("".to_string())
             .view(view_data);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -264,7 +265,7 @@ mod tests {
             .table_id("table_id".to_string())
             .view(view_data);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -285,7 +286,7 @@ mod tests {
             .table_id("table_id".to_string())
             .view(view_data);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -305,7 +306,7 @@ mod tests {
             .table_id("table_id".to_string())
             .view(view_data);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -325,7 +326,7 @@ mod tests {
             .table_id("table_id".to_string())
             .view(view_data);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());

@@ -8,8 +8,24 @@ pub mod download;
 pub mod upload;
 
 // 重新导出API函数
-pub use download::*;
-pub use upload::*;
+// download 模块显式导出
+pub use download::{
+    DownloadFileRequest,
+    UploadFileRequest,
+    UploadFileResp,
+    execute,
+    execute_with_options,
+    new,
+};
+// upload 模块显式导出
+pub use upload::{
+    DownloadFileRequest,
+    UploadFileRequest,
+    UploadFileResp,
+    execute,
+    execute_with_options,
+    new,
+};
 
 /// 文件管理服务
 #[derive(Debug, Clone)]
