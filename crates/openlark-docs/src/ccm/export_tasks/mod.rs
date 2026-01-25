@@ -30,7 +30,22 @@ pub mod models;
 pub mod services;
 
 // 重新导出主要类型
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    CreateExportTaskRequest,
+    CreateExportTaskResponse,
+    DownloadExportFileRequest,
+    DownloadExportFileResponse,
+    ExportTaskResult,
+    ExportTaskStatus,
+    ExportTasksService,
+    GetExportTaskRequest,
+    GetExportTaskResponse,
+    create_export_task,
+    get_export_task,
+    new,
+    validate,
+};
 // pub use services::{ // Generated: Module use not found
     CreateExportTaskRequestBuilder, DownloadExportFileRequestBuilder, ExportTasksService,
     GetExportTaskRequestBuilder,

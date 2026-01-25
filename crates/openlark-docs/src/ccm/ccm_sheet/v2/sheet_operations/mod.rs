@@ -38,7 +38,30 @@ impl SheetOperationsApi {
 
 // 导出模型定义
 pub mod models;
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    DeleteRangeParams,
+    DeleteRangeResponse,
+    DeleteRangeResult,
+    FindReplaceParams,
+    FindReplaceResponse,
+    FindReplaceResult,
+    InsertDimensionParams,
+    InsertDimensionResponse,
+    InsertDimensionResult,
+    MergeCellsParams,
+    MergeCellsResponse,
+    MergeCellsResult,
+    MoveDimensionParams,
+    MoveDimensionResponse,
+    MoveDimensionResult,
+    ReplaceRangeParams,
+    ReplaceRangeResponse,
+    ReplaceRangeResult,
+    UnmergeCellsParams,
+    UnmergeCellsResponse,
+    UnmergeCellsResult,
+};
 
 impl ApiResponseTrait for DeleteRangeResponse {
     fn data_format() -> ResponseFormat {

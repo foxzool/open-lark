@@ -4,7 +4,14 @@
 use openlark_core::{config::Config, req_option::RequestOption, SDKResult};
 
 // 重新导出所有模块类型
-pub use get::*;
+// get 模块显式导出
+pub use get::{
+    GetDocsContentRequest,
+    GetDocsContentResponse,
+    get_docs_content,
+    lang,
+    new,
+};
 
 // 子模块
 mod get;

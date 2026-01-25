@@ -29,7 +29,71 @@ pub struct FilterInfo {
 }
 
 // 重新导出所有API函数
-pub use create::*;
-pub use delete::*;
-pub use get::*;
-pub use update::*;
+// create 模块显式导出
+pub use create::{
+    CreateFilterRequest,
+    CreateFilterResponse,
+    DeleteFilterResponse,
+    GetFilterResponse,
+    UpdateFilterRequest,
+    UpdateFilterResponse,
+    create_filter,
+    create_filter_with_options,
+    delete_filter,
+    delete_filter_with_options,
+    get_filter,
+    get_filter_with_options,
+    update_filter,
+    update_filter_with_options,
+};
+// delete 模块显式导出
+pub use delete::{
+    CreateFilterRequest,
+    CreateFilterResponse,
+    DeleteFilterResponse,
+    GetFilterResponse,
+    UpdateFilterRequest,
+    UpdateFilterResponse,
+    create_filter,
+    create_filter_with_options,
+    delete_filter,
+    delete_filter_with_options,
+    get_filter,
+    get_filter_with_options,
+    update_filter,
+    update_filter_with_options,
+};
+// get 模块显式导出
+pub use get::{
+    CreateFilterRequest,
+    CreateFilterResponse,
+    DeleteFilterResponse,
+    GetFilterResponse,
+    UpdateFilterRequest,
+    UpdateFilterResponse,
+    create_filter,
+    create_filter_with_options,
+    delete_filter,
+    delete_filter_with_options,
+    get_filter,
+    get_filter_with_options,
+    update_filter,
+    update_filter_with_options,
+};
+// update 模块显式导出
+pub use update::{
+    CreateFilterRequest,
+    CreateFilterResponse,
+    DeleteFilterResponse,
+    GetFilterResponse,
+    UpdateFilterRequest,
+    UpdateFilterResponse,
+    create_filter,
+    create_filter_with_options,
+    delete_filter,
+    delete_filter_with_options,
+    get_filter,
+    get_filter_with_options,
+    update_filter,
+    update_filter_with_options,
+};

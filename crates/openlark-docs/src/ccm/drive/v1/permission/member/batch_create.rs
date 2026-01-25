@@ -224,6 +224,7 @@ impl ApiResponseTrait for BatchCreatePermissionMemberResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
@@ -252,7 +253,7 @@ mod tests {
         let config = Config::default();
         let member = PermissionMember::new("openid", "ou_123", "view");
         let request = BatchCreatePermissionMemberRequest::new(config, "", "docx", vec![member]);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -266,7 +267,7 @@ mod tests {
         let member = PermissionMember::new("openid", "ou_123", "view");
         let request =
             BatchCreatePermissionMemberRequest::new(config, "file_token", "", vec![member]);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -278,7 +279,7 @@ mod tests {
     fn test_empty_members() {
         let config = Config::default();
         let request = BatchCreatePermissionMemberRequest::new(config, "file_token", "docx", vec![]);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -293,7 +294,7 @@ mod tests {
         member.member_type = "invalid_type".to_string();
         let request =
             BatchCreatePermissionMemberRequest::new(config, "file_token", "docx", vec![member]);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -307,7 +308,7 @@ mod tests {
         let member = PermissionMember::new("openid", "ou_123", "invalid_perm");
         let request =
             BatchCreatePermissionMemberRequest::new(config, "file_token", "docx", vec![member]);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -321,7 +322,7 @@ mod tests {
         let member = PermissionMember::new("openid", "ou_123", "full_access");
         let request =
             BatchCreatePermissionMemberRequest::new(config, "file_token", "minutes", vec![member]);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());

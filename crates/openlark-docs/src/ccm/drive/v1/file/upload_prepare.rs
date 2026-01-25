@@ -140,6 +140,7 @@ impl ApiResponseTrait for UploadPrepareResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
@@ -156,7 +157,7 @@ mod tests {
         let config = Config::default();
         let request = UploadPrepareRequest::new(config, "", "folder_token", 1024);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -169,7 +170,7 @@ mod tests {
         let config = Config::default();
         let request = UploadPrepareRequest::new(config, "test.txt".to_string(), "", 1024);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -183,7 +184,7 @@ mod tests {
         let long_name = "a".repeat(251);
         let request = UploadPrepareRequest::new(config, long_name, "folder_token", 1024);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -196,7 +197,7 @@ mod tests {
         let config = Config::default();
         let request = UploadPrepareRequest::new(config, "test.txt", "folder_token", -1);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -210,7 +211,7 @@ mod tests {
         let request = UploadPrepareRequest::new(config, "test.txt", "folder_token", 1024)
             .parent_type("invalid_type");
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());

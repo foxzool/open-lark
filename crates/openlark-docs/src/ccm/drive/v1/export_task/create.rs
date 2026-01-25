@@ -135,6 +135,7 @@ impl ApiResponseTrait for CreateExportTaskResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     /// 测试构建器模式
@@ -168,7 +169,7 @@ mod tests {
         let request1 = CreateExportTaskRequest::new(config.clone(), "", "token", "docx");
 
         let result1 = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request1.execute().await;
             })
@@ -182,7 +183,7 @@ mod tests {
         let request2 = CreateExportTaskRequest::new(config, long_token, "token", "docx");
 
         let result2 = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request2.execute().await;
             })
@@ -199,7 +200,7 @@ mod tests {
         let request = CreateExportTaskRequest::new(config, "invalid", "token", "docx");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })
@@ -262,7 +263,7 @@ mod tests {
         let request = CreateExportTaskRequest::new(config, "csv", "token", "sheet");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })

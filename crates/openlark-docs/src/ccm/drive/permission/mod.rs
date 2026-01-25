@@ -41,7 +41,18 @@
 pub mod models;
 
 // 重新导出主要类型
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    CheckMemberPermissionRequest,
+    CheckMemberPermissionResponse,
+    GetPublicPermissionRequest,
+    GetPublicPermissionResponse,
+    PublicPermission,
+    TransferOwnerRequest,
+    TransferOwnerResponse,
+    UserPermission,
+    validate,
+};
 
 use serde_json::Value;
 use std::collections::HashMap;

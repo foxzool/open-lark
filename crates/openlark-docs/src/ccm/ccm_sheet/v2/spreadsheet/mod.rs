@@ -34,7 +34,20 @@ impl SpreadsheetApi {
 
 // 导出模型定义
 pub mod models;
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    CreateSpreadsheetParams,
+    CreateSpreadsheetResponse,
+    CreateSpreadsheetResult,
+    GetSpreadsheetParams,
+    GetSpreadsheetResponse,
+    SpreadsheetInfo,
+    SpreadsheetSheetInfo,
+    UpdateSpreadsheetParams,
+    UpdateSpreadsheetResponse,
+    UpdateSpreadsheetResult,
+    UserInfo,
+};
 
 impl ApiResponseTrait for GetSpreadsheetResponse {
     fn data_format() -> ResponseFormat {

@@ -117,4 +117,16 @@ pub async fn get_public_permission(
 // API函数已经在模块中定义，不需要重复导出
 
 // 重新导出模型
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    CheckMemberPermissionParams,
+    CheckMemberPermissionResponse,
+    GetPublicPermissionParams,
+    GetPublicPermissionResponse,
+    PermissionCheckResult,
+    PublicPermission,
+    TransferOwnerParams,
+    TransferOwnerResponse,
+    TransferResult,
+    UserInfo,
+};

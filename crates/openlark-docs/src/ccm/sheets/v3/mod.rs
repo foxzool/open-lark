@@ -1,4 +1,3 @@
-#![allow(ambiguous_glob_reexports)]
 
 //! Sheets电子表格服务 v3
 //!
@@ -45,7 +44,6 @@ pub mod spreadsheet;
 // pub use find_replace::*; // 暂时注释
 // pub use float_images::*; // Generated: Module use not found
 // pub use macros::*; // Generated: Module use not found
-pub use models::*;
 // pub use move_dimension::*; // 暂时注释
 // pub use pivot_tables::*; // Generated: Module use not found
 // pub use sheet::*; // Generated: Module use not found

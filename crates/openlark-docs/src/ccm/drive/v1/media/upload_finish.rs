@@ -104,6 +104,7 @@ impl ApiResponseTrait for UploadFinishMediaResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
@@ -127,7 +128,7 @@ mod tests {
         let config = Config::default();
         let request = UploadFinishMediaRequest::new(config, "", 10);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -140,7 +141,7 @@ mod tests {
         let config = Config::default();
         let request = UploadFinishMediaRequest::new(config, "upload_id", 0);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -153,7 +154,7 @@ mod tests {
         let config = Config::default();
         let request = UploadFinishMediaRequest::new(config, "upload_id", -1);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -166,7 +167,7 @@ mod tests {
         let config = Config::default();
         let request = UploadFinishMediaRequest::new(config, "upload_id", 1);
 
-        let _rt = tokio::runtime::Runtime::new().unwrap();
+        let _rt = test_runtime();
         // 只验证请求构建成功，不实际执行
         assert_eq!(request.block_num, 1);
     }

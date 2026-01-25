@@ -35,7 +35,21 @@ impl SheetApi {
 
 // 导出模型定义
 pub mod models;
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    AddSheetParams,
+    AddSheetResponse,
+    AddSheetResult,
+    DeleteSheetParams,
+    DeleteSheetResponse,
+    DeleteSheetResult,
+    GetSheetParams,
+    GetSheetResponse,
+    SheetDetailInfo,
+    UpdateSheetParams,
+    UpdateSheetResponse,
+    UpdateSheetResult,
+};
 
 impl ApiResponseTrait for AddSheetResponse {
     fn data_format() -> ResponseFormat {

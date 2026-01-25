@@ -165,6 +165,7 @@ impl ApiResponseTrait for UploadPartMediaResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
@@ -190,7 +191,7 @@ mod tests {
         let config = Config::default();
         let request = UploadPartMediaRequest::new(config, "", 0, 1024, vec![0; 1024]);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -203,7 +204,7 @@ mod tests {
         let config = Config::default();
         let request = UploadPartMediaRequest::new(config, "upload_id", -1, 1024, vec![0; 1024]);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -216,7 +217,7 @@ mod tests {
         let config = Config::default();
         let request = UploadPartMediaRequest::new(config, "upload_id", 0, 0, vec![]);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -235,7 +236,7 @@ mod tests {
             vec![0; 4 * 1024 * 1024 + 1],
         );
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -248,7 +249,7 @@ mod tests {
         let config = Config::default();
         let request = UploadPartMediaRequest::new(config, "upload_id", 0, 1024, vec![0; 512]);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());

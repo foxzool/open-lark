@@ -103,6 +103,7 @@ pub type ListFileVersionsResponse = ListFileVersionsData;
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
     use openlark_core::api::ApiResponseTrait;
 
@@ -137,7 +138,7 @@ mod tests {
         let request = ListFileVersionsRequest::new(config, "", 20, "docx");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })
@@ -164,7 +165,7 @@ mod tests {
         let request3 = ListFileVersionsRequest::new(config, "token", 101, "docx");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request3.execute().await;
             })
@@ -181,7 +182,7 @@ mod tests {
         let request = ListFileVersionsRequest::new(config, "token", 0, "docx");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })
@@ -198,7 +199,7 @@ mod tests {
         let request = ListFileVersionsRequest::new(config, "token", 20, "invalid");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })
