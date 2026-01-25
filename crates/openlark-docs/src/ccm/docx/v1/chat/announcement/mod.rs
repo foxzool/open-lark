@@ -14,8 +14,64 @@ use openlark_core::{
 };
 
 // 重新导出所有模块类型
-pub use block::*;
-pub use get::*;
+// block 模块显式导出
+pub use block::{
+    BatchDeleteChatAnnouncementBlockChildrenParams,
+    BatchDeleteChatAnnouncementBlockChildrenRequest,
+    BatchDeleteChatAnnouncementBlockChildrenResponse,
+    BatchUpdateChatAnnouncementBlocksParams,
+    BatchUpdateChatAnnouncementBlocksRequest,
+    BatchUpdateChatAnnouncementBlocksResponse,
+    BatchUpdateRequest,
+    CreateChatAnnouncementBlockChildrenParams,
+    CreateChatAnnouncementBlockChildrenRequest,
+    CreateChatAnnouncementBlockChildrenResponse,
+    GetChatAnnouncementBlockChildrenParams,
+    GetChatAnnouncementBlockChildrenRequest,
+    GetChatAnnouncementBlockChildrenResponse,
+    GetChatAnnouncementBlockParams,
+    GetChatAnnouncementBlockRequest,
+    GetChatAnnouncementBlockResponse,
+    GetChatAnnouncementBlocksParams,
+    GetChatAnnouncementBlocksRequest,
+    GetChatAnnouncementBlocksResponse,
+    GetChatAnnouncementRequest,
+    GetChatAnnouncementResponse,
+    chat_id,
+    execute,
+    execute_with_options,
+    new,
+    user_id_type,
+};
+// get 模块显式导出
+pub use get::{
+    BatchDeleteChatAnnouncementBlockChildrenParams,
+    BatchDeleteChatAnnouncementBlockChildrenRequest,
+    BatchDeleteChatAnnouncementBlockChildrenResponse,
+    BatchUpdateChatAnnouncementBlocksParams,
+    BatchUpdateChatAnnouncementBlocksRequest,
+    BatchUpdateChatAnnouncementBlocksResponse,
+    BatchUpdateRequest,
+    CreateChatAnnouncementBlockChildrenParams,
+    CreateChatAnnouncementBlockChildrenRequest,
+    CreateChatAnnouncementBlockChildrenResponse,
+    GetChatAnnouncementBlockChildrenParams,
+    GetChatAnnouncementBlockChildrenRequest,
+    GetChatAnnouncementBlockChildrenResponse,
+    GetChatAnnouncementBlockParams,
+    GetChatAnnouncementBlockRequest,
+    GetChatAnnouncementBlockResponse,
+    GetChatAnnouncementBlocksParams,
+    GetChatAnnouncementBlocksRequest,
+    GetChatAnnouncementBlocksResponse,
+    GetChatAnnouncementRequest,
+    GetChatAnnouncementResponse,
+    chat_id,
+    execute,
+    execute_with_options,
+    new,
+    user_id_type,
+};
 
 // 子模块
 mod block;

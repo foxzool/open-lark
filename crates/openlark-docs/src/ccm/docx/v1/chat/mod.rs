@@ -12,7 +12,35 @@
 use openlark_core::{api::Response, config::Config, req_option::RequestOption, SDKResult};
 
 // 重新导出所有模块类型
-pub use announcement::*;
+// announcement 模块显式导出
+pub use announcement::{
+    BatchDeleteChatAnnouncementBlockChildrenParams,
+    BatchDeleteChatAnnouncementBlockChildrenRequest,
+    BatchDeleteChatAnnouncementBlockChildrenResponse,
+    BatchUpdateChatAnnouncementBlocksParams,
+    BatchUpdateChatAnnouncementBlocksRequest,
+    BatchUpdateChatAnnouncementBlocksResponse,
+    BatchUpdateRequest,
+    CreateChatAnnouncementBlockChildrenParams,
+    CreateChatAnnouncementBlockChildrenRequest,
+    CreateChatAnnouncementBlockChildrenResponse,
+    GetChatAnnouncementBlockChildrenParams,
+    GetChatAnnouncementBlockChildrenRequest,
+    GetChatAnnouncementBlockChildrenResponse,
+    GetChatAnnouncementBlockParams,
+    GetChatAnnouncementBlockRequest,
+    GetChatAnnouncementBlockResponse,
+    GetChatAnnouncementBlocksParams,
+    GetChatAnnouncementBlocksRequest,
+    GetChatAnnouncementBlocksResponse,
+    GetChatAnnouncementRequest,
+    GetChatAnnouncementResponse,
+    chat_id,
+    execute,
+    execute_with_options,
+    new,
+    user_id_type,
+};
 
 // 子模块
 pub mod announcement;

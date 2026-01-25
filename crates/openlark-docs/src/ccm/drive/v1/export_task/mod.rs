@@ -2,7 +2,43 @@
 pub mod create;
 pub mod download;
 pub mod get;
-pub use download::*;
+// download 模块显式导出
+pub use download::{
+    CreateExportTaskRequest,
+    CreateExportTaskResponse,
+    DownloadExportRequest,
+    ExportTaskResult,
+    GetExportTaskRequest,
+    GetExportTaskResponse,
+    execute,
+    execute_with_options,
+    new,
+    sub_id,
+};
 // 重新导出所有API函数
-pub use create::*;
-pub use get::*;
+// create 模块显式导出
+pub use create::{
+    CreateExportTaskRequest,
+    CreateExportTaskResponse,
+    DownloadExportRequest,
+    ExportTaskResult,
+    GetExportTaskRequest,
+    GetExportTaskResponse,
+    execute,
+    execute_with_options,
+    new,
+    sub_id,
+};
+// get 模块显式导出
+pub use get::{
+    CreateExportTaskRequest,
+    CreateExportTaskResponse,
+    DownloadExportRequest,
+    ExportTaskResult,
+    GetExportTaskRequest,
+    GetExportTaskResponse,
+    execute,
+    execute_with_options,
+    new,
+    sub_id,
+};

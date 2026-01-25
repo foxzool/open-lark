@@ -210,6 +210,7 @@ impl ApiResponseTrait for UploadAllMediaResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
@@ -236,7 +237,7 @@ mod tests {
         let request =
             UploadAllMediaRequest::new(config, "", "docx_image", "doc_token", 100, vec![0; 100]);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -257,7 +258,7 @@ mod tests {
             vec![0; 100],
         );
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -271,7 +272,7 @@ mod tests {
         let request =
             UploadAllMediaRequest::new(config, "test.png", "docx_image", "", 100, vec![0; 100]);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -291,7 +292,7 @@ mod tests {
             vec![0; 100],
         );
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -305,7 +306,7 @@ mod tests {
         let request =
             UploadAllMediaRequest::new(config, "test.png", "docx_image", "doc_token", 0, vec![]);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -325,7 +326,7 @@ mod tests {
             vec![0; 20 * 1024 * 1024 + 1],
         );
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -345,7 +346,7 @@ mod tests {
             vec![0; 50],
         );
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());

@@ -23,7 +23,12 @@ use serde_json::json;
 // 重新导出所有子模块类型
 // pub use member_permitted::*; // Generated: Module use not found
 // pub use member_transfer::*; // Generated: Module use not found
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    MemberPermittedResponse,
+    MemberTransferResponse,
+    PublicResponse,
+};
 // pub use public::*; // Generated: Module use not found
 // pub use requests::*; // Generated: Module use not found
 // pub use responses::*; // Generated: Module use not found

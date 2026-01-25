@@ -206,6 +206,7 @@ impl ApiResponseTrait for PatchPublicPermissionResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
@@ -246,7 +247,7 @@ mod tests {
         };
 
         let request = PatchPublicPermissionRequest::new(config, "", "docx", body);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -267,7 +268,7 @@ mod tests {
         };
 
         let request = PatchPublicPermissionRequest::new(config, "doc_token", "", body);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -288,7 +289,7 @@ mod tests {
         };
 
         let request = PatchPublicPermissionRequest::new(config, "doc_token", "invalid_type", body);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -309,7 +310,7 @@ mod tests {
         };
 
         let request = PatchPublicPermissionRequest::new(config, "doc_token", "docx", body);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -330,7 +331,7 @@ mod tests {
         };
 
         let request = PatchPublicPermissionRequest::new(config, "wiki_token", "wiki", body);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -351,7 +352,7 @@ mod tests {
         };
 
         let request = PatchPublicPermissionRequest::new(config, "wiki_token", "wiki", body);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());

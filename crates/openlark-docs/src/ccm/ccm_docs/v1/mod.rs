@@ -16,6 +16,18 @@ pub mod models;
 // pub use docs_api::{search_object, get_meta}; // Generated: Module use not found
 
 // 重新导出模型和类型
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    DocumentItem,
+    GetMetaParams,
+    GetMetaResponse,
+    MetaData,
+    MetaItem,
+    PermissionInfo,
+    SearchData,
+    SearchObjectParams,
+    SearchObjectResponse,
+    UserInfo,
+};
 // pub use requests::*; // Generated: Module use not found
 // pub use responses::*; // Generated: Module use not found

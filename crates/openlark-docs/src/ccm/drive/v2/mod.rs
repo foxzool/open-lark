@@ -7,8 +7,48 @@ pub mod file;
 pub mod permission;
 
 // 重新导出所有模块
-pub use file::*;
-pub use permission::*;
+// file 模块显式导出
+pub use file::{
+    FileLike,
+    GetPermissionPublicRequest,
+    GetPermissionPublicResponse,
+    ListFileLikesRequest,
+    ListFileLikesResponse,
+    PermissionPublic,
+    UpdatePermissionPublicRequest,
+    UpdatePermissionPublicResponse,
+    execute,
+    execute_with_options,
+    get_permission_public,
+    get_permission_public_with_options,
+    new,
+    page_size,
+    page_token,
+    update_permission_public,
+    update_permission_public_with_options,
+    user_id_type,
+};
+// permission 模块显式导出
+pub use permission::{
+    FileLike,
+    GetPermissionPublicRequest,
+    GetPermissionPublicResponse,
+    ListFileLikesRequest,
+    ListFileLikesResponse,
+    PermissionPublic,
+    UpdatePermissionPublicRequest,
+    UpdatePermissionPublicResponse,
+    execute,
+    execute_with_options,
+    get_permission_public,
+    get_permission_public_with_options,
+    new,
+    page_size,
+    page_token,
+    update_permission_public,
+    update_permission_public_with_options,
+    user_id_type,
+};
 
 /// Drive V2 服务
 #[derive(Debug, Clone)]

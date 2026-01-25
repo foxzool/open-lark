@@ -12,7 +12,22 @@
 use openlark_core::config::Config;
 
 // 重新导出所有子模块
-pub use permission::*;
+// permission 模块显式导出
+pub use permission::{
+    CheckMemberPermissionParams,
+    CheckMemberPermissionResponse,
+    GetPublicPermissionParams,
+    GetPublicPermissionResponse,
+    MemberPermittedResponse,
+    MemberTransferResponse,
+    PermissionCheckResult,
+    PublicPermission,
+    PublicResponse,
+    TransferOwnerParams,
+    TransferOwnerResponse,
+    TransferResult,
+    UserInfo,
+};
 
 // 子模块
 pub mod permission;

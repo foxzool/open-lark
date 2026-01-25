@@ -35,7 +35,22 @@ impl FilterApi {
 
 // 导出模型定义
 pub mod models;
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    CreateFilterParams,
+    CreateFilterResponse,
+    DeleteFilterParams,
+    DeleteFilterResponse,
+    DeleteFilterResult,
+    FilterCondition,
+    FilterInfo,
+    FilterResult,
+    FilterSpec,
+    GetFilterParams,
+    GetFilterResponse,
+    UpdateFilterParams,
+    UpdateFilterResponse,
+};
 
 impl ApiResponseTrait for CreateFilterResponse {
     fn data_format() -> ResponseFormat {

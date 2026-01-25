@@ -29,5 +29,13 @@ impl DocsService {
 pub mod v1;
 // pub mod v2; // Generated: Module file not found
 
-pub use v1::*;
+// v1 模块显式导出
+pub use v1::{
+    DocsContent,
+    GetDocsContentRequest,
+    GetDocsContentResponse,
+    get_docs_content,
+    lang,
+    new,
+};
 // pub use v2::*; // Generated: Module use not found

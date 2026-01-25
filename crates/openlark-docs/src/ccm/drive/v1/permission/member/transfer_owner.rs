@@ -204,6 +204,7 @@ impl ApiResponseTrait for TransferOwnerResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     /// 测试构建器模式
@@ -235,7 +236,7 @@ mod tests {
         let request = TransferOwnerRequest::new(config, "", "docx", "openid", "ou_xxx");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })
@@ -252,7 +253,7 @@ mod tests {
         let request = TransferOwnerRequest::new(config, "token", "invalid", "openid", "ou_xxx");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })
@@ -269,7 +270,7 @@ mod tests {
         let request = TransferOwnerRequest::new(config, "token", "docx", "invalid", "ou_xxx");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })
@@ -286,7 +287,7 @@ mod tests {
         let request = TransferOwnerRequest::new(config, "token", "docx", "openid", "");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })

@@ -138,6 +138,7 @@ impl ApiResponseTrait for ListPermissionMembersResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     /// 测试构建器模式
@@ -190,7 +191,7 @@ mod tests {
         let request = ListPermissionMembersRequest::new(config, "", "docx");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })
@@ -207,7 +208,7 @@ mod tests {
         let request = ListPermissionMembersRequest::new(config, "token", "invalid");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })
@@ -225,7 +226,7 @@ mod tests {
             ListPermissionMembersRequest::new(config, "token", "docx").perm_type("invalid");
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request.execute().await;
             })

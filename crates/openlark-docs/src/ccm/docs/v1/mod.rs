@@ -12,7 +12,15 @@
 use openlark_core::config::Config;
 
 // 重新导出所有子模块
-pub use content::*;
+// content 模块显式导出
+pub use content::{
+    DocsContent,
+    GetDocsContentRequest,
+    GetDocsContentResponse,
+    get_docs_content,
+    lang,
+    new,
+};
 
 // 子模块
 pub mod content;

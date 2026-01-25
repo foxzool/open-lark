@@ -35,7 +35,20 @@ impl FloatImageApi {
 
 // 导出模型定义
 pub mod models;
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    CreateFloatImageParams,
+    CreateFloatImageResponse,
+    DeleteFloatImageParams,
+    DeleteFloatImageResponse,
+    FloatImageInfo,
+    FloatImagePosition,
+    FloatImageResult,
+    GetFloatImageParams,
+    GetFloatImageResponse,
+    UpdateFloatImageParams,
+    UpdateFloatImageResponse,
+};
 
 impl ApiResponseTrait for CreateFloatImageResponse {
     fn data_format() -> ResponseFormat {

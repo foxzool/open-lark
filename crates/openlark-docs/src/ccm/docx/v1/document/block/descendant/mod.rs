@@ -3,4 +3,13 @@
 /// 按照bizTag/project/version/resource/name.rs模式组织
 pub mod create;
 
-pub use create::*;
+// create 模块显式导出
+pub use create::{
+    BlockIdRelation,
+    CreateDocumentBlockDescendantParams,
+    CreateDocumentBlockDescendantRequest,
+    CreateDocumentBlockDescendantResponse,
+    execute,
+    execute_with_options,
+    new,
+};

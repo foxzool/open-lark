@@ -4,7 +4,95 @@ pub mod models;
 /// 评论回复管理模块
 pub mod update;
 
-pub use delete::*;
-pub use list::*;
-pub use models::*;
-pub use update::*;
+// delete 模块显式导出
+pub use delete::{
+    DeleteCommentReplyRequest,
+    DeleteCommentReplyResponse,
+    DocsLink,
+    ListCommentReplyRequest,
+    ListCommentReplyResponse,
+    Person,
+    ReplyContent,
+    ReplyElement,
+    ReplyExtra,
+    ReplyInfo,
+    TextRun,
+    UpdateReplyRequest,
+    UpdateReplyResponse,
+    delete_comment_reply,
+    list_comment_reply,
+    new,
+    page_size,
+    page_token,
+    update_reply,
+    user_id_type,
+};
+// list 模块显式导出
+pub use list::{
+    DeleteCommentReplyRequest,
+    DeleteCommentReplyResponse,
+    DocsLink,
+    ListCommentReplyRequest,
+    ListCommentReplyResponse,
+    Person,
+    ReplyContent,
+    ReplyElement,
+    ReplyExtra,
+    ReplyInfo,
+    TextRun,
+    UpdateReplyRequest,
+    UpdateReplyResponse,
+    delete_comment_reply,
+    list_comment_reply,
+    new,
+    page_size,
+    page_token,
+    update_reply,
+    user_id_type,
+};
+// models 模块显式导出
+pub use models::{
+    DeleteCommentReplyRequest,
+    DeleteCommentReplyResponse,
+    DocsLink,
+    ListCommentReplyRequest,
+    ListCommentReplyResponse,
+    Person,
+    ReplyContent,
+    ReplyElement,
+    ReplyExtra,
+    ReplyInfo,
+    TextRun,
+    UpdateReplyRequest,
+    UpdateReplyResponse,
+    delete_comment_reply,
+    list_comment_reply,
+    new,
+    page_size,
+    page_token,
+    update_reply,
+    user_id_type,
+};
+// update 模块显式导出
+pub use update::{
+    DeleteCommentReplyRequest,
+    DeleteCommentReplyResponse,
+    DocsLink,
+    ListCommentReplyRequest,
+    ListCommentReplyResponse,
+    Person,
+    ReplyContent,
+    ReplyElement,
+    ReplyExtra,
+    ReplyInfo,
+    TextRun,
+    UpdateReplyRequest,
+    UpdateReplyResponse,
+    delete_comment_reply,
+    list_comment_reply,
+    new,
+    page_size,
+    page_token,
+    update_reply,
+    user_id_type,
+};

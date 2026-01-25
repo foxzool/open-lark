@@ -101,6 +101,7 @@ impl ApiResponseTrait for CreatePermissionPublicPasswordResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
@@ -123,7 +124,7 @@ mod tests {
     fn test_empty_token() {
         let config = Config::default();
         let request = CreatePermissionPublicPasswordRequest::new(config, "", "docx");
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -135,7 +136,7 @@ mod tests {
     fn test_empty_type() {
         let config = Config::default();
         let request = CreatePermissionPublicPasswordRequest::new(config, "token", "");
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -147,7 +148,7 @@ mod tests {
     fn test_invalid_type() {
         let config = Config::default();
         let request = CreatePermissionPublicPasswordRequest::new(config, "token", "invalid_type");
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -159,7 +160,7 @@ mod tests {
     fn test_minutes_not_supported() {
         let config = Config::default();
         let request = CreatePermissionPublicPasswordRequest::new(config, "token", "minutes");
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());

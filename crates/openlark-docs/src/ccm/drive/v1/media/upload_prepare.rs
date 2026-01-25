@@ -169,6 +169,7 @@ impl ApiResponseTrait for UploadPrepareMediaResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
@@ -207,7 +208,7 @@ mod tests {
             1024,
         );
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -227,7 +228,7 @@ mod tests {
             1024,
         );
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -240,7 +241,7 @@ mod tests {
         let config = Config::default();
         let request = UploadPrepareMediaRequest::new(config, "demo.jpeg", "docx_image", "", 1024);
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -259,7 +260,7 @@ mod tests {
             1024,
         );
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -278,7 +279,7 @@ mod tests {
             -1,
         );
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
