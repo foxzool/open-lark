@@ -6,6 +6,7 @@ pub mod api_paths;
 pub mod api_utils;
 pub mod builders;
 pub mod chain;
+pub mod request_builder;
 
 // 重新导出API端点枚举
 pub use api_endpoints::{BaseApiV2, BitableApiV1, MinutesApiV1, SheetsApiV3};
