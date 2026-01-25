@@ -5,7 +5,7 @@
 
 #![allow(missing_docs)]
 
-// 对外稳定导出：尽量保持“少而清晰”的公共 API（KISS）
+// 对外稳定导出：尽量保持"少而清晰"的公共 API（KISS）
 pub mod api;
 pub mod auth;
 pub mod config;
@@ -16,6 +16,7 @@ pub mod observability;
 pub mod query_params;
 pub mod req_option;
 pub mod request_builder;
+pub mod testing;
 pub mod trait_system;
 pub mod validation;
 
