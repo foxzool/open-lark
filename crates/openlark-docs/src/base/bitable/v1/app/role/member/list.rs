@@ -157,6 +157,7 @@ impl ApiResponseTrait for ListRoleMembersResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
@@ -165,7 +166,7 @@ mod tests {
         let request = ListRoleMembersRequest::new(config)
             .app_token("".to_string())
             .role_id("role_id".to_string());
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
         assert!(result.is_err());
         let err = result.unwrap_err();
@@ -178,7 +179,7 @@ mod tests {
         let request = ListRoleMembersRequest::new(config)
             .app_token("app_token".to_string())
             .role_id("".to_string());
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
         assert!(result.is_err());
         let err = result.unwrap_err();
@@ -192,7 +193,7 @@ mod tests {
             .app_token("app_token".to_string())
             .role_id("role_id".to_string())
             .page_size(101);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
         assert!(result.is_err());
         let err = result.unwrap_err();

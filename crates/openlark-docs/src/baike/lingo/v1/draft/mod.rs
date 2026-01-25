@@ -6,8 +6,30 @@ pub mod create;
 pub mod update;
 
 // 重新导出
-pub use create::*;
-pub use update::*;
+// create 模块显式导出
+pub use create::{
+    CreateDraftRequest,
+    CreateDraftResp,
+    UpdateDraftRequest,
+    UpdateDraftResp,
+    execute,
+    execute_with_options,
+    new,
+    repo_id,
+    user_id_type,
+};
+// update 模块显式导出
+pub use update::{
+    CreateDraftRequest,
+    CreateDraftResp,
+    UpdateDraftRequest,
+    UpdateDraftResp,
+    execute,
+    execute_with_options,
+    new,
+    repo_id,
+    user_id_type,
+};
 
 /// Lingo草稿服务
 #[derive(Debug, Clone)]

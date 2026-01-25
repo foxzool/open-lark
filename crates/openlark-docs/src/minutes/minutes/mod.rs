@@ -1,2 +1,25 @@
 pub mod v1;
-pub use v1::*;
+// v1 模块显式导出
+pub use v1::{
+    GetMinuteMediaRequest,
+    GetMinuteMediaResponse,
+    GetMinuteRequest,
+    GetMinuteResponse,
+    GetMinuteStatisticsRequest,
+    GetMinuteStatisticsResponse,
+    GetMinuteTranscriptRequest,
+    MinuteInfo,
+    MinuteMediaInfo,
+    MinuteStatistics,
+    UserIdType,
+    UserViewDetail,
+    as_str,
+    execute,
+    execute_with_options,
+    file_format,
+    minute_token,
+    need_speaker,
+    need_timestamp,
+    new,
+    user_id_type,
+};

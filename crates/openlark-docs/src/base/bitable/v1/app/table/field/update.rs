@@ -204,6 +204,7 @@ impl ApiResponseTrait for UpdateFieldResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
@@ -215,7 +216,7 @@ mod tests {
             .field_id("field_id".to_string())
             .field_name("字段名".to_string());
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -232,7 +233,7 @@ mod tests {
             .field_id("field_id".to_string())
             .field_name("字段名".to_string());
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -249,7 +250,7 @@ mod tests {
             .field_id("".to_string())
             .field_name("字段名".to_string());
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());
@@ -266,7 +267,7 @@ mod tests {
             .field_id("field_id".to_string())
             .field_name("".to_string());
 
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
 
         assert!(result.is_err());

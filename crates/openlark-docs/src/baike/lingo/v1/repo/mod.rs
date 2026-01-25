@@ -7,7 +7,14 @@ use openlark_core::config::Config;
 pub mod list;
 
 // 重新导出API函数
-pub use list::*;
+// list 模块显式导出
+pub use list::{
+    ListRepoRequest,
+    ListRepoResp,
+    execute,
+    execute_with_options,
+    new,
+};
 
 /// 词库管理服务
 #[derive(Debug, Clone)]

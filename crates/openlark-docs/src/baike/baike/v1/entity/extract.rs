@@ -83,6 +83,7 @@ impl ExtractEntityRequest {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     /// 测试构建器模式
@@ -108,7 +109,7 @@ mod tests {
         let request2 = ExtractEntityRequest::new(config.clone(), text_129);
 
         let result = std::thread::spawn(move || {
-            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = test_runtime();
             rt.block_on(async move {
                 let _ = request2.execute().await;
             })

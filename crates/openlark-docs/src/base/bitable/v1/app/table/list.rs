@@ -178,13 +178,14 @@ impl ApiResponseTrait for ListTablesResponse {
 
 #[cfg(test)]
 mod tests {
+    use openlark_core::testing::prelude::test_runtime;
     use super::*;
 
     #[test]
     fn test_empty_app_token() {
         let config = Config::default();
         let request = ListTablesRequest::new(config).app_token("".to_string());
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
         assert!(result.is_err());
         let err = result.unwrap_err();
@@ -197,7 +198,7 @@ mod tests {
         let request = ListTablesRequest::new(config)
             .app_token("app_token".to_string())
             .page_size(0);
-        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rt = test_runtime();
         let result = rt.block_on(request.execute());
         assert!(result.is_err());
         let err = result.unwrap_err();
