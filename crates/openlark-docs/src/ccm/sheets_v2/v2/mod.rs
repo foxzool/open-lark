@@ -29,35 +29,35 @@ impl CcmSheetV2 {
     }
 
     /// 获取数据读写API
-    pub fn data_io(&self) -> crate::ccm::ccm_sheet::v2::data_io::DataIOApi {
-        crate::ccm::ccm_sheet::v2::data_io::DataIOApi::new(self.config.clone())
+    pub fn data_io(&self) -> crate::ccm::sheets_v2::v2::data_io::DataIOApi {
+        crate::ccm::sheets_v2::v2::data_io::DataIOApi::new(self.config.clone())
     }
 
     /// 获取表格操作API
     pub fn sheet_operations(
         &self,
-    ) -> crate::ccm::ccm_sheet::v2::sheet_operations::SheetOperationsApi {
-        crate::ccm::ccm_sheet::v2::sheet_operations::SheetOperationsApi::new(self.config.clone())
+    ) -> crate::ccm::sheets_v2::v2::sheet_operations::SheetOperationsApi {
+        crate::ccm::sheets_v2::v2::sheet_operations::SheetOperationsApi::new(self.config.clone())
     }
 
     /// 获取筛选功能API
-    pub fn filter(&self) -> crate::ccm::ccm_sheet::v2::filter::FilterApi {
-        crate::ccm::ccm_sheet::v2::filter::FilterApi::new(self.config.clone())
+    pub fn filter(&self) -> crate::ccm::sheets_v2::v2::filter::FilterApi {
+        crate::ccm::sheets_v2::v2::filter::FilterApi::new(self.config.clone())
     }
 
     /// 获取浮图功能API
-    pub fn float_image(&self) -> crate::ccm::ccm_sheet::v2::float_image::FloatImageApi {
-        crate::ccm::ccm_sheet::v2::float_image::FloatImageApi::new(self.config.clone())
+    pub fn float_image(&self) -> crate::ccm::sheets_v2::v2::float_image::FloatImageApi {
+        crate::ccm::sheets_v2::v2::float_image::FloatImageApi::new(self.config.clone())
     }
 
     /// 获取表格基础API
-    pub fn spreadsheet(&self) -> crate::ccm::ccm_sheet::v2::spreadsheet::SpreadsheetApi {
-        crate::ccm::ccm_sheet::v2::spreadsheet::SpreadsheetApi::new(self.config.clone())
+    pub fn spreadsheet(&self) -> crate::ccm::sheets_v2::v2::spreadsheet::SpreadsheetApi {
+        crate::ccm::sheets_v2::v2::spreadsheet::SpreadsheetApi::new(self.config.clone())
     }
 
     /// 获取工作表API
-    pub fn sheet(&self) -> crate::ccm::ccm_sheet::v2::sheet::SheetApi {
-        crate::ccm::ccm_sheet::v2::sheet::SheetApi::new(self.config.clone())
+    pub fn sheet(&self) -> crate::ccm::sheets_v2::v2::sheet::SheetApi {
+        crate::ccm::sheets_v2::v2::sheet::SheetApi::new(self.config.clone())
     }
 }
 

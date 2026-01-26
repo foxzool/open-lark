@@ -31,9 +31,9 @@ impl CcmService {
         crate::ccm::permission::PermissionService::new(self.config.clone())
     }
 
-    /// 获取表格服务
-    pub fn ccm_sheet(&self) -> crate::ccm::ccm_sheet::CcmSheetService {
-        crate::ccm::ccm_sheet::CcmSheetService::new(self.config.clone())
+    /// 获取表格服务 v2（旧版）
+    pub fn sheets_v2(&self) -> crate::ccm::sheets_v2::SheetsV2Service {
+        crate::ccm::sheets_v2::SheetsV2Service::new(self.config.clone())
     }
 
     /// 获取云文档内容服务
@@ -65,7 +65,7 @@ impl CcmService {
 // 导出所有子项目模块
 pub mod explorer;
 pub mod permission;
-pub mod ccm_sheet;
+pub mod sheets_v2;
 pub mod docs;
 pub mod docx;
 pub mod drive;
