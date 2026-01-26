@@ -13,11 +13,11 @@ pub mod explorer;
 
 /// 云盘浏览器服务
 #[derive(Clone)]
-pub struct CcmDriveExplorerService {
+pub struct ExplorerService {
     config: Config,
 }
 
-impl CcmDriveExplorerService {
+impl ExplorerService {
     /// 创建新的云盘浏览器服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -29,7 +29,7 @@ impl CcmDriveExplorerService {
     }
 }
 
-impl openlark_core::trait_system::service::Service for CcmDriveExplorerService {
+impl openlark_core::trait_system::service::Service for ExplorerService {
     fn config(&self) -> &Config {
         &self.config
     }
@@ -38,7 +38,7 @@ impl openlark_core::trait_system::service::Service for CcmDriveExplorerService {
     where
         Self: Sized,
     {
-        "ccm_drive_explorer"
+        "explorer"
     }
 }
 
@@ -47,28 +47,28 @@ mod tests {
     use super::*;
     use openlark_core::trait_system::service::Service;
 
-    fn create_test_service() -> CcmDriveExplorerService {
+    fn create_test_service() -> ExplorerService {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        CcmDriveExplorerService::new(config)
+        ExplorerService::new(config)
     }
 
     #[test]
-    fn test_ccm_drive_explorer_service_creation() {
+    fn test_explorer_service_creation() {
         let config = openlark_core::config::Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let service = CcmDriveExplorerService::new(config);
+        let service = ExplorerService::new(config);
 
         assert_eq!(service.config().app_id(), "test_app_id");
         assert_eq!(service.config().app_secret(), "test_app_secret");
     }
 
     #[test]
-    fn test_ccm_drive_explorer_service_clone() {
+    fn test_explorer_service_clone() {
         let service = create_test_service();
         let cloned_service = service.clone();
 
