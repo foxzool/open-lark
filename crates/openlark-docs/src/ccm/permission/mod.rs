@@ -12,11 +12,11 @@ pub use v2::*;
 
 /// CCM Drive Permission 服务
 #[derive(Debug, Clone)]
-pub struct CcmDrivePermissionService {
+pub struct PermissionService {
     config: Config,
 }
 
-impl CcmDrivePermissionService {
+impl PermissionService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }

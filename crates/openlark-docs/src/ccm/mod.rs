@@ -1,6 +1,6 @@
 /// 云内容管理(ccm)模块
 ///
-/// 包含docs、docx、ccm_doc、ccm_docs、explorer、ccm_drive_permission、sheets、wiki等子项目的API实现
+/// 包含docs、docx、ccm_doc、ccm_docs、explorer、permission、sheets、wiki等子项目的API实现
 use openlark_core::config::Config;
 
 /// 云内容管理服务（内部实现，通过 DocsClient 访问）
@@ -27,10 +27,8 @@ impl CcmService {
     }
 
     /// 获取文档权限管理服务
-    pub fn ccm_drive_permission(
-        &self,
-    ) -> crate::ccm::ccm_drive_permission::CcmDrivePermissionService {
-        crate::ccm::ccm_drive_permission::CcmDrivePermissionService::new(self.config.clone())
+    pub fn permission(&self) -> crate::ccm::permission::PermissionService {
+        crate::ccm::permission::PermissionService::new(self.config.clone())
     }
 
     /// 获取表格服务
@@ -66,7 +64,7 @@ impl CcmService {
 
 // 导出所有子项目模块
 pub mod explorer;
-pub mod ccm_drive_permission;
+pub mod permission;
 pub mod ccm_sheet;
 pub mod docs;
 pub mod docx;
