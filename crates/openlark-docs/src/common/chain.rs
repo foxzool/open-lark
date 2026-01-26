@@ -54,7 +54,7 @@ pub struct CcmClient {
 
     pub explorer: ExplorerClient,
     pub permission: PermissionClient,
-    pub ccm_sheet: CcmSheetClient,
+    pub sheets_v2: SheetsV2Client,
     pub docs: DocsContentClient,
     pub docx: DocxClient,
     pub drive: DriveClient,
@@ -69,7 +69,7 @@ impl CcmClient {
             config: config.clone(),
             explorer: ExplorerClient::new(config.clone()),
             permission: PermissionClient::new(config.clone()),
-            ccm_sheet: CcmSheetClient::new(config.clone()),
+            sheets_v2: SheetsV2Client::new(config.clone()),
             docs: DocsContentClient::new(config.clone()),
             docx: DocxClient::new(config.clone()),
             drive: DriveClient::new(config.clone()),
@@ -112,7 +112,7 @@ impl_ccm_project_client!(ExplorerClient, crate::ccm::explorer::ExplorerService);
 #[cfg(feature = "ccm-core")]
 impl_ccm_project_client!(PermissionClient, crate::ccm::permission::PermissionService);
 #[cfg(feature = "ccm-core")]
-impl_ccm_project_client!(CcmSheetClient, crate::ccm::ccm_sheet::CcmSheetService);
+impl_ccm_project_client!(SheetsV2Client, crate::ccm::sheets_v2::SheetsV2Service);
 #[cfg(feature = "ccm-core")]
 impl_ccm_project_client!(DocsContentClient, crate::ccm::docs::DocsService);
 #[cfg(feature = "ccm-core")]

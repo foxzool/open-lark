@@ -1,4 +1,4 @@
-/// CCM Sheet API 模块
+/// Sheets V2 API 模块（旧版）
 ///
 /// 电子表格操作API实现，包含全面的表格功能：
 ///
@@ -12,13 +12,13 @@ pub mod v2;
 pub use models::*;
 pub use v2::*;
 
-/// CCM Sheet 服务
+/// Sheets V2 服务（旧版）
 #[derive(Debug, Clone)]
-pub struct CcmSheetService {
+pub struct SheetsV2Service {
     config: Config,
 }
 
-impl CcmSheetService {
+impl SheetsV2Service {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
