@@ -21,11 +21,6 @@ impl CcmService {
         &self.config
     }
 
-    /// 获取云文档内容管理服务
-    pub fn ccm_docs(&self) -> crate::ccm::ccm_docs::CcmDocsService {
-        crate::ccm::ccm_docs::CcmDocsService::new(self.config.clone())
-    }
-
     /// 获取云盘浏览器服务
     pub fn ccm_drive_explorer(&self) -> crate::ccm::ccm_drive_explorer::CcmDriveExplorerService {
         crate::ccm::ccm_drive_explorer::CcmDriveExplorerService::new(self.config.clone())
@@ -70,7 +65,6 @@ impl CcmService {
 }
 
 // 导出所有子项目模块
-pub mod ccm_docs;
 pub mod ccm_drive_explorer;
 pub mod ccm_drive_permission;
 pub mod ccm_sheet;
