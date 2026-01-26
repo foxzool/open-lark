@@ -1,7 +1,6 @@
-/// Docs V1 API 数据模型
-
-use serde::{Deserialize, Serialize};
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
+/// Docs V1 API 数据模型
+use serde::{Deserialize, Serialize};
 
 /// 云文档内容信息
 #[derive(Debug, Clone, Serialize, Deserialize)]

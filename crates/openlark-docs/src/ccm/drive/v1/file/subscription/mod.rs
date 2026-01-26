@@ -4,68 +4,8 @@ pub mod get;
 pub mod models;
 pub mod patch;
 
-// 重新导出所有API函数
-// create 模块显式导出
-pub use create::{
-    CreateFileSubscriptionRequest,
-    CreateFileSubscriptionResponse,
-    GetSubscriptionRequest,
-    GetSubscriptionResponse,
-    PatchSubscriptionRequest,
-    PatchSubscriptionResponse,
-    Subscription,
-    create_file_subscription,
-    get_subscription,
-    is_subcribe,
-    new,
-    patch_subscription,
-    subscription_id,
-};
-// get 模块显式导出
-pub use get::{
-    CreateFileSubscriptionRequest,
-    CreateFileSubscriptionResponse,
-    GetSubscriptionRequest,
-    GetSubscriptionResponse,
-    PatchSubscriptionRequest,
-    PatchSubscriptionResponse,
-    Subscription,
-    create_file_subscription,
-    get_subscription,
-    is_subcribe,
-    new,
-    patch_subscription,
-    subscription_id,
-};
-// models 模块显式导出
-pub use models::{
-    CreateFileSubscriptionRequest,
-    CreateFileSubscriptionResponse,
-    GetSubscriptionRequest,
-    GetSubscriptionResponse,
-    PatchSubscriptionRequest,
-    PatchSubscriptionResponse,
-    Subscription,
-    create_file_subscription,
-    get_subscription,
-    is_subcribe,
-    new,
-    patch_subscription,
-    subscription_id,
-};
-// patch 模块显式导出
-pub use patch::{
-    CreateFileSubscriptionRequest,
-    CreateFileSubscriptionResponse,
-    GetSubscriptionRequest,
-    GetSubscriptionResponse,
-    PatchSubscriptionRequest,
-    PatchSubscriptionResponse,
-    Subscription,
-    create_file_subscription,
-    get_subscription,
-    is_subcribe,
-    new,
-    patch_subscription,
-    subscription_id,
-};
+// 使用通配符导出所有子模块
+pub use create::*;
+pub use get::*;
+pub use models::*;
+pub use patch::*;

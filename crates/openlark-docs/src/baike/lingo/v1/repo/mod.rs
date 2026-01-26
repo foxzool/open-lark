@@ -6,15 +6,8 @@ use openlark_core::config::Config;
 // 导出具体的API实现
 pub mod list;
 
-// 重新导出API函数
-// list 模块显式导出
-pub use list::{
-    ListRepoRequest,
-    ListRepoResp,
-    execute,
-    execute_with_options,
-    new,
-};
+// 使用通配符导出所有子模块
+pub use list::*;
 
 /// 词库管理服务
 #[derive(Debug, Clone)]

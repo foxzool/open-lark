@@ -1,11 +1,11 @@
-/// Bitable V1 字段管理API模块
+/// 字段管理模块
+
+pub mod list;
 pub mod create;
 pub mod delete;
-pub mod list;
 pub mod update;
 
-// Re-export common types for convenience
-pub use create::{CreateFieldRequest, CreateFieldResponse, Field, FieldProperty, FieldType};
-pub use delete::{DeleteFieldRequest, DeleteFieldResponse};
-pub use list::{ListFieldRequest, ListFieldResponse};
-pub use update::{UpdateFieldRequest, UpdateFieldResponse};
+pub use create::*;
+pub use delete::*;
+pub use list::*;
+pub use update::*;

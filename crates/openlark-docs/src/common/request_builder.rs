@@ -95,6 +95,7 @@ macro_rules! impl_required_builder {
         impl $builder_name {
             /// 创建新的构建器实例（废弃，请使用 builder()）
             #[deprecated(since = "0.5.0", note = "使用 builder() 替代")]
+            #[allow(dead_code)]
             pub fn new() -> Self {
                 Self::default()
             }
@@ -231,10 +232,11 @@ mod tests {
 
     // 测试用的请求结构
     #[derive(Debug, Clone)]
-    struct TestRequest {
+    pub struct TestRequest {
         app_token: String,
         table_id: String,
         user_id_type: Option<String>,
+        #[allow(dead_code)]
         config: Config,
     }
 
@@ -253,10 +255,7 @@ mod tests {
 
     #[test]
     fn test_required_builder_success() {
-        let config = Config::builder()
-            .app_id("test")
-            .app_secret("test")
-            .build();
+        let config = Config::builder().app_id("test").app_secret("test").build();
 
         let request = TestRequest::builder()
             .with_config(config)
@@ -272,10 +271,7 @@ mod tests {
 
     #[test]
     fn test_required_builder_with_optional() {
-        let config = Config::builder()
-            .app_id("test")
-            .app_secret("test")
-            .build();
+        let config = Config::builder().app_id("test").app_secret("test").build();
 
         let request = TestRequest::builder()
             .with_config(config)
@@ -290,10 +286,7 @@ mod tests {
 
     #[test]
     fn test_required_builder_missing_required_field() {
-        let config = Config::builder()
-            .app_id("test")
-            .app_secret("test")
-            .build();
+        let config = Config::builder().app_id("test").app_secret("test").build();
 
         let result = TestRequest::builder()
             .with_config(config)
@@ -319,10 +312,7 @@ mod tests {
 
     #[test]
     fn test_required_builder_into_string() {
-        let config = Config::builder()
-            .app_id("test")
-            .app_secret("test")
-            .build();
+        let config = Config::builder().app_id("test").app_secret("test").build();
 
         // 测试 impl Into<String>
         let request = TestRequest::builder()

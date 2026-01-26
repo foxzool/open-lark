@@ -29,8 +29,15 @@ use crate::common::api_endpoints::BaikeApiV1;
 ///
 /// ```rust,no_run
 /// use openlark_docs::baike::baike::v1::classification::ListClassificationRequest;
+/// use openlark_core::prelude::Config;
 ///
+/// # fn example() {
+/// let config = Config::builder()
+///     .app_id("app_id")
+///     .app_secret("app_secret")
+///     .build();
 /// let request = ListClassificationRequest::new(config).page_size(50);
+/// # }
 /// ```
 pub struct ListClassificationRequest {
     config: Config,

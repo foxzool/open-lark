@@ -1,38 +1,17 @@
 #![allow(clippy::module_inception)]
 
-// 重新导出子模块
-pub mod minutes;
-// minutes 模块显式导出
-pub use minutes::{
-    GetMinuteMediaRequest,
-    GetMinuteMediaResponse,
-    GetMinuteRequest,
-    GetMinuteResponse,
-    GetMinuteStatisticsRequest,
-    GetMinuteStatisticsResponse,
-    GetMinuteTranscriptRequest,
-    MinuteInfo,
-    MinuteMediaInfo,
-    MinuteStatistics,
-    UserIdType,
-    UserViewDetail,
-    as_str,
-    execute,
-    execute_with_options,
-    file_format,
-    minute_token,
-    need_speaker,
-    need_timestamp,
-    new,
-    user_id_type,
-};
-
-use crate::minutes::v1::minute::get::GetMinuteRequest;
-use crate::minutes::v1::minute::media::get::GetMinuteMediaRequest;
-use crate::minutes::v1::minute::statistics::get::GetMinuteStatisticsRequest;
-use crate::minutes::v1::minute::transcript::get::GetMinuteTranscriptRequest;
+/// 妙记服务模块
+///
+/// 提供飞书妙记的创建、查询、管理等功能。
+/// docPath: https://open.feishu.cn/document/server-docs/minutes-v1/minute/get
 use openlark_core::config::Config;
 
+pub mod minutes;
+
+// 使用通配符导出所有子模块,避免维护大量重复的导出列表
+pub use minutes::*;
+
+/// Minutes 服务
 #[derive(Debug, Clone)]
 pub struct MinutesService {
     config: Config,
@@ -43,37 +22,7 @@ impl MinutesService {
         Self { config }
     }
 
-    /// 获取妙记信息
-    ///
-    /// docPath: https://open.feishu.cn/document/server-docs/minutes-v1/minute/get
-    pub fn get_minute(&self, minute_token: impl Into<String>) -> GetMinuteRequest {
-        GetMinuteRequest::new(self.config.clone()).minute_token(minute_token)
-    }
-
-    /// 下载妙记音视频文件
-    ///
-    /// docPath: https://open.feishu.cn/document/minutes-v1/minute-media/get
-    pub fn get_minute_media(&self, minute_token: impl Into<String>) -> GetMinuteMediaRequest {
-        GetMinuteMediaRequest::new(self.config.clone()).minute_token(minute_token)
-    }
-
-    /// 获取妙记统计数据
-    ///
-    /// docPath: https://open.feishu.cn/document/server-docs/minutes-v1/minute-statistics/get
-    pub fn get_minute_statistics(
-        &self,
-        minute_token: impl Into<String>,
-    ) -> GetMinuteStatisticsRequest {
-        GetMinuteStatisticsRequest::new(self.config.clone()).minute_token(minute_token)
-    }
-
-    /// 导出妙记文字记录
-    ///
-    /// docPath: https://open.feishu.cn/document/minutes-v1/minute-transcript/get
-    pub fn get_minute_transcript(
-        &self,
-        minute_token: impl Into<String>,
-    ) -> GetMinuteTranscriptRequest {
-        GetMinuteTranscriptRequest::new(self.config.clone()).minute_token(minute_token)
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 }

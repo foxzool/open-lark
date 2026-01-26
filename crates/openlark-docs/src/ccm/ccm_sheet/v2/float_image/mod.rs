@@ -37,17 +37,9 @@ impl FloatImageApi {
 pub mod models;
 // models 模块显式导出
 pub use models::{
-    CreateFloatImageParams,
-    CreateFloatImageResponse,
-    DeleteFloatImageParams,
-    DeleteFloatImageResponse,
-    FloatImageInfo,
-    FloatImagePosition,
-    FloatImageResult,
-    GetFloatImageParams,
-    GetFloatImageResponse,
-    UpdateFloatImageParams,
-    UpdateFloatImageResponse,
+    CreateFloatImageParams, CreateFloatImageResponse, DeleteFloatImageParams,
+    DeleteFloatImageResponse, FloatImageInfo, FloatImagePosition, FloatImageResult,
+    GetFloatImageParams, GetFloatImageResponse, UpdateFloatImageParams, UpdateFloatImageResponse,
 };
 
 impl ApiResponseTrait for CreateFloatImageResponse {

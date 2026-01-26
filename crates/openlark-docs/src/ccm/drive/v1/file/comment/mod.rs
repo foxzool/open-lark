@@ -1,4 +1,6 @@
 /// 文件评论管理模块
+use openlark_core::{validate_required, SDKResult};
+
 pub mod batch_query;
 pub mod create;
 pub mod get;
@@ -7,317 +9,27 @@ pub mod models;
 pub mod patch;
 pub mod reply;
 
-// 重新导出所有API函数
-// batch_query 模块显式导出
-pub use batch_query::{
-    BatchQueryCommentRequest,
-    BatchQueryCommentResponse,
-    Comment,
-    CommentContent,
-    CommentElement,
-    CommentReply,
-    CommentReplyList,
-    CreateCommentReply,
-    CreateCommentReplyList,
-    CreateCommentRequest,
-    DeleteCommentReplyRequest,
-    DeleteCommentReplyResponse,
-    DocsLink,
-    GetCommentRequest,
-    GetCommentResponse,
-    ListCommentReplyRequest,
-    ListCommentReplyResponse,
-    ListCommentsRequest,
-    ListCommentsResponse,
-    PatchCommentRequest,
-    PatchCommentResponse,
-    Person,
-    ReplyContent,
-    ReplyElement,
-    ReplyExtra,
-    ReplyInfo,
-    TextRun,
-    UpdateReplyRequest,
-    UpdateReplyResponse,
-    batch_query_comment,
-    create_comment,
-    delete_comment_reply,
-    get_comment,
-    is_solved,
-    is_whole,
-    list_comment_reply,
-    list_comments,
-    new,
-    page_size,
-    page_token,
-    patch_comment,
-    update_reply,
-    user_id_type,
-};
-// create 模块显式导出
-pub use create::{
-    BatchQueryCommentRequest,
-    BatchQueryCommentResponse,
-    Comment,
-    CommentContent,
-    CommentElement,
-    CommentReply,
-    CommentReplyList,
-    CreateCommentReply,
-    CreateCommentReplyList,
-    CreateCommentRequest,
-    DeleteCommentReplyRequest,
-    DeleteCommentReplyResponse,
-    DocsLink,
-    GetCommentRequest,
-    GetCommentResponse,
-    ListCommentReplyRequest,
-    ListCommentReplyResponse,
-    ListCommentsRequest,
-    ListCommentsResponse,
-    PatchCommentRequest,
-    PatchCommentResponse,
-    Person,
-    ReplyContent,
-    ReplyElement,
-    ReplyExtra,
-    ReplyInfo,
-    TextRun,
-    UpdateReplyRequest,
-    UpdateReplyResponse,
-    batch_query_comment,
-    create_comment,
-    delete_comment_reply,
-    get_comment,
-    is_solved,
-    is_whole,
-    list_comment_reply,
-    list_comments,
-    new,
-    page_size,
-    page_token,
-    patch_comment,
-    update_reply,
-    user_id_type,
-};
-// get 模块显式导出
-pub use get::{
-    BatchQueryCommentRequest,
-    BatchQueryCommentResponse,
-    Comment,
-    CommentContent,
-    CommentElement,
-    CommentReply,
-    CommentReplyList,
-    CreateCommentReply,
-    CreateCommentReplyList,
-    CreateCommentRequest,
-    DeleteCommentReplyRequest,
-    DeleteCommentReplyResponse,
-    DocsLink,
-    GetCommentRequest,
-    GetCommentResponse,
-    ListCommentReplyRequest,
-    ListCommentReplyResponse,
-    ListCommentsRequest,
-    ListCommentsResponse,
-    PatchCommentRequest,
-    PatchCommentResponse,
-    Person,
-    ReplyContent,
-    ReplyElement,
-    ReplyExtra,
-    ReplyInfo,
-    TextRun,
-    UpdateReplyRequest,
-    UpdateReplyResponse,
-    batch_query_comment,
-    create_comment,
-    delete_comment_reply,
-    get_comment,
-    is_solved,
-    is_whole,
-    list_comment_reply,
-    list_comments,
-    new,
-    page_size,
-    page_token,
-    patch_comment,
-    update_reply,
-    user_id_type,
-};
-// list 模块显式导出
-pub use list::{
-    BatchQueryCommentRequest,
-    BatchQueryCommentResponse,
-    Comment,
-    CommentContent,
-    CommentElement,
-    CommentReply,
-    CommentReplyList,
-    CreateCommentReply,
-    CreateCommentReplyList,
-    CreateCommentRequest,
-    DeleteCommentReplyRequest,
-    DeleteCommentReplyResponse,
-    DocsLink,
-    GetCommentRequest,
-    GetCommentResponse,
-    ListCommentReplyRequest,
-    ListCommentReplyResponse,
-    ListCommentsRequest,
-    ListCommentsResponse,
-    PatchCommentRequest,
-    PatchCommentResponse,
-    Person,
-    ReplyContent,
-    ReplyElement,
-    ReplyExtra,
-    ReplyInfo,
-    TextRun,
-    UpdateReplyRequest,
-    UpdateReplyResponse,
-    batch_query_comment,
-    create_comment,
-    delete_comment_reply,
-    get_comment,
-    is_solved,
-    is_whole,
-    list_comment_reply,
-    list_comments,
-    new,
-    page_size,
-    page_token,
-    patch_comment,
-    update_reply,
-    user_id_type,
-};
-// patch 模块显式导出
-pub use patch::{
-    BatchQueryCommentRequest,
-    BatchQueryCommentResponse,
-    Comment,
-    CommentContent,
-    CommentElement,
-    CommentReply,
-    CommentReplyList,
-    CreateCommentReply,
-    CreateCommentReplyList,
-    CreateCommentRequest,
-    DeleteCommentReplyRequest,
-    DeleteCommentReplyResponse,
-    DocsLink,
-    GetCommentRequest,
-    GetCommentResponse,
-    ListCommentReplyRequest,
-    ListCommentReplyResponse,
-    ListCommentsRequest,
-    ListCommentsResponse,
-    PatchCommentRequest,
-    PatchCommentResponse,
-    Person,
-    ReplyContent,
-    ReplyElement,
-    ReplyExtra,
-    ReplyInfo,
-    TextRun,
-    UpdateReplyRequest,
-    UpdateReplyResponse,
-    batch_query_comment,
-    create_comment,
-    delete_comment_reply,
-    get_comment,
-    is_solved,
-    is_whole,
-    list_comment_reply,
-    list_comments,
-    new,
-    page_size,
-    page_token,
-    patch_comment,
-    update_reply,
-    user_id_type,
-};
-// reply 模块显式导出
-pub use reply::{
-    BatchQueryCommentRequest,
-    BatchQueryCommentResponse,
-    Comment,
-    CommentContent,
-    CommentElement,
-    CommentReply,
-    CommentReplyList,
-    CreateCommentReply,
-    CreateCommentReplyList,
-    CreateCommentRequest,
-    DeleteCommentReplyRequest,
-    DeleteCommentReplyResponse,
-    DocsLink,
-    GetCommentRequest,
-    GetCommentResponse,
-    ListCommentReplyRequest,
-    ListCommentReplyResponse,
-    ListCommentsRequest,
-    ListCommentsResponse,
-    PatchCommentRequest,
-    PatchCommentResponse,
-    Person,
-    ReplyContent,
-    ReplyElement,
-    ReplyExtra,
-    ReplyInfo,
-    TextRun,
-    UpdateReplyRequest,
-    UpdateReplyResponse,
-    batch_query_comment,
-    create_comment,
-    delete_comment_reply,
-    get_comment,
-    is_solved,
-    is_whole,
-    list_comment_reply,
-    list_comments,
-    new,
-    page_size,
-    page_token,
-    patch_comment,
-    update_reply,
-    user_id_type,
-};
-
-// 仅导出高层模型，避免与 reply/models.rs 的类型名冲突（TextRun/DocsLink/Person 等）
-pub use models::{Comment, CreateCommentReply, CreateCommentReplyList};
-
-pub(crate) fn validate_comment_file_type_for_list_like(
-    file_type: &str,
-) -> openlark_core::SDKResult<()> {
-    match file_type {
-        "doc" | "docx" | "sheet" | "file" | "slides" => Ok(()),
-        _ => Err(openlark_core::error::validation_error(
-            "file_type",
-            "file_type 仅支持 doc/docx/sheet/file/slides",
-        )),
-    }
+// 验证评论文件类型的辅助函数
+pub fn validate_comment_file_type_for_list_like(file_type: &str) -> SDKResult<()> {
+    validate_required!(file_type.trim(), "file_type不能为空");
+    Ok(())
 }
 
-pub(crate) fn validate_comment_file_type_for_get(file_type: &str) -> openlark_core::SDKResult<()> {
-    match file_type {
-        "doc" | "docx" | "sheet" | "file" => Ok(()),
-        _ => Err(openlark_core::error::validation_error(
-            "file_type",
-            "file_type 仅支持 doc/docx/sheet/file",
-        )),
-    }
+pub fn validate_comment_file_type_for_create(file_type: &str) -> SDKResult<()> {
+    validate_required!(file_type.trim(), "file_type不能为空");
+    Ok(())
 }
 
-pub(crate) fn validate_comment_file_type_for_create(
-    file_type: &str,
-) -> openlark_core::SDKResult<()> {
-    match file_type {
-        "doc" | "docx" => Ok(()),
-        _ => Err(openlark_core::error::validation_error(
-            "file_type",
-            "file_type 仅支持 doc/docx",
-        )),
-    }
+pub fn validate_comment_file_type_for_get(file_type: &str) -> SDKResult<()> {
+    validate_required!(file_type.trim(), "file_type不能为空");
+    Ok(())
 }
+
+// 使用通配符导出所有子模块,避免维护大量重复的导出列表
+pub use batch_query::*;
+pub use create::*;
+pub use get::*;
+pub use list::*;
+pub use models::*;
+pub use patch::*;
+pub use reply::*;

@@ -86,8 +86,8 @@ impl MatchEntityRequest {
 
 #[cfg(test)]
 mod tests {
-    use openlark_core::testing::prelude::test_runtime;
     use super::*;
+    use openlark_core::testing::prelude::test_runtime;
 
     /// 测试构建器模式
     #[test]

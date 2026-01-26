@@ -1,5 +1,4 @@
 /// CCM Drive Permission V2 数据模型
-
 use serde::{Deserialize, Serialize};
 
 /// 判断协作者是否有某权限请求参数

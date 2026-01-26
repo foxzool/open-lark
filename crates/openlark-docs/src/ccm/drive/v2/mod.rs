@@ -6,49 +6,9 @@ use openlark_core::config::Config;
 pub mod file;
 pub mod permission;
 
-// 重新导出所有模块
-// file 模块显式导出
-pub use file::{
-    FileLike,
-    GetPermissionPublicRequest,
-    GetPermissionPublicResponse,
-    ListFileLikesRequest,
-    ListFileLikesResponse,
-    PermissionPublic,
-    UpdatePermissionPublicRequest,
-    UpdatePermissionPublicResponse,
-    execute,
-    execute_with_options,
-    get_permission_public,
-    get_permission_public_with_options,
-    new,
-    page_size,
-    page_token,
-    update_permission_public,
-    update_permission_public_with_options,
-    user_id_type,
-};
-// permission 模块显式导出
-pub use permission::{
-    FileLike,
-    GetPermissionPublicRequest,
-    GetPermissionPublicResponse,
-    ListFileLikesRequest,
-    ListFileLikesResponse,
-    PermissionPublic,
-    UpdatePermissionPublicRequest,
-    UpdatePermissionPublicResponse,
-    execute,
-    execute_with_options,
-    get_permission_public,
-    get_permission_public_with_options,
-    new,
-    page_size,
-    page_token,
-    update_permission_public,
-    update_permission_public_with_options,
-    user_id_type,
-};
+// 使用通配符导出所有子模块
+pub use file::*;
+pub use permission::*;
 
 /// Drive V2 服务
 #[derive(Debug, Clone)]

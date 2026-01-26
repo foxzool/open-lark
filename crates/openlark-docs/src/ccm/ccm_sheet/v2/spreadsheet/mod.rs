@@ -36,17 +36,9 @@ impl SpreadsheetApi {
 pub mod models;
 // models 模块显式导出
 pub use models::{
-    CreateSpreadsheetParams,
-    CreateSpreadsheetResponse,
-    CreateSpreadsheetResult,
-    GetSpreadsheetParams,
-    GetSpreadsheetResponse,
-    SpreadsheetInfo,
-    SpreadsheetSheetInfo,
-    UpdateSpreadsheetParams,
-    UpdateSpreadsheetResponse,
-    UpdateSpreadsheetResult,
-    UserInfo,
+    CreateSpreadsheetParams, CreateSpreadsheetResponse, CreateSpreadsheetResult,
+    GetSpreadsheetParams, GetSpreadsheetResponse, SpreadsheetInfo, SpreadsheetSheetInfo,
+    UpdateSpreadsheetParams, UpdateSpreadsheetResponse, UpdateSpreadsheetResult, UserInfo,
 };
 
 impl ApiResponseTrait for GetSpreadsheetResponse {

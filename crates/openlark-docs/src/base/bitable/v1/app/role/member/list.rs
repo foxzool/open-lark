@@ -157,8 +157,8 @@ impl ApiResponseTrait for ListRoleMembersResponse {
 
 #[cfg(test)]
 mod tests {
-    use openlark_core::testing::prelude::test_runtime;
     use super::*;
+    use openlark_core::testing::prelude::test_runtime;
 
     #[test]
     fn test_empty_app_token() {

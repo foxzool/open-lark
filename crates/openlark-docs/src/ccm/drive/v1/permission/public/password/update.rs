@@ -101,8 +101,8 @@ impl ApiResponseTrait for UpdatePermissionPublicPasswordResponse {
 
 #[cfg(test)]
 mod tests {
-    use openlark_core::testing::prelude::test_runtime;
     use super::*;
+    use openlark_core::testing::prelude::test_runtime;
 
     #[test]
     fn test_update_permission_public_password_request_builder() {

@@ -1,108 +1,13 @@
 /// block模块 - 群公告块相关API
 ///
 /// 按照bizTag/project/version/resource/name.rs模式组织
-mod batch_update;
-mod children;
-mod get;
-mod list;
+pub mod batch_update;
+pub mod children;
+pub mod get;
+pub mod list;
 
-// batch_update 模块显式导出
-pub use batch_update::{
-    BatchDeleteChatAnnouncementBlockChildrenParams,
-    BatchDeleteChatAnnouncementBlockChildrenRequest,
-    BatchDeleteChatAnnouncementBlockChildrenResponse,
-    BatchUpdateChatAnnouncementBlocksParams,
-    BatchUpdateChatAnnouncementBlocksRequest,
-    BatchUpdateChatAnnouncementBlocksResponse,
-    BatchUpdateRequest,
-    CreateChatAnnouncementBlockChildrenParams,
-    CreateChatAnnouncementBlockChildrenRequest,
-    CreateChatAnnouncementBlockChildrenResponse,
-    GetChatAnnouncementBlockChildrenParams,
-    GetChatAnnouncementBlockChildrenRequest,
-    GetChatAnnouncementBlockChildrenResponse,
-    GetChatAnnouncementBlockParams,
-    GetChatAnnouncementBlockRequest,
-    GetChatAnnouncementBlockResponse,
-    GetChatAnnouncementBlocksParams,
-    GetChatAnnouncementBlocksRequest,
-    GetChatAnnouncementBlocksResponse,
-    execute,
-    execute_with_options,
-    new,
-};
-// children 模块显式导出
-pub use children::{
-    BatchDeleteChatAnnouncementBlockChildrenParams,
-    BatchDeleteChatAnnouncementBlockChildrenRequest,
-    BatchDeleteChatAnnouncementBlockChildrenResponse,
-    BatchUpdateChatAnnouncementBlocksParams,
-    BatchUpdateChatAnnouncementBlocksRequest,
-    BatchUpdateChatAnnouncementBlocksResponse,
-    BatchUpdateRequest,
-    CreateChatAnnouncementBlockChildrenParams,
-    CreateChatAnnouncementBlockChildrenRequest,
-    CreateChatAnnouncementBlockChildrenResponse,
-    GetChatAnnouncementBlockChildrenParams,
-    GetChatAnnouncementBlockChildrenRequest,
-    GetChatAnnouncementBlockChildrenResponse,
-    GetChatAnnouncementBlockParams,
-    GetChatAnnouncementBlockRequest,
-    GetChatAnnouncementBlockResponse,
-    GetChatAnnouncementBlocksParams,
-    GetChatAnnouncementBlocksRequest,
-    GetChatAnnouncementBlocksResponse,
-    execute,
-    execute_with_options,
-    new,
-};
-// get 模块显式导出
-pub use get::{
-    BatchDeleteChatAnnouncementBlockChildrenParams,
-    BatchDeleteChatAnnouncementBlockChildrenRequest,
-    BatchDeleteChatAnnouncementBlockChildrenResponse,
-    BatchUpdateChatAnnouncementBlocksParams,
-    BatchUpdateChatAnnouncementBlocksRequest,
-    BatchUpdateChatAnnouncementBlocksResponse,
-    BatchUpdateRequest,
-    CreateChatAnnouncementBlockChildrenParams,
-    CreateChatAnnouncementBlockChildrenRequest,
-    CreateChatAnnouncementBlockChildrenResponse,
-    GetChatAnnouncementBlockChildrenParams,
-    GetChatAnnouncementBlockChildrenRequest,
-    GetChatAnnouncementBlockChildrenResponse,
-    GetChatAnnouncementBlockParams,
-    GetChatAnnouncementBlockRequest,
-    GetChatAnnouncementBlockResponse,
-    GetChatAnnouncementBlocksParams,
-    GetChatAnnouncementBlocksRequest,
-    GetChatAnnouncementBlocksResponse,
-    execute,
-    execute_with_options,
-    new,
-};
-// list 模块显式导出
-pub use list::{
-    BatchDeleteChatAnnouncementBlockChildrenParams,
-    BatchDeleteChatAnnouncementBlockChildrenRequest,
-    BatchDeleteChatAnnouncementBlockChildrenResponse,
-    BatchUpdateChatAnnouncementBlocksParams,
-    BatchUpdateChatAnnouncementBlocksRequest,
-    BatchUpdateChatAnnouncementBlocksResponse,
-    BatchUpdateRequest,
-    CreateChatAnnouncementBlockChildrenParams,
-    CreateChatAnnouncementBlockChildrenRequest,
-    CreateChatAnnouncementBlockChildrenResponse,
-    GetChatAnnouncementBlockChildrenParams,
-    GetChatAnnouncementBlockChildrenRequest,
-    GetChatAnnouncementBlockChildrenResponse,
-    GetChatAnnouncementBlockParams,
-    GetChatAnnouncementBlockRequest,
-    GetChatAnnouncementBlockResponse,
-    GetChatAnnouncementBlocksParams,
-    GetChatAnnouncementBlocksRequest,
-    GetChatAnnouncementBlocksResponse,
-    execute,
-    execute_with_options,
-    new,
-};
+// 使用通配符导出所有子模块
+pub use batch_update::*;
+pub use children::*;
+pub use get::*;
+pub use list::*;

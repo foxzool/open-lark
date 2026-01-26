@@ -3,39 +3,23 @@
 /// 按照bizTag/project/version/resource/name.rs模式组织
 use openlark_core::config::Config;
 
-/// 云文档内容管理服务
+pub mod v1;
+
+// 使用通配符导出所有子模块,避免维护大量重复的导出列表
+pub use v1::*;
+
+/// Docs 服务
 #[derive(Debug, Clone)]
 pub struct DocsService {
     config: Config,
 }
 
 impl DocsService {
-    /// 创建新的云文档内容管理服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
-    /// 获取配置引用
     pub fn config(&self) -> &Config {
         &self.config
     }
-
-    /// 获取V1版本API
-    pub fn v1(&self) -> crate::ccm::docs::v1::DocsService {
-        crate::ccm::docs::v1::DocsService::new(self.config.clone())
-    }
 }
-
-pub mod v1;
-// pub mod v2; // Generated: Module file not found
-
-// v1 模块显式导出
-pub use v1::{
-    DocsContent,
-    GetDocsContentRequest,
-    GetDocsContentResponse,
-    get_docs_content,
-    lang,
-    new,
-};
-// pub use v2::*; // Generated: Module use not found

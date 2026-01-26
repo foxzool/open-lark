@@ -1,11 +1,4 @@
 pub mod list;
-// list 模块显式导出
-pub use list::{
-    GetFileViewRecordsRequest,
-    GetFileViewRecordsResponse,
-    ViewRecord,
-    get_file_view_records,
-    new,
-    page_token,
-    viewer_id_type,
-};
+
+// 使用通配符导出所有子模块
+pub use list::*;

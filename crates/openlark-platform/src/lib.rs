@@ -18,44 +18,19 @@
 //! ## 使用示例
 //!
 //! ```rust,no_run
-//! use openlark_platform::{PlatformService, PlatformConfig};
+//! use openlark_platform::PlatformService;
+//! use openlark_core::prelude::Config;
 //!
-//! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
-//! let config = PlatformConfig::new(
-//!     "app_id",
-//!     "app_secret"
-//! );
+//! # fn example() -> Result<(), Box<dyn std::error::Error>> {
+//! // 使用 builder 模式创建配置
+//! let config = Config::builder()
+//!     .app_id("app_id")
+//!     .app_secret("app_secret")
+//!     .build();
 //!
 //! let platform_service = PlatformService::new(config)?;
 //!
-//! // 应用引擎场景
-//! let app = platform_service
-//!     .app_engine()
-//!     .v1()
-//!     .apps()
-//!     .create()
-//!     .name("我的应用")
-//!     .execute()
-//!     .await?;
-//!
-//! // 目录服务场景
-//! let users = platform_service
-//!     .directory()
-//!     .v1()
-//!     .users()
-//!     .search()
-//!     .query("张三")
-//!     .execute()
-//!     .await?;
-//!
-//! // 系统管理场景
-//! let settings = platform_service
-//!     .admin()
-//!     .v1()
-//!     .settings()
-//!     .get()
-//!     .execute()
-//!     .await?;
+//! // 具体功能请参考各个子模块的文档
 //! # Ok(())
 //! # }
 //! ```

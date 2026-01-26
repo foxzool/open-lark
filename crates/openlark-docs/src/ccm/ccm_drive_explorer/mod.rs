@@ -4,27 +4,8 @@
 use openlark_core::config::Config;
 
 // 重新导出所有子模块
-// explorer 模块显式导出
-pub use explorer::{
-    CopyFileParams,
-    CopyFileResponse,
-    CopyResult,
-    CreateFileParams,
-    CreateFileResponse,
-    CreateFolderParams,
-    CreateFolderResponse,
-    DeleteFileResponse,
-    DeleteResult,
-    FileInfo,
-    FileItem,
-    FolderChildrenData,
-    FolderMeta,
-    FolderMetaResponse,
-    GetFolderChildrenParams,
-    GetFolderChildrenResponse,
-    NewFolderInfo,
-    UserInfo,
-};
+// explorer 模块使用通配符导出
+pub use explorer::*;
 
 // 子模块
 pub mod explorer;
