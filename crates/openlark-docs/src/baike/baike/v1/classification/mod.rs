@@ -1,11 +1,4 @@
 pub mod list;
-// list 模块显式导出
-pub use list::{
-    ListClassificationRequest,
-    ListClassificationResponse,
-    execute,
-    execute_with_options,
-    new,
-    page_size,
-    page_token,
-};
+
+// 使用通配符导出所有子模块
+pub use list::*;

@@ -12,39 +12,15 @@ pub mod list;
 // 重新导出所有服务类型
 // copy 模块显式导出
 pub use copy::{
-    CopyDashboardRequest,
-    CopyDashboardRequestBuilder,
-    CopyDashboardResponse,
-    ListDashboardsRequest,
-    ListDashboardsRequestBuilder,
-    ListDashboardsResponse,
-    app_token,
-    block_id,
-    build,
-    execute,
-    execute_with_options,
-    name,
-    new,
-    page_size,
-    page_token,
+    app_token, block_id, build, execute, execute_with_options, name, new, page_size, page_token,
+    CopyDashboardRequest, CopyDashboardRequestBuilder, CopyDashboardResponse,
+    ListDashboardsRequest, ListDashboardsRequestBuilder, ListDashboardsResponse,
 };
 // list 模块显式导出
 pub use list::{
-    CopyDashboardRequest,
-    CopyDashboardRequestBuilder,
-    CopyDashboardResponse,
-    ListDashboardsRequest,
-    ListDashboardsRequestBuilder,
-    ListDashboardsResponse,
-    app_token,
-    block_id,
-    build,
-    execute,
-    execute_with_options,
-    name,
-    new,
-    page_size,
-    page_token,
+    app_token, block_id, build, execute, execute_with_options, name, new, page_size, page_token,
+    CopyDashboardRequest, CopyDashboardRequestBuilder, CopyDashboardResponse,
+    ListDashboardsRequest, ListDashboardsRequestBuilder, ListDashboardsResponse,
 };
 
 use openlark_core::config::Config;

@@ -87,12 +87,11 @@ pub async fn get_docs_content(
 
     let api_endpoint = DocsApiV1::ContentGet;
 
-    let mut api_request: ApiRequest<GetDocsContentResponse> =
-        ApiRequest::get(&api_endpoint.to_url())
-            .query("doc_token", &request.doc_token)
-            .query("doc_type", &request.doc_type)
-            .query("content_type", &request.content_type)
-            .query_opt("lang", request.lang);
+    let api_request: ApiRequest<GetDocsContentResponse> = ApiRequest::get(&api_endpoint.to_url())
+        .query("doc_token", &request.doc_token)
+        .query("doc_type", &request.doc_type)
+        .query("content_type", &request.content_type)
+        .query_opt("lang", request.lang);
 
     let response = Transport::request(api_request, config, option).await?;
 

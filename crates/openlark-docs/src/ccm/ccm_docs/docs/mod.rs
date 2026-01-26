@@ -34,7 +34,6 @@ impl DocsService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
 }
 
 impl openlark_core::trait_system::service::Service for DocsService {

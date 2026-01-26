@@ -1,13 +1,13 @@
 /// 多维表格字段类型定义
 ///
 /// 提供更精确的字段值类型定义，替代通用的 `serde_json::Value`。
-use serde::{Deserialize, Serialize, Serialize, Serializer};
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
 /// 记录字段值枚举
 ///
 /// 支持多维表格中的各种字段类型，包括文本、数字、布尔值、日期、用户/部门/群组、附件、选择器等。
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RecordFieldValue {
     /// 文本
@@ -87,7 +87,7 @@ pub enum RecordFieldValue {
 }
 
 /// 附件信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttachmentInfo {
     /// 文件 token
     pub file_token: String,
@@ -108,7 +108,7 @@ pub struct AttachmentInfo {
 }
 
 /// 文本片段
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TextSegment {
     /// 文本内容
     pub text: String,
@@ -118,7 +118,7 @@ pub struct TextSegment {
 }
 
 /// 文本样式
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TextStyle {
     /// 字体颜色（十六进制）
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -144,7 +144,7 @@ pub struct TextStyle {
 }
 
 /// 提及信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MentionInfo {
     /// 提及的用户 ID
     pub user_id: String,
@@ -157,7 +157,7 @@ pub struct MentionInfo {
 }
 
 /// 级联记录
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LinkInfo {
     /// 级联的记录 ID
     pub record_id: String,
@@ -170,7 +170,7 @@ pub struct LinkInfo {
 }
 
 /// 进度条信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProgressInfo {
     /// 进度值（0-100）
     pub progress: i32,
@@ -183,7 +183,7 @@ pub struct ProgressInfo {
 }
 
 /// 自动编号信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AutoNumberInfo {
     /// 当前编号
     pub number: i32,
@@ -193,7 +193,7 @@ pub struct AutoNumberInfo {
 }
 
 /// 人员信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PeopleInfo {
     /// 用户 ID
     pub user_id: String,
@@ -212,7 +212,7 @@ pub struct PeopleInfo {
 }
 
 /// 位置信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LocationInfo {
     /// 地址文本
     pub address: String,
@@ -226,7 +226,7 @@ pub struct LocationInfo {
 }
 
 /// 看板项目
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KanbanItem {
     /// 项目 ID
     pub item_id: String,
@@ -253,7 +253,53 @@ impl RecordFieldValue {
 /// 记录数据类型别名
 ///
 /// 用于简化字段类型定义，提高代码可读性。
-pub type RecordFields = serde_json::Map<String, RecordFieldValue>;
+pub type RecordFields = std::collections::HashMap<String, RecordFieldValue>;
+
+/// 记录数据序列化辅助函数
+///
+/// 由于 HashMap 需要特殊处理才能与 serde 兼容
+pub fn serialize_record_fields<S>(fields: &RecordFields, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: serde::Serializer,
+{
+    use serde::ser::SerializeMap;
+    let mut map = serializer.serialize_map(Some(fields.len()))?;
+    for (k, v) in fields {
+        map.serialize_entry(k, v)?;
+    }
+    map.end()
+}
+
+/// 记录数据反序列化辅助函数
+pub fn deserialize_record_fields<'de, D>(deserializer: D) -> Result<RecordFields, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    use std::collections::HashMap;
+    struct RecordFieldsVisitor;
+
+    impl<'de> serde::de::Visitor<'de> for RecordFieldsVisitor {
+        type Value = RecordFields;
+
+        fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+            formatter.write_str("a map of field names to field values")
+        }
+
+        fn visit_map<M>(self, mut access: M) -> Result<Self::Value, M::Error>
+        where
+            M: serde::de::MapAccess<'de>,
+        {
+            let mut map = HashMap::new();
+            while let Some(key) = access.next_key::<String>()? {
+                let value = access.next_value()?;
+                map.insert(key, value);
+            }
+            Ok(map)
+        }
+    }
+
+    deserializer.deserialize_map(RecordFieldsVisitor)
+}
 
 /// 记录数据构建器
 ///
@@ -261,6 +307,12 @@ pub type RecordFields = serde_json::Map<String, RecordFieldValue>;
 #[derive(Debug, Clone)]
 pub struct RecordFieldsBuilder {
     inner: RecordFields,
+}
+
+impl Default for RecordFieldsBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl RecordFieldsBuilder {
@@ -368,7 +420,7 @@ impl RecordFieldsBuilder {
             field_name.into(),
             RecordFieldValue::Progress(ProgressInfo {
                 progress,
-                status: status.into(),
+                status: Some(status.into()),
                 progress_text: None,
             }),
         );
@@ -387,7 +439,7 @@ impl RecordFieldsBuilder {
             field_name.into(),
             RecordFieldValue::Progress(ProgressInfo {
                 progress,
-                status: status.into(),
+                status: Some(status.into()),
                 progress_text: Some(progress_text.into()),
             }),
         );
@@ -478,28 +530,28 @@ mod tests {
     #[test]
     fn test_field_types_text() {
         let field = RecordFieldValue::Text("Hello".to_string());
-        let value = field.to_json_value();
+        let value = json!(field);
         assert_eq!(value, json!("Hello"));
     }
 
     #[test]
     fn test_field_types_number() {
         let field = RecordFieldValue::Number(42);
-        let value = field.to_json_value();
+        let value = json!(field);
         assert_eq!(value, json!(42));
     }
 
     #[test]
     fn test_field_types_bool() {
         let field = RecordFieldValue::Bool(true);
-        let value = field.to_json_value();
+        let value = json!(field);
         assert_eq!(value, json!(true));
     }
 
     #[test]
     fn test_field_types_single_id() {
         let field = RecordFieldValue::SingleId("user_123".to_string());
-        let value = field.to_json_value();
+        let value = json!(field);
         assert_eq!(value, json!("user_123"));
     }
 
@@ -507,7 +559,7 @@ mod tests {
     fn test_field_types_multiple_ids() {
         let field =
             RecordFieldValue::MultipleIds(vec!["user_123".to_string(), "user_456".to_string()]);
-        let value = field.to_json_value();
+        let value = json!(field);
         assert_eq!(value, json!(["user_123", "user_456"]));
     }
 

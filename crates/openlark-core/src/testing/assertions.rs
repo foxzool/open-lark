@@ -107,23 +107,14 @@ macro_rules! assert_some {
     ($opt:expr) => {
         match $opt {
             Some(v) => v,
-            None => panic!(
-                "Expected Some, got None\n  ➜ 位置: {}:{}",
-                file!(),
-                line!()
-            ),
+            None => panic!("Expected Some, got None\n  ➜ 位置: {}:{}", file!(), line!()),
         }
     };
 
     ($opt:expr, $msg:expr) => {
         match $opt {
             Some(v) => v,
-            None => panic!(
-                "{}: got None\n  ➜ 位置: {}:{}",
-                $msg,
-                file!(),
-                line!()
-            ),
+            None => panic!("{}: got None\n  ➜ 位置: {}:{}", $msg, file!(), line!()),
         }
     };
 }

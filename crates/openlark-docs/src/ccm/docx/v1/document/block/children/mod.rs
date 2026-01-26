@@ -5,48 +5,7 @@ pub mod batch_delete;
 pub mod create;
 pub mod get;
 
-// batch_delete 模块显式导出
-pub use batch_delete::{
-    BatchDeleteDocumentBlockChildrenParams,
-    BatchDeleteDocumentBlockChildrenRequest,
-    BatchDeleteDocumentBlockChildrenResponse,
-    CreateDocumentBlockChildrenParams,
-    CreateDocumentBlockChildrenRequest,
-    CreateDocumentBlockChildrenResponse,
-    GetDocumentBlockChildrenParams,
-    GetDocumentBlockChildrenRequest,
-    GetDocumentBlockChildrenResponse,
-    execute,
-    execute_with_options,
-    new,
-};
-// create 模块显式导出
-pub use create::{
-    BatchDeleteDocumentBlockChildrenParams,
-    BatchDeleteDocumentBlockChildrenRequest,
-    BatchDeleteDocumentBlockChildrenResponse,
-    CreateDocumentBlockChildrenParams,
-    CreateDocumentBlockChildrenRequest,
-    CreateDocumentBlockChildrenResponse,
-    GetDocumentBlockChildrenParams,
-    GetDocumentBlockChildrenRequest,
-    GetDocumentBlockChildrenResponse,
-    execute,
-    execute_with_options,
-    new,
-};
-// get 模块显式导出
-pub use get::{
-    BatchDeleteDocumentBlockChildrenParams,
-    BatchDeleteDocumentBlockChildrenRequest,
-    BatchDeleteDocumentBlockChildrenResponse,
-    CreateDocumentBlockChildrenParams,
-    CreateDocumentBlockChildrenRequest,
-    CreateDocumentBlockChildrenResponse,
-    GetDocumentBlockChildrenParams,
-    GetDocumentBlockChildrenRequest,
-    GetDocumentBlockChildrenResponse,
-    execute,
-    execute_with_options,
-    new,
-};
+// 使用通配符导出所有子模块
+pub use batch_delete::*;
+pub use create::*;
+pub use get::*;

@@ -15,21 +15,25 @@
 //! ## 使用示例
 //!
 //! ```rust,no_run
-//! use openlark_analytics::{AnalyticsService, AnalyticsConfig};
+//! use openlark_analytics::AnalyticsService;
+//! use openlark_core::prelude::Config;
 //!
 //! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
-//! let config = AnalyticsConfig::new(
-//!     "app_id",
-//!     "app_secret"
-//! );
+//! // 使用 builder 模式创建配置
+//! let config = Config::builder()
+//!     .app_id("app_id")
+//!     .app_secret("app_secret")
+//!     .build();
 //!
 //! let analytics_service = AnalyticsService::new(config)?;
 //!
-//! // 搜索场景
+//! // 搜索场景（需要启用 search 和 v1 feature）
+//! # #[cfg(all(feature = "search", feature = "v1"))]
 //! let results = analytics_service
 //!     .search()
 //!     .v1()
 //!     .query()
+//!     .search()
 //!     .search_term("项目文档")
 //!     .execute()
 //!     .await?;

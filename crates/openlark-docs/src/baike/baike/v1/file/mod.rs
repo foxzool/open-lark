@@ -1,20 +1,6 @@
 pub mod download;
 pub mod upload;
-// download 模块显式导出
-pub use download::{
-    DownloadFileRequest,
-    UploadFileRequest,
-    UploadFileResponse,
-    execute,
-    execute_with_options,
-    new,
-};
-// upload 模块显式导出
-pub use upload::{
-    DownloadFileRequest,
-    UploadFileRequest,
-    UploadFileResponse,
-    execute,
-    execute_with_options,
-    new,
-};
+
+// 使用通配符导出所有子模块
+pub use download::*;
+pub use upload::*;

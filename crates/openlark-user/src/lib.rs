@@ -16,35 +16,23 @@
 //! ## 使用示例
 //!
 //! ```rust,no_run
-//! use openlark_user::{UserService, UserConfig};
+//! use openlark_user::UserService;
+//! use openlark_core::prelude::Config;
 //!
-//! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
-//! let config = UserConfig::new(
-//!     "app_id",
-//!     "app_secret"
-//! );
+//! let config = Config::builder()
+//!     .app_id("app_id")
+//!     .app_secret("app_secret")
+//!     .build();
 //!
-//! let user_service = UserService::new(config)?;
+//! let user_service = UserService::new(config).unwrap();
 //!
-//! // 获取用户设置
-//! let settings = user_service
-//!     .settings()
-//!     .v1()
-//!     .get()
-//!     .execute()
-//!     .await?;
+//! // 获取设置服务
+//! # #[cfg(feature = "settings")]
+//! let settings_service = user_service.settings();
 //!
-//! // 更新用户偏好
-//! user_service
-//!     .preferences()
-//!     .v1()
-//!     .update()
-//!     .key("theme")
-//!     .value("dark")
-//!     .execute()
-//!     .await?;
-//! # Ok(())
-//! # }
+//! // 获取偏好服务
+//! # #[cfg(feature = "preferences")]
+//! let preferences_service = user_service.preferences();
 //! ```
 
 #![allow(missing_docs)]

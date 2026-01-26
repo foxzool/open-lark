@@ -5,31 +5,9 @@ use openlark_core::config::Config;
 pub mod create;
 pub mod update;
 
-// 重新导出
-// create 模块显式导出
-pub use create::{
-    CreateDraftRequest,
-    CreateDraftResp,
-    UpdateDraftRequest,
-    UpdateDraftResp,
-    execute,
-    execute_with_options,
-    new,
-    repo_id,
-    user_id_type,
-};
-// update 模块显式导出
-pub use update::{
-    CreateDraftRequest,
-    CreateDraftResp,
-    UpdateDraftRequest,
-    UpdateDraftResp,
-    execute,
-    execute_with_options,
-    new,
-    repo_id,
-    user_id_type,
-};
+// 使用通配符导出所有子模块
+pub use create::*;
+pub use update::*;
 
 /// Lingo草稿服务
 #[derive(Debug, Clone)]

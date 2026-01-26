@@ -1,102 +1,13 @@
-/// 妙记（minute）相关接口
+/// 会议纪要模块
 pub mod get;
 pub mod media;
+pub mod models;
 pub mod statistics;
 pub mod transcript;
 
-// get 模块显式导出
-pub use get::{
-    GetMinuteMediaRequest,
-    GetMinuteMediaResponse,
-    GetMinuteRequest,
-    GetMinuteResponse,
-    GetMinuteStatisticsRequest,
-    GetMinuteStatisticsResponse,
-    GetMinuteTranscriptRequest,
-    MinuteInfo,
-    MinuteMediaInfo,
-    MinuteStatistics,
-    UserIdType,
-    UserViewDetail,
-    as_str,
-    execute,
-    execute_with_options,
-    file_format,
-    minute_token,
-    need_speaker,
-    need_timestamp,
-    new,
-    user_id_type,
-};
-// media 模块显式导出
-pub use media::{
-    GetMinuteMediaRequest,
-    GetMinuteMediaResponse,
-    GetMinuteRequest,
-    GetMinuteResponse,
-    GetMinuteStatisticsRequest,
-    GetMinuteStatisticsResponse,
-    GetMinuteTranscriptRequest,
-    MinuteInfo,
-    MinuteMediaInfo,
-    MinuteStatistics,
-    UserIdType,
-    UserViewDetail,
-    as_str,
-    execute,
-    execute_with_options,
-    file_format,
-    minute_token,
-    need_speaker,
-    need_timestamp,
-    new,
-    user_id_type,
-};
-// statistics 模块显式导出
-pub use statistics::{
-    GetMinuteMediaRequest,
-    GetMinuteMediaResponse,
-    GetMinuteRequest,
-    GetMinuteResponse,
-    GetMinuteStatisticsRequest,
-    GetMinuteStatisticsResponse,
-    GetMinuteTranscriptRequest,
-    MinuteInfo,
-    MinuteMediaInfo,
-    MinuteStatistics,
-    UserIdType,
-    UserViewDetail,
-    as_str,
-    execute,
-    execute_with_options,
-    file_format,
-    minute_token,
-    need_speaker,
-    need_timestamp,
-    new,
-    user_id_type,
-};
-// transcript 模块显式导出
-pub use transcript::{
-    GetMinuteMediaRequest,
-    GetMinuteMediaResponse,
-    GetMinuteRequest,
-    GetMinuteResponse,
-    GetMinuteStatisticsRequest,
-    GetMinuteStatisticsResponse,
-    GetMinuteTranscriptRequest,
-    MinuteInfo,
-    MinuteMediaInfo,
-    MinuteStatistics,
-    UserIdType,
-    UserViewDetail,
-    as_str,
-    execute,
-    execute_with_options,
-    file_format,
-    minute_token,
-    need_speaker,
-    need_timestamp,
-    new,
-    user_id_type,
-};
+// 使用通配符导出所有子模块
+pub use get::*;
+pub use media::*;
+pub use models::*;
+pub use statistics::*;
+pub use transcript::*;

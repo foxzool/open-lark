@@ -1,72 +1,10 @@
-/// 自定义角色服务模块
-///
-/// 提供多维表格高级权限中自定义角色的创建、更新、删除、查询等能力。
-use openlark_core::config::Config;
-
-pub mod create;
-pub mod delete;
-pub mod list;
-pub mod member;
-pub mod models;
-pub mod update;
-
-#[cfg(test)]
-mod tests;
-
-pub use create::{CreateAppRoleRequest, CreateAppRoleResponse};
-pub use delete::{DeleteAppRoleRequest, DeleteAppRoleResponse};
-pub use list::{ListAppRoleRequest, ListAppRoleResponse};
-// member 模块显式导出
-pub use member::{
-    BatchCreateRoleMemberRequest,
-    BatchCreateRoleMemberResponse,
-    BatchDeleteRoleMemberRequest,
-    BatchDeleteRoleMemberResponse,
-    BlockRole,
-    CreateAppRoleRequest,
-    CreateAppRoleRequestBody,
-    CreateAppRoleResponse,
-    CreateRoleMemberRequest,
-    CreateRoleMemberResponse,
-    DeleteAppRoleRequest,
-    DeleteAppRoleRequestBuilder,
-    DeleteAppRoleResponse,
-    DeleteRoleMemberRequest,
-    DeleteRoleMemberResponse,
-    ListAppRoleRequest,
-    ListAppRoleRequestBuilder,
-    ListAppRoleResponse,
-    ListRoleMembersRequest,
-    ListRoleMembersRequestBuilder,
-    ListRoleMembersResponse,
-    Role,
-    RoleMemberId,
-    RoleMemberIdType,
-    RoleMemberInfo,
-    RoleMemberType,
-    TableRole,
-    UpdateAppRoleRequest,
-    UpdateAppRoleRequestBody,
-    UpdateAppRoleRequestBuilder,
-    UpdateAppRoleResponse,
-    add_member,
-    app_token,
-    block_roles,
-    build,
-    execute,
-    execute_with_options,
-    member_id,
-    member_id_type,
-    member_list,
-    new,
-    page_size,
-    page_token,
-    role_id,
-    role_name,
-    table_roles,
-};
-pub use models::{BlockRole, Role, TableRole};
-pub use update::{UpdateAppRoleRequest, UpdateAppRoleResponse};
+ use tests::*;
+pub use create::*;
+pub use delete::*;
+pub use list::*;
+pub use member::*;
+pub use models::*;
+pub use update::*;
 
 // 兼容历史导出（在 app/mod.rs 中被引用）
 pub use create::CreateAppRoleRequestBody;
@@ -109,3 +47,4 @@ impl AppRoleService {
 
 // Type alias for compatibility
 pub type ServiceType = AppRoleService;
+

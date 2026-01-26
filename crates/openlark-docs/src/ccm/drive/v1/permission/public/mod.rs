@@ -4,74 +4,16 @@ pub mod password;
 pub mod patch;
 
 // get 模块显式导出
-pub use get::{
-    CreatePermissionPublicPasswordRequest,
-    CreatePermissionPublicPasswordResponse,
-    DeletePermissionPublicPasswordRequest,
-    DeletePermissionPublicPasswordResponse,
-    GetPublicPermissionRequest,
-    GetPublicPermissionResponse,
-    PatchPublicPermissionRequest,
-    PatchPublicPermissionResponse,
-    PermissionPublic,
-    PermissionPublicRequest,
-    UpdatePermissionPublicPasswordRequest,
-    UpdatePermissionPublicPasswordResponse,
-    execute,
-    execute_with_options,
-    new,
-};
+pub use get::{GetPublicPermissionRequest, GetPublicPermissionResponse};
 // models 模块显式导出
-pub use models::{
-    CreatePermissionPublicPasswordRequest,
-    CreatePermissionPublicPasswordResponse,
-    DeletePermissionPublicPasswordRequest,
-    DeletePermissionPublicPasswordResponse,
-    GetPublicPermissionRequest,
-    GetPublicPermissionResponse,
-    PatchPublicPermissionRequest,
-    PatchPublicPermissionResponse,
-    PermissionPublic,
-    PermissionPublicRequest,
-    UpdatePermissionPublicPasswordRequest,
-    UpdatePermissionPublicPasswordResponse,
-    execute,
-    execute_with_options,
-    new,
-};
+pub use models::PermissionPublic;
 // password 模块显式导出
 pub use password::{
-    CreatePermissionPublicPasswordRequest,
-    CreatePermissionPublicPasswordResponse,
-    DeletePermissionPublicPasswordRequest,
-    DeletePermissionPublicPasswordResponse,
-    GetPublicPermissionRequest,
-    GetPublicPermissionResponse,
-    PatchPublicPermissionRequest,
-    PatchPublicPermissionResponse,
-    PermissionPublic,
-    PermissionPublicRequest,
-    UpdatePermissionPublicPasswordRequest,
-    UpdatePermissionPublicPasswordResponse,
-    execute,
-    execute_with_options,
-    new,
+    CreatePermissionPublicPasswordRequest, CreatePermissionPublicPasswordResponse,
+    DeletePermissionPublicPasswordRequest, DeletePermissionPublicPasswordResponse,
+    UpdatePermissionPublicPasswordRequest, UpdatePermissionPublicPasswordResponse,
 };
 // patch 模块显式导出
 pub use patch::{
-    CreatePermissionPublicPasswordRequest,
-    CreatePermissionPublicPasswordResponse,
-    DeletePermissionPublicPasswordRequest,
-    DeletePermissionPublicPasswordResponse,
-    GetPublicPermissionRequest,
-    GetPublicPermissionResponse,
-    PatchPublicPermissionRequest,
-    PatchPublicPermissionResponse,
-    PermissionPublic,
-    PermissionPublicRequest,
-    UpdatePermissionPublicPasswordRequest,
-    UpdatePermissionPublicPasswordResponse,
-    execute,
-    execute_with_options,
-    new,
+    PatchPublicPermissionRequest, PatchPublicPermissionResponse, PermissionPublicRequest,
 };

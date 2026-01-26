@@ -12,19 +12,8 @@
 use openlark_core::config::Config;
 
 // 重新导出所有子模块
-// docs 模块显式导出
-pub use docs::{
-    DocumentItem,
-    GetMetaParams,
-    GetMetaResponse,
-    MetaData,
-    MetaItem,
-    PermissionInfo,
-    SearchData,
-    SearchObjectParams,
-    SearchObjectResponse,
-    UserInfo,
-};
+// docs 模块使用通配符导出
+pub use docs::*;
 
 // 子模块
 pub mod docs;
