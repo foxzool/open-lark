@@ -19,14 +19,14 @@ use openlark_core::config::Config;
 
 use crate::ccm::wiki::v1::node::search::SearchWikiRequest;
 
-/// Wiki 知识库服务
+/// Wiki V2 知识库服务
 #[derive(Clone, Debug)]
-pub struct WikiService {
+pub struct WikiV2Service {
     config: Config,
 }
 
-impl WikiService {
-    /// 创建新的Wiki服务实例
+impl WikiV2Service {
+    /// 创建新的 Wiki V2 服务实例
     pub fn new(config: Config) -> Self {
         Self { config }
     }
