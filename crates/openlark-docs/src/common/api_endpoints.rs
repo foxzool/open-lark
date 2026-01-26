@@ -927,9 +927,9 @@ fn simple_url_encode(input: &str) -> String {
 }
 
 /// CCM Drive Permission API V1 端点枚举
-/// 对应 meta.project = ccm_drive_permission, meta.version = v1
+/// 对应 meta.project = permission, meta.version = v1
 #[derive(Debug, Clone, PartialEq)]
-pub enum CcmDrivePermissionApi {
+pub enum PermissionApi {
     /// 判断协作者是否有某权限
     MemberPermitted,
     /// 转移拥有者
@@ -938,27 +938,25 @@ pub enum CcmDrivePermissionApi {
     Public,
 }
 
-impl CcmDrivePermissionApi {
+impl PermissionApi {
     /// 生成对应的 URL
     pub fn to_url(&self) -> String {
         match self {
-            CcmDrivePermissionApi::MemberPermitted => {
+            PermissionApi::MemberPermitted => {
                 "/open-apis/drive/v1/permission/member/permitted".to_string()
             }
-            CcmDrivePermissionApi::MemberTransfer => {
+            PermissionApi::MemberTransfer => {
                 "/open-apis/drive/v1/permission/member/transfer".to_string()
             }
-            CcmDrivePermissionApi::Public => {
-                "/open-apis/drive/v1/permission/v2/public/".to_string()
-            }
+            PermissionApi::Public => "/open-apis/drive/v1/permission/v2/public/".to_string(),
         }
     }
 }
 
 /// CCM Drive Permission API Old V2 端点枚举
-/// 对应 meta.project = ccm_drive_permission, meta.version = old
+/// 对应 meta.project = permission, meta.version = old
 #[derive(Debug, Clone, PartialEq)]
-pub enum CcmDrivePermissionApiOld {
+pub enum PermissionApiOld {
     /// 判断协作者是否有某权限
     MemberPermitted,
     /// 转移拥有者
@@ -967,19 +965,17 @@ pub enum CcmDrivePermissionApiOld {
     Public,
 }
 
-impl CcmDrivePermissionApiOld {
+impl PermissionApiOld {
     /// 生成对应的 URL
     pub fn to_url(&self) -> String {
         match self {
-            CcmDrivePermissionApiOld::MemberPermitted => {
-                "/open-apis/drive/permission/member/permitted".to_string()
+            PermissionApiOld::MemberPermitted => {
+                "/open-apis/drive/v1/permission/member/permitted".to_string()
             }
-            CcmDrivePermissionApiOld::MemberTransfer => {
-                "/open-apis/drive/permission/member/transfer".to_string()
+            PermissionApiOld::MemberTransfer => {
+                "/open-apis/drive/v1/permission/member/transfer".to_string()
             }
-            CcmDrivePermissionApiOld::Public => {
-                "/open-apis/drive/permission/v2/public/".to_string()
-            }
+            PermissionApiOld::Public => "/open-apis/drive/v1/permission/v2/public/".to_string(),
         }
     }
 }

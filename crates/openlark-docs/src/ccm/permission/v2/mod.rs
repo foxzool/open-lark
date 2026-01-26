@@ -11,7 +11,7 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 
-use crate::common::{api_endpoints::CcmDrivePermissionApiOld, api_utils::*};
+use crate::common::{api_endpoints::PermissionApiOld, api_utils::*};
 
 // 导出模型定义
 pub mod models;
@@ -48,7 +48,7 @@ pub async fn check_member_permission(
     validate_required!(params.permission, "权限类型不能为空");
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmDrivePermissionApiOld::MemberPermitted;
+    let api_endpoint = PermissionApiOld::MemberPermitted;
 
     // 创建API请求
     let api_request: ApiRequest<CheckMemberPermissionResponse> =
@@ -74,7 +74,7 @@ pub async fn transfer_owner(
     validate_required!(params.member_id_type.trim(), "用户ID类型不能为空");
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmDrivePermissionApiOld::MemberTransfer;
+    let api_endpoint = PermissionApiOld::MemberTransfer;
 
     // 创建API请求
     let api_request: ApiRequest<TransferOwnerResponse> =
@@ -98,7 +98,7 @@ pub async fn get_public_permission(
     validate_required!(params.obj_token.trim(), "文件Token不能为空");
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmDrivePermissionApiOld::Public;
+    let api_endpoint = PermissionApiOld::Public;
 
     // 创建API请求
     let api_request: ApiRequest<GetPublicPermissionResponse> =
