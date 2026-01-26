@@ -52,7 +52,7 @@ impl DocsClient {
 pub struct CcmClient {
     config: Config,
 
-    pub ccm_drive_explorer: CcmDriveExplorerClient,
+    pub explorer: ExplorerClient,
     pub ccm_drive_permission: CcmDrivePermissionClient,
     pub ccm_sheet: CcmSheetClient,
     pub docs: DocsContentClient,
@@ -67,7 +67,7 @@ impl CcmClient {
     fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
-            ccm_drive_explorer: CcmDriveExplorerClient::new(config.clone()),
+            explorer: ExplorerClient::new(config.clone()),
             ccm_drive_permission: CcmDrivePermissionClient::new(config.clone()),
             ccm_sheet: CcmSheetClient::new(config.clone()),
             docs: DocsContentClient::new(config.clone()),
@@ -108,10 +108,7 @@ macro_rules! impl_ccm_project_client {
 }
 
 #[cfg(feature = "ccm-core")]
-impl_ccm_project_client!(
-    CcmDriveExplorerClient,
-    crate::ccm::ccm_drive_explorer::CcmDriveExplorerService
-);
+impl_ccm_project_client!(ExplorerClient, crate::ccm::explorer::ExplorerService);
 #[cfg(feature = "ccm-core")]
 impl_ccm_project_client!(
     CcmDrivePermissionClient,
