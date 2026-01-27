@@ -8,15 +8,30 @@ use openlark_core::{
     http::Transport,
     validate_required, SDKResult,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
+
+use super::models::{CreateRequestBody, CreateResponse, CustomField};
 
 /// 创建职务请求
 #[derive(Debug, Clone)]
 pub struct CreateRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    /// 职务名称（必填）
+    name: String,
+    /// 职务编码
+    code: Option<String>,
+    /// 职务描述
+    description: Option<String>,
+    /// 职务状态
+    /// - 1: 启用
+    /// - 2: 停用
+    status: Option<i32>,
+    /// 所属序列 ID
+    job_family_id: Option<String>,
+    /// 所属职级 ID
+    job_level_id: Option<String>,
+    /// 自定义字段
+    custom_fields: Option<Vec<CustomField>>,
 }
 
 impl CreateRequest {
@@ -24,11 +39,59 @@ impl CreateRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            name: String::new(),
+            code: None,
+            description: None,
+            status: None,
+            job_family_id: None,
+            job_level_id: None,
+            custom_fields: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 设置职务名称（必填）
+    pub fn name(mut self, name: String) -> Self {
+        self.name = name;
+        self
+    }
+
+    /// 设置职务编码
+    pub fn code(mut self, code: String) -> Self {
+        self.code = Some(code);
+        self
+    }
+
+    /// 设置职务描述
+    pub fn description(mut self, description: String) -> Self {
+        self.description = Some(description);
+        self
+    }
+
+    /// 设置职务状态
+    /// - 1: 启用
+    /// - 2: 停用
+    pub fn status(mut self, status: i32) -> Self {
+        self.status = Some(status);
+        self
+    }
+
+    /// 设置所属序列 ID
+    pub fn job_family_id(mut self, job_family_id: String) -> Self {
+        self.job_family_id = Some(job_family_id);
+        self
+    }
+
+    /// 设置所属职级 ID
+    pub fn job_level_id(mut self, job_level_id: String) -> Self {
+        self.job_level_id = Some(job_level_id);
+        self
+    }
+
+    /// 设置自定义字段
+    pub fn custom_fields(mut self, custom_fields: Vec<CustomField>) -> Self {
+        self.custom_fields = Some(custom_fields);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CreateResponse> {
@@ -36,22 +99,48 @@ impl CreateRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 创建职务 API 调用")
-    }
-}
+        use crate::common::api_endpoints::FeishuPeopleApiV1;
 
-/// 创建职务响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct CreateResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+        // 1. 验证必填字段
+        validate_required!(self.name.trim(), "职务名称不能为空");
+
+        // 2. 构建端点
+        let api_endpoint = FeishuPeopleApiV1::JobCreate;
+        let request = ApiRequest::<CreateResponse>::post(&api_endpoint.to_url());
+
+        // 3. 序列化请求体
+        let request_body = CreateRequestBody {
+            name: self.name,
+            code: self.code,
+            description: self.description,
+            status: self.status,
+            job_family_id: self.job_family_id,
+            job_level_id: self.job_level_id,
+            custom_fields: self.custom_fields,
+        };
+        let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
+            openlark_core::error::validation_error(
+                "请求体序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
+
+        // 4. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 5. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "创建职务响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
+    }
 }
 
 impl ApiResponseTrait for CreateResponse {
