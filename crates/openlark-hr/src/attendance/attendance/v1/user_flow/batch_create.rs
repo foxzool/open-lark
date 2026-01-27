@@ -8,53 +8,107 @@ use openlark_core::{
     http::Transport,
     validate_required, SDKResult,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
+
+use super::models::{
+    BatchCreateUserFlowRequestBody, BatchCreateUserFlowResponse, UserFlowRecord,
+};
 
 /// 导入打卡流水请求
 #[derive(Debug, Clone)]
-pub struct BatchCreateRequest {
+pub struct BatchCreateUserFlowRequest {
+    /// 打卡流水记录列表
+    flow_records: Vec<UserFlowRecord>,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
-impl BatchCreateRequest {
+impl BatchCreateUserFlowRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
+            flow_records: Vec::new(),
             config,
-            // TODO: 初始化字段
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 添加打卡流水记录
+    pub fn add_flow_record(mut self, record: UserFlowRecord) -> Self {
+        self.flow_records.push(record);
+        self
+    }
+
+    /// 设置打卡流水记录列表
+    pub fn flow_records(mut self, records: Vec<UserFlowRecord>) -> Self {
+        self.flow_records = records;
+        self
+    }
 
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<BatchCreateResponse> {
+    pub async fn execute(self) -> SDKResult<BatchCreateUserFlowResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
-    ) -> SDKResult<BatchCreateResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 导入打卡流水 API 调用")
+    ) -> SDKResult<BatchCreateUserFlowResponse> {
+        use crate::common::api_endpoints::AttendanceApiV1;
+
+        // 1. 验证必填字段
+        if self.flow_records.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "打卡流水记录列表不能为空",
+                "至少需要提供一条打卡流水记录",
+            ));
+        }
+        if self.flow_records.len() > 100 {
+            return Err(openlark_core::error::validation_error(
+                "打卡流水记录数量超出限制",
+                "单次最多支持 100 条打卡流水记录",
+            ));
+        }
+        for (idx, record) in self.flow_records.iter().enumerate() {
+            validate_required!(
+                record.user_id.trim(),
+                &format!("第 {} 条记录的用户 ID 不能为空", idx + 1)
+            );
+            validate_required!(
+                record.punch_time.trim(),
+                &format!("第 {} 条记录的打卡时间不能为空", idx + 1)
+            );
+        }
+
+        // 2. 构建端点
+        let api_endpoint = AttendanceApiV1::UserFlowBatchCreate;
+        let request = ApiRequest::<BatchCreateUserFlowResponse>::post(&api_endpoint.to_url());
+
+        // 3. 序列化请求体
+        let request_body = BatchCreateUserFlowRequestBody {
+            flow_records: self.flow_records,
+        };
+        let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
+            openlark_core::error::validation_error(
+                "请求体序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
+
+        // 4. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 5. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "导入打卡流水响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
-/// 导入打卡流水响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchCreateResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
-}
-
-impl ApiResponseTrait for BatchCreateResponse {
+impl ApiResponseTrait for BatchCreateUserFlowResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }

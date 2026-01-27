@@ -1,4 +1,4 @@
-//! 查询打卡流水
+//! 获取打卡流水
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/attendance-v1/user_flow/get
 
@@ -8,53 +8,93 @@ use openlark_core::{
     http::Transport,
     validate_required, SDKResult,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
-/// 查询打卡流水请求
+use super::models::{GetUserFlowRequestBody, GetUserFlowResponse};
+
+/// 获取打卡流水请求
 #[derive(Debug, Clone)]
-pub struct GetRequest {
+pub struct GetUserFlowRequest {
+    /// 打卡流水 ID
+    user_flow_id: String,
+    /// 用户 ID 类型，可选值：open_id、union_id、user_id
+    user_id_type: Option<String>,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
-impl GetRequest {
-    /// 创建请求
+impl GetUserFlowRequest {
+    /// 创建获取打卡流水请求
     pub fn new(config: Config) -> Self {
         Self {
+            user_flow_id: String::new(),
+            user_id_type: None,
             config,
-            // TODO: 初始化字段
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 设置打卡流水 ID（必填）
+    pub fn user_flow_id(mut self, user_flow_id: String) -> Self {
+        self.user_flow_id = user_flow_id;
+        self
+    }
+
+    /// 设置用户 ID 类型（可选）
+    pub fn user_id_type(mut self, user_id_type: String) -> Self {
+        self.user_id_type = Some(user_id_type);
+        self
+    }
 
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<GetResponse> {
+    pub async fn execute(self) -> SDKResult<GetUserFlowResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
-    ) -> SDKResult<GetResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 查询打卡流水 API 调用")
+    ) -> SDKResult<GetUserFlowResponse> {
+        use crate::common::api_endpoints::AttendanceApiV1;
+
+        // 1. 验证必填字段
+        validate_required!(self.user_flow_id.trim(), "打卡流水 ID 不能为空");
+
+        // 2. 构建端点
+        let api_endpoint = AttendanceApiV1::UserFlowGet;
+        let mut request = ApiRequest::<GetUserFlowResponse>::post(&api_endpoint.to_url());
+
+        // 3. 添加查询参数（可选）
+        if let Some(ref user_id_type) = self.user_id_type {
+            request = request.query("user_id_type", user_id_type);
+        }
+
+        // 4. 序列化请求体
+        let request_body = GetUserFlowRequestBody {
+            user_flow_id: self.user_flow_id,
+            user_id_type: self.user_id_type,
+        };
+        request = request.body(serde_json::to_value(&request_body).map_err(|e| {
+            openlark_core::error::validation_error(
+                "请求体序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
+
+        // 5. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 6. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取打卡流水响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
-/// 查询打卡流水响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct GetResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
-}
-
-impl ApiResponseTrait for GetResponse {
+impl ApiResponseTrait for GetUserFlowResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
