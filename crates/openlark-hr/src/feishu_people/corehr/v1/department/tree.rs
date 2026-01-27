@@ -1,42 +1,51 @@
-//! 删除部门
+//! 获取部门树
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/department/delete
+//! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/department/tree
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    SDKResult,
 };
 
-use super::models::{DeleteRequestBody, DeleteResponse};
+use super::models::{TreeRequestBody, TreeResponse};
 
-/// 删除部门请求
+/// 获取部门树请求
 #[derive(Debug, Clone)]
-pub struct DeleteRequest {
+pub struct TreeRequest {
     /// 配置信息
     config: Config,
-    /// 部门 ID（必填）
-    department_id: String,
+    /// 根部门 ID（不传则从顶层开始）
+    department_id: Option<String>,
+    /// 是否包含已停用部门
+    include_inactive: Option<bool>,
 }
 
-impl DeleteRequest {
+impl TreeRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            department_id: String::new(),
+            department_id: None,
+            include_inactive: None,
         }
     }
 
-    /// 设置部门 ID（必填）
+    /// 设置根部门 ID（不传则从顶层开始）
     pub fn department_id(mut self, department_id: String) -> Self {
-        self.department_id = department_id;
+        self.department_id = Some(department_id);
+        self
+    }
+
+    /// 设置是否包含已停用部门
+    pub fn include_inactive(mut self, include_inactive: bool) -> Self {
+        self.include_inactive = Some(include_inactive);
         self
     }
 
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<DeleteResponse> {
+    pub async fn execute(self) -> SDKResult<TreeResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
@@ -45,19 +54,17 @@ impl DeleteRequest {
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
-    ) -> SDKResult<DeleteResponse> {
+    ) -> SDKResult<TreeResponse> {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
-        // 1. 验证必填字段
-        validate_required!(self.department_id.trim(), "部门ID不能为空");
+        // 1. 构建端点
+        let api_endpoint = FeishuPeopleApiV1::DepartmentTree;
+        let request = ApiRequest::<TreeResponse>::post(&api_endpoint.to_url());
 
-        // 2. 构建端点
-        let api_endpoint = FeishuPeopleApiV1::DepartmentDelete(self.department_id.clone());
-        let request = ApiRequest::<DeleteResponse>::delete(&api_endpoint.to_url());
-
-        // 3. 序列化请求体
-        let request_body = DeleteRequestBody {
+        // 2. 序列化请求体
+        let request_body = TreeRequestBody {
             department_id: self.department_id,
+            include_inactive: self.include_inactive,
         };
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
@@ -66,20 +73,20 @@ impl DeleteRequest {
             )
         })?);
 
-        // 4. 发送请求
+        // 3. 发送请求
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
-        // 5. 提取响应数据
+        // 4. 提取响应数据
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error(
-                "删除部门响应数据为空",
+                "获取部门树响应数据为空",
                 "服务器没有返回有效的数据",
             )
         })
     }
 }
 
-impl ApiResponseTrait for DeleteResponse {
+impl ApiResponseTrait for TreeResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }

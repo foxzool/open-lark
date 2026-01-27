@@ -1,35 +1,44 @@
-//! 批量查询部门
+//! 搜索部门
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/department/list
+//! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/department/search
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 
-use super::models::{ListRequestBody, ListResponse};
+use super::models::{SearchRequestBody, SearchResponse};
 
-/// 批量查询部门请求
+/// 搜索部门请求
 #[derive(Debug, Clone)]
-pub struct ListRequest {
+pub struct SearchRequest {
     /// 配置信息
     config: Config,
+    /// 搜索关键词（必填）
+    query: String,
     /// 分页大小（1-100，默认 20）
     page_size: Option<i32>,
     /// 分页标记
     page_token: Option<String>,
 }
 
-impl ListRequest {
+impl SearchRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
             config,
+            query: String::new(),
             page_size: None,
             page_token: None,
         }
+    }
+
+    /// 设置搜索关键词（必填）
+    pub fn query(mut self, query: String) -> Self {
+        self.query = query;
+        self
     }
 
     /// 设置分页大小（1-100，默认 20）
@@ -45,7 +54,7 @@ impl ListRequest {
     }
 
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<ListResponse> {
+    pub async fn execute(self) -> SDKResult<SearchResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
@@ -54,15 +63,19 @@ impl ListRequest {
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
-    ) -> SDKResult<ListResponse> {
+    ) -> SDKResult<SearchResponse> {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
-        // 1. 构建端点
-        let api_endpoint = FeishuPeopleApiV1::DepartmentList;
-        let request = ApiRequest::<ListResponse>::get(&api_endpoint.to_url());
+        // 1. 验证必填字段
+        validate_required!(self.query.trim(), "搜索关键词不能为空");
 
-        // 2. 序列化请求体
-        let request_body = ListRequestBody {
+        // 2. 构建端点
+        let api_endpoint = FeishuPeopleApiV1::DepartmentSearch;
+        let request = ApiRequest::<SearchResponse>::post(&api_endpoint.to_url());
+
+        // 3. 序列化请求体
+        let request_body = SearchRequestBody {
+            query: self.query,
             page_size: self.page_size,
             page_token: self.page_token,
         };
@@ -73,20 +86,20 @@ impl ListRequest {
             )
         })?);
 
-        // 3. 发送请求
+        // 4. 发送请求
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
-        // 4. 提取响应数据
+        // 5. 提取响应数据
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error(
-                "批量查询部门响应数据为空",
+                "搜索部门响应数据为空",
                 "服务器没有返回有效的数据",
             )
         })
     }
 }
 
-impl ApiResponseTrait for ListResponse {
+impl ApiResponseTrait for SearchResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }

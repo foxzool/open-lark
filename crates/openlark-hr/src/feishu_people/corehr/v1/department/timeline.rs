@@ -1,6 +1,6 @@
-//! 删除部门
+//! 查询时间轴
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/department/delete
+//! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/department/query_timeline
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -9,23 +9,29 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 
-use super::models::{DeleteRequestBody, DeleteResponse};
+use super::models::{TimelineRequestBody, TimelineResponse};
 
-/// 删除部门请求
+/// 查询时间轴请求
 #[derive(Debug, Clone)]
-pub struct DeleteRequest {
+pub struct TimelineRequest {
     /// 配置信息
     config: Config,
     /// 部门 ID（必填）
     department_id: String,
+    /// 开始时间（必填，格式：YYYY-MM-DD）
+    start_time: String,
+    /// 结束时间（必填，格式：YYYY-MM-DD）
+    end_time: String,
 }
 
-impl DeleteRequest {
+impl TimelineRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
             config,
             department_id: String::new(),
+            start_time: String::new(),
+            end_time: String::new(),
         }
     }
 
@@ -35,8 +41,20 @@ impl DeleteRequest {
         self
     }
 
+    /// 设置开始时间（必填，格式：YYYY-MM-DD）
+    pub fn start_time(mut self, start_time: String) -> Self {
+        self.start_time = start_time;
+        self
+    }
+
+    /// 设置结束时间（必填，格式：YYYY-MM-DD）
+    pub fn end_time(mut self, end_time: String) -> Self {
+        self.end_time = end_time;
+        self
+    }
+
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<DeleteResponse> {
+    pub async fn execute(self) -> SDKResult<TimelineResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
@@ -45,19 +63,23 @@ impl DeleteRequest {
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
-    ) -> SDKResult<DeleteResponse> {
+    ) -> SDKResult<TimelineResponse> {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
         // 1. 验证必填字段
         validate_required!(self.department_id.trim(), "部门ID不能为空");
+        validate_required!(self.start_time.trim(), "开始时间不能为空");
+        validate_required!(self.end_time.trim(), "结束时间不能为空");
 
         // 2. 构建端点
-        let api_endpoint = FeishuPeopleApiV1::DepartmentDelete(self.department_id.clone());
-        let request = ApiRequest::<DeleteResponse>::delete(&api_endpoint.to_url());
+        let api_endpoint = FeishuPeopleApiV1::DepartmentQueryTimeline;
+        let request = ApiRequest::<TimelineResponse>::post(&api_endpoint.to_url());
 
         // 3. 序列化请求体
-        let request_body = DeleteRequestBody {
+        let request_body = TimelineRequestBody {
             department_id: self.department_id,
+            start_time: self.start_time,
+            end_time: self.end_time,
         };
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
@@ -72,14 +94,14 @@ impl DeleteRequest {
         // 5. 提取响应数据
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error(
-                "删除部门响应数据为空",
+                "查询时间轴响应数据为空",
                 "服务器没有返回有效的数据",
             )
         })
     }
 }
 
-impl ApiResponseTrait for DeleteResponse {
+impl ApiResponseTrait for TimelineResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
