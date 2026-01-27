@@ -32,18 +32,12 @@
 
 #![allow(missing_docs)]
 
-// Include macros first
-#[macro_use]
-mod macros;
+pub mod common;
 
-// Core service
-pub mod service;
-
-// 项目模块（按 meta.Project）
 pub mod attendance;
-pub mod compensation;
-pub mod corehr;
+pub mod compensation_management;
 pub mod ehr;
+pub mod feishu_people;
 pub mod hire;
 pub mod okr;
 pub mod payroll;
@@ -57,7 +51,7 @@ pub mod prelude {
     pub use openlark_core::{config::Config, SDKResult};
 }
 
-use service::HrService;
+use common::service::HrService;
 use std::sync::Arc;
 
 /// HRClient：统一入口，提供 project-version-resource 链式访问
@@ -74,34 +68,34 @@ impl HrClient {
     }
 
     pub fn attendance(&self) -> attendance::Attendance {
-        attendance::Attendance::new(self.service.clone())
+        attendance::Attendance::new(self.service.config().clone())
     }
 
-    pub fn corehr(&self) -> corehr::Corehr {
-        corehr::Corehr::new(self.service.clone())
+    pub fn corehr(&self) -> feishu_people::Corehr {
+        feishu_people::Corehr::new(self.service.config().clone())
     }
 
-    pub fn compensation(&self) -> compensation::Compensation {
-        compensation::Compensation::new(self.service.clone())
+    pub fn compensation(&self) -> compensation_management::CompensationManagement {
+        compensation_management::CompensationManagement::new(self.service.config().clone())
     }
 
     pub fn payroll(&self) -> payroll::Payroll {
-        payroll::Payroll::new(self.service.clone())
+        payroll::Payroll::new(self.service.config().clone())
     }
 
     pub fn performance(&self) -> performance::Performance {
-        performance::Performance::new(self.service.clone())
+        performance::Performance::new(self.service.config().clone())
     }
 
     pub fn okr(&self) -> okr::Okr {
-        okr::Okr::new(self.service.clone())
+        okr::Okr::new(self.service.config().clone())
     }
 
     pub fn hire(&self) -> hire::Hire {
-        hire::Hire::new(self.service.clone())
+        hire::Hire::new(self.service.config().clone())
     }
 
     pub fn ehr(&self) -> ehr::Ehr {
-        ehr::Ehr::new(self.service.clone())
+        ehr::Ehr::new(self.service.config().clone())
     }
 }
