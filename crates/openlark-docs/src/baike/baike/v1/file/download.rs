@@ -3,8 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/baike-v1/file/download
 
 use openlark_core::{
-    api::{ApiRequest, Response}, config::Config, http::Transport, req_option::RequestOption, validate_required,
-    SDKResult,
+    api::{ApiRequest, Response},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    validate_required, SDKResult,
 };
 
 use crate::common::api_endpoints::BaikeApiV1;

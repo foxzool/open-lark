@@ -3,7 +3,10 @@
 //! docPath: https://open.feishu.cn/document/lingo-v1/file/download
 
 use openlark_core::{
-    api::{ApiRequest, Response}, config::Config, http::Transport, req_option::RequestOption,
+    api::{ApiRequest, Response},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 
