@@ -6,17 +6,24 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    SDKResult,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
+
+use super::models::{ListRequestBody, ListResponse};
 
 /// 批量查询任职信息请求
 #[derive(Debug, Clone)]
 pub struct ListRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    /// 分页大小（1-100）
+    page_size: Option<i32>,
+    /// 分页标记
+    page_token: Option<String>,
+    /// 员工 ID 过滤
+    employee_id: Option<String>,
+    /// 状态过滤
+    status: Option<i32>,
 }
 
 impl ListRequest {
@@ -24,11 +31,38 @@ impl ListRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            page_size: None,
+            page_token: None,
+            employee_id: None,
+            status: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 设置分页大小（1-100）
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: String) -> Self {
+        self.page_token = Some(page_token);
+        self
+    }
+
+    /// 设置员工 ID 过滤
+    pub fn employee_id(mut self, employee_id: String) -> Self {
+        self.employee_id = Some(employee_id);
+        self
+    }
+
+    /// 设置状态过滤
+    /// - 1: 在职
+    /// - 2: 离职
+    pub fn status(mut self, status: i32) -> Self {
+        self.status = Some(status);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ListResponse> {
@@ -36,22 +70,52 @@ impl ListRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 批量查询任职信息 API 调用")
-    }
-}
+        use crate::common::api_endpoints::FeishuPeopleApiV1;
 
-/// 批量查询任职信息响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ListResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+        // 1. 验证分页参数
+        if let Some(size) = self.page_size {
+            if size < 1 || size > 100 {
+                return Err(openlark_core::error::validation_error(
+                    "分页参数无效",
+                    &format!("分页大小必须在 1-100 之间，当前值为: {}", size),
+                ));
+            }
+        }
+
+        // 2. 构建端点
+        let api_endpoint = FeishuPeopleApiV1::JobDataList;
+        let request = ApiRequest::<ListResponse>::get(&api_endpoint.to_url());
+
+        // 3. 序列化请求体（作为查询参数）
+        let request_body = ListRequestBody {
+            page_size: self.page_size,
+            page_token: self.page_token,
+            employee_id: self.employee_id,
+            status: self.status,
+        };
+        let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
+            openlark_core::error::validation_error(
+                "请求体序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
+
+        // 4. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 5. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "批量查询任职信息响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
+    }
 }
 
 impl ApiResponseTrait for ListResponse {
