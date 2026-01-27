@@ -7,6 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
+    SDKResult,
 };
 
 use serde::{Deserialize, Serialize};

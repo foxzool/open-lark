@@ -10,8 +10,8 @@ use openlark_core::{
 };
 
 use super::models::{
-    CreateShiftRequestBody, CreateShiftResponse, EarlyLeaveRule, LateRule, OvertimeRule,
-    PunchTime, RestRule,
+    CreateShiftRequestBody, CreateShiftResponse, EarlyLeaveRule, LateRule, OvertimeRule, PunchTime,
+    RestRule,
 };
 
 /// 创建班次请求
