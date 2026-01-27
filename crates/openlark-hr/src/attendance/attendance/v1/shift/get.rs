@@ -8,53 +8,67 @@ use openlark_core::{
     http::Transport,
     validate_required, SDKResult,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
+
+use super::models::GetShiftResponse;
 
 /// 按 ID 查询班次请求
 #[derive(Debug, Clone)]
-pub struct GetRequest {
+pub struct GetShiftRequest {
+    /// 班次 ID（必填）
+    shift_id: String,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
-impl GetRequest {
+impl GetShiftRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
+            shift_id: String::new(),
             config,
-            // TODO: 初始化字段
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 设置班次 ID（必填）
+    pub fn shift_id(mut self, shift_id: String) -> Self {
+        self.shift_id = shift_id;
+        self
+    }
 
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<GetResponse> {
+    pub async fn execute(self) -> SDKResult<GetShiftResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
-    ) -> SDKResult<GetResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 按 ID 查询班次 API 调用")
+    ) -> SDKResult<GetShiftResponse> {
+        use crate::common::api_endpoints::AttendanceApiV1;
+
+        // 1. 验证必填字段
+        validate_required!(self.shift_id.trim(), "班次 ID 不能为空");
+
+        // 2. 构建端点
+        let api_endpoint = AttendanceApiV1::ShiftGet(self.shift_id.clone());
+        let request = ApiRequest::<GetShiftResponse>::get(&api_endpoint.to_url());
+
+        // 3. 发送请求（GET 无请求体）
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 4. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取班次响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
-/// 按 ID 查询班次响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct GetResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
-}
-
-impl ApiResponseTrait for GetResponse {
+impl ApiResponseTrait for GetShiftResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
