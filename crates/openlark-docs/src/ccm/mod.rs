@@ -63,13 +63,13 @@ impl CcmService {
 }
 
 // 导出所有子项目模块
-pub mod explorer;
-pub mod permission;
-pub mod sheets_v2;
 pub mod docs;
 pub mod docx;
 pub mod drive;
+pub mod explorer;
+pub mod permission;
 pub mod sheets;
+pub mod sheets_v2;
 pub mod wiki;
 // old 模块已废弃 - 暂时注释以解决编译问题
 // pub mod old;
