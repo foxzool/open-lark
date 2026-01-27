@@ -8,15 +8,16 @@ use openlark_core::{
     http::Transport,
     validate_required, SDKResult,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
+
+use super::models::GetResponse;
 
 /// 查询单个职级请求
 #[derive(Debug, Clone)]
 pub struct GetRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    /// 职级 ID（必填）
+    job_level_id: String,
 }
 
 impl GetRequest {
@@ -24,11 +25,15 @@ impl GetRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            job_level_id: String::new(),
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 设置职级 ID（必填）
+    pub fn job_level_id(mut self, job_level_id: String) -> Self {
+        self.job_level_id = job_level_id;
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<GetResponse> {
@@ -36,22 +41,31 @@ impl GetRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 查询单个职级 API 调用")
-    }
-}
+        use crate::common::api_endpoints::FeishuPeopleApiV1;
 
-/// 查询单个职级响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct GetResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+        // 1. 验证必填字段
+        validate_required!(self.job_level_id.trim(), "职级 ID 不能为空");
+
+        // 2. 构建端点
+        let api_endpoint = FeishuPeopleApiV1::JobLevelGet(self.job_level_id);
+        let request = ApiRequest::<GetResponse>::get(&api_endpoint.to_url());
+
+        // 3. 发送请求（GET 请求无请求体）
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 4. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "查询职级响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
+    }
 }
 
 impl ApiResponseTrait for GetResponse {
