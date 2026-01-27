@@ -8,6 +8,7 @@ pub mod country_region;
 pub mod currency;
 pub mod custom_field;
 pub mod department;
+pub mod employee;
 pub mod employee_type;
 pub mod employment;
 pub mod file;
