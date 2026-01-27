@@ -56,7 +56,12 @@ impl BatchGetIdRequest {
         use crate::common::api_endpoints::HireApiV1;
 
         // 1. 验证必填字段
-        validate_required!(!self.talent_ids.is_empty(), "候选人 ID 列表不能为空");
+        if self.talent_ids.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "候选人 ID 列表不能为空",
+                "请至少提供一个候选人 ID",
+            ));
+        }
 
         // 验证数量限制
         if self.talent_ids.len() > 100 {

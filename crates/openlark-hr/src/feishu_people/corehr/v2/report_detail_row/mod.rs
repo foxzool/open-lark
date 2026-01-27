@@ -1,2 +1,2 @@
-pub mod batchDelete;
-pub mod batchSave;
+pub mod batch_delete;
+pub mod batch_save;

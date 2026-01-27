@@ -9,9 +9,7 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 
-use super::models::{
-    BatchCreateUserFlowRequestBody, BatchCreateUserFlowResponse, UserFlowRecord,
-};
+use super::models::{BatchCreateUserFlowRequestBody, BatchCreateUserFlowResponse, UserFlowRecord};
 
 /// 导入打卡流水请求
 #[derive(Debug, Clone)]

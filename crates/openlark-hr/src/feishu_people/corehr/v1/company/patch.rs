@@ -92,7 +92,11 @@ impl PatchRequest {
         validate_required!(self.company_id.trim(), "公司 ID 不能为空");
 
         // 验证至少有一个更新字段
-        if self.name.is_none() && self.code.is_none() && self.description.is_none() && self.status.is_none() {
+        if self.name.is_none()
+            && self.code.is_none()
+            && self.description.is_none()
+            && self.status.is_none()
+        {
             return Err(openlark_core::error::validation_error(
                 "更新字段不能为空",
                 "至少需要提供一个更新字段（name、code、description 或 status）",

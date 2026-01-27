@@ -2,9 +2,9 @@
 //!
 //! 提供雇佣信息管理相关的 API，包括创建、删除、更新等功能。
 
-pub mod models;
 pub mod create;
 pub mod delete;
+pub mod models;
 pub mod patch;
 
 // Re-export 公共类型
