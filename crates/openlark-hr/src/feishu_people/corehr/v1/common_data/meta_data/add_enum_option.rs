@@ -3,10 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/common_data.meta_data/add_enum_option
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::{ApiResponseTrait, ResponseFormat},
+    config::Config, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -38,7 +36,7 @@ impl AddEnumOptionRequest {
 
     pub async fn execute_with_options(
         self,
-        option: openlark_core::req_option::RequestOption,
+        _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<AddEnumOptionResponse> {
         // TODO: 实现 API 调用逻辑
         todo!("实现 增加字段枚举值选项 API 调用")

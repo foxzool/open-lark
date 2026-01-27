@@ -5,8 +5,7 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    http::Transport, SDKResult,
 };
 
 use super::models::{CalendarByScopeRequestBody, CalendarByScopeResponse};

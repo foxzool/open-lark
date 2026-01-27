@@ -8,7 +8,6 @@ use openlark_core::{
     http::Transport,
     validate_required, SDKResult,
 };
-use serde::{Deserialize, Serialize};
 
 use super::models::{
     CombinedUpdateRequestBody, CombinedUpdateResponse, TalentEducation, TalentWorkExperience,

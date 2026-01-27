@@ -3,10 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/interview/get_by_talent
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::{ApiResponseTrait, ResponseFormat},
+    config::Config, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -38,7 +36,7 @@ impl GetByTalentRequest {
 
     pub async fn execute_with_options(
         self,
-        option: openlark_core::req_option::RequestOption,
+        _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetByTalentResponse> {
         // TODO: 实现 API 调用逻辑
         todo!("实现 获取人才面试信息 API 调用")

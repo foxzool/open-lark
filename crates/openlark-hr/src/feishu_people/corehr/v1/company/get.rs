@@ -9,7 +9,7 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 
-use super::models::{GetRequestBody, GetResponse};
+use super::models::GetResponse;
 
 /// 查询单个公司请求
 #[derive(Debug, Clone)]

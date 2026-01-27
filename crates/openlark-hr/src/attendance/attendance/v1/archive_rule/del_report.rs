@@ -3,10 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/attendance-v1/archive_rule/del_report
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::{ApiResponseTrait, ResponseFormat},
+    config::Config, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -38,7 +36,7 @@ impl DelReportRequest {
 
     pub async fn execute_with_options(
         self,
-        option: openlark_core::req_option::RequestOption,
+        _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DelReportResponse> {
         // TODO: 实现 API 调用逻辑
         todo!("实现 删除归档报表行数据 API 调用")
