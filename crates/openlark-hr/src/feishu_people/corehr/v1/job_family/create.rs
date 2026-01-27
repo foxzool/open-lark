@@ -8,15 +8,20 @@ use openlark_core::{
     http::Transport,
     validate_required, SDKResult,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
+
+use super::models::{CreateRequestBody, CreateResponse};
 
 /// 创建序列请求
 #[derive(Debug, Clone)]
 pub struct CreateRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    /// 序列名称（必填）
+    name: String,
+    /// 序列描述
+    description: Option<String>,
+    /// 序列编码
+    code: Option<String>,
 }
 
 impl CreateRequest {
@@ -24,11 +29,29 @@ impl CreateRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            name: String::new(),
+            description: None,
+            code: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 设置序列名称（必填）
+    pub fn name(mut self, name: String) -> Self {
+        self.name = name;
+        self
+    }
+
+    /// 设置序列描述
+    pub fn description(mut self, description: String) -> Self {
+        self.description = Some(description);
+        self
+    }
+
+    /// 设置序列编码
+    pub fn code(mut self, code: String) -> Self {
+        self.code = Some(code);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CreateResponse> {
@@ -36,22 +59,44 @@ impl CreateRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 创建序列 API 调用")
-    }
-}
+        use crate::common::api_endpoints::FeishuPeopleApiV1;
 
-/// 创建序列响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct CreateResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+        // 1. 验证必填字段
+        validate_required!(self.name.trim(), "序列名称不能为空");
+
+        // 2. 构建端点
+        let api_endpoint = FeishuPeopleApiV1::JobFamilyCreate;
+        let request = ApiRequest::<CreateResponse>::post(&api_endpoint.to_url());
+
+        // 3. 序列化请求体
+        let request_body = CreateRequestBody {
+            name: self.name,
+            description: self.description,
+            code: self.code,
+        };
+        let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
+            openlark_core::error::validation_error(
+                "请求体序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
+
+        // 4. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 5. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "创建序列响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
+    }
 }
 
 impl ApiResponseTrait for CreateResponse {
