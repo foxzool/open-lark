@@ -12,7 +12,6 @@ pub mod department;
 pub mod draft;
 pub mod employee;
 pub mod employees;
-pub mod enum;
 pub mod job;
 pub mod job_change;
 pub mod job_family;
