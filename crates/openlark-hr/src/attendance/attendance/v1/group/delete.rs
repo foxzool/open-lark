@@ -8,53 +8,67 @@ use openlark_core::{
     http::Transport,
     validate_required, SDKResult,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
+
+use super::models::DeleteGroupResponse;
 
 /// 删除考勤组请求
 #[derive(Debug, Clone)]
-pub struct DeleteRequest {
+pub struct DeleteGroupRequest {
+    /// 考勤组 ID（必填）
+    group_id: String,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
-impl DeleteRequest {
+impl DeleteGroupRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
+            group_id: String::new(),
             config,
-            // TODO: 初始化字段
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 设置考勤组 ID（必填）
+    pub fn group_id(mut self, group_id: String) -> Self {
+        self.group_id = group_id;
+        self
+    }
 
     /// 执行请求
-    pub async fn execute(self) -> SDKResult<DeleteResponse> {
+    pub async fn execute(self) -> SDKResult<DeleteGroupResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
-    ) -> SDKResult<DeleteResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 删除考勤组 API 调用")
+    ) -> SDKResult<DeleteGroupResponse> {
+        use crate::common::api_endpoints::AttendanceApiV1;
+
+        // 1. 验证必填字段
+        validate_required!(self.group_id.trim(), "考勤组 ID 不能为空");
+
+        // 2. 构建端点
+        let api_endpoint = AttendanceApiV1::GroupDelete(self.group_id.clone());
+        let request = ApiRequest::<DeleteGroupResponse>::delete(&api_endpoint.to_url());
+
+        // 3. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 4. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "删除考勤组响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
-/// 删除考勤组响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct DeleteResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
-}
-
-impl ApiResponseTrait for DeleteResponse {
+impl ApiResponseTrait for DeleteGroupResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
