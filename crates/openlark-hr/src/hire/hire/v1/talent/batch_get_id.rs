@@ -1,4 +1,4 @@
-//! 批量获取人才ID
+//! 批量获取候选人ID
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/talent/batch_get_id
 
@@ -9,14 +9,16 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
-/// 批量获取人才ID请求
+use super::models::{BatchGetIdRequestBody, BatchGetIdResponse};
+
+/// 批量获取候选人ID请求
 #[derive(Debug, Clone)]
 pub struct BatchGetIdRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    /// 候选人 ID 列表（必填，最多100个）
+    talent_ids: Vec<String>,
 }
 
 impl BatchGetIdRequest {
@@ -24,11 +26,21 @@ impl BatchGetIdRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            talent_ids: Vec::new(),
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 设置候选人 ID 列表（必填，最多100个）
+    pub fn talent_ids(mut self, talent_ids: Vec<String>) -> Self {
+        self.talent_ids = talent_ids;
+        self
+    }
+
+    /// 添加单个候选人 ID
+    pub fn add_talent_id(mut self, talent_id: String) -> Self {
+        self.talent_ids.push(talent_id);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<BatchGetIdResponse> {
@@ -36,22 +48,50 @@ impl BatchGetIdRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchGetIdResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 批量获取人才ID API 调用")
-    }
-}
+        use crate::common::api_endpoints::HireApiV1;
 
-/// 批量获取人才ID响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct BatchGetIdResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+        // 1. 验证必填字段
+        validate_required!(!self.talent_ids.is_empty(), "候选人 ID 列表不能为空");
+
+        // 验证数量限制
+        if self.talent_ids.len() > 100 {
+            return Err(openlark_core::error::validation_error(
+                "候选人 ID 数量超出限制",
+                "一次最多只能查询 100 个候选人 ID",
+            ));
+        }
+
+        // 2. 构建端点
+        let api_endpoint = HireApiV1::TalentBatchGetId;
+        let request = ApiRequest::<BatchGetIdResponse>::post(&api_endpoint.to_url());
+
+        // 3. 序列化请求体
+        let request_body = BatchGetIdRequestBody {
+            talent_ids: self.talent_ids,
+        };
+        let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
+            openlark_core::error::validation_error(
+                "请求体序列化失败",
+                &format!("无法序列化请求参数: {}", e),
+            )
+        })?);
+
+        // 4. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 5. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "批量获取候选人ID响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
+    }
 }
 
 impl ApiResponseTrait for BatchGetIdResponse {
