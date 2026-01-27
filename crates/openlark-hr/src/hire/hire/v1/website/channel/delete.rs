@@ -3,10 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/website.channel/delete
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::{ApiResponseTrait, ResponseFormat},
+    config::Config, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -38,7 +36,7 @@ impl DeleteRequest {
 
     pub async fn execute_with_options(
         self,
-        option: openlark_core::req_option::RequestOption,
+        _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteResponse> {
         // TODO: 实现 API 调用逻辑
         todo!("实现 删除招聘官网推广渠道 API 调用")

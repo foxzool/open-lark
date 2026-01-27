@@ -3,10 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/external_background_check/create
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::{ApiResponseTrait, ResponseFormat},
+    config::Config, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -38,7 +36,7 @@ impl CreateRequest {
 
     pub async fn execute_with_options(
         self,
-        option: openlark_core::req_option::RequestOption,
+        _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateResponse> {
         // TODO: 实现 API 调用逻辑
         todo!("实现 创建外部背调 API 调用")

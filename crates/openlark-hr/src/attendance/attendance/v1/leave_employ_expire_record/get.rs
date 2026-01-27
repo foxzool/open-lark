@@ -3,10 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/attendance-v1/leave_employ_expire_record/get
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::{ApiResponseTrait, ResponseFormat},
+    config::Config, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -38,7 +36,7 @@ impl GetRequest {
 
     pub async fn execute_with_options(
         self,
-        option: openlark_core::req_option::RequestOption,
+        _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
         // TODO: 实现 API 调用逻辑
         todo!("实现 通过过期时间获取发放记录 API 调用")

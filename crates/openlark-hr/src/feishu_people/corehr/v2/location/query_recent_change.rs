@@ -3,10 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/location/query_recent_change
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
-    config::Config,
-    http::Transport,
-    validate_required, SDKResult,
+    api::{ApiResponseTrait, ResponseFormat},
+    config::Config, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -38,7 +36,7 @@ impl QueryRecentChangeRequest {
 
     pub async fn execute_with_options(
         self,
-        option: openlark_core::req_option::RequestOption,
+        _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryRecentChangeResponse> {
         // TODO: 实现 API 调用逻辑
         todo!("实现 查询当前生效信息发生变更的地点 API 调用")

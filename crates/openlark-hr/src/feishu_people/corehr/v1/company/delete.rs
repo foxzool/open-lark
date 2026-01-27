@@ -9,7 +9,7 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 
-use super::models::{DeleteRequestBody, DeleteResponse};
+use super::models::DeleteResponse;
 
 /// 删除公司请求
 #[derive(Debug, Clone)]
