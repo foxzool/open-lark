@@ -5,6 +5,6 @@
 #![allow(clippy::module_inception)]
 
 pub mod service;
-pub mod v1;
+pub mod vc;
 
 pub use service::VcService;

@@ -1,7 +1,7 @@
 # AGENTS.md (openlark-meeting)
 
 ## OVERVIEW
-飞书会议与日程服务实现。涵盖 117 个 API（pub async fn），175 个源码文件。核心特征是日历（calendar）、视频会议（vc）、会议室（meeting_room）三大业务域。
+飞书会议与日程服务实现。涵盖 100 个 API（pub async fn），119 个源码文件。核心特征是日历（calendar）、视频会议（vc）、会议室（meeting_room）三大业务域。
 
 ## STRUCTURE
 - **Calendar（日历）**: v4 (44 APIs) - 日程管理、忙闲查询、权限控制
@@ -9,16 +9,16 @@
 - **Meeting Room（会议室）**: 历史版本 (17 APIs) - 建筑、房间、预约管理
 
 ## WHERE TO LOOK
-- **日程管理**: `src/calendar/v4/calendar/event/`
-- **忙闲查询**: `src/calendar/v4/freebusy/`
-- **视频会议**: `src/vc/v1/meeting/`
+- **日程管理**: `src/calendar/calendar/v4/calendar/event/`
+- **忙闲查询**: `src/calendar/calendar/v4/freebusy/`
+- **视频会议**: `src/vc/vc/v1/meeting/`
 - **会议室管理**: `src/meeting_room/room/`
 - **Endpoint 定义**: `src/common/api_endpoints.rs` (基于 Enum 的类型安全映射)
 
 ## CONVENTIONS
-- **路径规范**: `src/{bizTag}/{version}/{resource}/{name}.rs`
-  - 示例: `src/calendar/v4/calendar/event/get.rs`
-  - 示例: `src/vc/v1/meeting/list_by_no.rs`
+- **路径规范**: `src/{bizTag}/{project}/{version}/{resource}/{name}.rs`
+  - 示例: `src/calendar/calendar/v4/calendar/event/get.rs`
+  - 示例: `src/vc/vc/v1/meeting/list_by_no.rs`
 - **版本策略**:
   - `v4`: calendar（现行）
   - `v1`: vc（现行）、meeting_room（历史版本）

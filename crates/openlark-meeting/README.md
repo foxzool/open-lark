@@ -41,16 +41,18 @@ meeting-room = ["meeting-room-v1"]
 ├── common/                    # 公共工具和模型
 ├── endpoints/                 # API 端点定义
 ├── calendar/                 # 日历模块 (calendar-v4)
-│   ├── v4/
-│   │   ├── calendar/
-│   │   ├── freebusy/
-│   │   └── setting/
+│   ├── calendar/
+│   │   └── v4/
+│   │       ├── calendar/
+│   │       ├── freebusy/
+│   │       └── setting/
 │   └── service.rs
 ├── vc/                       # 视频会议模块 (vc-v1)
-│   ├── v1/
-│   │   ├── meeting/
-│   │   ├── room/
-│   │   └── reserve/
+│   ├── vc/
+│   │   └── v1/
+│   │       ├── meeting/
+│   │       ├── room/
+│   │       └── reserve/
 │   └── service.rs
 └── meeting_room/             # 会议室模块 (meeting-room-v1)
     ├── room/
