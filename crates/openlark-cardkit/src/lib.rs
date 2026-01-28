@@ -9,9 +9,6 @@
 
 #![allow(missing_docs)]
 
-#[macro_use]
-mod macros;
-
 pub mod common;
 pub mod endpoints;
 pub mod service;
