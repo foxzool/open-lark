@@ -1,22 +1,22 @@
-//! OIDC认证相关API模块
-//!
-//! 本模块包含OIDC（OpenID Connect）相关的认证API实现
+//! OIDC Authentication APIs
+
+use openlark_core::config::Config;
 
 pub mod access_token;
 pub mod refresh_access_token;
 
-// 重新导出构建器，方便外部使用
-pub use access_token::OidcAccessTokenBuilder;
-pub use refresh_access_token::OidcRefreshAccessTokenBuilder;
+// Re-export types for convenient access
+pub use access_token::create::OidcAccessTokenBuilder;
+pub use refresh_access_token::create::OidcRefreshAccessTokenBuilder;
 
 /// OIDC认证服务
 #[derive(Debug)]
 pub struct OidcService {
-    config: openlark_core::config::Config,
+    config: Config,
 }
 
 impl OidcService {
-    pub fn new(config: openlark_core::config::Config) -> Self {
+    pub fn new(config: Config) -> Self {
         Self { config }
     }
 
