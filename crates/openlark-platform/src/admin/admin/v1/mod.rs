@@ -1,20 +1,24 @@
-//! 目录服务 V1 API
+//! 系统管理 V1 API
 //!
-//! 提供目录服务 V1 版本的 API 访问
+//! 提供系统管理 V1 版本的 API 访问
 
 use crate::PlatformConfig;
 use std::sync::Arc;
 
-/// 目录服务 V1 API
+pub mod audit;
+pub mod settings;
+pub mod users;
+
+/// 系统管理 V1 API
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
-pub struct DirectoryV1 {
+pub struct AdminV1 {
     /// 客户端配置
     config: Arc<PlatformConfig>,
 }
 
-impl DirectoryV1 {
-    /// 创建新的目录服务 V1 实例
+impl AdminV1 {
+    /// 创建新的系统管理 V1 实例
     pub fn new(config: Arc<PlatformConfig>) -> Self {
         Self { config }
     }

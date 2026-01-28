@@ -27,13 +27,13 @@ impl AppEngineService {
 
     /// V1 版本 API
     #[cfg(feature = "v1")]
-    pub fn v1(&self) -> crate::app_engine::v1::AppEngineV1 {
-        crate::app_engine::v1::AppEngineV1::new(self.config.clone())
+    pub fn v1(&self) -> crate::app_engine::apaas::v1::ApaasV1 {
+        crate::app_engine::apaas::v1::ApaasV1::new(self.config.clone())
     }
 }
 
 #[cfg(feature = "v1")]
-pub mod v1;
+pub mod apaas;
 
 #[cfg(test)]
 mod tests {
