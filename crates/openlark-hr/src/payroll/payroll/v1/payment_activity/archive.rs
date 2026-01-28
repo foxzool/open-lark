@@ -3,30 +3,30 @@
 //! docPath: https://open.feishu.cn/document/server-docs/payroll-v1/payment_activity/archive
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 /// 封存发薪活动请求
 #[derive(Debug, Clone)]
 pub struct ArchiveRequest {
+    /// 发薪活动 ID（必填）
+    activity_id: String,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl ArchiveRequest {
     /// 创建请求
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Config, activity_id: String) -> Self {
         Self {
+            activity_id,
             config,
-            // TODO: 初始化字段
         }
     }
-
-    // TODO: 添加字段 setter 方法
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ArchiveResponse> {
@@ -34,22 +34,39 @@ impl ArchiveRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ArchiveResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 封存发薪活动 API 调用")
+        use crate::common::api_endpoints::PayrollApiV1;
+
+        // 1. 构建端点
+        let api_endpoint = PayrollApiV1::PaymentActivityArchive(self.activity_id.clone());
+        let request = ApiRequest::<ArchiveResponse>::post(api_endpoint.to_url());
+
+        // 2. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 3. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "封存发薪活动响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
 /// 封存发薪活动响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ArchiveResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// 是否成功
+    pub success: bool,
+    /// 发薪活动 ID
+    pub activity_id: String,
+    /// 封存时间（Unix 时间戳）
+    pub archived_at: i64,
 }
 
 impl ApiResponseTrait for ArchiveResponse {

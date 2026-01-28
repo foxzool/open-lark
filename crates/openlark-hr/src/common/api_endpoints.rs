@@ -2834,18 +2834,101 @@ impl FeishuPeopleApiV1 {
 }
 
 // ============================================================================
-// 简单的 URL 编码函数（用于查询参数编码）
+// FeishuPeople API V2 - 核心人力资源 V2 (14 APIs)
 // ============================================================================
 
-/// 简单的 URL 编码函数，用于查询参数编码
-fn simple_url_encode(input: &str) -> String {
-    input
-        .chars()
-        .map(|c| match c {
-            'A'..='Z' | 'a'..='z' | '0'..='9' | '-' | '_' | '.' | '~' => c.to_string(),
-            _ => format!("%{:02X}", c as u8),
-        })
-        .collect()
+/// FeishuPeople API V2 端点枚举（核心人力资源 V2）
+#[derive(Debug, Clone, PartialEq)]
+pub enum FeishuPeopleApiV2 {
+    // === company 资源 (1个) ===
+    /// 启用/停用公司
+    CompanyActive(String), // company_id
+
+    // === contract 资源 (1个) ===
+    /// 搜索合同
+    ContractSearch,
+
+    // === department 资源 (7个) ===
+    /// 批量查询部门
+    DepartmentBatchGet,
+    /// 批量查询部门版本信息
+    DepartmentQueryMultiTimeline,
+    /// 批量查询部门操作日志
+    DepartmentQueryOperationLogs,
+    /// 获取父部门信息
+    DepartmentParents(String), // department_id
+    /// 搜索部门信息
+    DepartmentSearch,
+    /// 查询指定生效日期的部门基本信息
+    DepartmentQueryTimeline,
+    /// 查询指定生效日期的部门架构树
+    DepartmentTree,
+
+    // === employee 资源 (3个) ===
+    /// 批量查询员工信息
+    EmployeeBatchGet,
+    /// 添加人员
+    EmployeeCreate,
+    /// 搜索员工信息
+    EmployeeSearch,
+
+    // === location 资源 (1个) ===
+    /// 更新地点
+    LocationPatch(String), // location_id
+}
+
+impl FeishuPeopleApiV2 {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            // company
+            FeishuPeopleApiV2::CompanyActive(company_id) => {
+                format!("/open-apis/corehr/v2/companies/{}/active", company_id)
+            }
+
+            // contract
+            FeishuPeopleApiV2::ContractSearch => {
+                "/open-apis/corehr/v2/contracts/search".to_string()
+            }
+
+            // department
+            FeishuPeopleApiV2::DepartmentBatchGet => {
+                "/open-apis/corehr/v2/departments/batch_get".to_string()
+            }
+            FeishuPeopleApiV2::DepartmentQueryMultiTimeline => {
+                "/open-apis/corehr/v2/departments/query_multi_timeline".to_string()
+            }
+            FeishuPeopleApiV2::DepartmentQueryOperationLogs => {
+                "/open-apis/corehr/v2/departments/query_operation_logs".to_string()
+            }
+            FeishuPeopleApiV2::DepartmentParents(department_id) => {
+                format!("/open-apis/corehr/v2/departments/{}/parents", department_id)
+            }
+            FeishuPeopleApiV2::DepartmentSearch => {
+                "/open-apis/corehr/v2/departments/search".to_string()
+            }
+            FeishuPeopleApiV2::DepartmentQueryTimeline => {
+                "/open-apis/corehr/v2/departments/query_timeline".to_string()
+            }
+            FeishuPeopleApiV2::DepartmentTree => {
+                "/open-apis/corehr/v2/departments/tree".to_string()
+            }
+
+            // employee
+            FeishuPeopleApiV2::EmployeeBatchGet => {
+                "/open-apis/corehr/v2/employees/batch_get".to_string()
+            }
+            FeishuPeopleApiV2::EmployeeCreate => "/open-apis/corehr/v2/employees".to_string(),
+            FeishuPeopleApiV2::EmployeeSearch => {
+                "/open-apis/corehr/v2/employees/search".to_string()
+            }
+
+            // location
+            FeishuPeopleApiV2::LocationPatch(location_id) => {
+                format!("/open-apis/corehr/v2/locations/{}", location_id)
+            }
+        }
+    }
 }
 
 // ============================================================================
@@ -2911,5 +2994,17 @@ mod tests {
 
         let url = FeishuPeopleApiV1::DepartmentGet("789".to_string()).to_url();
         assert_eq!(url, "/open-apis/corehr/v1/departments/789");
+    }
+
+    #[test]
+    fn test_feishu_people_api_v2_urls() {
+        let url = FeishuPeopleApiV2::CompanyActive("123".to_string()).to_url();
+        assert_eq!(url, "/open-apis/corehr/v2/companies/123/active");
+
+        let url = FeishuPeopleApiV2::DepartmentTree.to_url();
+        assert_eq!(url, "/open-apis/corehr/v2/departments/tree");
+
+        let url = FeishuPeopleApiV2::EmployeeCreate.to_url();
+        assert_eq!(url, "/open-apis/corehr/v2/employees");
     }
 }

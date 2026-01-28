@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required, validate_required_list, SDKResult,
 };
 
 use super::models::{BatchCreateUserFlowRequestBody, BatchCreateUserFlowResponse, UserFlowRecord};
@@ -55,18 +55,7 @@ impl BatchCreateUserFlowRequest {
         use crate::common::api_endpoints::AttendanceApiV1;
 
         // 1. 验证必填字段
-        if self.flow_records.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "打卡流水记录列表不能为空",
-                "至少需要提供一条打卡流水记录",
-            ));
-        }
-        if self.flow_records.len() > 100 {
-            return Err(openlark_core::error::validation_error(
-                "打卡流水记录数量超出限制",
-                "单次最多支持 100 条打卡流水记录",
-            ));
-        }
+        validate_required_list!(self.flow_records, 100, "打卡流水记录列表不能为空且不能超过 100 个");
         for (idx, record) in self.flow_records.iter().enumerate() {
             validate_required!(
                 record.user_id.trim(),
@@ -80,7 +69,7 @@ impl BatchCreateUserFlowRequest {
 
         // 2. 构建端点
         let api_endpoint = AttendanceApiV1::UserFlowBatchCreate;
-        let request = ApiRequest::<BatchCreateUserFlowResponse>::post(&api_endpoint.to_url());
+        let request = ApiRequest::<BatchCreateUserFlowResponse>::post(api_endpoint.to_url());
 
         // 3. 序列化请求体
         let request_body = BatchCreateUserFlowRequestBody {
@@ -89,7 +78,7 @@ impl BatchCreateUserFlowRequest {
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

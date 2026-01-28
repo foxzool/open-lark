@@ -3,30 +3,30 @@
 //! docPath: https://open.feishu.cn/document/server-docs/okr-v1/progress_record/delete
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 /// 删除 OKR 进展记录请求
 #[derive(Debug, Clone)]
 pub struct DeleteRequest {
+    /// 进展记录 ID（必填）
+    progress_id: String,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl DeleteRequest {
     /// 创建请求
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Config, progress_id: String) -> Self {
         Self {
+            progress_id,
             config,
-            // TODO: 初始化字段
         }
     }
-
-    // TODO: 添加字段 setter 方法
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<DeleteResponse> {
@@ -34,22 +34,38 @@ impl DeleteRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 删除 OKR 进展记录 API 调用")
+        use crate::common::api_endpoints::OkrApiV1;
+
+        // 1. 验证必填字段
+        validate_required!(self.progress_id.trim(), "进展记录 ID 不能为空");
+
+        // 2. 构建端点
+        let api_endpoint = OkrApiV1::ProgressRecordDelete(self.progress_id.clone());
+        let request = ApiRequest::<DeleteResponse>::delete(api_endpoint.to_url());
+
+        // 3. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 4. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "删除 OKR 进展记录响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
 /// 删除 OKR 进展记录响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// 删除结果
+    pub result: bool,
 }
 
 impl ApiResponseTrait for DeleteResponse {

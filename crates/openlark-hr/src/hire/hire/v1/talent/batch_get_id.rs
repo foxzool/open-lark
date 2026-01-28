@@ -5,7 +5,8 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    http::Transport, SDKResult,
+    http::Transport,
+    validate_required_list, SDKResult,
 };
 
 use super::models::{BatchGetIdRequestBody, BatchGetIdResponse};
@@ -54,24 +55,11 @@ impl BatchGetIdRequest {
         use crate::common::api_endpoints::HireApiV1;
 
         // 1. 验证必填字段
-        if self.talent_ids.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "候选人 ID 列表不能为空",
-                "请至少提供一个候选人 ID",
-            ));
-        }
-
-        // 验证数量限制
-        if self.talent_ids.len() > 100 {
-            return Err(openlark_core::error::validation_error(
-                "候选人 ID 数量超出限制",
-                "一次最多只能查询 100 个候选人 ID",
-            ));
-        }
+        validate_required_list!(self.talent_ids, 100, "候选人 ID 列表不能为空且不能超过 100 个");
 
         // 2. 构建端点
         let api_endpoint = HireApiV1::TalentBatchGetId;
-        let request = ApiRequest::<BatchGetIdResponse>::post(&api_endpoint.to_url());
+        let request = ApiRequest::<BatchGetIdResponse>::post(api_endpoint.to_url());
 
         // 3. 序列化请求体
         let request_body = BatchGetIdRequestBody {
@@ -80,7 +68,7 @@ impl BatchGetIdRequest {
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

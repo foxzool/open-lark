@@ -10,7 +10,10 @@ pub mod password;
 pub mod uuid;
 
 // Re-export commonly used types
-pub use core::{validate_required, validate_string_length, ValidateBuilder, ValidationResult};
+pub use core::{
+    validate_required, validate_required_list_length, validate_string_length, ValidateBuilder,
+    ValidationResult,
+};
 pub use file::{
     validate_file_extension, validate_file_name, validate_file_size, validate_upload_file,
 };

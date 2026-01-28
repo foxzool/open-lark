@@ -5,7 +5,8 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    http::Transport, SDKResult,
+    http::Transport,
+    SDKResult,
 };
 
 use super::models::{CalendarByScopeRequestBody, CalendarByScopeResponse};
@@ -99,7 +100,7 @@ impl CalendarByScopeRequest {
 
         // 2. 构建端点
         let api_endpoint = FeishuPeopleApiV1::LeaveCalendarByScope;
-        let request = ApiRequest::<CalendarByScopeResponse>::post(&api_endpoint.to_url());
+        let request = ApiRequest::<CalendarByScopeResponse>::post(api_endpoint.to_url());
 
         // 3. 序列化请求体
         let request_body = CalendarByScopeRequestBody {
@@ -112,7 +113,7 @@ impl CalendarByScopeRequest {
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

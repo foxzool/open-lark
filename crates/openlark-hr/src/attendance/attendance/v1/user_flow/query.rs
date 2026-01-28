@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required, validate_required_list, SDKResult,
 };
 
 use super::models::{QueryUserFlowRequestBody, QueryUserFlowResponse};
@@ -87,22 +87,11 @@ impl QueryUserFlowRequest {
         // 1. 验证必填字段
         validate_required!(self.start_date.trim(), "查询起始日期不能为空");
         validate_required!(self.end_date.trim(), "查询结束日期不能为空");
-        if self.user_ids.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "查询用户 ID 列表不能为空",
-                "至少需要指定一个用户 ID",
-            ));
-        }
-        if self.user_ids.len() > 50 {
-            return Err(openlark_core::error::validation_error(
-                "查询用户 ID 列表超出限制",
-                "最多支持 50 个用户",
-            ));
-        }
+        validate_required_list!(self.user_ids, 50, "用户 ID 列表不能为空且不能超过 50 个");
 
         // 2. 构建端点
         let api_endpoint = AttendanceApiV1::UserFlowQuery;
-        let mut request = ApiRequest::<QueryUserFlowResponse>::post(&api_endpoint.to_url());
+        let mut request = ApiRequest::<QueryUserFlowResponse>::post(api_endpoint.to_url());
 
         // 3. 添加查询参数（可选）
         if let Some(ref user_id_type) = self.user_id_type {
@@ -120,7 +109,7 @@ impl QueryUserFlowRequest {
         request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

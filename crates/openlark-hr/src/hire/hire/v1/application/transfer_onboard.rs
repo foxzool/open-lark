@@ -4,13 +4,15 @@
 
 use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    config::Config,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 操作候选人入职请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct TransferOnboardRequest {
     /// 配置信息
     config: Config,

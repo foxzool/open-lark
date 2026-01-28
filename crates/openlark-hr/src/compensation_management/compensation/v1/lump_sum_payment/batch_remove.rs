@@ -3,30 +3,26 @@
 //! docPath: https://open.feishu.cn/document/server-docs/compensation-v1/lump_sum_payment/batch_remove
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 /// 批量删除一次性支付记录请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct BatchRemoveRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl BatchRemoveRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self {
-            config,
-            // TODO: 初始化字段
-        }
+        Self { config }
     }
-
-    // TODO: 添加字段 setter 方法
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<BatchRemoveResponse> {
@@ -34,22 +30,42 @@ impl BatchRemoveRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchRemoveResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 批量删除一次性支付记录 API 调用")
+        use crate::common::api_endpoints::CompensationApiV1;
+
+        let api_endpoint = CompensationApiV1::LumpSumPaymentBatchRemove;
+        let request = ApiRequest::<BatchRemoveResponse>::post(api_endpoint.to_url());
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "批量删除一次性支付记录响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
 /// 批量删除一次性支付记录响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchRemoveResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// 删除结果列表
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub results: Option<Vec<BatchRemoveResult>>,
+}
+
+/// 批量删除结果
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct BatchRemoveResult {
+    /// 记录 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// 是否成功
+    pub success: bool,
 }
 
 impl ApiResponseTrait for BatchRemoveResponse {

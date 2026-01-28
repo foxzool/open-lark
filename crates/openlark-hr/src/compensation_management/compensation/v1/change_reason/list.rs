@@ -3,30 +3,26 @@
 //! docPath: https://open.feishu.cn/document/server-docs/compensation-v1/change_reason/list
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 /// 批量查询定调薪原因请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct ListRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl ListRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self {
-            config,
-            // TODO: 初始化字段
-        }
+        Self { config }
     }
-
-    // TODO: 添加字段 setter 方法
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ListResponse> {
@@ -34,22 +30,46 @@ impl ListRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 批量查询定调薪原因 API 调用")
+        use crate::common::api_endpoints::CompensationApiV1;
+
+        // 1. 构建端点
+        let api_endpoint = CompensationApiV1::ChangeReasonList;
+        let request = ApiRequest::<ListResponse>::get(api_endpoint.to_url());
+
+        // 2. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 3. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "批量查询定调薪原因响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
 /// 批量查询定调薪原因响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// 定调薪原因列表
+    pub items: Vec<ChangeReason>,
+}
+
+/// 定调薪原因
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ChangeReason {
+    /// 原因 ID
+    pub id: String,
+    /// 原因名称
+    pub name: String,
+    /// 原因类型
+    pub reason_type: i32,
 }
 
 impl ApiResponseTrait for ListResponse {

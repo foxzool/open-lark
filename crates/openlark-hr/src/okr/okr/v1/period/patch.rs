@@ -3,30 +3,36 @@
 //! docPath: https://open.feishu.cn/document/server-docs/okr-v1/period/patch
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 /// 修改 OKR 周期状态请求
 #[derive(Debug, Clone)]
 pub struct PatchRequest {
+    /// 周期 ID（必填）
+    period_id: String,
+    /// 周期状态（必填）
+    /// - 1: 未开始
+    /// - 2: 进行中
+    /// - 3: 已结束
+    status: i32,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl PatchRequest {
     /// 创建请求
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Config, period_id: String, status: i32) -> Self {
         Self {
+            period_id,
+            status,
             config,
-            // TODO: 初始化字段
         }
     }
-
-    // TODO: 添加字段 setter 方法
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<PatchResponse> {
@@ -34,22 +40,55 @@ impl PatchRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<PatchResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 修改 OKR 周期状态 API 调用")
+        use crate::common::api_endpoints::OkrApiV1;
+
+        // 1. 构建端点
+        let api_endpoint = OkrApiV1::PeriodPatch(self.period_id.clone());
+        let request = ApiRequest::<PatchResponse>::patch(api_endpoint.to_url());
+
+        // 2. 序列化请求体
+        let request_body = PatchRequestBody { status: self.status };
+        let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
+            openlark_core::error::validation_error(
+                "请求体序列化失败",
+                format!("无法序列化请求参数: {}", e),
+            )
+        })?);
+
+        // 3. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 4. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "修改 OKR 周期状态响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
+}
+
+/// 修改 OKR 周期状态请求体
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PatchRequestBody {
+    /// 周期状态（必填）
+    pub status: i32,
 }
 
 /// 修改 OKR 周期状态响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// 周期 ID
+    pub period_id: String,
+    /// 周期状态
+    pub status: i32,
+    /// 更新时间
+    pub updated_at: i64,
 }
 
 impl ApiResponseTrait for PatchResponse {

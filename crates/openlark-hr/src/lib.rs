@@ -12,23 +12,27 @@
 //!
 //! ## 使用示例
 //!
-//! ```rust
-//! use openlark_hr::endpoints::*;
+//! ```rust,ignore
+//! use openlark_hr::prelude::*;
+//! use openlark_hr::HrClient;
 //!
-//! // 使用端点常量
-//! let employees_endpoint = COREHR_V1_EMPLOYEES;
-//! let attendance_endpoint = ATTENDANCE_V1_GROUPS;
-//! println!("员工端点: {}", employees_endpoint);
-//! println!("考勤端点: {}", attendance_endpoint);
+//! let client = HrClient::new(config);
+//! // 链式调用
+//! client.attendance().v1().group().create()
+//!     .group_name("技术部".to_string())
+//!     .execute()
+//!     .await?;
 //! ```
 //!
-//! ## 端点组织
+//! ## API 端点
 //!
-//! - `attendance`: 考勤相关API端点
-//! - `corehr`: 核心人力资源API端点
-//! - `okr`: 目标管理API端点
-//! - `payroll`: 薪资管理API端点
-//! - `performance`: 绩效管理API端点
+//! 推荐使用枚举类型的端点系统（位于 `common::api_endpoints`）：
+//! - `AttendanceApiV1` - 考勤管理
+//! - `HireApiV1` - 招聘管理
+//! - `FeishuPeopleApiV1` / `FeishuPeopleApiV2` - 核心人力资源
+//! - `OkrApiV1` - OKR管理
+//! - `PayrollApiV1` - 薪资管理
+//! - `PerformanceApiV1` - 绩效管理
 
 #![allow(missing_docs)]
 
@@ -43,9 +47,9 @@ pub mod okr;
 pub mod payroll;
 pub mod performance;
 
-// 端点保留
-pub mod endpoints;
-pub use endpoints::*;
+// 端点保留（已废弃，请使用 common::api_endpoints 中的枚举系统）
+#[allow(deprecated)]
+mod endpoints;
 
 pub mod prelude {
     pub use openlark_core::{config::Config, SDKResult};

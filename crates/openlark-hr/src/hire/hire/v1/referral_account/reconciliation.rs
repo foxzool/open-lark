@@ -4,13 +4,15 @@
 
 use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    config::Config,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 内推账户提现数据对账请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct ReconciliationRequest {
     /// 配置信息
     config: Config,

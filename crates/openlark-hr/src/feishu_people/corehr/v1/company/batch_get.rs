@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required_list, SDKResult,
 };
 
 use super::models::{BatchGetRequestBody, BatchGetResponse};
@@ -55,25 +55,11 @@ impl BatchGetRequest {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
         // 1. 验证必填字段
-        if self.company_ids.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "公司 ID 列表不能为空",
-                "至少需要提供一个公司 ID",
-            ));
-        }
-        if self.company_ids.len() > 100 {
-            return Err(openlark_core::error::validation_error(
-                "公司 ID 列表超出限制",
-                "最多只能提供 100 个公司 ID",
-            ));
-        }
-        for company_id in &self.company_ids {
-            validate_required!(company_id.trim(), "公司 ID 不能为空");
-        }
+        validate_required_list!(self.company_ids, 100, "公司 ID 列表不能为空且不能超过 100 个");
 
         // 2. 构建端点
         let api_endpoint = FeishuPeopleApiV1::CompanyBatchGet;
-        let request = ApiRequest::<BatchGetResponse>::post(&api_endpoint.to_url());
+        let request = ApiRequest::<BatchGetResponse>::post(api_endpoint.to_url());
 
         // 3. 序列化请求体
         let request_body = BatchGetRequestBody {
@@ -82,7 +68,7 @@ impl BatchGetRequest {
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

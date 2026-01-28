@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required, validate_required_list, SDKResult,
 };
 
 use super::models::{BatchDelUserFlowRequestBody, BatchDelUserFlowResponse};
@@ -55,18 +55,7 @@ impl BatchDelUserFlowRequest {
         use crate::common::api_endpoints::AttendanceApiV1;
 
         // 1. 验证必填字段
-        if self.user_flow_ids.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "打卡流水 ID 列表不能为空",
-                "至少需要指定一个要删除的打卡流水 ID",
-            ));
-        }
-        if self.user_flow_ids.len() > 100 {
-            return Err(openlark_core::error::validation_error(
-                "打卡流水 ID 数量超出限制",
-                "单次最多支持删除 100 条打卡流水",
-            ));
-        }
+        validate_required_list!(self.user_flow_ids, 100, "打卡流水 ID 列表不能为空且不能超过 100 个");
         for (idx, flow_id) in self.user_flow_ids.iter().enumerate() {
             validate_required!(
                 flow_id.trim(),
@@ -76,7 +65,7 @@ impl BatchDelUserFlowRequest {
 
         // 2. 构建端点
         let api_endpoint = AttendanceApiV1::UserFlowBatchDel;
-        let request = ApiRequest::<BatchDelUserFlowResponse>::post(&api_endpoint.to_url());
+        let request = ApiRequest::<BatchDelUserFlowResponse>::post(api_endpoint.to_url());
 
         // 3. 序列化请求体
         let request_body = BatchDelUserFlowRequestBody {
@@ -85,7 +74,7 @@ impl BatchDelUserFlowRequest {
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

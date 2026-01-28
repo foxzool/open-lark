@@ -4,13 +4,15 @@
 
 use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    config::Config,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 查询单个用户授权请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct GetByParamRequest {
     /// 配置信息
     config: Config,

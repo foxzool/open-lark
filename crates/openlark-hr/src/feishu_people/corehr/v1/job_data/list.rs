@@ -79,17 +79,17 @@ impl ListRequest {
 
         // 1. 验证分页参数
         if let Some(size) = self.page_size {
-            if size < 1 || size > 100 {
+            if !(1..=100).contains(&size) {
                 return Err(openlark_core::error::validation_error(
                     "分页参数无效",
-                    &format!("分页大小必须在 1-100 之间，当前值为: {}", size),
+                    format!("分页大小必须在 1-100 之间，当前值为: {}", size),
                 ));
             }
         }
 
         // 2. 构建端点
         let api_endpoint = FeishuPeopleApiV1::JobDataList;
-        let request = ApiRequest::<ListResponse>::get(&api_endpoint.to_url());
+        let request = ApiRequest::<ListResponse>::get(api_endpoint.to_url());
 
         // 3. 序列化请求体（作为查询参数）
         let request_body = ListRequestBody {
@@ -101,7 +101,7 @@ impl ListRequest {
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

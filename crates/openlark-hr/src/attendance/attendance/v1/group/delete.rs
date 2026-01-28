@@ -53,7 +53,7 @@ impl DeleteGroupRequest {
 
         // 2. 构建端点
         let api_endpoint = AttendanceApiV1::GroupDelete(self.group_id.clone());
-        let request = ApiRequest::<DeleteGroupResponse>::delete(&api_endpoint.to_url());
+        let request = ApiRequest::<DeleteGroupResponse>::delete(api_endpoint.to_url());
 
         // 3. 发送请求
         let response = Transport::request(request, &self.config, Some(option)).await?;
