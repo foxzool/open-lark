@@ -6,8 +6,13 @@ use crate::PlatformConfig;
 use std::sync::Arc;
 
 pub mod app;
+pub mod application;
 pub mod approval_instance;
 pub mod approval_task;
+pub mod seat_activity;
+pub mod seat_assignment;
+pub mod user_task;
+pub mod workspace;
 
 use openlark_core::api::{ApiRequest, ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
