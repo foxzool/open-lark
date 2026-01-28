@@ -58,6 +58,7 @@
 pub mod auth;
 pub mod common;
 pub mod models;
+pub mod passport;
 pub mod services;
 pub mod token_provider;
 
