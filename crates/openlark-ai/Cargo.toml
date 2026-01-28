@@ -14,3 +14,9 @@ serde_json = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 async-trait = { workspace = true }
+
+[features]
+default = ["v1"]
+full = ["v1"]
+
+v1 = []

@@ -5,46 +5,58 @@
 //! ## 主要功能
 //!
 //! - **文档AI识别**: 简历、身份证、驾驶证、银行卡、营业执照等证件识别
-//! - **AI嵌入服务**: 文本、对话、图像嵌入和相似度计算
-//! - **AI工作流**: 智能工作流的创建、运行和管理
-//! - **Aily智能助手**: 会话管理、知识库、技能管理、消息交互
+//! - **OCR识别**: 光学字符识别，将图片中的文字转换为可编辑文本
+//! - **语音转文字**: 将语音转换为文本
+//! - **翻译服务**: 文本翻译和语言检测
 //!
 //! ## 使用示例
 //!
 //! ```rust
-//! use openlark_ai::{AiService, endpoints::*};
+//! use openlark_ai::{AiClient, endpoints::*, prelude::Config};
+//!
+//! // 使用客户端链式调用
+//! let config = Config::builder()
+//!     .app_id("your_app_id")
+//!     .app_secret("your_app_secret")
+//!     .build();
+//!
+//! let client = AiClient::new(config);
+//! // client.document_ai().v1()...
 //!
 //! // 使用端点常量
 //! let resume_endpoint = DOCUMENT_AI_RESUME_PARSE;
 //! let ocr_endpoint = OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE;
 //! let translate_endpoint = TRANSLATION_V1_TEXT_TRANSLATE;
-//! println!("简历解析端点: {}", resume_endpoint);
-//! println!("OCR识别端点: {}", ocr_endpoint);
-//! println!("文本翻译端点: {}", translate_endpoint);
 //! ```
 //!
 //! ## 端点组织
 //!
 //! - `document_ai`: 文档AI识别API端点
-//! - `ai_embedding`: AI嵌入服务API端点
-//! - `ai_workflow`: AI工作流API端点
-//! - `aily`: Aily智能助手API端点
+//! - `ocr`: 光学字符识别API端点
+//! - `speech_to_text`: 语音转文字API端点
+//! - `translation`: 翻译服务API端点
 
 #![deny(missing_docs)]
 
-// 导入端点模块
+// 导入通用工具模块
+pub mod common;
+
+// 导入服务端点模块
 pub mod endpoints;
 
 // AI service modules
 pub mod ai;
 
-/// Re-exports from open-lark-core for convenience.
-pub mod prelude {
-    pub use openlark_core::SDKResult;
-}
+// 服务入口
+pub mod service;
+
+// 重新导出服务客户端
+pub use service::AiClient;
 
 // 重新导出端点常量，方便外部使用
 pub use endpoints::*;
 
-// Re-export service types for convenience
-pub use ai::AiService;
+/// Re-exports from openlark-core for convenience.
+pub mod prelude {
+    pub use openlark_core::{config::Config, SDKResult};
+}

@@ -1,17 +1,16 @@
 //! AI service module
 //!
-//! This module provides AI and machine learning functionality.
-
-use openlark_core::{config::Config, trait_system::Service};
-use std::sync::Arc;
+//! 提供 AI 服务模块，包括文档 AI、OCR、语音转文字和翻译服务。
 
 pub mod v1;
 
+use crate::prelude::Config;
+use openlark_core::trait_system::Service;
+
 /// AI service
+#[derive(Debug, Clone)]
 pub struct AiService {
     config: Config,
-    #[allow(dead_code)]
-    config_arc: Arc<Config>,
     /// AI API v1 service
     pub v1: v1::V1,
 }
@@ -21,17 +20,7 @@ impl AiService {
     pub fn new(config: Config) -> Self {
         Self {
             config: config.clone(),
-            config_arc: Arc::new(config.clone()),
             v1: v1::V1::new(config),
-        }
-    }
-
-    /// Create service with shared config (experimental)
-    pub fn new_from_shared(shared: Arc<Config>) -> Self {
-        Self {
-            config: shared.as_ref().clone(),
-            config_arc: shared.clone(),
-            v1: v1::V1::new(shared.as_ref().clone()),
         }
     }
 }
