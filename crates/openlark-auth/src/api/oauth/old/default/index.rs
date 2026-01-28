@@ -5,7 +5,7 @@ use crate::models::oauth::*;
 ///
 /// 应用请求用户身份验证时，需构造登录链接，并引导用户跳转至此链接。
 /// 用户登录成功后会生成登录预授权码 code，并作为参数追加到重定向URL。
-use openlark_core::{config::Config, validate_required, SDKResult};
+use openlark_core::{config::Config, req_option::RequestOption, validate_required, SDKResult};
 use serde::{Deserialize, Serialize};
 
 /// 授权码请求构建器
@@ -80,6 +80,13 @@ impl AuthorizationBuilder {
 
     /// 执行请求 - 生成授权URL
     pub async fn execute(self) -> SDKResult<AuthorizationCodeResponseData> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）- 生成授权URL
+    ///
+    /// 注意：OAuth 授权是重定向流程，此方法仅构建授权 URL，不发起网络请求。
+    pub async fn execute_with_options(self, _option: RequestOption) -> SDKResult<AuthorizationCodeResponseData> {
         // 验证必填字段
         validate_required!(self.app_id, "应用ID不能为空");
         validate_required!(self.redirect_uri, "重定向URI不能为空");

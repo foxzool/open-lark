@@ -8,9 +8,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+
 
 /// OIDC 用户访问令牌刷新请求
 pub struct OidcRefreshAccessTokenBuilder {
@@ -73,6 +76,11 @@ impl OidcRefreshAccessTokenBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<OidcRefreshAccessTokenResponseData> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<OidcRefreshAccessTokenResponseData> {
         // 验证必填字段
         validate_required!(self.refresh_token, "刷新令牌不能为空");
 
@@ -100,9 +108,9 @@ impl OidcRefreshAccessTokenBuilder {
                 .body(openlark_core::api::RequestData::Form(form_data));
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+            openlark_core::error::validation_error("刷新 OIDC user_access_token", "响应数据为空")
         })
     }
 }

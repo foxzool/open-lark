@@ -9,9 +9,12 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+
 
 /// 用户访问令牌刷新请求（v1版本）
 pub struct RefreshUserAccessTokenV1Builder {
@@ -66,6 +69,11 @@ impl RefreshUserAccessTokenV1Builder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<RefreshUserAccessTokenV1ResponseData> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<RefreshUserAccessTokenV1ResponseData> {
         // 验证必填字段
         validate_required!(self.refresh_token, "刷新令牌不能为空");
         validate_required!(self.app_id, "应用ID不能为空");
@@ -87,9 +95,9 @@ impl RefreshUserAccessTokenV1Builder {
             ApiRequest::post(api_endpoint.path()).body(serde_json::to_value(&request_body)?);
 
         // 发送请求
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+            openlark_core::error::validation_error("刷新 user_access_token v1", "响应数据为空")
         })
     }
 }
