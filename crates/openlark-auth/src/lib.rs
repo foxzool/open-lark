@@ -15,7 +15,7 @@
 //!
 //! - [`services`][]: 核心认证服务
 //! - [`models`][]: 数据模型定义
-//! - [`api`][]: API实现层
+//! - `auth`: 认证 API (包含 auth, authen, oauth 子模块)
 //!
 //! ## 快速开始
 //!
@@ -55,7 +55,7 @@
 //!     .build_url();
 //! ```
 
-pub mod api;
+pub mod auth;
 pub mod common;
 pub mod models;
 pub mod services;

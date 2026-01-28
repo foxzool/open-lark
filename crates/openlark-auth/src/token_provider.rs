@@ -113,7 +113,7 @@ impl TokenProvider for AuthTokenProvider {
     async fn get_token(&self, request: TokenRequest) -> SDKResult<String> {
         match request.token_type {
             AccessTokenType::App => {
-                use crate::api::auth::v3::auth::AuthServiceV3;
+                use crate::auth::auth::v3::auth::AuthServiceV3;
                 let auth = AuthServiceV3::new(self.config.clone());
 
                 let cache_key = Self::cache_key(&AccessTokenType::App, &self.config.app_type);
@@ -143,7 +143,7 @@ impl TokenProvider for AuthTokenProvider {
                 .await
             }
             AccessTokenType::Tenant => {
-                use crate::api::auth::v3::auth::AuthServiceV3;
+                use crate::auth::auth::v3::auth::AuthServiceV3;
                 let auth = AuthServiceV3::new(self.config.clone());
 
                 let cache_key = Self::cache_key(&AccessTokenType::Tenant, &self.config.app_type);

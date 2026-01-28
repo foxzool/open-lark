@@ -2,7 +2,7 @@
 //!
 //! 提供企业应用的认证功能，包括自建应用和应用商店应用的访问令牌管理。
 
-use crate::api::auth::v3::AuthServiceV3;
+use crate::auth::auth::v3::AuthServiceV3;
 use openlark_core::config::Config;
 
 /// 企业认证服务
