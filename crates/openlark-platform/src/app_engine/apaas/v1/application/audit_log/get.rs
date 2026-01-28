@@ -3,11 +3,10 @@
 //! 文档: https://open.feishu.cn/document/apaas-v1/application-audit_log/get
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -36,10 +35,6 @@ impl AuditLogGetBuilder {
     pub async fn execute(self) -> SDKResult<AuditLogGetResponse> {
         let url = format!("/open-apis/apaas/v1/applications/{}/audit_log", self.namespace);
 
-        let request = AuditLogGetRequest {
-            log_id: self.log_id,
-        };
-
         let transport = Transport::new(self.config);
         transport.get_with_query(url, vec![("log_id", Some(self.log_id))]).await
     }
@@ -51,14 +46,6 @@ impl AuditLogGetBuilder {
         let transport = Transport::new(self.config);
         transport.get_with_query_and_option(url, vec![("log_id", Some(self.log_id))], option).await
     }
-}
-
-/// 查询审计日志详情请求
-#[derive(Debug, Clone, Deserialize, Serialize)]
-struct AuditLogGetRequest {
-    /// 日志 ID
-    #[serde(rename = "log_id")]
-    log_id: String,
 }
 
 /// 审计日志详情
