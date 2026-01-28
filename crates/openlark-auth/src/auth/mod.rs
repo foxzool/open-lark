@@ -7,7 +7,11 @@
 //! - tenant_access_token_internal: 自建应用获取tenant_access_token
 //! - app_ticket: 重新获取app_ticket
 
-// 重新导出具体API实现
-pub use self::v3::{auth::*, AuthServiceV3};
+#![allow(clippy::module_inception)]
 
-pub mod v3;
+// 重新导出具体API实现
+pub use self::auth::v3::{auth::*, AuthServiceV3};
+
+pub mod auth;
+pub mod authen;
+pub mod oauth;
