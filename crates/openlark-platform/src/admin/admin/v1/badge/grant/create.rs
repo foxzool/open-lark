@@ -1,0 +1,80 @@
+//! 创建勋章授予名单 API
+//!
+//! API文档: https://open.feishu.cn/document/server-docs/admin-v1/badge/badge-grant/create
+
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    validate_required, SDKResult,
+};
+use serde::{Deserialize, Serialize};
+
+/// 创建勋章授予名单请求
+pub struct CreateBadgeGrantBuilder {
+    badge_id: String,
+    user_ids: Vec<String>,
+    config: Config,
+}
+
+impl CreateBadgeGrantBuilder {
+    pub fn new(config: Config) -> Self {
+        Self {
+            badge_id: String::new(),
+            user_ids: Vec::new(),
+            config,
+        }
+    }
+
+    pub fn badge_id(mut self, badge_id: impl Into<String>) -> Self {
+        self.badge_id = badge_id.into();
+        self
+    }
+
+    pub fn user_ids(mut self, user_ids: Vec<String>) -> Self {
+        self.user_ids = user_ids;
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<CreateBadgeGrantResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CreateBadgeGrantResponse> {
+        validate_required!(self.badge_id, "勋章ID不能为空");
+        validate_required!(!self.user_ids.is_empty(), "用户ID列表不能为空");
+
+        let request_body = CreateBadgeGrantRequest {
+            user_ids: self.user_ids,
+        };
+
+        let api_request: ApiRequest<CreateBadgeGrantResponse> =
+            ApiRequest::post(format!("/open-apis/admin/v1/badges/{}/grants", self.badge_id))
+                .body(serde_json::to_value(&request_body)?);
+
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error("创建勋章授予名单", "响应数据为空")
+        })
+    }
+}
+
+#[derive(Debug, Serialize)]
+struct CreateBadgeGrantRequest {
+    user_ids: Vec<String>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct CreateBadgeGrantResponse {
+    pub grant_id: String,
+    pub badge_id: String,
+    pub user_ids: Vec<String>,
+    pub create_time: String,
+}
+
+impl ApiResponseTrait for CreateBadgeGrantResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
