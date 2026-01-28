@@ -1,24 +1,24 @@
-//! 系统管理 V1 API
-//!
-//! 提供系统管理 V1 版本的 API 访问
+//! Admin V1 module
 
 use crate::PlatformConfig;
 use std::sync::Arc;
 
-pub mod audit;
-pub mod settings;
-pub mod users;
+pub mod admin;
+pub mod admin_dept_stat;
+pub mod admin_user_stat;
+pub mod audit_info;
+pub mod badge;
+pub mod badge_image;
+pub mod password;
 
-/// 系统管理 V1 API
+/// Admin V1 API
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct AdminV1 {
-    /// 客户端配置
     config: Arc<PlatformConfig>,
 }
 
 impl AdminV1 {
-    /// 创建新的系统管理 V1 实例
     pub fn new(config: Arc<PlatformConfig>) -> Self {
         Self { config }
     }
