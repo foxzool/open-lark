@@ -1,0 +1,77 @@
+//! 更新待离职成员为在职
+//!
+//! 文档: https://open.feishu.cn/document/directory-v1/employee/regular
+
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config:: Config,
+    http::Transport,
+    req_option::RequestOption,
+    validate_required,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+
+/// 更新待离职成员为在职 Builder
+#[derive(Debug, Clone)]
+pub struct EmployeeRegularBuilder {
+    config: Config,
+    /// 员工 ID
+    employee_id: String,
+}
+
+impl EmployeeRegularBuilder {
+    /// 创建新的 Builder
+    pub fn new(config: Config, employee_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            employee_id: employee_id.into(),
+        }
+    }
+
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<EmployeeRegularResponse> {
+        let url = format!(
+            "/open-apis/directory/v1/employees/{}/regular",
+            self.employee_id
+        );
+
+        let transport = Transport::new(self.config);
+        transport.patch::<EmployeeRegularRequest>(url, EmployeeRegularRequest {}).await
+    }
+
+    /// 使用选项执行请求
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<EmployeeRegularResponse> {
+        let url = format!(
+            "/open-apis/directory/v1/employees/{}/regular",
+            self.employee_id
+        );
+
+        let transport = Transport::new(self.config);
+        transport.patch_with_option::<EmployeeRegularRequest>(url, EmployeeRegularRequest {}, option).await
+    }
+}
+
+/// 更新待离职成员为在职请求
+#[derive(Debug, Clone, Deserialize, Serialize)]
+struct EmployeeRegularRequest {}
+
+/// 更新待离职成员为在职响应
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct EmployeeRegularResponse {
+    /// 员工 ID
+    #[serde(rename = "employee_id")]
+    employee_id: String,
+    /// 状态
+    #[serde(rename = "status")]
+    status: String,
+    /// 结果消息
+    #[serde(rename = "message")]
+    message: String,
+}
+
+impl ApiResponseTrait for EmployeeRegularResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}

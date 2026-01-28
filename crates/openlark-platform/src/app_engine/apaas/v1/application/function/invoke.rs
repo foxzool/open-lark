@@ -1,0 +1,105 @@
+//! 执行函数
+//!
+//! 文档: https://open.feishu.cn/document/apaas-v1/application-function/invoke
+
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    validate_required,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+
+/// 执行函数 Builder
+#[derive(Debug, Clone)]
+pub struct FunctionInvokeBuilder {
+    config: Config,
+    /// 应用命名空间
+    namespace: String,
+    /// 函数 API 名称
+    function_api_name: String,
+    /// 函数参数
+    params: serde_json::Value,
+}
+
+impl FunctionInvokeBuilder {
+    /// 创建新的 Builder
+    pub fn new(
+        config: Config,
+        namespace: impl Into<String>,
+        function_api_name: impl Into<String>,
+    ) -> Self {
+        Self {
+            config,
+            namespace: namespace.into(),
+            function_api_name: function_api_name.into(),
+            params: serde_json::json!({}),
+        }
+    }
+
+    /// 设置函数参数
+    pub fn params(mut self, params: impl Into<serde_json::Value>) -> Self {
+        self.params = params.into();
+        self
+    }
+
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<FunctionInvokeResponse> {
+        let url = format!(
+            "/open-apis/apaas/v1/applications/{}/functions/{}/invoke",
+            self.namespace, self.function_api_name
+        );
+
+        let request = FunctionInvokeRequest {
+            params: self.params,
+        };
+
+        let transport = Transport::new(self.config);
+        transport.post(url, request, None::<&()>).await
+    }
+
+    /// 使用选项执行请求
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<FunctionInvokeResponse> {
+        let url = format!(
+            "/open-apis/apaas/v1/applications/{}/functions/{}/invoke",
+            self.namespace, self.function_api_name
+        );
+
+        let request = FunctionInvokeRequest {
+            params: self.params,
+        };
+
+        let transport = Transport::new(self.config);
+        transport.post(url, request, Some(option)).await
+    }
+}
+
+/// 执行函数请求
+#[derive(Debug, Clone, Deserialize, Serialize)]
+struct FunctionInvokeRequest {
+    /// 函数参数
+    #[serde(rename = "params")]
+    params: serde_json::Value,
+}
+
+/// 执行函数响应
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct FunctionInvokeResponse {
+    /// 执行结果
+    #[serde(rename = "result")]
+    result: serde_json::Value,
+    /// 执行状态
+    #[serde(rename = "status")]
+    status: String,
+    /// 结果消息
+    #[serde(rename = "message")]
+    message: String,
+}
+
+impl ApiResponseTrait for FunctionInvokeResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}

@@ -1,0 +1,111 @@
+//! 按条件更新数据表中的记录
+//!
+//! URL: PATCH:/open-apis/apaas/v1/workspaces/:workspace_id/tables/:table_name/records
+
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    validate_required,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+
+/// 按条件更新记录 Builder
+#[derive(Debug, Clone)]
+pub struct TableRecordsPatchBuilder {
+    config: Config,
+    /// 工作空间 ID
+    workspace_id: String,
+    /// 数据表名称
+    table_name: String,
+    /// 筛选条件
+    filter: String,
+    /// 更新的数据
+    data: serde_json::Value,
+}
+
+impl TableRecordsPatchBuilder {
+    /// 创建新的 Builder
+    pub fn new(
+        config: Config,
+        workspace_id: impl Into<String>,
+        table_name: impl Into<String>,
+        filter: impl Into<String>,
+    ) -> Self {
+        Self {
+            config,
+            workspace_id: workspace_id.into(),
+            table_name: table_name.into(),
+            filter: filter.into(),
+            data: serde_json::json!({}),
+        }
+    }
+
+    /// 设置更新的数据
+    pub fn data(mut self, data: impl Into<serde_json::Value>) -> Self {
+        self.data = data.into();
+        self
+    }
+
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<TableRecordsPatchResponse> {
+        let url = format!(
+            "/open-apis/apaas/v1/workspaces/{}/tables/{}/records",
+            self.workspace_id, self.table_name
+        );
+
+        let request = TableRecordsPatchRequest {
+            filter: self.filter,
+            data: self.data,
+        };
+
+        let transport = Transport::new(self.config);
+        transport.patch(url, request).await
+    }
+
+    /// 使用选项执行请求
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<TableRecordsPatchResponse> {
+        let url = format!(
+            "/open-apis/apaas/v1/workspaces/{}/tables/{}/records",
+            self.workspace_id, self.table_name
+        );
+
+        let request = TableRecordsPatchRequest {
+            filter: self.filter,
+            data: self.data,
+        };
+
+        let transport = Transport::new(self.config);
+        transport.patch_with_option(url, request, option).await
+    }
+}
+
+/// 按条件更新记录请求
+#[derive(Debug, Clone, Deserialize, Serialize)]
+struct TableRecordsPatchRequest {
+    /// 筛选条件
+    #[serde(rename = "filter")]
+    filter: String,
+    /// 更新的数据
+    #[serde(rename = "data")]
+    data: serde_json::Value,
+}
+
+/// 按条件更新记录响应
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct TableRecordsPatchResponse {
+    /// 更新的记录数量
+    #[serde(rename = "updated_count")]
+    updated_count: u32,
+    /// 结果消息
+    #[serde(rename = "message")]
+    message: String,
+}
+
+impl ApiResponseTrait for TableRecordsPatchResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
