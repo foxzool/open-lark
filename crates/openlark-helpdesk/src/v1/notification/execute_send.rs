@@ -1,0 +1,132 @@
+//! 执行推送通知
+//!
+//! 执行推送通知。
+//!
+//! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/execute_send
+
+use openlark_core::{
+    api::ApiRequest,
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+use crate::common::api_endpoints::HelpdeskApiV1;
+use crate::common::api_utils::extract_response_data;
+
+/// 执行推送通知响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ExecuteSendNotificationResponse {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<ExecuteSendNotificationResult>,
+}
+
+impl openlark_core::api::ApiResponseTrait for ExecuteSendNotificationResponse {}
+
+/// 执行推送通知结果
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ExecuteSendNotificationResult {
+    /// 是否执行成功
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+}
+
+/// 执行推送通知请求
+#[derive(Debug, Clone)]
+pub struct ExecuteSendNotificationRequest {
+    config: Arc<Config>,
+    notification_id: String,
+}
+
+impl ExecuteSendNotificationRequest {
+    /// 创建新的执行推送通知请求
+    pub fn new(config: Arc<Config>, notification_id: String) -> Self {
+        Self { config, notification_id }
+    }
+
+    /// 执行执行推送通知请求
+    pub async fn execute(self) -> SDKResult<ExecuteSendNotificationResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行执行推送通知请求（支持自定义选项）
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ExecuteSendNotificationResponse> {
+        let req: ApiRequest<ExecuteSendNotificationResponse> =
+            ApiRequest::post(HelpdeskApiV1::NotificationExecuteSend(self.notification_id.clone()).to_url());
+
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        extract_response_data(resp, "执行推送通知")
+    }
+}
+
+/// 执行推送通知请求构建器
+#[derive(Debug, Clone)]
+pub struct ExecuteSendNotificationRequestBuilder {
+    config: Arc<Config>,
+    notification_id: String,
+}
+
+impl ExecuteSendNotificationRequestBuilder {
+    /// 创建新的构建器
+    pub fn new(config: Arc<Config>, notification_id: String) -> Self {
+        Self { config, notification_id }
+    }
+
+    /// 执行请求
+    pub async fn execute(&self) -> SDKResult<ExecuteSendNotificationResponse> {
+        let request = ExecuteSendNotificationRequest::new(self.config.clone(), self.notification_id.clone());
+        request.execute().await
+    }
+
+    /// 执行请求（支持自定义选项）
+    pub async fn execute_with_options(
+        &self,
+        option: RequestOption,
+    ) -> SDKResult<ExecuteSendNotificationResponse> {
+        let request = ExecuteSendNotificationRequest::new(self.config.clone(), self.notification_id.clone());
+        request.execute_with_options(option).await
+    }
+}
+
+/// 执行执行推送通知
+pub async fn execute_send_notification(
+    config: &Config,
+    notification_id: String,
+) -> SDKResult<ExecuteSendNotificationResponse> {
+    execute_send_notification_with_options(config, notification_id, RequestOption::default()).await
+}
+
+/// 执行执行推送通知（支持自定义选项）
+pub async fn execute_send_notification_with_options(
+    config: &Config,
+    notification_id: String,
+    option: RequestOption,
+) -> SDKResult<ExecuteSendNotificationResponse> {
+    let req: ApiRequest<ExecuteSendNotificationResponse> =
+        ApiRequest::post(HelpdeskApiV1::NotificationExecuteSend(notification_id).to_url());
+
+    let resp = Transport::request(req, config, Some(option)).await?;
+    extract_response_data(resp, "执行推送通知")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_builder_creation() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let builder = ExecuteSendNotificationRequestBuilder::new(Arc::new(config), "notif_123".to_string());
+
+        assert_eq!(builder.notification_id, "notif_123");
+    }
+}
