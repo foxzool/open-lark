@@ -4,13 +4,15 @@
 
 use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    config::Config,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 将人才从指定文件夹移除请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct RemoveToFolderRequest {
     /// 配置信息
     config: Config,

@@ -53,7 +53,7 @@ impl ParentsRequest {
 
         // 2. 构建端点
         let api_endpoint = FeishuPeopleApiV1::DepartmentParents(self.department_id);
-        let request = ApiRequest::<ParentsResponse>::get(&api_endpoint.to_url());
+        let request = ApiRequest::<ParentsResponse>::get(api_endpoint.to_url());
 
         // 3. 发送请求
         let response = Transport::request(request, &self.config, Some(option)).await?;

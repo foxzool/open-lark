@@ -3,30 +3,40 @@
 //! docPath: https://open.feishu.cn/document/server-docs/performance-v1/stage_task/find_by_user_list
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 /// 获取周期任务（指定用户）请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct FindByUserListRequest {
+    /// 绩效周期 ID（必填）
+    cycle_id: String,
+    /// 用户 ID 列表（必填）
+    user_ids: Vec<String>,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl FindByUserListRequest {
     /// 创建请求
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Config, cycle_id: String) -> Self {
         Self {
+            cycle_id,
+            user_ids: Vec::new(),
             config,
-            // TODO: 初始化字段
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 添加用户 ID
+    pub fn add_user_id(mut self, user_id: String) -> Self {
+        self.user_ids.push(user_id);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<FindByUserListResponse> {
@@ -34,22 +44,68 @@ impl FindByUserListRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<FindByUserListResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 获取周期任务（指定用户） API 调用")
+        use crate::common::api_endpoints::PerformanceApiV1;
+
+        // 1. 构建端点
+        let api_endpoint = PerformanceApiV1::StageTaskFindByUserList;
+        let request = ApiRequest::<FindByUserListResponse>::post(api_endpoint.to_url());
+
+        // 2. 构建请求体
+        let request_body = FindByUserListRequestBody {
+            cycle_id: self.cycle_id,
+            user_ids: self.user_ids,
+        };
+        let request_body_json = serde_json::to_value(&request_body).map_err(|e| {
+            openlark_core::error::validation_error(
+                "请求体序列化失败",
+                format!("无法序列化请求参数: {}", e),
+            )
+        })?;
+        let request = request.body(request_body_json);
+
+        // 3. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 4. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取周期任务响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
+}
+
+/// 请求体
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FindByUserListRequestBody {
+    /// 绩效周期 ID
+    pub cycle_id: String,
+    /// 用户 ID 列表
+    pub user_ids: Vec<String>,
 }
 
 /// 获取周期任务（指定用户）响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FindByUserListResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// 周期任务列表
+    pub items: Vec<StageTask>,
+}
+
+/// 周期任务
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct StageTask {
+    /// 用户 ID
+    pub user_id: String,
+    /// 阶段 ID
+    pub stage_id: String,
+    /// 任务状态
+    pub status: i32,
 }
 
 impl ApiResponseTrait for FindByUserListResponse {

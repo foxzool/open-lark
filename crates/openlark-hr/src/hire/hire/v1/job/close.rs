@@ -4,13 +4,15 @@
 
 use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    config::Config,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 关闭职位请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct CloseRequest {
     /// 配置信息
     config: Config,

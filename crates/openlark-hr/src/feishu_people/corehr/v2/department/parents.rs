@@ -3,30 +3,78 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/department/parents
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
+
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 /// 获取父部门信息请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ParentsRequest {
-    /// 配置信息
-    config: Config,
-    // TODO: 添加请求字段
+    /// 部门 ID
+    pub department_id: String,
 }
 
 impl ParentsRequest {
     /// 创建请求
-    pub fn new(config: Config) -> Self {
+    pub fn new(department_id: String) -> Self {
+        Self { department_id }
+    }
+}
+
+/// 获取父部门信息响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ParentsResponse {
+    /// 父部门列表
+    pub data: Option<ParentsResponseData>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ParentsResponseData {
+    /// 父部门列表（按层级从顶部门到直接父部门排序）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<DepartmentItem>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct DepartmentItem {
+    /// 部门 ID
+    pub id: String,
+    /// 部门名称
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// 父部门 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_id: Option<String>,
+    /// 部门编码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+}
+
+impl ApiResponseTrait for ParentsResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 获取父部门信息请求构建器
+#[derive(Debug, Clone)]
+pub struct ParentsRequestBuilder {
+    config: Config,
+    department_id: String,
+}
+
+impl ParentsRequestBuilder {
+    /// 创建请求构建器
+    pub fn new(config: Config, department_id: String) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            department_id,
         }
     }
-
-    // TODO: 添加字段 setter 方法
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ParentsResponse> {
@@ -34,26 +82,26 @@ impl ParentsRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ParentsResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 获取父部门信息 API 调用")
-    }
-}
+        use crate::common::api_endpoints::FeishuPeopleApiV2;
 
-/// 获取父部门信息响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ParentsResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
-}
+        // 构建端点
+        let api_endpoint = FeishuPeopleApiV2::DepartmentParents(self.department_id.clone());
+        let request = ApiRequest::<ParentsResponse>::get(api_endpoint.to_url());
 
-impl ApiResponseTrait for ParentsResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+        // 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取父部门信息响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }

@@ -53,7 +53,7 @@ impl DeleteShiftRequest {
 
         // 2. 构建端点
         let api_endpoint = AttendanceApiV1::ShiftDelete(self.shift_id.clone());
-        let request = ApiRequest::<DeleteShiftResponse>::delete(&api_endpoint.to_url());
+        let request = ApiRequest::<DeleteShiftResponse>::delete(api_endpoint.to_url());
 
         // 3. 发送请求（DELETE 无请求体）
         let response = Transport::request(request, &self.config, Some(option)).await?;

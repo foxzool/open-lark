@@ -44,6 +44,29 @@ macro_rules! validate_required {
     };
 }
 
+/// 验证必填列表字段（检查非空和最大长度）
+///
+/// # 参数
+/// - `$field`: 要验证的列表字段
+/// - `$max_len`: 最大长度限制
+/// - `$error_msg`: 错误消息
+///
+/// # 使用示例
+/// ```rust,ignore
+/// validate_required_list!(self.user_ids, 50, "用户 ID 列表不能为空且不能超过 50 个");
+/// ```
+#[macro_export]
+macro_rules! validate_required_list {
+    ($field:expr, $max_len:expr, $error_msg:expr) => {
+        if $field.is_empty() {
+            return Err(openlark_core::error::CoreError::validation_msg($error_msg));
+        }
+        if $field.len() > $max_len {
+            return Err(openlark_core::error::CoreError::validation_msg($error_msg));
+        }
+    };
+}
+
 /// Prelude module for convenient imports.
 pub mod prelude {
     // Re-export new API module（请求/响应基础类型）
@@ -56,6 +79,7 @@ pub mod prelude {
     pub use crate::http::Transport;
     pub use crate::req_option::*;
     pub use crate::validate_required;
+    pub use crate::validate_required_list;
 
     // Re-export commonly used dependencies
     pub use serde::{Deserialize, Serialize};

@@ -9,7 +9,6 @@ use openlark_core::{
     SDKResult,
 };
 
-
 use super::models::{ListRequestBody, ListResponse};
 
 /// 获取候选人列表请求
@@ -78,7 +77,7 @@ impl ListRequest {
 
         // 1. 验证分页大小范围
         if let Some(size) = self.page_size {
-            if size < 1 || size > 100 {
+            if !(1..=100).contains(&size) {
                 return Err(openlark_core::error::validation_error(
                     "分页大小超出范围",
                     "page_size 必须在 1-100 之间",
@@ -88,7 +87,7 @@ impl ListRequest {
 
         // 2. 构建端点
         let api_endpoint = HireApiV1::TalentList;
-        let request = ApiRequest::<ListResponse>::get(&api_endpoint.to_url());
+        let request = ApiRequest::<ListResponse>::get(api_endpoint.to_url());
 
         // 3. 序列化请求体
         let request_body = ListRequestBody {
@@ -100,7 +99,7 @@ impl ListRequest {
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

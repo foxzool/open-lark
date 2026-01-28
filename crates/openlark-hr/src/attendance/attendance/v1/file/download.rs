@@ -3,30 +3,30 @@
 //! docPath: https://open.feishu.cn/document/server-docs/attendance-v1/file/download
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 /// 下载用户人脸识别照片请求
 #[derive(Debug, Clone)]
 pub struct DownloadRequest {
+    /// 照片 ID（必填）
+    photo_id: String,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl DownloadRequest {
     /// 创建请求
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Config, photo_id: String) -> Self {
         Self {
+            photo_id,
             config,
-            // TODO: 初始化字段
         }
     }
-
-    // TODO: 添加字段 setter 方法
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<DownloadResponse> {
@@ -34,22 +34,47 @@ impl DownloadRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DownloadResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 下载用户人脸识别照片 API 调用")
+        use crate::common::api_endpoints::AttendanceApiV1;
+
+        // 1. 验证必填字段
+        validate_required!(self.photo_id.trim(), "photo_id");
+
+        // 2. 构建端点
+        let api_endpoint = AttendanceApiV1::FileDownload;
+        let mut request = ApiRequest::<DownloadResponse>::get(api_endpoint.to_url());
+
+        // 3. 添加查询参数
+        request = request.query("photo_id", &self.photo_id);
+
+        // 4. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 5. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "下载用户人脸识别照片响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
 /// 下载用户人脸识别照片响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DownloadResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// 照片 ID
+    pub photo_id: String,
+    /// 用户 ID
+    pub user_id: String,
+    /// 照片数据（Base64 编码）
+    pub photo_data: String,
+    /// 照片格式
+    pub content_type: String,
 }
 
 impl ApiResponseTrait for DownloadResponse {

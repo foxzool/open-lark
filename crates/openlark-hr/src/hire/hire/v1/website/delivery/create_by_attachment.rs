@@ -4,13 +4,15 @@
 
 use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    config::Config,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 根据简历附件创建招聘官网投递任务请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct CreateByAttachmentRequest {
     /// 配置信息
     config: Config,

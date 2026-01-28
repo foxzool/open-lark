@@ -3,30 +3,54 @@
 //! docPath: https://open.feishu.cn/document/server-docs/ehr-v1/employee/list
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 /// 批量获取员工花名册信息请求
 #[derive(Debug, Clone)]
 pub struct ListRequest {
+    /// 分页大小（可选，默认 50，最大 200）
+    page_size: Option<i32>,
+    /// 分页标记（可选）
+    page_token: Option<String>,
+    /// 用户 ID 列表（可选，不超过 100 个）
+    user_ids: Option<Vec<String>>,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl ListRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
+            page_size: None,
+            page_token: None,
+            user_ids: None,
             config,
-            // TODO: 初始化字段
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 设置分页大小（可选，默认 50，最大 200）
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    /// 设置分页标记（可选）
+    pub fn page_token(mut self, page_token: String) -> Self {
+        self.page_token = Some(page_token);
+        self
+    }
+
+    /// 设置用户 ID 列表（可选，不超过 100 个）
+    pub fn user_ids(mut self, user_ids: Vec<String>) -> Self {
+        self.user_ids = Some(user_ids);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ListResponse> {
@@ -34,22 +58,101 @@ impl ListRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 批量获取员工花名册信息 API 调用")
+        use crate::common::api_endpoints::EhrApiV1;
+
+        // 1. 构建端点
+        let api_endpoint = EhrApiV1::EmployeeList;
+        let mut request = ApiRequest::<ListResponse>::get(api_endpoint.to_url());
+
+        // 2. 添加查询参数（可选）
+        if let Some(page_size) = self.page_size {
+            request = request.query("page_size", page_size.to_string());
+        }
+        if let Some(ref page_token) = self.page_token {
+            request = request.query("page_token", page_token);
+        }
+        if let Some(ref user_ids) = self.user_ids {
+            let user_ids_str = user_ids.join(",");
+            request = request.query("user_ids", &user_ids_str);
+        }
+
+        // 3. 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 4. 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "批量获取员工花名册响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
 /// 批量获取员工花名册信息响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// 员工花名册信息列表
+    pub items: Vec<EmployeeProfile>,
+    /// 是否有更多数据
+    pub has_more: bool,
+    /// 分页标记，用于获取下一页数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+/// 员工花名册信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct EmployeeProfile {
+    /// 员工 ID
+    pub user_id: String,
+    /// 员工编号
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub employee_no: Option<String>,
+    /// 员工姓名
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// 头像 URL
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avatar: Option<String>,
+    /// 部门 ID 列表
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub department_ids: Option<Vec<String>>,
+    /// 岗位 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position_id: Option<String>,
+    /// 岗位名称
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position_name: Option<String>,
+    /// 雇佣状态
+    /// - 1: 试用
+    /// - 2: 正式
+    /// - 3: 离职
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub employment_status: Option<i32>,
+    /// 入职日期（Unix 时间戳）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hire_date: Option<i64>,
+    /// 离职日期（Unix 时间戳）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub termination_date: Option<i64>,
+    /// 工时制度 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub working_hours_type_id: Option<String>,
+    /// 成本中心 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_center_id: Option<String>,
+    /// 直接主管 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_manager_id: Option<String>,
+    /// 自定义字段
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_fields: Option<serde_json::Value>,
 }
 
 impl ApiResponseTrait for ListResponse {

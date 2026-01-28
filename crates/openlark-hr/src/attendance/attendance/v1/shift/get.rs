@@ -53,7 +53,7 @@ impl GetShiftRequest {
 
         // 2. 构建端点
         let api_endpoint = AttendanceApiV1::ShiftGet(self.shift_id.clone());
-        let request = ApiRequest::<GetShiftResponse>::get(&api_endpoint.to_url());
+        let request = ApiRequest::<GetShiftResponse>::get(api_endpoint.to_url());
 
         // 3. 发送请求（GET 无请求体）
         let response = Transport::request(request, &self.config, Some(option)).await?;

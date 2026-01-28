@@ -67,18 +67,13 @@ impl MultiTimelineRequest {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
         // 1. 验证必填字段
-        if self.department_ids.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "部门ID列表不能为空",
-                "至少需要提供一个部门ID",
-            ));
-        }
+        validate_required!(self.department_ids, "部门 ID 列表不能为空");
         validate_required!(self.start_time.trim(), "开始时间不能为空");
         validate_required!(self.end_time.trim(), "结束时间不能为空");
 
         // 2. 构建端点
         let api_endpoint = FeishuPeopleApiV1::DepartmentQueryMultiTimeline;
-        let request = ApiRequest::<MultiTimelineResponse>::post(&api_endpoint.to_url());
+        let request = ApiRequest::<MultiTimelineResponse>::post(api_endpoint.to_url());
 
         // 3. 序列化请求体
         let request_body = MultiTimelineRequestBody {
@@ -89,7 +84,7 @@ impl MultiTimelineRequest {
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

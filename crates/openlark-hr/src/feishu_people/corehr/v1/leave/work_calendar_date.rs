@@ -13,6 +13,7 @@ use serde_json::Value;
 
 /// 获取工作日历日期详情请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct WorkCalendarDateRequest {
     /// 配置信息
     config: Config,

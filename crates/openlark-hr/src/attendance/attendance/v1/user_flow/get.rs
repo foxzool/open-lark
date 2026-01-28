@@ -62,7 +62,7 @@ impl GetUserFlowRequest {
 
         // 2. 构建端点
         let api_endpoint = AttendanceApiV1::UserFlowGet;
-        let mut request = ApiRequest::<GetUserFlowResponse>::post(&api_endpoint.to_url());
+        let mut request = ApiRequest::<GetUserFlowResponse>::post(api_endpoint.to_url());
 
         // 3. 添加查询参数（可选）
         if let Some(ref user_id_type) = self.user_id_type {
@@ -77,7 +77,7 @@ impl GetUserFlowRequest {
         request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

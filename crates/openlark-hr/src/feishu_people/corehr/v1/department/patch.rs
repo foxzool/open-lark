@@ -125,7 +125,7 @@ impl PatchRequest {
 
         // 2. 构建端点
         let api_endpoint = FeishuPeopleApiV1::DepartmentPatch(self.department_id.clone());
-        let request = ApiRequest::<PatchResponse>::patch(&api_endpoint.to_url());
+        let request = ApiRequest::<PatchResponse>::patch(api_endpoint.to_url());
 
         // 3. 序列化请求体
         let request_body = PatchRequestBody {
@@ -140,7 +140,7 @@ impl PatchRequest {
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

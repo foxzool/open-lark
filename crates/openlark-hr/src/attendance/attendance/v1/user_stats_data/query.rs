@@ -133,7 +133,7 @@ impl QueryRequest {
 
         // 验证分页大小
         if let Some(page_size) = self.page_size {
-            if page_size < 1 || page_size > 200 {
+            if !(1..=200).contains(&page_size) {
                 return Err(openlark_core::error::validation_error(
                     "分页大小超出范围",
                     "分页大小必须在 1-200 之间",
@@ -143,7 +143,7 @@ impl QueryRequest {
 
         // 2. 构建端点
         let api_endpoint = AttendanceApiV1::UserStatsDataQuery;
-        let mut request = ApiRequest::<QueryResponse>::post(&api_endpoint.to_url());
+        let mut request = ApiRequest::<QueryResponse>::post(api_endpoint.to_url());
 
         // 3. 添加查询参数（可选）
         if let Some(ref user_id_type) = self.user_id_type {
@@ -172,7 +172,7 @@ impl QueryRequest {
         request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                &format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {}", e),
             )
         })?);
 

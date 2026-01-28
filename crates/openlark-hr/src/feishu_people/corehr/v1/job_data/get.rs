@@ -53,7 +53,7 @@ impl GetRequest {
 
         // 2. 构建端点
         let api_endpoint = FeishuPeopleApiV1::JobDataGet(self.job_data_id);
-        let request = ApiRequest::<GetResponse>::get(&api_endpoint.to_url());
+        let request = ApiRequest::<GetResponse>::get(api_endpoint.to_url());
 
         // 3. 发送请求（GET 请求无请求体）
         let response = Transport::request(request, &self.config, Some(option)).await?;

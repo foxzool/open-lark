@@ -3,6 +3,7 @@
 /// 按照bizTag/project/version/resource/name.rs模式组织
 use openlark_core::config::Config;
 
+#[allow(clippy::module_inception)]
 pub mod payroll;
 
 /// 薪资服务

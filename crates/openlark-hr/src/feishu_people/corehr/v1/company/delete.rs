@@ -53,7 +53,7 @@ impl DeleteRequest {
 
         // 2. 构建端点
         let api_endpoint = FeishuPeopleApiV1::CompanyDelete(self.company_id.clone());
-        let request = ApiRequest::<DeleteResponse>::delete(&api_endpoint.to_url());
+        let request = ApiRequest::<DeleteResponse>::delete(api_endpoint.to_url());
 
         // 3. 发送请求
         let response = Transport::request(request, &self.config, Some(option)).await?;

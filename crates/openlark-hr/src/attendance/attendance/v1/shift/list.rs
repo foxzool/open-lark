@@ -59,11 +59,11 @@ impl ListShiftRequest {
 
         // 1. 构建端点
         let api_endpoint = AttendanceApiV1::ShiftList;
-        let mut request = ApiRequest::<ListShiftResponse>::get(&api_endpoint.to_url());
+        let mut request = ApiRequest::<ListShiftResponse>::get(api_endpoint.to_url());
 
         // 2. 添加查询参数（可选）
         if let Some(page_size) = self.page_size {
-            request = request.query("page_size", &page_size.to_string());
+            request = request.query("page_size", page_size.to_string());
         }
         if let Some(ref page_token) = self.page_token {
             request = request.query("page_token", page_token);

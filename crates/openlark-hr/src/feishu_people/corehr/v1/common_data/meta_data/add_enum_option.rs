@@ -4,13 +4,15 @@
 
 use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    config::Config,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 增加字段枚举值选项请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct AddEnumOptionRequest {
     /// 配置信息
     config: Config,

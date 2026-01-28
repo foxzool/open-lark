@@ -3,30 +3,59 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/company/active
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    SDKResult,
 };
+
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 /// 启用/停用公司请求
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ActiveRequest {
-    /// 配置信息
-    config: Config,
-    // TODO: 添加请求字段
+    /// 是否启用（true=启用，false=停用）
+    pub active: bool,
 }
 
 impl ActiveRequest {
     /// 创建请求
-    pub fn new(config: Config) -> Self {
-        Self {
-            config,
-            // TODO: 初始化字段
-        }
+    pub fn new(active: bool) -> Self {
+        Self { active }
     }
+}
 
-    // TODO: 添加字段 setter 方法
+/// 启用/停用公司响应
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ActiveResponse {
+    /// 公司 ID
+    pub data: Option<ActiveResponseData>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ActiveResponseData {
+    /// 公司 ID
+    pub id: String,
+}
+
+impl ApiResponseTrait for ActiveResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 启用/停用公司请求构建器
+#[derive(Debug, Clone)]
+pub struct ActiveRequestBuilder {
+    config: Config,
+    active: bool,
+}
+
+impl ActiveRequestBuilder {
+    /// 创建请求构建器
+    pub fn new(config: Config, active: bool) -> Self {
+        Self { config, active }
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ActiveResponse> {
@@ -34,26 +63,36 @@ impl ActiveRequest {
             .await
     }
 
+    /// 执行请求（带自定义选项）
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ActiveResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 启用/停用公司 API 调用")
-    }
-}
+        use crate::common::api_endpoints::FeishuPeopleApiV2;
 
-/// 启用/停用公司响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ActiveResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
-}
+        // 构建端点
+        let company_id = "";
+        let api_endpoint = FeishuPeopleApiV2::CompanyActive(company_id.to_string());
+        let request = ApiRequest::<ActiveResponse>::patch(api_endpoint.to_url());
 
-impl ApiResponseTrait for ActiveResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
+        // 序列化请求体
+        let request_body = ActiveRequest::new(self.active);
+        let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
+            openlark_core::error::validation_error(
+                "请求体序列化失败",
+                format!("无法序列化请求参数: {}", e),
+            )
+        })?);
+
+        // 发送请求
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        // 提取响应数据
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "启用/停用公司响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }

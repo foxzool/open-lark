@@ -4,13 +4,15 @@
 
 use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    config::Config,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 设置猎头保护期请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct ProtectRequest {
     /// 配置信息
     config: Config,

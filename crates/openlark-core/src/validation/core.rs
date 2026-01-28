@@ -77,6 +77,32 @@ pub fn validate_required(value: &str, field_name: &str) -> bool {
     }
 }
 
+/// 验证必填列表字段
+///
+/// # 参数
+/// - `values`: 列表字段
+/// - `max_len`: 最大长度限制
+/// - `field_name`: 字段名称（用于日志）
+///
+/// # 返回
+/// true 如果字段有效且长度合规，false 否则
+pub fn validate_required_list_length(values: &[String], max_len: usize, field_name: &str) -> bool {
+    if values.is_empty() {
+        error!("必填列表字段 {} 为空", field_name);
+        false
+    } else if values.len() > max_len {
+        error!(
+            "必填列表字段 {} 长度 {} 超过最大限制 {}",
+            field_name,
+            values.len(),
+            max_len
+        );
+        false
+    } else {
+        true
+    }
+}
+
 /// 验证内容大小
 ///
 /// # 参数

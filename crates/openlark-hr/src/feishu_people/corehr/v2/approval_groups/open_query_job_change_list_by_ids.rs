@@ -4,13 +4,15 @@
 
 use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
-    config::Config, SDKResult,
+    config::Config,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// 批量查询人员调整内容请求
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct OpenQueryJobChangeListByIdsRequest {
     /// 配置信息
     config: Config,
