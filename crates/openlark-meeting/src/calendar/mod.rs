@@ -2,5 +2,7 @@
 //!
 //! 该目录包含日历资源相关接口。
 
+#![allow(clippy::module_inception)]
+
 pub mod service;
-pub mod v4;
+pub mod calendar;

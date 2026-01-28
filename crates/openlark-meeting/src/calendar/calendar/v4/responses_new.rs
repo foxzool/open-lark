@@ -522,7 +522,7 @@ pub struct PatchMeetingMinuteResponse {
 
 impl ApiResponseTrait for GetCalendarResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("calendar".to_string())
+        ResponseFormat::Data
     }
 }
 
@@ -534,19 +534,19 @@ impl ApiResponseTrait for ListCalendarResponse {
 
 impl ApiResponseTrait for CreateCalendarResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("calendar".to_string())
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for DeleteCalendarResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::None
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for PatchCalendarResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("calendar".to_string())
+        ResponseFormat::Data
     }
 }
 
@@ -564,31 +564,31 @@ impl ApiResponseTrait for MgetCalendarResponse {
 
 impl ApiResponseTrait for PrimaryCalendarResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("calendar".to_string())
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetPrimaryCalendarResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("calendar".to_string())
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for SubscribeCalendarResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::None
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for UnsubscribeCalendarResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::None
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for GetEventResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("event".to_string())
+        ResponseFormat::Data
     }
 }
 
@@ -600,19 +600,19 @@ impl ApiResponseTrait for ListEventResponse {
 
 impl ApiResponseTrait for CreateEventResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("event".to_string())
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for PatchEventResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("event".to_string())
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for DeleteEventResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::None
+        ResponseFormat::Data
     }
 }
 
@@ -630,7 +630,7 @@ impl ApiResponseTrait for SearchEventResponse {
 
 impl ApiResponseTrait for EventInstanceViewResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::None
+        ResponseFormat::Data
     }
 }
 
@@ -642,7 +642,7 @@ impl ApiResponseTrait for EventInstancesResponse {
 
 impl ApiResponseTrait for ReplyEventResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::None
+        ResponseFormat::Data
     }
 }
 
@@ -654,19 +654,19 @@ impl ApiResponseTrait for ListAttendeeResponse {
 
 impl ApiResponseTrait for CreateAttendeeResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("attendee".to_string())
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for DeleteAttendeeResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::None
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for BatchDeleteAttendeeResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::None
+        ResponseFormat::Data
     }
 }
 
@@ -708,7 +708,7 @@ impl ApiResponseTrait for GenerateCaldavConfResponse {
 
 impl ApiResponseTrait for CreateTimeoffEventResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("event".to_string())
+        ResponseFormat::Data
     }
 }
 
@@ -720,7 +720,7 @@ impl ApiResponseTrait for ListTimeoffEventResponse {
 
 impl ApiResponseTrait for DeleteTimeoffEventResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::None
+        ResponseFormat::Data
     }
 }
 
@@ -732,13 +732,13 @@ impl ApiResponseTrait for GetExchangeBindingResponse {
 
 impl ApiResponseTrait for CreateExchangeBindingResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("exchange_binding".to_string())
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for DeleteExchangeBindingResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::None
+        ResponseFormat::Data
     }
 }
 
@@ -750,13 +750,13 @@ impl ApiResponseTrait for ListAclResponse {
 
 impl ApiResponseTrait for CreateAclResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::Custom("acl".to_string())
+        ResponseFormat::Data
     }
 }
 
 impl ApiResponseTrait for DeleteAclResponse {
     fn data_format() -> ResponseFormat {
-        ResponseFormat::None
+        ResponseFormat::Data
     }
 }
 
