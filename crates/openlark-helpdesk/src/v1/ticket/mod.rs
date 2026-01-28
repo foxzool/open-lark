@@ -3,6 +3,7 @@ pub mod get;
 pub mod list;
 pub mod models;
 pub mod update;
+pub mod message;
 
 use openlark_core::config::Config;
 use std::sync::Arc;
@@ -32,10 +33,15 @@ impl Ticket {
     pub fn list(&self) -> list::TicketListRequest {
         list::TicketListRequest::new(self.config.clone())
     }
+
+    pub fn message(&self) -> message::TicketMessage {
+        message::TicketMessage::new(self)
+    }
 }
 
 pub use create::CreateTicketRequest;
 pub use get::GetTicketRequest;
 pub use list::TicketListRequest;
+pub use message::{CreateTicketMessageRequest, CreateTicketMessageRequestBuilder, ListTicketMessageRequest, ListTicketMessageRequestBuilder};
 pub use models::*;
 pub use update::UpdateTicketRequest;
