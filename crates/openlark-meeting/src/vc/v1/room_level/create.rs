@@ -44,11 +44,20 @@ impl CreateRoomLevelRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room_level/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<CreateRoomLevelResponse> {
+        self.execute_with_options(body, RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<CreateRoomLevelResponse> {
         let api_endpoint = VcApiV1::RoomLevelCreate;
         let req: ApiRequest<CreateRoomLevelResponse> = ApiRequest::post(api_endpoint.to_url())
             .body(serialize_params(&body, "创建会议室层级")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "创建会议室层级")
     }
 }

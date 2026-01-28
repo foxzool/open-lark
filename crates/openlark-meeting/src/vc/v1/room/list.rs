@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -70,6 +71,11 @@ impl ListRoomRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/list
     pub async fn execute(self) -> SDKResult<ListRoomResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListRoomResponse> {
         let api_endpoint = VcApiV1::RoomList;
         let mut api_request: ApiRequest<ListRoomResponse> = ApiRequest::get(api_endpoint.to_url());
 
@@ -77,7 +83,7 @@ impl ListRoomRequest {
             api_request = api_request.query(key, value);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "查询会议室列表")
     }
 }

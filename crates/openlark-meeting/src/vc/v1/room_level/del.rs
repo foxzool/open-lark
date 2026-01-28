@@ -24,12 +24,21 @@ impl DeleteRoomLevelRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room_level/del
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         // url: POST:/open-apis/vc/v1/room_levels/del
         let req: ApiRequest<serde_json::Value> =
             ApiRequest::post(format!("{}/del", VC_V1_ROOM_LEVELS))
                 .body(serialize_params(&body, "删除会议室层级")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "删除会议室层级")
     }
 }

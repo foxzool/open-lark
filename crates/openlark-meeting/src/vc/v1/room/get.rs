@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -82,6 +83,11 @@ impl GetRoomRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/get
     pub async fn execute(self) -> SDKResult<GetRoomResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetRoomResponse> {
         validate_required_field("room_id", Some(&self.room_id), "会议室 ID 不能为空")?;
 
         let api_endpoint = VcApiV1::RoomGet(self.room_id.clone());
@@ -91,7 +97,7 @@ impl GetRoomRequest {
             api_request = api_request.query(key, value);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "查询会议室详情")
     }
 }

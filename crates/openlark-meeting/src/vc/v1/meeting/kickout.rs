@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -53,13 +54,22 @@ impl KickoutMeetingRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting/kickout
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<KickoutMeetingResponse> {
+        self.execute_with_options(body, RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<KickoutMeetingResponse> {
         validate_required!(self.meeting_id, "meeting_id 不能为空");
 
         let api_endpoint = VcApiV1::MeetingKickout(self.meeting_id);
         let req: ApiRequest<KickoutMeetingResponse> =
             ApiRequest::post(api_endpoint.to_url()).body(serialize_params(&body, "移除参会人")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "移除参会人")
     }
 }

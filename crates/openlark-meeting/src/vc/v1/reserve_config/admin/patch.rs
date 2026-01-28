@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/scope_config/patch-3
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required, SDKResult,
 };
 
 use crate::common::api_endpoints::VcApiV1;
@@ -33,13 +33,22 @@ impl PatchReserveConfigAdminRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/scope_config/patch-3
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.reserve_config_id, "reserve_config_id 不能为空");
 
         let api_endpoint = VcApiV1::ReserveConfigAdminPatch(self.reserve_config_id.clone());
         let req: ApiRequest<serde_json::Value> = ApiRequest::patch(api_endpoint.to_url())
             .body(serialize_params(&body, "更新会议室预定管理员")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "更新会议室预定管理员")
     }
 }

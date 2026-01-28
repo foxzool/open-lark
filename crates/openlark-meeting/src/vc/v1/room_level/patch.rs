@@ -36,6 +36,15 @@ impl PatchRoomLevelRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room_level/patch
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.room_level_id, "room_level_id 不能为空");
 
         // url: PATCH:/open-apis/vc/v1/room_levels/:room_level_id
@@ -43,7 +52,7 @@ impl PatchRoomLevelRequest {
             ApiRequest::patch(format!("{}/{}", VC_V1_ROOM_LEVELS, self.room_level_id))
                 .body(serialize_params(&body, "更新会议室层级")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "更新会议室层级")
     }
 }

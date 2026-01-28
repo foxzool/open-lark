@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -78,10 +79,19 @@ impl CreateCalendarRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<CreateCalendarResponse> {
+        self.execute_with_options(body, RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<CreateCalendarResponse> {
         let api_request: ApiRequest<serde_json::Value> =
             ApiRequest::post(CALENDAR_V4_CALENDARS).body(body);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         let data: CreateCalendarResponse =
             serde_json::from_value(response.data.unwrap_or_default())?;
         Ok(data)
