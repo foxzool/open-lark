@@ -11,7 +11,6 @@ use openlark_core::{
 };
 
 use crate::common::api_endpoints::LingoApiV1;
-use crate::common::api_utils::*;
 
 /// 下载图片请求
 pub struct DownloadFileRequest {
