@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -55,13 +56,18 @@ impl DeleteReserveRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/reserve/delete
     pub async fn execute(self) -> SDKResult<DeleteReserveResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<DeleteReserveResponse> {
         validate_required_field("reserve_id", Some(&self.reserve_id), "预约 ID 不能为空")?;
 
         let api_endpoint = VcApiV1::ReserveDelete(self.reserve_id.clone());
         let api_request: ApiRequest<DeleteReserveResponse> =
             ApiRequest::delete(api_endpoint.to_url());
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "删除预约")
     }
 }

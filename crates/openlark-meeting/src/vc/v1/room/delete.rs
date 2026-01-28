@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 
@@ -55,12 +56,17 @@ impl DeleteRoomRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/delete
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         validate_required_field("room_id", Some(&self.room_id), "会议室 ID 不能为空")?;
 
         let api_endpoint = VcApiV1::RoomDelete(self.room_id.clone());
         let api_request: ApiRequest<serde_json::Value> = ApiRequest::delete(api_endpoint.to_url());
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "删除会议室")
     }
 }

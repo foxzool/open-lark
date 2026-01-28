@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 
@@ -86,6 +87,11 @@ impl GetCalendarRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/get
     pub async fn execute(self) -> SDKResult<GetCalendarResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetCalendarResponse> {
         validate_required_field("calendar_id", Some(&self.calendar_id), "日历 ID 不能为空")?;
 
         let url = format!("{}/{}", CALENDAR_V4_CALENDARS, self.calendar_id);
@@ -95,7 +101,7 @@ impl GetCalendarRequest {
             api_request = api_request.query(key, value);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "查询日历信息")
     }
 }

@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -53,13 +54,22 @@ impl SetHostMeetingRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting/set_host
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<SetHostMeetingResponse> {
+        self.execute_with_options(body, RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<SetHostMeetingResponse> {
         validate_required!(self.meeting_id, "meeting_id 不能为空");
 
         let api_endpoint = VcApiV1::MeetingSetHost(self.meeting_id);
         let req: ApiRequest<SetHostMeetingResponse> =
             ApiRequest::patch(api_endpoint.to_url()).body(serialize_params(&body, "设置主持人")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "设置主持人")
     }
 }

@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 
@@ -55,13 +56,22 @@ impl PatchRoomRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/room/patch
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<PatchRoomResponse> {
+        self.execute_with_options(body, RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<PatchRoomResponse> {
         validate_required_field("room_id", Some(&self.room_id), "会议室 ID 不能为空")?;
 
         let api_endpoint = VcApiV1::RoomPatch(self.room_id.clone());
         let api_request: ApiRequest<PatchRoomResponse> =
             ApiRequest::patch(api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "更新会议室")
     }
 }

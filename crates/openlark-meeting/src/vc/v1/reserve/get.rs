@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -72,6 +73,11 @@ impl GetReserveRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/reserve/get
     pub async fn execute(self) -> SDKResult<GetReserveResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetReserveResponse> {
         validate_required_field("reserve_id", Some(&self.reserve_id), "预约 ID 不能为空")?;
 
         let api_endpoint = VcApiV1::ReserveGet(self.reserve_id.clone());
@@ -82,7 +88,7 @@ impl GetReserveRequest {
             api_request = api_request.query(key, value);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "获取预约")
     }
 }
