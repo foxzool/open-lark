@@ -1,0 +1,104 @@
+//! 删除数据表中的记录
+//!
+//! URL: DELETE:/open-apis/apaas/v1/workspaces/:workspace_id/tables/:table_name/records
+
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    validate_required,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+
+/// 删除数据表记录 Builder
+#[derive(Debug, Clone)]
+pub struct TableRecordsDeleteBuilder {
+    config: Config,
+    /// 工作空间 ID
+    workspace_id: String,
+    /// 数据表名称
+    table_name: String,
+    /// 记录 ID 列表
+    record_ids: Vec<String>,
+}
+
+impl TableRecordsDeleteBuilder {
+    /// 创建新的 Builder
+    pub fn new(config: Config, workspace_id: impl Into<String>, table_name: impl Into<String>) -> Self {
+        Self {
+            config,
+            workspace_id: workspace_id.into(),
+            table_name: table_name.into(),
+            record_ids: Vec::new(),
+        }
+    }
+
+    /// 添加记录 ID
+    pub fn record_id(mut self, record_id: impl Into<String>) -> Self {
+        self.record_ids.push(record_id.into());
+        self
+    }
+
+    /// 添加多个记录 ID
+    pub fn record_ids(mut self, record_ids: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.record_ids.extend(record_ids.into_iter().map(Into::into));
+        self
+    }
+
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<TableRecordsDeleteResponse> {
+        let url = format!(
+            "/open-apis/apaas/v1/workspaces/{}/tables/{}/records",
+            self.workspace_id, self.table_name
+        );
+
+        let request = TableRecordsDeleteRequest {
+            record_ids: self.record_ids,
+        };
+
+        let transport = Transport::new(self.config);
+        transport.delete(url, request).await
+    }
+
+    /// 使用选项执行请求
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<TableRecordsDeleteResponse> {
+        let url = format!(
+            "/open-apis/apaas/v1/workspaces/{}/tables/{}/records",
+            self.workspace_id, self.table_name
+        );
+
+        let request = TableRecordsDeleteRequest {
+            record_ids: self.record_ids,
+        };
+
+        let transport = Transport::new(self.config);
+        transport.delete_with_option(url, request, option).await
+    }
+}
+
+/// 删除记录请求
+#[derive(Debug, Clone, Deserialize, Serialize)]
+struct TableRecordsDeleteRequest {
+    /// 记录 ID 列表
+    #[serde(rename = "record_ids")]
+    record_ids: Vec<String>,
+}
+
+/// 删除记录响应
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct TableRecordsDeleteResponse {
+    /// 删除的记录数量
+    #[serde(rename = "deleted_count")]
+    deleted_count: u32,
+    /// 结果消息
+    #[serde(rename = "message")]
+    message: String,
+}
+
+impl ApiResponseTrait for TableRecordsDeleteResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}

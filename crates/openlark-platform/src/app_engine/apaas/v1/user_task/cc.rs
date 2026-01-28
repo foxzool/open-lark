@@ -1,0 +1,112 @@
+//! 抄送人工任务
+//!
+//! 文档: https://open.feishu.cn/document/apaas-v1/flow/user-task/cc
+
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    validate_required,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+
+/// 抄送人工任务 Builder
+#[derive(Debug, Clone)]
+pub struct CcTaskBuilder {
+    config: Config,
+    /// 任务 ID
+    task_id: String,
+    /// 抄送用户 ID 列表
+    user_ids: Vec<String>,
+    /// 抄送原因
+    reason: Option<String>,
+}
+
+impl CcTaskBuilder {
+    /// 创建新的 Builder
+    pub fn new(config: Config, task_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            task_id: task_id.into(),
+            user_ids: Vec::new(),
+            reason: None,
+        }
+    }
+
+    /// 添加抄送用户 ID
+    pub fn user_id(mut self, user_id: impl Into<String>) -> Self {
+        self.user_ids.push(user_id.into());
+        self
+    }
+
+    /// 添加多个抄送用户 ID
+    pub fn user_ids(mut self, user_ids: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.user_ids.extend(user_ids.into_iter().map(Into::into));
+        self
+    }
+
+    /// 设置抄送原因
+    pub fn reason(mut self, reason: impl Into<String>) -> Self {
+        self.reason = Some(reason.into());
+        self
+    }
+
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<CcTaskResponse> {
+        let url = format!("/open-apis/apaas/v1/user_tasks/{}/cc", self.task_id);
+
+        let request = CcTaskRequest {
+            user_ids: self.user_ids,
+            reason: self.reason,
+        };
+
+        let transport = Transport::new(self.config);
+        transport.post(url, request, None::<&()>).await
+    }
+
+    /// 使用选项执行请求
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CcTaskResponse> {
+        let url = format!("/open-apis/apaas/v1/user_tasks/{}/cc", self.task_id);
+
+        let request = CcTaskRequest {
+            user_ids: self.user_ids,
+            reason: self.reason,
+        };
+
+        let transport = Transport::new(self.config);
+        transport.post(url, request, Some(option)).await
+    }
+}
+
+/// 抄送请求
+#[derive(Debug, Clone, Deserialize, Serialize)]
+struct CcTaskRequest {
+    /// 抄送用户 ID 列表
+    #[serde(rename = "user_ids")]
+    user_ids: Vec<String>,
+    /// 抄送原因
+    #[serde(rename = "reason", skip_serializing_if = "Option::is_none")]
+    reason: Option<String>,
+}
+
+/// 抄送响应
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct CcTaskResponse {
+    /// 任务 ID
+    #[serde(rename = "task_id")]
+    task_id: String,
+    /// 抄送记录 ID
+    #[serde(rename = "cc_id")]
+    cc_id: String,
+    /// 结果消息
+    #[serde(rename = "message")]
+    message: String,
+}
+
+impl ApiResponseTrait for CcTaskResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}

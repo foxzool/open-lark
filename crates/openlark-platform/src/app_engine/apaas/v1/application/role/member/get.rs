@@ -1,0 +1,126 @@
+//! 查询角色成员信息
+//!
+//! 文档: https://open.feishu.cn/document/apaas-v1/permission/application-role-member/get
+
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    validate_required,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+
+/// 查询角色成员信息 Builder
+#[derive(Debug, Clone)]
+pub struct RoleMemberGetBuilder {
+    config: Config,
+    /// 应用命名空间
+    namespace: String,
+    /// 角色 API 名称
+    role_api_name: String,
+    /// 页码
+    page: Option<u32>,
+    /// 每页数量
+    page_size: Option<u32>,
+}
+
+impl RoleMemberGetBuilder {
+    /// 创建新的 Builder
+    pub fn new(
+        config: Config,
+        namespace: impl Into<String>,
+        role_api_name: impl Into<String>,
+    ) -> Self {
+        Self {
+            config,
+            namespace: namespace.into(),
+            role_api_name: role_api_name.into(),
+            page: None,
+            page_size: None,
+        }
+    }
+
+    /// 设置页码
+    pub fn page(mut self, page: u32) -> Self {
+        self.page = Some(page);
+        self
+    }
+
+    /// 设置每页数量
+    pub fn page_size(mut self, page_size: u32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    /// 执行请求
+    pub async fn execute(self) -> SDKResult<RoleMemberGetResponse> {
+        let url = format!(
+            "/open-apis/apaas/v1/applications/{}/roles/{}/member",
+            self.namespace, self.role_api_name
+        );
+
+        let transport = Transport::new(self.config);
+        transport
+            .get_with_query(
+                url,
+                vec![
+                    ("page", self.page.map(|p| p.to_string())),
+                    ("page_size", self.page_size.map(|p| p.to_string())),
+                ],
+            )
+            .await
+    }
+
+    /// 使用选项执行请求
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<RoleMemberGetResponse> {
+        let url = format!(
+            "/open-apis/apaas/v1/applications/{}/roles/{}/member",
+            self.namespace, self.role_api_name
+        );
+
+        let transport = Transport::new(self.config);
+        transport
+            .get_with_query_and_option(
+                url,
+                vec![
+                    ("page", self.page.map(|p| p.to_string())),
+                    ("page_size", self.page_size.map(|p| p.to_string())),
+                ],
+                option,
+            )
+            .await
+    }
+}
+
+/// 角色成员信息
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct RoleMember {
+    /// 用户 ID
+    #[serde(rename = "user_id")]
+    user_id: String,
+    /// 成员类型
+    #[serde(rename = "member_type")]
+    member_type: String,
+    /// 添加时间
+    #[serde(rename = "added_time")]
+    added_time: i64,
+}
+
+/// 查询角色成员信息响应
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct RoleMemberGetResponse {
+    /// 角色成员列表
+    #[serde(rename = "items")]
+    items: Vec<RoleMember>,
+    /// 是否有更多
+    #[serde(rename = "has_more")]
+    has_more: bool,
+}
+
+impl ApiResponseTrait for RoleMemberGetResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
