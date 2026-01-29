@@ -43,8 +43,8 @@ bitable = ["core"]
 base = ["core"]
 
 # 知识库 (27 APIs)
-baike = ["ccm-wiki"]
-wiki = ["baike"]
+baike = []
+wiki = ["ccm-wiki"]
 
 # 语言服务 (14 APIs)
 lingo = []

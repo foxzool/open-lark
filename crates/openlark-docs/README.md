@@ -117,17 +117,20 @@ open-lark = { version = "0.15", features = ["your-features"] }
 ### 基础使用
 
 ```rust
-use open_lark::prelude::*;
+use openlark_client::prelude::*;
+use openlark_docs::ccm::docs::v1::{GetDocsContentRequest, get_docs_content};
 
 #[tokio::main]
 async fn main() -> SDKResult<()> {
-    // 1. 创建客户端
-    let client = LarkClient::builder("app_id", "app_secret")
-        .with_app_type(AppType::SelfBuild)
-        .build();
+    // 1. 创建客户端（或使用 Client::from_env() 从环境变量读取）
+    let client = Client::builder()
+        .app_id("app_id")
+        .app_secret("app_secret")
+        .build()?;
 
-    // 2. 使用 DocsClient 访问云文档功能
-    let doc = client.docs.ccm_doc.get_document("doc_token").await?;
+    // 2. 使用 docs 字段获取配置，然后调用云文档 API
+    let request = GetDocsContentRequest::new("doc_token", "docx", "markdown");
+    let doc = get_docs_content(request, client.docs.ccm.docs.config(), None).await?;
     println!("Document: {:?}", doc);
 
     Ok(())
@@ -143,14 +146,16 @@ open-lark = { version = "0.15", features = ["bitable"] }
 ```
 
 ```rust
-use open_lark::prelude::*;
+use openlark_client::prelude::*;
 
-let client = LarkClient::builder("app_id", "app_secret")
-    .with_app_type(AppType::SelfBuild)
-    .build();
+let client = Client::builder()
+    .app_id("app_id")
+    .app_secret("app_secret")
+    .build()?;
 
-// 访问多维表格
-let app = client.docs.base.bitable.create_app(&CreateAppRequest { ... }).await?;
+// 访问多维表格（使用 Request 对象方式）
+// 具体请参考 openlark_docs::base::bitable::v1::app 模块
+let app = CreateAppRequest::new(client.docs.base.bitable().config().clone(), ...).execute().await?;
 ```
 
 ### 云文档协同使用
@@ -162,15 +167,17 @@ open-lark = { version = "0.15", features = ["ccm"] }
 ```
 
 ```rust
-use open_lark::prelude::*;
+use openlark_client::prelude::*;
+use openlark_docs::ccm::drive::v1::file::DownloadFileRequest;
 
-let client = LarkClient::builder("app_id", "app_secret")
-    .with_app_type(AppType::SelfBuild)
-    .build();
+let client = Client::builder()
+    .app_id("app_id")
+    .app_secret("app_secret")
+    .build()?;
 
 // 访问云文档协同
-let file = client.docs.ccm.drive.get_file("file_token").await?;
-let sheet = client.docs.ccm.sheets.get_sheet("spreadsheet_token", "sheet_id").await?;
+let file = DownloadFileRequest::new(client.docs.ccm.drive.config().clone(), "file_token").execute().await?;
+// 表格操作请参考 openlark_docs::ccm::sheets 模块
 ```
 
 ### 知识库使用
@@ -182,14 +189,16 @@ open-lark = { version = "0.15", features = ["baike"] }
 ```
 
 ```rust
-use open_lark::prelude::*;
+use openlark_client::prelude::*;
 
-let client = LarkClient::builder("app_id", "app_secret")
-    .with_app_type(AppType::SelfBuild)
-    .build();
+let client = Client::builder()
+    .app_id("app_id")
+    .app_secret("app_secret")
+    .build()?;
 
-// 访问知识库
-let entity = client.docs.baike.create_entity(&CreateEntityRequest { ... }).await?;
+// 访问知识库（使用 Request 对象方式）
+// 具体请参考 openlark_docs::baike::v1 模块
+let entity = CreateEntityRequest::new(client.docs.baike.service().config().clone(), ...).execute().await?;
 ```
 
 ## 性能优化建议
