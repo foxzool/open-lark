@@ -95,15 +95,15 @@ impl BitableError {
                 预期类型: {expected_type}, 实际类型: {actual_type}",
                 field_name
             ),
-            Bitable::FieldValidationError {
+            BitableError::FieldValidationError {
                 field_name,
                 message,
             } => format!("字段值验证失败 (field_name: {}): {message}", field_name),
             BitableError::PermissionDenied => "权限不足，无权执行此操作".to_string(),
-            Bitable::Error::RateLimitExceeded(limit) => {
+            BitableError::RateLimitExceeded(limit) => {
                 format!("请求过于频繁，每秒最多 {} 次请求，请稍后重试。", limit)
             }
-            Bitable::Error::DataConsistencyError(msg) => {
+            BitableError::DataConsistencyError(msg) => {
                 format!("数据一致性问题: {msg}", msg)
             }
         }
@@ -121,7 +121,7 @@ mod tests {
             BitableError::TableNotFound("test".to_string()).code(),
             10101
         );
-        assert_eq!(Bitable::RateLimitExceeded(50).code(), 10107);
+        assert_eq!(BitableError::RateLimitExceeded(50).code(), 10107);
 
         let msg = BitableError::FieldValidationError {
             field_name: "field".to_string(),

@@ -3,10 +3,6 @@
 /// 提供云盘浏览器相关的API功能。
 use openlark_core::config::Config;
 
-// 重新导出所有子模块
-// explorer 模块使用通配符导出
-pub use explorer::*;
-
 // 子模块
 pub mod explorer;
 // old 模块已废弃并删除
