@@ -1,0 +1,83 @@
+//! 公共邮箱模块
+
+pub mod create;
+pub mod delete;
+pub mod get;
+pub mod list;
+pub mod models;
+pub mod patch;
+pub mod update;
+
+pub mod alias;
+pub mod member;
+
+use openlark_core::config::Config;
+use std::sync::Arc;
+
+/// PublicMailbox：公共邮箱资源
+#[derive(Clone)]
+pub struct PublicMailbox {
+    config: Arc<Config>,
+}
+
+impl PublicMailbox {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+
+    /// 创建公共邮箱
+    pub fn create(&self) -> create::CreatePublicMailboxRequest {
+        create::CreatePublicMailboxRequest::new(self.config.clone())
+    }
+
+    /// 获取公共邮箱详情
+    pub fn get(&self, mailbox_id: impl Into<String>) -> get::GetPublicMailboxRequest {
+        get::GetPublicMailboxRequest::new(self.config.clone(), mailbox_id.into())
+    }
+
+    /// 更新公共邮箱全部信息
+    pub fn update(&self, mailbox_id: impl Into<String>) -> update::UpdatePublicMailboxRequest {
+        update::UpdatePublicMailboxRequest::new(self.config.clone(), mailbox_id.into())
+    }
+
+    /// 删除公共邮箱
+    pub fn delete(&self, mailbox_id: impl Into<String>) -> delete::DeletePublicMailboxRequest {
+        delete::DeletePublicMailboxRequest::new(self.config.clone(), mailbox_id.into())
+    }
+
+    /// 获取公共邮箱列表
+    pub fn list(&self) -> list::PublicMailboxListRequest {
+        list::PublicMailboxListRequest::new(self.config.clone())
+    }
+
+    /// 部分更新公共邮箱
+    pub fn patch(&self, mailbox_id: impl Into<String>) -> patch::PatchPublicMailboxRequest {
+        patch::PatchPublicMailboxRequest::new(self.config.clone(), mailbox_id.into())
+    }
+
+    /// 获取别名管理
+    pub fn alias(&self, mailbox_id: impl Into<String>) -> alias::Alias {
+        alias::Alias::new(self.config.clone(), mailbox_id.into())
+    }
+
+    /// 获取成员管理
+    pub fn member(&self, mailbox_id: impl Into<String>) -> member::Member {
+        member::Member::new(self.config.clone(), mailbox_id.into())
+    }
+}
+
+// 重新导出请求类型
+pub use create::CreatePublicMailboxRequest;
+pub use delete::DeletePublicMailboxRequest;
+pub use get::GetPublicMailboxRequest;
+pub use list::PublicMailboxListRequest;
+pub use patch::PatchPublicMailboxRequest;
+pub use update::UpdatePublicMailboxRequest;
+
+// 重新导出响应类型
+pub use models::{
+    CreatePublicMailboxBody, CreatePublicMailboxResponse, DeletePublicMailboxResponse,
+    GetPublicMailboxResponse, PatchPublicMailboxBody, PatchPublicMailboxResponse,
+    PublicMailboxItem, PublicMailboxListResponse, UpdatePublicMailboxBody,
+    UpdatePublicMailboxResponse,
+};
