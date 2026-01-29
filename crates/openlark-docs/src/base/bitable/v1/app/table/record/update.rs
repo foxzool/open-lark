@@ -138,55 +138,6 @@ impl UpdateRecordRequest {
     }
 }
 
-/// 更新记录 Builder
-pub struct UpdateRecordRequestBuilder {
-    request: UpdateRecordRequest,
-}
-
-impl UpdateRecordRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: UpdateRecordRequest::new(config),
-        }
-    }
-
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    pub fn record_id(mut self, record_id: String) -> Self {
-        self.request = self.request.record_id(record_id);
-        self
-    }
-
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
-    pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
-        self.request = self
-            .request
-            .ignore_consistency_check(ignore_consistency_check);
-        self
-    }
-
-    pub fn fields(mut self, fields: Value) -> Self {
-        self.request = self.request.fields(fields);
-        self
-    }
-
-    pub fn build(self) -> UpdateRecordRequest {
-        self.request
-    }
-}
-
 #[derive(Serialize)]
 struct UpdateRecordRequestBody {
     fields: Value,

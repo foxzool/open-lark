@@ -150,55 +150,6 @@ impl ListViewsRequest {
     }
 }
 
-/// 列出视图Builder
-pub struct ListViewsRequestBuilder {
-    request: ListViewsRequest,
-}
-
-impl ListViewsRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: ListViewsRequest::new(config),
-        }
-    }
-
-    /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    /// 设置数据表ID
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    /// 设置用户ID类型
-    pub fn user_id_type(mut self, user_id_type: String) -> Self {
-        self.request = self.request.user_id_type(user_id_type);
-        self
-    }
-
-    /// 设置分页标记
-    pub fn page_token(mut self, page_token: String) -> Self {
-        self.request = self.request.page_token(page_token);
-        self
-    }
-
-    /// 设置分页大小
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        self.request = self.request.page_size(page_size);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> ListViewsRequest {
-        self.request
-    }
-}
-
 /// 列出视图响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListViewsResponse {

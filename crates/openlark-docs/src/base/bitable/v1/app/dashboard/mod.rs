@@ -12,15 +12,12 @@ pub mod list;
 // 重新导出所有服务类型
 // copy 模块显式导出
 pub use copy::{
-    app_token, block_id, build, execute, execute_with_options, name, new, page_size, page_token,
-    CopyDashboardRequest, CopyDashboardRequestBuilder, CopyDashboardResponse,
-    ListDashboardsRequest, ListDashboardsRequestBuilder, ListDashboardsResponse,
+    CopyDashboardRequest, CopyDashboardResponse,
+    ListDashboardsRequest, ListDashboardsResponse,
 };
 // list 模块显式导出
 pub use list::{
-    app_token, block_id, build, execute, execute_with_options, name, new, page_size, page_token,
-    CopyDashboardRequest, CopyDashboardRequestBuilder, CopyDashboardResponse,
-    ListDashboardsRequest, ListDashboardsRequestBuilder, ListDashboardsResponse,
+    ListDashboardsRequest, ListDashboardsResponse,
 };
 
 /// 仪表盘信息

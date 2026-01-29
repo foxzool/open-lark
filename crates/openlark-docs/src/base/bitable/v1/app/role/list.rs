@@ -85,38 +85,6 @@ impl ListAppRoleRequest {
     }
 }
 
-/// 列出自定义角色 Builder
-pub struct ListAppRoleRequestBuilder {
-    request: ListAppRoleRequest,
-}
-
-impl ListAppRoleRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: ListAppRoleRequest::new(config),
-        }
-    }
-
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    pub fn page_token(mut self, page_token: String) -> Self {
-        self.request = self.request.page_token(page_token);
-        self
-    }
-
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        self.request = self.request.page_size(page_size);
-        self
-    }
-
-    pub fn build(self) -> ListAppRoleRequest {
-        self.request
-    }
-}
-
 /// 列出自定义角色响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListAppRoleResponse {

@@ -78,38 +78,6 @@ impl ListDashboardsRequest {
     }
 }
 
-/// 列出仪表盘 Builder
-pub struct ListDashboardsRequestBuilder {
-    request: ListDashboardsRequest,
-}
-
-impl ListDashboardsRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: ListDashboardsRequest::new(config),
-        }
-    }
-
-    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        self.request = self.request.page_size(page_size);
-        self
-    }
-
-    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
-        self.request = self.request.page_token(page_token);
-        self
-    }
-
-    pub fn build(self) -> ListDashboardsRequest {
-        self.request
-    }
-}
-
 /// 列出仪表盘响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListDashboardsResponse {
