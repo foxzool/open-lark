@@ -93,36 +93,3 @@ impl GetMeetingRequest {
         extract_response_data(response, "获取会议详情")
     }
 }
-
-/// 获取会议详情请求构建器
-
-#[derive(Debug, Clone)]
-pub struct GetMeetingRequestBuilder {
-    request: GetMeetingRequest,
-}
-
-impl GetMeetingRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: GetMeetingRequest::new(config),
-        }
-    }
-
-    /// 设置会议 ID
-    pub fn meeting_id(mut self, meeting_id: impl Into<String>) -> Self {
-        self.request = self.request.meeting_id(meeting_id);
-        self
-    }
-
-    /// 追加查询参数
-    pub fn query_param(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
-        self.request = self.request.query_param(key, value);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> GetMeetingRequest {
-        self.request
-    }
-}

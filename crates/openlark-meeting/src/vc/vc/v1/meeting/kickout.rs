@@ -73,29 +73,3 @@ impl KickoutMeetingRequest {
         extract_response_data(resp, "移除参会人")
     }
 }
-
-/// 移除参会人请求构建器
-#[derive(Debug, Clone)]
-pub struct KickoutMeetingRequestBuilder {
-    request: KickoutMeetingRequest,
-}
-
-impl KickoutMeetingRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: KickoutMeetingRequest::new(config),
-        }
-    }
-
-    /// 设置会议ID
-    pub fn meeting_id(mut self, meeting_id: impl Into<String>) -> Self {
-        self.request = self.request.meeting_id(meeting_id);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> KickoutMeetingRequest {
-        self.request
-    }
-}

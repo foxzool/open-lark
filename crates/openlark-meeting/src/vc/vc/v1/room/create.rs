@@ -61,23 +61,3 @@ impl CreateRoomRequest {
         extract_response_data(response, "创建会议室")
     }
 }
-
-/// 创建会议室请求构建器
-#[derive(Debug, Clone)]
-pub struct CreateRoomRequestBuilder {
-    request: CreateRoomRequest,
-}
-
-impl CreateRoomRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: CreateRoomRequest::new(config),
-        }
-    }
-
-    /// 构建请求
-    pub fn build(self) -> CreateRoomRequest {
-        self.request
-    }
-}

@@ -75,30 +75,3 @@ impl PatchRoomRequest {
         extract_response_data(response, "更新会议室")
     }
 }
-
-/// 更新会议室请求构建器
-
-#[derive(Debug, Clone)]
-pub struct PatchRoomRequestBuilder {
-    request: PatchRoomRequest,
-}
-
-impl PatchRoomRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: PatchRoomRequest::new(config),
-        }
-    }
-
-    /// 设置会议室 ID
-    pub fn room_id(mut self, room_id: impl Into<String>) -> Self {
-        self.request = self.request.room_id(room_id);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> PatchRoomRequest {
-        self.request
-    }
-}

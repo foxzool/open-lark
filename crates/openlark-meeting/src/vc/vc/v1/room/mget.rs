@@ -73,24 +73,3 @@ impl MgetRoomRequest {
         extract_response_data(response, "批量查询会议室")
     }
 }
-
-/// 批量查询会议室详情请求构建器
-
-#[derive(Debug, Clone)]
-pub struct MgetRoomRequestBuilder {
-    request: MgetRoomRequest,
-}
-
-impl MgetRoomRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: MgetRoomRequest::new(config),
-        }
-    }
-
-    /// 构建请求
-    pub fn build(self) -> MgetRoomRequest {
-        self.request
-    }
-}

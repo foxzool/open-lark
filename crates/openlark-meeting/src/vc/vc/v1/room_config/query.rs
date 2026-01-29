@@ -71,24 +71,3 @@ impl QueryRoomConfigRequest {
         extract_response_data(response, "查询会议室配置")
     }
 }
-
-/// 查询会议室配置请求构建器
-
-#[derive(Debug, Clone)]
-pub struct QueryRoomConfigRequestBuilder {
-    request: QueryRoomConfigRequest,
-}
-
-impl QueryRoomConfigRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: QueryRoomConfigRequest::new(config),
-        }
-    }
-
-    /// 构建请求
-    pub fn build(self) -> QueryRoomConfigRequest {
-        self.request
-    }
-}

@@ -73,29 +73,3 @@ impl EndMeetingRequest {
         extract_response_data(resp, "结束会议")
     }
 }
-
-/// 结束会议请求构建器
-#[derive(Debug, Clone)]
-pub struct EndMeetingRequestBuilder {
-    request: EndMeetingRequest,
-}
-
-impl EndMeetingRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: EndMeetingRequest::new(config),
-        }
-    }
-
-    /// 设置会议ID
-    pub fn meeting_id(mut self, meeting_id: impl Into<String>) -> Self {
-        self.request = self.request.meeting_id(meeting_id);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> EndMeetingRequest {
-        self.request
-    }
-}

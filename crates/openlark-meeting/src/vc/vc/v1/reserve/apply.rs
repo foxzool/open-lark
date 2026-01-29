@@ -66,24 +66,3 @@ impl ApplyReserveRequest {
         extract_response_data(response, "预约会议")
     }
 }
-
-/// 预约会议请求构建器
-
-#[derive(Debug, Clone)]
-pub struct ApplyReserveRequestBuilder {
-    request: ApplyReserveRequest,
-}
-
-impl ApplyReserveRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: ApplyReserveRequest::new(config),
-        }
-    }
-
-    /// 构建请求
-    pub fn build(self) -> ApplyReserveRequest {
-        self.request
-    }
-}

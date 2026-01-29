@@ -96,36 +96,3 @@ impl GetRoomLevelRequest {
         extract_response_data(response, "查询会议室层级详情")
     }
 }
-
-/// 查询会议室层级详情请求构建器
-
-#[derive(Debug, Clone)]
-pub struct GetRoomLevelRequestBuilder {
-    request: GetRoomLevelRequest,
-}
-
-impl GetRoomLevelRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: GetRoomLevelRequest::new(config),
-        }
-    }
-
-    /// 设置会议室层级 ID
-    pub fn room_level_id(mut self, room_level_id: impl Into<String>) -> Self {
-        self.request = self.request.room_level_id(room_level_id);
-        self
-    }
-
-    /// 追加查询参数
-    pub fn query_param(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
-        self.request = self.request.query_param(key, value);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> GetRoomLevelRequest {
-        self.request
-    }
-}
