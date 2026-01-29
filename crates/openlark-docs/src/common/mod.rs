@@ -2,7 +2,6 @@
 ///
 /// 提供openlark-docs项目中通用的工具、宏和类型定义。
 pub mod api_endpoints;
-pub mod api_paths;
 pub mod api_utils;
 pub mod builders;
 pub mod chain;
