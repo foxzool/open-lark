@@ -23,8 +23,6 @@ pub use list::{
     ListDashboardsRequest, ListDashboardsRequestBuilder, ListDashboardsResponse,
 };
 
-use openlark_core::config::Config;
-
 /// 仪表盘信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct Dashboard {
@@ -75,48 +73,4 @@ pub struct Permission {
     pub entity: String,
     /// 权限值
     pub value: String,
-}
-
-/// AppDashboard v1版本服务
-///
-/// 提供飞书多维表格仪表盘v1版本的统一入口，支持现代化的仪表盘管理。
-/// 包括列表查询、复制、权限管理等企业级功能。
-pub struct AppDashboardService {
-    config: Config,
-}
-
-impl AppDashboardService {
-    /// 创建AppDashboard v1服务实例
-    ///
-    /// # 参数
-    /// - `config`: SDK配置信息
-    ///
-    /// # 示例
-    ///
-    /// ```rust
-    /// use openlark_core::config::Config;
-    /// use openlark_docs::base::bitable::v1::app::dashboard::AppDashboardService;
-    ///
-    /// let config = Config::builder()
-    ///     .app_id("app_id")
-    ///     .app_secret("app_secret")
-    ///     .build();
-    /// let _service = AppDashboardService::new(config);
-    /// ```
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-}
-
-impl openlark_core::trait_system::Service for AppDashboardService {
-    fn config(&self) -> &Config {
-        &self.config
-    }
-
-    fn service_name() -> &'static str
-    where
-        Self: Sized,
-    {
-        "AppDashboardService"
-    }
 }

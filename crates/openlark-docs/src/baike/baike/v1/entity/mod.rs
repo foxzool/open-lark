@@ -1,7 +1,6 @@
 /// Baike 词条管理模块
 ///
 /// 提供免审词条的创建、获取、列表、搜索等功能。
-
 pub mod create;
 pub mod extract;
 pub mod get;

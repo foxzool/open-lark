@@ -9,21 +9,3 @@ pub mod models;
 pub use baike::*;
 pub use lingo::*;
 pub use models::*;
-
-use openlark_core::config::Config;
-
-/// Baike 知识库服务
-#[derive(Debug, Clone)]
-pub struct BaikeService {
-    config: Config,
-}
-
-impl BaikeService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-
-    pub fn config(&self) -> &Config {
-        &self.config
-    }
-}

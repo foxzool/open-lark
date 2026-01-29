@@ -12,9 +12,6 @@
 /// - 统计分析:文件统计、查看记录等
 /// - 密码保护:文件密码的增删改查
 /// - 文件搜索:文件搜索功能
-
-use openlark_core::config::Config;
-
 pub mod export_task;
 pub mod file;
 pub mod import_task;
@@ -46,21 +43,3 @@ pub use media::{
 pub use meta::BatchQueryMetaRequest;
 
 // 注意: permission 模块已使用显式导出
-
-/// Drive V1 服务
-#[derive(Debug, Clone)]
-pub struct DriveV1Service {
-    config: Config,
-}
-
-impl DriveV1Service {
-    /// 创建新的 Drive V1 服务实例
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-
-    /// 获取配置引用
-    pub fn config(&self) -> &Config {
-        &self.config
-    }
-}
