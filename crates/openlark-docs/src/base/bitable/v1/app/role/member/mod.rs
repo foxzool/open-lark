@@ -6,8 +6,6 @@
 /// - 列出协作者
 /// - 删除协作者
 /// - 批量删除协作者
-use openlark_core::config::Config;
-
 pub mod batch_create;
 pub mod batch_delete;
 pub mod create;
@@ -22,20 +20,5 @@ pub use delete::{DeleteRoleMemberRequest, DeleteRoleMemberResponse};
 pub use list::{ListRoleMembersRequest, ListRoleMembersResponse};
 pub use models::{RoleMemberId, RoleMemberIdType, RoleMemberInfo, RoleMemberType};
 
-/// 协作者服务
-pub struct RoleMemberService {
-    config: Config,
-}
-
-impl RoleMemberService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-
-    pub fn config(&self) -> &Config {
-        &self.config
-    }
-}
-
 // Type alias for compatibility
-pub type ServiceType = RoleMemberService;
+pub type ServiceType = ();

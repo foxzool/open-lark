@@ -3,29 +3,10 @@
 /// 按照bizTag/project/version/resource/name.rs模式组织
 /// 包含chat公告和document操作的相关API
 /// 数据模型定义（模型，不算 API）
-use openlark_core::config::Config;
-
 pub mod documents;
 pub mod models;
 pub mod v1;
 
 // 使用通配符导出所有子模块
-pub use documents::*;
 pub use models::*;
 pub use v1::*;
-
-/// Docx 服务
-#[derive(Debug, Clone)]
-pub struct DocxService {
-    config: Config,
-}
-
-impl DocxService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-
-    pub fn config(&self) -> &Config {
-        &self.config
-    }
-}

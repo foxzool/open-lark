@@ -1,67 +1,6 @@
 /// 云内容管理(ccm)模块
 ///
 /// 包含docs、docx、ccm_doc、ccm_docs、explorer、permission、sheets、wiki等子项目的API实现
-use openlark_core::config::Config;
-
-/// 云内容管理服务（内部实现，通过 DocsClient 访问）
-#[doc(hidden)]
-#[derive(Debug, Clone)]
-pub struct CcmService {
-    config: Config,
-}
-
-impl CcmService {
-    /// 创建新的云内容管理服务实例
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-
-    /// 获取配置引用
-    pub fn config(&self) -> &Config {
-        &self.config
-    }
-
-    /// 获取云盘浏览器服务
-    pub fn explorer(&self) -> crate::ccm::explorer::ExplorerService {
-        crate::ccm::explorer::ExplorerService::new(self.config.clone())
-    }
-
-    /// 获取文档权限管理服务
-    pub fn permission(&self) -> crate::ccm::permission::PermissionService {
-        crate::ccm::permission::PermissionService::new(self.config.clone())
-    }
-
-    /// 获取表格服务 v2（旧版）
-    pub fn sheets_v2(&self) -> crate::ccm::sheets_v2::SheetsV2Service {
-        crate::ccm::sheets_v2::SheetsV2Service::new(self.config.clone())
-    }
-
-    /// 获取云文档内容服务
-    pub fn docs(&self) -> crate::ccm::docs::DocsService {
-        crate::ccm::docs::DocsService::new(self.config.clone())
-    }
-
-    /// 获取文档块管理服务
-    pub fn docx(&self) -> crate::ccm::docx::DocxService {
-        crate::ccm::docx::DocxService::new(self.config.clone())
-    }
-
-    /// 获取云盘文件管理服务
-    pub fn drive(&self) -> crate::ccm::drive::DriveService {
-        crate::ccm::drive::DriveService::new(self.config.clone())
-    }
-
-    /// 获取电子表格服务
-    pub fn sheets(&self) -> crate::ccm::sheets::SheetsService {
-        crate::ccm::sheets::SheetsService::new(self.config.clone())
-    }
-
-    /// 获取Wiki知识库服务
-    pub fn wiki(&self) -> crate::ccm::wiki::WikiService {
-        crate::ccm::wiki::WikiService::new(self.config.clone())
-    }
-}
-
 // 导出所有子项目模块
 pub mod docs;
 pub mod docx;
@@ -71,5 +10,3 @@ pub mod permission;
 pub mod sheets;
 pub mod sheets_v2;
 pub mod wiki;
-// old 模块已废弃 - 暂时注释以解决编译问题
-// pub mod old;

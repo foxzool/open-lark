@@ -43,8 +43,9 @@
 //!         .build();
 //!     let client = DocsClient::new(config);
 //!
-//!     // 使用链式调用访问云盘文件服务
-//!     // client.ccm().drive().v1().file()...
+//!     // 获取配置后构建 Request
+//!     let config = client.ccm.config().clone();
+//!     // 使用 openlark_docs::ccm::drive::v1::file::UploadAllRequest
 //!
 //!     Ok(())
 //! }
@@ -94,67 +95,42 @@ pub use common::chain::DocsClient;
 
 // === 入口设计说明 ===
 //
-// openlark-docs 采用三层入口设计，提供清晰的调用层次和最佳实践：
+// openlark-docs 采用简化的入口设计：
 //
-// 1. **DocsClient** (公开入口，推荐用户使用)
+// 1. **DocsClient** (公开入口)
 //    - 唯一推荐的公开入口
-//    - 提供链式调用体验：`docs.ccm.drive.v1().file()...`
+//    - 提供配置获取：`docs.ccm.config()`, `docs.base.bitable.config()`
 //    - 按业务域分组：`docs.ccm`, `docs.base`, `docs.baike`, `docs.minutes`
 //    - 自动根据 feature 裁剪编译
 //
-// 2. **\*Client** (内部类型，SDK 内部使用)
-//    - `CcmClient`, `BaseClient`, `BaikeClient`, `MinutesClient` 等
-//    - 各业务域的二级入口
-//    - 提供子服务访问（如 `ccm.drive`, `ccm.sheets`）
-//    - **不推荐外部直接使用**，如需访问请通过 `DocsClient` 间接访问
-//
-// 3. **\*Service** (内部类型，SDK 内部使用)
-//    - `DriveService`, `BitableService`, `DocsService` 等
-//    - 具体的服务实现
-//    - 提供底层的 API 调用能力
-//    - **不推荐外部直接使用**，如有需要可通过完整路径访问
+// 2. **使用方式**
+//    - 通过 DocsClient 获取配置
+//    - 使用 `*Request::new(config, ...)` 构建请求
+//    - 调用 `.execute().await?` 执行
 //
 // === 示例代码 ===
 //
-// ✅ 推荐：使用 DocsClient 链式调用
 // ```rust
 // use openlark_docs::DocsClient;
+// use openlark_docs::ccm::drive::v1::file::UploadAllRequest;
 //
 // let docs = DocsClient::new(config);
 //
 // // 访问云盘服务
-// let file = docs.ccm.drive.v1().file().upload(...).execute().await?;
+// let config = docs.ccm.config().clone();
+// let request = UploadAllRequest::new(config, ...);
+// let file = request.execute().await?;
 //
 // // 访问多维表格
-// let table = docs.base.bitable().table().create(...).execute().await?;
-//
-// // 访问知识库
-// let node = docs.ccm.wiki.v2().node().create(...).execute().await?;
-// ```
-//
-// ❌ 不推荐：直接访问内部类型
-// ```rust
-// // 不要这样做：
-// // use openlark_docs::common::chain::CcmClient;
-// // let ccm = CcmClient::new(config);  // 内部类型，不应直接使用
-//
-// // 如需访问具体服务，使用完整路径：
-// use openlark_docs::ccm::drive::DriveService;
-// let drive = DriveService::new(config);  // 可访问，但不推荐
+// let config = docs.base.bitable.config().clone();
+// let request = CreateTableRequest::new(config, ...);
+// let table = request.execute().await?;
 // ```
 //
 // === 导出说明 ===
 //
-// 已移除中间 Service 的 public 导出，统一使用 DocsClient 作为唯一入口
-// 移除的导出：
-// - CcmService（通过 docs.ccm 访问）
-// - BaseService（通过 docs.base 访问）
-// - BitableService（通过 docs.base.bitable 访问）
-// - BaikeService（通过 docs.baike 访问）
-// - LingoService（通过 docs.baike.lingo 访问）
-// - MinutesService（通过 docs.minutes 访问）
-// - WikiService（通过 docs.ccm.wiki 访问）
-// - DocsService（通过 docs.ccm.docs 访问）
-// - DocxService（通过 docs.ccm.docx 访问）
-//
-// 注意：Service 类型仍然保留，但不从 lib.rs 导出。如有需要，可通过完整路径访问。
+// 已移除所有 Service 类型，统一使用 Request 模式
+// 用户应通过以下方式使用 API：
+// 1. 从 `openlark_docs::*` 模块导入 Request 类型
+// 2. 使用 `DocsClient` 获取配置
+// 3. 构建并执行 Request
