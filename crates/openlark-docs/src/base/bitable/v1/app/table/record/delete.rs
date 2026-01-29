@@ -93,38 +93,6 @@ impl DeleteRecordRequest {
     }
 }
 
-/// 删除记录 Builder
-pub struct DeleteRecordRequestBuilder {
-    request: DeleteRecordRequest,
-}
-
-impl DeleteRecordRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: DeleteRecordRequest::new(config),
-        }
-    }
-
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    pub fn table_id(mut self, table_id: String) -> Self {
-        self.request = self.request.table_id(table_id);
-        self
-    }
-
-    pub fn record_id(mut self, record_id: String) -> Self {
-        self.request = self.request.record_id(record_id);
-        self
-    }
-
-    pub fn build(self) -> DeleteRecordRequest {
-        self.request
-    }
-}
-
 /// 删除记录响应
 ///
 /// 表示记录是否成功删除以及被删除记录的ID。

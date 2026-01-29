@@ -108,49 +108,7 @@ impl UpdateAppRoleRequest {
     }
 }
 
-/// 更新自定义角色 Builder
-pub struct UpdateAppRoleRequestBuilder {
-    request: UpdateAppRoleRequest,
-}
-
-impl UpdateAppRoleRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: UpdateAppRoleRequest::new(config),
-        }
-    }
-
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    pub fn role_id(mut self, role_id: String) -> Self {
-        self.request = self.request.role_id(role_id);
-        self
-    }
-
-    pub fn role_name(mut self, role_name: String) -> Self {
-        self.request = self.request.role_name(role_name);
-        self
-    }
-
-    pub fn table_roles(mut self, table_roles: Vec<TableRole>) -> Self {
-        self.request = self.request.table_roles(table_roles);
-        self
-    }
-
-    pub fn block_roles(mut self, block_roles: Vec<BlockRole>) -> Self {
-        self.request = self.request.block_roles(block_roles);
-        self
-    }
-
-    pub fn build(self) -> UpdateAppRoleRequest {
-        self.request
-    }
-}
-
-#[derive(Serialize)]
+#[derive(Debug, Serialize, Default)]
 pub struct UpdateAppRoleRequestBody {
     role_name: String,
     table_roles: Vec<TableRole>,

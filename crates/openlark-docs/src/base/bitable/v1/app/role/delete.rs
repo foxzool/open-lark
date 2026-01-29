@@ -64,33 +64,6 @@ impl DeleteAppRoleRequest {
     }
 }
 
-/// 删除自定义角色 Builder
-pub struct DeleteAppRoleRequestBuilder {
-    request: DeleteAppRoleRequest,
-}
-
-impl DeleteAppRoleRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: DeleteAppRoleRequest::new(config),
-        }
-    }
-
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    pub fn role_id(mut self, role_id: String) -> Self {
-        self.request = self.request.role_id(role_id);
-        self
-    }
-
-    pub fn build(self) -> DeleteAppRoleRequest {
-        self.request
-    }
-}
-
 /// 删除自定义角色响应（data 为空对象）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DeleteAppRoleResponse {}

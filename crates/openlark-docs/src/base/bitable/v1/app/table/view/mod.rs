@@ -15,6 +15,6 @@ pub use delete::{DeleteViewRequest, DeleteViewResponse};
 
 pub use get::{GetViewRequest, GetViewResponse};
 
-pub use list::{ListViewsRequest, ListViewsRequestBuilder, ListViewsResponse};
+pub use list::{ListViewsRequest, ListViewsResponse};
 
 pub use patch::{PatchViewData, PatchViewRequest, PatchViewResponse, View};

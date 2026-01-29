@@ -102,43 +102,6 @@ impl ListTablesRequest {
     }
 }
 
-/// 列出数据表Builder
-pub struct ListTablesRequestBuilder {
-    request: ListTablesRequest,
-}
-
-impl ListTablesRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: ListTablesRequest::new(config),
-        }
-    }
-
-    /// 设置应用token
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    /// 设置分页大小
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        self.request = self.request.page_size(page_size);
-        self
-    }
-
-    /// 设置分页标记
-    pub fn page_token(mut self, page_token: String) -> Self {
-        self.request = self.request.page_token(page_token);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> ListTablesRequest {
-        self.request
-    }
-}
-
 /// 数据表信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TableInfo {

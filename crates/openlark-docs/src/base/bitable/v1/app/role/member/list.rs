@@ -98,43 +98,6 @@ impl ListRoleMembersRequest {
     }
 }
 
-/// 列出协作者 Builder
-pub struct ListRoleMembersRequestBuilder {
-    request: ListRoleMembersRequest,
-}
-
-impl ListRoleMembersRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: ListRoleMembersRequest::new(config),
-        }
-    }
-
-    pub fn app_token(mut self, app_token: String) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    pub fn role_id(mut self, role_id: String) -> Self {
-        self.request = self.request.role_id(role_id);
-        self
-    }
-
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        self.request = self.request.page_size(page_size);
-        self
-    }
-
-    pub fn page_token(mut self, page_token: String) -> Self {
-        self.request = self.request.page_token(page_token);
-        self
-    }
-
-    pub fn build(self) -> ListRoleMembersRequest {
-        self.request
-    }
-}
-
 /// 列出协作者响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListRoleMembersResponse {

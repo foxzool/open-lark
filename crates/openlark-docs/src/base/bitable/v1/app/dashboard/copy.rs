@@ -72,38 +72,6 @@ impl CopyDashboardRequest {
     }
 }
 
-/// 复制仪表盘 Builder
-pub struct CopyDashboardRequestBuilder {
-    request: CopyDashboardRequest,
-}
-
-impl CopyDashboardRequestBuilder {
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: CopyDashboardRequest::new(config),
-        }
-    }
-
-    pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
-        self.request = self.request.app_token(app_token);
-        self
-    }
-
-    pub fn block_id(mut self, block_id: impl Into<String>) -> Self {
-        self.request = self.request.block_id(block_id);
-        self
-    }
-
-    pub fn name(mut self, name: impl Into<String>) -> Self {
-        self.request = self.request.name(name);
-        self
-    }
-
-    pub fn build(self) -> CopyDashboardRequest {
-        self.request
-    }
-}
-
 #[derive(Debug, Serialize)]
 struct CopyDashboardRequestBody {
     name: String,

@@ -24,7 +24,6 @@ pub mod view;
 // 显式导出 - 避免使用 glob reexport
 pub use list::{
     ListTablesRequest,
-    ListTablesRequestBuilder,
     ListTablesResponse,
     TableInfo,
 };
