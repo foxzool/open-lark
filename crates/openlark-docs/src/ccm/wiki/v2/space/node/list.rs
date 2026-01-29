@@ -13,7 +13,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
-use crate::wiki::v2::models::WikiSpaceNode;
+use crate::ccm::wiki::v2::models::WikiSpaceNode;
 
 /// 获取知识空间节点列表请求
 pub struct ListWikiSpaceNodesRequest {

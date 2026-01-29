@@ -3,7 +3,6 @@
 #![allow(clippy::needless_borrows_for_generic_args)]
 #![allow(ambiguous_glob_reexports)]
 #![allow(hidden_glob_reexports)]
-// #![deny(missing_docs)] // 暂时禁用，在开发阶段
 
 //! # OpenLark 文档服务模块
 //!
@@ -79,20 +78,6 @@ pub mod baike;
 
 #[cfg(feature = "minutes")]
 pub mod minutes;
-
-// === 兼容导出：保持历史模块路径不变 ===
-// 注意：实现文件严格按 src/bizTag/project/version/resource/name.rs 组织，
-// 这里只做模块别名/重导出，不属于 API 实现文件。
-#[cfg(feature = "bitable")]
-pub use base::bitable;
-
-#[cfg(feature = "lingo")]
-pub use baike::lingo;
-
-#[cfg(feature = "ccm-wiki")]
-pub use ccm::wiki;
-
-// docs和docx模块已包含在ccm模块中，无需独立导出
 
 // API版本模块
 #[cfg(any(feature = "v1", feature = "v2", feature = "v3"))]
