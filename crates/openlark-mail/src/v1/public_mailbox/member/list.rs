@@ -1,0 +1,97 @@
+//! 获取公共邮箱成员列表
+
+use crate::common::{api_endpoints::MailApiV1, api_utils::*};
+use crate::v1::public_mailbox::member::models::PublicMailboxMemberListResponse;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    SDKResult,
+};
+use std::sync::Arc;
+
+/// 公共邮箱成员列表请求
+#[derive(Debug, Clone)]
+pub struct PublicMailboxMemberListRequest {
+    config: Arc<Config>,
+    mailbox_id: String,
+    /// 分页标记
+    page_token: Option<String>,
+    /// 每页数量
+    page_size: Option<i32>,
+}
+
+impl PublicMailboxMemberListRequest {
+    pub fn new(config: Arc<Config>, mailbox_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            mailbox_id: mailbox_id.into(),
+            page_token: None,
+            page_size: None,
+        }
+    }
+
+    /// 设置分页标记
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.page_token = Some(page_token.into());
+        self
+    }
+
+    /// 设置每页数量
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    pub async fn execute(self) -> SDKResult<PublicMailboxMemberListResponse> {
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: openlark_core::req_option::RequestOption,
+    ) -> SDKResult<PublicMailboxMemberListResponse> {
+        let api_endpoint = MailApiV1::PublicMailboxMemberList(self.mailbox_id.clone());
+        let mut request = ApiRequest::<PublicMailboxMemberListResponse>::get(api_endpoint.to_url());
+
+        if let Some(page_token) = &self.page_token {
+            request = request.query("page_token", page_token);
+        }
+        if let Some(page_size) = &self.page_size {
+            request = request.query("page_size", page_size.to_string());
+        }
+
+        let response =
+            openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;
+        extract_response_data(response, "获取公共邮箱成员列表")
+    }
+}
+
+impl ApiResponseTrait for PublicMailboxMemberListResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_public_mailbox_member_list_request() {
+        let config = Arc::new(
+            openlark_core::config::Config::builder()
+                .app_id("test")
+                .app_secret("test")
+                .build(),
+        );
+
+        let request = PublicMailboxMemberListRequest::new(config, "mailbox_123".to_string())
+            .page_token("token_123".to_string())
+            .page_size(20);
+
+        assert_eq!(request.mailbox_id, "mailbox_123");
+        assert_eq!(request.page_token, Some("token_123".to_string()));
+        assert_eq!(request.page_size, Some(20));
+    }
+}

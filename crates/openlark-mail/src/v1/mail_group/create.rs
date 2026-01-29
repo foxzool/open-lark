@@ -116,7 +116,7 @@ mod tests {
     #[test]
     fn test_mail_api_v1_url() {
         let endpoint = MailApiV1::MailGroupCreate;
-        assert_eq!(endpoint.to_url(), "/open-apis/mail/v1/mail_groups");
+        assert_eq!(endpoint.to_url(), "/open-apis/mail/v1/mailgroups");
 
         let endpoint = MailApiV1::MailGroupGet("group_123".to_string());
         assert!(endpoint.to_url().contains("group_123"));
