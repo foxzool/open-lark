@@ -5,7 +5,13 @@
 use crate::PlatformConfig;
 use std::sync::Arc;
 
+// 声明所有子模块
+pub mod collaboration_rule;
+pub mod collaboration_share_entity;
+pub mod collaboration_tenant;
+pub mod department;
 pub mod departments;
+pub mod employee;
 pub mod sync;
 pub mod users;
 

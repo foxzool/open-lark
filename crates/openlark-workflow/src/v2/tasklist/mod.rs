@@ -49,7 +49,10 @@ impl Tasklist {
         &self,
         tasklist_guid: impl Into<String>,
     ) -> activity_subscription::ActivitySubscriptionResource {
-        activity_subscription::ActivitySubscriptionResource::new(self.config.clone(), tasklist_guid.into())
+        activity_subscription::ActivitySubscriptionResource::new(
+            self.config.clone(),
+            tasklist_guid.into(),
+        )
     }
 
     /// 获取清单任务列表

@@ -44,7 +44,11 @@ pub struct GetFaqImageRequest {
 impl GetFaqImageRequest {
     /// 创建新的获取知识库图片请求
     pub fn new(config: Arc<Config>, id: String, image_key: String) -> Self {
-        Self { config, id, image_key }
+        Self {
+            config,
+            id,
+            image_key,
+        }
     }
 
     /// 执行获取知识库图片请求
@@ -68,7 +72,11 @@ pub struct GetFaqImageRequestBuilder {
 impl GetFaqImageRequestBuilder {
     /// 创建新的构建器
     pub fn new(config: Arc<Config>, id: String, image_key: String) -> Self {
-        Self { config, id, image_key }
+        Self {
+            config,
+            id,
+            image_key,
+        }
     }
 
     /// 执行请求

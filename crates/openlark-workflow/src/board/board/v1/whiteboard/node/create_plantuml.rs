@@ -70,7 +70,12 @@ impl CreatePlantumlNodeRequestV1 {
     }
 
     pub fn position(mut self, x: f64, y: f64, width: f64, height: f64) -> Self {
-        self.body.position = NodePosition { x, y, width, height };
+        self.body.position = NodePosition {
+            x,
+            y,
+            width,
+            height,
+        };
         self
     }
 
@@ -87,11 +92,9 @@ impl CreatePlantumlNodeRequestV1 {
         validate_required!(self.body.title.trim(), "节点标题不能为空");
         validate_required!(self.body.plantuml_code.trim(), "PlantUML 代码不能为空");
 
-        let api_endpoint = crate::common::api_endpoints::BoardApiV1::WhiteboardNodeCreatePlantuml(
-            self.board_id,
-        );
-        let mut request =
-            ApiRequest::<CreatePlantumlNodeResponseV1>::post(api_endpoint.to_url());
+        let api_endpoint =
+            crate::common::api_endpoints::BoardApiV1::WhiteboardNodeCreatePlantuml(self.board_id);
+        let mut request = ApiRequest::<CreatePlantumlNodeResponseV1>::post(api_endpoint.to_url());
 
         let body_json = serde_json::to_value(&self.body).map_err(|e| {
             openlark_core::error::validation_error("序列化请求体失败", e.to_string().as_str())
@@ -122,6 +125,9 @@ mod tests {
         let endpoint = crate::common::api_endpoints::BoardApiV1::WhiteboardNodeCreatePlantuml(
             "test_board_id".to_string(),
         );
-        assert_eq!(endpoint.to_url(), "/open-apis/board/v1/whiteboards/test_board_id/nodes/create_plantuml");
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/board/v1/whiteboards/test_board_id/nodes/create_plantuml"
+        );
     }
 }

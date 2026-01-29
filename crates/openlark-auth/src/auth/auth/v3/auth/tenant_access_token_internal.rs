@@ -11,8 +11,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
-
 /// 自建应用获取 tenant_access_token 请求
 pub struct TenantAccessTokenInternalRequestBuilder {
     app_id: String,
@@ -62,7 +60,10 @@ impl TenantAccessTokenInternalRequestBuilder {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<TenantAccessTokenInternalResponseData> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<TenantAccessTokenInternalResponseData> {
         // 验证必填字段
         validate_required!(self.app_id, "应用ID不能为空");
         validate_required!(self.app_secret, "应用密钥不能为空");
@@ -84,7 +85,10 @@ impl TenantAccessTokenInternalRequestBuilder {
         // 发送请求
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("获取自建应用 tenant_access_token", "响应数据为空")
+            openlark_core::error::validation_error(
+                "获取自建应用 tenant_access_token",
+                "响应数据为空",
+            )
         })
     }
 }

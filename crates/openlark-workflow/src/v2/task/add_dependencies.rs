@@ -84,10 +84,7 @@ impl AddDependenciesRequest {
     ) -> SDKResult<AddDependenciesResponse> {
         // 验证必填字段
         validate_required!(self.task_guid.trim(), "任务GUID不能为空");
-        validate_required!(
-            self.body.dependencies,
-            "依赖任务列表不能为空"
-        );
+        validate_required!(self.body.dependencies, "依赖任务列表不能为空");
 
         let api_endpoint = TaskApiV2::TaskAddDependencies(self.task_guid.clone());
         let mut request = ApiRequest::<AddDependenciesResponse>::post(api_endpoint.to_url());

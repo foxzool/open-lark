@@ -4,11 +4,10 @@
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
-    config:: Config,
+    config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -36,25 +35,24 @@ impl EmployeeRegularBuilder {
             self.employee_id
         );
 
-        let transport = Transport::new(self.config);
-        transport.patch::<EmployeeRegularRequest>(url, EmployeeRegularRequest {}).await
+        let req: ApiRequest<EmployeeRegularResponse> = ApiRequest::patch(&url);
+        Transport::request(req, &self.config, None).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<EmployeeRegularResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<EmployeeRegularResponse> {
         let url = format!(
             "/open-apis/directory/v1/employees/{}/regular",
             self.employee_id
         );
 
-        let transport = Transport::new(self.config);
-        transport.patch_with_option::<EmployeeRegularRequest>(url, EmployeeRegularRequest {}, option).await
+        let req: ApiRequest<EmployeeRegularResponse> = ApiRequest::patch(&url);
+        Transport::request(req, &self.config, Some(option)).await
     }
 }
-
-/// 更新待离职成员为在职请求
-#[derive(Debug, Clone, Deserialize, Serialize)]
-struct EmployeeRegularRequest {}
 
 /// 更新待离职成员为在职响应
 #[derive(Debug, Clone, Deserialize, Serialize)]

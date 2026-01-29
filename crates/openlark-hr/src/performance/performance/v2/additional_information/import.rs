@@ -33,15 +33,9 @@ impl ImportRequest {
     }
 
     /// 添加补充信息
-    pub fn add_information(
-        mut self,
-        user_id: String,
-        content: String,
-    ) -> Self {
-        self.additional_informations.push(AdditionalInformation {
-            user_id,
-            content,
-        });
+    pub fn add_information(mut self, user_id: String, content: String) -> Self {
+        self.additional_informations
+            .push(AdditionalInformation { user_id, content });
         self
     }
 

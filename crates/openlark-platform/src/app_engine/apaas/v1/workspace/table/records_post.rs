@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -26,7 +25,11 @@ pub struct TableRecordsPostBuilder {
 
 impl TableRecordsPostBuilder {
     /// 创建新的 Builder
-    pub fn new(config: Config, workspace_id: impl Into<String>, table_name: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        workspace_id: impl Into<String>,
+        table_name: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             workspace_id: workspace_id.into(),
@@ -42,7 +45,10 @@ impl TableRecordsPostBuilder {
     }
 
     /// 添加多条记录数据
-    pub fn records(mut self, records: impl IntoIterator<Item = impl Into<serde_json::Value>>) -> Self {
+    pub fn records(
+        mut self,
+        records: impl IntoIterator<Item = impl Into<serde_json::Value>>,
+    ) -> Self {
         self.records.extend(records.into_iter().map(Into::into));
         self
     }
@@ -58,12 +64,14 @@ impl TableRecordsPostBuilder {
             records: self.records,
         };
 
-        let transport = Transport::new(self.config);
-        transport.post(url, request, None::<&()>).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<TableRecordsPostResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<TableRecordsPostResponse> {
         let url = format!(
             "/open-apis/apaas/v1/workspaces/{}/tables/{}/records",
             self.workspace_id, self.table_name
@@ -73,8 +81,11 @@ impl TableRecordsPostBuilder {
             records: self.records,
         };
 
-        let transport = Transport::new(self.config);
-        transport.post(url, request, Some(option)).await
+        let req: ApiRequest<TableRecordsPostResponse> =
+            ApiRequest::post(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

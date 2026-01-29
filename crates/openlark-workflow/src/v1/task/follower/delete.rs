@@ -53,8 +53,7 @@ impl DeleteTaskFollowerRequestV1 {
             self.task_id.clone(),
             self.follower_id.clone(),
         );
-        let request =
-            ApiRequest::<DeleteTaskFollowerResponseV1>::delete(api_endpoint.to_url());
+        let request = ApiRequest::<DeleteTaskFollowerResponseV1>::delete(api_endpoint.to_url());
 
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;

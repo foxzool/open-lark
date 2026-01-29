@@ -38,7 +38,8 @@ impl DeletePublicMailboxAliasRequest {
         validate_required!(self.mailbox_id.trim(), "公共邮箱ID不能为空");
         validate_required!(self.alias_id.trim(), "别名ID不能为空");
 
-        let api_endpoint = MailApiV1::PublicMailboxAliasDelete(self.mailbox_id.clone(), self.alias_id.clone());
+        let api_endpoint =
+            MailApiV1::PublicMailboxAliasDelete(self.mailbox_id.clone(), self.alias_id.clone());
         let request = ApiRequest::<DeletePublicMailboxAliasResponse>::delete(api_endpoint.to_url());
 
         let response =

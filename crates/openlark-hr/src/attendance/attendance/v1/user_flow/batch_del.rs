@@ -55,7 +55,11 @@ impl BatchDelUserFlowRequest {
         use crate::common::api_endpoints::AttendanceApiV1;
 
         // 1. 验证必填字段
-        validate_required_list!(self.user_flow_ids, 100, "打卡流水 ID 列表不能为空且不能超过 100 个");
+        validate_required_list!(
+            self.user_flow_ids,
+            100,
+            "打卡流水 ID 列表不能为空且不能超过 100 个"
+        );
         for (idx, flow_id) in self.user_flow_ids.iter().enumerate() {
             validate_required!(
                 flow_id.trim(),

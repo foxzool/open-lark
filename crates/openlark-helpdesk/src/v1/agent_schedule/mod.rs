@@ -2,11 +2,11 @@
 //!
 //! 提供客服工作日程相关的 API。
 
-pub mod list;
 pub mod create;
-pub mod get;
-pub mod patch;
 pub mod delete;
+pub mod get;
+pub mod list;
+pub mod patch;
 
 use openlark_core::config::Config;
 use std::sync::Arc;
@@ -49,8 +49,8 @@ impl AgentSchedule {
     }
 }
 
-pub use list::{ListAgentScheduleRequest, ListAgentScheduleRequestBuilder};
 pub use create::{CreateAgentScheduleRequest, CreateAgentScheduleRequestBuilder};
-pub use get::{GetAgentScheduleRequest, GetAgentScheduleRequestBuilder};
-pub use patch::{PatchAgentScheduleRequest, PatchAgentScheduleRequestBuilder};
 pub use delete::{DeleteAgentScheduleRequest, DeleteAgentScheduleRequestBuilder};
+pub use get::{GetAgentScheduleRequest, GetAgentScheduleRequestBuilder};
+pub use list::{ListAgentScheduleRequest, ListAgentScheduleRequestBuilder};
+pub use patch::{PatchAgentScheduleRequest, PatchAgentScheduleRequestBuilder};

@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/category/create
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -86,7 +82,8 @@ impl CreateCategoryRequest {
 
     /// 执行创建知识库分类请求
     pub async fn execute(self, body: CreateCategoryBody) -> SDKResult<CreateCategoryResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行创建知识库分类请求（支持自定义选项）
@@ -167,9 +164,9 @@ impl CreateCategoryRequestBuilder {
 
     /// 执行请求
     pub async fn execute(&self) -> SDKResult<CreateCategoryResponse> {
-        let body = self.body().map_err(|reason| {
-            openlark_core::error::validation_error("body", reason)
-        })?;
+        let body = self
+            .body()
+            .map_err(|reason| openlark_core::error::validation_error("body", reason))?;
         let request = CreateCategoryRequest::new(self.config.clone());
         request.execute(body).await
     }

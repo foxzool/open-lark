@@ -89,7 +89,10 @@ impl UploadRequest {
         );
 
         let request = request
-            .header("Content-Type", format!("multipart/form-data; boundary={}", boundary))
+            .header(
+                "Content-Type",
+                format!("multipart/form-data; boundary={}", boundary),
+            )
             .body(body);
 
         // 4. 发送请求
@@ -107,11 +110,7 @@ impl UploadRequest {
 
 /// 根据文件扩展名检测 MIME 类型
 fn detect_mime_type(file_name: &str) -> &'static str {
-    let ext = file_name
-        .rsplit('.')
-        .next()
-        .unwrap_or("")
-        .to_lowercase();
+    let ext = file_name.rsplit('.').next().unwrap_or("").to_lowercase();
 
     match ext.as_str() {
         "jpg" | "jpeg" => "image/jpeg",
@@ -143,7 +142,13 @@ fn build_multipart_body(
 
     // 文件部分
     body.extend_from_slice(format!("--{}\r\n", boundary).as_bytes());
-    body.extend_from_slice(format!("Content-Disposition: form-data; name=\"file\"; filename=\"{}\"\r\n", file_name).as_bytes());
+    body.extend_from_slice(
+        format!(
+            "Content-Disposition: form-data; name=\"file\"; filename=\"{}\"\r\n",
+            file_name
+        )
+        .as_bytes(),
+    );
     body.extend_from_slice(format!("Content-Type: {}\r\n\r\n", mime_type).as_bytes());
     body.extend_from_slice(image_data);
     body.extend_from_slice(b"\r\n");

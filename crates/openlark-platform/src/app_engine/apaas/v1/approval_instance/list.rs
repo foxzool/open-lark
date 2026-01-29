@@ -45,10 +45,13 @@ impl ListInstanceBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListInstanceResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListInstanceResponse> {
         let mut url = String::from("/open-apis/apaas/v1/approval_instances");
         let mut params = Vec::new();
-        
+
         if let Some(size) = self.page_size {
             params.push(format!("page_size={}", size));
         }
@@ -58,7 +61,7 @@ impl ListInstanceBuilder {
         if let Some(uid) = self.user_id {
             params.push(format!("user_id={}", uid));
         }
-        
+
         if !params.is_empty() {
             url.push('?');
             url.push_str(&params.join("&"));

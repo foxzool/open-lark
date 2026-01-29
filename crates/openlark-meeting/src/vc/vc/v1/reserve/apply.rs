@@ -49,7 +49,8 @@ impl ApplyReserveRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/vc-v1/reserve/apply
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<ApplyReserveResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行请求（带选项）

@@ -77,7 +77,10 @@ impl GetReserveRequest {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetReserveResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<GetReserveResponse> {
         validate_required_field("reserve_id", Some(&self.reserve_id), "预约 ID 不能为空")?;
 
         let api_endpoint = VcApiV1::ReserveGet(self.reserve_id.clone());

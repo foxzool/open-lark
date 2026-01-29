@@ -25,7 +25,12 @@ pub struct DelReportRequest {
 
 impl DelReportRequest {
     /// 创建请求
-    pub fn new(config: Config, archive_rule_id: String, employee_ids: Vec<String>, stat_dates: Vec<i64>) -> Self {
+    pub fn new(
+        config: Config,
+        archive_rule_id: String,
+        employee_ids: Vec<String>,
+        stat_dates: Vec<i64>,
+    ) -> Self {
         Self {
             archive_rule_id,
             employee_ids,
@@ -49,8 +54,16 @@ impl DelReportRequest {
 
         // 1. 验证必填字段
         validate_required!(self.archive_rule_id.trim(), "archive_rule_id");
-        validate_required_list!(self.employee_ids, 100, "员工 ID 列表不能为空且不能超过 100 个");
-        validate_required_list!(self.stat_dates, 100, "统计日期列表不能为空且不能超过 100 个");
+        validate_required_list!(
+            self.employee_ids,
+            100,
+            "员工 ID 列表不能为空且不能超过 100 个"
+        );
+        validate_required_list!(
+            self.stat_dates,
+            100,
+            "统计日期列表不能为空且不能超过 100 个"
+        );
 
         // 2. 构建端点
         let api_endpoint = AttendanceApiV1::ArchiveRuleDelReport;

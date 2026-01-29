@@ -60,9 +60,8 @@ impl CreateTaskFollowerRequestV1 {
     ) -> SDKResult<CreateTaskFollowerResponseV1> {
         validate_required!(self.body.follower_id.trim(), "关注者用户 ID 不能为空");
 
-        let api_endpoint = crate::common::api_endpoints::TaskApiV1::TaskFollowerCreate(
-            self.task_id.clone(),
-        );
+        let api_endpoint =
+            crate::common::api_endpoints::TaskApiV1::TaskFollowerCreate(self.task_id.clone());
         let mut request = ApiRequest::<CreateTaskFollowerResponseV1>::post(api_endpoint.to_url());
 
         let body_json = serde_json::to_value(&self.body).map_err(|e| {
@@ -98,8 +97,8 @@ mod tests {
                 .build(),
         );
 
-        let request = CreateTaskFollowerRequestV1::new(config.clone(), "task_123")
-            .follower_id("user_456");
+        let request =
+            CreateTaskFollowerRequestV1::new(config.clone(), "task_123").follower_id("user_456");
 
         assert_eq!(request.body.follower_id, "user_456");
         assert_eq!(request.task_id, "task_123");
@@ -107,7 +106,11 @@ mod tests {
 
     #[test]
     fn test_task_follower_create_v1_url() {
-        let endpoint = crate::common::api_endpoints::TaskApiV1::TaskFollowerCreate("task_123".to_string());
-        assert_eq!(endpoint.to_url(), "/open-apis/task/v1/tasks/task_123/followers");
+        let endpoint =
+            crate::common::api_endpoints::TaskApiV1::TaskFollowerCreate("task_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/task/v1/tasks/task_123/followers"
+        );
     }
 }

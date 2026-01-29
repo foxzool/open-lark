@@ -4,5 +4,5 @@
 
 #![allow(clippy::module_inception)]
 
-pub mod service;
 pub mod calendar;
+pub mod service;

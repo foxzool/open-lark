@@ -105,7 +105,11 @@ mod tests {
 
     #[test]
     fn test_list_task_collaborator_v1_url() {
-        let endpoint = crate::common::api_endpoints::TaskApiV1::TaskCollaboratorList("task_123".to_string());
-        assert_eq!(endpoint.to_url(), "/open-apis/task/v1/tasks/task_123/collaborators");
+        let endpoint =
+            crate::common::api_endpoints::TaskApiV1::TaskCollaboratorList("task_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/task/v1/tasks/task_123/collaborators"
+        );
     }
 }

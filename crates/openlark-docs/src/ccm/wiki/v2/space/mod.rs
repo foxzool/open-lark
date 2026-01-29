@@ -21,18 +21,15 @@ pub use get_node::{GetWikiSpaceNodeRequest, GetWikiSpaceNodeResponse};
 pub use list::{ListWikiSpacesRequest, ListWikiSpacesResponse};
 
 pub use member::{
-    CreateWikiSpaceMemberRequest, CreateWikiSpaceMemberResponse,
-    DeleteWikiSpaceMemberRequest, DeleteWikiSpaceMemberResponse,
-    ListWikiSpaceMembersRequest, ListWikiSpaceMembersResponse,
+    CreateWikiSpaceMemberRequest, CreateWikiSpaceMemberResponse, DeleteWikiSpaceMemberRequest,
+    DeleteWikiSpaceMemberResponse, ListWikiSpaceMembersRequest, ListWikiSpaceMembersResponse,
 };
 
 pub use node::{
-    CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse,
-    CreateWikiSpaceNodeRequest, CreateWikiSpaceNodeResponse,
-    ListWikiSpaceNodesRequest, ListWikiSpaceNodesResponse,
-    MoveDocsToWikiRequest, MoveDocsToWikiResponse,
-    MoveWikiSpaceNodeRequest, MoveWikiSpaceNodeResponse,
-    UpdateWikiSpaceNodeTitleRequest, UpdateWikiSpaceNodeTitleResponse,
+    CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse, CreateWikiSpaceNodeRequest,
+    CreateWikiSpaceNodeResponse, ListWikiSpaceNodesRequest, ListWikiSpaceNodesResponse,
+    MoveDocsToWikiRequest, MoveDocsToWikiResponse, MoveWikiSpaceNodeRequest,
+    MoveWikiSpaceNodeResponse, UpdateWikiSpaceNodeTitleRequest, UpdateWikiSpaceNodeTitleResponse,
 };
 
 pub use setting::{UpdateWikiSpaceSettingRequest, UpdateWikiSpaceSettingResponse};

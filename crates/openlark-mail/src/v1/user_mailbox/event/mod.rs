@@ -127,7 +127,8 @@ impl UnsubscribeUserMailboxEventRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UnsubscribeUserMailboxEventResponse> {
         let api_endpoint = MailApiV1::UserMailboxEventUnsubscribe(self.mailbox_id.clone());
-        let request = ApiRequest::<UnsubscribeUserMailboxEventResponse>::post(api_endpoint.to_url());
+        let request =
+            ApiRequest::<UnsubscribeUserMailboxEventResponse>::post(api_endpoint.to_url());
 
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;
@@ -166,7 +167,8 @@ impl UserMailboxEventSubscriptionRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UserMailboxEventSubscriptionResponse> {
         let api_endpoint = MailApiV1::UserMailboxEventSubscription(self.mailbox_id.clone());
-        let request = ApiRequest::<UserMailboxEventSubscriptionResponse>::get(api_endpoint.to_url());
+        let request =
+            ApiRequest::<UserMailboxEventSubscriptionResponse>::get(api_endpoint.to_url());
 
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;

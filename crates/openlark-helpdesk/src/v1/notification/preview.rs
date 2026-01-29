@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/preview
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -44,7 +40,10 @@ pub struct PreviewNotificationRequest {
 impl PreviewNotificationRequest {
     /// 创建新的预览推送通知请求
     pub fn new(config: Arc<Config>, notification_id: String) -> Self {
-        Self { config, notification_id }
+        Self {
+            config,
+            notification_id,
+        }
     }
 
     /// 执行预览推送通知请求
@@ -57,8 +56,9 @@ impl PreviewNotificationRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<PreviewNotificationResponse> {
-        let req: ApiRequest<PreviewNotificationResponse> =
-            ApiRequest::post(HelpdeskApiV1::NotificationPreview(self.notification_id.clone()).to_url());
+        let req: ApiRequest<PreviewNotificationResponse> = ApiRequest::post(
+            HelpdeskApiV1::NotificationPreview(self.notification_id.clone()).to_url(),
+        );
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "预览推送通知")
@@ -75,12 +75,16 @@ pub struct PreviewNotificationRequestBuilder {
 impl PreviewNotificationRequestBuilder {
     /// 创建新的构建器
     pub fn new(config: Arc<Config>, notification_id: String) -> Self {
-        Self { config, notification_id }
+        Self {
+            config,
+            notification_id,
+        }
     }
 
     /// 执行请求
     pub async fn execute(&self) -> SDKResult<PreviewNotificationResponse> {
-        let request = PreviewNotificationRequest::new(self.config.clone(), self.notification_id.clone());
+        let request =
+            PreviewNotificationRequest::new(self.config.clone(), self.notification_id.clone());
         request.execute().await
     }
 
@@ -89,7 +93,8 @@ impl PreviewNotificationRequestBuilder {
         &self,
         option: RequestOption,
     ) -> SDKResult<PreviewNotificationResponse> {
-        let request = PreviewNotificationRequest::new(self.config.clone(), self.notification_id.clone());
+        let request =
+            PreviewNotificationRequest::new(self.config.clone(), self.notification_id.clone());
         request.execute_with_options(option).await
     }
 }
@@ -125,7 +130,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = PreviewNotificationRequestBuilder::new(Arc::new(config), "notif_123".to_string());
+        let builder =
+            PreviewNotificationRequestBuilder::new(Arc::new(config), "notif_123".to_string());
 
         assert_eq!(builder.notification_id, "notif_123");
     }

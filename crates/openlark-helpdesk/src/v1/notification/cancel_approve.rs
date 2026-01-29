@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/cancel_approve
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -44,7 +40,10 @@ pub struct CancelApproveNotificationRequest {
 impl CancelApproveNotificationRequest {
     /// 创建新的取消推送通知审核请求
     pub fn new(config: Arc<Config>, notification_id: String) -> Self {
-        Self { config, notification_id }
+        Self {
+            config,
+            notification_id,
+        }
     }
 
     /// 执行取消推送通知审核请求
@@ -57,8 +56,9 @@ impl CancelApproveNotificationRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<CancelApproveNotificationResponse> {
-        let req: ApiRequest<CancelApproveNotificationResponse> =
-            ApiRequest::post(HelpdeskApiV1::NotificationCancelApprove(self.notification_id.clone()).to_url());
+        let req: ApiRequest<CancelApproveNotificationResponse> = ApiRequest::post(
+            HelpdeskApiV1::NotificationCancelApprove(self.notification_id.clone()).to_url(),
+        );
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "取消推送通知审核")
@@ -75,12 +75,18 @@ pub struct CancelApproveNotificationRequestBuilder {
 impl CancelApproveNotificationRequestBuilder {
     /// 创建新的构建器
     pub fn new(config: Arc<Config>, notification_id: String) -> Self {
-        Self { config, notification_id }
+        Self {
+            config,
+            notification_id,
+        }
     }
 
     /// 执行请求
     pub async fn execute(&self) -> SDKResult<CancelApproveNotificationResponse> {
-        let request = CancelApproveNotificationRequest::new(self.config.clone(), self.notification_id.clone());
+        let request = CancelApproveNotificationRequest::new(
+            self.config.clone(),
+            self.notification_id.clone(),
+        );
         request.execute().await
     }
 
@@ -89,7 +95,10 @@ impl CancelApproveNotificationRequestBuilder {
         &self,
         option: RequestOption,
     ) -> SDKResult<CancelApproveNotificationResponse> {
-        let request = CancelApproveNotificationRequest::new(self.config.clone(), self.notification_id.clone());
+        let request = CancelApproveNotificationRequest::new(
+            self.config.clone(),
+            self.notification_id.clone(),
+        );
         request.execute_with_options(option).await
     }
 }
@@ -99,7 +108,8 @@ pub async fn cancel_approve_notification(
     config: &Config,
     notification_id: String,
 ) -> SDKResult<CancelApproveNotificationResponse> {
-    cancel_approve_notification_with_options(config, notification_id, RequestOption::default()).await
+    cancel_approve_notification_with_options(config, notification_id, RequestOption::default())
+        .await
 }
 
 /// 执行取消推送通知审核（支持自定义选项）
@@ -125,7 +135,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = CancelApproveNotificationRequestBuilder::new(Arc::new(config), "notif_123".to_string());
+        let builder =
+            CancelApproveNotificationRequestBuilder::new(Arc::new(config), "notif_123".to_string());
 
         assert_eq!(builder.notification_id, "notif_123");
     }

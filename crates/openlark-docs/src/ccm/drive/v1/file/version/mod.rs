@@ -16,4 +16,4 @@ pub use get::{GetFileVersionRequest, GetFileVersionResponse};
 
 pub use list::{ListFileVersionsRequest, ListFileVersionsResponse};
 
-pub use models::{FileVersionInfo};
+pub use models::FileVersionInfo;

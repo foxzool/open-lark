@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -40,7 +39,11 @@ impl RecordBatchUpdateBuilder {
     }
 
     /// 添加要更新的记录
-    pub fn record(mut self, record_id: impl Into<String>, data: impl Into<serde_json::Value>) -> Self {
+    pub fn record(
+        mut self,
+        record_id: impl Into<String>,
+        data: impl Into<serde_json::Value>,
+    ) -> Self {
         self.records.push(RecordUpdateItem {
             id: record_id.into(),
             data: data.into(),
@@ -53,14 +56,11 @@ impl RecordBatchUpdateBuilder {
         mut self,
         records: impl IntoIterator<Item = (impl Into<String>, impl Into<serde_json::Value>)>,
     ) -> Self {
-        self.records.extend(
-            records
-                .into_iter()
-                .map(|(id, data)| RecordUpdateItem {
-                    id: id.into(),
-                    data: data.into(),
-                }),
-        );
+        self.records
+            .extend(records.into_iter().map(|(id, data)| RecordUpdateItem {
+                id: id.into(),
+                data: data.into(),
+            }));
         self
     }
 
@@ -75,12 +75,18 @@ impl RecordBatchUpdateBuilder {
             records: self.records,
         };
 
-        let transport = Transport::new(self.config);
-        transport.patch(url, request).await
+        let req: ApiRequest<RecordBatchUpdateResponse> =
+            ApiRequest::patch(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(RequestOption::default())).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<RecordBatchUpdateResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<RecordBatchUpdateResponse> {
         let url = format!(
             "/open-apis/apaas/v1/applications/{}/objects/{}/records/batch_update",
             self.namespace, self.object_api_name
@@ -90,8 +96,11 @@ impl RecordBatchUpdateBuilder {
             records: self.records,
         };
 
-        let transport = Transport::new(self.config);
-        transport.patch_with_option(url, request, option).await
+        let req: ApiRequest<RecordBatchUpdateResponse> =
+            ApiRequest::patch(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

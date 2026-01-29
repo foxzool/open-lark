@@ -73,10 +73,7 @@ impl RemoveRemindersRequest {
     ) -> SDKResult<RemoveRemindersResponse> {
         // 验证必填字段
         validate_required!(self.task_guid.trim(), "任务GUID不能为空");
-        validate_required!(
-            self.body.reminder_guids,
-            "提醒GUID列表不能为空"
-        );
+        validate_required!(self.body.reminder_guids, "提醒GUID列表不能为空");
 
         let api_endpoint = TaskApiV2::TaskRemoveReminders(self.task_guid.clone());
         let mut request = ApiRequest::<RemoveRemindersResponse>::post(api_endpoint.to_url());
@@ -113,7 +110,10 @@ mod tests {
             .reminder_guids(vec!["reminder_1".to_string(), "reminder_2".to_string()]);
 
         assert_eq!(request.task_guid, "task_123");
-        assert_eq!(request.body.reminder_guids, vec!["reminder_1", "reminder_2"]);
+        assert_eq!(
+            request.body.reminder_guids,
+            vec!["reminder_1", "reminder_2"]
+        );
     }
 
     #[test]
@@ -129,7 +129,10 @@ mod tests {
             .remove_reminder("reminder_1")
             .remove_reminder("reminder_2");
 
-        assert_eq!(request.body.reminder_guids, vec!["reminder_1", "reminder_2"]);
+        assert_eq!(
+            request.body.reminder_guids,
+            vec!["reminder_1", "reminder_2"]
+        );
     }
 
     #[test]

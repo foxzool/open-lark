@@ -71,7 +71,10 @@ impl Task {
     }
 
     /// 任务移出清单
-    pub fn remove_tasklist(&self, task_guid: impl Into<String>) -> remove_tasklist::RemoveTasklistRequest {
+    pub fn remove_tasklist(
+        &self,
+        task_guid: impl Into<String>,
+    ) -> remove_tasklist::RemoveTasklistRequest {
         remove_tasklist::RemoveTasklistRequest::new(self.config.clone(), task_guid.into())
     }
 
@@ -86,27 +89,42 @@ impl Task {
     }
 
     /// 移除任务成员
-    pub fn remove_members(&self, task_guid: impl Into<String>) -> remove_members::RemoveMembersRequest {
+    pub fn remove_members(
+        &self,
+        task_guid: impl Into<String>,
+    ) -> remove_members::RemoveMembersRequest {
         remove_members::RemoveMembersRequest::new(self.config.clone(), task_guid.into())
     }
 
     /// 添加任务提醒
-    pub fn add_reminders(&self, task_guid: impl Into<String>) -> add_reminders::AddRemindersRequest {
+    pub fn add_reminders(
+        &self,
+        task_guid: impl Into<String>,
+    ) -> add_reminders::AddRemindersRequest {
         add_reminders::AddRemindersRequest::new(self.config.clone(), task_guid.into())
     }
 
     /// 移除任务提醒
-    pub fn remove_reminders(&self, task_guid: impl Into<String>) -> remove_reminders::RemoveRemindersRequest {
+    pub fn remove_reminders(
+        &self,
+        task_guid: impl Into<String>,
+    ) -> remove_reminders::RemoveRemindersRequest {
         remove_reminders::RemoveRemindersRequest::new(self.config.clone(), task_guid.into())
     }
 
     /// 添加任务依赖
-    pub fn add_dependencies(&self, task_guid: impl Into<String>) -> add_dependencies::AddDependenciesRequest {
+    pub fn add_dependencies(
+        &self,
+        task_guid: impl Into<String>,
+    ) -> add_dependencies::AddDependenciesRequest {
         add_dependencies::AddDependenciesRequest::new(self.config.clone(), task_guid.into())
     }
 
     /// 移除任务依赖
-    pub fn remove_dependencies(&self, task_guid: impl Into<String>) -> remove_dependencies::RemoveDependenciesRequest {
+    pub fn remove_dependencies(
+        &self,
+        task_guid: impl Into<String>,
+    ) -> remove_dependencies::RemoveDependenciesRequest {
         remove_dependencies::RemoveDependenciesRequest::new(self.config.clone(), task_guid.into())
     }
 }

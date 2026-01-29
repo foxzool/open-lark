@@ -88,7 +88,8 @@ impl UpdateCustomFieldOptionRequest {
             self.custom_field_guid.clone(),
             self.option_guid.clone(),
         );
-        let mut request = ApiRequest::<UpdateCustomFieldOptionResponse>::patch(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<UpdateCustomFieldOptionResponse>::patch(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "更新自定义字段选项")?);
@@ -118,13 +119,9 @@ mod tests {
                 .build(),
         );
 
-        let request = UpdateCustomFieldOptionRequest::new(
-            config,
-            "custom_field_123",
-            "option_456",
-        )
-        .name("中优先级")
-        .color("#00FF00");
+        let request = UpdateCustomFieldOptionRequest::new(config, "custom_field_123", "option_456")
+            .name("中优先级")
+            .color("#00FF00");
 
         assert_eq!(request.custom_field_guid, "custom_field_123");
         assert_eq!(request.option_guid, "option_456");

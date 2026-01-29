@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/ticket-management/ticket-message/create
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -68,8 +64,12 @@ impl CreateTicketMessageRequest {
     }
 
     /// 执行发送工单消息请求
-    pub async fn execute(self, body: CreateTicketMessageBody) -> SDKResult<CreateTicketMessageResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+    pub async fn execute(
+        self,
+        body: CreateTicketMessageBody,
+    ) -> SDKResult<CreateTicketMessageResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行发送工单消息请求（支持自定义选项）
@@ -134,9 +134,9 @@ impl CreateTicketMessageRequestBuilder {
 
     /// 执行请求
     pub async fn execute(&self) -> SDKResult<CreateTicketMessageResponse> {
-        let body = self.body().map_err(|reason| {
-            openlark_core::error::validation_error("body", reason)
-        })?;
+        let body = self
+            .body()
+            .map_err(|reason| openlark_core::error::validation_error("body", reason))?;
         let request = CreateTicketMessageRequest::new(self.config.clone(), self.ticket_id.clone());
         request.execute(body).await
     }
@@ -199,7 +199,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = CreateTicketMessageRequestBuilder::new(Arc::new(config), "ticket_123".to_string());
+        let builder =
+            CreateTicketMessageRequestBuilder::new(Arc::new(config), "ticket_123".to_string());
 
         assert_eq!(builder.ticket_id, "ticket_123");
         assert!(builder.content.is_none());

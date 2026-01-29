@@ -40,9 +40,8 @@ impl EventUnsubscribeRequest {
 
     /// 执行取消订阅服务台事件请求
     pub async fn execute(self) -> SDKResult<EventUnsubscribeResponse> {
-        let request = ApiRequest::<EventUnsubscribeResponse>::post(
-            HelpdeskApiV1::EventUnsubscribe.to_url(),
-        );
+        let request =
+            ApiRequest::<EventUnsubscribeResponse>::post(HelpdeskApiV1::EventUnsubscribe.to_url());
 
         let response = Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "取消订阅服务台事件")
@@ -63,9 +62,8 @@ impl EventUnsubscribeRequestBuilder {
 
     /// 执行请求
     pub async fn execute(&self) -> SDKResult<EventUnsubscribeResponse> {
-        let request = ApiRequest::<EventUnsubscribeResponse>::post(
-            HelpdeskApiV1::EventUnsubscribe.to_url(),
-        );
+        let request =
+            ApiRequest::<EventUnsubscribeResponse>::post(HelpdeskApiV1::EventUnsubscribe.to_url());
 
         let response = Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "取消订阅服务台事件")
@@ -74,9 +72,8 @@ impl EventUnsubscribeRequestBuilder {
 
 /// 执行取消订阅服务台事件
 pub async fn unsubscribe_event(config: &Config) -> SDKResult<EventUnsubscribeResponse> {
-    let request = ApiRequest::<EventUnsubscribeResponse>::post(
-        HelpdeskApiV1::EventUnsubscribe.to_url(),
-    );
+    let request =
+        ApiRequest::<EventUnsubscribeResponse>::post(HelpdeskApiV1::EventUnsubscribe.to_url());
 
     let response = Transport::request(request, config, None).await?;
     extract_response_data(response, "取消订阅服务台事件")

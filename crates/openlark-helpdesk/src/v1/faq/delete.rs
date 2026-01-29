@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/delete
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -53,10 +49,7 @@ impl DeleteFaqRequest {
     }
 
     /// 执行删除知识库请求（支持自定义选项）
-    pub async fn execute_with_options(
-        self,
-        option: RequestOption,
-    ) -> SDKResult<DeleteFaqResponse> {
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<DeleteFaqResponse> {
         let req: ApiRequest<DeleteFaqResponse> =
             ApiRequest::delete(HelpdeskApiV1::FaqDelete(self.id.clone()).to_url());
 

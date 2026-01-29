@@ -22,10 +22,7 @@ pub struct QueryRequest {
 impl QueryRequest {
     /// 创建请求
     pub fn new(config: Config, user_ids: Vec<String>) -> Self {
-        Self {
-            user_ids,
-            config,
-        }
+        Self { user_ids, config }
     }
 
     /// 执行请求

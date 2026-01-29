@@ -73,10 +73,7 @@ impl RemoveDependenciesRequest {
     ) -> SDKResult<RemoveDependenciesResponse> {
         // 验证必填字段
         validate_required!(self.task_guid.trim(), "任务GUID不能为空");
-        validate_required!(
-            self.body.dependency_guids,
-            "依赖GUID列表不能为空"
-        );
+        validate_required!(self.body.dependency_guids, "依赖GUID列表不能为空");
 
         let api_endpoint = TaskApiV2::TaskRemoveDependencies(self.task_guid.clone());
         let mut request = ApiRequest::<RemoveDependenciesResponse>::post(api_endpoint.to_url());

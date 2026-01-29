@@ -43,9 +43,9 @@ impl QuerySessionRequest {
             ApiRequest::post("/open-apis/passport/v1/sessions/query");
 
         let response = Transport::request(req, &self.config, Some(option)).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("query_session", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("query_session", "响应数据为空"))
     }
 }
 

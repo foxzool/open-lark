@@ -136,7 +136,10 @@ impl Message {
     }
 
     /// 获取附件下载链接
-    pub fn attachment_download_url(&self, attachment_id: impl Into<String>) -> UserMailboxMessageAttachmentDownloadUrlRequest {
+    pub fn attachment_download_url(
+        &self,
+        attachment_id: impl Into<String>,
+    ) -> UserMailboxMessageAttachmentDownloadUrlRequest {
         UserMailboxMessageAttachmentDownloadUrlRequest::new(
             self.config.clone(),
             self.mailbox_id.clone(),
@@ -322,7 +325,11 @@ pub struct UserMailboxMessageAttachmentDownloadUrlRequest {
 }
 
 impl UserMailboxMessageAttachmentDownloadUrlRequest {
-    pub fn new(config: Arc<Config>, mailbox_id: impl Into<String>, attachment_id: impl Into<String>) -> Self {
+    pub fn new(
+        config: Arc<Config>,
+        mailbox_id: impl Into<String>,
+        attachment_id: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             mailbox_id: mailbox_id.into(),
@@ -339,8 +346,11 @@ impl UserMailboxMessageAttachmentDownloadUrlRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UserMailboxMessageAttachmentDownloadUrlResponse> {
-        let api_endpoint = MailApiV1::UserMailboxMessageAttachmentDownloadUrl(self.mailbox_id.clone());
-        let mut request = ApiRequest::<UserMailboxMessageAttachmentDownloadUrlResponse>::get(api_endpoint.to_url());
+        let api_endpoint =
+            MailApiV1::UserMailboxMessageAttachmentDownloadUrl(self.mailbox_id.clone());
+        let mut request = ApiRequest::<UserMailboxMessageAttachmentDownloadUrlResponse>::get(
+            api_endpoint.to_url(),
+        );
         request = request.query("attachment_id", &self.attachment_id);
 
         let response =

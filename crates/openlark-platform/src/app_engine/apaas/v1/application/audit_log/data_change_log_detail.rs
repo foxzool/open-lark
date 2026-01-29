@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -39,10 +38,9 @@ impl DataChangeLogDetailBuilder {
             self.namespace
         );
 
-        let transport = Transport::new(self.config);
-        transport
-            .get_with_query(url, vec![("log_id", Some(self.log_id))])
-            .await
+        let mut req: ApiRequest<DataChangeLogDetailResponse> = ApiRequest::get(&url);
+        req = req.query("log_id", &self.log_id);
+        Transport::request(req, &self.config, None).await
     }
 
     /// 使用选项执行请求
@@ -55,10 +53,9 @@ impl DataChangeLogDetailBuilder {
             self.namespace
         );
 
-        let transport = Transport::new(self.config);
-        transport
-            .get_with_query_and_option(url, vec![("log_id", Some(self.log_id))], option)
-            .await
+        let mut req: ApiRequest<DataChangeLogDetailResponse> = ApiRequest::get(&url);
+        req = req.query("log_id", &self.log_id);
+        Transport::request(req, &self.config, Some(option)).await
     }
 }
 

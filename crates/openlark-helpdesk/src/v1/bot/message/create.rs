@@ -75,7 +75,8 @@ impl CreateBotMessageRequest {
 
     /// 执行通过服务台机器人发送消息请求
     pub async fn execute(self, body: CreateBotMessageBody) -> SDKResult<CreateBotMessageResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行通过服务台机器人发送消息请求（支持自定义选项）
@@ -149,9 +150,9 @@ impl CreateBotMessageRequestBuilder {
 
     /// 执行请求
     pub async fn execute(&self) -> SDKResult<CreateBotMessageResponse> {
-        let body = self.body().map_err(|reason| {
-            openlark_core::error::validation_error("body", reason)
-        })?;
+        let body = self
+            .body()
+            .map_err(|reason| openlark_core::error::validation_error("body", reason))?;
         let request = CreateBotMessageRequest::new(self.config.clone());
         request.execute(body).await
     }

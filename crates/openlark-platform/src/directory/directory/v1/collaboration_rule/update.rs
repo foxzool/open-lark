@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -61,7 +60,8 @@ impl CollaborationRuleUpdateBuilder {
 
     /// 添加搜索可见范围部门 ID
     pub fn search_visible_scope_department_id(mut self, department_id: impl Into<String>) -> Self {
-        self.search_visible_scope_department_ids.push(department_id.into());
+        self.search_visible_scope_department_ids
+            .push(department_id.into());
         self
     }
 
@@ -72,15 +72,19 @@ impl CollaborationRuleUpdateBuilder {
             self.collaboration_rule_id
         );
 
-        let request = CollaborationRuleUpdateRequest {
-            name: self.name,
-            search_visible_scope_type: self.search_visible_scope_type,
-            search_visible_scope_user_ids: self.search_visible_scope_user_ids,
-            search_visible_scope_department_ids: self.search_visible_scope_department_ids,
-        };
+        use serde_json::json;
 
-        let transport = Transport::new(self.config);
-        transport.put(url, request).await
+        let request = json!({
+            "name": self.name,
+            "search_visible_scope_type": self.search_visible_scope_type,
+            "search_visible_scope_user_ids": self.search_visible_scope_user_ids,
+            "search_visible_scope_department_ids": self.search_visible_scope_department_ids,
+        });
+
+        let mut api_request = ApiRequest::<CollaborationRuleUpdateResponse>::put(&url);
+        api_request = api_request.body(request);
+
+        Transport::request(api_request, &self.config, None).await
     }
 
     /// 使用选项执行请求
@@ -93,33 +97,20 @@ impl CollaborationRuleUpdateBuilder {
             self.collaboration_rule_id
         );
 
-        let request = CollaborationRuleUpdateRequest {
-            name: self.name,
-            search_visible_scope_type: self.search_visible_scope_type,
-            search_visible_scope_user_ids: self.search_visible_scope_user_ids,
-            search_visible_scope_department_ids: self.search_visible_scope_department_ids,
-        };
+        use serde_json::json;
 
-        let transport = Transport::new(self.config);
-        transport.put_with_option(url, request, option).await
+        let request = json!({
+            "name": self.name,
+            "search_visible_scope_type": self.search_visible_scope_type,
+            "search_visible_scope_user_ids": self.search_visible_scope_user_ids,
+            "search_visible_scope_department_ids": self.search_visible_scope_department_ids,
+        });
+
+        let mut api_request = ApiRequest::<CollaborationRuleUpdateResponse>::put(&url);
+        api_request = api_request.body(request);
+
+        Transport::request(api_request, &self.config, Some(option)).await
     }
-}
-
-/// 更新可搜可见规则请求
-#[derive(Debug, Clone, Deserialize, Serialize)]
-struct CollaborationRuleUpdateRequest {
-    /// 规则名称
-    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
-    name: Option<String>,
-    /// 搜索可见范围类型
-    #[serde(rename = "search_visible_scope_type", skip_serializing_if = "Option::is_none")]
-    search_visible_scope_type: Option<String>,
-    /// 搜索可见范围用户列表
-    #[serde(rename = "search_visible_scope_user_ids", skip_serializing_if = "Vec::is_empty")]
-    search_visible_scope_user_ids: Vec<String>,
-    /// 搜索可见范围部门列表
-    #[serde(rename = "search_visible_scope_department_ids", skip_serializing_if = "Vec::is_empty")]
-    search_visible_scope_department_ids: Vec<String>,
 }
 
 /// 更新可搜可见规则响应

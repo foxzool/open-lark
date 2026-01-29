@@ -22,10 +22,7 @@ pub struct BatchCreateTempRequest {
 impl BatchCreateTempRequest {
     /// 创建请求
     pub fn new(config: Config, shifts: Vec<TempShift>) -> Self {
-        Self {
-            shifts,
-            config,
-        }
+        Self { shifts, config }
     }
 
     /// 执行请求

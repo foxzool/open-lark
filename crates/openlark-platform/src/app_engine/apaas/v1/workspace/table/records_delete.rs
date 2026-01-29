@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -26,7 +25,11 @@ pub struct TableRecordsDeleteBuilder {
 
 impl TableRecordsDeleteBuilder {
     /// 创建新的 Builder
-    pub fn new(config: Config, workspace_id: impl Into<String>, table_name: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        workspace_id: impl Into<String>,
+        table_name: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             workspace_id: workspace_id.into(),
@@ -43,7 +46,8 @@ impl TableRecordsDeleteBuilder {
 
     /// 添加多个记录 ID
     pub fn record_ids(mut self, record_ids: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        self.record_ids.extend(record_ids.into_iter().map(Into::into));
+        self.record_ids
+            .extend(record_ids.into_iter().map(Into::into));
         self
     }
 
@@ -54,36 +58,39 @@ impl TableRecordsDeleteBuilder {
             self.workspace_id, self.table_name
         );
 
-        let request = TableRecordsDeleteRequest {
-            record_ids: self.record_ids,
-        };
+        use serde_json::json;
 
-        let transport = Transport::new(self.config);
-        transport.delete(url, request).await
+        let request = json!({
+            "record_ids": self.record_ids,
+        });
+
+        let mut api_request = ApiRequest::<TableRecordsDeleteResponse>::delete(&url);
+        api_request = api_request.body(request);
+
+        Transport::request(api_request, &self.config, None).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<TableRecordsDeleteResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<TableRecordsDeleteResponse> {
         let url = format!(
             "/open-apis/apaas/v1/workspaces/{}/tables/{}/records",
             self.workspace_id, self.table_name
         );
 
-        let request = TableRecordsDeleteRequest {
-            record_ids: self.record_ids,
-        };
+        use serde_json::json;
 
-        let transport = Transport::new(self.config);
-        transport.delete_with_option(url, request, option).await
+        let request = json!({
+            "record_ids": self.record_ids,
+        });
+
+        let mut api_request = ApiRequest::<TableRecordsDeleteResponse>::delete(&url);
+        api_request = api_request.body(request);
+
+        Transport::request(api_request, &self.config, Some(option)).await
     }
-}
-
-/// 删除记录请求
-#[derive(Debug, Clone, Deserialize, Serialize)]
-struct TableRecordsDeleteRequest {
-    /// 记录 ID 列表
-    #[serde(rename = "record_ids")]
-    record_ids: Vec<String>,
 }
 
 /// 删除记录响应

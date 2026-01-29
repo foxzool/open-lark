@@ -13,8 +13,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
-
 /// OIDC 用户访问令牌请求
 pub struct OidcAccessTokenBuilder {
     code: String,
@@ -96,7 +94,10 @@ impl OidcAccessTokenBuilder {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<OidcAccessTokenResponseData> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<OidcAccessTokenResponseData> {
         // 验证必填字段
         validate_required!(self.code, "授权码不能为空");
 

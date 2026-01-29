@@ -38,18 +38,26 @@ impl RejectTaskBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<RejectTaskResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<RejectTaskResponse> {
         validate_required!(self.approval_task_id, "任务ID不能为空");
 
-        let url = format!("/open-apis/apaas/v1/approval_tasks/{}/reject", self.approval_task_id);
-        let request_body = RejectTaskRequest { reason: self.reason };
+        let url = format!(
+            "/open-apis/apaas/v1/approval_tasks/{}/reject",
+            self.approval_task_id
+        );
+        let request_body = RejectTaskRequest {
+            reason: self.reason,
+        };
         let api_request: ApiRequest<RejectTaskResponse> =
             ApiRequest::post(url).body(serde_json::to_value(&request_body)?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("拒绝人工任务", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("拒绝人工任务", "响应数据为空"))
     }
 }
 

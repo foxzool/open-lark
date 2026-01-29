@@ -73,10 +73,7 @@ impl RemoveTasklistMembersRequest {
     ) -> SDKResult<RemoveTasklistMembersResponse> {
         // 验证必填字段
         validate_required!(self.tasklist_guid.trim(), "任务清单GUID不能为空");
-        validate_required!(
-            self.body.members,
-            "成员列表不能为空"
-        );
+        validate_required!(self.body.members, "成员列表不能为空");
 
         let api_endpoint = TaskApiV2::TasklistRemoveMembers(self.tasklist_guid.clone());
         let mut request = ApiRequest::<RemoveTasklistMembersResponse>::post(api_endpoint.to_url());

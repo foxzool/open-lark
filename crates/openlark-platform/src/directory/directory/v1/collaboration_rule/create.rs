@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -52,23 +51,14 @@ impl CollaborationRuleCreateBuilder {
 
     /// 添加搜索可见范围部门 ID
     pub fn search_visible_scope_department_id(mut self, department_id: impl Into<String>) -> Self {
-        self.search_visible_scope_department_ids.push(department_id.into());
+        self.search_visible_scope_department_ids
+            .push(department_id.into());
         self
     }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CollaborationRuleCreateResponse> {
-        let url = "/open-apis/directory/v1/collaboration_rules".to_string();
-
-        let request = CollaborationRuleCreateRequest {
-            name: self.name,
-            search_visible_scope_type: self.search_visible_scope_type,
-            search_visible_scope_user_ids: self.search_visible_scope_user_ids,
-            search_visible_scope_department_ids: self.search_visible_scope_department_ids,
-        };
-
-        let transport = Transport::new(self.config);
-        transport.post(url, request, None::<&()>).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
@@ -85,8 +75,11 @@ impl CollaborationRuleCreateBuilder {
             search_visible_scope_department_ids: self.search_visible_scope_department_ids,
         };
 
-        let transport = Transport::new(self.config);
-        transport.post(url, request, Some(option)).await
+        let req: ApiRequest<CollaborationRuleCreateResponse> =
+            ApiRequest::post(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

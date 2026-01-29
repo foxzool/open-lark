@@ -22,10 +22,7 @@ pub struct BatchCreateRequest {
 impl BatchCreateRequest {
     /// 创建请求
     pub fn new(config: Config, shifts: Vec<UserDailyShift>) -> Self {
-        Self {
-            shifts,
-            config,
-        }
+        Self { shifts, config }
     }
 
     /// 执行请求

@@ -2,13 +2,13 @@
 //!
 //! 提供客服知识库相关的 API。
 
-pub mod list;
 pub mod create;
-pub mod get;
-pub mod patch;
 pub mod delete;
-pub mod search;
+pub mod get;
 pub mod image;
+pub mod list;
+pub mod patch;
+pub mod search;
 
 use openlark_core::config::Config;
 use std::sync::Arc;
@@ -56,15 +56,19 @@ impl Faq {
     }
 
     /// 获取知识库图片
-    pub fn image(&self, id: impl Into<String>, image_key: impl Into<String>) -> image::GetFaqImageRequest {
+    pub fn image(
+        &self,
+        id: impl Into<String>,
+        image_key: impl Into<String>,
+    ) -> image::GetFaqImageRequest {
         image::GetFaqImageRequest::new(self.config.clone(), id.into(), image_key.into())
     }
 }
 
-pub use list::{ListFaqRequest, ListFaqRequestBuilder};
 pub use create::{CreateFaqRequest, CreateFaqRequestBuilder};
-pub use get::{GetFaqRequest, GetFaqRequestBuilder};
-pub use patch::{PatchFaqRequest, PatchFaqRequestBuilder};
 pub use delete::{DeleteFaqRequest, DeleteFaqRequestBuilder};
-pub use search::{SearchFaqRequest, SearchFaqRequestBuilder};
+pub use get::{GetFaqRequest, GetFaqRequestBuilder};
 pub use image::{GetFaqImageRequest, GetFaqImageRequestBuilder};
+pub use list::{ListFaqRequest, ListFaqRequestBuilder};
+pub use patch::{PatchFaqRequest, PatchFaqRequestBuilder};
+pub use search::{SearchFaqRequest, SearchFaqRequestBuilder};

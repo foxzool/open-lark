@@ -4,8 +4,8 @@
 
 use crate::common::{api_endpoints::TaskApiV2, api_utils::*};
 use crate::v2::tasklist::activity_subscription::models::{
-    ActivitySubscriptionTargetType, ActivitySubscriptionType,
-    CreateActivitySubscriptionBody, CreateActivitySubscriptionResponse,
+    ActivitySubscriptionTargetType, ActivitySubscriptionType, CreateActivitySubscriptionBody,
+    CreateActivitySubscriptionResponse,
 };
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -73,7 +73,8 @@ impl CreateActivitySubscriptionRequest {
         validate_required!(self.tasklist_guid.trim(), "任务清单GUID不能为空");
 
         let api_endpoint = TaskApiV2::ActivitySubscriptionCreate(self.tasklist_guid.clone());
-        let mut request = ApiRequest::<CreateActivitySubscriptionResponse>::post(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<CreateActivitySubscriptionResponse>::post(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "创建动态订阅")?);
@@ -109,9 +110,18 @@ mod tests {
             .target_url("https://example.com/webhook");
 
         assert_eq!(request.tasklist_guid, "tasklist_123");
-        assert_eq!(request.body.subscription_type, ActivitySubscriptionType::TaskCreated);
-        assert_eq!(request.body.target_type, ActivitySubscriptionTargetType::Webhook);
-        assert_eq!(request.body.target_url, Some("https://example.com/webhook".to_string()));
+        assert_eq!(
+            request.body.subscription_type,
+            ActivitySubscriptionType::TaskCreated
+        );
+        assert_eq!(
+            request.body.target_type,
+            ActivitySubscriptionTargetType::Webhook
+        );
+        assert_eq!(
+            request.body.target_url,
+            Some("https://example.com/webhook".to_string())
+        );
     }
 
     #[test]

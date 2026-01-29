@@ -40,19 +40,27 @@ impl AddAssigneeBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<AddAssigneeResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<AddAssigneeResponse> {
         validate_required!(self.approval_task_id, "任务ID不能为空");
         validate_required!(!self.user_ids.is_empty(), "用户ID列表不能为空");
 
-        let request_body = AddAssigneeRequest { user_ids: self.user_ids };
-        let url = format!("/open-apis/apaas/v1/approval_tasks/{}/add_assignee", self.approval_task_id);
+        let request_body = AddAssigneeRequest {
+            user_ids: self.user_ids,
+        };
+        let url = format!(
+            "/open-apis/apaas/v1/approval_tasks/{}/add_assignee",
+            self.approval_task_id
+        );
         let api_request: ApiRequest<AddAssigneeResponse> =
             ApiRequest::post(url).body(serde_json::to_value(&request_body)?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("人工任务加签", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("人工任务加签", "响应数据为空"))
     }
 }
 

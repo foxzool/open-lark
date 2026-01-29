@@ -55,7 +55,11 @@ impl BatchGetRequest {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
         // 1. 验证必填字段
-        validate_required_list!(self.company_ids, 100, "公司 ID 列表不能为空且不能超过 100 个");
+        validate_required_list!(
+            self.company_ids,
+            100,
+            "公司 ID 列表不能为空且不能超过 100 个"
+        );
 
         // 2. 构建端点
         let api_endpoint = FeishuPeopleApiV1::CompanyBatchGet;

@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -30,7 +29,11 @@ pub struct ViewsGetBuilder {
 
 impl ViewsGetBuilder {
     /// 创建新的 Builder
-    pub fn new(config: Config, workspace_id: impl Into<String>, view_name: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        workspace_id: impl Into<String>,
+        view_name: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             workspace_id: workspace_id.into(),
@@ -66,17 +69,17 @@ impl ViewsGetBuilder {
             self.workspace_id, self.view_name
         );
 
-        let transport = Transport::new(self.config);
-        transport
-            .get_with_query(
-                url,
-                vec![
-                    ("page", self.page.map(|p| p.to_string())),
-                    ("page_size", self.page_size.map(|p| p.to_string())),
-                    ("filter", self.filter),
-                ],
-            )
-            .await
+        let mut req: ApiRequest<ViewsGetResponse> = ApiRequest::get(&url);
+        if let Some(page) = self.page {
+            req = req.query("page", &page.to_string());
+        }
+        if let Some(page_size) = self.page_size {
+            req = req.query("page_size", &page_size.to_string());
+        }
+        if let Some(filter) = self.filter {
+            req = req.query("filter", &filter);
+        }
+        Transport::request(req, &self.config, None).await
     }
 
     /// 使用选项执行请求
@@ -86,18 +89,17 @@ impl ViewsGetBuilder {
             self.workspace_id, self.view_name
         );
 
-        let transport = Transport::new(self.config);
-        transport
-            .get_with_query_and_option(
-                url,
-                vec![
-                    ("page", self.page.map(|p| p.to_string())),
-                    ("page_size", self.page_size.map(|p| p.to_string())),
-                    ("filter", self.filter),
-                ],
-                option,
-            )
-            .await
+        let mut req: ApiRequest<ViewsGetResponse> = ApiRequest::get(&url);
+        if let Some(page) = self.page {
+            req = req.query("page", &page.to_string());
+        }
+        if let Some(page_size) = self.page_size {
+            req = req.query("page_size", &page_size.to_string());
+        }
+        if let Some(filter) = self.filter {
+            req = req.query("filter", &filter);
+        }
+        Transport::request(req, &self.config, Some(option)).await
     }
 }
 

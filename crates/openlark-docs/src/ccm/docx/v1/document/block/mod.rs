@@ -26,13 +26,9 @@ pub use descendant::{
     CreateDocumentBlockDescendantResponse,
 };
 
-pub use get::{
-    GetDocumentBlockParams, GetDocumentBlockRequest, GetDocumentBlockResponse,
-};
+pub use get::{GetDocumentBlockParams, GetDocumentBlockRequest, GetDocumentBlockResponse};
 
-pub use list::{
-    GetDocumentBlocksParams, GetDocumentBlocksRequest, GetDocumentBlocksResponse,
-};
+pub use list::{GetDocumentBlocksParams, GetDocumentBlocksRequest, GetDocumentBlocksResponse};
 
 pub use patch::{
     UpdateDocumentBlockParams, UpdateDocumentBlockRequest, UpdateDocumentBlockResponse,

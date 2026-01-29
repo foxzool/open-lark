@@ -111,7 +111,11 @@ mod tests {
 
     #[test]
     fn test_list_task_comment_v1_url() {
-        let endpoint = crate::common::api_endpoints::TaskApiV1::TaskCommentList("task_123".to_string());
-        assert_eq!(endpoint.to_url(), "/open-apis/task/v1/tasks/task_123/comments");
+        let endpoint =
+            crate::common::api_endpoints::TaskApiV1::TaskCommentList("task_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/task/v1/tasks/task_123/comments"
+        );
     }
 }

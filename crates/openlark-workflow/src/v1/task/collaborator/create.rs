@@ -60,10 +60,10 @@ impl CreateTaskCollaboratorRequestV1 {
     ) -> SDKResult<CreateTaskCollaboratorResponseV1> {
         validate_required!(self.body.collaborator_id.trim(), "协作者用户 ID 不能为空");
 
-        let api_endpoint = crate::common::api_endpoints::TaskApiV1::TaskCollaboratorCreate(
-            self.task_id.clone(),
-        );
-        let mut request = ApiRequest::<CreateTaskCollaboratorResponseV1>::post(api_endpoint.to_url());
+        let api_endpoint =
+            crate::common::api_endpoints::TaskApiV1::TaskCollaboratorCreate(self.task_id.clone());
+        let mut request =
+            ApiRequest::<CreateTaskCollaboratorResponseV1>::post(api_endpoint.to_url());
 
         let body_json = serde_json::to_value(&self.body).map_err(|e| {
             openlark_core::error::validation_error("序列化请求体失败", e.to_string().as_str())
@@ -107,7 +107,11 @@ mod tests {
 
     #[test]
     fn test_task_collaborator_create_v1_url() {
-        let endpoint = crate::common::api_endpoints::TaskApiV1::TaskCollaboratorCreate("task_123".to_string());
-        assert_eq!(endpoint.to_url(), "/open-apis/task/v1/tasks/task_123/collaborators");
+        let endpoint =
+            crate::common::api_endpoints::TaskApiV1::TaskCollaboratorCreate("task_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/task/v1/tasks/task_123/collaborators"
+        );
     }
 }

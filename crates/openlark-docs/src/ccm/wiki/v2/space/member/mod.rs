@@ -6,8 +6,14 @@ pub mod delete;
 pub mod list;
 
 // 显式导出 - 避免使用 glob reexport
-pub use create::{CreateWikiSpaceMemberRequest, CreateWikiSpaceMemberResponse, CreateWikiSpaceMemberParams};
+pub use create::{
+    CreateWikiSpaceMemberParams, CreateWikiSpaceMemberRequest, CreateWikiSpaceMemberResponse,
+};
 
-pub use delete::{DeleteWikiSpaceMemberRequest, DeleteWikiSpaceMemberResponse, DeleteWikiSpaceMemberParams};
+pub use delete::{
+    DeleteWikiSpaceMemberParams, DeleteWikiSpaceMemberRequest, DeleteWikiSpaceMemberResponse,
+};
 
-pub use list::{ListWikiSpaceMembersRequest, ListWikiSpaceMembersResponse, ListWikiSpaceMembersParams};
+pub use list::{
+    ListWikiSpaceMembersParams, ListWikiSpaceMembersRequest, ListWikiSpaceMembersResponse,
+};

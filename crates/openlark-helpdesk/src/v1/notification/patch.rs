@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/patch
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -78,12 +74,19 @@ pub struct PatchNotificationRequest {
 impl PatchNotificationRequest {
     /// 创建新的更新推送通知请求
     pub fn new(config: Arc<Config>, notification_id: String) -> Self {
-        Self { config, notification_id }
+        Self {
+            config,
+            notification_id,
+        }
     }
 
     /// 执行更新推送通知请求
-    pub async fn execute(self, body: PatchNotificationBody) -> SDKResult<PatchNotificationResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+    pub async fn execute(
+        self,
+        body: PatchNotificationBody,
+    ) -> SDKResult<PatchNotificationResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行更新推送通知请求（支持自定义选项）
@@ -95,9 +98,10 @@ impl PatchNotificationRequest {
         body.validate()
             .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
 
-        let req: ApiRequest<PatchNotificationResponse> =
-            ApiRequest::patch(HelpdeskApiV1::NotificationPatch(self.notification_id.clone()).to_url())
-                .body(serialize_params(&body, "更新推送通知")?);
+        let req: ApiRequest<PatchNotificationResponse> = ApiRequest::patch(
+            HelpdeskApiV1::NotificationPatch(self.notification_id.clone()).to_url(),
+        )
+        .body(serialize_params(&body, "更新推送通知")?);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "更新推送通知")
@@ -147,7 +151,8 @@ impl PatchNotificationRequestBuilder {
     /// 执行请求
     pub async fn execute(&self) -> SDKResult<PatchNotificationResponse> {
         let body = self.body();
-        let request = PatchNotificationRequest::new(self.config.clone(), self.notification_id.clone());
+        let request =
+            PatchNotificationRequest::new(self.config.clone(), self.notification_id.clone());
         request.execute(body).await
     }
 
@@ -157,7 +162,8 @@ impl PatchNotificationRequestBuilder {
         option: RequestOption,
     ) -> SDKResult<PatchNotificationResponse> {
         let body = self.body();
-        let request = PatchNotificationRequest::new(self.config.clone(), self.notification_id.clone());
+        let request =
+            PatchNotificationRequest::new(self.config.clone(), self.notification_id.clone());
         request.execute_with_options(body, option).await
     }
 }
@@ -226,7 +232,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = PatchNotificationRequestBuilder::new(Arc::new(config), "notif_123".to_string());
+        let builder =
+            PatchNotificationRequestBuilder::new(Arc::new(config), "notif_123".to_string());
 
         assert_eq!(builder.notification_id, "notif_123");
         assert!(builder.title.is_none());

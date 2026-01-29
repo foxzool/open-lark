@@ -92,7 +92,8 @@ impl CreateCustomFieldOptionRequest {
         validate_required!(self.body.name.trim(), "选项名称不能为空");
 
         let api_endpoint = TaskApiV2::CustomFieldOptionCreate(self.custom_field_guid.clone());
-        let mut request = ApiRequest::<CreateCustomFieldOptionResponse>::post(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<CreateCustomFieldOptionResponse>::post(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "创建自定义字段选项")?);

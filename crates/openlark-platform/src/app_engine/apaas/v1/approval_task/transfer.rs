@@ -57,8 +57,7 @@ impl TransferApprovalTaskBuilder {
             reason: self.reason,
         };
 
-        let transport = Transport::new(self.config);
-        transport.post(url, request, None::<&()>).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
@@ -76,8 +75,9 @@ impl TransferApprovalTaskBuilder {
             reason: self.reason,
         };
 
-        let transport = Transport::new(self.config);
-        transport.post(url, request, Some(option)).await
+        let req = ApiRequest::post(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data.ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

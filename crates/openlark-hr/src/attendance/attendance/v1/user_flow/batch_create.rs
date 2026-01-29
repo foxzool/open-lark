@@ -55,7 +55,11 @@ impl BatchCreateUserFlowRequest {
         use crate::common::api_endpoints::AttendanceApiV1;
 
         // 1. 验证必填字段
-        validate_required_list!(self.flow_records, 100, "打卡流水记录列表不能为空且不能超过 100 个");
+        validate_required_list!(
+            self.flow_records,
+            100,
+            "打卡流水记录列表不能为空且不能超过 100 个"
+        );
         for (idx, record) in self.flow_records.iter().enumerate() {
             validate_required!(
                 record.user_id.trim(),

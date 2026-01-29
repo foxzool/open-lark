@@ -13,8 +13,8 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 use crate::ccm::wiki::v2::models::WikiSpaceMember;
+use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 添加知识空间成员请求
 pub struct CreateWikiSpaceMemberRequest {

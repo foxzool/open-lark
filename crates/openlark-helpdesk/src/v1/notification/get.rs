@@ -59,7 +59,10 @@ pub struct GetNotificationRequest {
 impl GetNotificationRequest {
     /// 创建新的获取指定推送通知请求
     pub fn new(config: Arc<Config>, notification_id: String) -> Self {
-        Self { config, notification_id }
+        Self {
+            config,
+            notification_id,
+        }
     }
 
     /// 执行获取指定推送通知请求
@@ -82,7 +85,10 @@ pub struct GetNotificationRequestBuilder {
 impl GetNotificationRequestBuilder {
     /// 创建新的构建器
     pub fn new(config: Arc<Config>, notification_id: String) -> Self {
-        Self { config, notification_id }
+        Self {
+            config,
+            notification_id,
+        }
     }
 
     /// 执行请求

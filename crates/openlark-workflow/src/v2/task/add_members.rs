@@ -84,10 +84,7 @@ impl AddMembersRequest {
     ) -> SDKResult<AddMembersResponse> {
         // 验证必填字段
         validate_required!(self.task_guid.trim(), "任务GUID不能为空");
-        validate_required!(
-            self.body.members,
-            "成员列表不能为空"
-        );
+        validate_required!(self.body.members, "成员列表不能为空");
 
         let api_endpoint = TaskApiV2::TaskAddMembers(self.task_guid.clone());
         let mut request = ApiRequest::<AddMembersResponse>::post(api_endpoint.to_url());

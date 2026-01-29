@@ -22,10 +22,7 @@ pub struct QueryUserAllowedRemedysRequest {
 impl QueryUserAllowedRemedysRequest {
     /// 创建请求
     pub fn new(config: Config, user_id: String) -> Self {
-        Self {
-            user_id,
-            config,
-        }
+        Self { user_id, config }
     }
 
     /// 执行请求

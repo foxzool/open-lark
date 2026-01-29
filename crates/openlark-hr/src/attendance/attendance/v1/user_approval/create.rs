@@ -29,7 +29,13 @@ pub struct CreateRequest {
 
 impl CreateRequest {
     /// 创建请求
-    pub fn new(config: Config, user_id: String, approval_type: i32, result: i32, approval_time: i64) -> Self {
+    pub fn new(
+        config: Config,
+        user_id: String,
+        approval_type: i32,
+        result: i32,
+        approval_time: i64,
+    ) -> Self {
         Self {
             user_id,
             approval_type,

@@ -5,17 +5,13 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-function/agent/patch
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
-use crate::common::api_utils::{extract_response_data, serialize_params};
 use crate::common::api_endpoints::HelpdeskApiV1;
+use crate::common::api_utils::{extract_response_data, serialize_params};
 
 /// 更新客服信息请求体
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -72,7 +68,8 @@ impl PatchAgentRequest {
 
     /// 执行更新客服信息请求
     pub async fn execute(self, body: PatchAgentBody) -> SDKResult<PatchAgentResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行更新客服信息请求（支持自定义选项）

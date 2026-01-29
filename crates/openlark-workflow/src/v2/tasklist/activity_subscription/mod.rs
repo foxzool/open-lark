@@ -34,10 +34,7 @@ impl ActivitySubscriptionResource {
     }
 
     /// 获取动态订阅
-    pub fn get(
-        &self,
-        subscription_guid: impl Into<String>,
-    ) -> get::GetActivitySubscriptionRequest {
+    pub fn get(&self, subscription_guid: impl Into<String>) -> get::GetActivitySubscriptionRequest {
         get::GetActivitySubscriptionRequest::new(
             self.config.clone(),
             self.tasklist_guid.clone(),

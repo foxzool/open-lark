@@ -118,7 +118,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = ListTicketMessageRequestBuilder::new(Arc::new(config), "ticket_123".to_string());
+        let builder =
+            ListTicketMessageRequestBuilder::new(Arc::new(config), "ticket_123".to_string());
 
         assert_eq!(builder.ticket_id, "ticket_123");
     }

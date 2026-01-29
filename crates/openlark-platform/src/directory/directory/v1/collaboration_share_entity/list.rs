@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -23,7 +22,10 @@ pub struct CollaborationShareEntityListBuilder {
 impl CollaborationShareEntityListBuilder {
     /// 创建新的 Builder
     pub fn new(config: Config) -> Self {
-        Self { config, tenant_id: None }
+        Self {
+            config,
+            tenant_id: None,
+        }
     }
 
     /// 设置租户 ID
@@ -34,12 +36,7 @@ impl CollaborationShareEntityListBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CollaborationShareEntityListResponse> {
-        let url = "/open-apis/directory/v1/share_entities".to_string();
-
-        let transport = Transport::new(self.config);
-        transport
-            .get_with_query(url, vec![("tenant_id", self.tenant_id)])
-            .await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
@@ -49,10 +46,11 @@ impl CollaborationShareEntityListBuilder {
     ) -> SDKResult<CollaborationShareEntityListResponse> {
         let url = "/open-apis/directory/v1/share_entities".to_string();
 
-        let transport = Transport::new(self.config);
-        transport
-            .get_with_query_and_option(url, vec![("tenant_id", self.tenant_id)], option)
-            .await
+        let req: ApiRequest<CollaborationShareEntityListResponse> =
+            ApiRequest::get(&url).query("tenant_id", &self.tenant_id);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("获取共享成员", "响应数据为空"))
     }
 }
 

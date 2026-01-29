@@ -2,11 +2,11 @@
 //!
 //! 提供客服知识库分类相关的 API。
 
-pub mod list;
 pub mod create;
-pub mod get;
-pub mod patch;
 pub mod delete;
+pub mod get;
+pub mod list;
+pub mod patch;
 
 use openlark_core::config::Config;
 use std::sync::Arc;
@@ -49,8 +49,8 @@ impl Category {
     }
 }
 
-pub use list::{ListCategoryRequest, ListCategoryRequestBuilder};
 pub use create::{CreateCategoryRequest, CreateCategoryRequestBuilder};
-pub use get::{GetCategoryRequest, GetCategoryRequestBuilder};
-pub use patch::{PatchCategoryRequest, PatchCategoryRequestBuilder};
 pub use delete::{DeleteCategoryRequest, DeleteCategoryRequestBuilder};
+pub use get::{GetCategoryRequest, GetCategoryRequestBuilder};
+pub use list::{ListCategoryRequest, ListCategoryRequestBuilder};
+pub use patch::{PatchCategoryRequest, PatchCategoryRequestBuilder};

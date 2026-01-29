@@ -105,7 +105,11 @@ mod tests {
 
     #[test]
     fn test_list_task_follower_v1_url() {
-        let endpoint = crate::common::api_endpoints::TaskApiV1::TaskFollowerList("task_123".to_string());
-        assert_eq!(endpoint.to_url(), "/open-apis/task/v1/tasks/task_123/followers");
+        let endpoint =
+            crate::common::api_endpoints::TaskApiV1::TaskFollowerList("task_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/task/v1/tasks/task_123/followers"
+        );
     }
 }

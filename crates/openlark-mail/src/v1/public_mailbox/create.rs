@@ -96,6 +96,9 @@ mod tests {
             .description("技术支持公共邮箱");
 
         assert_eq!(request.body.name, "support@example.com");
-        assert_eq!(request.body.description, Some("技术支持公共邮箱".to_string()));
+        assert_eq!(
+            request.body.description,
+            Some("技术支持公共邮箱".to_string())
+        );
     }
 }

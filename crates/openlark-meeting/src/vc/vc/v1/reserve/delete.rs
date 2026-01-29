@@ -60,7 +60,10 @@ impl DeleteReserveRequest {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<DeleteReserveResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<DeleteReserveResponse> {
         validate_required_field("reserve_id", Some(&self.reserve_id), "预约 ID 不能为空")?;
 
         let api_endpoint = VcApiV1::ReserveDelete(self.reserve_id.clone());

@@ -52,7 +52,9 @@ impl PatchRequest {
         let request = ApiRequest::<PatchResponse>::patch(api_endpoint.to_url());
 
         // 2. 序列化请求体
-        let request_body = PatchRequestBody { status: self.status };
+        let request_body = PatchRequestBody {
+            status: self.status,
+        };
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",

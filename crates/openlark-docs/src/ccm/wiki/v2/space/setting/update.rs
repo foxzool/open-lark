@@ -13,8 +13,8 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 use crate::ccm::wiki::v2::models::WikiSpaceSetting;
+use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 更新知识空间设置请求
 pub struct UpdateWikiSpaceSettingRequest {

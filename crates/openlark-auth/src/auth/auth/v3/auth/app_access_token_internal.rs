@@ -11,8 +11,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
-
 /// 自建应用获取 app_access_token 请求
 pub struct AppAccessTokenInternalBuilder {
     app_id: String,
@@ -62,7 +60,10 @@ impl AppAccessTokenInternalBuilder {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<AppAccessTokenInternalResponseData> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<AppAccessTokenInternalResponseData> {
         // 验证必填字段
         validate_required!(self.app_id, "应用ID不能为空");
         validate_required!(self.app_secret, "应用密钥不能为空");

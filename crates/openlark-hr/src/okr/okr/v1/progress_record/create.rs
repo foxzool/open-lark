@@ -20,8 +20,7 @@ pub struct CreateRequest {
     /// 进展百分比（必填，0-100）
     progress_rate: i32,
     /// 进展说明（可选）
-    description: Option<String>
-,
+    description: Option<String>,
     /// 附件列表（可选）
     attachments: Option<Vec<ProgressAttachment>>,
     /// 配置信息

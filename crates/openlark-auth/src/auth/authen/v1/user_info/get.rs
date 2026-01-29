@@ -13,8 +13,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
-
 /// 获取用户信息请求
 pub struct UserInfoBuilder {
     user_access_token: String,
@@ -64,7 +62,10 @@ impl UserInfoBuilder {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<UserInfoResponseData> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<UserInfoResponseData> {
         // 验证必填字段
         validate_required!(self.user_access_token, "用户访问令牌不能为空");
 
@@ -91,9 +92,9 @@ impl UserInfoBuilder {
 
         // 发送请求
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("获取用户信息", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("获取用户信息", "响应数据为空"))
     }
 }
 

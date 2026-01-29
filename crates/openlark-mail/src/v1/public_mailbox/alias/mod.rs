@@ -45,6 +45,6 @@ pub use create::CreatePublicMailboxAliasRequest;
 pub use delete::DeletePublicMailboxAliasRequest;
 pub use list::PublicMailboxAliasListRequest;
 pub use models::{
-    CreatePublicMailboxAliasBody, CreatePublicMailboxAliasResponse, DeletePublicMailboxAliasResponse,
-    PublicMailboxAliasItem, PublicMailboxAliasListResponse,
+    CreatePublicMailboxAliasBody, CreatePublicMailboxAliasResponse,
+    DeletePublicMailboxAliasResponse, PublicMailboxAliasItem, PublicMailboxAliasListResponse,
 };

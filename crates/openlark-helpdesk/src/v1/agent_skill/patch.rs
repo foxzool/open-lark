@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-function/agent_skill/patch
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -79,12 +75,16 @@ pub struct PatchAgentSkillRequest {
 impl PatchAgentSkillRequest {
     /// 创建新的更新客服技能请求
     pub fn new(config: Arc<Config>, agent_skill_id: String) -> Self {
-        Self { config, agent_skill_id }
+        Self {
+            config,
+            agent_skill_id,
+        }
     }
 
     /// 执行更新客服技能请求
     pub async fn execute(self, body: PatchAgentSkillBody) -> SDKResult<PatchAgentSkillResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行更新客服技能请求（支持自定义选项）
