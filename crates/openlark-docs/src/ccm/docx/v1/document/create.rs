@@ -105,17 +105,4 @@ impl CreateDocumentRequest {
     }
 }
 
-/// 创建文档请求参数（兼容旧 API，已弃用）
-#[deprecated(
-    since = "0.16.0",
-    note = "请使用 CreateDocumentRequest 的流式 Builder 模式"
-)]
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct CreateDocumentParams {
-    /// 文档标题（可选）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub title: Option<String>,
-    /// 文件夹 token（可选）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub folder_token: Option<String>,
-}
+

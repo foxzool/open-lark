@@ -24,7 +24,7 @@ pub use convert::{
 };
 
 pub use create::{
-    CreateDocumentParams, CreateDocumentRequest, CreateDocumentResponse, CreatedDocument,
+    CreateDocumentRequest, CreateDocumentResponse, CreatedDocument,
 };
 
 pub use get::{

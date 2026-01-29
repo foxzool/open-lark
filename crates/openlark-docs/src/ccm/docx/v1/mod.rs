@@ -20,7 +20,7 @@ pub use document::{
     CreateDocumentBlockChildrenParams, CreateDocumentBlockChildrenRequest,
     CreateDocumentBlockChildrenResponse, CreateDocumentBlockDescendantParams,
     CreateDocumentBlockDescendantRequest, CreateDocumentBlockDescendantResponse, BlockIdRelation,
-    CreateDocumentParams, CreateDocumentRequest, CreateDocumentResponse, CreatedDocument,
+    CreateDocumentRequest, CreateDocumentResponse, CreatedDocument,
     Document, DocumentCover, DocumentDisplaySetting,
     GetDocumentBlockChildrenParams, GetDocumentBlockChildrenRequest,
     GetDocumentBlockChildrenResponse, GetDocumentBlockParams, GetDocumentBlockRequest,
