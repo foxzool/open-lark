@@ -107,6 +107,59 @@ pub mod prelude;
 // 重新导出主要类型
 pub use common::chain::DocsClient;
 
+// === 入口设计说明 ===
+//
+// openlark-docs 采用三层入口设计，提供清晰的调用层次和最佳实践：
+//
+// 1. **DocsClient** (公开入口，推荐用户使用)
+//    - 唯一推荐的公开入口
+//    - 提供链式调用体验：`docs.ccm.drive.v1().file()...`
+//    - 按业务域分组：`docs.ccm`, `docs.base`, `docs.baike`, `docs.minutes`
+//    - 自动根据 feature 裁剪编译
+//
+// 2. **\*Client** (内部类型，SDK 内部使用)
+//    - `CcmClient`, `BaseClient`, `BaikeClient`, `MinutesClient` 等
+//    - 各业务域的二级入口
+//    - 提供子服务访问（如 `ccm.drive`, `ccm.sheets`）
+//    - **不推荐外部直接使用**，如需访问请通过 `DocsClient` 间接访问
+//
+// 3. **\*Service** (内部类型，SDK 内部使用)
+//    - `DriveService`, `BitableService`, `DocsService` 等
+//    - 具体的服务实现
+//    - 提供底层的 API 调用能力
+//    - **不推荐外部直接使用**，如有需要可通过完整路径访问
+//
+// === 示例代码 ===
+//
+// ✅ 推荐：使用 DocsClient 链式调用
+// ```rust
+// use openlark_docs::DocsClient;
+//
+// let docs = DocsClient::new(config);
+//
+// // 访问云盘服务
+// let file = docs.ccm.drive.v1().file().upload(...).execute().await?;
+//
+// // 访问多维表格
+// let table = docs.base.bitable().table().create(...).execute().await?;
+//
+// // 访问知识库
+// let node = docs.ccm.wiki.v2().node().create(...).execute().await?;
+// ```
+//
+// ❌ 不推荐：直接访问内部类型
+// ```rust
+// // 不要这样做：
+// // use openlark_docs::common::chain::CcmClient;
+// // let ccm = CcmClient::new(config);  // 内部类型，不应直接使用
+//
+// // 如需访问具体服务，使用完整路径：
+// use openlark_docs::ccm::drive::DriveService;
+// let drive = DriveService::new(config);  // 可访问，但不推荐
+// ```
+//
+// === 导出说明 ===
+//
 // 已移除中间 Service 的 public 导出，统一使用 DocsClient 作为唯一入口
 // 移除的导出：
 // - CcmService（通过 docs.ccm 访问）
