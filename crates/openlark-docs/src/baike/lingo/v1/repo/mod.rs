@@ -3,11 +3,9 @@
 /// 提供词库的查询功能。
 use openlark_core::config::Config;
 
-// 导出具体的API实现
 pub mod list;
 
-// 使用通配符导出所有子模块
-pub use list::*;
+pub use list::{ListRepoRequest, ListRepoResp};
 
 /// 词库管理服务
 #[derive(Debug, Clone)]

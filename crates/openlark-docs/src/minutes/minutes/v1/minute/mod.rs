@@ -5,9 +5,8 @@ pub mod models;
 pub mod statistics;
 pub mod transcript;
 
-// 使用通配符导出所有子模块
-pub use get::*;
-pub use media::*;
-pub use models::*;
-pub use statistics::*;
-pub use transcript::*;
+pub use get::{GetMinuteRequest, GetMinuteResponse, MinuteInfo};
+pub use media::{GetMinuteMediaRequest, GetMinuteMediaResponse};
+pub use models::{MinuteInfo as ModelMinuteInfo, MinuteMediaInfo, MinuteStatistics, UserIdType, UserViewDetail};
+pub use statistics::{GetMinuteStatisticsRequest, GetMinuteStatisticsResponse, MinuteStatistics as StatMinuteStatistics, UserViewDetail as StatUserViewDetail};
+pub use transcript::GetMinuteTranscriptRequest;

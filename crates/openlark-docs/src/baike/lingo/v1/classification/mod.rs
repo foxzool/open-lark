@@ -3,11 +3,9 @@
 /// 提供词典分类的查询功能。
 use openlark_core::config::Config;
 
-// 导出具体的API实现
 pub mod list;
 
-// 使用通配符导出所有子模块
-pub use list::*;
+pub use list::{ListClassificationRequest, ListClassificationResp};
 
 /// 词典分类服务
 #[derive(Debug, Clone)]

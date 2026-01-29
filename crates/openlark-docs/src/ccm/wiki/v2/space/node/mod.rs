@@ -1,3 +1,7 @@
+/// Wiki V2 空间节点管理模块
+///
+/// 提供知识空间节点的创建、列表、移动、复制、标题更新等操作。
+
 pub mod copy;
 pub mod create;
 pub mod list;
@@ -5,11 +9,16 @@ pub mod r#move;
 pub mod move_docs_to_wiki;
 pub mod update_title;
 
-// 使用通配符导出所有子模块
-pub use copy::*;
-pub use create::*;
-pub use list::*;
+// 显式导出 - 避免使用 glob reexport
+pub use copy::{CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse};
+
+pub use create::{CreateWikiSpaceNodeRequest, CreateWikiSpaceNodeResponse};
+
+pub use list::{ListWikiSpaceNodesRequest, ListWikiSpaceNodesResponse};
+
 #[allow(deprecated)]
-pub use move_docs_to_wiki::*;
-pub use r#move::*;
-pub use update_title::*;
+pub use move_docs_to_wiki::{MoveDocsToWikiRequest, MoveDocsToWikiResponse};
+
+pub use r#move::{MoveWikiSpaceNodeRequest, MoveWikiSpaceNodeResponse};
+
+pub use update_title::{UpdateWikiSpaceNodeTitleRequest, UpdateWikiSpaceNodeTitleResponse};

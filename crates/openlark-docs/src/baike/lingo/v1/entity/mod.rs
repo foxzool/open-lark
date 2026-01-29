@@ -9,15 +9,14 @@ pub mod r#match;
 pub mod search;
 pub mod update;
 
-// 使用通配符导出所有子模块
-pub use create::*;
-pub use delete::*;
-pub use get::*;
-pub use highlight::*;
-pub use list::*;
-pub use r#match::*;
-pub use search::*;
-pub use update::*;
+pub use create::{CreateEntityRequest, CreateEntityResp};
+pub use delete::{DeleteEntityRequest, DeleteEntityResp};
+pub use get::{GetEntityRequest, GetEntityResp};
+pub use highlight::{HighlightEntityBody, HighlightEntityRequest, HighlightEntityResp, Phrase, Span};
+pub use list::{ListEntityRequest, ListEntityResp};
+pub use r#match::{MatchEntityBody, MatchEntityRequest, MatchEntityResp, MatchInfo, TermType};
+pub use search::{ClassificationFilter, SearchEntityBody, SearchEntityRequest, SearchEntityResp};
+pub use update::{UpdateEntityRequest, UpdateEntityResp};
 
 /// Lingo词条管理服务
 #[derive(Debug, Clone)]

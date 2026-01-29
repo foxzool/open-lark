@@ -7,10 +7,17 @@ pub mod permission;
 pub mod v1;
 pub mod v2;
 
-// 使用通配符导出所有子模块,避免维护大量重复的导出列表
-pub use permission::*;
-pub use v1::*;
-pub use v2::*;
+pub use permission::models;
+
+pub use v1::export_task;
+pub use v1::file;
+pub use v1::import_task;
+pub use v1::media;
+pub use v1::meta;
+pub use v1::permission as v1_permission;
+
+pub use v2::file as drive_v2_file;
+pub use v2::permission as v2_permission;
 
 /// Drive 服务
 #[derive(Debug, Clone)]
