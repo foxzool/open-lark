@@ -1,1 +1,3 @@
-pub mod board_impl;
+pub mod board;
+
+pub use board::*;
