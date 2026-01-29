@@ -5,6 +5,7 @@ pub mod delete;
 pub mod get;
 pub mod list;
 pub mod models;
+pub mod patch;
 pub mod remove_members;
 pub mod tasks;
 pub mod update;
@@ -79,9 +80,9 @@ pub use create::CreateTasklistRequest;
 pub use delete::DeleteTasklistRequest;
 pub use get::GetTasklistRequest;
 pub use list::ListTasklistsRequest;
+pub use patch::UpdateTasklistRequest;
 pub use remove_members::RemoveTasklistMembersRequest;
 pub use tasks::GetTasklistTasksRequest;
-pub use update::UpdateTasklistRequest;
 
 // 重新导出响应类型
 pub use add_members::{AddTasklistMembersBody, AddTasklistMembersResponse, TasklistMember};

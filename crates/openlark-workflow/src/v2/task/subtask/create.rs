@@ -3,7 +3,6 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/task-v2/task-subtask/create
 
 use crate::common::{api_endpoints::TaskApiV2, api_utils::*};
-use crate::v2::task::models::TaskItem;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

@@ -20,12 +20,15 @@ tracing = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
 
 [features]
-default = ["v1", "v2", "async"]
+default = ["v1", "v2", "async", "board"]
 async = ["tokio"]
 
 # 任务 API 版本
 v1 = []
 v2 = []
 
+# 看板模块
+board = []
+
 # 完整功能集
-full = ["v1", "v2", "async"]
+full = ["v1", "v2", "async", "board"]

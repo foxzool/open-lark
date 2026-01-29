@@ -50,6 +50,10 @@ pub mod v1;
 #[cfg(feature = "v2")]
 pub mod v2;
 
+// 看板模块
+#[cfg(feature = "board")]
+pub mod board;
+
 // Prelude 模块
 pub mod prelude;
 

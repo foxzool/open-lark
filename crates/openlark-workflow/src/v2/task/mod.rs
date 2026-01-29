@@ -8,6 +8,7 @@ pub mod delete;
 pub mod get;
 pub mod list;
 pub mod models;
+pub mod patch;
 pub mod remove_dependencies;
 pub mod remove_members;
 pub mod remove_reminders;
@@ -120,13 +121,13 @@ pub use create::CreateTaskRequest;
 pub use delete::DeleteTaskRequest;
 pub use get::GetTaskRequest;
 pub use list::ListTasksRequest;
+pub use patch::UpdateTaskRequest;
 pub use remove_dependencies::RemoveDependenciesRequest;
 pub use remove_members::RemoveMembersRequest;
 pub use remove_reminders::RemoveRemindersRequest;
 pub use remove_tasklist::RemoveTasklistRequest;
 pub use tasklists::GetTaskTasklistsRequest;
 pub use uncomplete::UncompleteTaskRequest;
-pub use update::UpdateTaskRequest;
 
 // 重新导出响应类型
 pub use add_dependencies::{AddDependenciesResponse, TaskDependency};

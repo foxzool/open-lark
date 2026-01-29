@@ -10,17 +10,29 @@ pub mod patch;
 pub mod reminder;
 pub mod uncomplete;
 
-pub use comment::*;
-pub use collaborator::*;
-pub use complete::*;
-pub use create::*;
-pub use delete::*;
-pub use follower::*;
-pub use get::*;
-pub use list::*;
-pub use patch::*;
-pub use reminder::*;
-pub use uncomplete::*;
+// 显式导出 Request 类型，避免 ambiguous glob re-exports
+pub use comment::{
+    CreateTaskCommentRequestV1, DeleteTaskCommentRequestV1, GetTaskCommentRequestV1,
+    ListTaskCommentRequestV1, UpdateTaskCommentRequestV1,
+};
+pub use collaborator::{
+    BatchDeleteTaskCollaboratorRequestV1, CreateTaskCollaboratorRequestV1,
+    DeleteTaskCollaboratorRequestV1, ListTaskCollaboratorRequestV1,
+};
+pub use complete::CompleteTaskRequestV1;
+pub use create::CreateTaskRequestV1;
+pub use delete::DeleteTaskRequestV1;
+pub use follower::{
+    BatchDeleteTaskFollowerRequestV1, CreateTaskFollowerRequestV1, DeleteTaskFollowerRequestV1,
+    ListTaskFollowerRequestV1,
+};
+pub use get::GetTaskRequestV1;
+pub use list::ListTaskRequestV1;
+pub use patch::UpdateTaskRequestV1;
+pub use reminder::{
+    CreateTaskReminderRequestV1, DeleteTaskReminderRequestV1, ListTaskReminderRequestV1,
+};
+pub use uncomplete::UncompleteTaskRequestV1;
 
 use openlark_core::config::Config;
 use std::sync::Arc;
@@ -65,7 +77,6 @@ impl Task {
     }
 
     /// 关注者相关方法
-
     pub fn follower_create(&self, task_id: impl Into<String>) -> CreateTaskFollowerRequestV1 {
         CreateTaskFollowerRequestV1::new(self.config.clone(), task_id)
     }
@@ -90,7 +101,6 @@ impl Task {
     }
 
     /// 协作者相关方法
-
     pub fn collaborator_create(
         &self,
         task_id: impl Into<String>,
@@ -118,7 +128,6 @@ impl Task {
     }
 
     /// 提醒相关方法
-
     pub fn reminder_create(&self, task_id: impl Into<String>) -> CreateTaskReminderRequestV1 {
         CreateTaskReminderRequestV1::new(self.config.clone(), task_id)
     }
@@ -136,7 +145,6 @@ impl Task {
     }
 
     /// 评论相关方法
-
     pub fn comment_create(&self, task_id: impl Into<String>) -> CreateTaskCommentRequestV1 {
         CreateTaskCommentRequestV1::new(self.config.clone(), task_id)
     }
