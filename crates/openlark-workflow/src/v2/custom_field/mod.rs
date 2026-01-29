@@ -1,9 +1,11 @@
+pub mod add;
 pub mod create;
 pub mod delete;
 pub mod get;
 pub mod list;
 pub mod models;
 pub mod option;
+pub mod remove;
 pub mod update;
 
 use openlark_core::config::Config;
@@ -68,10 +70,12 @@ impl CustomField {
 }
 
 // 重新导出请求类型
+pub use add::AddCustomFieldRequest;
 pub use create::CreateCustomFieldRequest;
 pub use delete::DeleteCustomFieldRequest;
 pub use get::GetCustomFieldRequest;
 pub use list::ListCustomFieldsRequest;
+pub use remove::RemoveCustomFieldRequest;
 pub use update::UpdateCustomFieldRequest;
 
 // 重新导出响应类型

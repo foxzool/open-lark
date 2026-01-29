@@ -3,6 +3,7 @@ pub mod delete;
 pub mod get;
 pub mod list;
 pub mod models;
+pub mod patch;
 pub mod update;
 
 use openlark_core::config::Config;
@@ -66,7 +67,7 @@ pub use create::CreateSectionRequest;
 pub use delete::DeleteSectionRequest;
 pub use get::GetSectionRequest;
 pub use list::ListSectionsRequest;
-pub use update::UpdateSectionRequest;
+pub use patch::UpdateSectionRequest;
 
 // 重新导出响应类型
 pub use models::{

@@ -684,3 +684,49 @@ impl ApprovalApiV4 {
         }
     }
 }
+
+/// 白板 API V1 端点枚举
+#[derive(Debug, Clone, PartialEq)]
+pub enum BoardApiV1 {
+    /// 创建节点
+    WhiteboardNodeCreate(String),
+    /// 获取节点列表
+    WhiteboardNodeList(String),
+    /// 更新主题
+    WhiteboardUpdateTheme(String),
+    /// 获取主题
+    WhiteboardTheme(String),
+    /// 下载为图片
+    WhiteboardDownloadAsImage(String),
+    /// 创建 PlantUML 节点
+    WhiteboardNodeCreatePlantuml(String),
+}
+
+impl BoardApiV1 {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            BoardApiV1::WhiteboardNodeCreate(board_id) => {
+                format!("/open-apis/board/v1/whiteboards/{}/nodes", board_id)
+            }
+            BoardApiV1::WhiteboardNodeList(board_id) => {
+                format!("/open-apis/board/v1/whiteboards/{}/nodes", board_id)
+            }
+            BoardApiV1::WhiteboardUpdateTheme(board_id) => {
+                format!("/open-apis/board/v1/whiteboards/{}/theme", board_id)
+            }
+            BoardApiV1::WhiteboardTheme(board_id) => {
+                format!("/open-apis/board/v1/whiteboards/{}/theme", board_id)
+            }
+            BoardApiV1::WhiteboardDownloadAsImage(board_id) => {
+                format!("/open-apis/board/v1/whiteboards/{}/image", board_id)
+            }
+            BoardApiV1::WhiteboardNodeCreatePlantuml(board_id) => {
+                format!(
+                    "/open-apis/board/v1/whiteboards/{}/nodes/create_plantuml",
+                    board_id
+                )
+            }
+        }
+    }
+}
