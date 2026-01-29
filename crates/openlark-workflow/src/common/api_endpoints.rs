@@ -524,3 +524,163 @@ impl TaskApiV2 {
         }
     }
 }
+
+/// 审批 API V4 端点枚举
+#[derive(Debug, Clone, PartialEq)]
+pub enum ApprovalApiV4 {
+    /// 创建审批定义
+    ApprovalCreate,
+    /// 查看指定审批定义
+    ApprovalGet(String),
+    /// 订阅审批事件
+    ApprovalSubscribe(String),
+    /// 取消订阅审批事件
+    ApprovalUnsubscribe(String),
+    /// 创建三方审批定义
+    ExternalApprovalCreate,
+    /// 查看指定三方审批定义
+    ExternalApprovalGet(String),
+    /// 校验三方审批实例
+    ExternalInstanceCheck,
+    /// 同步三方审批实例
+    ExternalInstanceCreate,
+    /// 获取三方审批任务状态
+    ExternalTaskList,
+    /// 审批任务加签
+    InstanceAddSign,
+    /// 撤回审批实例
+    InstanceCancel,
+    /// 抄送审批实例
+    InstanceCc,
+    /// 创建审批实例
+    InstanceCreate,
+    /// 获取单个审批实例详情
+    InstanceGet(String),
+    /// 批量获取审批实例 ID
+    InstanceList(String),
+    /// 预览审批流程
+    InstancePreview,
+    /// 查询实例列表
+    InstanceQuery,
+    /// 查询抄送列表
+    InstanceSearchCc,
+    /// 退回审批任务
+    InstanceSpecifiedRollback(String),
+    /// 创建评论
+    InstanceCommentCreate(String),
+    /// 删除评论
+    InstanceCommentDelete(String, String),
+    /// 获取评论列表
+    InstanceCommentList(String),
+    /// 同意审批任务
+    TaskApprove,
+    /// 查询用户的任务列表
+    TaskQuery,
+    /// 拒绝审批任务
+    TaskReject,
+    /// 重新提交审批任务
+    TaskResubmit,
+    /// 查询任务列表
+    TaskSearch,
+    /// 转交审批任务
+    TaskTransfer,
+}
+
+impl ApprovalApiV4 {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            // 审批定义相关
+            ApprovalApiV4::ApprovalCreate => "/open-apis/approval/v4/approvals".to_string(),
+            ApprovalApiV4::ApprovalGet(approval_code) => {
+                format!("/open-apis/approval/v4/approvals/{}", approval_code)
+            }
+            ApprovalApiV4::ApprovalSubscribe(approval_code) => {
+                format!(
+                    "/open-apis/approval/v4/approvals/{}/subscribe",
+                    approval_code
+                )
+            }
+            ApprovalApiV4::ApprovalUnsubscribe(approval_code) => {
+                format!(
+                    "/open-apis/approval/v4/approvals/{}/unsubscribe",
+                    approval_code
+                )
+            }
+
+            // 三方审批定义相关
+            ApprovalApiV4::ExternalApprovalCreate => {
+                "/open-apis/approval/v4/external_approvals".to_string()
+            }
+            ApprovalApiV4::ExternalApprovalGet(approval_code) => {
+                format!(
+                    "/open-apis/approval/v4/external_approvals/{}",
+                    approval_code
+                )
+            }
+
+            // 三方审批实例相关
+            ApprovalApiV4::ExternalInstanceCheck => {
+                "/open-apis/approval/v4/external_instances/check".to_string()
+            }
+            ApprovalApiV4::ExternalInstanceCreate => {
+                "/open-apis/approval/v4/external_instances".to_string()
+            }
+
+            // 三方审批任务相关
+            ApprovalApiV4::ExternalTaskList => "/open-apis/approval/v4/external_tasks".to_string(),
+
+            // 审批实例相关
+            ApprovalApiV4::InstanceAddSign => {
+                "/open-apis/approval/v4/instances/add_sign".to_string()
+            }
+            ApprovalApiV4::InstanceCancel => "/open-apis/approval/v4/instances/cancel".to_string(),
+            ApprovalApiV4::InstanceCc => "/open-apis/approval/v4/instances/cc".to_string(),
+            ApprovalApiV4::InstanceCreate => "/open-apis/approval/v4/instances".to_string(),
+            ApprovalApiV4::InstanceGet(instance_id) => {
+                format!("/open-apis/approval/v4/instances/{}", instance_id)
+            }
+            ApprovalApiV4::InstanceList(approval_code) => {
+                format!(
+                    "/open-apis/approval/v4/instances?approval_code={}",
+                    approval_code
+                )
+            }
+            ApprovalApiV4::InstancePreview => {
+                "/open-apis/approval/v4/instances/preview".to_string()
+            }
+            ApprovalApiV4::InstanceQuery => "/open-apis/approval/v4/instances/query".to_string(),
+            ApprovalApiV4::InstanceSearchCc => {
+                "/open-apis/approval/v4/instances/search_cc".to_string()
+            }
+            ApprovalApiV4::InstanceSpecifiedRollback(instance_id) => {
+                format!(
+                    "/open-apis/approval/v4/instances/{}/specified_rollback",
+                    instance_id
+                )
+            }
+
+            // 审批实例评论相关
+            ApprovalApiV4::InstanceCommentCreate(instance_id) => {
+                format!("/open-apis/approval/v4/instances/{}/comments", instance_id)
+            }
+            ApprovalApiV4::InstanceCommentDelete(instance_id, comment_id) => {
+                format!(
+                    "/open-apis/approval/v4/instances/{}/comments/{}",
+                    instance_id, comment_id
+                )
+            }
+            ApprovalApiV4::InstanceCommentList(instance_id) => {
+                format!("/open-apis/approval/v4/instances/{}/comments", instance_id)
+            }
+
+            // 审批任务相关
+            ApprovalApiV4::TaskApprove => "/open-apis/approval/v4/tasks/approve".to_string(),
+            ApprovalApiV4::TaskQuery => "/open-apis/approval/v4/tasks/query".to_string(),
+            ApprovalApiV4::TaskReject => "/open-apis/approval/v4/tasks/reject".to_string(),
+            ApprovalApiV4::TaskResubmit => "/open-apis/approval/v4/tasks/resubmit".to_string(),
+            ApprovalApiV4::TaskSearch => "/open-apis/approval/v4/tasks/search".to_string(),
+            ApprovalApiV4::TaskTransfer => "/open-apis/approval/v4/tasks/transfer".to_string(),
+        }
+    }
+}
