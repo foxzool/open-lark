@@ -47,6 +47,10 @@ coverage-html/
 api_check_output.txt
 *.changeset
 
+# IDE temporary files
+.rust-analyzer/
+flycheck0/
+
 # Temporary development files
 /tmp/
 /temp/
