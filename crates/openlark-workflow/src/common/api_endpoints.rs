@@ -79,6 +79,74 @@ pub enum TaskApiV2 {
     AttachmentUpload(String),
     /// 删除附件
     AttachmentDelete(String, String),
+
+    // 子任务相关
+    /// 创建子任务
+    SubtaskCreate(String),
+    /// 获取子任务列表
+    SubtaskList(String),
+
+    // 任务相关扩展
+    /// 添加任务到任务清单
+    TaskAddTasklist(String),
+    /// 从任务清单移除任务
+    TaskRemoveTasklist(String),
+    /// 获取任务所属任务清单列表
+    TaskGetTasklists(String),
+    /// 添加任务成员
+    TaskAddMembers(String),
+    /// 移除任务成员
+    TaskRemoveMembers(String),
+    /// 添加任务提醒
+    TaskAddReminders(String),
+    /// 移除任务提醒
+    TaskRemoveReminders(String),
+    /// 添加任务依赖
+    TaskAddDependencies(String),
+    /// 移除任务依赖
+    TaskRemoveDependencies(String),
+
+    // 任务清单相关扩展
+    /// 获取任务清单中的任务列表
+    TasklistGetTasks(String),
+    /// 添加任务清单成员
+    TasklistAddMembers(String),
+    /// 移除任务清单成员
+    TasklistRemoveMembers(String),
+
+    // 分组相关扩展
+    /// 获取分组中的任务列表
+    SectionGetTasks(String),
+
+    // 活动订阅相关
+    /// 创建活动订阅
+    ActivitySubscriptionCreate(String),
+    /// 获取活动订阅详情
+    ActivitySubscriptionGet(String, String),
+    /// 更新活动订阅
+    ActivitySubscriptionUpdate(String, String),
+    /// 删除活动订阅
+    ActivitySubscriptionDelete(String, String),
+    /// 获取活动订阅列表
+    ActivitySubscriptionList(String),
+
+    // 自定义字段选项相关
+    /// 创建自定义字段选项
+    CustomFieldOptionCreate(String),
+    /// 更新自定义字段选项
+    CustomFieldOptionUpdate(String, String),
+
+    // 附件相关扩展
+    /// 获取附件详情
+    AttachmentGet(String),
+    /// 获取附件列表
+    AttachmentList,
+
+    // 自定义字段 add/remove
+    /// 添加自定义字段到任务清单
+    CustomFieldAdd(String),
+    /// 从任务清单移除自定义字段
+    CustomFieldRemove(String),
 }
 
 impl TaskApiV2 {
@@ -209,6 +277,125 @@ impl TaskApiV2 {
                 format!(
                     "/open-apis/task/v2/tasks/{}/attachments/{}",
                     task_guid, attachment_guid
+                )
+            }
+
+            // 子任务相关
+            TaskApiV2::SubtaskCreate(task_guid) => {
+                format!("/open-apis/task/v2/tasks/{}/subtasks", task_guid)
+            }
+            TaskApiV2::SubtaskList(task_guid) => {
+                format!("/open-apis/task/v2/tasks/{}/subtasks", task_guid)
+            }
+
+            // 任务相关扩展
+            TaskApiV2::TaskAddTasklist(task_guid) => {
+                format!("/open-apis/task/v2/tasks/{}/add_tasklist", task_guid)
+            }
+            TaskApiV2::TaskRemoveTasklist(task_guid) => {
+                format!("/open-apis/task/v2/tasks/{}/remove_tasklist", task_guid)
+            }
+            TaskApiV2::TaskGetTasklists(task_guid) => {
+                format!("/open-apis/task/v2/tasks/{}/tasklists", task_guid)
+            }
+            TaskApiV2::TaskAddMembers(task_guid) => {
+                format!("/open-apis/task/v2/tasks/{}/add_members", task_guid)
+            }
+            TaskApiV2::TaskRemoveMembers(task_guid) => {
+                format!("/open-apis/task/v2/tasks/{}/remove_members", task_guid)
+            }
+            TaskApiV2::TaskAddReminders(task_guid) => {
+                format!("/open-apis/task/v2/tasks/{}/add_reminders", task_guid)
+            }
+            TaskApiV2::TaskRemoveReminders(task_guid) => {
+                format!("/open-apis/task/v2/tasks/{}/remove_reminders", task_guid)
+            }
+            TaskApiV2::TaskAddDependencies(task_guid) => {
+                format!("/open-apis/task/v2/tasks/{}/add_dependencies", task_guid)
+            }
+            TaskApiV2::TaskRemoveDependencies(task_guid) => {
+                format!("/open-apis/task/v2/tasks/{}/remove_dependencies", task_guid)
+            }
+
+            // 任务清单相关扩展
+            TaskApiV2::TasklistGetTasks(tasklist_guid) => {
+                format!("/open-apis/task/v2/tasklists/{}/tasks", tasklist_guid)
+            }
+            TaskApiV2::TasklistAddMembers(tasklist_guid) => {
+                format!("/open-apis/task/v2/tasklists/{}/add_members", tasklist_guid)
+            }
+            TaskApiV2::TasklistRemoveMembers(tasklist_guid) => {
+                format!(
+                    "/open-apis/task/v2/tasklists/{}/remove_members",
+                    tasklist_guid
+                )
+            }
+
+            // 分组相关扩展
+            TaskApiV2::SectionGetTasks(section_guid) => {
+                format!("/open-apis/task/v2/sections/{}/tasks", section_guid)
+            }
+
+            // 活动订阅相关
+            TaskApiV2::ActivitySubscriptionCreate(tasklist_guid) => {
+                format!(
+                    "/open-apis/task/v2/tasklists/{}/activity_subscriptions",
+                    tasklist_guid
+                )
+            }
+            TaskApiV2::ActivitySubscriptionGet(tasklist_guid, subscription_guid) => {
+                format!(
+                    "/open-apis/task/v2/tasklists/{}/activity_subscriptions/{}",
+                    tasklist_guid, subscription_guid
+                )
+            }
+            TaskApiV2::ActivitySubscriptionUpdate(tasklist_guid, subscription_guid) => {
+                format!(
+                    "/open-apis/task/v2/tasklists/{}/activity_subscriptions/{}",
+                    tasklist_guid, subscription_guid
+                )
+            }
+            TaskApiV2::ActivitySubscriptionDelete(tasklist_guid, subscription_guid) => {
+                format!(
+                    "/open-apis/task/v2/tasklists/{}/activity_subscriptions/{}",
+                    tasklist_guid, subscription_guid
+                )
+            }
+            TaskApiV2::ActivitySubscriptionList(tasklist_guid) => {
+                format!(
+                    "/open-apis/task/v2/tasklists/{}/activity_subscriptions",
+                    tasklist_guid
+                )
+            }
+
+            // 自定义字段选项相关
+            TaskApiV2::CustomFieldOptionCreate(custom_field_guid) => {
+                format!(
+                    "/open-apis/task/v2/custom_fields/{}/options",
+                    custom_field_guid
+                )
+            }
+            TaskApiV2::CustomFieldOptionUpdate(custom_field_guid, option_guid) => {
+                format!(
+                    "/open-apis/task/v2/custom_fields/{}/options/{}",
+                    custom_field_guid, option_guid
+                )
+            }
+
+            // 附件相关扩展
+            TaskApiV2::AttachmentGet(attachment_guid) => {
+                format!("/open-apis/task/v2/attachments/{}", attachment_guid)
+            }
+            TaskApiV2::AttachmentList => "/open-apis/task/v2/attachments".to_string(),
+
+            // 自定义字段 add/remove
+            TaskApiV2::CustomFieldAdd(custom_field_guid) => {
+                format!("/open-apis/task/v2/custom_fields/{}/add", custom_field_guid)
+            }
+            TaskApiV2::CustomFieldRemove(custom_field_guid) => {
+                format!(
+                    "/open-apis/task/v2/custom_fields/{}/remove",
+                    custom_field_guid
                 )
             }
         }

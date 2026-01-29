@@ -3,6 +3,7 @@ pub mod delete;
 pub mod get;
 pub mod list;
 pub mod models;
+pub mod option;
 pub mod update;
 
 use openlark_core::config::Config;
@@ -58,6 +59,11 @@ impl CustomField {
 
     pub fn list(&self) -> list::ListCustomFieldsRequest {
         list::ListCustomFieldsRequest::new(self.config.clone(), self.tasklist_guid.clone())
+    }
+
+    /// 获取自定义字段选项资源（不需要 tasklist_guid）
+    pub fn option(&self, custom_field_guid: impl Into<String>) -> option::CustomFieldOptionResource {
+        option::CustomFieldOptionResource::new(self.config.clone(), custom_field_guid.into())
     }
 }
 
