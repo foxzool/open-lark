@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -43,8 +42,7 @@ impl EnvironmentVariableGetBuilder {
             self.namespace, self.env_var_api_name
         );
 
-        let transport = Transport::new(self.config);
-        transport.get(url, None::<&()>).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
@@ -57,8 +55,10 @@ impl EnvironmentVariableGetBuilder {
             self.namespace, self.env_var_api_name
         );
 
-        let transport = Transport::new(self.config);
-        transport.get_with_option(url, option).await
+        let req: ApiRequest<EnvironmentVariableGetResponse> = ApiRequest::get(&url);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

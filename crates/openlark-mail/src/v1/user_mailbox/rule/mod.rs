@@ -306,7 +306,8 @@ impl DeleteUserMailboxRuleRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteUserMailboxRuleResponse> {
         let api_endpoint = MailApiV1::UserMailboxRuleDelete(self.mailbox_id.clone());
-        let mut request = ApiRequest::<DeleteUserMailboxRuleResponse>::delete(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<DeleteUserMailboxRuleResponse>::delete(api_endpoint.to_url());
         request = request.query("rule_id", &self.rule_id);
 
         let response =
@@ -331,7 +332,11 @@ pub struct UpdateUserMailboxRuleRequest {
 }
 
 impl UpdateUserMailboxRuleRequest {
-    pub fn new(config: Arc<Config>, mailbox_id: impl Into<String>, rule_id: impl Into<String>) -> Self {
+    pub fn new(
+        config: Arc<Config>,
+        mailbox_id: impl Into<String>,
+        rule_id: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             mailbox_id: mailbox_id.into(),

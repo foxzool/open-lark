@@ -30,10 +30,7 @@ impl CustomFieldOptionResource {
     }
 
     /// 更新自定义字段选项
-    pub fn patch(
-        &self,
-        option_guid: impl Into<String>,
-    ) -> patch::UpdateCustomFieldOptionRequest {
+    pub fn patch(&self, option_guid: impl Into<String>) -> patch::UpdateCustomFieldOptionRequest {
         patch::UpdateCustomFieldOptionRequest::new(
             self.config.clone(),
             self.custom_field_guid.clone(),
@@ -47,7 +44,5 @@ pub use create::CreateCustomFieldOptionRequest;
 pub use patch::UpdateCustomFieldOptionRequest;
 
 // 重新导出响应类型
-pub use create::{
-    CreateCustomFieldOptionBody, CreateCustomFieldOptionResponse, CustomFieldOption,
-};
+pub use create::{CreateCustomFieldOptionBody, CreateCustomFieldOptionResponse, CustomFieldOption};
 pub use patch::{UpdateCustomFieldOptionBody, UpdateCustomFieldOptionResponse};

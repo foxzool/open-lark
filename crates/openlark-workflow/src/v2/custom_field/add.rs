@@ -60,10 +60,7 @@ impl AddCustomFieldRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<AddCustomFieldResponse> {
-        validate_required!(
-            self.custom_field_guid.trim(),
-            "自定义字段 GUID 不能为空"
-        );
+        validate_required!(self.custom_field_guid.trim(), "自定义字段 GUID 不能为空");
 
         let api_endpoint = TaskApiV2::CustomFieldAdd(self.custom_field_guid);
         let mut request = ApiRequest::<AddCustomFieldResponse>::post(api_endpoint.to_url());

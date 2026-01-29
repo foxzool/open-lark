@@ -102,8 +102,8 @@ mod tests {
                 .build(),
         );
 
-        let request = CompleteTaskRequestV1::new(config, "test_task_id")
-            .completed_at("2024-01-15T10:00:00Z");
+        let request =
+            CompleteTaskRequestV1::new(config, "test_task_id").completed_at("2024-01-15T10:00:00Z");
 
         assert_eq!(request.task_id, "test_task_id");
         assert_eq!(
@@ -114,7 +114,8 @@ mod tests {
 
     #[test]
     fn test_task_api_v1_complete_url() {
-        let endpoint = crate::common::api_endpoints::TaskApiV1::TaskComplete("task_123".to_string());
+        let endpoint =
+            crate::common::api_endpoints::TaskApiV1::TaskComplete("task_123".to_string());
         assert_eq!(
             endpoint.to_url(),
             "/open-apis/task/v1/tasks/task_123/complete"

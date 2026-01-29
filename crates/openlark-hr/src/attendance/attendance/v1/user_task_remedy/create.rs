@@ -27,7 +27,13 @@ pub struct CreateRequest {
 
 impl CreateRequest {
     /// 创建请求
-    pub fn new(config: Config, user_id: String, original_time: i64, remedy_time: i64, reason: String) -> Self {
+    pub fn new(
+        config: Config,
+        user_id: String,
+        original_time: i64,
+        remedy_time: i64,
+        reason: String,
+    ) -> Self {
         Self {
             user_id,
             original_time,

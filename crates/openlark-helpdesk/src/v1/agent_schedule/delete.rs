@@ -5,17 +5,13 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-function/agent-schedules/delete
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 use crate::common::api_endpoints::HelpdeskApiV1;
-use crate::common::api_utils::{extract_response_data, serialize_params};
+use crate::common::api_utils::extract_response_data;
 
 /// 删除客服工作日程响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -125,7 +121,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = DeleteAgentScheduleRequestBuilder::new(Arc::new(config), "agent_123".to_string());
+        let builder =
+            DeleteAgentScheduleRequestBuilder::new(Arc::new(config), "agent_123".to_string());
 
         assert_eq!(builder.agent_id, "agent_123");
     }

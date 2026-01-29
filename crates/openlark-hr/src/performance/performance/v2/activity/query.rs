@@ -5,7 +5,8 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    http::Transport, SDKResult,
+    http::Transport,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

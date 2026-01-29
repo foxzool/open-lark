@@ -2,8 +2,8 @@
 //!
 //! 提供工单消息相关的 API。
 
-pub mod list;
 pub mod create;
+pub mod list;
 
 use openlark_core::config::Config;
 use std::sync::Arc;
@@ -31,5 +31,5 @@ impl<'a> TicketMessage<'a> {
     }
 }
 
-pub use list::{ListTicketMessageRequest, ListTicketMessageRequestBuilder};
 pub use create::{CreateTicketMessageRequest, CreateTicketMessageRequestBuilder};
+pub use list::{ListTicketMessageRequest, ListTicketMessageRequestBuilder};

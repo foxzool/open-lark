@@ -112,7 +112,9 @@ mod tests {
 
     #[test]
     fn test_task_follower_batch_delete_v1_url() {
-        let endpoint = crate::common::api_endpoints::TaskApiV1::TaskFollowerBatchDelete("task_123".to_string());
+        let endpoint = crate::common::api_endpoints::TaskApiV1::TaskFollowerBatchDelete(
+            "task_123".to_string(),
+        );
         assert_eq!(
             endpoint.to_url(),
             "/open-apis/task/v1/tasks/task_123/batch_delete_follower"

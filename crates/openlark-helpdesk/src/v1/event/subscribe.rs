@@ -40,9 +40,8 @@ impl EventSubscribeRequest {
 
     /// 执行订阅服务台事件请求
     pub async fn execute(self) -> SDKResult<EventSubscribeResponse> {
-        let request = ApiRequest::<EventSubscribeResponse>::post(
-            HelpdeskApiV1::EventSubscribe.to_url(),
-        );
+        let request =
+            ApiRequest::<EventSubscribeResponse>::post(HelpdeskApiV1::EventSubscribe.to_url());
 
         let response = Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "订阅服务台事件")
@@ -63,9 +62,8 @@ impl EventSubscribeRequestBuilder {
 
     /// 执行请求
     pub async fn execute(&self) -> SDKResult<EventSubscribeResponse> {
-        let request = ApiRequest::<EventSubscribeResponse>::post(
-            HelpdeskApiV1::EventSubscribe.to_url(),
-        );
+        let request =
+            ApiRequest::<EventSubscribeResponse>::post(HelpdeskApiV1::EventSubscribe.to_url());
 
         let response = Transport::request(request, &self.config, None).await?;
         extract_response_data(response, "订阅服务台事件")
@@ -74,9 +72,8 @@ impl EventSubscribeRequestBuilder {
 
 /// 执行订阅服务台事件
 pub async fn subscribe_event(config: &Config) -> SDKResult<EventSubscribeResponse> {
-    let request = ApiRequest::<EventSubscribeResponse>::post(
-        HelpdeskApiV1::EventSubscribe.to_url(),
-    );
+    let request =
+        ApiRequest::<EventSubscribeResponse>::post(HelpdeskApiV1::EventSubscribe.to_url());
 
     let response = Transport::request(request, config, None).await?;
     extract_response_data(response, "订阅服务台事件")

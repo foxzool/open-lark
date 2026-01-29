@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -32,7 +31,11 @@ pub struct TableRecordsGetBuilder {
 
 impl TableRecordsGetBuilder {
     /// 创建新的 Builder
-    pub fn new(config: Config, workspace_id: impl Into<String>, table_name: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        workspace_id: impl Into<String>,
+        table_name: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             workspace_id: workspace_id.into(),
@@ -75,40 +78,46 @@ impl TableRecordsGetBuilder {
             self.workspace_id, self.table_name
         );
 
-        let transport = Transport::new(self.config);
-        transport
-            .get_with_query(
-                url,
-                vec![
-                    ("page", self.page.map(|p| p.to_string())),
-                    ("page_size", self.page_size.map(|p| p.to_string())),
-                    ("filter", self.filter),
-                    ("order_by", self.order_by),
-                ],
-            )
-            .await
+        let mut req: ApiRequest<TableRecordsGetResponse> = ApiRequest::get(&url);
+        if let Some(page) = self.page {
+            req = req.query("page", &page.to_string());
+        }
+        if let Some(page_size) = self.page_size {
+            req = req.query("page_size", &page_size.to_string());
+        }
+        if let Some(filter) = self.filter {
+            req = req.query("filter", &filter);
+        }
+        if let Some(order_by) = self.order_by {
+            req = req.query("order_by", &order_by);
+        }
+        Transport::request(req, &self.config, None).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<TableRecordsGetResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<TableRecordsGetResponse> {
         let url = format!(
             "/open-apis/apaas/v1/workspaces/{}/tables/{}/records",
             self.workspace_id, self.table_name
         );
 
-        let transport = Transport::new(self.config);
-        transport
-            .get_with_query_and_option(
-                url,
-                vec![
-                    ("page", self.page.map(|p| p.to_string())),
-                    ("page_size", self.page_size.map(|p| p.to_string())),
-                    ("filter", self.filter),
-                    ("order_by", self.order_by),
-                ],
-                option,
-            )
-            .await
+        let mut req: ApiRequest<TableRecordsGetResponse> = ApiRequest::get(&url);
+        if let Some(page) = self.page {
+            req = req.query("page", &page.to_string());
+        }
+        if let Some(page_size) = self.page_size {
+            req = req.query("page_size", &page_size.to_string());
+        }
+        if let Some(filter) = self.filter {
+            req = req.query("filter", &filter);
+        }
+        if let Some(order_by) = self.order_by {
+            req = req.query("order_by", &order_by);
+        }
+        Transport::request(req, &self.config, Some(option)).await
     }
 }
 

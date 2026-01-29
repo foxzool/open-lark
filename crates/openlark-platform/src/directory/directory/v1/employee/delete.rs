@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -31,30 +30,23 @@ impl EmployeeDeleteBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<EmployeeDeleteResponse> {
-        let url = format!(
-            "/open-apis/directory/v1/employees/{}",
-            self.employee_id
-        );
+        let url = format!("/open-apis/directory/v1/employees/{}", self.employee_id);
 
-        let transport = Transport::new(self.config);
-        transport.delete::<EmployeeDeleteRequest>(url, EmployeeDeleteRequest {}).await
+        let req: ApiRequest<EmployeeDeleteResponse> = ApiRequest::delete(&url);
+        Transport::request(req, &self.config, None).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<EmployeeDeleteResponse> {
-        let url = format!(
-            "/open-apis/directory/v1/employees/{}",
-            self.employee_id
-        );
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<EmployeeDeleteResponse> {
+        let url = format!("/open-apis/directory/v1/employees/{}", self.employee_id);
 
-        let transport = Transport::new(self.config);
-        transport.delete_with_option::<EmployeeDeleteRequest>(url, EmployeeDeleteRequest {}, option).await
+        let req: ApiRequest<EmployeeDeleteResponse> = ApiRequest::delete(&url);
+        Transport::request(req, &self.config, Some(option)).await
     }
 }
-
-/// 离职员工请求
-#[derive(Debug, Clone, Deserialize, Serialize)]
-struct EmployeeDeleteRequest {}
 
 /// 离职员工响应
 #[derive(Debug, Clone, Deserialize, Serialize)]

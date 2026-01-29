@@ -31,10 +31,16 @@ impl GetInstanceBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetInstanceResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<GetInstanceResponse> {
         validate_required!(self.approval_instance_id, "实例ID不能为空");
 
-        let url = format!("/open-apis/apaas/v1/approval_instances/{}", self.approval_instance_id);
+        let url = format!(
+            "/open-apis/apaas/v1/approval_instances/{}",
+            self.approval_instance_id
+        );
         let api_request: ApiRequest<GetInstanceResponse> = ApiRequest::get(url);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;

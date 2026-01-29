@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/create
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -75,8 +71,12 @@ impl CreateNotificationRequest {
     }
 
     /// 执行创建推送通知请求
-    pub async fn execute(self, body: CreateNotificationBody) -> SDKResult<CreateNotificationResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+    pub async fn execute(
+        self,
+        body: CreateNotificationBody,
+    ) -> SDKResult<CreateNotificationResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行创建推送通知请求（支持自定义选项）
@@ -137,9 +137,9 @@ impl CreateNotificationRequestBuilder {
 
     /// 执行请求
     pub async fn execute(&self) -> SDKResult<CreateNotificationResponse> {
-        let body = self.body().map_err(|reason| {
-            openlark_core::error::validation_error("body", reason)
-        })?;
+        let body = self
+            .body()
+            .map_err(|reason| openlark_core::error::validation_error("body", reason))?;
         let request = CreateNotificationRequest::new(self.config.clone());
         request.execute(body).await
     }

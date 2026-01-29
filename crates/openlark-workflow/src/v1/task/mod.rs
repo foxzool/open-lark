@@ -1,5 +1,5 @@
-pub mod comment;
 pub mod collaborator;
+pub mod comment;
 pub mod complete;
 pub mod create;
 pub mod delete;
@@ -11,13 +11,13 @@ pub mod reminder;
 pub mod uncomplete;
 
 // 显式导出 Request 类型，避免 ambiguous glob re-exports
-pub use comment::{
-    CreateTaskCommentRequestV1, DeleteTaskCommentRequestV1, GetTaskCommentRequestV1,
-    ListTaskCommentRequestV1, UpdateTaskCommentRequestV1,
-};
 pub use collaborator::{
     BatchDeleteTaskCollaboratorRequestV1, CreateTaskCollaboratorRequestV1,
     DeleteTaskCollaboratorRequestV1, ListTaskCollaboratorRequestV1,
+};
+pub use comment::{
+    CreateTaskCommentRequestV1, DeleteTaskCommentRequestV1, GetTaskCommentRequestV1,
+    ListTaskCommentRequestV1, UpdateTaskCommentRequestV1,
 };
 pub use complete::CompleteTaskRequestV1;
 pub use create::CreateTaskRequestV1;

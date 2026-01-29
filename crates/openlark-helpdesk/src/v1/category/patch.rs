@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/category/patch
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -90,7 +86,8 @@ impl PatchCategoryRequest {
 
     /// 执行更新知识库分类请求
     pub async fn execute(self, body: PatchCategoryBody) -> SDKResult<PatchCategoryResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行更新知识库分类请求（支持自定义选项）
@@ -255,7 +252,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = PatchCategoryRequestBuilder::new(Arc::new(config), "category_123".to_string());
+        let builder =
+            PatchCategoryRequestBuilder::new(Arc::new(config), "category_123".to_string());
 
         assert_eq!(builder.id, "category_123");
         assert!(builder.name.is_none());

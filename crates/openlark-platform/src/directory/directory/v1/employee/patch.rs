@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -61,16 +60,14 @@ impl EmployeePatchBuilder {
         mut self,
         department_ids: impl IntoIterator<Item = impl Into<String>>,
     ) -> Self {
-        self.department_ids.extend(department_ids.into_iter().map(Into::into));
+        self.department_ids
+            .extend(department_ids.into_iter().map(Into::into));
         self
     }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<EmployeePatchResponse> {
-        let url = format!(
-            "/open-apis/directory/v1/employees/{}",
-            self.employee_id
-        );
+        let url = format!("/open-apis/directory/v1/employees/{}", self.employee_id);
 
         let request = EmployeePatchRequest {
             name: self.name,
@@ -78,16 +75,19 @@ impl EmployeePatchBuilder {
             department_ids: self.department_ids,
         };
 
-        let transport = Transport::new(self.config);
-        transport.patch(url, request).await
+        let req: ApiRequest<EmployeePatchResponse> =
+            ApiRequest::patch(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(RequestOption::default())).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<EmployeePatchResponse> {
-        let url = format!(
-            "/open-apis/directory/v1/employees/{}",
-            self.employee_id
-        );
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<EmployeePatchResponse> {
+        let url = format!("/open-apis/directory/v1/employees/{}", self.employee_id);
 
         let request = EmployeePatchRequest {
             name: self.name,
@@ -95,8 +95,11 @@ impl EmployeePatchBuilder {
             department_ids: self.department_ids,
         };
 
-        let transport = Transport::new(self.config);
-        transport.patch_with_option(url, request, option).await
+        let req: ApiRequest<EmployeePatchResponse> =
+            ApiRequest::patch(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

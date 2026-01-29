@@ -233,7 +233,8 @@ impl DeleteUserMailboxAliasRequest {
         validate_required!(self.mailbox_id.trim(), "邮箱ID不能为空");
         validate_required!(self.alias_id.trim(), "别名ID不能为空");
 
-        let api_endpoint = MailApiV1::UserMailboxAliasDelete(self.mailbox_id.clone(), self.alias_id.clone());
+        let api_endpoint =
+            MailApiV1::UserMailboxAliasDelete(self.mailbox_id.clone(), self.alias_id.clone());
         let request = ApiRequest::<DeleteUserMailboxAliasResponse>::delete(api_endpoint.to_url());
 
         let response =

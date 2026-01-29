@@ -46,7 +46,8 @@ impl CreatePublicMailboxAliasRequest {
         validate_required!(self.body.email.trim(), "别名邮箱地址不能为空");
 
         let api_endpoint = MailApiV1::PublicMailboxAliasCreate(self.mailbox_id.clone());
-        let mut request = ApiRequest::<CreatePublicMailboxAliasResponse>::post(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<CreatePublicMailboxAliasResponse>::post(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "创建公共邮箱别名")?);

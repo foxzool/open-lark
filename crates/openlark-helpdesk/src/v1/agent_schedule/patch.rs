@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-function/agent-schedules/patch
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -89,8 +85,12 @@ impl PatchAgentScheduleRequest {
     }
 
     /// 执行更新客服工作日程请求
-    pub async fn execute(self, body: PatchAgentScheduleBody) -> SDKResult<PatchAgentScheduleResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+    pub async fn execute(
+        self,
+        body: PatchAgentScheduleBody,
+    ) -> SDKResult<PatchAgentScheduleResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行更新客服工作日程请求（支持自定义选项）
@@ -255,7 +255,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = PatchAgentScheduleRequestBuilder::new(Arc::new(config), "agent_123".to_string());
+        let builder =
+            PatchAgentScheduleRequestBuilder::new(Arc::new(config), "agent_123".to_string());
 
         assert_eq!(builder.agent_id, "agent_123");
         assert!(builder.work_date.is_none());

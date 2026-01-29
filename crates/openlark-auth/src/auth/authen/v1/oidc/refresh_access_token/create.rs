@@ -13,8 +13,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
-
 /// OIDC 用户访问令牌刷新请求
 pub struct OidcRefreshAccessTokenBuilder {
     refresh_token: String,
@@ -80,7 +78,10 @@ impl OidcRefreshAccessTokenBuilder {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<OidcRefreshAccessTokenResponseData> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<OidcRefreshAccessTokenResponseData> {
         // 验证必填字段
         validate_required!(self.refresh_token, "刷新令牌不能为空");
 

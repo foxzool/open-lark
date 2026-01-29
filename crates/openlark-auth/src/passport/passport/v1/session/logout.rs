@@ -19,7 +19,10 @@ pub struct LogoutRequest {
 
 impl LogoutRequest {
     pub fn new(config: Config) -> Self {
-        Self { config, user_id: None }
+        Self {
+            config,
+            user_id: None,
+        }
     }
 
     /// 设置用户ID
@@ -32,17 +35,14 @@ impl LogoutRequest {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(
-        self,
-        option: RequestOption,
-    ) -> SDKResult<LogoutResponse> {
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<LogoutResponse> {
         let req: ApiRequest<LogoutResponse> =
             ApiRequest::post("/open-apis/passport/v1/sessions/logout");
 
         let response = Transport::request(req, &self.config, Some(option)).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("logout", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("logout", "响应数据为空"))
     }
 }
 

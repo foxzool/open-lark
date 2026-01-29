@@ -4,8 +4,8 @@
 
 use crate::common::{api_endpoints::TaskApiV2, api_utils::*};
 use crate::v2::tasklist::activity_subscription::models::{
-    ActivitySubscriptionTargetType, ActivitySubscriptionType,
-    UpdateActivitySubscriptionBody, UpdateActivitySubscriptionResponse,
+    ActivitySubscriptionTargetType, ActivitySubscriptionType, UpdateActivitySubscriptionBody,
+    UpdateActivitySubscriptionResponse,
 };
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -84,7 +84,8 @@ impl UpdateActivitySubscriptionRequest {
             self.tasklist_guid.clone(),
             self.subscription_guid.clone(),
         );
-        let mut request = ApiRequest::<UpdateActivitySubscriptionResponse>::patch(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<UpdateActivitySubscriptionResponse>::patch(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "更新动态订阅")?);
@@ -114,14 +115,11 @@ mod tests {
                 .build(),
         );
 
-        let request = UpdateActivitySubscriptionRequest::new(
-            config,
-            "tasklist_123",
-            "subscription_456",
-        )
-        .subscription_type(ActivitySubscriptionType::TaskUpdated)
-        .target_type(ActivitySubscriptionTargetType::Chat)
-        .chat_id("chat_789");
+        let request =
+            UpdateActivitySubscriptionRequest::new(config, "tasklist_123", "subscription_456")
+                .subscription_type(ActivitySubscriptionType::TaskUpdated)
+                .target_type(ActivitySubscriptionTargetType::Chat)
+                .chat_id("chat_789");
 
         assert_eq!(request.tasklist_guid, "tasklist_123");
         assert_eq!(request.subscription_guid, "subscription_456");

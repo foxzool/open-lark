@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -49,20 +48,14 @@ impl DepartmentCreateBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<DepartmentCreateResponse> {
-        let url = "/open-apis/directory/v1/departments".to_string();
-
-        let request = DepartmentCreateRequest {
-            name: self.name,
-            parent_id: self.parent_id,
-            leader_user_id: self.leader_user_id,
-        };
-
-        let transport = Transport::new(self.config);
-        transport.post(url, request, None::<&()>).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<DepartmentCreateResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<DepartmentCreateResponse> {
         let url = "/open-apis/directory/v1/departments".to_string();
 
         let request = DepartmentCreateRequest {
@@ -71,8 +64,10 @@ impl DepartmentCreateBuilder {
             leader_user_id: self.leader_user_id,
         };
 
-        let transport = Transport::new(self.config);
-        transport.post(url, request, Some(option)).await
+        let req = ApiRequest::post(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("创建部门", "响应数据为空"))
     }
 }
 

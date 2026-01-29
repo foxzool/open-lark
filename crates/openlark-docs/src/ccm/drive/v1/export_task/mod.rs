@@ -8,6 +8,6 @@ pub mod get;
 // 显式导出 - 避免使用 glob reexport
 pub use create::{CreateExportTaskRequest, CreateExportTaskResponse};
 
-pub use download::{DownloadExportRequest};
+pub use download::DownloadExportRequest;
 
-pub use get::{GetExportTaskRequest, GetExportTaskResponse, ExportTaskResult};
+pub use get::{ExportTaskResult, GetExportTaskRequest, GetExportTaskResponse};

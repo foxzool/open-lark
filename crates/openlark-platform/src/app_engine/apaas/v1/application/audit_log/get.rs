@@ -3,7 +3,7 @@
 //! 文档: https://open.feishu.cn/document/apaas-v1/application-audit_log/get
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
@@ -33,18 +33,29 @@ impl AuditLogGetBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<AuditLogGetResponse> {
-        let url = format!("/open-apis/apaas/v1/applications/{}/audit_log", self.namespace);
+        let url = format!(
+            "/open-apis/apaas/v1/applications/{}/audit_log",
+            self.namespace
+        );
 
-        let transport = Transport::new(self.config);
-        transport.get_with_query(url, vec![("log_id", Some(self.log_id))]).await
+        let mut req: ApiRequest<AuditLogGetResponse> = ApiRequest::get(&url);
+        req = req.query("log_id", &self.log_id);
+        Transport::request(req, &self.config, None).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<AuditLogGetResponse> {
-        let url = format!("/open-apis/apaas/v1/applications/{}/audit_log", self.namespace);
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<AuditLogGetResponse> {
+        let url = format!(
+            "/open-apis/apaas/v1/applications/{}/audit_log",
+            self.namespace
+        );
 
-        let transport = Transport::new(self.config);
-        transport.get_with_query_and_option(url, vec![("log_id", Some(self.log_id))], option).await
+        let mut req: ApiRequest<AuditLogGetResponse> = ApiRequest::get(&url);
+        req = req.query("log_id", &self.log_id);
+        Transport::request(req, &self.config, Some(option)).await
     }
 }
 

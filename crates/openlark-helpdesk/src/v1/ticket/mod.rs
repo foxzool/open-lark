@@ -1,9 +1,9 @@
 pub mod create;
 pub mod get;
 pub mod list;
+pub mod message;
 pub mod models;
 pub mod update;
-pub mod message;
 
 use openlark_core::config::Config;
 use std::sync::Arc;
@@ -34,7 +34,8 @@ impl Ticket {
         list::TicketListRequest::new(self.config.clone())
     }
 
-    pub fn message(&self) -> message::TicketMessage {
+    #[allow(mismatched_lifetime_syntaxes)]
+    pub fn message(&self) -> message::TicketMessage<'_> {
         message::TicketMessage::new(self)
     }
 }
@@ -42,6 +43,9 @@ impl Ticket {
 pub use create::CreateTicketRequest;
 pub use get::GetTicketRequest;
 pub use list::TicketListRequest;
-pub use message::{CreateTicketMessageRequest, CreateTicketMessageRequestBuilder, ListTicketMessageRequest, ListTicketMessageRequestBuilder};
+pub use message::{
+    CreateTicketMessageRequest, CreateTicketMessageRequestBuilder, ListTicketMessageRequest,
+    ListTicketMessageRequestBuilder,
+};
 pub use models::*;
 pub use update::UpdateTicketRequest;

@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/patch
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -92,7 +88,8 @@ impl PatchFaqRequest {
 
     /// 执行更新知识库请求
     pub async fn execute(self, body: PatchFaqBody) -> SDKResult<PatchFaqResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行更新知识库请求（支持自定义选项）
@@ -170,10 +167,7 @@ impl PatchFaqRequestBuilder {
     }
 
     /// 执行请求（支持自定义选项）
-    pub async fn execute_with_options(
-        &self,
-        option: RequestOption,
-    ) -> SDKResult<PatchFaqResponse> {
+    pub async fn execute_with_options(&self, option: RequestOption) -> SDKResult<PatchFaqResponse> {
         let body = self.body();
         let request = PatchFaqRequest::new(self.config.clone(), self.id.clone());
         request.execute_with_options(body, option).await
@@ -199,9 +193,8 @@ pub async fn patch_faq_with_options(
     body.validate()
         .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
 
-    let req: ApiRequest<PatchFaqResponse> =
-        ApiRequest::patch(HelpdeskApiV1::FaqPatch(id).to_url())
-            .body(serialize_params(&body, "更新知识库")?);
+    let req: ApiRequest<PatchFaqResponse> = ApiRequest::patch(HelpdeskApiV1::FaqPatch(id).to_url())
+        .body(serialize_params(&body, "更新知识库")?);
 
     let resp = Transport::request(req, config, Some(option)).await?;
     extract_response_data(resp, "更新知识库")

@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -46,35 +45,33 @@ impl SeatAssignmentListBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<SeatAssignmentListResponse> {
-        let url = "/open-apis/apaas/v1/seat_assignments".to_string();
+        let url = "/open-apis/apaas/v1/seat_assignments";
 
-        let transport = Transport::new(self.config);
-        transport
-            .get_with_query(
-                url,
-                vec![
-                    ("page", self.page.map(|p| p.to_string())),
-                    ("page_size", self.page_size.map(|p| p.to_string())),
-                ],
-            )
-            .await
+        let mut req: ApiRequest<SeatAssignmentListResponse> = ApiRequest::get(&url);
+        if let Some(page) = self.page {
+            req = req.query("page", &page.to_string());
+        }
+        if let Some(page_size) = self.page_size {
+            req = req.query("page_size", &page_size.to_string());
+        }
+        Transport::request(req, &self.config, None).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<SeatAssignmentListResponse> {
-        let url = "/open-apis/apaas/v1/seat_assignments".to_string();
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<SeatAssignmentListResponse> {
+        let url = "/open-apis/apaas/v1/seat_assignments";
 
-        let transport = Transport::new(self.config);
-        transport
-            .get_with_query_and_option(
-                url,
-                vec![
-                    ("page", self.page.map(|p| p.to_string())),
-                    ("page_size", self.page_size.map(|p| p.to_string())),
-                ],
-                option,
-            )
-            .await
+        let mut req: ApiRequest<SeatAssignmentListResponse> = ApiRequest::get(&url);
+        if let Some(page) = self.page {
+            req = req.query("page", &page.to_string());
+        }
+        if let Some(page_size) = self.page_size {
+            req = req.query("page_size", &page_size.to_string());
+        }
+        Transport::request(req, &self.config, Some(option)).await
     }
 }
 

@@ -56,7 +56,10 @@ pub struct GetAgentSkillRequest {
 impl GetAgentSkillRequest {
     /// 创建新的获取指定客服技能请求
     pub fn new(config: Arc<Config>, agent_skill_id: String) -> Self {
-        Self { config, agent_skill_id }
+        Self {
+            config,
+            agent_skill_id,
+        }
     }
 
     /// 执行获取指定客服技能请求
@@ -79,7 +82,10 @@ pub struct GetAgentSkillRequestBuilder {
 impl GetAgentSkillRequestBuilder {
     /// 创建新的构建器
     pub fn new(config: Arc<Config>, agent_skill_id: String) -> Self {
-        Self { config, agent_skill_id }
+        Self {
+            config,
+            agent_skill_id,
+        }
     }
 
     /// 执行请求

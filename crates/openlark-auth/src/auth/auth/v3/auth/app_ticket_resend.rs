@@ -14,8 +14,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
-
 /// 重新获取 app_ticket 请求
 pub struct AppTicketResendBuilder {
     app_id: String,
@@ -65,7 +63,10 @@ impl AppTicketResendBuilder {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<AppTicketResendResponseData> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<AppTicketResendResponseData> {
         // 验证必填字段
         validate_required!(self.app_id, "应用ID不能为空");
         validate_required!(self.app_secret, "应用密钥不能为空");

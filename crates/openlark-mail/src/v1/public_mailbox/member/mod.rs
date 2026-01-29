@@ -56,6 +56,7 @@ pub use delete::DeletePublicMailboxMemberRequest;
 pub use get::GetPublicMailboxMemberRequest;
 pub use list::PublicMailboxMemberListRequest;
 pub use models::{
-    CreatePublicMailboxMemberBody, CreatePublicMailboxMemberResponse, DeletePublicMailboxMemberResponse,
-    GetPublicMailboxMemberResponse, PublicMailboxMemberItem, PublicMailboxMemberListResponse,
+    CreatePublicMailboxMemberBody, CreatePublicMailboxMemberResponse,
+    DeletePublicMailboxMemberResponse, GetPublicMailboxMemberResponse, PublicMailboxMemberItem,
+    PublicMailboxMemberListResponse,
 };

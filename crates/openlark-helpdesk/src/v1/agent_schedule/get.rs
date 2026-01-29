@@ -208,7 +208,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = GetAgentScheduleRequestBuilder::new(Arc::new(config), "agent_123".to_string());
+        let builder =
+            GetAgentScheduleRequestBuilder::new(Arc::new(config), "agent_123".to_string());
 
         assert_eq!(builder.agent_id, "agent_123");
         assert!(builder.page_size.is_none());

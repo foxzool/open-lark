@@ -1,13 +1,13 @@
-pub mod ticket;
 pub mod agent;
 pub mod agent_schedule;
 pub mod agent_skill;
 pub mod agent_skill_rule;
+pub mod bot;
 pub mod category;
+pub mod event;
 pub mod faq;
 pub mod notification;
-pub mod event;
-pub mod bot;
+pub mod ticket;
 
 use openlark_core::config::Config;
 use std::sync::Arc;

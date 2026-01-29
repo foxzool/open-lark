@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -36,25 +35,24 @@ impl EmployeeResurrectBuilder {
             self.employee_id
         );
 
-        let transport = Transport::new(self.config);
-        transport.post::<EmployeeResurrectRequest>(url, EmployeeResurrectRequest {}, None::<&()>).await
+        let req: ApiRequest<EmployeeResurrectResponse> = ApiRequest::post(&url);
+        Transport::request(req, &self.config, None).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<EmployeeResurrectResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<EmployeeResurrectResponse> {
         let url = format!(
             "/open-apis/directory/v1/employees/{}/resurrect",
             self.employee_id
         );
 
-        let transport = Transport::new(self.config);
-        transport.post_with_option::<EmployeeResurrectRequest>(url, EmployeeResurrectRequest {}, option).await
+        let req: ApiRequest<EmployeeResurrectResponse> = ApiRequest::post(&url);
+        Transport::request(req, &self.config, Some(option)).await
     }
 }
-
-/// 恢复离职员工请求
-#[derive(Debug, Clone, Deserialize, Serialize)]
-struct EmployeeResurrectRequest {}
 
 /// 恢复离职员工响应
 #[derive(Debug, Clone, Deserialize, Serialize)]

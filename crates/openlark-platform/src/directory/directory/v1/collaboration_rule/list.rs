@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -26,18 +25,20 @@ impl CollaborationRuleListBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CollaborationRuleListResponse> {
-        let url = "/open-apis/directory/v1/collaboration_rules".to_string();
-
-        let transport = Transport::new(self.config);
-        transport.get(url, None::<&()>).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CollaborationRuleListResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<CollaborationRuleListResponse> {
         let url = "/open-apis/directory/v1/collaboration_rules".to_string();
 
-        let transport = Transport::new(self.config);
-        transport.get_with_option(url, option).await
+        let req: ApiRequest<CollaborationRuleListResponse> = ApiRequest::get(&url);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

@@ -53,8 +53,7 @@ impl DeleteTaskCollaboratorRequestV1 {
             self.task_id.clone(),
             self.collaborator_id.clone(),
         );
-        let request =
-            ApiRequest::<DeleteTaskCollaboratorResponseV1>::delete(api_endpoint.to_url());
+        let request = ApiRequest::<DeleteTaskCollaboratorResponseV1>::delete(api_endpoint.to_url());
 
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;

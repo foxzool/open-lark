@@ -169,7 +169,8 @@ impl CreateUserMailboxMailContactRequest {
         validate_required!(self.body.email.trim(), "联系人邮箱不能为空");
 
         let api_endpoint = MailApiV1::UserMailboxMailContactCreate(self.mailbox_id.clone());
-        let mut request = ApiRequest::<CreateUserMailboxMailContactResponse>::post(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<CreateUserMailboxMailContactResponse>::post(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "创建用户邮箱邮件联系人")?);
@@ -225,7 +226,8 @@ impl UserMailboxMailContactListRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UserMailboxMailContactListResponse> {
         let api_endpoint = MailApiV1::UserMailboxMailContactList(self.mailbox_id.clone());
-        let mut request = ApiRequest::<UserMailboxMailContactListResponse>::get(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<UserMailboxMailContactListResponse>::get(api_endpoint.to_url());
 
         if let Some(page_token) = &self.page_token {
             request = request.query("page_token", page_token);
@@ -273,7 +275,8 @@ impl DeleteUserMailboxMailContactRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteUserMailboxMailContactResponse> {
         let api_endpoint = MailApiV1::UserMailboxMailContactDelete(self.mailbox_id.clone());
-        let mut request = ApiRequest::<DeleteUserMailboxMailContactResponse>::delete(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<DeleteUserMailboxMailContactResponse>::delete(api_endpoint.to_url());
         request = request.query("contact_id", &self.contact_id);
 
         let response =
@@ -298,7 +301,11 @@ pub struct PatchUserMailboxMailContactRequest {
 }
 
 impl PatchUserMailboxMailContactRequest {
-    pub fn new(config: Arc<Config>, mailbox_id: impl Into<String>, contact_id: impl Into<String>) -> Self {
+    pub fn new(
+        config: Arc<Config>,
+        mailbox_id: impl Into<String>,
+        contact_id: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             mailbox_id: mailbox_id.into(),
@@ -329,11 +336,15 @@ impl PatchUserMailboxMailContactRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<PatchUserMailboxMailContactResponse> {
         let api_endpoint = MailApiV1::UserMailboxMailContactPatch(self.mailbox_id.clone());
-        let mut request = ApiRequest::<PatchUserMailboxMailContactResponse>::patch(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<PatchUserMailboxMailContactResponse>::patch(api_endpoint.to_url());
         request = request.query("contact_id", &self.contact_id);
 
         let request_body = &self.body;
-        request = request.body(serialize_params(request_body, "部分更新用户邮箱邮件联系人")?);
+        request = request.body(serialize_params(
+            request_body,
+            "部分更新用户邮箱邮件联系人",
+        )?);
 
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;

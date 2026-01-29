@@ -22,10 +22,7 @@ pub struct BatchGetRequest {
 impl BatchGetRequest {
     /// 创建请求
     pub fn new(config: Config, okr_ids: Vec<String>) -> Self {
-        Self {
-            okr_ids,
-            config,
-        }
+        Self { okr_ids, config }
     }
 
     /// 执行请求

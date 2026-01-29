@@ -33,16 +33,16 @@ impl EnumListBuilder {
     pub async fn execute(self) -> SDKResult<EnumListResponse> {
         let url = format!("/open-apis/apaas/v1/workspaces/{}/enums", self.workspace_id);
 
-        let transport = Transport::new(self.config);
-        transport.get(url, None::<&()>).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<EnumListResponse> {
         let url = format!("/open-apis/apaas/v1/workspaces/{}/enums", self.workspace_id);
 
-        let transport = Transport::new(self.config);
-        transport.get_with_option(url, option).await
+        let req = ApiRequest::get(&url);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data.ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

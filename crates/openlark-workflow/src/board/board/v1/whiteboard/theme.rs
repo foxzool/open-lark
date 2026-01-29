@@ -50,8 +50,7 @@ impl GetWhiteboardThemeRequestV1 {
     ) -> SDKResult<GetWhiteboardThemeResponseV1> {
         validate_required!(self.board_id.trim(), "白板 ID 不能为空");
 
-        let api_endpoint =
-            crate::common::api_endpoints::BoardApiV1::WhiteboardTheme(self.board_id);
+        let api_endpoint = crate::common::api_endpoints::BoardApiV1::WhiteboardTheme(self.board_id);
         let request = ApiRequest::<GetWhiteboardThemeResponseV1>::get(api_endpoint.to_url());
 
         let response =
@@ -74,9 +73,8 @@ mod tests {
 
     #[test]
     fn test_whiteboard_theme_v1_url() {
-        let endpoint = crate::common::api_endpoints::BoardApiV1::WhiteboardTheme(
-            "test_board_id".to_string(),
-        );
+        let endpoint =
+            crate::common::api_endpoints::BoardApiV1::WhiteboardTheme("test_board_id".to_string());
         assert_eq!(
             endpoint.to_url(),
             "/open-apis/board/v1/whiteboards/test_board_id/theme"

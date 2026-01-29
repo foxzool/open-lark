@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-function/agent_skill/delete
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -44,7 +40,10 @@ pub struct DeleteAgentSkillRequest {
 impl DeleteAgentSkillRequest {
     /// 创建新的删除客服技能请求
     pub fn new(config: Arc<Config>, agent_skill_id: String) -> Self {
-        Self { config, agent_skill_id }
+        Self {
+            config,
+            agent_skill_id,
+        }
     }
 
     /// 执行删除客服技能请求
@@ -57,8 +56,9 @@ impl DeleteAgentSkillRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<DeleteAgentSkillResponse> {
-        let req: ApiRequest<DeleteAgentSkillResponse> =
-            ApiRequest::delete(HelpdeskApiV1::AgentSkillDelete(self.agent_skill_id.clone()).to_url());
+        let req: ApiRequest<DeleteAgentSkillResponse> = ApiRequest::delete(
+            HelpdeskApiV1::AgentSkillDelete(self.agent_skill_id.clone()).to_url(),
+        );
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "删除客服技能")
@@ -75,12 +75,16 @@ pub struct DeleteAgentSkillRequestBuilder {
 impl DeleteAgentSkillRequestBuilder {
     /// 创建新的构建器
     pub fn new(config: Arc<Config>, agent_skill_id: String) -> Self {
-        Self { config, agent_skill_id }
+        Self {
+            config,
+            agent_skill_id,
+        }
     }
 
     /// 执行请求
     pub async fn execute(&self) -> SDKResult<DeleteAgentSkillResponse> {
-        let request = DeleteAgentSkillRequest::new(self.config.clone(), self.agent_skill_id.clone());
+        let request =
+            DeleteAgentSkillRequest::new(self.config.clone(), self.agent_skill_id.clone());
         request.execute().await
     }
 
@@ -89,7 +93,8 @@ impl DeleteAgentSkillRequestBuilder {
         &self,
         option: RequestOption,
     ) -> SDKResult<DeleteAgentSkillResponse> {
-        let request = DeleteAgentSkillRequest::new(self.config.clone(), self.agent_skill_id.clone());
+        let request =
+            DeleteAgentSkillRequest::new(self.config.clone(), self.agent_skill_id.clone());
         request.execute_with_options(option).await
     }
 }
@@ -125,7 +130,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = DeleteAgentSkillRequestBuilder::new(Arc::new(config), "skill_123".to_string());
+        let builder =
+            DeleteAgentSkillRequestBuilder::new(Arc::new(config), "skill_123".to_string());
 
         assert_eq!(builder.agent_skill_id, "skill_123");
     }

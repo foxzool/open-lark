@@ -78,7 +78,12 @@ impl CreateWhiteboardNodeRequestV1 {
     }
 
     pub fn position(mut self, x: f64, y: f64, width: f64, height: f64) -> Self {
-        self.body.position = NodePosition { x, y, width, height };
+        self.body.position = NodePosition {
+            x,
+            y,
+            width,
+            height,
+        };
         self
     }
 

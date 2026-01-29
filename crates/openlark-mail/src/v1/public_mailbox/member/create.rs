@@ -52,7 +52,8 @@ impl CreatePublicMailboxMemberRequest {
         validate_required!(self.body.email.trim(), "成员邮箱地址不能为空");
 
         let api_endpoint = MailApiV1::PublicMailboxMemberCreate(self.mailbox_id.clone());
-        let mut request = ApiRequest::<CreatePublicMailboxMemberResponse>::post(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<CreatePublicMailboxMemberResponse>::post(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "创建公共邮箱成员")?);

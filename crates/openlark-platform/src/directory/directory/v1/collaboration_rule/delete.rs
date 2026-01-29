@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -36,8 +35,8 @@ impl CollaborationRuleDeleteBuilder {
             self.collaboration_rule_id
         );
 
-        let transport = Transport::new(self.config);
-        transport.delete::<CollaborationRuleDeleteRequest>(url, CollaborationRuleDeleteRequest {}).await
+        let req: ApiRequest<CollaborationRuleDeleteResponse> = ApiRequest::delete(&url);
+        Transport::request(req, &self.config, None).await
     }
 
     /// 使用选项执行请求
@@ -50,14 +49,10 @@ impl CollaborationRuleDeleteBuilder {
             self.collaboration_rule_id
         );
 
-        let transport = Transport::new(self.config);
-        transport.delete_with_option::<CollaborationRuleDeleteRequest>(url, CollaborationRuleDeleteRequest {}, option).await
+        let req: ApiRequest<CollaborationRuleDeleteResponse> = ApiRequest::delete(&url);
+        Transport::request(req, &self.config, Some(option)).await
     }
 }
-
-/// 删除可搜可见规则请求
-#[derive(Debug, Clone, Deserialize, Serialize)]
-struct CollaborationRuleDeleteRequest {}
 
 /// 删除可搜可见规则响应
 #[derive(Debug, Clone, Deserialize, Serialize)]

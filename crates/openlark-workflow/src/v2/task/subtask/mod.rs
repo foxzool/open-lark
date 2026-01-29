@@ -22,8 +22,7 @@ impl Subtask {
     }
 
     /// 创建子任务
-    pub fn create(&self,
-    ) -> create::CreateSubtaskRequest {
+    pub fn create(&self) -> create::CreateSubtaskRequest {
         create::CreateSubtaskRequest::new(self.config.clone(), self.task_guid.clone())
     }
 

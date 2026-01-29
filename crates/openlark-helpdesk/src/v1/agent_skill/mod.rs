@@ -2,11 +2,11 @@
 //!
 //! 提供客服技能相关的 API。
 
-pub mod list;
 pub mod create;
-pub mod get;
-pub mod patch;
 pub mod delete;
+pub mod get;
+pub mod list;
+pub mod patch;
 
 use openlark_core::config::Config;
 use std::sync::Arc;
@@ -49,8 +49,8 @@ impl AgentSkill {
     }
 }
 
-pub use list::{ListAgentSkillRequest, ListAgentSkillRequestBuilder};
 pub use create::{CreateAgentSkillRequest, CreateAgentSkillRequestBuilder};
-pub use get::{GetAgentSkillRequest, GetAgentSkillRequestBuilder};
-pub use patch::{PatchAgentSkillRequest, PatchAgentSkillRequestBuilder};
 pub use delete::{DeleteAgentSkillRequest, DeleteAgentSkillRequestBuilder};
+pub use get::{GetAgentSkillRequest, GetAgentSkillRequestBuilder};
+pub use list::{ListAgentSkillRequest, ListAgentSkillRequestBuilder};
+pub use patch::{PatchAgentSkillRequest, PatchAgentSkillRequestBuilder};

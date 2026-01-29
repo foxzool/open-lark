@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -47,25 +46,24 @@ impl RecordDeleteBuilder {
             self.namespace, self.object_api_name, self.record_id
         );
 
-        let transport = Transport::new(self.config);
-        transport.delete::<RecordDeleteRequest>(url, RecordDeleteRequest {}).await
+        let req: ApiRequest<RecordDeleteResponse> = ApiRequest::delete(&url);
+        Transport::request(req, &self.config, None).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<RecordDeleteResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<RecordDeleteResponse> {
         let url = format!(
             "/open-apis/apaas/v1/applications/{}/objects/{}/records/{}",
             self.namespace, self.object_api_name, self.record_id
         );
 
-        let transport = Transport::new(self.config);
-        transport.delete_with_option::<RecordDeleteRequest>(url, RecordDeleteRequest {}, option).await
+        let req: ApiRequest<RecordDeleteResponse> = ApiRequest::delete(&url);
+        Transport::request(req, &self.config, Some(option)).await
     }
 }
-
-/// 删除记录请求
-#[derive(Debug, Clone, Deserialize, Serialize)]
-struct RecordDeleteRequest {}
 
 /// 删除记录响应
 #[derive(Debug, Clone, Deserialize, Serialize)]

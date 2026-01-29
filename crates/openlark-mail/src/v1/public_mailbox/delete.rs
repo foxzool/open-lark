@@ -18,10 +18,7 @@ pub struct DeletePublicMailboxRequest {
 
 impl DeletePublicMailboxRequest {
     pub fn new(config: Arc<Config>, mailbox_id: String) -> Self {
-        Self {
-            config,
-            mailbox_id,
-        }
+        Self { config, mailbox_id }
     }
 
     pub async fn execute(self) -> SDKResult<DeletePublicMailboxResponse> {

@@ -25,7 +25,12 @@ pub struct SaveRequest {
 
 impl SaveRequest {
     /// 创建请求
-    pub fn new(config: Config, datasource_id: String, employee_ids: Vec<String>, records: Vec<DatasourceRecord>) -> Self {
+    pub fn new(
+        config: Config,
+        datasource_id: String,
+        employee_ids: Vec<String>,
+        records: Vec<DatasourceRecord>,
+    ) -> Self {
         Self {
             datasource_id,
             employee_ids,

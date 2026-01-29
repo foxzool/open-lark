@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -24,7 +23,11 @@ pub struct TableGetBuilder {
 
 impl TableGetBuilder {
     /// 创建新的 Builder
-    pub fn new(config: Config, workspace_id: impl Into<String>, table_name: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        workspace_id: impl Into<String>,
+        table_name: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             workspace_id: workspace_id.into(),
@@ -34,13 +37,7 @@ impl TableGetBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<TableGetResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/workspaces/{}/tables/{}",
-            self.workspace_id, self.table_name
-        );
-
-        let transport = Transport::new(self.config);
-        transport.get(url, None::<&()>).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
@@ -50,8 +47,10 @@ impl TableGetBuilder {
             self.workspace_id, self.table_name
         );
 
-        let transport = Transport::new(self.config);
-        transport.get_with_option(url, option).await
+        let req: ApiRequest<TableGetResponse> = ApiRequest::get(&url);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

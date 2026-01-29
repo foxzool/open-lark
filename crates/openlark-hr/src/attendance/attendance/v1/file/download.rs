@@ -22,10 +22,7 @@ pub struct DownloadRequest {
 impl DownloadRequest {
     /// 创建请求
     pub fn new(config: Config, photo_id: String) -> Self {
-        Self {
-            photo_id,
-            config,
-        }
+        Self { photo_id, config }
     }
 
     /// 执行请求

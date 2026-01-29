@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -61,12 +60,18 @@ impl TableRecordsPatchBuilder {
             data: self.data,
         };
 
-        let transport = Transport::new(self.config);
-        transport.patch(url, request).await
+        let req: ApiRequest<TableRecordsPatchResponse> =
+            ApiRequest::patch(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(RequestOption::default())).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<TableRecordsPatchResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<TableRecordsPatchResponse> {
         let url = format!(
             "/open-apis/apaas/v1/workspaces/{}/tables/{}/records",
             self.workspace_id, self.table_name
@@ -77,8 +82,11 @@ impl TableRecordsPatchBuilder {
             data: self.data,
         };
 
-        let transport = Transport::new(self.config);
-        transport.patch_with_option(url, request, option).await
+        let req: ApiRequest<TableRecordsPatchResponse> =
+            ApiRequest::patch(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

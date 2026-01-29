@@ -38,8 +38,10 @@ impl DeletePublicMailboxMemberRequest {
         validate_required!(self.mailbox_id.trim(), "公共邮箱ID不能为空");
         validate_required!(self.member_id.trim(), "成员ID不能为空");
 
-        let api_endpoint = MailApiV1::PublicMailboxMemberDelete(self.mailbox_id.clone(), self.member_id.clone());
-        let request = ApiRequest::<DeletePublicMailboxMemberResponse>::delete(api_endpoint.to_url());
+        let api_endpoint =
+            MailApiV1::PublicMailboxMemberDelete(self.mailbox_id.clone(), self.member_id.clone());
+        let request =
+            ApiRequest::<DeletePublicMailboxMemberResponse>::delete(api_endpoint.to_url());
 
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;

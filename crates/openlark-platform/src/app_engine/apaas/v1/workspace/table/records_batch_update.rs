@@ -2,13 +2,13 @@
 //!
 //! URL: PATCH:/open-apis/apaas/v1/workspaces/:workspace_id/tables/:table_name/records_batch_update
 
+use crate::app_engine::apaas::v1::workspace::table::records_post::RecordOperationResult;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -26,7 +26,11 @@ pub struct TableRecordsBatchUpdateBuilder {
 
 impl TableRecordsBatchUpdateBuilder {
     /// 创建新的 Builder
-    pub fn new(config: Config, workspace_id: impl Into<String>, table_name: impl Into<String>) -> Self {
+    pub fn new(
+        config: Config,
+        workspace_id: impl Into<String>,
+        table_name: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             workspace_id: workspace_id.into(),
@@ -36,7 +40,11 @@ impl TableRecordsBatchUpdateBuilder {
     }
 
     /// 添加要更新的记录
-    pub fn record(mut self, record_id: impl Into<String>, data: impl Into<serde_json::Value>) -> Self {
+    pub fn record(
+        mut self,
+        record_id: impl Into<String>,
+        data: impl Into<serde_json::Value>,
+    ) -> Self {
         self.records.push(RecordUpdate {
             id: record_id.into(),
             data: data.into(),
@@ -49,30 +57,17 @@ impl TableRecordsBatchUpdateBuilder {
         mut self,
         records: impl IntoIterator<Item = (impl Into<String>, impl Into<serde_json::Value>)>,
     ) -> Self {
-        self.records.extend(
-            records
-                .into_iter()
-                .map(|(id, data)| RecordUpdate {
-                    id: id.into(),
-                    data: data.into(),
-                }),
-        );
+        self.records
+            .extend(records.into_iter().map(|(id, data)| RecordUpdate {
+                id: id.into(),
+                data: data.into(),
+            }));
         self
     }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<TableRecordsBatchUpdateResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/workspaces/{}/tables/{}/records_batch_update",
-            self.workspace_id, self.table_name
-        );
-
-        let request = TableRecordsBatchUpdateRequest {
-            records: self.records,
-        };
-
-        let transport = Transport::new(self.config);
-        transport.patch(url, request).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
@@ -89,8 +84,18 @@ impl TableRecordsBatchUpdateBuilder {
             records: self.records,
         };
 
-        let transport = Transport::new(self.config);
-        transport.patch_with_option(url, request, option).await
+        // 使用新的 Transport API
+        let req: ApiRequest<TableRecordsBatchUpdateResponse> =
+            ApiRequest::patch(url).body(serde_json::to_value(&request)?);
+
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+
+        resp.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "批量更新记录响应数据为空".to_string(),
+                "服务器没有返回有效的数据".to_string(),
+            )
+        })
     }
 }
 
@@ -121,7 +126,7 @@ pub struct TableRecordsBatchUpdateResponse {
     updated_count: u32,
     /// 操作结果列表
     #[serde(rename = "items")]
-    items: Vec<RecordOperationResult>,
+    pub items: Vec<RecordOperationResult>,
 }
 
 impl ApiResponseTrait for TableRecordsBatchUpdateResponse {

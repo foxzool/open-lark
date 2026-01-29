@@ -13,8 +13,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
-
 /// 用户访问令牌请求（v1版本）
 pub struct UserAccessTokenV1Builder {
     grant_code: String,
@@ -72,7 +70,10 @@ impl UserAccessTokenV1Builder {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<UserAccessTokenV1ResponseData> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<UserAccessTokenV1ResponseData> {
         // 验证必填字段
         validate_required!(self.grant_code, "授权码不能为空");
         validate_required!(self.app_id, "应用ID不能为空");

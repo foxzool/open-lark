@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/category/delete
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -122,7 +118,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = DeleteCategoryRequestBuilder::new(Arc::new(config), "category_123".to_string());
+        let builder =
+            DeleteCategoryRequestBuilder::new(Arc::new(config), "category_123".to_string());
 
         assert_eq!(builder.id, "category_123");
     }

@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -64,7 +63,8 @@ impl ChatGroupBuilder {
 
     /// 添加多个群成员 ID
     pub fn member_ids(mut self, member_ids: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        self.member_ids.extend(member_ids.into_iter().map(Into::into));
+        self.member_ids
+            .extend(member_ids.into_iter().map(Into::into));
         self
     }
 
@@ -78,8 +78,7 @@ impl ChatGroupBuilder {
             member_ids: self.member_ids,
         };
 
-        let transport = Transport::new(self.config);
-        transport.post(url, request, None::<&()>).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
@@ -92,8 +91,11 @@ impl ChatGroupBuilder {
             member_ids: self.member_ids,
         };
 
-        let transport = Transport::new(self.config);
-        transport.post(url, request, Some(option)).await
+        let req: ApiRequest<ChatGroupResponse> =
+            ApiRequest::post(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

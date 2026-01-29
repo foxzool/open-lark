@@ -60,7 +60,10 @@ impl DownloadExportRequest {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<DownloadExportResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<DownloadExportResponse> {
         let url = VC_V1_EXPORT_GET.replace("{export_id}", "download");
         let mut api_request: ApiRequest<DownloadExportResponse> = ApiRequest::get(&url);
 

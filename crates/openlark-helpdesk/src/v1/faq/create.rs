@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/create
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -85,7 +81,8 @@ impl CreateFaqRequest {
 
     /// 执行创建知识库请求
     pub async fn execute(self, body: CreateFaqBody) -> SDKResult<CreateFaqResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行创建知识库请求（支持自定义选项）
@@ -158,9 +155,9 @@ impl CreateFaqRequestBuilder {
 
     /// 执行请求
     pub async fn execute(&self) -> SDKResult<CreateFaqResponse> {
-        let body = self.body().map_err(|reason| {
-            openlark_core::error::validation_error("body", reason)
-        })?;
+        let body = self
+            .body()
+            .map_err(|reason| openlark_core::error::validation_error("body", reason))?;
         let request = CreateFaqRequest::new(self.config.clone());
         request.execute(body).await
     }
@@ -180,9 +177,8 @@ pub async fn create_faq_with_options(
     body.validate()
         .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
 
-    let req: ApiRequest<CreateFaqResponse> =
-        ApiRequest::post(HelpdeskApiV1::FaqCreate.to_url())
-            .body(serialize_params(&body, "创建知识库")?);
+    let req: ApiRequest<CreateFaqResponse> = ApiRequest::post(HelpdeskApiV1::FaqCreate.to_url())
+        .body(serialize_params(&body, "创建知识库")?);
 
     let resp = Transport::request(req, config, Some(option)).await?;
     extract_response_data(resp, "创建知识库")

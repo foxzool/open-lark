@@ -7,10 +7,10 @@ pub mod raw_content;
 
 pub use block::{
     BatchUpdateDocumentBlocksParams, BatchUpdateDocumentBlocksRequest,
-    BatchUpdateDocumentBlocksResponse, BatchUpdateRequest,
+    BatchUpdateDocumentBlocksResponse, BatchUpdateRequest, BlockIdRelation,
     CreateDocumentBlockChildrenParams, CreateDocumentBlockChildrenRequest,
     CreateDocumentBlockChildrenResponse, CreateDocumentBlockDescendantParams,
-    CreateDocumentBlockDescendantRequest, CreateDocumentBlockDescendantResponse, BlockIdRelation,
+    CreateDocumentBlockDescendantRequest, CreateDocumentBlockDescendantResponse,
     GetDocumentBlockChildrenParams, GetDocumentBlockChildrenRequest,
     GetDocumentBlockChildrenResponse, GetDocumentBlockParams, GetDocumentBlockRequest,
     GetDocumentBlockResponse, GetDocumentBlocksParams, GetDocumentBlocksRequest,
@@ -19,13 +19,11 @@ pub use block::{
 };
 
 pub use convert::{
-    ConvertContentToBlocksParams, ConvertContentToBlocksRequest, ConvertContentToBlocksResponse,
-    ContentType,
+    ContentType, ConvertContentToBlocksParams, ConvertContentToBlocksRequest,
+    ConvertContentToBlocksResponse,
 };
 
-pub use create::{
-    CreateDocumentRequest, CreateDocumentResponse, CreatedDocument,
-};
+pub use create::{CreateDocumentRequest, CreateDocumentResponse, CreatedDocument};
 
 pub use get::{
     Document, DocumentCover, DocumentDisplaySetting, GetDocumentRequest, GetDocumentResponse,

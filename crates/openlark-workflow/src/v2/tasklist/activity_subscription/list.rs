@@ -61,7 +61,8 @@ impl ListActivitySubscriptionsRequest {
         validate_required!(self.tasklist_guid.trim(), "任务清单GUID不能为空");
 
         let api_endpoint = TaskApiV2::ActivitySubscriptionList(self.tasklist_guid.clone());
-        let mut request = ApiRequest::<ListActivitySubscriptionsResponse>::get(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<ListActivitySubscriptionsResponse>::get(api_endpoint.to_url());
 
         // 构建查询参数
         if let Some(page_size) = self.page_size {

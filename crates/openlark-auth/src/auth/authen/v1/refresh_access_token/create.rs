@@ -14,8 +14,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-
-
 /// 用户访问令牌刷新请求（v1版本）
 pub struct RefreshUserAccessTokenV1Builder {
     refresh_token: String,
@@ -73,7 +71,10 @@ impl RefreshUserAccessTokenV1Builder {
     }
 
     /// 执行请求（带选项）
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<RefreshUserAccessTokenV1ResponseData> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<RefreshUserAccessTokenV1ResponseData> {
         // 验证必填字段
         validate_required!(self.refresh_token, "刷新令牌不能为空");
         validate_required!(self.app_id, "应用ID不能为空");

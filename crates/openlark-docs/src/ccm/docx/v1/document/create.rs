@@ -104,5 +104,3 @@ impl CreateDocumentRequest {
         extract_response_data(response, "创建")
     }
 }
-
-

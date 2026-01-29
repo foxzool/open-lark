@@ -168,7 +168,8 @@ impl CreateUserMailboxFolderRequest {
         validate_required!(self.body.name.trim(), "文件夹名称不能为空");
 
         let api_endpoint = MailApiV1::UserMailboxFolderCreate(self.mailbox_id.clone());
-        let mut request = ApiRequest::<CreateUserMailboxFolderResponse>::post(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<CreateUserMailboxFolderResponse>::post(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "创建用户邮箱文件夹")?);
@@ -272,7 +273,8 @@ impl DeleteUserMailboxFolderRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteUserMailboxFolderResponse> {
         let api_endpoint = MailApiV1::UserMailboxFolderDelete(self.mailbox_id.clone());
-        let mut request = ApiRequest::<DeleteUserMailboxFolderResponse>::delete(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<DeleteUserMailboxFolderResponse>::delete(api_endpoint.to_url());
         request = request.query("folder_id", &self.folder_id);
 
         let response =
@@ -297,7 +299,11 @@ pub struct PatchUserMailboxFolderRequest {
 }
 
 impl PatchUserMailboxFolderRequest {
-    pub fn new(config: Arc<Config>, mailbox_id: impl Into<String>, folder_id: impl Into<String>) -> Self {
+    pub fn new(
+        config: Arc<Config>,
+        mailbox_id: impl Into<String>,
+        folder_id: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             mailbox_id: mailbox_id.into(),
@@ -322,7 +328,8 @@ impl PatchUserMailboxFolderRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<PatchUserMailboxFolderResponse> {
         let api_endpoint = MailApiV1::UserMailboxFolderPatch(self.mailbox_id.clone());
-        let mut request = ApiRequest::<PatchUserMailboxFolderResponse>::patch(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<PatchUserMailboxFolderResponse>::patch(api_endpoint.to_url());
         request = request.query("folder_id", &self.folder_id);
 
         let request_body = &self.body;
@@ -353,8 +360,8 @@ mod tests {
                 .build(),
         );
 
-        let request = CreateUserMailboxFolderRequest::new(config, "mailbox_123".to_string())
-            .name("收件箱");
+        let request =
+            CreateUserMailboxFolderRequest::new(config, "mailbox_123".to_string()).name("收件箱");
 
         assert_eq!(request.mailbox_id, "mailbox_123");
         assert_eq!(request.body.name, "收件箱");

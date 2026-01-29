@@ -7,8 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -34,26 +33,33 @@ impl SqlCommandsBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<SqlCommandsResponse> {
-        let url = format!("/open-apis/apaas/v1/workspaces/{}/sql_commands", self.workspace_id);
+        let url = format!(
+            "/open-apis/apaas/v1/workspaces/{}/sql_commands",
+            self.workspace_id
+        );
 
-        let request = SqlCommandsRequest {
-            sql: self.sql,
-        };
+        let request = SqlCommandsRequest { sql: self.sql };
 
-        let transport = Transport::new(self.config);
-        transport.post(url, request, None::<&()>).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<SqlCommandsResponse> {
-        let url = format!("/open-apis/apaas/v1/workspaces/{}/sql_commands", self.workspace_id);
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<SqlCommandsResponse> {
+        let url = format!(
+            "/open-apis/apaas/v1/workspaces/{}/sql_commands",
+            self.workspace_id
+        );
 
-        let request = SqlCommandsRequest {
-            sql: self.sql,
-        };
+        let request = SqlCommandsRequest { sql: self.sql };
 
-        let transport = Transport::new(self.config);
-        transport.post(url, request, Some(option)).await
+        let req: ApiRequest<SqlCommandsResponse> =
+            ApiRequest::post(&url).body(serde_json::to_value(&request)?);
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))
     }
 }
 

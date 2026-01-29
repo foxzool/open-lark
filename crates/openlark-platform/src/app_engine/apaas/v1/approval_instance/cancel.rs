@@ -31,16 +31,22 @@ impl CancelInstanceBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CancelInstanceResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<CancelInstanceResponse> {
         validate_required!(self.approval_instance_id, "实例ID不能为空");
 
-        let url = format!("/open-apis/apaas/v1/approval_instances/{}/cancel", self.approval_instance_id);
+        let url = format!(
+            "/open-apis/apaas/v1/approval_instances/{}/cancel",
+            self.approval_instance_id
+        );
         let api_request: ApiRequest<CancelInstanceResponse> = ApiRequest::post(url);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("撤销人工任务", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("撤销人工任务", "响应数据为空"))
     }
 }
 

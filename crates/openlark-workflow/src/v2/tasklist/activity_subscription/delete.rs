@@ -54,7 +54,8 @@ impl DeleteActivitySubscriptionRequest {
             self.tasklist_guid.clone(),
             self.subscription_guid.clone(),
         );
-        let request = ApiRequest::<DeleteActivitySubscriptionResponse>::delete(api_endpoint.to_url());
+        let request =
+            ApiRequest::<DeleteActivitySubscriptionResponse>::delete(api_endpoint.to_url());
 
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;

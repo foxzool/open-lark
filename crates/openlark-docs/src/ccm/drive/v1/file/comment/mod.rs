@@ -30,29 +30,20 @@ pub fn validate_comment_file_type_for_get(file_type: &str) -> SDKResult<()> {
 // 显式导出 - 避免使用 glob reexport
 pub use batch_query::{BatchQueryCommentRequest, BatchQueryCommentResponse};
 
-pub use create::{CreateCommentRequest};
+pub use create::CreateCommentRequest;
 
 pub use get::{GetCommentRequest, GetCommentResponse};
 
 pub use list::{ListCommentsRequest, ListCommentsResponse};
 
 pub use models::{
-    Comment,
-    CommentContent,
-    CommentElement,
-    CreateCommentReply,
-    CreateCommentReplyList,
-    DocsLink,
-    Person,
-    ReplyExtra,
-    TextRun,
+    Comment, CommentContent, CommentElement, CreateCommentReply, CreateCommentReplyList, DocsLink,
+    Person, ReplyExtra, TextRun,
 };
 
 pub use patch::{PatchCommentRequest, PatchCommentResponse};
 
 pub use reply::{
-    DeleteCommentReplyRequest,
-    DeleteCommentReplyResponse,
-    ListCommentReplyRequest,
+    DeleteCommentReplyRequest, DeleteCommentReplyResponse, ListCommentReplyRequest,
     ListCommentReplyResponse,
 };
