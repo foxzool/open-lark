@@ -74,46 +74,45 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("文件上传成功: {}", result.file_token);
 
-    // 创建多维表格
-    let table = client.docs.base.bitable().create_tables(
-    tables: vec!["测试表格".to_string()],
-        folder_token: "folder_token".to_string(),
-    table: false,
-    default: true,
+    // 创建数据表
+    use openlark_docs::base::bitable::v1::app::table::{CreateTableRequest, TableData};
+    let table_request = CreateTableRequest::new(
+        client.docs.base.bitable().config().clone(),
     )
-    .execute()
-    .await?;
+    .app_token("app_token".to_string())
+    .table(TableData::new("测试表格"));
+    let table = table_request.execute().await?;
 
-    println!("表格创建成功");
+    println!("表格创建成功: {}", table.table_id);
 
     // 创建记录
+    use openlark_docs::base::bitable::v1::app::table::record::CreateRecordRequest;
     let fields = serde_json::json!({
         "姓名": "张三",
         "部门": "技术部",
         "状态": "在职"
     });
 
-    let record = RecordCreateRequest::new(
+    let record_request = CreateRecordRequest::new(
         client.docs.base.bitable().config().clone(),
-        "app_token".to_string(),
-        "table_id".to_string(),
-        fields,
     )
-    .execute()
-    .await?;
+    .app_token("app_token".to_string())
+    .table_id("table_id".to_string())
+    .fields(fields);
+    let record = record_request.execute().await?;
 
     println!("记录创建成功: {}", record.data.record_id);
 
     // 创建知识空间
-    let space = client.docs.ccm.wiki.v2().space.create(
-        name: "技术文档库".to_string(),
-        wiki_space_id: "space_id".to_string(),
-        description: Some("存储技术文档".to_string()),
+    use openlark_docs::ccm::wiki::v2::space::CreateWikiSpaceRequest;
+    let space_request = CreateWikiSpaceRequest::new(
+        client.docs.ccm.wiki.v2().config().clone(),
     )
-    .execute()
-    .await?;
+    .name("技术文档库".to_string())
+    .description("存储技术文档".to_string());
+    let space = space_request.execute().await?;
 
-    println!("知识空间创建成功: {}", space.data.wiki_space.space_id);
+    println!("知识空间创建成功: {}", space.space.as_ref().unwrap().space_id);
 
     Ok(())
 }
