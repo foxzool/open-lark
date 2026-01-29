@@ -8,10 +8,32 @@ pub mod get;
 pub mod list;
 pub mod patch;
 
-// 使用通配符导出所有子模块
-pub use batch_update::*;
-pub use children::*;
-pub use descendant::*;
-pub use get::*;
-pub use list::*;
-pub use patch::*;
+pub use batch_update::{
+    BatchUpdateDocumentBlocksParams, BatchUpdateDocumentBlocksRequest,
+    BatchUpdateDocumentBlocksResponse, BatchUpdateRequest,
+};
+
+pub use children::{
+    BatchDeleteDocumentBlockChildrenParams, BatchDeleteDocumentBlockChildrenRequest,
+    BatchDeleteDocumentBlockChildrenResponse, CreateDocumentBlockChildrenParams,
+    CreateDocumentBlockChildrenRequest, CreateDocumentBlockChildrenResponse,
+    GetDocumentBlockChildrenParams, GetDocumentBlockChildrenRequest,
+    GetDocumentBlockChildrenResponse,
+};
+
+pub use descendant::{
+    BlockIdRelation, CreateDocumentBlockDescendantParams, CreateDocumentBlockDescendantRequest,
+    CreateDocumentBlockDescendantResponse,
+};
+
+pub use get::{
+    GetDocumentBlockParams, GetDocumentBlockRequest, GetDocumentBlockResponse,
+};
+
+pub use list::{
+    GetDocumentBlocksParams, GetDocumentBlocksRequest, GetDocumentBlocksResponse,
+};
+
+pub use patch::{
+    UpdateDocumentBlockParams, UpdateDocumentBlockRequest, UpdateDocumentBlockResponse,
+};

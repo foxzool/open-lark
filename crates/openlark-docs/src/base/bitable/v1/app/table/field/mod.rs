@@ -1,11 +1,17 @@
 /// 字段管理模块
+//!
+//! 提供多维表格字段的 CRUD 操作。
 
 pub mod list;
 pub mod create;
 pub mod delete;
 pub mod update;
 
-pub use create::*;
-pub use delete::*;
-pub use list::*;
-pub use update::*;
+// 显式导出 - 避免使用 glob reexport
+pub use create::{CreateFieldRequest, Field, FieldProperty, FieldType, CreateFieldResponse};
+
+pub use delete::{DeleteFieldRequest, DeleteFieldResponse};
+
+pub use list::{ListFieldRequest, ListFieldResponse};
+
+pub use update::{UpdateFieldRequest, UpdateFieldResponse};

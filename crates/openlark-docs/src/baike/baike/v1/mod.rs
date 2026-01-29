@@ -6,10 +6,26 @@ pub mod file;
 pub mod models;
 pub mod service;
 
-// 使用通配符导出所有子模块
-pub use classification::*;
-pub use draft::*;
-pub use entity::*;
-pub use file::*;
-pub use models::*;
-pub use service::*;
+pub use classification::ListClassificationRequest;
+
+pub use draft::{CreateDraftReq, CreateDraftRequest, CreateDraftResp, Draft, UpdateDraftReq, UpdateDraftRequest, UpdateDraftResp};
+
+pub use entity::{
+    CreateEntityReq, CreateEntityRequest, CreateEntityResp,
+    ExtractEntityRequest, ExtractEntityResponse,
+    GetEntityRequest, GetEntityResp,
+    HighlightEntityRequest, HighlightEntityResponse,
+    ListEntityRequest, ListEntityResp,
+    MatchEntityRequest, MatchEntityResp,
+    SearchEntityRequest, SearchEntityResponse,
+    UpdateEntityReq, UpdateEntityRequest, UpdateEntityResp,
+};
+
+pub use file::{DownloadFileRequest, UploadFileRequest, UploadFileResponse};
+
+pub use models::{
+    BaikeImage, ClassificationItem, DisplayStatus, Entity, EntityStatistics,
+    OuterInfo, RelatedMeta, Referer, Term, UserIdType,
+};
+
+pub use service::BaikeV1Service;

@@ -1,4 +1,6 @@
 /// 视图管理模块
+//!
+//! 提供多维表格视图的 CRUD 操作。
 
 pub mod list;
 pub mod create;
@@ -6,8 +8,13 @@ pub mod patch;
 pub mod delete;
 pub mod get;
 
-pub use create::*;
-pub use delete::*;
-pub use get::*;
-pub use list::*;
-pub use patch::*;
+// 显式导出 - 避免使用 glob reexport
+pub use create::{CreateViewData, CreateViewRequest, CreateViewResponse};
+
+pub use delete::{DeleteViewRequest, DeleteViewResponse};
+
+pub use get::{GetViewRequest, GetViewResponse};
+
+pub use list::{ListViewsRequest, ListViewsRequestBuilder, ListViewsResponse};
+
+pub use patch::{PatchViewData, PatchViewRequest, PatchViewResponse, View};

@@ -4,6 +4,28 @@
 pub mod chat;
 pub mod document;
 
-// 使用通配符导出所有子模块
-pub use chat::*;
-pub use document::*;
+pub use chat::{
+    GetChatAnnouncementBlockChildrenParams, GetChatAnnouncementBlockChildrenRequest,
+    GetChatAnnouncementBlockChildrenResponse, GetChatAnnouncementBlockParams,
+    GetChatAnnouncementBlockRequest, GetChatAnnouncementBlockResponse,
+    GetChatAnnouncementBlocksParams, GetChatAnnouncementBlocksRequest,
+    GetChatAnnouncementBlocksResponse, GetChatAnnouncementRequest, GetChatAnnouncementResponse,
+};
+
+pub use document::{
+    BatchUpdateDocumentBlocksParams, BatchUpdateDocumentBlocksRequest,
+    BatchUpdateDocumentBlocksResponse, BatchUpdateRequest,
+    ConvertContentToBlocksParams, ConvertContentToBlocksRequest, ConvertContentToBlocksResponse,
+    ContentType,
+    CreateDocumentBlockChildrenParams, CreateDocumentBlockChildrenRequest,
+    CreateDocumentBlockChildrenResponse, CreateDocumentBlockDescendantParams,
+    CreateDocumentBlockDescendantRequest, CreateDocumentBlockDescendantResponse, BlockIdRelation,
+    CreateDocumentParams, CreateDocumentRequest, CreateDocumentResponse, CreatedDocument,
+    Document, DocumentCover, DocumentDisplaySetting,
+    GetDocumentBlockChildrenParams, GetDocumentBlockChildrenRequest,
+    GetDocumentBlockChildrenResponse, GetDocumentBlockParams, GetDocumentBlockRequest,
+    GetDocumentBlockResponse, GetDocumentBlocksParams, GetDocumentBlocksRequest,
+    GetDocumentBlocksResponse, GetDocumentRawContentParams, GetDocumentRawContentRequest,
+    GetDocumentRawContentResponse, GetDocumentRequest, GetDocumentResponse,
+    UpdateDocumentBlockParams, UpdateDocumentBlockRequest, UpdateDocumentBlockResponse,
+};

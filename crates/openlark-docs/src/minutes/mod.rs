@@ -8,8 +8,12 @@ use openlark_core::config::Config;
 
 pub mod minutes;
 
-// 使用通配符导出所有子模块,避免维护大量重复的导出列表
-pub use minutes::*;
+pub use minutes::{
+    GetMinuteMediaRequest, GetMinuteMediaResponse, GetMinuteRequest, GetMinuteResponse,
+    GetMinuteStatisticsRequest, GetMinuteStatisticsResponse, GetMinuteTranscriptRequest, MinuteInfo,
+    ModelMinuteInfo, MinuteMediaInfo, MinuteStatistics, StatMinuteStatistics, StatUserViewDetail,
+    UserIdType, UserViewDetail,
+};
 
 /// Minutes 服务
 #[derive(Debug, Clone)]

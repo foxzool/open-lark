@@ -1,4 +1,6 @@
+/// 分类管理模块
+///
+/// 提供百科知识库分类列表的获取功能。
 pub mod list;
 
-// 使用通配符导出所有子模块
-pub use list::*;
+pub use list::{ListClassificationRequest, ListClassificationResponse};

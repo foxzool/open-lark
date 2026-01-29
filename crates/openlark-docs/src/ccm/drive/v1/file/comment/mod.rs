@@ -1,4 +1,7 @@
 /// 文件评论管理模块
+///
+/// 提供云文档评论的增删改查功能。
+
 use openlark_core::{validate_required, SDKResult};
 
 pub mod batch_query;
@@ -25,11 +28,32 @@ pub fn validate_comment_file_type_for_get(file_type: &str) -> SDKResult<()> {
     Ok(())
 }
 
-// 使用通配符导出所有子模块,避免维护大量重复的导出列表
-pub use batch_query::*;
-pub use create::*;
-pub use get::*;
-pub use list::*;
-pub use models::*;
-pub use patch::*;
-pub use reply::*;
+// 显式导出 - 避免使用 glob reexport
+pub use batch_query::{BatchQueryCommentRequest, BatchQueryCommentResponse};
+
+pub use create::{CreateCommentRequest};
+
+pub use get::{GetCommentRequest, GetCommentResponse};
+
+pub use list::{ListCommentsRequest, ListCommentsResponse};
+
+pub use models::{
+    Comment,
+    CommentContent,
+    CommentElement,
+    CreateCommentReply,
+    CreateCommentReplyList,
+    DocsLink,
+    Person,
+    ReplyExtra,
+    TextRun,
+};
+
+pub use patch::{PatchCommentRequest, PatchCommentResponse};
+
+pub use reply::{
+    DeleteCommentReplyRequest,
+    DeleteCommentReplyResponse,
+    ListCommentReplyRequest,
+    ListCommentReplyResponse,
+};

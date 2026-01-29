@@ -1,4 +1,7 @@
 /// 文件操作模块
+///
+/// 提供云盘文件管理功能，包括上传、下载、复制、移动、删除、评论等。
+
 pub mod comment;
 pub mod copy;
 pub mod create_folder;
@@ -20,24 +23,48 @@ pub mod upload_prepare;
 pub mod version;
 pub mod view_record;
 
-// 使用通配符导出所有子模块
-pub use comment::*;
-pub use copy::*;
-pub use create_folder::*;
-pub use create_shortcut::*;
-pub use delete::*;
-pub use delete_subscribe::*;
-pub use download::*;
-pub use get_subscribe::*;
-pub use list::*;
-pub use r#move::*;
-pub use statistics::*;
-pub use subscribe::*;
-pub use subscription::*;
-pub use task_check::*;
-pub use upload_all::*;
-pub use upload_finish::*;
-pub use upload_part::*;
-pub use upload_prepare::*;
-pub use version::*;
-pub use view_record::*;
+// 显式导出 - 避免使用 glob reexport
+pub use comment::{
+    BatchQueryCommentRequest, BatchQueryCommentResponse,
+    Comment, CommentContent, CommentElement, CreateCommentReply, CreateCommentReplyList,
+    CreateCommentRequest,
+    GetCommentRequest, GetCommentResponse,
+    ListCommentsRequest, ListCommentsResponse,
+    PatchCommentRequest, PatchCommentResponse,
+    DeleteCommentReplyRequest, DeleteCommentReplyResponse,
+    ListCommentReplyRequest, ListCommentReplyResponse,
+};
+
+pub use copy::{CopyFileRequest, CopyFileResponse};
+
+pub use create_folder::{CreateFolderRequest, CreateFolderResponse};
+
+pub use create_shortcut::{CreateFileShortcutRequest, CreateFileShortcutResponse, ShortcutNode, CreateShortcutInfo};
+
+pub use delete::{DeleteFileRequest, DeleteFileResponse};
+
+pub use delete_subscribe::{DeleteSubscribeRequest, DeleteSubscribeResponse};
+
+pub use download::{DownloadFileRequest};
+
+pub use get_subscribe::{GetSubscribeRequest, GetSubscribeResponse};
+
+pub use list::{ListFilesRequest, ListFilesResponse, FileInfo, ShortcutInfo};
+
+pub use r#move::{MoveFileRequest, MoveFileResponse};
+
+pub use statistics::{GetFileStatisticsRequest, GetFileStatisticsResponse};
+
+pub use subscribe::{SubscribeFileRequest, SubscribeFileResponse};
+
+pub use task_check::{CheckTaskStatusRequest, CheckTaskStatusResponse};
+
+pub use upload_all::{UploadAllRequest, UploadAllResponse};
+
+pub use upload_finish::{UploadFinishRequest, UploadFinishResponse};
+
+pub use upload_part::{UploadPartRequest, UploadPartResponse};
+
+pub use upload_prepare::{UploadPrepareRequest, UploadPrepareResponse};
+
+pub use view_record::GetFileViewRecordsRequest;

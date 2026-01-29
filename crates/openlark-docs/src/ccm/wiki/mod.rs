@@ -6,12 +6,31 @@ use openlark_core::config::Config;
 pub mod v1;
 pub mod v2;
 
-// 导出数据模型和请求类型
-pub use v1::*;
-pub use v2::*;
-
-// 导出 V1 和 V2 服务
+// 导出 V1 类型
+pub use v1::node::search::SearchWikiRequest;
 pub use v1::WikiV1Service;
+
+// 导出 V2 类型
+pub use v2::models::{
+    WikiSearchResult, WikiSpace, WikiSpaceMember, WikiSpaceNode, WikiSpaceSetting, WikiTask,
+};
+pub use v2::space::{
+    CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse,
+    CreateWikiSpaceMemberRequest, CreateWikiSpaceMemberResponse,
+    CreateWikiSpaceNodeRequest, CreateWikiSpaceNodeResponse,
+    CreateWikiSpaceRequest, CreateWikiSpaceResponse,
+    DeleteWikiSpaceMemberRequest, DeleteWikiSpaceMemberResponse,
+    GetWikiSpaceNodeRequest, GetWikiSpaceNodeResponse,
+    GetWikiSpaceRequest, GetWikiSpaceResponse,
+    ListWikiSpaceMembersRequest, ListWikiSpaceMembersResponse,
+    ListWikiSpacesRequest, ListWikiSpacesResponse,
+    ListWikiSpaceNodesRequest, ListWikiSpaceNodesResponse,
+    MoveDocsToWikiRequest, MoveDocsToWikiResponse,
+    MoveWikiSpaceNodeRequest, MoveWikiSpaceNodeResponse,
+    UpdateWikiSpaceNodeTitleRequest, UpdateWikiSpaceNodeTitleResponse,
+    UpdateWikiSpaceSettingRequest, UpdateWikiSpaceSettingResponse,
+};
+pub use v2::task::get::{GetWikiTaskRequest, GetWikiTaskResponse};
 pub use v2::WikiV2Service;
 
 /// Wiki 知识库服务
