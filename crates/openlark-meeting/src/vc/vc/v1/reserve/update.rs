@@ -77,30 +77,3 @@ impl UpdateReserveRequest {
         extract_response_data(response, "更新预约")
     }
 }
-
-/// 更新预约请求构建器
-
-#[derive(Debug, Clone)]
-pub struct UpdateReserveRequestBuilder {
-    request: UpdateReserveRequest,
-}
-
-impl UpdateReserveRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: UpdateReserveRequest::new(config),
-        }
-    }
-
-    /// 设置预约 ID
-    pub fn reserve_id(mut self, reserve_id: impl Into<String>) -> Self {
-        self.request = self.request.reserve_id(reserve_id);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> UpdateReserveRequest {
-        self.request
-    }
-}

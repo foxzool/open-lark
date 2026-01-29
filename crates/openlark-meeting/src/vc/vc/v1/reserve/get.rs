@@ -92,36 +92,3 @@ impl GetReserveRequest {
         extract_response_data(response, "获取预约")
     }
 }
-
-/// 获取预约请求构建器
-
-#[derive(Debug, Clone)]
-pub struct GetReserveRequestBuilder {
-    request: GetReserveRequest,
-}
-
-impl GetReserveRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: GetReserveRequest::new(config),
-        }
-    }
-
-    /// 设置预约 ID
-    pub fn reserve_id(mut self, reserve_id: impl Into<String>) -> Self {
-        self.request = self.request.reserve_id(reserve_id);
-        self
-    }
-
-    /// 追加查询参数
-    pub fn query_param(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
-        self.request = self.request.query_param(key, value);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> GetReserveRequest {
-        self.request
-    }
-}

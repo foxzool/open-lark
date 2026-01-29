@@ -61,23 +61,3 @@ impl CreateRoomLevelRequest {
         extract_response_data(resp, "创建会议室层级")
     }
 }
-
-/// 创建会议室层级请求构建器
-#[derive(Debug, Clone)]
-pub struct CreateRoomLevelRequestBuilder {
-    request: CreateRoomLevelRequest,
-}
-
-impl CreateRoomLevelRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: CreateRoomLevelRequest::new(config),
-        }
-    }
-
-    /// 构建请求
-    pub fn build(self) -> CreateRoomLevelRequest {
-        self.request
-    }
-}

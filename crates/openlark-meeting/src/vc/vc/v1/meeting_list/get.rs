@@ -70,29 +70,3 @@ impl GetMeetingListRequest {
         extract_response_data(resp, "查询会议明细")
     }
 }
-
-/// 查询会议明细请求构建器
-#[derive(Debug, Clone)]
-pub struct GetMeetingListRequestBuilder {
-    request: GetMeetingListRequest,
-}
-
-impl GetMeetingListRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: GetMeetingListRequest::new(config),
-        }
-    }
-
-    /// 添加查询参数
-    pub fn query_param(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
-        self.request = self.request.query_param(key, value);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> GetMeetingListRequest {
-        self.request
-    }
-}

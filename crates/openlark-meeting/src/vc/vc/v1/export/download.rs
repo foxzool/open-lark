@@ -72,30 +72,3 @@ impl DownloadExportRequest {
         extract_response_data(response, "下载导出文件")
     }
 }
-
-/// 下载导出文件请求构建器
-
-#[derive(Debug, Clone)]
-pub struct DownloadExportRequestBuilder {
-    request: DownloadExportRequest,
-}
-
-impl DownloadExportRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: DownloadExportRequest::new(config),
-        }
-    }
-
-    /// 追加查询参数
-    pub fn query_param(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
-        self.request = self.request.query_param(key, value);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> DownloadExportRequest {
-        self.request
-    }
-}

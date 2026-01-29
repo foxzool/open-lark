@@ -63,29 +63,3 @@ impl CreateCalendarEventRequest {
         extract_response_data(resp, "创建日程")
     }
 }
-
-/// 创建日程请求构建器
-#[derive(Debug, Clone)]
-pub struct CreateCalendarEventRequestBuilder {
-    request: CreateCalendarEventRequest,
-}
-
-impl CreateCalendarEventRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: CreateCalendarEventRequest::new(config),
-        }
-    }
-
-    /// 设置日历ID
-    pub fn calendar_id(mut self, calendar_id: impl Into<String>) -> Self {
-        self.request = self.request.calendar_id(calendar_id);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> CreateCalendarEventRequest {
-        self.request
-    }
-}

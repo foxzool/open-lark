@@ -101,36 +101,3 @@ impl GetRoomRequest {
         extract_response_data(response, "查询会议室详情")
     }
 }
-
-/// 查询会议室详情请求构建器
-
-#[derive(Debug, Clone)]
-pub struct GetRoomRequestBuilder {
-    request: GetRoomRequest,
-}
-
-impl GetRoomRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: GetRoomRequest::new(config),
-        }
-    }
-
-    /// 设置会议室 ID
-    pub fn room_id(mut self, room_id: impl Into<String>) -> Self {
-        self.request = self.request.room_id(room_id);
-        self
-    }
-
-    /// 追加查询参数
-    pub fn query_param(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
-        self.request = self.request.query_param(key, value);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> GetRoomRequest {
-        self.request
-    }
-}

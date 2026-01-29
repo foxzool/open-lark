@@ -63,30 +63,6 @@ impl RoomResource {
     pub fn config(&self) -> &Config {
         &self.config
     }
-
-    pub fn create(&self) -> crate::vc::vc::v1::room::CreateRoomRequestBuilder {
-        crate::vc::vc::v1::room::CreateRoomRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn get(&self) -> crate::vc::vc::v1::room::GetRoomRequestBuilder {
-        crate::vc::vc::v1::room::GetRoomRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn delete(&self) -> crate::vc::vc::v1::room::DeleteRoomRequestBuilder {
-        crate::vc::vc::v1::room::DeleteRoomRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn list(&self) -> crate::vc::vc::v1::room::ListRoomRequestBuilder {
-        crate::vc::vc::v1::room::ListRoomRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn mget(&self) -> crate::vc::vc::v1::room::MgetRoomRequestBuilder {
-        crate::vc::vc::v1::room::MgetRoomRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn patch(&self) -> crate::vc::vc::v1::room::PatchRoomRequestBuilder {
-        crate::vc::vc::v1::room::PatchRoomRequestBuilder::new(self.config.clone())
-    }
 }
 
 /// Meeting 资源
@@ -118,21 +94,5 @@ impl ReserveResource {
 
     pub fn config(&self) -> &Config {
         &self.config
-    }
-
-    pub fn apply(&self) -> crate::vc::vc::v1::reserve::ApplyReserveRequestBuilder {
-        crate::vc::vc::v1::reserve::ApplyReserveRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn delete_reserve(&self) -> crate::vc::vc::v1::reserve::DeleteReserveRequestBuilder {
-        crate::vc::vc::v1::reserve::DeleteReserveRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn get_reserve(&self) -> crate::vc::vc::v1::reserve::GetReserveRequestBuilder {
-        crate::vc::vc::v1::reserve::GetReserveRequestBuilder::new(self.config.clone())
-    }
-
-    pub fn update_reserve(&self) -> crate::vc::vc::v1::reserve::UpdateReserveRequestBuilder {
-        crate::vc::vc::v1::reserve::UpdateReserveRequestBuilder::new(self.config.clone())
     }
 }

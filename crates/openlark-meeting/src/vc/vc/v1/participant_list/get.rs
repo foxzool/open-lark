@@ -71,29 +71,3 @@ impl GetParticipantListRequest {
         extract_response_data(resp, "查询参会人明细")
     }
 }
-
-/// 查询参会人明细请求构建器
-#[derive(Debug, Clone)]
-pub struct GetParticipantListRequestBuilder {
-    request: GetParticipantListRequest,
-}
-
-impl GetParticipantListRequestBuilder {
-    /// 创建Builder实例
-    pub fn new(config: Config) -> Self {
-        Self {
-            request: GetParticipantListRequest::new(config),
-        }
-    }
-
-    /// 添加查询参数
-    pub fn query_param(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
-        self.request = self.request.query_param(key, value);
-        self
-    }
-
-    /// 构建请求
-    pub fn build(self) -> GetParticipantListRequest {
-        self.request
-    }
-}
