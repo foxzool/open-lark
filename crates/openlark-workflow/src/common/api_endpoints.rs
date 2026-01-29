@@ -7,6 +7,50 @@
 pub enum TaskApiV1 {
     /// 创建任务
     TaskCreate,
+    /// 获取任务详情
+    TaskGet(String),
+    /// 更新任务
+    TaskUpdate(String),
+    /// 删除任务
+    TaskDelete(String),
+    /// 完成任务
+    TaskComplete(String),
+    /// 取消完成任务
+    TaskUncomplete(String),
+    /// 获取任务列表
+    TaskList,
+    /// 创建任务关注者
+    TaskFollowerCreate(String),
+    /// 删除任务关注者
+    TaskFollowerDelete(String, String),
+    /// 获取任务关注者列表
+    TaskFollowerList(String),
+    /// 批量删除任务关注者
+    TaskFollowerBatchDelete(String),
+    /// 创建任务协作者
+    TaskCollaboratorCreate(String),
+    /// 删除任务协作者
+    TaskCollaboratorDelete(String, String),
+    /// 获取任务协作者列表
+    TaskCollaboratorList(String),
+    /// 批量删除任务协作者
+    TaskCollaboratorBatchDelete(String),
+    /// 创建任务提醒
+    TaskReminderCreate(String),
+    /// 删除任务提醒
+    TaskReminderDelete(String, String),
+    /// 获取任务提醒列表
+    TaskReminderList(String),
+    /// 创建任务评论
+    TaskCommentCreate(String),
+    /// 获取任务评论详情
+    TaskCommentGet(String, String),
+    /// 更新任务评论
+    TaskCommentUpdate(String, String),
+    /// 删除任务评论
+    TaskCommentDelete(String, String),
+    /// 获取任务评论列表
+    TaskCommentList(String),
 }
 
 impl TaskApiV1 {
@@ -14,6 +58,85 @@ impl TaskApiV1 {
     pub fn to_url(&self) -> String {
         match self {
             TaskApiV1::TaskCreate => "/open-apis/task/v1/tasks".to_string(),
+            TaskApiV1::TaskGet(task_id) => format!("/open-apis/task/v1/tasks/{}", task_id),
+            TaskApiV1::TaskUpdate(task_id) => format!("/open-apis/task/v1/tasks/{}", task_id),
+            TaskApiV1::TaskDelete(task_id) => format!("/open-apis/task/v1/tasks/{}", task_id),
+            TaskApiV1::TaskComplete(task_id) => {
+                format!("/open-apis/task/v1/tasks/{}/complete", task_id)
+            }
+            TaskApiV1::TaskUncomplete(task_id) => {
+                format!("/open-apis/task/v1/tasks/{}/uncomplete", task_id)
+            }
+            TaskApiV1::TaskList => "/open-apis/task/v1/tasks".to_string(),
+            TaskApiV1::TaskFollowerCreate(task_id) => {
+                format!("/open-apis/task/v1/tasks/{}/followers", task_id)
+            }
+            TaskApiV1::TaskFollowerDelete(task_id, follower_id) => {
+                format!(
+                    "/open-apis/task/v1/tasks/{}/followers/{}",
+                    task_id, follower_id
+                )
+            }
+            TaskApiV1::TaskFollowerList(task_id) => {
+                format!("/open-apis/task/v1/tasks/{}/followers", task_id)
+            }
+            TaskApiV1::TaskFollowerBatchDelete(task_id) => {
+                format!("/open-apis/task/v1/tasks/{}/batch_delete_follower", task_id)
+            }
+            TaskApiV1::TaskCollaboratorCreate(task_id) => {
+                format!("/open-apis/task/v1/tasks/{}/collaborators", task_id)
+            }
+            TaskApiV1::TaskCollaboratorDelete(task_id, collaborator_id) => {
+                format!(
+                    "/open-apis/task/v1/tasks/{}/collaborators/{}",
+                    task_id, collaborator_id
+                )
+            }
+            TaskApiV1::TaskCollaboratorList(task_id) => {
+                format!("/open-apis/task/v1/tasks/{}/collaborators", task_id)
+            }
+            TaskApiV1::TaskCollaboratorBatchDelete(task_id) => {
+                format!(
+                    "/open-apis/task/v1/tasks/{}/batch_delete_collaborator",
+                    task_id
+                )
+            }
+            TaskApiV1::TaskReminderCreate(task_id) => {
+                format!("/open-apis/task/v1/tasks/{}/reminders", task_id)
+            }
+            TaskApiV1::TaskReminderDelete(task_id, reminder_id) => {
+                format!(
+                    "/open-apis/task/v1/tasks/{}/reminders/{}",
+                    task_id, reminder_id
+                )
+            }
+            TaskApiV1::TaskReminderList(task_id) => {
+                format!("/open-apis/task/v1/tasks/{}/reminders", task_id)
+            }
+            TaskApiV1::TaskCommentCreate(task_id) => {
+                format!("/open-apis/task/v1/tasks/{}/comments", task_id)
+            }
+            TaskApiV1::TaskCommentGet(task_id, comment_id) => {
+                format!(
+                    "/open-apis/task/v1/tasks/{}/comments/{}",
+                    task_id, comment_id
+                )
+            }
+            TaskApiV1::TaskCommentUpdate(task_id, comment_id) => {
+                format!(
+                    "/open-apis/task/v1/tasks/{}/comments/{}",
+                    task_id, comment_id
+                )
+            }
+            TaskApiV1::TaskCommentDelete(task_id, comment_id) => {
+                format!(
+                    "/open-apis/task/v1/tasks/{}/comments/{}",
+                    task_id, comment_id
+                )
+            }
+            TaskApiV1::TaskCommentList(task_id) => {
+                format!("/open-apis/task/v1/tasks/{}/comments", task_id)
+            }
         }
     }
 }
