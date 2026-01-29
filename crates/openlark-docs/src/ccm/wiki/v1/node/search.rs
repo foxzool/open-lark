@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::WikiApiV1;
 use crate::common::api_utils::*;
-use crate::wiki::v2::models::WikiSearchResult;
+use crate::ccm::wiki::v2::models::WikiSearchResult;
 
 /// 搜索 Wiki 请求（流式 Builder 模式）
 pub struct SearchWikiRequest {
