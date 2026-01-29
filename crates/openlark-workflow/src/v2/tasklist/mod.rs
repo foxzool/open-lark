@@ -1,8 +1,12 @@
+pub mod activity_subscription;
+pub mod add_members;
 pub mod create;
 pub mod delete;
 pub mod get;
 pub mod list;
 pub mod models;
+pub mod remove_members;
+pub mod tasks;
 pub mod update;
 
 use openlark_core::config::Config;
@@ -38,17 +42,51 @@ impl Tasklist {
     pub fn list(&self) -> list::ListTasklistsRequest {
         list::ListTasklistsRequest::new(self.config.clone())
     }
+
+    /// 获取动态订阅资源
+    pub fn activity_subscription(
+        &self,
+        tasklist_guid: impl Into<String>,
+    ) -> activity_subscription::ActivitySubscriptionResource {
+        activity_subscription::ActivitySubscriptionResource::new(self.config.clone(), tasklist_guid.into())
+    }
+
+    /// 获取清单任务列表
+    pub fn tasks(&self, tasklist_guid: impl Into<String>) -> tasks::GetTasklistTasksRequest {
+        tasks::GetTasklistTasksRequest::new(self.config.clone(), tasklist_guid.into())
+    }
+
+    /// 添加清单成员
+    pub fn add_members(
+        &self,
+        tasklist_guid: impl Into<String>,
+    ) -> add_members::AddTasklistMembersRequest {
+        add_members::AddTasklistMembersRequest::new(self.config.clone(), tasklist_guid.into())
+    }
+
+    /// 移除清单成员
+    pub fn remove_members(
+        &self,
+        tasklist_guid: impl Into<String>,
+    ) -> remove_members::RemoveTasklistMembersRequest {
+        remove_members::RemoveTasklistMembersRequest::new(self.config.clone(), tasklist_guid.into())
+    }
 }
 
 // 重新导出请求类型
+pub use add_members::AddTasklistMembersRequest;
 pub use create::CreateTasklistRequest;
 pub use delete::DeleteTasklistRequest;
 pub use get::GetTasklistRequest;
 pub use list::ListTasklistsRequest;
+pub use remove_members::RemoveTasklistMembersRequest;
+pub use tasks::GetTasklistTasksRequest;
 pub use update::UpdateTasklistRequest;
 
 // 重新导出响应类型
+pub use add_members::{AddTasklistMembersBody, AddTasklistMembersResponse, TasklistMember};
 pub use models::{
     CreateTasklistBody, CreateTasklistResponse, DeleteTasklistResponse, GetTasklistResponse,
     ListTasklistsResponse, TasklistIcon, TasklistItem, UpdateTasklistBody, UpdateTasklistResponse,
 };
+pub use remove_members::{RemoveTasklistMembersBody, RemoveTasklistMembersResponse};

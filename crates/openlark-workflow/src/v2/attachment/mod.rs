@@ -1,4 +1,6 @@
 pub mod delete;
+pub mod get;
+pub mod list;
 pub mod models;
 pub mod upload;
 
@@ -36,11 +38,25 @@ impl Attachment {
             attachment_guid.into(),
         )
     }
+
+    /// 获取附件（不需要 task_guid）
+    pub fn get(&self, attachment_guid: impl Into<String>) -> get::GetAttachmentRequest {
+        get::GetAttachmentRequest::new(self.config.clone(), attachment_guid.into())
+    }
+
+    /// 列取附件（不需要 task_guid）
+    pub fn list(&self) -> list::ListAttachmentsRequest {
+        list::ListAttachmentsRequest::new(self.config.clone())
+    }
 }
 
 // 重新导出请求类型
 pub use delete::DeleteAttachmentRequest;
+pub use get::GetAttachmentRequest;
+pub use list::ListAttachmentsRequest;
 pub use upload::UploadAttachmentRequest;
 
 // 重新导出响应类型
+pub use get::{AttachmentInfo, GetAttachmentResponse};
+pub use list::{AttachmentListItem, ListAttachmentsResponse};
 pub use models::{DeleteAttachmentResponse, UploadAttachmentResponse};
