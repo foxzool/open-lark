@@ -161,7 +161,7 @@ macro_rules! impl_ccm_project_client {
             }
 
             pub fn service(&self) -> $service {
-                <$service>::new(self.config.clone())
+                <$service>::new((*self.config).clone())
             }
         }
     };
@@ -202,12 +202,12 @@ impl BaseClient {
     }
 
     pub fn service(&self) -> crate::base::BaseService {
-        crate::base::BaseService::new(self.config.clone())
+        crate::base::BaseService::new((*self.config).clone())
     }
 
     #[cfg(feature = "bitable")]
     pub fn bitable(&self) -> crate::base::bitable::BitableService {
-        crate::base::bitable::BitableService::new(self.config.clone())
+        crate::base::bitable::BitableService::new((*self.config).clone())
     }
 }
 
@@ -230,7 +230,7 @@ impl BaikeClient {
 
     #[cfg(feature = "baike")]
     pub fn service(&self) -> crate::baike::BaikeService {
-        crate::baike::BaikeService::new(self.config.clone())
+        crate::baike::BaikeService::new((*self.config).clone())
     }
 }
 
@@ -252,6 +252,6 @@ impl MinutesClient {
     }
 
     pub fn service(&self) -> crate::minutes::MinutesService {
-        crate::minutes::MinutesService::new(self.config.clone())
+        crate::minutes::MinutesService::new((*self.config).clone())
     }
 }
