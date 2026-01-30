@@ -65,7 +65,7 @@ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[cfg(test)]
 mod tests {
-    
+    use crate::VERSION;
 
     #[test]
     fn test_version() {

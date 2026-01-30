@@ -2,7 +2,7 @@
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
-    config: Config,
+    config::Config,
     http::Transport,
     req_option::RequestOption,
     SDKResult,

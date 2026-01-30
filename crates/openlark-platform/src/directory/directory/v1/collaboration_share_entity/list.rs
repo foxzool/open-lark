@@ -46,8 +46,10 @@ impl CollaborationShareEntityListBuilder {
     ) -> SDKResult<CollaborationShareEntityListResponse> {
         let url = "/open-apis/directory/v1/share_entities".to_string();
 
-        let req: ApiRequest<CollaborationShareEntityListResponse> =
-            ApiRequest::get(&url).query("tenant_id", &self.tenant_id);
+        let mut req: ApiRequest<CollaborationShareEntityListResponse> = ApiRequest::get(&url);
+        if let Some(tenant_id) = &self.tenant_id {
+            req = req.query("tenant_id", tenant_id);
+        }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data
             .ok_or_else(|| openlark_core::error::validation_error("获取共享成员", "响应数据为空"))

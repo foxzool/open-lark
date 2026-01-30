@@ -43,7 +43,7 @@ impl CreateBadgeGrantBuilder {
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CreateBadgeGrantResponse> {
         validate_required!(self.badge_id, "勋章ID不能为空");
-        validate_required!(!self.user_ids.is_empty(), "用户ID列表不能为空");
+        validate_required!(self.user_ids, "用户ID列表不能为空");
 
         let request_body = CreateBadgeGrantRequest {
             user_ids: self.user_ids,
