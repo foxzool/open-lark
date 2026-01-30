@@ -71,7 +71,7 @@ impl ApiResponseTrait for SearchCcResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_instance_search_cc_v4_url() {

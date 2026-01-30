@@ -48,17 +48,8 @@ impl EnvironmentVariableQueryBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<EnvironmentVariableQueryResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/environment_variables/query",
-            self.namespace
-        );
-
-        let request = EnvironmentVariableQueryRequest {
-            page: self.page,
-            page_size: self.page_size,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

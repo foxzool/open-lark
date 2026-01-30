@@ -46,14 +46,8 @@ impl RecordCreateBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<RecordCreateResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/objects/{}/records",
-            self.namespace, self.object_api_name
-        );
-
-        let request = RecordCreateRequest { data: self.data };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

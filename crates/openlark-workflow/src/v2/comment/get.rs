@@ -63,7 +63,7 @@ impl ApiResponseTrait for GetCommentResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_get_comment_request() {

@@ -53,16 +53,8 @@ impl RoleMemberBatchRemoveAuthBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<RoleMemberBatchRemoveAuthResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/roles/{}/member/batch_remove_authorization",
-            self.namespace, self.role_api_name
-        );
-
-        let request = RoleMemberBatchRemoveAuthRequest {
-            user_ids: self.user_ids,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

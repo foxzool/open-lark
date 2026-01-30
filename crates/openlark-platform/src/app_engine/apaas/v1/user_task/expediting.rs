@@ -45,13 +45,8 @@ impl ExpeditingBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ExpeditingResponse> {
-        let url = format!("/open-apis/apaas/v1/user_tasks/{}/expediting", self.task_id);
-
-        let request = ExpeditingRequest {
-            user_ids: self.user_ids,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

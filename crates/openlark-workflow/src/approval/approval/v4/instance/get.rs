@@ -67,7 +67,7 @@ impl ApiResponseTrait for GetInstanceResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_instance_get_v4_url() {

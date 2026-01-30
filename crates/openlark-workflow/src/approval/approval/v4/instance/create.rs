@@ -103,7 +103,7 @@ impl ApiResponseTrait for CreateInstanceResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_instance_create_v4_url() {

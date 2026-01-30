@@ -64,7 +64,7 @@ impl ApiResponseTrait for DeleteAttachmentResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_delete_attachment_request() {

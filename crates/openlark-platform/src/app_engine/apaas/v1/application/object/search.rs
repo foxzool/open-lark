@@ -66,19 +66,8 @@ impl RecordSearchBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<RecordSearchResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/objects/search",
-            self.namespace
-        );
-
-        let request = RecordSearchRequest {
-            search: self.search,
-            fields: self.fields,
-            page: self.page,
-            page_size: self.page_size,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

@@ -112,7 +112,7 @@ impl ApiResponseTrait for CreateCustomFieldOptionResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_create_custom_field_option_builder() {

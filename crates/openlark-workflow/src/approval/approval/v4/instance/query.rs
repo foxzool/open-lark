@@ -71,7 +71,7 @@ impl ApiResponseTrait for QueryInstanceResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_instance_query_v4_url() {

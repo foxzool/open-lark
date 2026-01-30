@@ -83,7 +83,7 @@ impl ApiResponseTrait for CancelInstanceResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_instance_cancel_v4_url() {

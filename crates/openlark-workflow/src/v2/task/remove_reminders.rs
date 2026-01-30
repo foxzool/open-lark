@@ -95,7 +95,7 @@ impl ApiResponseTrait for RemoveRemindersResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_remove_reminders_builder() {

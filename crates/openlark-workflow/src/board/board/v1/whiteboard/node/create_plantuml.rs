@@ -118,7 +118,7 @@ impl ApiResponseTrait for CreatePlantumlNodeResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_whiteboard_node_create_plantuml_v1_url() {

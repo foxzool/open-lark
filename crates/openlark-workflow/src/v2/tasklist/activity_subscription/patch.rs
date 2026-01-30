@@ -104,7 +104,7 @@ impl ApiResponseTrait for UpdateActivitySubscriptionResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_update_activity_subscription_builder() {

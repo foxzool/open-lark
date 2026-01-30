@@ -56,16 +56,8 @@ impl RecordQueryBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<RecordQueryResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/objects/{}/records/{}/query",
-            self.namespace, self.object_api_name, self.record_id
-        );
-
-        let request = RecordQueryRequest {
-            fields: self.fields,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

@@ -95,7 +95,7 @@ impl ApiResponseTrait for GetExternalApprovalResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_external_approval_get_v4_url() {

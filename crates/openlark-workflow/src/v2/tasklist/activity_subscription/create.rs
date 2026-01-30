@@ -93,7 +93,7 @@ impl ApiResponseTrait for CreateActivitySubscriptionResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_create_activity_subscription_builder() {

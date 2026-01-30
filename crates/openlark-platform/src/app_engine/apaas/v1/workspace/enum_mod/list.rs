@@ -30,9 +30,8 @@ impl EnumListBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<EnumListResponse> {
-        let url = format!("/open-apis/apaas/v1/workspaces/{}/enums", self.workspace_id);
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

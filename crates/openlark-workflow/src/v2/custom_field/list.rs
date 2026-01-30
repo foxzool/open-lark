@@ -85,7 +85,7 @@ impl ApiResponseTrait for ListCustomFieldsResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_list_custom_fields_request() {

@@ -48,17 +48,8 @@ impl OqlQueryBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<OqlQueryResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/objects/oql_query",
-            self.namespace
-        );
-
-        let request = OqlQueryRequest {
-            oql: self.oql,
-            fields: self.fields,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

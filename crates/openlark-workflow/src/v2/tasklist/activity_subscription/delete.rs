@@ -71,7 +71,7 @@ impl ApiResponseTrait for DeleteActivitySubscriptionResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_delete_activity_subscription_request() {

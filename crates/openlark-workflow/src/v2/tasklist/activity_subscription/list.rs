@@ -86,7 +86,7 @@ impl ApiResponseTrait for ListActivitySubscriptionsResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_list_activity_subscriptions_request() {

@@ -70,7 +70,7 @@ impl ApiResponseTrait for GetActivitySubscriptionResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_get_activity_subscription_request() {

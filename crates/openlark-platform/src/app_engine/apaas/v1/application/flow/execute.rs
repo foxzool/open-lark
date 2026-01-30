@@ -42,16 +42,8 @@ impl FlowExecuteBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<FlowExecuteResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/flows/{}/execute",
-            self.namespace, self.flow_id
-        );
-
-        let request = FlowExecuteRequest {
-            params: self.params,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

@@ -114,7 +114,7 @@ impl ApiResponseTrait for PatchCustomFieldResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_patch_custom_field_url() {

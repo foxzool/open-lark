@@ -78,7 +78,7 @@ impl ApiResponseTrait for CreateCustomFieldResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use crate::v2::custom_field::models::{CustomFieldConfig, CustomFieldType};
 
     #[test]

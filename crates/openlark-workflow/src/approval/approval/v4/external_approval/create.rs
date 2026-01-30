@@ -126,7 +126,7 @@ impl ApiResponseTrait for CreateExternalApprovalResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_external_approval_create_v4_url() {

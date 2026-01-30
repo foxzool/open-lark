@@ -55,16 +55,8 @@ impl RecordBatchCreateBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<RecordBatchCreateResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/objects/{}/records/batch_create",
-            self.namespace, self.object_api_name
-        );
-
-        let request = RecordBatchCreateRequest {
-            records: self.records,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

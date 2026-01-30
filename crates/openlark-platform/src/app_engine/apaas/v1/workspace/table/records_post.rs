@@ -55,16 +55,8 @@ impl TableRecordsPostBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<TableRecordsPostResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/workspaces/{}/tables/{}/records",
-            self.workspace_id, self.table_name
-        );
-
-        let request = TableRecordsPostRequest {
-            records: self.records,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

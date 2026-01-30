@@ -37,12 +37,8 @@ impl EnvironmentVariableGetBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<EnvironmentVariableGetResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/environment_variables/{}",
-            self.namespace, self.env_var_api_name
-        );
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
