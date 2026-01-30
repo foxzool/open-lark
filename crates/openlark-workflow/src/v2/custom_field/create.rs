@@ -78,7 +78,10 @@ impl ApiResponseTrait for CreateCustomFieldResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
+
     use crate::v2::custom_field::models::{CustomFieldConfig, CustomFieldType};
 
     #[test]

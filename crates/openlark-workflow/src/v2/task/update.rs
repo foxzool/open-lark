@@ -119,7 +119,9 @@ impl ApiResponseTrait for UpdateTaskResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_update_task_builder() {

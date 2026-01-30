@@ -126,7 +126,9 @@ impl ApiResponseTrait for CreateTaskResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_create_task_v1_builder() {

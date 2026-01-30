@@ -112,7 +112,9 @@ impl ApiResponseTrait for CreateCustomFieldOptionResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_create_custom_field_option_builder() {

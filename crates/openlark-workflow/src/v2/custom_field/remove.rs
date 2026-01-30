@@ -82,7 +82,7 @@ impl ApiResponseTrait for RemoveCustomFieldResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use super::*;
 
     #[test]
     fn test_remove_custom_field_url() {

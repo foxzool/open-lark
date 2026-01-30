@@ -95,7 +95,9 @@ impl ApiResponseTrait for RemoveMembersResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_remove_members_builder() {

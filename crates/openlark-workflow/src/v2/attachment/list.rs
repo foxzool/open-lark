@@ -131,7 +131,9 @@ impl ApiResponseTrait for ListAttachmentsResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_list_attachments_request() {

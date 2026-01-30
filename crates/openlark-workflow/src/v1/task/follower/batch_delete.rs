@@ -92,7 +92,9 @@ impl ApiResponseTrait for BatchDeleteTaskFollowerResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_batch_delete_task_follower_v1_builder() {

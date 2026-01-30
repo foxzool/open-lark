@@ -86,7 +86,9 @@ impl ApiResponseTrait for ListActivitySubscriptionsResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_list_activity_subscriptions_request() {

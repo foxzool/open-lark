@@ -145,7 +145,9 @@ impl ApiResponseTrait for CreateSubtaskResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_create_subtask_builder() {

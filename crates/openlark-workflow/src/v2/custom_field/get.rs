@@ -64,7 +64,9 @@ impl ApiResponseTrait for GetCustomFieldResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_get_custom_field_request() {

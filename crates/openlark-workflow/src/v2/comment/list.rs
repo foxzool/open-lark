@@ -85,7 +85,9 @@ impl ApiResponseTrait for ListCommentsResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_list_comments_request() {

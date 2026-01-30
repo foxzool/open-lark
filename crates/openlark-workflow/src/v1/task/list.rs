@@ -117,7 +117,9 @@ impl ApiResponseTrait for ListTaskResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_list_task_v1_builder() {

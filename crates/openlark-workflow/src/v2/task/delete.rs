@@ -56,7 +56,9 @@ impl ApiResponseTrait for DeleteTaskResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_delete_task_request() {

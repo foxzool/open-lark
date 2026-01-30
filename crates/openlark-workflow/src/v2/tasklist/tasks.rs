@@ -130,7 +130,9 @@ impl ApiResponseTrait for ListTasklistTasksResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_get_tasklist_tasks_request() {
