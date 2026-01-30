@@ -56,7 +56,9 @@ impl ApiResponseTrait for UncompleteTaskResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_uncomplete_task_request() {

@@ -96,7 +96,9 @@ impl ApiResponseTrait for UpdateTaskCommentResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_update_task_comment_v1_builder() {

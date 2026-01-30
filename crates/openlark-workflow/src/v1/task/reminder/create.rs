@@ -92,7 +92,9 @@ impl ApiResponseTrait for CreateTaskReminderResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_create_task_reminder_v1_builder() {

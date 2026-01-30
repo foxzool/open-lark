@@ -87,7 +87,9 @@ impl ApiResponseTrait for CreateTaskCollaboratorResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_create_task_collaborator_v1_builder() {

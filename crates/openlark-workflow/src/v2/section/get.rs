@@ -64,7 +64,9 @@ impl ApiResponseTrait for GetSectionResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_get_section_request() {

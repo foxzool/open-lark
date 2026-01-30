@@ -103,7 +103,9 @@ impl ApiResponseTrait for ListSubtasksResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_list_subtasks_request() {

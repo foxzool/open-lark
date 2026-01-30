@@ -56,7 +56,9 @@ impl ApiResponseTrait for CompleteTaskResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_complete_task_request() {

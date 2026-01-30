@@ -80,7 +80,9 @@ impl ApiResponseTrait for CreateTasklistResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_create_tasklist_builder() {

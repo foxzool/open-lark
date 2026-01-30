@@ -77,7 +77,9 @@ impl ApiResponseTrait for UpdateCommentResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_update_comment_builder() {

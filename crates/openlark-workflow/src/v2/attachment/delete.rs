@@ -64,7 +64,9 @@ impl ApiResponseTrait for DeleteAttachmentResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_delete_attachment_request() {

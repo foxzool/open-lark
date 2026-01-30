@@ -72,7 +72,9 @@ impl ApiResponseTrait for CreateCommentResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_create_comment_builder() {

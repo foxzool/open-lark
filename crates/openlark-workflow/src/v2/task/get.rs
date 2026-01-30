@@ -56,7 +56,9 @@ impl ApiResponseTrait for GetTaskResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_get_task_request() {

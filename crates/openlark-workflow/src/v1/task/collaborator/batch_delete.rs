@@ -93,12 +93,14 @@ impl ApiResponseTrait for BatchDeleteTaskCollaboratorResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_batch_delete_task_collaborator_v1_builder() {
         let config = Arc::new(
-            openlark_core::config::Config::builder()
+            Config::builder()
                 .app_id("test")
                 .app_secret("test")
                 .build(),

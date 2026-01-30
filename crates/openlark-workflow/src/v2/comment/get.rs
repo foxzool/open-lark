@@ -63,7 +63,9 @@ impl ApiResponseTrait for GetCommentResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_get_comment_request() {

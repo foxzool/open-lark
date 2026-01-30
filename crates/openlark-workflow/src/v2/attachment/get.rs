@@ -86,7 +86,9 @@ impl ApiResponseTrait for GetAttachmentResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_get_attachment_request() {

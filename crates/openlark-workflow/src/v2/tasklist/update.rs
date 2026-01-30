@@ -83,7 +83,9 @@ impl ApiResponseTrait for UpdateTasklistResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_update_tasklist_builder() {

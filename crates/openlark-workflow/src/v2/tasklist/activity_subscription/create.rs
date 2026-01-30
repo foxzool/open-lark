@@ -93,7 +93,9 @@ impl ApiResponseTrait for CreateActivitySubscriptionResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_create_activity_subscription_builder() {

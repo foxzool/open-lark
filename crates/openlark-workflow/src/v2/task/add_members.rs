@@ -106,7 +106,9 @@ impl ApiResponseTrait for AddMembersResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_add_members_builder() {

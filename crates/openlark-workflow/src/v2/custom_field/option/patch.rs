@@ -108,7 +108,9 @@ impl ApiResponseTrait for UpdateCustomFieldOptionResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_update_custom_field_option_builder() {

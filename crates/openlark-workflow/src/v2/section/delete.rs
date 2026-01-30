@@ -64,7 +64,9 @@ impl ApiResponseTrait for DeleteSectionResponse {
 
 #[cfg(test)]
 mod tests {
-    
+    use std::sync::Arc;
+
+    use super::*;
 
     #[test]
     fn test_delete_section_request() {
