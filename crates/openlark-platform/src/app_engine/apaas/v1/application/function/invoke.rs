@@ -46,16 +46,8 @@ impl FunctionInvokeBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<FunctionInvokeResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/functions/{}/invoke",
-            self.namespace, self.function_api_name
-        );
-
-        let request = FunctionInvokeRequest {
-            params: self.params,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

@@ -118,7 +118,7 @@ impl ApiResponseTrait for PreviewInstanceResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_instance_preview_v4_url() {

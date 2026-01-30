@@ -132,7 +132,7 @@ impl ApiResponseTrait for CreateExternalInstanceResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_external_instance_create_v4_url() {

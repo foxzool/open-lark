@@ -104,7 +104,7 @@ impl ApiResponseTrait for TransferTaskResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_task_transfer_v4_url() {

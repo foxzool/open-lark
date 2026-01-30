@@ -64,7 +64,7 @@ impl ApiResponseTrait for UnsubscribeApprovalResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_approval_unsubscribe_v4_url() {

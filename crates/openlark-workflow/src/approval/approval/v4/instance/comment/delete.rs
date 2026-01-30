@@ -72,7 +72,7 @@ impl ApiResponseTrait for DeleteInstanceCommentResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_instance_comment_delete_v4_url() {

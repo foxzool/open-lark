@@ -47,17 +47,8 @@ impl TransferApprovalTaskBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<TransferApprovalTaskResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/approval_tasks/{}/transfer",
-            self.approval_task_id
-        );
-
-        let request = TransferApprovalTaskRequest {
-            transfer_to_user_id: self.transfer_to_user_id,
-            reason: self.reason,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

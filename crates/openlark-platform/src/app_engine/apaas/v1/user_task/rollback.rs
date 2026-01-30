@@ -42,14 +42,8 @@ impl RollbackTaskBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<RollbackTaskResponse> {
-        let url = format!("/open-apis/apaas/v1/user_tasks/{}/rollback", self.task_id);
-
-        let request = RollbackTaskRequest {
-            node_id: self.node_id,
-            reason: self.reason,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

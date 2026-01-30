@@ -95,7 +95,7 @@ impl ApiResponseTrait for CheckExternalInstanceResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_external_instance_check_v4_url() {

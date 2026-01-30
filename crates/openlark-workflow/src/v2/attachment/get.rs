@@ -86,7 +86,7 @@ impl ApiResponseTrait for GetAttachmentResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_get_attachment_request() {

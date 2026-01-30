@@ -37,7 +37,7 @@ pub mod apaas;
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::PlatformConfig;
 
     #[test]
     fn test_service_creation() {

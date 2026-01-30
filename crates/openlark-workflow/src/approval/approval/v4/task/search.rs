@@ -71,7 +71,7 @@ impl ApiResponseTrait for SearchTaskResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_task_search_v4_url() {

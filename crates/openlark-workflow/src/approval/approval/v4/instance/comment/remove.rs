@@ -67,7 +67,7 @@ impl ApiResponseTrait for RemoveInstanceCommentResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_instance_comment_remove_v4_url() {

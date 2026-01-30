@@ -82,7 +82,7 @@ impl ApiResponseTrait for AddCustomFieldResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_add_custom_field_url() {

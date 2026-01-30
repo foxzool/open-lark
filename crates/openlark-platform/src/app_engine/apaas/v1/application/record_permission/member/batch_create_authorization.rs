@@ -53,16 +53,8 @@ impl RecordPermissionBatchCreateAuthBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<RecordPermissionBatchCreateAuthResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/record_permissions/{}/member/batch_create_authorization",
-            self.namespace, self.record_permission_api_name
-        );
-
-        let request = RecordPermissionBatchCreateAuthRequest {
-            user_ids: self.user_ids,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

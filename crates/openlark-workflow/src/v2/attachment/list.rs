@@ -131,7 +131,7 @@ impl ApiResponseTrait for ListAttachmentsResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_list_attachments_request() {

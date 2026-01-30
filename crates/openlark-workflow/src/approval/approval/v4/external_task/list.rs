@@ -110,7 +110,7 @@ impl ApiResponseTrait for ListExternalTaskResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_external_task_list_v4_url() {

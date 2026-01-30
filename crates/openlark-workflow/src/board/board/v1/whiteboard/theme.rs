@@ -69,7 +69,7 @@ impl ApiResponseTrait for GetWhiteboardThemeResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_whiteboard_theme_v1_url() {

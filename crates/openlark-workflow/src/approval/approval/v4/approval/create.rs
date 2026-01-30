@@ -92,7 +92,7 @@ impl ApiResponseTrait for CreateApprovalResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_approval_create_v4_url() {

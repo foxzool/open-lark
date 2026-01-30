@@ -70,15 +70,8 @@ impl ChatGroupBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ChatGroupResponse> {
-        let url = format!("/open-apis/apaas/v1/user_tasks/{}/chat_group", self.task_id);
-
-        let request = ChatGroupRequest {
-            name: self.name,
-            owner_ids: self.owner_ids,
-            member_ids: self.member_ids,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

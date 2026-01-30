@@ -5,9 +5,6 @@
 pub mod create;
 pub mod list;
 
-use openlark_core::config::Config;
-use std::sync::Arc;
-
 /// 工单消息服务（挂载在 Ticket 下）
 #[derive(Clone)]
 pub struct TicketMessage<'a> {

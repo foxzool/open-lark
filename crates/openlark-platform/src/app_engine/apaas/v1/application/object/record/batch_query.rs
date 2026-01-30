@@ -68,17 +68,8 @@ impl RecordBatchQueryBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<RecordBatchQueryResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/applications/{}/objects/{}/records/batch_query",
-            self.namespace, self.object_api_name
-        );
-
-        let request = RecordBatchQueryRequest {
-            record_ids: self.record_ids,
-            fields: self.fields,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

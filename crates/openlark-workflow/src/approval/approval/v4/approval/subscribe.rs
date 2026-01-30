@@ -64,7 +64,7 @@ impl ApiResponseTrait for SubscribeApprovalResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_approval_subscribe_v4_url() {

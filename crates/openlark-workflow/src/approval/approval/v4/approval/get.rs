@@ -65,7 +65,7 @@ impl ApiResponseTrait for GetApprovalResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_approval_get_v4_url() {

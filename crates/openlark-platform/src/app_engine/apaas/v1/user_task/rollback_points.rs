@@ -30,12 +30,8 @@ impl RollbackPointsBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<RollbackPointsResponse> {
-        let url = format!(
-            "/open-apis/apaas/v1/user_tasks/{}/rollback_points",
-            self.task_id
-        );
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

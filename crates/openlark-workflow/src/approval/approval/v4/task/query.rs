@@ -71,7 +71,7 @@ impl ApiResponseTrait for QueryTaskResponseV4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_task_query_v4_url() {

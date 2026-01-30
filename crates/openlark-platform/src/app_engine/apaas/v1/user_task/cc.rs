@@ -54,14 +54,8 @@ impl CcTaskBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CcTaskResponse> {
-        let url = format!("/open-apis/apaas/v1/user_tasks/{}/cc", self.task_id);
-
-        let request = CcTaskRequest {
-            user_ids: self.user_ids,
-            reason: self.reason,
-        };
-
-        self.execute_with_options(RequestOption::default()).await
+        self.execute_with_options.await
+    }(RequestOption::default()).await
     }
 
     /// 使用选项执行请求
