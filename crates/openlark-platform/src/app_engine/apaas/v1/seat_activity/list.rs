@@ -65,7 +65,7 @@ impl SeatActivityListBuilder {
     pub async fn execute(self) -> SDKResult<SeatActivityListResponse> {
         let url = "/open-apis/apaas/v1/seat_activities";
 
-        let mut req: ApiRequest<SeatActivityListResponse> = ApiRequest::get(&url);
+        let mut req: ApiRequest<SeatActivityListResponse> = ApiRequest::get(&*url);
         if let Some(page) = self.page {
             req = req.query("page", &page.to_string());
         }
@@ -78,7 +78,8 @@ impl SeatActivityListBuilder {
         if let Some(end_time) = self.end_time {
             req = req.query("end_time", &end_time.to_string());
         }
-        Transport::request(req, &self.config, None).await
+        let resp = Transport::request(req, &self.config, None).await?;
+        resp.data.ok_or_else(|| openlark_core::error::validation_error("查询席位活跃详情", "响应数据为空"))
     }
 
     /// 使用选项执行请求
@@ -88,7 +89,7 @@ impl SeatActivityListBuilder {
     ) -> SDKResult<SeatActivityListResponse> {
         let url = "/open-apis/apaas/v1/seat_activities";
 
-        let mut req: ApiRequest<SeatActivityListResponse> = ApiRequest::get(&url);
+        let mut req: ApiRequest<SeatActivityListResponse> = ApiRequest::get(&*url);
         if let Some(page) = self.page {
             req = req.query("page", &page.to_string());
         }
@@ -101,7 +102,8 @@ impl SeatActivityListBuilder {
         if let Some(end_time) = self.end_time {
             req = req.query("end_time", &end_time.to_string());
         }
-        Transport::request(req, &self.config, Some(option)).await
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data.ok_or_else(|| openlark_core::error::validation_error("查询席位活跃详情", "响应数据为空"))
     }
 }
 

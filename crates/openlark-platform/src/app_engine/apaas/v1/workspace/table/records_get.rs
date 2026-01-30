@@ -91,7 +91,8 @@ impl TableRecordsGetBuilder {
         if let Some(order_by) = self.order_by {
             req = req.query("order_by", &order_by);
         }
-        Transport::request(req, &self.config, None).await
+        let resp = Transport::request(req, &self.config, None).await?;
+        resp.data.ok_or_else(|| openlark_core::error::validation_error("查询数据表记录", "响应数据为空"))
     }
 
     /// 使用选项执行请求
@@ -117,7 +118,8 @@ impl TableRecordsGetBuilder {
         if let Some(order_by) = self.order_by {
             req = req.query("order_by", &order_by);
         }
-        Transport::request(req, &self.config, Some(option)).await
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        resp.data.ok_or_else(|| openlark_core::error::validation_error("查询数据表记录", "响应数据为空"))
     }
 }
 

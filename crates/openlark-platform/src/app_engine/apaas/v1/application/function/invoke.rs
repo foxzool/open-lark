@@ -46,8 +46,7 @@ impl FunctionInvokeBuilder {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<FunctionInvokeResponse> {
-        self.execute_with_options.await
-    }(RequestOption::default()).await
+        self.execute_with_options(RequestOption::default()).await
     }
 
     /// 使用选项执行请求

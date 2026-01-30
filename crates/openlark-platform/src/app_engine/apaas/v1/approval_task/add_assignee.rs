@@ -45,7 +45,7 @@ impl AddAssigneeBuilder {
         option: RequestOption,
     ) -> SDKResult<AddAssigneeResponse> {
         validate_required!(self.approval_task_id, "任务ID不能为空");
-        validate_required!(!self.user_ids.is_empty(), "用户ID列表不能为空");
+        validate_required!(self.user_ids, "用户ID列表不能为空");
 
         let request_body = AddAssigneeRequest {
             user_ids: self.user_ids,
