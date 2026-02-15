@@ -13,11 +13,12 @@ use std::sync::Arc;
 #[derive(Debug, Clone)]
 pub struct GetFrequentlyUsedAppsRequest {
     config: Arc<Config>,
+    
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetFrequentlyUsedAppsResponse {
-    pub data: Option<FrequentlyUsedAppsData>,
+    pub data: Option<serde_json::Value>,
 }
 
 impl ApiResponseTrait for GetFrequentlyUsedAppsResponse {
@@ -26,20 +27,12 @@ impl ApiResponseTrait for GetFrequentlyUsedAppsResponse {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FrequentlyUsedAppsData {
-    pub apps: Vec<FrequentlyUsedApp>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FrequentlyUsedApp {
-    pub app_id: String,
-    pub app_name: String,
-}
-
 impl GetFrequentlyUsedAppsRequest {
     pub fn new(config: Arc<Config>) -> Self {
-        Self { config }
+        Self {
+            config,
+            
+        }
     }
 
     pub async fn execute(self) -> SDKResult<GetFrequentlyUsedAppsResponse> {
@@ -50,12 +43,11 @@ impl GetFrequentlyUsedAppsRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<GetFrequentlyUsedAppsResponse> {
-        let path = "/open-apis/application/v6/applications/frequently_used".to_string();
+        let path = format!("/open-apis/application/v6/applications/frequently_used");
         let req: ApiRequest<GetFrequentlyUsedAppsResponse> = ApiRequest::get(&path);
 
-        let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("获取用户自定义常用的应用", "响应数据为空")
-        })
+        let _resp: openlark_core::api::Response<GetFrequentlyUsedAppsResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(GetFrequentlyUsedAppsResponse { data: None })
     }
 }

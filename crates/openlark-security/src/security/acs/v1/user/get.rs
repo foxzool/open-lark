@@ -1,4 +1,4 @@
-//! user get
+//! 获取单个用户信息
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -11,43 +11,43 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone)]
-pub struct UserGetRequest {
+pub struct GetUserRequest {
     config: Arc<Config>,
+    user_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UserGetResponse {
+pub struct GetUserResponse {
     pub data: Option<serde_json::Value>,
 }
 
-impl ApiResponseTrait for UserGetResponse {
+impl ApiResponseTrait for GetUserResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl UserGetRequest {
-    pub fn new(config: Arc<Config>) -> Self {
-        Self { config }
+impl GetUserRequest {
+    pub fn new(config: Arc<Config>, user_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            user_id: user_id.into(),
+        }
     }
 
-    pub async fn execute(self) -> SDKResult<UserGetResponse> {
+    pub async fn execute(self) -> SDKResult<GetUserResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
         self,
         option: RequestOption,
-    ) -> SDKResult<UserGetResponse> {
-        let path = "/open-apis/security/acs/v1/user/get"
-            .replace("application", "application")
-            .replace("security", "acs")
-            .replace("personal_settings", "personal_settings");
-        let req: ApiRequest<UserGetResponse> = ApiRequest::get(&path);
+    ) -> SDKResult<GetUserResponse> {
+        let path = format!("/open-apis/acs/v1/users/{}", self.user_id);
+        let req: ApiRequest<GetUserResponse> = ApiRequest::get(&path);
 
-        let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("user get", "响应数据为空")
-        })
+        let _resp: openlark_core::api::Response<GetUserResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(GetUserResponse { data: None })
     }
 }

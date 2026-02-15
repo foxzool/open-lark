@@ -1,4 +1,4 @@
-//! 转移应用所有者
+//! 更新应用通讯录权限范围配置
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -11,23 +11,23 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone)]
-pub struct TransferAppOwnerRequest {
+pub struct PatchApplicationContactsRangeRequest {
     config: Arc<Config>,
     app_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TransferAppOwnerResponse {
+pub struct PatchApplicationContactsRangeResponse {
     pub data: Option<serde_json::Value>,
 }
 
-impl ApiResponseTrait for TransferAppOwnerResponse {
+impl ApiResponseTrait for PatchApplicationContactsRangeResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl TransferAppOwnerRequest {
+impl PatchApplicationContactsRangeRequest {
     pub fn new(config: Arc<Config>, app_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -35,19 +35,19 @@ impl TransferAppOwnerRequest {
         }
     }
 
-    pub async fn execute(self) -> SDKResult<TransferAppOwnerResponse> {
+    pub async fn execute(self) -> SDKResult<PatchApplicationContactsRangeResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
         self,
         option: RequestOption,
-    ) -> SDKResult<TransferAppOwnerResponse> {
-        let path = format!("/open-apis/application/v6/applications/{}/owner/transfer", self.app_id);
-        let req: ApiRequest<TransferAppOwnerResponse> = ApiRequest::post(&path);
+    ) -> SDKResult<PatchApplicationContactsRangeResponse> {
+        let path = format!("/open-apis/application/v6/applications/{}/contacts_range", self.app_id);
+        let req: ApiRequest<PatchApplicationContactsRangeResponse> = ApiRequest::patch(&path);
 
-        let _resp: openlark_core::api::Response<TransferAppOwnerResponse> =
+        let _resp: openlark_core::api::Response<PatchApplicationContactsRangeResponse> =
             Transport::request(req, &self.config, Some(option)).await?;
-        Ok(TransferAppOwnerResponse { data: None })
+        Ok(PatchApplicationContactsRangeResponse { data: None })
     }
 }
