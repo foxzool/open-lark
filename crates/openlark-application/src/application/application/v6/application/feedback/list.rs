@@ -1,4 +1,4 @@
-//! 转移应用所有者
+//! 获取应用反馈列表
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -11,23 +11,23 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone)]
-pub struct TransferAppOwnerRequest {
+pub struct ListApplicationFeedbackRequest {
     config: Arc<Config>,
     app_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TransferAppOwnerResponse {
+pub struct ListApplicationFeedbackResponse {
     pub data: Option<serde_json::Value>,
 }
 
-impl ApiResponseTrait for TransferAppOwnerResponse {
+impl ApiResponseTrait for ListApplicationFeedbackResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl TransferAppOwnerRequest {
+impl ListApplicationFeedbackRequest {
     pub fn new(config: Arc<Config>, app_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -35,19 +35,19 @@ impl TransferAppOwnerRequest {
         }
     }
 
-    pub async fn execute(self) -> SDKResult<TransferAppOwnerResponse> {
+    pub async fn execute(self) -> SDKResult<ListApplicationFeedbackResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
         self,
         option: RequestOption,
-    ) -> SDKResult<TransferAppOwnerResponse> {
-        let path = format!("/open-apis/application/v6/applications/{}/owner/transfer", self.app_id);
-        let req: ApiRequest<TransferAppOwnerResponse> = ApiRequest::post(&path);
+    ) -> SDKResult<ListApplicationFeedbackResponse> {
+        let path = format!("/open-apis/application/v6/applications/{}/feedbacks", self.app_id);
+        let req: ApiRequest<ListApplicationFeedbackResponse> = ApiRequest::get(&path);
 
-        let _resp: openlark_core::api::Response<TransferAppOwnerResponse> =
+        let _resp: openlark_core::api::Response<ListApplicationFeedbackResponse> =
             Transport::request(req, &self.config, Some(option)).await?;
-        Ok(TransferAppOwnerResponse { data: None })
+        Ok(ListApplicationFeedbackResponse { data: None })
     }
 }

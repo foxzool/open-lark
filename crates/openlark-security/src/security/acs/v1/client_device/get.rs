@@ -1,4 +1,4 @@
-//! 修改用户部分信息
+//! 获取客户端设备认证信息
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -11,43 +11,43 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone)]
-pub struct PatchUserRequest {
+pub struct GetClientDeviceRequest {
     config: Arc<Config>,
-    user_id: String,
+    device_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PatchUserResponse {
+pub struct GetClientDeviceResponse {
     pub data: Option<serde_json::Value>,
 }
 
-impl ApiResponseTrait for PatchUserResponse {
+impl ApiResponseTrait for GetClientDeviceResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl PatchUserRequest {
-    pub fn new(config: Arc<Config>, user_id: impl Into<String>) -> Self {
+impl GetClientDeviceRequest {
+    pub fn new(config: Arc<Config>, device_id: impl Into<String>) -> Self {
         Self {
             config,
-            user_id: user_id.into(),
+            device_id: device_id.into(),
         }
     }
 
-    pub async fn execute(self) -> SDKResult<PatchUserResponse> {
+    pub async fn execute(self) -> SDKResult<GetClientDeviceResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
         self,
         option: RequestOption,
-    ) -> SDKResult<PatchUserResponse> {
-        let path = format!("/open-apis/acs/v1/users/{}", self.user_id);
-        let req: ApiRequest<PatchUserResponse> = ApiRequest::patch(&path);
+    ) -> SDKResult<GetClientDeviceResponse> {
+        let path = format!("/open-apis/acs/v1/client_devices/{}", self.device_id);
+        let req: ApiRequest<GetClientDeviceResponse> = ApiRequest::get(&path);
 
-        let _resp: openlark_core::api::Response<PatchUserResponse> =
+        let _resp: openlark_core::api::Response<GetClientDeviceResponse> =
             Transport::request(req, &self.config, Some(option)).await?;
-        Ok(PatchUserResponse { data: None })
+        Ok(GetClientDeviceResponse { data: None })
     }
 }

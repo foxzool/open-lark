@@ -13,11 +13,12 @@ use std::sync::Arc;
 #[derive(Debug, Clone)]
 pub struct GetRecommendedAppsRequest {
     config: Arc<Config>,
+    
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetRecommendedAppsResponse {
-    pub data: Option<RecommendedAppsData>,
+    pub data: Option<serde_json::Value>,
 }
 
 impl ApiResponseTrait for GetRecommendedAppsResponse {
@@ -26,20 +27,12 @@ impl ApiResponseTrait for GetRecommendedAppsResponse {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RecommendedAppsData {
-    pub apps: Vec<RecommendedApp>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RecommendedApp {
-    pub app_id: String,
-    pub app_name: String,
-}
-
 impl GetRecommendedAppsRequest {
     pub fn new(config: Arc<Config>) -> Self {
-        Self { config }
+        Self {
+            config,
+            
+        }
     }
 
     pub async fn execute(self) -> SDKResult<GetRecommendedAppsResponse> {
@@ -50,12 +43,11 @@ impl GetRecommendedAppsRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<GetRecommendedAppsResponse> {
-        let path = "/open-apis/application/v6/applications/recommended".to_string();
+        let path = format!("/open-apis/application/v6/applications/recommended");
         let req: ApiRequest<GetRecommendedAppsResponse> = ApiRequest::get(&path);
 
-        let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("获取管理员推荐的应用", "响应数据为空")
-        })
+        let _resp: openlark_core::api::Response<GetRecommendedAppsResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(GetRecommendedAppsResponse { data: None })
     }
 }

@@ -1,4 +1,4 @@
-//! 修改用户部分信息
+//! 审批设备申报
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -11,43 +11,43 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone)]
-pub struct PatchUserRequest {
+pub struct ApproveDeviceRequest {
     config: Arc<Config>,
-    user_id: String,
+    device_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PatchUserResponse {
+pub struct ApproveDeviceResponse {
     pub data: Option<serde_json::Value>,
 }
 
-impl ApiResponseTrait for PatchUserResponse {
+impl ApiResponseTrait for ApproveDeviceResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl PatchUserRequest {
-    pub fn new(config: Arc<Config>, user_id: impl Into<String>) -> Self {
+impl ApproveDeviceRequest {
+    pub fn new(config: Arc<Config>, device_id: impl Into<String>) -> Self {
         Self {
             config,
-            user_id: user_id.into(),
+            device_id: device_id.into(),
         }
     }
 
-    pub async fn execute(self) -> SDKResult<PatchUserResponse> {
+    pub async fn execute(self) -> SDKResult<ApproveDeviceResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
         self,
         option: RequestOption,
-    ) -> SDKResult<PatchUserResponse> {
-        let path = format!("/open-apis/acs/v1/users/{}", self.user_id);
-        let req: ApiRequest<PatchUserResponse> = ApiRequest::patch(&path);
+    ) -> SDKResult<ApproveDeviceResponse> {
+        let path = format!("/open-apis/acs/v1/devices/{}/approve", self.device_id);
+        let req: ApiRequest<ApproveDeviceResponse> = ApiRequest::post(&path);
 
-        let _resp: openlark_core::api::Response<PatchUserResponse> =
+        let _resp: openlark_core::api::Response<ApproveDeviceResponse> =
             Transport::request(req, &self.config, Some(option)).await?;
-        Ok(PatchUserResponse { data: None })
+        Ok(ApproveDeviceResponse { data: None })
     }
 }

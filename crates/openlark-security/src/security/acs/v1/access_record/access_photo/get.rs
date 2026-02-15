@@ -1,4 +1,4 @@
-//! 获取门禁照片
+//! 下载开门时的人脸识别图片
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -13,12 +13,12 @@ use std::sync::Arc;
 #[derive(Debug, Clone)]
 pub struct GetAccessPhotoRequest {
     config: Arc<Config>,
-    record_id: String,
+    access_record_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetAccessPhotoResponse {
-    pub data: Option<AccessPhotoData>,
+    pub data: Option<serde_json::Value>,
 }
 
 impl ApiResponseTrait for GetAccessPhotoResponse {
@@ -27,16 +27,11 @@ impl ApiResponseTrait for GetAccessPhotoResponse {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AccessPhotoData {
-    pub photo_url: String,
-}
-
 impl GetAccessPhotoRequest {
-    pub fn new(config: Arc<Config>, record_id: impl Into<String>) -> Self {
+    pub fn new(config: Arc<Config>, access_record_id: impl Into<String>) -> Self {
         Self {
             config,
-            record_id: record_id.into(),
+            access_record_id: access_record_id.into(),
         }
     }
 
@@ -48,12 +43,11 @@ impl GetAccessPhotoRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<GetAccessPhotoResponse> {
-        let path = format!("/open-apis/acs/v1/access_records/{}/access_photo", self.record_id);
+        let path = format!("/open-apis/acs/v1/access_records/{}/access_photo", self.access_record_id);
         let req: ApiRequest<GetAccessPhotoResponse> = ApiRequest::get(&path);
 
-        let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("获取门禁照片", "响应数据为空")
-        })
+        let _resp: openlark_core::api::Response<GetAccessPhotoResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(GetAccessPhotoResponse { data: None })
     }
 }

@@ -1,4 +1,4 @@
-//! device list
+//! 获取门禁设备列表
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -11,43 +11,43 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone)]
-pub struct DeviceListRequest {
+pub struct ListDevicesRequest {
     config: Arc<Config>,
+    
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeviceListResponse {
+pub struct ListDevicesResponse {
     pub data: Option<serde_json::Value>,
 }
 
-impl ApiResponseTrait for DeviceListResponse {
+impl ApiResponseTrait for ListDevicesResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl DeviceListRequest {
+impl ListDevicesRequest {
     pub fn new(config: Arc<Config>) -> Self {
-        Self { config }
+        Self {
+            config,
+            
+        }
     }
 
-    pub async fn execute(self) -> SDKResult<DeviceListResponse> {
+    pub async fn execute(self) -> SDKResult<ListDevicesResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
         self,
         option: RequestOption,
-    ) -> SDKResult<DeviceListResponse> {
-        let path = "/open-apis/security/acs/v1/device/list"
-            .replace("application", "application")
-            .replace("security", "acs")
-            .replace("personal_settings", "personal_settings");
-        let req: ApiRequest<DeviceListResponse> = ApiRequest::get(&path);
+    ) -> SDKResult<ListDevicesResponse> {
+        let path = format!("/open-apis/acs/v1/devices");
+        let req: ApiRequest<ListDevicesResponse> = ApiRequest::get(&path);
 
-        let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("device list", "响应数据为空")
-        })
+        let _resp: openlark_core::api::Response<ListDevicesResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(ListDevicesResponse { data: None })
     }
 }

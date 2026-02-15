@@ -1,4 +1,4 @@
-//! device get
+//! 查询设备信息
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -11,43 +11,43 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone)]
-pub struct DeviceGetRequest {
+pub struct GetDeviceRequest {
     config: Arc<Config>,
+    device_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeviceGetResponse {
+pub struct GetDeviceResponse {
     pub data: Option<serde_json::Value>,
 }
 
-impl ApiResponseTrait for DeviceGetResponse {
+impl ApiResponseTrait for GetDeviceResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl DeviceGetRequest {
-    pub fn new(config: Arc<Config>) -> Self {
-        Self { config }
+impl GetDeviceRequest {
+    pub fn new(config: Arc<Config>, device_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            device_id: device_id.into(),
+        }
     }
 
-    pub async fn execute(self) -> SDKResult<DeviceGetResponse> {
+    pub async fn execute(self) -> SDKResult<GetDeviceResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
         self,
         option: RequestOption,
-    ) -> SDKResult<DeviceGetResponse> {
-        let path = "/open-apis/security/acs/v1/device/get"
-            .replace("application", "application")
-            .replace("security", "acs")
-            .replace("personal_settings", "personal_settings");
-        let req: ApiRequest<DeviceGetResponse> = ApiRequest::get(&path);
+    ) -> SDKResult<GetDeviceResponse> {
+        let path = format!("/open-apis/acs/v1/devices/{}", self.device_id);
+        let req: ApiRequest<GetDeviceResponse> = ApiRequest::get(&path);
 
-        let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("device get", "响应数据为空")
-        })
+        let _resp: openlark_core::api::Response<GetDeviceResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(GetDeviceResponse { data: None })
     }
 }

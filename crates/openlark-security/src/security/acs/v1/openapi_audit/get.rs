@@ -1,4 +1,4 @@
-//! 修改用户部分信息
+//! 获取OpenAPI审计日志数据
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -11,43 +11,43 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone)]
-pub struct PatchUserRequest {
+pub struct GetOpenapiAuditRequest {
     config: Arc<Config>,
-    user_id: String,
+    
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PatchUserResponse {
+pub struct GetOpenapiAuditResponse {
     pub data: Option<serde_json::Value>,
 }
 
-impl ApiResponseTrait for PatchUserResponse {
+impl ApiResponseTrait for GetOpenapiAuditResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl PatchUserRequest {
-    pub fn new(config: Arc<Config>, user_id: impl Into<String>) -> Self {
+impl GetOpenapiAuditRequest {
+    pub fn new(config: Arc<Config>) -> Self {
         Self {
             config,
-            user_id: user_id.into(),
+            
         }
     }
 
-    pub async fn execute(self) -> SDKResult<PatchUserResponse> {
+    pub async fn execute(self) -> SDKResult<GetOpenapiAuditResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
         self,
         option: RequestOption,
-    ) -> SDKResult<PatchUserResponse> {
-        let path = format!("/open-apis/acs/v1/users/{}", self.user_id);
-        let req: ApiRequest<PatchUserResponse> = ApiRequest::patch(&path);
+    ) -> SDKResult<GetOpenapiAuditResponse> {
+        let path = format!("/open-apis/acs/v1/openapi_audit");
+        let req: ApiRequest<GetOpenapiAuditResponse> = ApiRequest::get(&path);
 
-        let _resp: openlark_core::api::Response<PatchUserResponse> =
+        let _resp: openlark_core::api::Response<GetOpenapiAuditResponse> =
             Transport::request(req, &self.config, Some(option)).await?;
-        Ok(PatchUserResponse { data: None })
+        Ok(GetOpenapiAuditResponse { data: None })
     }
 }

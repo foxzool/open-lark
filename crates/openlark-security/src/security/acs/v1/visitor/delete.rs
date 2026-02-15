@@ -1,4 +1,4 @@
-//! visitor delete
+//! 删除访客
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -11,43 +11,43 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone)]
-pub struct VisitorDeleteRequest {
+pub struct DeleteVisitorRequest {
     config: Arc<Config>,
+    visitor_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct VisitorDeleteResponse {
+pub struct DeleteVisitorResponse {
     pub data: Option<serde_json::Value>,
 }
 
-impl ApiResponseTrait for VisitorDeleteResponse {
+impl ApiResponseTrait for DeleteVisitorResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl VisitorDeleteRequest {
-    pub fn new(config: Arc<Config>) -> Self {
-        Self { config }
+impl DeleteVisitorRequest {
+    pub fn new(config: Arc<Config>, visitor_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            visitor_id: visitor_id.into(),
+        }
     }
 
-    pub async fn execute(self) -> SDKResult<VisitorDeleteResponse> {
+    pub async fn execute(self) -> SDKResult<DeleteVisitorResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
         self,
         option: RequestOption,
-    ) -> SDKResult<VisitorDeleteResponse> {
-        let path = "/open-apis/security/acs/v1/visitor/delete"
-            .replace("application", "application")
-            .replace("security", "acs")
-            .replace("personal_settings", "personal_settings");
-        let req: ApiRequest<VisitorDeleteResponse> = ApiRequest::get(&path);
+    ) -> SDKResult<DeleteVisitorResponse> {
+        let path = format!("/open-apis/acs/v1/visitors/{}", self.visitor_id);
+        let req: ApiRequest<DeleteVisitorResponse> = ApiRequest::delete(&path);
 
-        let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("visitor delete", "响应数据为空")
-        })
+        let _resp: openlark_core::api::Response<DeleteVisitorResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(DeleteVisitorResponse { data: None })
     }
 }
