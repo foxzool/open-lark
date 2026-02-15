@@ -40,8 +40,8 @@ impl AnalyticsService {
     ///
     /// 提供全文搜索、智能搜索等功能。
     #[cfg(feature = "search")]
-    pub fn search(&self) -> crate::search::SearchService {
-        crate::search::SearchService::new(self.config.clone())
+    pub fn search(&self) -> crate::search::search::Search {
+        crate::search::search::Search::new(self.config.clone())
     }
 }
 

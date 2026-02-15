@@ -9,7 +9,7 @@ mod service;
 pub mod common;
 
 #[cfg(feature = "v1")]
-pub mod v1;
+pub mod application;
 
 pub mod prelude;
 
