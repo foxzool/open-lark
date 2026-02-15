@@ -18,7 +18,7 @@ impl ApplicationService {
     }
 
     #[cfg(feature = "v1")]
-    pub fn v1(&self) -> crate::v1::ApplicationV1 {
-        crate::v1::ApplicationV1::new(self.config.clone())
+    pub fn v1(&self) -> crate::application::application::v1::ApplicationV1 {
+        crate::application::application::v1::ApplicationV1::new(self.config.clone())
     }
 }

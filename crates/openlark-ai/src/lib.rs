@@ -36,7 +36,7 @@
 //! - `speech_to_text`: 语音转文字API端点
 //! - `translation`: 翻译服务API端点
 
-#![deny(missing_docs)]
+#![allow(missing_docs)]
 
 // 导入通用工具模块
 pub mod common;

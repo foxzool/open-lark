@@ -24,7 +24,7 @@
 //!
 //! // 创建邮件组
 //! let result = mail_service
-//!     .mail_group()
+//!     .mailgroup()
 //!     .create()
 //!     .mail_group_id("team@example.com")
 //!     .description("项目团队邮件组")
@@ -41,9 +41,9 @@ mod service;
 // 通用模块
 pub mod common;
 
-// 版本模块
+// mail 模块
 #[cfg(feature = "v1")]
-pub mod v1;
+pub mod mail;
 
 // Prelude 模块
 pub mod prelude;

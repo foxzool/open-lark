@@ -2,6 +2,10 @@
 //!
 //! 提供 AI 服务模块，包括文档 AI、OCR、语音转文字和翻译服务。
 
+pub mod document_ai;
+pub mod optical_char_recognition;
+pub mod speech_to_text;
+pub mod translation;
 pub mod v1;
 
 use crate::prelude::Config;
