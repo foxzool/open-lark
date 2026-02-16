@@ -48,7 +48,10 @@ impl CreateBadgeBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CreateBadgeResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<CreateBadgeResponse> {
         validate_required!(self.name, "勋章名称不能为空");
 
         let request_body = CreateBadgeRequest {
@@ -58,12 +61,13 @@ impl CreateBadgeBuilder {
         };
 
         let api_request: ApiRequest<CreateBadgeResponse> =
-            ApiRequest::post("/open-apis/admin/v1/badges").body(serde_json::to_value(&request_body)?);
+            ApiRequest::post("/open-apis/admin/v1/badges")
+                .body(serde_json::to_value(&request_body)?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("创建勋章", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("创建勋章", "响应数据为空"))
     }
 }
 

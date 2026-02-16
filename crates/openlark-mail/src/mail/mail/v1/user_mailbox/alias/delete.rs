@@ -30,7 +30,11 @@ impl ApiResponseTrait for DeleteMailboxAliasResponse {
 }
 
 impl DeleteMailboxAliasRequest {
-    pub fn new(config: Arc<Config>, user_mailbox_id: impl Into<String>, alias_id: impl Into<String>) -> Self {
+    pub fn new(
+        config: Arc<Config>,
+        user_mailbox_id: impl Into<String>,
+        alias_id: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             user_mailbox_id: user_mailbox_id.into(),
@@ -47,7 +51,10 @@ impl DeleteMailboxAliasRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<DeleteMailboxAliasResponse> {
-        let path = format!("/open-apis/mail/v1/user_mailboxes/{}/aliases/{}", self.user_mailbox_id, self.alias_id);
+        let path = format!(
+            "/open-apis/mail/v1/user_mailboxes/{}/aliases/{}",
+            self.user_mailbox_id, self.alias_id
+        );
         let req: ApiRequest<DeleteMailboxAliasResponse> = ApiRequest::delete(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;

@@ -14,7 +14,6 @@ use std::sync::Arc;
 pub struct ListMailboxAliasRequest {
     config: Arc<Config>,
     user_mailbox_id: String,
-    
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -33,7 +32,6 @@ impl ListMailboxAliasRequest {
         Self {
             config,
             user_mailbox_id: user_mailbox_id.into(),
-            
         }
     }
 
@@ -45,7 +43,10 @@ impl ListMailboxAliasRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<ListMailboxAliasResponse> {
-        let path = format!("/open-apis/mail/v1/user_mailboxes/{}/aliases", self.user_mailbox_id);
+        let path = format!(
+            "/open-apis/mail/v1/user_mailboxes/{}/aliases",
+            self.user_mailbox_id
+        );
         let req: ApiRequest<ListMailboxAliasResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;

@@ -41,7 +41,10 @@ impl CreateBadgeGrantBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CreateBadgeGrantResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<CreateBadgeGrantResponse> {
         validate_required!(self.badge_id, "勋章ID不能为空");
         validate_required!(self.user_ids, "用户ID列表不能为空");
 
@@ -49,9 +52,11 @@ impl CreateBadgeGrantBuilder {
             user_ids: self.user_ids,
         };
 
-        let api_request: ApiRequest<CreateBadgeGrantResponse> =
-            ApiRequest::post(format!("/open-apis/admin/v1/badges/{}/grants", self.badge_id))
-                .body(serde_json::to_value(&request_body)?);
+        let api_request: ApiRequest<CreateBadgeGrantResponse> = ApiRequest::post(format!(
+            "/open-apis/admin/v1/badges/{}/grants",
+            self.badge_id
+        ))
+        .body(serde_json::to_value(&request_body)?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {

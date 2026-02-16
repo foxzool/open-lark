@@ -68,7 +68,8 @@ impl TableRecordsDeleteBuilder {
         api_request = api_request.body(request);
 
         let resp = Transport::request(api_request, &self.config, None).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("删除数据表记录", "响应数据为空"))
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("删除数据表记录", "响应数据为空"))
     }
 
     /// 使用选项执行请求
@@ -91,7 +92,8 @@ impl TableRecordsDeleteBuilder {
         api_request = api_request.body(request);
 
         let resp = Transport::request(api_request, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("删除数据表记录", "响应数据为空"))
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("删除数据表记录", "响应数据为空"))
     }
 }
 

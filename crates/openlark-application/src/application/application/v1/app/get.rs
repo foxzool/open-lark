@@ -35,10 +35,7 @@ impl GetAppRequest {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(
-        self,
-        option: RequestOption,
-    ) -> SDKResult<AppGetResponse> {
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<AppGetResponse> {
         let path = "/open-apis/application/application/v1/app/get"
             .replace("application", "application")
             .replace("security", "acs")
@@ -46,8 +43,7 @@ impl GetAppRequest {
         let req: ApiRequest<AppGetResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("app get", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("app get", "响应数据为空"))
     }
 }

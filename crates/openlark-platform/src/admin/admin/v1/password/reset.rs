@@ -38,7 +38,10 @@ impl ResetPasswordBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ResetPasswordResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ResetPasswordResponse> {
         validate_required!(self.user_id, "用户ID不能为空");
         validate_required!(self.new_password, "新密码不能为空");
 
@@ -52,9 +55,9 @@ impl ResetPasswordBuilder {
                 .body(serde_json::to_value(&request_body)?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("重置用户密码", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("重置用户密码", "响应数据为空"))
     }
 }
 

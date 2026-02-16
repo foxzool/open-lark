@@ -71,7 +71,6 @@ impl ApiResponseTrait for DeleteTaskCommentResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
 
     #[test]
     fn test_delete_task_comment_v1_url() {

@@ -14,7 +14,6 @@ use std::sync::Arc;
 pub struct ReorderMailboxRuleRequest {
     config: Arc<Config>,
     user_mailbox_id: String,
-    
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -33,7 +32,6 @@ impl ReorderMailboxRuleRequest {
         Self {
             config,
             user_mailbox_id: user_mailbox_id.into(),
-            
         }
     }
 
@@ -45,7 +43,10 @@ impl ReorderMailboxRuleRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<ReorderMailboxRuleResponse> {
-        let path = format!("/open-apis/mail/v1/user_mailboxes/{}/rules/reorder", self.user_mailbox_id);
+        let path = format!(
+            "/open-apis/mail/v1/user_mailboxes/{}/rules/reorder",
+            self.user_mailbox_id
+        );
         let req: ApiRequest<ReorderMailboxRuleResponse> = ApiRequest::post(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;

@@ -38,8 +38,14 @@ impl GetBadgeGrantBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetBadgeGrantResponse> {
-        let url = format!("/open-apis/admin/v1/badges/{}/grants/{}", self.badge_id, self.grant_id);
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<GetBadgeGrantResponse> {
+        let url = format!(
+            "/open-apis/admin/v1/badges/{}/grants/{}",
+            self.badge_id, self.grant_id
+        );
         let api_request: ApiRequest<GetBadgeGrantResponse> = ApiRequest::get(url);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;

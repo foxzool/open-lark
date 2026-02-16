@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/document_ai-v1/bank_card_recognize
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -78,8 +74,12 @@ impl BankCardRecognizeRequest {
         Self { config }
     }
 
-    pub async fn execute(self, body: BankCardRecognizeBody) -> SDKResult<BankCardRecognizeResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+    pub async fn execute(
+        self,
+        body: BankCardRecognizeBody,
+    ) -> SDKResult<BankCardRecognizeResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     pub async fn execute_with_options(

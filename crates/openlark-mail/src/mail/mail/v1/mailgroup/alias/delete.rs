@@ -55,7 +55,8 @@ impl DeleteMailGroupAliasRequest {
         );
         let req: ApiRequest<DeleteMailGroupAliasResponse> = ApiRequest::delete(&path);
 
-        let _resp: Response<DeleteMailGroupAliasResponse> = Transport::request(req, &self.config, Some(option)).await?;
+        let _resp: Response<DeleteMailGroupAliasResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
         Ok(DeleteMailGroupAliasResponse { data: None })
     }
 }

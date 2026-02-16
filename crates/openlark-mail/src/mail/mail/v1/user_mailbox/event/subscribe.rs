@@ -14,7 +14,6 @@ use std::sync::Arc;
 pub struct SubscribeMailboxEventRequest {
     config: Arc<Config>,
     user_mailbox_id: String,
-    
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -33,7 +32,6 @@ impl SubscribeMailboxEventRequest {
         Self {
             config,
             user_mailbox_id: user_mailbox_id.into(),
-            
         }
     }
 
@@ -45,12 +43,14 @@ impl SubscribeMailboxEventRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<SubscribeMailboxEventResponse> {
-        let path = format!("/open-apis/mail/v1/user_mailboxes/{}/event/subscribe", self.user_mailbox_id);
+        let path = format!(
+            "/open-apis/mail/v1/user_mailboxes/{}/event/subscribe",
+            self.user_mailbox_id
+        );
         let req: ApiRequest<SubscribeMailboxEventResponse> = ApiRequest::post(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("订阅邮箱事件", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("订阅邮箱事件", "响应数据为空"))
     }
 }

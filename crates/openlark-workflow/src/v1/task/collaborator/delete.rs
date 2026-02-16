@@ -71,7 +71,6 @@ impl ApiResponseTrait for DeleteTaskCollaboratorResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
 
     #[test]
     fn test_delete_task_collaborator_v1_url() {

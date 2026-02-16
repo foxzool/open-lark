@@ -101,7 +101,6 @@ impl ApiResponseTrait for ListTaskFollowerResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
 
     #[test]
     fn test_list_task_follower_v1_url() {

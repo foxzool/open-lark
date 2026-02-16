@@ -45,7 +45,10 @@ impl UpdateBadgeBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<UpdateBadgeResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<UpdateBadgeResponse> {
         let url = format!("/open-apis/admin/v1/badges/{}", self.badge_id);
         let request_body = UpdateBadgeRequest {
             name: self.name,
@@ -55,9 +58,9 @@ impl UpdateBadgeBuilder {
             ApiRequest::put(url).body(serde_json::to_value(&request_body)?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("修改勋章信息", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("修改勋章信息", "响应数据为空"))
     }
 }
 

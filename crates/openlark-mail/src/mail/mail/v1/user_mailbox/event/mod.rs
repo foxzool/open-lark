@@ -23,6 +23,9 @@ impl Event {
     }
 
     pub fn unsubscribe(&self) -> unsubscribe::UnsubscribeMailboxEventRequest {
-        unsubscribe::UnsubscribeMailboxEventRequest::new(self.config.clone(), self.mailbox_id.clone())
+        unsubscribe::UnsubscribeMailboxEventRequest::new(
+            self.config.clone(),
+            self.mailbox_id.clone(),
+        )
     }
 }

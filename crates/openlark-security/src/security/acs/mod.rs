@@ -50,7 +50,9 @@ impl AcsV1Service {
         Self {
             users: crate::security::acs::v1::users::UsersService::new(config.clone()),
             user_faces: crate::security::acs::v1::user_faces::UserFacesService::new(config.clone()),
-            rule_external: crate::security::acs::v1::rule_external::RuleExternalService::new(config.clone()),
+            rule_external: crate::security::acs::v1::rule_external::RuleExternalService::new(
+                config.clone(),
+            ),
             visitors: crate::security::acs::v1::visitors::VisitorsService::new(config.clone()),
             devices: crate::security::acs::v1::devices::DevicesService::new(config.clone()),
             access_records: crate::security::acs::v1::access_records::AccessRecordsService::new(
@@ -86,7 +88,9 @@ impl AcsV1Service {
     }
 
     /// 获取访问记录服务
-    pub fn access_records(&self) -> &crate::security::acs::v1::access_records::AccessRecordsService {
+    pub fn access_records(
+        &self,
+    ) -> &crate::security::acs::v1::access_records::AccessRecordsService {
         &self.access_records
     }
 }

@@ -38,7 +38,10 @@ impl StartServiceBody {
             return Err(openlark_core::error::validation_error("用户ID不能为空", ""));
         }
         if self.service_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error("服务台ID不能为空", ""));
+            return Err(openlark_core::error::validation_error(
+                "服务台ID不能为空",
+                "",
+            ));
         }
         Ok(())
     }
@@ -101,8 +104,7 @@ impl StartServiceRequest {
                 .body(serialize_params(&self.body, "创建服务台对话")?);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("创建服务台对话", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("创建服务台对话", "响应数据为空"))
     }
 }

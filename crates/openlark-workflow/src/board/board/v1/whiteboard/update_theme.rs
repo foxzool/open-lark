@@ -94,7 +94,6 @@ impl ApiResponseTrait for UpdateWhiteboardThemeResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
 
     #[test]
     fn test_whiteboard_update_theme_v1_url() {

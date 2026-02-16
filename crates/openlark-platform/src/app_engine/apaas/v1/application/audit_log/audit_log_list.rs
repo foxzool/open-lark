@@ -85,7 +85,9 @@ impl AuditLogListBuilder {
             req = req.query("page_size", &page_size.to_string());
         }
         let resp = Transport::request(req, &self.config, None).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("查询审计日志列表", "响应数据为空"))
+        resp.data.ok_or_else(|| {
+            openlark_core::error::validation_error("查询审计日志列表", "响应数据为空")
+        })
     }
 
     /// 使用选项执行请求
@@ -112,7 +114,9 @@ impl AuditLogListBuilder {
             req = req.query("page_size", &page_size.to_string());
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("查询审计日志列表", "响应数据为空"))
+        resp.data.ok_or_else(|| {
+            openlark_core::error::validation_error("查询审计日志列表", "响应数据为空")
+        })
     }
 }
 

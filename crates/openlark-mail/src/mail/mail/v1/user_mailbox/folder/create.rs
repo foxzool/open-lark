@@ -14,7 +14,6 @@ use std::sync::Arc;
 pub struct CreateMailboxFolderRequest {
     config: Arc<Config>,
     user_mailbox_id: String,
-    
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -33,7 +32,6 @@ impl CreateMailboxFolderRequest {
         Self {
             config,
             user_mailbox_id: user_mailbox_id.into(),
-            
         }
     }
 
@@ -45,12 +43,14 @@ impl CreateMailboxFolderRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<CreateMailboxFolderResponse> {
-        let path = format!("/open-apis/mail/v1/user_mailboxes/{}/folders", self.user_mailbox_id);
+        let path = format!(
+            "/open-apis/mail/v1/user_mailboxes/{}/folders",
+            self.user_mailbox_id
+        );
         let req: ApiRequest<CreateMailboxFolderResponse> = ApiRequest::post(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("创建邮箱文件夹", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("创建邮箱文件夹", "响应数据为空"))
     }
 }

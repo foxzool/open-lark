@@ -29,6 +29,10 @@ impl Alias {
     }
 
     pub fn delete(&self, alias_id: impl Into<String>) -> delete::DeleteMailboxAliasRequest {
-        delete::DeleteMailboxAliasRequest::new(self.config.clone(), self.mailbox_id.clone(), alias_id)
+        delete::DeleteMailboxAliasRequest::new(
+            self.config.clone(),
+            self.mailbox_id.clone(),
+            alias_id,
+        )
     }
 }

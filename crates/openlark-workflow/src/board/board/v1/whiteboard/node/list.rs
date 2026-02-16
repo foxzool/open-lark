@@ -121,7 +121,6 @@ impl ApiResponseTrait for ListWhiteboardNodeResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
 
     #[test]
     fn test_whiteboard_node_list_v1_url() {

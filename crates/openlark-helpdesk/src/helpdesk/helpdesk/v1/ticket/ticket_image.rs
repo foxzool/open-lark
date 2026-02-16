@@ -57,15 +57,12 @@ impl GetTicketImageRequest {
     ) -> SDKResult<GetTicketImageResponse> {
         let path = format!(
             "{}/{}/images/{}",
-            "/open-apis/helpdesk/v1/tickets",
-            self.ticket_id,
-            self.image_key
+            "/open-apis/helpdesk/v1/tickets", self.ticket_id, self.image_key
         );
         let req: ApiRequest<GetTicketImageResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("获取工单内图像", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("获取工单内图像", "响应数据为空"))
     }
 }

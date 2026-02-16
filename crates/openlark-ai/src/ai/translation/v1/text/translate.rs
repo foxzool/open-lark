@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/translation-v1/text_translate
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -91,7 +87,8 @@ impl TextTranslateRequest {
 
     /// 执行文本翻译请求
     pub async fn execute(self, body: TextTranslateBody) -> SDKResult<TextTranslateResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行文本翻译请求（支持自定义选项）
@@ -201,8 +198,7 @@ pub async fn text_translate_with_options(
         .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
 
     let req: ApiRequest<TextTranslateResponse> =
-        ApiRequest::post(TRANSLATION_V1_TEXT_TRANSLATE)
-            .body(serialize_params(&body, "文本翻译")?);
+        ApiRequest::post(TRANSLATION_V1_TEXT_TRANSLATE).body(serialize_params(&body, "文本翻译")?);
 
     let resp = Transport::request(req, config, Some(option)).await?;
     extract_response_data(resp, "文本翻译")
@@ -246,8 +242,7 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = TextTranslateRequestBuilder::new(config.clone())
-            .source_language("en-US");
+        let builder = TextTranslateRequestBuilder::new(config.clone()).source_language("en-US");
 
         assert_eq!(builder.source_language, Some("en-US".to_string()));
     }
@@ -258,8 +253,7 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = TextTranslateRequestBuilder::new(config.clone())
-            .target_language("zh-CN");
+        let builder = TextTranslateRequestBuilder::new(config.clone()).target_language("zh-CN");
 
         assert_eq!(builder.target_language, Some("zh-CN".to_string()));
     }

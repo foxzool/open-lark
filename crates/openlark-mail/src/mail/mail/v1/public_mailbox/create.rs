@@ -3,7 +3,9 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/mail-v1/public_mailbox/create
 
 use crate::common::{api_endpoints::MailApiV1, api_utils::*};
-use crate::mail::mail::v1::public_mailbox::models::{CreatePublicMailboxBody, CreatePublicMailboxResponse};
+use crate::mail::mail::v1::public_mailbox::models::{
+    CreatePublicMailboxBody, CreatePublicMailboxResponse,
+};
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

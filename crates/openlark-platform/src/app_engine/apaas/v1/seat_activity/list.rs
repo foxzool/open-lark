@@ -79,7 +79,9 @@ impl SeatActivityListBuilder {
             req = req.query("end_time", &end_time.to_string());
         }
         let resp = Transport::request(req, &self.config, None).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("查询席位活跃详情", "响应数据为空"))
+        resp.data.ok_or_else(|| {
+            openlark_core::error::validation_error("查询席位活跃详情", "响应数据为空")
+        })
     }
 
     /// 使用选项执行请求
@@ -103,7 +105,9 @@ impl SeatActivityListBuilder {
             req = req.query("end_time", &end_time.to_string());
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("查询席位活跃详情", "响应数据为空"))
+        resp.data.ok_or_else(|| {
+            openlark_core::error::validation_error("查询席位活跃详情", "响应数据为空")
+        })
     }
 }
 

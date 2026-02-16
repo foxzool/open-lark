@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/document_ai-v1/health_certificate_recognize
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -86,7 +82,8 @@ impl HealthCertificateRecognizeRequest {
         self,
         body: HealthCertificateRecognizeBody,
     ) -> SDKResult<HealthCertificateRecognizeResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行健康证识别请求（支持自定义选项）

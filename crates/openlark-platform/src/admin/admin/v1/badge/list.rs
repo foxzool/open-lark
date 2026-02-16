@@ -44,14 +44,14 @@ impl ListBadgeBuilder {
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListBadgeResponse> {
         let mut url = String::from("/open-apis/admin/v1/badges");
         let mut params = Vec::new();
-        
+
         if let Some(size) = self.page_size {
             params.push(format!("page_size={}", size));
         }
         if let Some(token) = self.page_token {
             params.push(format!("page_token={}", token));
         }
-        
+
         if !params.is_empty() {
             url.push('?');
             url.push_str(&params.join("&"));
@@ -60,9 +60,9 @@ impl ListBadgeBuilder {
         let api_request: ApiRequest<ListBadgeResponse> = ApiRequest::get(url);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("获取勋章列表", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("获取勋章列表", "响应数据为空"))
     }
 }
 

@@ -1,7 +1,7 @@
 //! Text translation module
 
-pub mod translate;
 pub mod detect;
+pub mod translate;
 
 use openlark_core::config::Config;
 use std::sync::Arc;

@@ -122,7 +122,8 @@ impl BatchCreateMailGroupManagerRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchCreateMailGroupManagerResponse> {
         let api_endpoint = MailApiV1::MailGroupManagerBatchCreate(self.group_id.clone());
-        let mut request = ApiRequest::<BatchCreateMailGroupManagerResponse>::post(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<BatchCreateMailGroupManagerResponse>::post(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "批量创建邮件组管理员")?);
@@ -172,7 +173,8 @@ impl BatchDeleteMailGroupManagerRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchDeleteMailGroupManagerResponse> {
         let api_endpoint = MailApiV1::MailGroupManagerBatchDelete(self.group_id.clone());
-        let mut request = ApiRequest::<BatchDeleteMailGroupManagerResponse>::post(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<BatchDeleteMailGroupManagerResponse>::post(api_endpoint.to_url());
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "批量删除邮件组管理员")?);
@@ -263,7 +265,10 @@ mod tests {
         );
 
         let request = BatchCreateMailGroupManagerRequest::new(config, "group_123".to_string())
-            .managers(vec!["admin1@example.com".to_string(), "admin2@example.com".to_string()]);
+            .managers(vec![
+                "admin1@example.com".to_string(),
+                "admin2@example.com".to_string(),
+            ]);
 
         assert_eq!(request.group_id, "group_123");
         assert_eq!(request.body.managers.len(), 2);

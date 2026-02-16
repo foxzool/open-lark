@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/document_ai-v1/train_invoice_recognize
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -92,7 +88,8 @@ impl TrainInvoiceRecognizeRequest {
         self,
         body: TrainInvoiceRecognizeBody,
     ) -> SDKResult<TrainInvoiceRecognizeResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行火车票识别请求（支持自定义选项）

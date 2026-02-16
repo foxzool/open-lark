@@ -99,7 +99,6 @@ impl ApiResponseTrait for DownloadWhiteboardAsImageResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
 
     #[test]
     fn test_whiteboard_download_as_image_v1_url() {

@@ -48,17 +48,20 @@ impl ListBadgeGrantBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListBadgeGrantResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListBadgeGrantResponse> {
         let mut url = format!("/open-apis/admin/v1/badges/{}/grants", self.badge_id);
         let mut params = Vec::new();
-        
+
         if let Some(size) = self.page_size {
             params.push(format!("page_size={}", size));
         }
         if let Some(token) = self.page_token {
             params.push(format!("page_token={}", token));
         }
-        
+
         if !params.is_empty() {
             url.push('?');
             url.push_str(&params.join("&"));
