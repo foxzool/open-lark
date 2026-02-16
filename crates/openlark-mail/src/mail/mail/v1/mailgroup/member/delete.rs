@@ -1,11 +1,7 @@
 //! 删除邮件组成员
 
 use openlark_core::{
-    api::Response,
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
+    api::ApiRequest, api::Response, config::Config, http::Transport, req_option::RequestOption,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -50,7 +46,8 @@ impl DeleteMailGroupMemberRequest {
         );
         let req: ApiRequest<DeleteMailGroupMemberResponse> = ApiRequest::delete(&path);
 
-        let _resp: Response<DeleteMailGroupMemberResponse> = Transport::request(req, &self.config, Some(option)).await?;
+        let _resp: Response<DeleteMailGroupMemberResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
         Ok(DeleteMailGroupMemberResponse { data: None })
     }
 }

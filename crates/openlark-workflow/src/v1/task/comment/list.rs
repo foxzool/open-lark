@@ -107,7 +107,6 @@ impl ApiResponseTrait for ListTaskCommentResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
 
     #[test]
     fn test_list_task_comment_v1_url() {

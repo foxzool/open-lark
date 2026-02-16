@@ -14,7 +14,6 @@ use std::sync::Arc;
 pub struct ListMailContactRequest {
     config: Arc<Config>,
     user_mailbox_id: String,
-    
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -33,7 +32,6 @@ impl ListMailContactRequest {
         Self {
             config,
             user_mailbox_id: user_mailbox_id.into(),
-            
         }
     }
 
@@ -45,12 +43,14 @@ impl ListMailContactRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<ListMailContactResponse> {
-        let path = format!("/open-apis/mail/v1/user_mailboxes/{}/mail_contacts", self.user_mailbox_id);
+        let path = format!(
+            "/open-apis/mail/v1/user_mailboxes/{}/mail_contacts",
+            self.user_mailbox_id
+        );
         let req: ApiRequest<ListMailContactResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("列出邮箱联系人", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("列出邮箱联系人", "响应数据为空"))
     }
 }

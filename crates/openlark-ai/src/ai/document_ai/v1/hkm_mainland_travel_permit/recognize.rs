@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/document_ai-v1/hkm_mainland_travel_permit_recognize
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -86,7 +82,8 @@ impl HkmMainlandTravelPermitRecognizeRequest {
         self,
         body: HkmMainlandTravelPermitRecognizeBody,
     ) -> SDKResult<HkmMainlandTravelPermitRecognizeResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行港澳通行证识别请求（支持自定义选项）
@@ -168,8 +165,7 @@ pub async fn hkm_mainland_travel_permit_recognize(
     config: &Config,
     body: HkmMainlandTravelPermitRecognizeBody,
 ) -> SDKResult<HkmMainlandTravelPermitRecognizeResponse> {
-    hkm_mainland_travel_permit_recognize_with_options(config, body, RequestOption::default())
-        .await
+    hkm_mainland_travel_permit_recognize_with_options(config, body, RequestOption::default()).await
 }
 
 /// 执行港澳通行证识别（支持自定义选项）

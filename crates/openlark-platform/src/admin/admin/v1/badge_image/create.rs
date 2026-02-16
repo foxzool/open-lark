@@ -31,7 +31,10 @@ impl CreateBadgeImageBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CreateBadgeImageResponse> {
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<CreateBadgeImageResponse> {
         validate_required!(self.image, "图片不能为空");
 
         let request_body = CreateBadgeImageRequest { image: self.image };
@@ -40,9 +43,9 @@ impl CreateBadgeImageBuilder {
                 .body(serde_json::to_value(&request_body)?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
-        response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("上传勋章图片", "响应数据为空")
-        })
+        response
+            .data
+            .ok_or_else(|| openlark_core::error::validation_error("上传勋章图片", "响应数据为空"))
     }
 }
 

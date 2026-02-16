@@ -126,7 +126,6 @@ impl ApiResponseTrait for CreateWhiteboardNodeResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
 
     #[test]
     fn test_whiteboard_node_create_v1_url() {

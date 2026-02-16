@@ -79,7 +79,6 @@ impl ApiResponseTrait for GetTaskCommentResponseV1 {
 
 #[cfg(test)]
 mod tests {
-    
 
     #[test]
     fn test_get_task_comment_v1_url() {

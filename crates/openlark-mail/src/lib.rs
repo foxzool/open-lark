@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 //! # OpenLark 邮件模块
 //!
 //! OpenLark SDK 的邮件模块，提供飞书邮件组 API 的完整访问。

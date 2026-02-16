@@ -1,7 +1,9 @@
 //! 部分更新公共邮箱
 
 use crate::common::{api_endpoints::MailApiV1, api_utils::*};
-use crate::mail::mail::v1::public_mailbox::models::{PatchPublicMailboxBody, PatchPublicMailboxResponse};
+use crate::mail::mail::v1::public_mailbox::models::{
+    PatchPublicMailboxBody, PatchPublicMailboxResponse,
+};
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

@@ -2,7 +2,7 @@
 
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
-    config:: Config,
+    config::Config,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -52,10 +52,15 @@ impl ListAdminDeptStatBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListAdminDeptStatResponse> {
-        let mut url = format!("/open-apis/admin/v1/admin_dept_stats?start_date={}&end_date={}",
-            self.start_date, self.end_date);
-        
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListAdminDeptStatResponse> {
+        let mut url = format!(
+            "/open-apis/admin/v1/admin_dept_stats?start_date={}&end_date={}",
+            self.start_date, self.end_date
+        );
+
         if let Some(size) = self.page_size {
             url.push_str(&format!("&page_size={}", size));
         }

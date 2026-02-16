@@ -29,6 +29,10 @@ impl Alias {
     }
 
     pub fn delete(&self, alias_id: impl Into<String>) -> delete::DeleteMailGroupAliasRequest {
-        delete::DeleteMailGroupAliasRequest::new(self.config.clone(), self.mailgroup_id.clone(), alias_id)
+        delete::DeleteMailGroupAliasRequest::new(
+            self.config.clone(),
+            self.mailgroup_id.clone(),
+            alias_id,
+        )
     }
 }

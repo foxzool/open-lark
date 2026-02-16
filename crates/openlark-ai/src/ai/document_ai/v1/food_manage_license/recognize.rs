@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/document_ai-v1/food_manage_license_recognize
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -89,7 +85,8 @@ impl FoodManageLicenseRecognizeRequest {
         self,
         body: FoodManageLicenseRecognizeBody,
     ) -> SDKResult<FoodManageLicenseRecognizeResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行食品经营许可证识别请求（支持自定义选项）

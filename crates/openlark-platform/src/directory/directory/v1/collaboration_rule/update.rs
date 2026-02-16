@@ -85,7 +85,9 @@ impl CollaborationRuleUpdateBuilder {
         api_request = api_request.body(request);
 
         let resp = Transport::request(api_request, &self.config, None).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("更新可搜可见规则", "响应数据为空"))
+        resp.data.ok_or_else(|| {
+            openlark_core::error::validation_error("更新可搜可见规则", "响应数据为空")
+        })
     }
 
     /// 使用选项执行请求
@@ -111,7 +113,9 @@ impl CollaborationRuleUpdateBuilder {
         api_request = api_request.body(request);
 
         let resp = Transport::request(api_request, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("更新可搜可见规则", "响应数据为空"))
+        resp.data.ok_or_else(|| {
+            openlark_core::error::validation_error("更新可搜可见规则", "响应数据为空")
+        })
     }
 }
 

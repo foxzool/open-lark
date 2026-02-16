@@ -54,7 +54,10 @@ impl ListMailGroupAliasRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<ListMailGroupAliasResponse> {
-        let path = format!("/open-apis/mail/v1/mailgroups/{}/aliases", self.mailgroup_id);
+        let path = format!(
+            "/open-apis/mail/v1/mailgroups/{}/aliases",
+            self.mailgroup_id
+        );
         let req: ApiRequest<ListMailGroupAliasResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;

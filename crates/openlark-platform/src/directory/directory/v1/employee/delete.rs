@@ -34,7 +34,8 @@ impl EmployeeDeleteBuilder {
 
         let req: ApiRequest<EmployeeDeleteResponse> = ApiRequest::delete(&url);
         let resp = Transport::request(req, &self.config, None).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("离职员工", "响应数据为空"))
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("离职员工", "响应数据为空"))
     }
 
     /// 使用选项执行请求
@@ -46,7 +47,8 @@ impl EmployeeDeleteBuilder {
 
         let req: ApiRequest<EmployeeDeleteResponse> = ApiRequest::delete(&url);
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("离职员工", "响应数据为空"))
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("离职员工", "响应数据为空"))
     }
 }
 

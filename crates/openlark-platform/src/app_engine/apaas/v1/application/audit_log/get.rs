@@ -41,7 +41,9 @@ impl AuditLogGetBuilder {
         let mut req: ApiRequest<AuditLogGetResponse> = ApiRequest::get(&url);
         req = req.query("log_id", &self.log_id);
         let resp = Transport::request(req, &self.config, None).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("查询审计日志详情", "响应数据为空"))
+        resp.data.ok_or_else(|| {
+            openlark_core::error::validation_error("查询审计日志详情", "响应数据为空")
+        })
     }
 
     /// 使用选项执行请求
@@ -57,7 +59,9 @@ impl AuditLogGetBuilder {
         let mut req: ApiRequest<AuditLogGetResponse> = ApiRequest::get(&url);
         req = req.query("log_id", &self.log_id);
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| openlark_core::error::validation_error("查询审计日志详情", "响应数据为空"))
+        resp.data.ok_or_else(|| {
+            openlark_core::error::validation_error("查询审计日志详情", "响应数据为空")
+        })
     }
 }
 

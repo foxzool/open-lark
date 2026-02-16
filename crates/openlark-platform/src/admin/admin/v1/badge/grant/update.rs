@@ -45,9 +45,17 @@ impl UpdateBadgeGrantBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<UpdateBadgeGrantResponse> {
-        let url = format!("/open-apis/admin/v1/badges/{}/grants/{}", self.badge_id, self.grant_id);
-        let request_body = UpdateBadgeGrantRequest { user_ids: self.user_ids };
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<UpdateBadgeGrantResponse> {
+        let url = format!(
+            "/open-apis/admin/v1/badges/{}/grants/{}",
+            self.badge_id, self.grant_id
+        );
+        let request_body = UpdateBadgeGrantRequest {
+            user_ids: self.user_ids,
+        };
         let api_request: ApiRequest<UpdateBadgeGrantResponse> =
             ApiRequest::put(url).body(serde_json::to_value(&request_body)?);
 

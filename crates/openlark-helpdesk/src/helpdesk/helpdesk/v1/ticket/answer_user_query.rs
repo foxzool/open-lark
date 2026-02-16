@@ -28,7 +28,10 @@ pub struct AnswerUserQueryBody {
 impl AnswerUserQueryBody {
     fn validate(&self) -> SDKResult<()> {
         if self.content.trim().is_empty() {
-            return Err(openlark_core::error::validation_error("回复内容不能为空", ""));
+            return Err(openlark_core::error::validation_error(
+                "回复内容不能为空",
+                "",
+            ));
         }
         Ok(())
     }
@@ -80,8 +83,8 @@ impl AnswerUserQueryRequest {
         self.body.validate()?;
 
         let path = HelpdeskApiV1::TicketAnswerUserQuery(self.ticket_id.clone()).to_url();
-        let req: ApiRequest<AnswerUserQueryResponse> = ApiRequest::post(&path)
-            .body(serialize_params(&self.body, "回复用户在工单里的提问")?);
+        let req: ApiRequest<AnswerUserQueryResponse> =
+            ApiRequest::post(&path).body(serialize_params(&self.body, "回复用户在工单里的提问")?);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data.ok_or_else(|| {

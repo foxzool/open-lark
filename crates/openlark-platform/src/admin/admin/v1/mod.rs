@@ -3,13 +3,13 @@
 use crate::PlatformConfig;
 use std::sync::Arc;
 
-pub mod users;
 pub mod admin_dept_stat;
 pub mod admin_user_stat;
 pub mod audit;
 pub mod badge;
 pub mod badge_image;
 pub mod password;
+pub mod users;
 
 /// Admin V1 API
 #[derive(Debug, Clone)]

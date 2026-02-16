@@ -30,7 +30,11 @@ impl ApiResponseTrait for DeleteMailContactResponse {
 }
 
 impl DeleteMailContactRequest {
-    pub fn new(config: Arc<Config>, user_mailbox_id: impl Into<String>, mail_contact_id: impl Into<String>) -> Self {
+    pub fn new(
+        config: Arc<Config>,
+        user_mailbox_id: impl Into<String>,
+        mail_contact_id: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             user_mailbox_id: user_mailbox_id.into(),
@@ -47,12 +51,14 @@ impl DeleteMailContactRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<DeleteMailContactResponse> {
-        let path = format!("/open-apis/mail/v1/user_mailboxes/{}/mail_contacts/{}", self.user_mailbox_id, self.mail_contact_id);
+        let path = format!(
+            "/open-apis/mail/v1/user_mailboxes/{}/mail_contacts/{}",
+            self.user_mailbox_id, self.mail_contact_id
+        );
         let req: ApiRequest<DeleteMailContactResponse> = ApiRequest::delete(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("删除邮箱联系人", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("删除邮箱联系人", "响应数据为空"))
     }
 }

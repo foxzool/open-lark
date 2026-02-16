@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/document_ai-v1/id_card_recognize
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -100,7 +96,8 @@ impl IdCardRecognizeRequest {
     }
 
     pub async fn execute(self, body: IdCardRecognizeBody) -> SDKResult<IdCardRecognizeResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     pub async fn execute_with_options(
@@ -184,9 +181,8 @@ pub async fn id_card_recognize_with_options(
     body.validate()
         .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
 
-    let req: ApiRequest<IdCardRecognizeResponse> =
-        ApiRequest::post(DOCUMENT_AI_ID_CARD_RECOGNIZE)
-            .body(serialize_params(&body, "身份证识别")?);
+    let req: ApiRequest<IdCardRecognizeResponse> = ApiRequest::post(DOCUMENT_AI_ID_CARD_RECOGNIZE)
+        .body(serialize_params(&body, "身份证识别")?);
 
     let resp = Transport::request(req, config, Some(option)).await?;
     extract_response_data(resp, "身份证识别")
@@ -213,8 +209,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = IdCardRecognizeRequestBuilder::new(config.clone())
-            .file_token("file_token_123");
+        let builder =
+            IdCardRecognizeRequestBuilder::new(config.clone()).file_token("file_token_123");
         assert_eq!(builder.file_token, Some("file_token_123".to_string()));
     }
 

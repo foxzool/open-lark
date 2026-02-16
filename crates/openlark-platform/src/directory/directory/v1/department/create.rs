@@ -64,7 +64,8 @@ impl DepartmentCreateBuilder {
             leader_user_id: self.leader_user_id,
         };
 
-        let req: ApiRequest<DepartmentCreateResponse> = ApiRequest::post(&url).body(serde_json::to_value(&request)?);
+        let req: ApiRequest<DepartmentCreateResponse> =
+            ApiRequest::post(&url).body(serde_json::to_value(&request)?);
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data
             .ok_or_else(|| openlark_core::error::validation_error("创建部门", "响应数据为空"))

@@ -29,10 +29,18 @@ impl Folder {
     }
 
     pub fn patch(&self, folder_id: impl Into<String>) -> patch::PatchMailboxFolderRequest {
-        patch::PatchMailboxFolderRequest::new(self.config.clone(), self.mailbox_id.clone(), folder_id)
+        patch::PatchMailboxFolderRequest::new(
+            self.config.clone(),
+            self.mailbox_id.clone(),
+            folder_id,
+        )
     }
 
     pub fn delete(&self, folder_id: impl Into<String>) -> delete::DeleteMailboxFolderRequest {
-        delete::DeleteMailboxFolderRequest::new(self.config.clone(), self.mailbox_id.clone(), folder_id)
+        delete::DeleteMailboxFolderRequest::new(
+            self.config.clone(),
+            self.mailbox_id.clone(),
+            folder_id,
+        )
     }
 }

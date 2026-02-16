@@ -32,7 +32,6 @@ impl GetMailboxMessageByCardRequest {
         Self {
             config,
             user_mailbox_id: user_mailbox_id.into(),
-            
         }
     }
 
@@ -44,7 +43,10 @@ impl GetMailboxMessageByCardRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<GetMailboxMessageByCardResponse> {
-        let path = format!("/open-apis/mail/v1/user_mailboxes/{}/messages/get_by_card", self.user_mailbox_id);
+        let path = format!(
+            "/open-apis/mail/v1/user_mailboxes/{}/messages/get_by_card",
+            self.user_mailbox_id
+        );
         let req: ApiRequest<GetMailboxMessageByCardResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;

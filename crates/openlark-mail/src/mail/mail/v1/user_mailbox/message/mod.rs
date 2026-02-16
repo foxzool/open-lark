@@ -29,7 +29,10 @@ impl Message {
     }
 
     pub fn get_by_card(&self) -> get_by_card::GetMailboxMessageByCardRequest {
-        get_by_card::GetMailboxMessageByCardRequest::new(self.config.clone(), self.mailbox_id.clone())
+        get_by_card::GetMailboxMessageByCardRequest::new(
+            self.config.clone(),
+            self.mailbox_id.clone(),
+        )
     }
 
     pub fn send(&self) -> send::SendMailboxMessageRequest {

@@ -29,10 +29,18 @@ impl MailContact {
     }
 
     pub fn patch(&self, mail_contact_id: impl Into<String>) -> patch::PatchMailContactRequest {
-        patch::PatchMailContactRequest::new(self.config.clone(), self.mailbox_id.clone(), mail_contact_id)
+        patch::PatchMailContactRequest::new(
+            self.config.clone(),
+            self.mailbox_id.clone(),
+            mail_contact_id,
+        )
     }
 
     pub fn delete(&self, mail_contact_id: impl Into<String>) -> delete::DeleteMailContactRequest {
-        delete::DeleteMailContactRequest::new(self.config.clone(), self.mailbox_id.clone(), mail_contact_id)
+        delete::DeleteMailContactRequest::new(
+            self.config.clone(),
+            self.mailbox_id.clone(),
+            mail_contact_id,
+        )
     }
 }

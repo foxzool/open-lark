@@ -52,10 +52,15 @@ impl ListAdminUserStatBuilder {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListAdminUserStatResponse> {
-        let mut url = format!("/open-apis/admin/v1/admin_user_stats?start_date={}&end_date={}",
-            self.start_date, self.end_date);
-        
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListAdminUserStatResponse> {
+        let mut url = format!(
+            "/open-apis/admin/v1/admin_user_stats?start_date={}&end_date={}",
+            self.start_date, self.end_date
+        );
+
         if let Some(size) = self.page_size {
             url.push_str(&format!("&page_size={}", size));
         }

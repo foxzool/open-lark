@@ -32,7 +32,6 @@ impl ListMailGroupPermissionMemberRequest {
         Self {
             config,
             mailgroup_id: mailgroup_id.into(),
-            
         }
     }
 
@@ -44,7 +43,10 @@ impl ListMailGroupPermissionMemberRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<ListMailGroupPermissionMemberResponse> {
-        let path = format!("/open-apis/mail/v1/mailgroups/{}/permission_members", self.mailgroup_id);
+        let path = format!(
+            "/open-apis/mail/v1/mailgroups/{}/permission_members",
+            self.mailgroup_id
+        );
         let req: ApiRequest<ListMailGroupPermissionMemberResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;

@@ -52,9 +52,10 @@ impl SecurityAndComplianceV1Service {
     /// 创建新的 v1 服务实例
     pub fn new(config: Arc<crate::models::SecurityConfig>) -> Self {
         Self {
-            openapi_logs: crate::security::security_and_compliance::v1::openapi_logs::OpenApiLogsService::new(
-                config.clone(),
-            ),
+            openapi_logs:
+                crate::security::security_and_compliance::v1::openapi_logs::OpenApiLogsService::new(
+                    config.clone(),
+                ),
             config,
         }
     }
@@ -99,7 +100,7 @@ impl SecurityAndComplianceV2Service {
     /// 获取设备申报审批服务
     pub fn device_apply_records(
         &self,
-    ) -> &crate::security::security_and_compliance::v2::device_apply_records::DeviceApplyRecordsService {
+    ) -> &crate::security::security_and_compliance::v2::device_apply_records::DeviceApplyRecordsService{
         &self.device_apply_records
     }
 }

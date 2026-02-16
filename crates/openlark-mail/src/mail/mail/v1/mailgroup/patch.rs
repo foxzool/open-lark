@@ -63,7 +63,8 @@ impl PatchMailGroupRequest {
         let req: ApiRequest<PatchMailGroupResponse> =
             ApiRequest::patch(&path).body(serialize_params(&self.body, "请求")?);
 
-        let _resp: Response<PatchMailGroupResponse> = Transport::request(req, &self.config, Some(option)).await?;
+        let _resp: Response<PatchMailGroupResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
         Ok(PatchMailGroupResponse { data: None })
     }
 }

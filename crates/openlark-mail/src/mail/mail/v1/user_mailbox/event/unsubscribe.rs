@@ -14,7 +14,6 @@ use std::sync::Arc;
 pub struct UnsubscribeMailboxEventRequest {
     config: Arc<Config>,
     user_mailbox_id: String,
-    
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -33,7 +32,6 @@ impl UnsubscribeMailboxEventRequest {
         Self {
             config,
             user_mailbox_id: user_mailbox_id.into(),
-            
         }
     }
 
@@ -45,12 +43,14 @@ impl UnsubscribeMailboxEventRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<UnsubscribeMailboxEventResponse> {
-        let path = format!("/open-apis/mail/v1/user_mailboxes/{}/event/unsubscribe", self.user_mailbox_id);
+        let path = format!(
+            "/open-apis/mail/v1/user_mailboxes/{}/event/unsubscribe",
+            self.user_mailbox_id
+        );
         let req: ApiRequest<UnsubscribeMailboxEventResponse> = ApiRequest::post(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("取消订阅", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("取消订阅", "响应数据为空"))
     }
 }

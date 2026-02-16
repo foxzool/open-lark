@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/translation-v1/text_detect
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -68,7 +64,8 @@ impl TextDetectRequest {
 
     /// 执行文本语言检测请求
     pub async fn execute(self, body: TextDetectBody) -> SDKResult<TextDetectResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行文本语言检测请求（支持自定义选项）
@@ -136,10 +133,7 @@ impl TextDetectRequestBuilder {
 /// 执行文本语言检测
 ///
 /// docPath: https://open.feishu.cn/document/translation-v1/text_detect
-pub async fn text_detect(
-    config: &Config,
-    body: TextDetectBody,
-) -> SDKResult<TextDetectResponse> {
+pub async fn text_detect(config: &Config, body: TextDetectBody) -> SDKResult<TextDetectResponse> {
     text_detect_with_options(config, body, RequestOption::default()).await
 }
 
@@ -152,8 +146,8 @@ pub async fn text_detect_with_options(
     body.validate()
         .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
 
-    let req: ApiRequest<TextDetectResponse> = ApiRequest::post(TRANSLATION_V1_TEXT_DETECT)
-        .body(serialize_params(&body, "文本语言检测")?);
+    let req: ApiRequest<TextDetectResponse> =
+        ApiRequest::post(TRANSLATION_V1_TEXT_DETECT).body(serialize_params(&body, "文本语言检测")?);
 
     let resp = Transport::request(req, config, Some(option)).await?;
     extract_response_data(resp, "文本语言检测")
@@ -180,8 +174,7 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = TextDetectRequestBuilder::new(config.clone())
-            .text("Hello World");
+        let builder = TextDetectRequestBuilder::new(config.clone()).text("Hello World");
 
         assert_eq!(builder.text, Some("Hello World".to_string()));
     }

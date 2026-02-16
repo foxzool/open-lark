@@ -99,12 +99,7 @@ mod tests {
 
     #[test]
     fn test_batch_delete_task_collaborator_v1_builder() {
-        let config = Arc::new(
-            Config::builder()
-                .app_id("test")
-                .app_secret("test")
-                .build(),
-        );
+        let config = Arc::new(Config::builder().app_id("test").app_secret("test").build());
 
         let request = BatchDeleteTaskCollaboratorRequestV1::new(config.clone(), "task_123")
             .collaborator_ids(vec!["user_1", "user_2"]);

@@ -5,11 +5,7 @@
 //! docPath: https://open.feishu.cn/document/optical-char-recognition-v1/basic_recognize
 
 use openlark_core::{
-    api::ApiRequest,
-    config::Config,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -112,7 +108,8 @@ impl BasicRecognizeRequest {
 
     /// 执行 OCR 基础识别请求
     pub async fn execute(self, body: BasicRecognizeBody) -> SDKResult<BasicRecognizeResponse> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     /// 执行 OCR 基础识别请求（支持自定义选项）
@@ -236,8 +233,8 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder = BasicRecognizeRequestBuilder::new(config.clone())
-            .file_token("file_token_123");
+        let builder =
+            BasicRecognizeRequestBuilder::new(config.clone()).file_token("file_token_123");
 
         assert_eq!(builder.file_token, Some("file_token_123".to_string()));
     }
