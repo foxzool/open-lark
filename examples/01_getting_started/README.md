@@ -19,6 +19,7 @@
 | `authentication` | 认证流程详解 | 10分钟 | 了解飞书开放平台 |
 | `first_api_call` | 第一个API调用 | 10分钟 | 前两个示例 |
 | `error_handling` | 错误处理最佳实践 | 15分钟 | 前三个示例 |
+| `websocket_echo_bot` | 长连接接收并回显文本消息 | 20分钟 | 熟悉消息发送与事件订阅 |
 
 ## 🚀 开始之前
 
@@ -81,6 +82,12 @@ cargo run --example first_api_call
 cargo run --example error_handling
 ```
 学习如何优雅地处理API调用中的错误。
+
+### 步骤5: WebSocket Echo Bot
+```bash
+cargo run --example websocket_echo_bot --features "websocket,communication"
+```
+学习如何通过飞书长连接接收文本消息，并使用消息发送 API 回显回复。
 
 ## 🔍 核心概念
 

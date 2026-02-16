@@ -232,6 +232,11 @@ path = "src/lib.rs"
 name = "config_performance"
 harness = false
 
+[[example]]
+name = "websocket_echo_bot"
+path = "examples/01_getting_started/websocket_echo_bot.rs"
+required-features = ["communication", "websocket"]
+
 [features]
 default = ["core-services"]
 
@@ -282,4 +287,4 @@ core-services = ["auth", "communication", "docs", "workflow"]
 
 # === 开发与调试 (Development & Debugging) ===
 dev-tools = []  # 开发工具
-websocket = ["protocol"]  # WebSocket 支持
+websocket = ["protocol", "openlark-client/websocket"]  # WebSocket 支持

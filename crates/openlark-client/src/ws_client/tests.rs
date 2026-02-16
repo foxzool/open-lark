@@ -118,3 +118,202 @@ async fn test_multi_package_payload_combination() {
     assert!(processed_frame.payload.is_some());
     assert_eq!(processed_frame.payload.unwrap(), combined);
 }
+
+#[tokio::test]
+async fn test_process_frame_packages_missing_payload_returns_none() {
+    let mut client = LarkWsClient::new_for_test();
+
+    let frame = Frame {
+        seq_id: 1,
+        log_id: 1,
+        service: 1,
+        method: 1,
+        headers: vec![
+            Header {
+                key: "type".to_string(),
+                value: "event".to_string(),
+            },
+            Header {
+                key: "message_id".to_string(),
+                value: "test_msg_missing_payload".to_string(),
+            },
+            Header {
+                key: "sum".to_string(),
+                value: "2".to_string(),
+            },
+            Header {
+                key: "seq".to_string(),
+                value: "0".to_string(),
+            },
+        ],
+        payload_encoding: None,
+        payload_type: None,
+        payload: None,
+        log_id_new: None,
+    };
+
+    let result = client.process_frame_packages(frame).await;
+    assert!(result.is_none());
+}
+
+#[tokio::test]
+async fn test_process_frame_packages_without_sum_passthrough() {
+    let mut client = LarkWsClient::new_for_test();
+
+    let payload = b"single frame no-sum".to_vec();
+    let frame = Frame {
+        seq_id: 1,
+        log_id: 1,
+        service: 1,
+        method: 1,
+        headers: vec![
+            Header {
+                key: "type".to_string(),
+                value: "event".to_string(),
+            },
+            Header {
+                key: "message_id".to_string(),
+                value: "test_msg_no_sum".to_string(),
+            },
+        ],
+        payload_encoding: None,
+        payload_type: None,
+        payload: Some(payload.clone()),
+        log_id_new: None,
+    };
+
+    let result = client.process_frame_packages(frame).await;
+    assert!(result.is_some());
+    let processed_frame = result.unwrap();
+    assert_eq!(processed_frame.payload, Some(payload));
+}
+
+#[tokio::test]
+async fn test_process_frame_packages_sum_change_resets_buffer() {
+    let mut client = LarkWsClient::new_for_test();
+
+    let first = Frame {
+        seq_id: 1,
+        log_id: 1,
+        service: 1,
+        method: 1,
+        headers: vec![
+            Header {
+                key: "type".to_string(),
+                value: "event".to_string(),
+            },
+            Header {
+                key: "message_id".to_string(),
+                value: "test_msg_sum_change".to_string(),
+            },
+            Header {
+                key: "sum".to_string(),
+                value: "2".to_string(),
+            },
+            Header {
+                key: "seq".to_string(),
+                value: "0".to_string(),
+            },
+        ],
+        payload_encoding: None,
+        payload_type: None,
+        payload: Some(b"A".to_vec()),
+        log_id_new: None,
+    };
+
+    let second = Frame {
+        seq_id: 2,
+        log_id: 1,
+        service: 1,
+        method: 1,
+        headers: vec![
+            Header {
+                key: "type".to_string(),
+                value: "event".to_string(),
+            },
+            Header {
+                key: "message_id".to_string(),
+                value: "test_msg_sum_change".to_string(),
+            },
+            Header {
+                key: "sum".to_string(),
+                value: "3".to_string(),
+            },
+            Header {
+                key: "seq".to_string(),
+                value: "0".to_string(),
+            },
+        ],
+        payload_encoding: None,
+        payload_type: None,
+        payload: Some(b"B".to_vec()),
+        log_id_new: None,
+    };
+
+    let third = Frame {
+        seq_id: 3,
+        log_id: 1,
+        service: 1,
+        method: 1,
+        headers: vec![
+            Header {
+                key: "type".to_string(),
+                value: "event".to_string(),
+            },
+            Header {
+                key: "message_id".to_string(),
+                value: "test_msg_sum_change".to_string(),
+            },
+            Header {
+                key: "sum".to_string(),
+                value: "3".to_string(),
+            },
+            Header {
+                key: "seq".to_string(),
+                value: "1".to_string(),
+            },
+        ],
+        payload_encoding: None,
+        payload_type: None,
+        payload: Some(b"C".to_vec()),
+        log_id_new: None,
+    };
+
+    let fourth = Frame {
+        seq_id: 4,
+        log_id: 1,
+        service: 1,
+        method: 1,
+        headers: vec![
+            Header {
+                key: "type".to_string(),
+                value: "event".to_string(),
+            },
+            Header {
+                key: "message_id".to_string(),
+                value: "test_msg_sum_change".to_string(),
+            },
+            Header {
+                key: "sum".to_string(),
+                value: "3".to_string(),
+            },
+            Header {
+                key: "seq".to_string(),
+                value: "2".to_string(),
+            },
+        ],
+        payload_encoding: None,
+        payload_type: None,
+        payload: Some(b"D".to_vec()),
+        log_id_new: None,
+    };
+
+    assert!(client.process_frame_packages(first).await.is_none());
+    assert!(client.process_frame_packages(second).await.is_none());
+    assert!(client.process_frame_packages(third).await.is_none());
+
+    let result = client.process_frame_packages(fourth).await;
+    assert!(result.is_some());
+    let processed_frame = result.unwrap();
+    assert_eq!(processed_frame.payload, Some(b"BCD".to_vec()));
+}
