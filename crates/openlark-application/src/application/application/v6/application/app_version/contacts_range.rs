@@ -11,24 +11,24 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone)]
-pub struct GetApplicationVersionContactsRangeRequest {
+pub struct GetAppVersionContactsRangeRequest {
     config: Arc<Config>,
     app_id: String,
     version_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GetApplicationVersionContactsRangeResponse {
+pub struct GetAppVersionContactsRangeResponse {
     pub data: Option<serde_json::Value>,
 }
 
-impl ApiResponseTrait for GetApplicationVersionContactsRangeResponse {
+impl ApiResponseTrait for GetAppVersionContactsRangeResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
-impl GetApplicationVersionContactsRangeRequest {
+impl GetAppVersionContactsRangeRequest {
     pub fn new(config: Arc<Config>, app_id: impl Into<String>, version_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -37,19 +37,19 @@ impl GetApplicationVersionContactsRangeRequest {
         }
     }
 
-    pub async fn execute(self) -> SDKResult<GetApplicationVersionContactsRangeResponse> {
+    pub async fn execute(self) -> SDKResult<GetAppVersionContactsRangeResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
         self,
         option: RequestOption,
-    ) -> SDKResult<GetApplicationVersionContactsRangeResponse> {
+    ) -> SDKResult<GetAppVersionContactsRangeResponse> {
         let path = format!("/open-apis/application/v6/applications/{}/app_versions/{}/contacts_range", self.app_id, self.version_id);
-        let req: ApiRequest<GetApplicationVersionContactsRangeResponse> = ApiRequest::get(&path);
+        let req: ApiRequest<GetAppVersionContactsRangeResponse> = ApiRequest::get(&path);
 
-        let _resp: openlark_core::api::Response<GetApplicationVersionContactsRangeResponse> =
+        let _resp: openlark_core::api::Response<GetAppVersionContactsRangeResponse> =
             Transport::request(req, &self.config, Some(option)).await?;
-        Ok(GetApplicationVersionContactsRangeResponse { data: None })
+        Ok(GetAppVersionContactsRangeResponse { data: None })
     }
 }
