@@ -37,7 +37,7 @@ pub mod apaas;
 
 #[cfg(test)]
 mod tests {
-    use crate::PlatformConfig;
+    use crate::{app_engine::AppEngineService, PlatformConfig};
 
     #[test]
     fn test_service_creation() {

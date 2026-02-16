@@ -7,7 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -71,10 +71,10 @@ impl ViewsGetBuilder {
 
         let mut req: ApiRequest<ViewsGetResponse> = ApiRequest::get(&url);
         if let Some(page) = self.page {
-            req = req.query("page", &page.to_string());
+            req = req.query("page", page.to_string());
         }
         if let Some(page_size) = self.page_size {
-            req = req.query("page_size", &page_size.to_string());
+            req = req.query("page_size", page_size.to_string());
         }
         if let Some(filter) = self.filter {
             req = req.query("filter", &filter);
@@ -93,10 +93,10 @@ impl ViewsGetBuilder {
 
         let mut req: ApiRequest<ViewsGetResponse> = ApiRequest::get(&url);
         if let Some(page) = self.page {
-            req = req.query("page", &page.to_string());
+            req = req.query("page", page.to_string());
         }
         if let Some(page_size) = self.page_size {
-            req = req.query("page_size", &page_size.to_string());
+            req = req.query("page_size", page_size.to_string());
         }
         if let Some(filter) = self.filter {
             req = req.query("filter", &filter);

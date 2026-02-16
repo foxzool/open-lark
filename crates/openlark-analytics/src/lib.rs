@@ -31,7 +31,7 @@
 //! # #[cfg(all(feature = "search", feature = "v1"))]
 //! let results = analytics_service
 //!     .search()
-//!     .v1()
+//!     .v2()
 //!     .query()
 //!     .search()
 //!     .search_term("项目文档")
@@ -42,6 +42,7 @@
 //! ```
 
 #![allow(missing_docs)]
+#![allow(clippy::module_inception)]
 
 mod service;
 

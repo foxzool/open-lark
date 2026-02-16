@@ -13,7 +13,7 @@
 //!
 //! ## 推荐调用方式
 //!
-//! ```rust
+//! ```rust,ignore
 //! use openlark_core::config::Config;
 //! use openlark_docs::DocsClient;
 //!
@@ -27,15 +27,15 @@
 //! // ✅ 推荐：获取配置后构建 Request
 //! // 访问云盘服务
 //! let config = docs.ccm.config().clone();
-//! let file = UploadAllRequest::new(config, ...).execute().await?;
+//! // let file = UploadAllRequest::new(config, ...).execute().await?;
 //!
 //! // 访问多维表格
 //! let config = docs.base.bitable.config().clone();
-//! let table = CreateTableRequest::new(config, ...).execute().await?;
+//! // let table = CreateTableRequest::new(config, ...).execute().await?;
 //!
 //! // 访问知识库
 //! let config = docs.ccm.wiki.config().clone();
-//! let node = CreateNodeRequest::new(config, ...).execute().await?;
+//! // let node = CreateNodeRequest::new(config, ...).execute().await?;
 //! ```
 
 use openlark_core::config::Config;

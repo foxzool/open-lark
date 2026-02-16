@@ -36,10 +36,7 @@ impl GetAppRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<AppGetResponse> {
-        let path = "/open-apis/application/application/v1/app/get"
-            .replace("application", "application")
-            .replace("security", "acs")
-            .replace("personal_settings", "personal_settings");
+        let path = "/open-apis/application/v3/app/info".to_string();
         let req: ApiRequest<AppGetResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;

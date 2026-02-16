@@ -7,7 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -47,12 +47,12 @@ impl SeatAssignmentListBuilder {
     pub async fn execute(self) -> SDKResult<SeatAssignmentListResponse> {
         let url = "/open-apis/apaas/v1/seat_assignments";
 
-        let mut req: ApiRequest<SeatAssignmentListResponse> = ApiRequest::get(&*url);
+        let mut req: ApiRequest<SeatAssignmentListResponse> = ApiRequest::get(url);
         if let Some(page) = self.page {
-            req = req.query("page", &page.to_string());
+            req = req.query("page", page.to_string());
         }
         if let Some(page_size) = self.page_size {
-            req = req.query("page_size", &page_size.to_string());
+            req = req.query("page_size", page_size.to_string());
         }
         let resp = Transport::request(req, &self.config, None).await?;
         resp.data.ok_or_else(|| {
@@ -67,12 +67,12 @@ impl SeatAssignmentListBuilder {
     ) -> SDKResult<SeatAssignmentListResponse> {
         let url = "/open-apis/apaas/v1/seat_assignments";
 
-        let mut req: ApiRequest<SeatAssignmentListResponse> = ApiRequest::get(&*url);
+        let mut req: ApiRequest<SeatAssignmentListResponse> = ApiRequest::get(url);
         if let Some(page) = self.page {
-            req = req.query("page", &page.to_string());
+            req = req.query("page", page.to_string());
         }
         if let Some(page_size) = self.page_size {
-            req = req.query("page_size", &page_size.to_string());
+            req = req.query("page_size", page_size.to_string());
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data.ok_or_else(|| {

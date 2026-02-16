@@ -1,10 +1,11 @@
 //! 识别流式语音
 
-use openlark_core::{config::Config, SDKResult};
+use openlark_core::config::Config;
 
 /// 识别流式语音请求
 #[derive(Debug)]
 pub struct StreamRecognizeRequest {
+    #[allow(dead_code)]
     config: Config,
 }
 

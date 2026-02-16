@@ -7,7 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -65,18 +65,18 @@ impl SeatActivityListBuilder {
     pub async fn execute(self) -> SDKResult<SeatActivityListResponse> {
         let url = "/open-apis/apaas/v1/seat_activities";
 
-        let mut req: ApiRequest<SeatActivityListResponse> = ApiRequest::get(&*url);
+        let mut req: ApiRequest<SeatActivityListResponse> = ApiRequest::get(url);
         if let Some(page) = self.page {
-            req = req.query("page", &page.to_string());
+            req = req.query("page", page.to_string());
         }
         if let Some(page_size) = self.page_size {
-            req = req.query("page_size", &page_size.to_string());
+            req = req.query("page_size", page_size.to_string());
         }
         if let Some(start_time) = self.start_time {
-            req = req.query("start_time", &start_time.to_string());
+            req = req.query("start_time", start_time.to_string());
         }
         if let Some(end_time) = self.end_time {
-            req = req.query("end_time", &end_time.to_string());
+            req = req.query("end_time", end_time.to_string());
         }
         let resp = Transport::request(req, &self.config, None).await?;
         resp.data.ok_or_else(|| {
@@ -91,18 +91,18 @@ impl SeatActivityListBuilder {
     ) -> SDKResult<SeatActivityListResponse> {
         let url = "/open-apis/apaas/v1/seat_activities";
 
-        let mut req: ApiRequest<SeatActivityListResponse> = ApiRequest::get(&*url);
+        let mut req: ApiRequest<SeatActivityListResponse> = ApiRequest::get(url);
         if let Some(page) = self.page {
-            req = req.query("page", &page.to_string());
+            req = req.query("page", page.to_string());
         }
         if let Some(page_size) = self.page_size {
-            req = req.query("page_size", &page_size.to_string());
+            req = req.query("page_size", page_size.to_string());
         }
         if let Some(start_time) = self.start_time {
-            req = req.query("start_time", &start_time.to_string());
+            req = req.query("start_time", start_time.to_string());
         }
         if let Some(end_time) = self.end_time {
-            req = req.query("end_time", &end_time.to_string());
+            req = req.query("end_time", end_time.to_string());
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data.ok_or_else(|| {

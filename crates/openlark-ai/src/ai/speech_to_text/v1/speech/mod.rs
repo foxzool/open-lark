@@ -9,6 +9,7 @@ use std::sync::Arc;
 /// Speech recognition API
 #[derive(Clone)]
 pub struct Speech {
+    #[allow(dead_code)]
     config: Arc<Config>,
 }
 

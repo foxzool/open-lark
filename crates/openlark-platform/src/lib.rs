@@ -36,6 +36,7 @@
 //! ```
 
 #![allow(missing_docs)]
+#![allow(clippy::module_inception)]
 
 mod service;
 
@@ -69,6 +70,8 @@ pub type PlatformConfig = Config;
 
 #[cfg(test)]
 mod tests {
+    use crate::VERSION;
+
     #[test]
     fn test_version() {
         assert!(!VERSION.is_empty());

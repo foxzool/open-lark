@@ -1,6 +1,7 @@
 ---
 name: openlark-validation-style
 description: OpenLark Rust SDK 的 feature-crate 参数校验规范（必填校验）。当需要统一/评审 `validate()` 写法，或用户询问 `openlark_core::validate_required`（函数）与 `openlark_core::validate_required!`（宏）的区别、是否需要宏、空白字符串处理等问题时使用。
+argument-hint: "[crate-name|path|request-file]"
 allowed-tools: Read, Grep
 ---
 
@@ -15,8 +16,22 @@ allowed-tools: Read, Grep
 - 需要聚合多条校验错误
 
 **其他技能：**
+- 项目级代码规范检查（架构/API/导出/校验一体）→ `Skill(openlark-code-standards)`
 - 添加/重构 API → `Skill(openlark-api)`
 - 审查整体设计规范 → `Skill(openlark-design-review)`
+
+### 关键词触发映射
+
+- validate、必填校验、validate_required、空白字符串、校验聚合 → `openlark-validation-style`
+- 代码规范、规范检查、风格一致性、体检 → `openlark-code-standards`
+- 架构设计、public API、收敛方案、feature gating、兼容策略 → `openlark-design-review`
+- 新增 API、重构 API、Builder、Request/Response、mod.rs 导出 → `openlark-api`
+- 覆盖率、缺失 API、实现数量、CSV 对比 → `openlark-api-validation`
+
+### 双向跳转规则
+
+- 若校验问题已扩展到命名/导出/端点体系，转 `openlark-code-standards`。
+- 若校验争议本质是架构范式冲突（例如 Request/Service 边界），转 `openlark-design-review`。
 
 ---
 

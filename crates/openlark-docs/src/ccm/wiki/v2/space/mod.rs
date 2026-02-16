@@ -26,10 +26,11 @@ pub use member::{
 };
 
 pub use node::{
-    CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse, CreateWikiSpaceNodeRequest,
-    CreateWikiSpaceNodeResponse, ListWikiSpaceNodesRequest, ListWikiSpaceNodesResponse,
-    MoveDocsToWikiRequest, MoveDocsToWikiResponse, MoveWikiSpaceNodeRequest,
-    MoveWikiSpaceNodeResponse, UpdateWikiSpaceNodeTitleRequest, UpdateWikiSpaceNodeTitleResponse,
+    CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse, CreateWikiSpaceNodeParams,
+    CreateWikiSpaceNodeRequest, CreateWikiSpaceNodeResponse, ListWikiSpaceNodesRequest,
+    ListWikiSpaceNodesResponse, MoveDocsToWikiRequest, MoveDocsToWikiResponse,
+    MoveWikiSpaceNodeRequest, MoveWikiSpaceNodeResponse, UpdateWikiSpaceNodeTitleRequest,
+    UpdateWikiSpaceNodeTitleResponse,
 };
 
 pub use setting::{UpdateWikiSpaceSettingRequest, UpdateWikiSpaceSettingResponse};

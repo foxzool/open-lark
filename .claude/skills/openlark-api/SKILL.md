@@ -1,6 +1,7 @@
 ---
 name: openlark-api
 description: OpenLark 项目 API 接口实现规范（速查）。用于添加/重构飞书开放平台 API：确定落盘路径、实现 Body/Response + Builder(Request)、对齐 endpoints 常量/enum、补齐 mod.rs 导出，并明确"调用服务端 API"的方法签名/RequestOption 传递约定。触发关键词：API 接口、API 文件、飞书 API、添加 API、调用服务端 API
+argument-hint: "[api-id|path|bizTag]"
 allowed-tools: Bash, Read, Grep, Glob, Edit
 ---
 
@@ -15,8 +16,23 @@ allowed-tools: Bash, Read, Grep, Glob, Edit
 - 需要了解端点规范、RequestOption 约定、Service 链式调用
 
 **其他技能：**
+- 项目级规范体检（架构/API/导出/校验一体）→ `Skill(openlark-code-standards)`
 - 审查整体设计规范 → `Skill(openlark-design-review)`
 - 统一 `validate()` 写法 → `Skill(openlark-validation-style)`
+
+### 关键词触发映射
+
+- 新增 API、重构 API、Builder、Request/Response、mod.rs 导出、RequestOption → `openlark-api`
+- 代码规范、规范检查、风格一致性、体检 → `openlark-code-standards`
+- 架构设计、public API、收敛方案、feature gating、兼容策略 → `openlark-design-review`
+- validate、必填校验、validate_required、空白字符串、校验聚合 → `openlark-validation-style`
+- 覆盖率、缺失 API、实现数量、CSV 对比、验证脚本 → `openlark-api-validation`
+
+### 双向跳转规则
+
+- 若实现问题本质是架构范式冲突（Request/Service 边界），转 `openlark-design-review`。
+- 若实现前需要先做全仓规范体检，先跑 `openlark-code-standards`。
+- 若实现完成后要核验覆盖率与缺失清单，转 `openlark-api-validation`。
 
 ---
 

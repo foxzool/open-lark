@@ -63,10 +63,10 @@ impl RoleMemberGetBuilder {
 
         let mut req: ApiRequest<RoleMemberGetResponse> = ApiRequest::get(&url);
         if let Some(page) = self.page {
-            req = req.query("page", &page.to_string());
+            req = req.query("page", page.to_string());
         }
         if let Some(page_size) = self.page_size {
-            req = req.query("page_size", &page_size.to_string());
+            req = req.query("page_size", page_size.to_string());
         }
         Transport::request(req, &self.config, None).await
     }
@@ -80,10 +80,10 @@ impl RoleMemberGetBuilder {
 
         let mut req: ApiRequest<RoleMemberGetResponse> = ApiRequest::get(&url);
         if let Some(page) = self.page {
-            req = req.query("page", &page.to_string());
+            req = req.query("page", page.to_string());
         }
         if let Some(page_size) = self.page_size {
-            req = req.query("page_size", &page_size.to_string());
+            req = req.query("page_size", page_size.to_string());
         }
         Transport::request(req, &self.config, Some(option)).await
     }
