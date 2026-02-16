@@ -121,6 +121,7 @@ cargo run --example client_setup --features client
 - `authentication` - 认证流程
 - `first_api_call` - 第一个API调用
 - `error_handling` - 错误处理
+- `websocket_echo_bot` - 长连接消息回显
 
 **学习时长**：30分钟
 

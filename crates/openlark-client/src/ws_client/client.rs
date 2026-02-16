@@ -76,19 +76,31 @@ impl FramePackageBuffer {
 
 // 临时类型占位符，等待 event 模块实现
 #[derive(Debug, Clone)]
-pub struct EventDispatcherHandler;
+pub struct EventDispatcherHandler {
+    payload_tx: Option<mpsc::UnboundedSender<Vec<u8>>>,
+}
 
 impl EventDispatcherHandler {
     pub fn builder() -> Self {
-        Self
+        Self { payload_tx: None }
     }
 
     pub fn build(self) -> Self {
         self
     }
 
-    pub fn do_without_validation(&self, _payload: &[u8]) -> Result<(), String> {
-        // 临时实现，等待实际的 event 模块实现
+    pub fn payload_sender(mut self, payload_tx: mpsc::UnboundedSender<Vec<u8>>) -> Self {
+        self.payload_tx = Some(payload_tx);
+        self
+    }
+
+    pub fn do_without_validation(&self, payload: &[u8]) -> Result<(), String> {
+        if let Some(payload_tx) = &self.payload_tx {
+            payload_tx
+                .send(payload.to_vec())
+                .map_err(|e| format!("转发事件负载失败: {e}"))?;
+        }
+
         Ok(())
     }
 }

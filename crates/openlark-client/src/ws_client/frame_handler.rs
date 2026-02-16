@@ -600,6 +600,43 @@ mod tests {
     }
 
     #[test]
+    fn test_event_dispatcher_forwards_payload_when_sender_exists() {
+        let (payload_tx, mut payload_rx) = mpsc::unbounded_channel::<Vec<u8>>();
+        let handler = EventDispatcherHandler::builder()
+            .payload_sender(payload_tx)
+            .build();
+
+        let payload = b"payload-forward-test".to_vec();
+        let result = handler.do_without_validation(&payload);
+
+        assert!(result.is_ok());
+        let forwarded = payload_rx.try_recv().expect("payload should be forwarded");
+        assert_eq!(forwarded, payload);
+    }
+
+    #[test]
+    fn test_event_dispatcher_no_sender_still_ok() {
+        let handler = EventDispatcherHandler::builder().build();
+        let payload = b"payload-without-sender";
+
+        let result = handler.do_without_validation(payload);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_event_dispatcher_returns_err_when_sender_closed() {
+        let (payload_tx, payload_rx) = mpsc::unbounded_channel::<Vec<u8>>();
+        drop(payload_rx);
+
+        let handler = EventDispatcherHandler::builder()
+            .payload_sender(payload_tx)
+            .build();
+
+        let result = handler.do_without_validation(b"closed-channel");
+        assert!(result.is_err());
+    }
+
+    #[test]
     fn test_new_ws_response_ok() {
         let response = NewWsResponse::ok();
 
