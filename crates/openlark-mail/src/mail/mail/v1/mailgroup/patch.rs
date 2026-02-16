@@ -2,8 +2,7 @@
 
 use crate::common::api_utils::serialize_params;
 use openlark_core::{
-    api::Response,
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, Response},
     config::Config,
     http::Transport,
     req_option::RequestOption,

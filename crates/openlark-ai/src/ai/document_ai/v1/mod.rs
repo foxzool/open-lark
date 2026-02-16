@@ -25,6 +25,7 @@ use std::sync::Arc;
 /// Document AI V1 API
 #[derive(Clone)]
 pub struct DocumentAiV1 {
+    #[allow(dead_code)]
     config: Arc<Config>,
 }
 

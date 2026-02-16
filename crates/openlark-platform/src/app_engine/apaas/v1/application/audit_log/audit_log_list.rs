@@ -7,7 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -73,16 +73,16 @@ impl AuditLogListBuilder {
 
         let mut req: ApiRequest<AuditLogListResponse> = ApiRequest::get(&url);
         if let Some(start_time) = self.start_time {
-            req = req.query("start_time", &start_time.to_string());
+            req = req.query("start_time", start_time.to_string());
         }
         if let Some(end_time) = self.end_time {
-            req = req.query("end_time", &end_time.to_string());
+            req = req.query("end_time", end_time.to_string());
         }
         if let Some(page) = self.page {
-            req = req.query("page", &page.to_string());
+            req = req.query("page", page.to_string());
         }
         if let Some(page_size) = self.page_size {
-            req = req.query("page_size", &page_size.to_string());
+            req = req.query("page_size", page_size.to_string());
         }
         let resp = Transport::request(req, &self.config, None).await?;
         resp.data.ok_or_else(|| {
@@ -102,16 +102,16 @@ impl AuditLogListBuilder {
 
         let mut req: ApiRequest<AuditLogListResponse> = ApiRequest::get(&url);
         if let Some(start_time) = self.start_time {
-            req = req.query("start_time", &start_time.to_string());
+            req = req.query("start_time", start_time.to_string());
         }
         if let Some(end_time) = self.end_time {
-            req = req.query("end_time", &end_time.to_string());
+            req = req.query("end_time", end_time.to_string());
         }
         if let Some(page) = self.page {
-            req = req.query("page", &page.to_string());
+            req = req.query("page", page.to_string());
         }
         if let Some(page_size) = self.page_size {
-            req = req.query("page_size", &page_size.to_string());
+            req = req.query("page_size", page_size.to_string());
         }
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data.ok_or_else(|| {

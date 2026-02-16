@@ -1,10 +1,11 @@
 //! 识别语音文件
 
-use openlark_core::{config::Config, SDKResult};
+use openlark_core::config::Config;
 
 /// 识别语音文件请求
 #[derive(Debug)]
 pub struct FileRecognizeRequest {
+    #[allow(dead_code)]
     config: Config,
 }
 

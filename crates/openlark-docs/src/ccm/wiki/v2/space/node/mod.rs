@@ -11,7 +11,9 @@ pub mod update_title;
 // 显式导出 - 避免使用 glob reexport
 pub use copy::{CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse};
 
-pub use create::{CreateWikiSpaceNodeRequest, CreateWikiSpaceNodeResponse};
+pub use create::{
+    CreateWikiSpaceNodeParams, CreateWikiSpaceNodeRequest, CreateWikiSpaceNodeResponse,
+};
 
 pub use list::{ListWikiSpaceNodesRequest, ListWikiSpaceNodesResponse};
 

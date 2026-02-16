@@ -1,10 +1,37 @@
 ---
 name: openlark-api-validation
 description: OpenLark API 覆盖率验证技能。用于验证各 crate 的 API 实现数量与覆盖率，基于 tools/validate_apis.py 脚本和 api_list_export.csv 对比实际代码实现。触发关键词：API 验证、API 覆盖率、验证 API 数量、检查 API 实现、API 统计
+argument-hint: "[crate-name|path|bizTag]"
 allowed-tools: Bash, Read, Edit, Write
 ---
 
 # OpenLark API 覆盖率验证技能
+
+## 🧭 技能路由指南
+
+**本技能适用场景：**
+- 需要统计某个 crate/bizTag 的 API 覆盖率
+- 需要输出缺失 API 清单与完成率报告
+- 需要对比 `api_list_export.csv` 与实际落盘实现
+
+**其他技能：**
+- 项目级规范体检（架构/API/导出/校验一体）→ `Skill(openlark-code-standards)`
+- 新增/重构具体 API → `Skill(openlark-api)`
+- 审查整体架构与公共 API 收敛 → `Skill(openlark-design-review)`
+
+### 关键词触发映射
+
+- 覆盖率、缺失 API、实现数量、CSV 对比、验证脚本、报告 → `openlark-api-validation`
+- 新增 API、重构 API、Builder、Request/Response、mod.rs 导出 → `openlark-api`
+- 代码规范、规范检查、风格一致性、体检 → `openlark-code-standards`
+- 架构设计、public API、收敛方案、feature gating、兼容策略 → `openlark-design-review`
+- validate、必填校验、validate_required、空白字符串、校验聚合 → `openlark-validation-style`
+
+### 双向跳转规则
+
+- 若发现缺失 API 的根因是架构分层/范式混乱，转 `openlark-design-review`。
+- 若发现问题是具体 API 尚未实现，转 `openlark-api` 落地实现。
+- 若需要把覆盖率问题归因到全仓规范一致性，转 `openlark-code-standards`。
 
 ## 🎯 技能用途
 

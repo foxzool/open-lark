@@ -7,7 +7,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -46,10 +46,6 @@ impl DepartmentDeleteBuilder {
             .ok_or_else(|| openlark_core::error::validation_error("删除部门", "响应数据为空"))
     }
 }
-
-/// 删除部门请求
-#[derive(Debug, Clone, Deserialize, Serialize)]
-struct DepartmentDeleteRequest {}
 
 /// 删除部门响应
 #[derive(Debug, Clone, Deserialize, Serialize)]

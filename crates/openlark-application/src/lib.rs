@@ -3,6 +3,7 @@
 //! OpenLark SDK 的应用管理模块，提供飞书应用 API 的完整访问。
 
 #![allow(missing_docs)]
+#![allow(clippy::module_inception)]
 
 mod service;
 

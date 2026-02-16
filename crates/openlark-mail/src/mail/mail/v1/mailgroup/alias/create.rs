@@ -1,6 +1,6 @@
 //! 创建邮件组别名
 
-use crate::common::{api_endpoints::MailApiV1, api_utils::*};
+use crate::common::api_utils::serialize_params;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

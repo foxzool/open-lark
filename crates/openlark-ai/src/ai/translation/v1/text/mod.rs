@@ -9,6 +9,7 @@ use std::sync::Arc;
 /// Text translation API
 #[derive(Clone)]
 pub struct Text {
+    #[allow(dead_code)]
     config: Arc<Config>,
 }
 

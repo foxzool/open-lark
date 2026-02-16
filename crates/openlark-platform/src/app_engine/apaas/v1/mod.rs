@@ -14,9 +14,6 @@ pub mod seat_assignment;
 pub mod user_task;
 pub mod workspace;
 
-use openlark_core::api::{ApiRequest, ApiResponseTrait, ResponseFormat};
-use serde::{Deserialize, Serialize};
-
 /// aPaaS V1 API
 #[derive(Debug, Clone)]
 #[allow(dead_code)]

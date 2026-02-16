@@ -1,6 +1,7 @@
 ---
 name: openlark-naming
 description: OpenLark Rust SDK 命名与对外 API 表达规范（Client/Service/Resource/Request/Builder）。用于新增/重构公开类型、设计 meta 调用链、调整模块导出与 prelude、或排查类似 openlark-docs 中 DocsService 重名/语义混乱与调用风格不一致的问题。触发关键词：命名规范、Client vs Service、Resource、重命名、meta 调用链、公开 API
+argument-hint: "[module|type-name|path]"
 allowed-tools: Bash, Read, Grep, Glob, Edit
 ---
 
@@ -14,8 +15,23 @@ allowed-tools: Bash, Read, Grep, Glob, Edit
 - 你发现 `*Service` 同名、语义混乱、调用方式不一致，想系统性收敛
 
 **其他技能：**
+- 项目级规范体检（架构/API/导出/校验一体）→ `Skill(openlark-code-standards)`
 - 设计审查（更广）→ `Skill(openlark-design-review)`
 - 新增/重构单个 API（落盘/端点/Builder 模板）→ `Skill(openlark-api)`
+
+### 关键词触发映射
+
+- 命名规范、Client vs Service、Resource、重命名、meta 调用链、公开 API → `openlark-naming`
+- 代码规范、规范检查、风格一致性、体检 → `openlark-code-standards`
+- 架构设计、public API、收敛方案、feature gating、兼容策略 → `openlark-design-review`
+- 新增 API、重构 API、Builder、Request/Response、mod.rs 导出 → `openlark-api`
+- validate、必填校验、validate_required、空白字符串、校验聚合 → `openlark-validation-style`
+
+### 双向跳转规则
+
+- 若命名问题已扩展为入口/范式收敛问题，转 `openlark-design-review`。
+- 若命名调整涉及具体 API 文件实现与导出补齐，转 `openlark-api`。
+- 若需要先确认全仓规则基线，再做命名调整，先跑 `openlark-code-standards`。
 
 ---
 

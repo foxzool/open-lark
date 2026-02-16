@@ -63,7 +63,7 @@ impl PlatformService {
 
 #[cfg(test)]
 mod tests {
-    use crate::PlatformConfig;
+    use crate::{PlatformConfig, PlatformService};
 
     #[test]
     fn test_service_creation() {

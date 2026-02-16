@@ -37,7 +37,7 @@ pub mod directory;
 
 #[cfg(test)]
 mod tests {
-    use crate::PlatformConfig;
+    use crate::{directory::DirectoryService, PlatformConfig};
 
     #[test]
     fn test_service_creation() {

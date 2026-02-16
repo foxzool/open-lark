@@ -16,8 +16,22 @@ allowed-tools: Read, Grep, Glob, Edit, Bash
 - 需要输出按优先级排序的整改清单（P0-P3）
 
 **其他技能：**
+- 仅做代码规范体检（不做深度设计审查）→ `Skill(openlark-code-standards)`
 - 添加/重构单个 API → `Skill(openlark-api)`
 - 统一 `validate()` 写法 → `Skill(openlark-validation-style)`
+
+### 关键词触发映射
+
+- 架构设计、public API、收敛方案、feature gating、兼容策略、breaking change → `openlark-design-review`
+- 代码规范、规范检查、风格一致性、体检 → `openlark-code-standards`
+- validate、必填校验、空白字符串、validate_required → `openlark-validation-style`
+- 新增 API、重构 API、Builder、Request/Response、mod.rs 导出 → `openlark-api`
+- 覆盖率、缺失 API、实现数量、CSV 对比 → `openlark-api-validation`
+
+### 双向跳转规则
+
+- 若先做设计审查，但缺少全仓规范证据，先补跑 `openlark-code-standards`。
+- 若主要问题退化为校验写法统一，转 `openlark-validation-style`。
 
 ---
 

@@ -1,6 +1,6 @@
 //! 获取服务台自定义字段
 
-use crate::common::{api_endpoints::HelpdeskApiV1, api_utils::*};
+use crate::common::api_endpoints::HelpdeskApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

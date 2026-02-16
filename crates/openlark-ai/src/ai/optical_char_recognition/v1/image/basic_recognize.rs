@@ -33,7 +33,7 @@ impl BasicRecognizeBody {
 }
 
 /// 识别结果优先级模型
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum RecognitionModel {
     /// 优先返回文本框位置信息

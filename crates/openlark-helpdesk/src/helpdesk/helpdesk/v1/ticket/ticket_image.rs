@@ -1,6 +1,5 @@
 //! 获取工单内图像
 
-use crate::common::{api_endpoints::HelpdeskApiV1, api_utils::*};
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
