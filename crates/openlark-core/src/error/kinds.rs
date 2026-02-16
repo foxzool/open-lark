@@ -399,3 +399,4 @@ mod tests {
         assert_eq!(ErrorKind::Authentication.to_string(), "身份验证相关错误");
     }
 }
+

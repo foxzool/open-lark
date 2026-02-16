@@ -4,6 +4,7 @@
 
 pub mod im;
 pub mod authentication;
+pub mod auth;
 pub mod cardkit;
 pub mod ai;
 // pub mod contact;

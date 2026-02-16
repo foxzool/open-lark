@@ -92,3 +92,50 @@ impl TenantAccessTokenInternalRequestBuilder {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_tenant_access_token_internal_builder_new() {
+        let config = create_test_config();
+        let builder = TenantAccessTokenInternalRequestBuilder::new(config);
+        assert!(builder.app_id.is_empty());
+        assert!(builder.app_secret.is_empty());
+    }
+
+    #[test]
+    fn test_tenant_access_token_internal_builder_chain() {
+        let config = create_test_config();
+        let builder = TenantAccessTokenInternalRequestBuilder::new(config)
+            .app_id("my_app_id")
+            .app_secret("my_app_secret");
+        assert_eq!(builder.app_id, "my_app_id");
+        assert_eq!(builder.app_secret, "my_app_secret");
+    }
+
+    #[test]
+    fn test_tenant_access_token_internal_response_data_format() {
+        assert_eq!(
+            TenantAccessTokenInternalResponseData::data_format(),
+            ResponseFormat::Data
+        );
+    }
+
+    #[test]
+    fn test_tenant_access_token_internal_response_deserialization() {
+        let json = r#"{"data":{"tenant_access_token":"tenant_token","expires_in":7200}}"#;
+        let response: TenantAccessTokenInternalResponseData = serde_json::from_str(json).unwrap();
+        assert_eq!(response.data.tenant_access_token, "tenant_token");
+        assert_eq!(response.data.expires_in, 7200);
+    }
+}
