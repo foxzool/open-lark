@@ -56,3 +56,55 @@ pub mod prelude;
 
 // 重新导出主要类型
 pub use common::chain::MeetingClient;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_meeting_client_creation() {
+        let config = create_test_config();
+        let client = MeetingClient::new(config);
+        assert!(client.config().app_id() == "test_app");
+    }
+
+    #[test]
+    fn test_meeting_client_clone() {
+        let config = create_test_config();
+        let client = MeetingClient::new(config);
+        let cloned = client.clone();
+        assert!(cloned.config().app_id() == "test_app");
+    }
+
+    #[cfg(feature = "vc")]
+    #[test]
+    fn test_meeting_client_vc() {
+        let config = create_test_config();
+        let client = MeetingClient::new(config);
+        let _vc = &client.vc;
+    }
+
+    #[cfg(feature = "calendar")]
+    #[test]
+    fn test_meeting_client_calendar() {
+        let config = create_test_config();
+        let client = MeetingClient::new(config);
+        let _calendar = &client.calendar;
+    }
+
+    #[cfg(feature = "meeting-room")]
+    #[test]
+    fn test_meeting_client_meeting_room() {
+        let config = create_test_config();
+        let client = MeetingClient::new(config);
+        let _meeting_room = &client.meeting_room;
+    }
+}

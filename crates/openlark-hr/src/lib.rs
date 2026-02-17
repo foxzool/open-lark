@@ -103,3 +103,87 @@ impl HrClient {
         ehr::Ehr::new(self.service.config().clone())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_hr_client_creation() {
+        let config = create_test_config();
+        let client = HrClient::new(config);
+        assert!(client.service.config().app_id() == "test_app");
+    }
+
+    #[test]
+    fn test_hr_client_clone() {
+        let config = create_test_config();
+        let client = HrClient::new(config);
+        let cloned = client.clone();
+        assert!(cloned.service.config().app_id() == "test_app");
+    }
+
+    #[test]
+    fn test_hr_client_attendance() {
+        let config = create_test_config();
+        let client = HrClient::new(config);
+        let _attendance = client.attendance();
+    }
+
+    #[test]
+    fn test_hr_client_corehr() {
+        let config = create_test_config();
+        let client = HrClient::new(config);
+        let _corehr = client.corehr();
+    }
+
+    #[test]
+    fn test_hr_client_compensation() {
+        let config = create_test_config();
+        let client = HrClient::new(config);
+        let _compensation = client.compensation();
+    }
+
+    #[test]
+    fn test_hr_client_payroll() {
+        let config = create_test_config();
+        let client = HrClient::new(config);
+        let _payroll = client.payroll();
+    }
+
+    #[test]
+    fn test_hr_client_performance() {
+        let config = create_test_config();
+        let client = HrClient::new(config);
+        let _performance = client.performance();
+    }
+
+    #[test]
+    fn test_hr_client_okr() {
+        let config = create_test_config();
+        let client = HrClient::new(config);
+        let _okr = client.okr();
+    }
+
+    #[test]
+    fn test_hr_client_hire() {
+        let config = create_test_config();
+        let client = HrClient::new(config);
+        let _hire = client.hire();
+    }
+
+    #[test]
+    fn test_hr_client_ehr() {
+        let config = create_test_config();
+        let client = HrClient::new(config);
+        let _ehr = client.ehr();
+    }
+}
