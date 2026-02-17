@@ -83,3 +83,65 @@ mod tests {
         assert_eq!(VERSION, env!("CARGO_PKG_VERSION"));
     }
 }
+
+#[cfg(test)]
+mod service_tests {
+    use super::*;
+    use openlark_core::constants::AppType;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .app_type(AppType::SelfBuild)
+            .build()
+    }
+
+    #[test]
+    fn test_platform_service_creation() {
+        let config = create_test_config();
+        let service = PlatformService::new(config).unwrap();
+        assert!(service.config().app_id() == "test_app");
+    }
+
+    #[test]
+    fn test_platform_service_clone() {
+        let config = create_test_config();
+        let service = PlatformService::new(config).unwrap();
+        let cloned = service.clone();
+        assert!(cloned.config().app_id() == "test_app");
+    }
+
+    #[test]
+    fn test_platform_config_alias() {
+        let config: PlatformConfig = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        assert!(config.app_id() == "test_app");
+    }
+
+    #[cfg(feature = "app-engine")]
+    #[test]
+    fn test_platform_service_app_engine() {
+        let config = create_test_config();
+        let service = PlatformService::new(config).unwrap();
+        let _app_engine = service.app_engine();
+    }
+
+    #[cfg(feature = "directory")]
+    #[test]
+    fn test_platform_service_directory() {
+        let config = create_test_config();
+        let service = PlatformService::new(config).unwrap();
+        let _directory = service.directory();
+    }
+
+    #[cfg(feature = "admin")]
+    #[test]
+    fn test_platform_service_admin() {
+        let config = create_test_config();
+        let service = PlatformService::new(config).unwrap();
+        let _admin = service.admin();
+    }
+}

@@ -24,3 +24,53 @@ pub use service::CardkitService;
 pub mod prelude {
     pub use openlark_core::{config::Config, SDKResult};
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_cardkit_client_creation() {
+        let config = create_test_config();
+        let client = CardkitClient::new(config);
+        assert!(client.config().app_id() == "test_app");
+    }
+
+    #[test]
+    fn test_cardkit_client_clone() {
+        let config = create_test_config();
+        let client = CardkitClient::new(config);
+        let cloned = client.clone();
+        assert!(cloned.config().app_id() == "test_app");
+    }
+
+    #[test]
+    fn test_cardkit_service_creation() {
+        let config = create_test_config();
+        let service = CardkitService::new(config);
+        assert!(service.config().app_id() == "test_app");
+    }
+
+    #[test]
+    fn test_cardkit_service_clone() {
+        let config = create_test_config();
+        let service = CardkitService::new(config);
+        let cloned = service.clone();
+        assert!(cloned.config().app_id() == "test_app");
+    }
+
+    #[test]
+    fn test_cardkit_client_v1() {
+        let config = create_test_config();
+        let client = CardkitClient::new(config);
+        let _v1 = &client.v1;
+    }
+}
