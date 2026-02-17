@@ -134,3 +134,47 @@ pub use common::chain::DocsClient;
 // 1. 从 `openlark_docs::*` 模块导入 Request 类型
 // 2. 使用 `DocsClient` 获取配置
 // 3. 构建并执行 Request
+
+#[cfg(test)]
+mod client_tests {
+    use super::*;
+    use openlark_core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_docs_client_creation() {
+        let config = create_test_config();
+        let client = DocsClient::new(config);
+        assert_eq!(client.config().app_id(), "test_app");
+    }
+
+    #[test]
+    fn test_docs_client_clone() {
+        let config = create_test_config();
+        let client = DocsClient::new(config);
+        let cloned = client.clone();
+        assert_eq!(cloned.config().app_id(), "test_app");
+    }
+
+    #[cfg(feature = "ccm-core")]
+    #[test]
+    fn test_docs_client_ccm() {
+        let config = create_test_config();
+        let client = DocsClient::new(config);
+        assert_eq!(client.ccm.config().app_id(), "test_app");
+    }
+
+    #[cfg(any(feature = "base", feature = "bitable"))]
+    #[test]
+    fn test_docs_client_base() {
+        let config = create_test_config();
+        let client = DocsClient::new(config);
+        let _base = &client.base;
+    }
+}
