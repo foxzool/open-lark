@@ -79,3 +79,82 @@ impl Default for FeatureSet {
         Self::new()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_feature_set_new() {
+        let feature_set = FeatureSet::new();
+        assert!(feature_set.enabled_features.is_empty());
+        assert_eq!(feature_set.stats.enabled_features, 0);
+    }
+
+    #[test]
+    fn test_feature_set_default() {
+        let feature_set = FeatureSet::default();
+        assert!(feature_set.enabled_features.is_empty());
+    }
+
+    #[test]
+    fn test_feature_set_get_enabled_features() {
+        let feature_set = FeatureSet::new();
+        assert!(feature_set.get_enabled_features().is_empty());
+    }
+
+    #[test]
+    fn test_feature_set_is_enabled_empty() {
+        let feature_set = FeatureSet::new();
+        assert!(!feature_set.is_enabled("test_feature"));
+    }
+
+    #[test]
+    fn test_feature_set_get_stats() {
+        let feature_set = FeatureSet::new();
+        let stats = feature_set.get_stats();
+        assert_eq!(stats.enabled_features, 0);
+        assert_eq!(stats.available_features, 0);
+        assert_eq!(stats.loaded_services, 0);
+    }
+
+    #[test]
+    fn test_feature_loader_debug() {
+        let loader = FeatureLoader;
+        let debug_str = format!("{:?}", loader);
+        assert!(debug_str.contains("FeatureLoader"));
+    }
+
+    #[test]
+    fn test_feature_stats_debug() {
+        let stats = FeatureStats {
+            enabled_features: 5,
+            available_features: 10,
+            loaded_services: 3,
+        };
+        let debug_str = format!("{:?}", stats);
+        assert!(debug_str.contains("enabled_features: 5"));
+    }
+
+    #[test]
+    fn test_feature_stats_clone() {
+        let stats = FeatureStats {
+            enabled_features: 5,
+            available_features: 10,
+            loaded_services: 3,
+        };
+        let cloned = stats.clone();
+        assert_eq!(cloned.enabled_features, 5);
+    }
+
+    #[test]
+    fn test_feature_stats_copy() {
+        let stats = FeatureStats {
+            enabled_features: 5,
+            available_features: 10,
+            loaded_services: 3,
+        };
+        let copied: FeatureStats = stats;
+        assert_eq!(copied.enabled_features, 5);
+    }
+}

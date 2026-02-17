@@ -22,3 +22,46 @@ pub trait Service {
         "v1"
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    struct TestService {
+        config: Config,
+    }
+
+    impl Service for TestService {
+        fn config(&self) -> &Config {
+            &self.config
+        }
+
+        fn service_name() -> &'static str {
+            "test_service"
+        }
+
+        fn service_version() -> &'static str {
+            "v2"
+        }
+    }
+
+    #[test]
+    fn test_service_name() {
+        assert_eq!(TestService::service_name(), "test_service");
+    }
+
+    #[test]
+    fn test_service_version() {
+        assert_eq!(TestService::service_version(), "v2");
+    }
+
+    #[test]
+    fn test_service_config() {
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let service = TestService { config };
+        assert_eq!(service.config().app_id(), "test_app");
+    }
+}

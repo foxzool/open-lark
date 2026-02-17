@@ -49,3 +49,50 @@ macro_rules! api_url {
         format!($base_url, $($arg),+)
     };
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde::Serialize;
+
+    #[derive(Serialize)]
+    struct TestParams {
+        name: String,
+        value: i32,
+    }
+
+    #[test]
+    fn test_serialize_params_success() {
+        let params = TestParams {
+            name: "test".to_string(),
+            value: 42,
+        };
+        let result = serialize_params(&params, "test");
+        assert!(result.is_ok());
+        let json = result.unwrap();
+        assert_eq!(json["name"], "test");
+        assert_eq!(json["value"], 42);
+    }
+
+    #[test]
+    fn test_api_url_macro_simple() {
+        let url = api_url!("/open-apis/test/v1/resource");
+        assert_eq!(url, "/open-apis/test/v1/resource");
+    }
+
+    #[test]
+    fn test_api_url_macro_with_args() {
+        let resource_id = "12345";
+        let url = api_url!("/open-apis/test/v1/resources/{}", resource_id);
+        assert!(url.contains("12345"));
+    }
+
+    #[test]
+    fn test_api_url_macro_with_multiple_args() {
+        let resource_id = "123";
+        let action = "approve";
+        let url = api_url!("/open-apis/test/v1/resources/{}/{}", resource_id, action);
+        assert!(url.contains("123"));
+        assert!(url.contains("approve"));
+    }
+}

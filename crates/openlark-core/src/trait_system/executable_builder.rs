@@ -22,3 +22,65 @@ pub trait ExecutableBuilder<S: Sync, Req, Resp>: Sized {
         self.execute(service).await
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // 测试用的 mock 类型
+    struct MockService;
+    struct MockRequest {
+        value: String,
+    }
+    struct MockResponse {
+        result: String,
+    }
+
+    struct MockBuilder {
+        value: String,
+    }
+
+    #[async_trait::async_trait]
+    impl ExecutableBuilder<MockService, MockRequest, MockResponse> for MockBuilder {
+        fn build(self) -> MockRequest {
+            MockRequest { value: self.value }
+        }
+
+        async fn execute(self, _service: &MockService) -> SDKResult<MockResponse> {
+            Ok(MockResponse {
+                result: "success".to_string(),
+            })
+        }
+    }
+
+    #[tokio::test]
+    async fn test_executable_builder_build() {
+        let builder = MockBuilder {
+            value: "test".to_string(),
+        };
+        let request = builder.build();
+        assert_eq!(request.value, "test");
+    }
+
+    #[tokio::test]
+    async fn test_executable_builder_execute() {
+        let builder = MockBuilder {
+            value: "test".to_string(),
+        };
+        let service = MockService;
+        let result = builder.execute(&service).await;
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap().result, "success");
+    }
+
+    #[tokio::test]
+    async fn test_executable_builder_execute_with_options() {
+        let builder = MockBuilder {
+            value: "test".to_string(),
+        };
+        let service = MockService;
+        let option = RequestOption::default();
+        let result = builder.execute_with_options(&service, option).await;
+        assert!(result.is_ok());
+    }
+}

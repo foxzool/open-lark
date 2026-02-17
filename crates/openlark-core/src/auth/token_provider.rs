@@ -102,3 +102,68 @@ impl TokenProvider for NoOpTokenProvider {
         <Self as TokenProvider>::get_tenant_token(self, tenant_key).await
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_token_request_app() {
+        let req = TokenRequest::app();
+        assert_eq!(req.token_type, AccessTokenType::App);
+        assert!(req.tenant_key.is_none());
+        assert!(req.app_ticket.is_none());
+    }
+
+    #[test]
+    fn test_token_request_tenant() {
+        let req = TokenRequest::tenant();
+        assert_eq!(req.token_type, AccessTokenType::Tenant);
+    }
+
+    #[test]
+    fn test_token_request_user() {
+        let req = TokenRequest::user();
+        assert_eq!(req.token_type, AccessTokenType::User);
+    }
+
+    #[test]
+    fn test_token_request_with_tenant_key() {
+        let req = TokenRequest::tenant().tenant_key("test_tenant");
+        assert_eq!(req.tenant_key, Some("test_tenant".to_string()));
+    }
+
+    #[test]
+    fn test_token_request_with_app_ticket() {
+        let req = TokenRequest::app().app_ticket("test_ticket");
+        assert_eq!(req.app_ticket, Some("test_ticket".to_string()));
+    }
+
+    #[test]
+    fn test_token_request_default() {
+        let req = TokenRequest::default();
+        assert_eq!(req.token_type, AccessTokenType::None);
+    }
+
+    #[test]
+    fn test_token_request_debug() {
+        let req = TokenRequest::app();
+        let debug_str = format!("{:?}", req);
+        assert!(debug_str.contains("TokenRequest"));
+    }
+
+    #[tokio::test]
+    async fn test_no_op_token_provider_returns_error() {
+        let provider = NoOpTokenProvider;
+        let result = provider.get_token(TokenRequest::app()).await;
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_no_op_token_provider_debug() {
+        let provider = NoOpTokenProvider;
+        let debug_str = format!("{:?}", provider);
+        assert!(debug_str.contains("NoOpTokenProvider"));
+    }
+}

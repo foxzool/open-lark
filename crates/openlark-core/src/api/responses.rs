@@ -218,3 +218,83 @@ impl ApiResponseTrait for () {}
 
 // 类型别名，用于向后兼容
 pub type BaseResponse<T> = Response<T>;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_raw_response_default() {
+        let response = RawResponse::default();
+        assert_eq!(response.code, 0);
+        assert_eq!(response.msg, "success");
+        assert!(response.request_id.is_none());
+        assert!(response.data.is_none());
+        assert!(response.error.is_none());
+    }
+
+    #[test]
+    fn test_raw_response_success() {
+        let response = RawResponse::success();
+        assert!(response.is_success());
+    }
+
+    #[test]
+    fn test_raw_response_success_with_data() {
+        let data = serde_json::json!({"key": "value"});
+        let response = RawResponse::success_with_data(data.clone());
+        assert!(response.is_success());
+        assert_eq!(response.data, Some(data));
+    }
+
+    #[test]
+    fn test_raw_response_error() {
+        let response = RawResponse::error(400, "Bad Request");
+        assert!(!response.is_success());
+        assert_eq!(response.code, 400);
+        assert!(response.error.is_some());
+    }
+
+    #[test]
+    fn test_raw_response_get_error() {
+        let response = RawResponse::error(404, "Not Found");
+        let error = response.get_error();
+        assert!(error.is_some());
+        assert_eq!(error.unwrap().code, 404);
+    }
+
+    #[test]
+    fn test_raw_response_serialization() {
+        let response = RawResponse::success_with_data(serde_json::json!({"test": 123}));
+        let json = serde_json::to_string(&response).unwrap();
+        let parsed: RawResponse = serde_json::from_str(&json).unwrap();
+        assert!(parsed.is_success());
+    }
+
+    #[test]
+    fn test_error_info_creation() {
+        let error = ErrorInfo {
+            code: 500,
+            message: "Internal Error".to_string(),
+            details: None,
+        };
+        assert_eq!(error.code, 500);
+        assert_eq!(error.message, "Internal Error");
+    }
+
+    #[test]
+    fn test_response_format() {
+        assert_eq!(ResponseFormat::Data, ResponseFormat::Data);
+        assert_ne!(ResponseFormat::Data, ResponseFormat::Flatten);
+    }
+
+    #[test]
+    fn test_response_format_binary() {
+        assert_eq!(<Vec<u8>>::data_format(), ResponseFormat::Binary);
+    }
+
+    #[test]
+    fn test_response_format_default() {
+        assert_eq!(<()>::data_format(), ResponseFormat::Data);
+    }
+}
