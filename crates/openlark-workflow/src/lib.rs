@@ -72,3 +72,63 @@ mod tests {
         assert!(!VERSION.is_empty());
     }
 }
+
+#[cfg(test)]
+mod service_tests {
+    use super::*;
+    use openlark_core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_workflow_service_creation() {
+        let config = create_test_config();
+        let service = WorkflowService::new(config);
+        // Service created successfully
+        let _ = service;
+    }
+
+    #[test]
+    fn test_workflow_service_clone() {
+        let config = create_test_config();
+        let service = WorkflowService::new(config);
+        let _cloned = service.clone();
+    }
+
+    #[cfg(feature = "v1")]
+    #[test]
+    fn test_workflow_service_v1() {
+        let config = create_test_config();
+        let service = WorkflowService::new(config);
+        let _v1 = service.v1();
+    }
+
+    #[cfg(feature = "v2")]
+    #[test]
+    fn test_workflow_service_v2() {
+        let config = create_test_config();
+        let service = WorkflowService::new(config);
+        let _v2 = service.v2();
+    }
+
+    #[cfg(feature = "v2")]
+    #[test]
+    fn test_workflow_service_task() {
+        let config = create_test_config();
+        let service = WorkflowService::new(config);
+        let _task = service.task();
+    }
+
+    #[cfg(feature = "v2")]
+    #[test]
+    fn test_workflow_service_tasklist() {
+        let config = create_test_config();
+        let service = WorkflowService::new(config);
+        let _tasklist = service.tasklist();
+    }
+}
