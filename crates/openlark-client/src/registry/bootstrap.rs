@@ -168,3 +168,83 @@ fn register_ai(registry: &mut DefaultServiceRegistry) -> Result<()> {
     };
     register(registry, metadata)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_service_metadata_creation() {
+        let metadata = ServiceMetadata {
+            name: "test_service".to_string(),
+            version: "1.0.0".to_string(),
+            description: Some("Test service description".to_string()),
+            dependencies: vec!["auth".to_string()],
+            provides: vec!["test".to_string()],
+            status: ServiceStatus::Uninitialized,
+            priority: 1,
+        };
+        assert_eq!(metadata.name, "test_service");
+        assert_eq!(metadata.version, "1.0.0");
+        assert_eq!(metadata.priority, 1);
+    }
+
+    #[test]
+    fn test_service_status_debug() {
+        let status = ServiceStatus::Uninitialized;
+        let debug_str = format!("{:?}", status);
+        assert!(debug_str.contains("Uninitialized"));
+    }
+
+    #[test]
+    fn test_service_status_clone() {
+        let status = ServiceStatus::Uninitialized;
+        let cloned = status.clone();
+        assert!(matches!(cloned, ServiceStatus::Uninitialized));
+    }
+
+    #[test]
+    fn test_register_compiled_services() {
+        let mut registry = DefaultServiceRegistry::new();
+        let result = register_compiled_services(&mut registry);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_service_metadata_with_empty_dependencies() {
+        let metadata = ServiceMetadata {
+            name: "standalone_service".to_string(),
+            version: "2.0.0".to_string(),
+            description: None,
+            dependencies: vec![],
+            provides: vec![],
+            status: ServiceStatus::Uninitialized,
+            priority: 0,
+        };
+        assert!(metadata.dependencies.is_empty());
+        assert!(metadata.provides.is_empty());
+    }
+
+    #[test]
+    fn test_service_metadata_priority_ordering() {
+        let low_priority = ServiceMetadata {
+            name: "low".to_string(),
+            version: "1.0.0".to_string(),
+            description: None,
+            dependencies: vec![],
+            provides: vec![],
+            status: ServiceStatus::Uninitialized,
+            priority: 1,
+        };
+        let high_priority = ServiceMetadata {
+            name: "high".to_string(),
+            version: "1.0.0".to_string(),
+            description: None,
+            dependencies: vec![],
+            provides: vec![],
+            status: ServiceStatus::Uninitialized,
+            priority: 10,
+        };
+        assert!(high_priority.priority > low_priority.priority);
+    }
+}

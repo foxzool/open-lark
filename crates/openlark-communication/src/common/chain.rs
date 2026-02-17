@@ -94,3 +94,54 @@ impl MomentsClient {
         &self.config
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_communication_client_creation() {
+        let config = create_test_config();
+        let client = CommunicationClient::new(config);
+        assert_eq!(client.config().app_id(), "test_app");
+    }
+
+    #[test]
+    fn test_communication_client_debug() {
+        let config = create_test_config();
+        let client = CommunicationClient::new(config);
+        let debug_str = format!("{:?}", client);
+        assert!(debug_str.contains("CommunicationClient"));
+    }
+
+    #[test]
+    fn test_communication_client_clone() {
+        let config = create_test_config();
+        let client = CommunicationClient::new(config);
+        let cloned = client.clone();
+        assert_eq!(cloned.config().app_id(), "test_app");
+    }
+
+    #[cfg(feature = "im")]
+    #[test]
+    fn test_im_client_config() {
+        let config = create_test_config();
+        let client = CommunicationClient::new(config);
+        assert_eq!(client.im.config().app_id(), "test_app");
+    }
+
+    #[cfg(feature = "contact")]
+    #[test]
+    fn test_contact_client_config() {
+        let config = create_test_config();
+        let client = CommunicationClient::new(config);
+        assert_eq!(client.contact.config().app_id(), "test_app");
+    }
+}
