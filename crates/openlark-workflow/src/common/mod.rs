@@ -30,3 +30,55 @@ pub mod types {
     /// 附件 GUID
     pub type AttachmentGuid = String;
 }
+
+#[cfg(test)]
+mod tests {
+    use super::constants;
+    use super::types;
+
+    #[test]
+    fn test_default_page_size() {
+        assert_eq!(constants::DEFAULT_PAGE_SIZE, 20);
+    }
+
+    #[test]
+    fn test_max_page_size() {
+        assert_eq!(constants::MAX_PAGE_SIZE, 100);
+    }
+
+    #[test]
+    fn test_task_guid_type() {
+        let guid: types::TaskGuid = "test_guid".to_string();
+        assert_eq!(guid, "test_guid");
+    }
+
+    #[test]
+    fn test_tasklist_guid_type() {
+        let guid: types::TasklistGuid = "test_tasklist".to_string();
+        assert_eq!(guid, "test_tasklist");
+    }
+
+    #[test]
+    fn test_section_guid_type() {
+        let guid: types::SectionGuid = "test_section".to_string();
+        assert_eq!(guid, "test_section");
+    }
+
+    #[test]
+    fn test_custom_field_guid_type() {
+        let guid: types::CustomFieldGuid = "test_field".to_string();
+        assert_eq!(guid, "test_field");
+    }
+
+    #[test]
+    fn test_comment_guid_type() {
+        let guid: types::CommentGuid = "test_comment".to_string();
+        assert_eq!(guid, "test_comment");
+    }
+
+    #[test]
+    fn test_attachment_guid_type() {
+        let guid: types::AttachmentGuid = "test_attachment".to_string();
+        assert_eq!(guid, "test_attachment");
+    }
+}
