@@ -87,3 +87,60 @@ pub use models::{
     ListActivitySubscriptionsResponse, UpdateActivitySubscriptionBody,
     UpdateActivitySubscriptionResponse,
 };
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<Config> {
+        Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        )
+    }
+
+    #[test]
+    fn test_activity_subscription_resource_new() {
+        let config = create_test_config();
+        let resource = ActivitySubscriptionResource::new(config, "tasklist_123");
+        assert_eq!(resource.tasklist_guid, "tasklist_123");
+    }
+
+    #[test]
+    fn test_activity_subscription_create() {
+        let config = create_test_config();
+        let resource = ActivitySubscriptionResource::new(config, "tasklist_123");
+        let _request = resource.create();
+    }
+
+    #[test]
+    fn test_activity_subscription_get() {
+        let config = create_test_config();
+        let resource = ActivitySubscriptionResource::new(config, "tasklist_123");
+        let _request = resource.get("subscription_456");
+    }
+
+    #[test]
+    fn test_activity_subscription_patch() {
+        let config = create_test_config();
+        let resource = ActivitySubscriptionResource::new(config, "tasklist_123");
+        let _request = resource.patch("subscription_456");
+    }
+
+    #[test]
+    fn test_activity_subscription_delete() {
+        let config = create_test_config();
+        let resource = ActivitySubscriptionResource::new(config, "tasklist_123");
+        let _request = resource.delete("subscription_456");
+    }
+
+    #[test]
+    fn test_activity_subscription_list() {
+        let config = create_test_config();
+        let resource = ActivitySubscriptionResource::new(config, "tasklist_123");
+        let _request = resource.list();
+    }
+}
