@@ -4,7 +4,7 @@ use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// Pin 消息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Pin {
     pub message_id: String,
     pub chat_id: String,
@@ -14,13 +14,13 @@ pub struct Pin {
 }
 
 /// Pin 消息请求体
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreatePinBody {
     pub message_id: String,
 }
 
 /// Pin 消息响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreatePinResponse {
     pub pin: Pin,
 }
@@ -32,7 +32,7 @@ impl ApiResponseTrait for CreatePinResponse {
 }
 
 /// 获取群内 Pin 消息响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListPinsResponse {
     #[serde(default)]
     pub items: Option<Vec<Pin>>,

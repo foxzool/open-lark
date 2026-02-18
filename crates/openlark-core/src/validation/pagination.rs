@@ -125,8 +125,6 @@ pub fn sanitize_tag(tag: &str) -> String {
 }
 
 #[cfg(test)]
-
-#[cfg(test)]
 mod tests {
     use super::*;
 

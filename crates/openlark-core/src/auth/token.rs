@@ -324,6 +324,7 @@ pub trait TokenManager: Send + Sync {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::HashMap;
     use std::time::Duration;
 
     #[test]
@@ -460,5 +461,371 @@ mod tests {
         );
 
         assert!(expired_token.time_until_expiry().is_none());
+    }
+
+    #[test]
+    fn test_expiring_soon_exact_threshold_boundary() {
+        let token = TokenInfo::new(
+            "boundary_token".to_string(),
+            TokenType::AppAccessToken,
+            Duration::from_secs(2),
+            "test".to_string(),
+        );
+
+        assert!(token.is_expiring_soon(2));
+    }
+
+    #[test]
+    fn test_expiring_soon_below_threshold_boundary() {
+        let token = TokenInfo::new(
+            "boundary_token".to_string(),
+            TokenType::AppAccessToken,
+            Duration::from_secs(5),
+            "test".to_string(),
+        );
+
+        assert!(!token.is_expiring_soon(2));
+    }
+
+    #[test]
+    fn test_token_validation_needs_refresh_states() {
+        let expiring_soon = TokenValidationResult::ExpiringSoon(Duration::from_secs(30));
+        let expired = TokenValidationResult::Expired;
+        let valid = TokenValidationResult::Valid;
+
+        assert!(expiring_soon.needs_refresh());
+        assert!(expired.needs_refresh());
+        assert!(!valid.needs_refresh());
+    }
+
+    #[test]
+    fn test_refresh_retry_interval_is_capped() {
+        let config = TokenRefreshConfig {
+            refresh_ahead_seconds: 120,
+            max_retry_attempts: 5,
+            retry_interval_base: 2,
+            retry_interval_max: 10,
+            auto_refresh: true,
+        };
+
+        let calc_interval = |attempt: u32| {
+            let exponential = config.retry_interval_base.saturating_mul(1u64 << attempt);
+            exponential.min(config.retry_interval_max)
+        };
+
+        assert_eq!(calc_interval(0), 2);
+        assert_eq!(calc_interval(1), 4);
+        assert_eq!(calc_interval(2), 8);
+        assert_eq!(calc_interval(3), 10);
+        assert_eq!(calc_interval(4), 10);
+    }
+
+    #[test]
+    fn test_token_refresh_config_auto_refresh_toggle() {
+        let mut config = TokenRefreshConfig::default();
+        assert!(config.auto_refresh);
+
+        config.auto_refresh = false;
+        assert!(!config.auto_refresh);
+    }
+
+    #[test]
+    fn test_token_cache_hit_miss_and_expiry_cleanup() {
+        let mut cache: HashMap<String, TokenInfo> = HashMap::new();
+
+        let valid_token = TokenInfo::new(
+            "cli_valid".to_string(),
+            TokenType::AppAccessToken,
+            Duration::from_secs(120),
+            "test".to_string(),
+        );
+        let expired_token = TokenInfo::new(
+            "cli_expired".to_string(),
+            TokenType::AppAccessToken,
+            Duration::from_secs(0),
+            "test".to_string(),
+        );
+
+        cache.insert("valid".to_string(), valid_token);
+        cache.insert("expired".to_string(), expired_token);
+
+        let valid_hit = cache
+            .get("valid")
+            .expect("valid token should exist in cache");
+        assert!(!valid_hit.is_expired());
+
+        let expired_hit = cache
+            .get("expired")
+            .expect("expired token should exist in cache");
+        assert!(expired_hit.is_expired());
+
+        cache.retain(|_, token| !token.is_expired());
+
+        assert!(cache.contains_key("valid"));
+        assert!(!cache.contains_key("expired"));
+        assert!(!cache.contains_key("missing"));
+    }
+
+    #[test]
+    fn test_token_cache_access_updates_lifecycle_metadata() {
+        let mut cache: HashMap<String, TokenInfo> = HashMap::new();
+        let token = TokenInfo::new(
+            "cli_cached".to_string(),
+            TokenType::AppAccessToken,
+            Duration::from_secs(300),
+            "test".to_string(),
+        );
+        cache.insert("session".to_string(), token);
+
+        {
+            let cached = cache
+                .get_mut("session")
+                .expect("cached token should exist");
+            cached.update_access();
+            cached.update_access();
+        }
+
+        let cached = cache.get("session").expect("cached token should still exist");
+        assert_eq!(cached.access_count, 2);
+        assert!(cached.last_accessed_at >= cached.created_at);
+    }
+
+    // 新增测试：Token 类型完整测试
+    #[test]
+    fn test_all_token_types_properties() {
+        let app_token = TokenInfo::new(
+            "cli_test123".to_string(),
+            TokenType::AppAccessToken,
+            Duration::from_secs(3600),
+            "self_build".to_string(),
+        );
+        let tenant_token = TokenInfo::new(
+            "t-test456".to_string(),
+            TokenType::TenantAccessToken,
+            Duration::from_secs(3600),
+            "marketplace".to_string(),
+        );
+        let user_token = TokenInfo::new(
+            "u-test789".to_string(),
+            TokenType::UserAccessToken,
+            Duration::from_secs(3600),
+            "oauth".to_string(),
+        );
+
+        // 验证 TokenType 属性
+        assert_eq!(TokenType::AppAccessToken.as_str(), "app_access_token");
+        assert_eq!(TokenType::TenantAccessToken.as_str(), "tenant_access_token");
+        assert_eq!(TokenType::UserAccessToken.as_str(), "user_access_token");
+
+        assert_eq!(TokenType::AppAccessToken.prefix(), "cli_");
+        assert_eq!(TokenType::TenantAccessToken.prefix(), "t-");
+        assert_eq!(TokenType::UserAccessToken.prefix(), "u-");
+
+        // 验证创建的 Token
+        assert_eq!(app_token.token_type, TokenType::AppAccessToken);
+        assert_eq!(tenant_token.token_type, TokenType::TenantAccessToken);
+        assert_eq!(user_token.token_type, TokenType::UserAccessToken);
+    }
+
+    // 新增测试：Token 带有刷新令牌
+    #[test]
+    fn test_token_with_refresh_token() {
+        let mut token = TokenInfo::new(
+            "cli_access".to_string(),
+            TokenType::AppAccessToken,
+            Duration::from_secs(3600),
+            "oauth".to_string(),
+        );
+
+        assert!(token.refresh_token.is_none());
+
+        token.refresh_token = Some("refresh_token_123".to_string());
+        assert_eq!(token.refresh_token, Some("refresh_token_123".to_string()));
+    }
+
+    // 新增测试：Token 带有租户信息
+    #[test]
+    fn test_token_with_tenant_key() {
+        let mut token = TokenInfo::new(
+            "t-tenant_token".to_string(),
+            TokenType::TenantAccessToken,
+            Duration::from_secs(3600),
+            "marketplace".to_string(),
+        );
+
+        assert!(token.tenant_key.is_none());
+
+        token.tenant_key = Some("tenant_abc123".to_string());
+        assert_eq!(token.tenant_key, Some("tenant_abc123".to_string()));
+    }
+
+    // 新增测试：Token 生命周期 - 多次访问
+    #[test]
+    fn test_token_multiple_accesses() {
+        let mut token = TokenInfo::new(
+            "cli_multi".to_string(),
+            TokenType::AppAccessToken,
+            Duration::from_secs(3600),
+            "test".to_string(),
+        );
+
+        let original_access_time = token.last_accessed_at;
+        std::thread::sleep(Duration::from_millis(10));
+
+        token.update_access();
+        assert_eq!(token.access_count, 1);
+        assert!(token.last_accessed_at > original_access_time);
+
+        std::thread::sleep(Duration::from_millis(10));
+        token.update_access();
+        assert_eq!(token.access_count, 2);
+    }
+
+    // 新增测试：TokenValidationResult 完整状态测试
+    #[test]
+    fn test_token_validation_result_all_states() {
+        let valid = TokenValidationResult::Valid;
+        let expired = TokenValidationResult::Expired;
+        let invalid = TokenValidationResult::Invalid("test error".to_string());
+        let expiring_soon = TokenValidationResult::ExpiringSoon(Duration::from_secs(60));
+
+        // is_valid
+        assert!(valid.is_valid());
+        assert!(!expired.is_valid());
+        assert!(!invalid.is_valid());
+        assert!(!expiring_soon.is_valid());
+
+        // is_invalid
+        assert!(!valid.is_invalid());
+        assert!(!expired.is_invalid());
+        assert!(invalid.is_invalid());
+        assert!(!expiring_soon.is_invalid());
+
+        // needs_refresh
+        assert!(!valid.needs_refresh());
+        assert!(expired.needs_refresh());
+        assert!(!invalid.needs_refresh());
+        assert!(expiring_soon.needs_refresh());
+
+        // error_message
+        assert_eq!(valid.error_message(), "令牌有效");
+        assert_eq!(expired.error_message(), "令牌已过期");
+        assert_eq!(invalid.error_message(), "test error");
+        assert_eq!(expiring_soon.error_message(), "令牌将在60秒后过期");
+    }
+
+    // 新增测试：TokenRefreshConfig 自定义配置
+    #[test]
+    fn test_token_refresh_config_custom_values() {
+        let config = TokenRefreshConfig {
+            refresh_ahead_seconds: 600,
+            max_retry_attempts: 5,
+            retry_interval_base: 2,
+            retry_interval_max: 60,
+            auto_refresh: false,
+        };
+
+        assert_eq!(config.refresh_ahead_seconds, 600);
+        assert_eq!(config.max_retry_attempts, 5);
+        assert_eq!(config.retry_interval_base, 2);
+        assert_eq!(config.retry_interval_max, 60);
+        assert!(!config.auto_refresh);
+    }
+
+    // 新增测试：Token 过期边界 - 刚好过期
+    #[test]
+    fn test_token_expiry_boundary() {
+        let expired_token = TokenInfo::new(
+            "cli_expired".to_string(),
+            TokenType::AppAccessToken,
+            Duration::from_secs(0),
+            "test".to_string(),
+        );
+
+        // 由于创建后立即检查，可能仍然是有效的
+        // 但在极短延迟后应该过期
+        std::thread::sleep(Duration::from_millis(5));
+        assert!(expired_token.is_expired());
+        assert_eq!(expired_token.expires_in_seconds(), 0);
+    }
+
+    // 新增测试：不同 Token 类型的过期判断
+    #[test]
+    fn test_different_token_types_expiry() {
+        let app_token = TokenInfo::new(
+            "cli_app".to_string(),
+            TokenType::AppAccessToken,
+            Duration::from_secs(0),
+            "test".to_string(),
+        );
+        let tenant_token = TokenInfo::new(
+            "t-tenant".to_string(),
+            TokenType::TenantAccessToken,
+            Duration::from_secs(0),
+            "test".to_string(),
+        );
+        let user_token = TokenInfo::new(
+            "u-user".to_string(),
+            TokenType::UserAccessToken,
+            Duration::from_secs(0),
+            "test".to_string(),
+        );
+
+        std::thread::sleep(Duration::from_millis(5));
+
+        assert!(app_token.is_expired());
+        assert!(tenant_token.is_expired());
+        assert!(user_token.is_expired());
+    }
+
+    // 新增测试：Token 刷新策略 - 配置克隆
+    #[test]
+    fn test_token_refresh_config_clone() {
+        let config = TokenRefreshConfig::default();
+        let cloned = config.clone();
+
+        assert_eq!(config.refresh_ahead_seconds, cloned.refresh_ahead_seconds);
+        assert_eq!(config.max_retry_attempts, cloned.max_retry_attempts);
+        assert_eq!(config.retry_interval_base, cloned.retry_interval_base);
+        assert_eq!(config.retry_interval_max, cloned.retry_interval_max);
+        assert_eq!(config.auto_refresh, cloned.auto_refresh);
+    }
+
+    // 新增测试：Token 序列化与反序列化
+    #[test]
+    fn test_token_info_serialization() {
+        let token = TokenInfo::new(
+            "cli_serial".to_string(),
+            TokenType::AppAccessToken,
+            Duration::from_secs(3600),
+            "self_build".to_string(),
+        );
+
+        let json = serde_json::to_string(&token).expect("should serialize");
+        let deserialized: TokenInfo = serde_json::from_str(&json).expect("should deserialize");
+
+        assert_eq!(token.access_token, deserialized.access_token);
+        assert_eq!(token.token_type, deserialized.token_type);
+        assert_eq!(token.app_type, deserialized.app_type);
+    }
+
+    // 新增测试：TokenType 序列化与反序列化
+    #[test]
+    fn test_token_type_serialization() {
+        let app = TokenType::AppAccessToken;
+        let tenant = TokenType::TenantAccessToken;
+        let user = TokenType::UserAccessToken;
+
+        let app_json = serde_json::to_string(&app).unwrap();
+        let tenant_json = serde_json::to_string(&tenant).unwrap();
+        let user_json = serde_json::to_string(&user).unwrap();
+
+        let app_de: TokenType = serde_json::from_str(&app_json).unwrap();
+        let tenant_de: TokenType = serde_json::from_str(&tenant_json).unwrap();
+        let user_de: TokenType = serde_json::from_str(&user_json).unwrap();
+
+        assert_eq!(app, app_de);
+        assert_eq!(tenant, tenant_de);
+        assert_eq!(user, user_de);
     }
 }

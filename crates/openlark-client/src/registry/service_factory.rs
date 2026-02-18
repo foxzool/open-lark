@@ -536,4 +536,238 @@ mod tests {
 
         assert!(factory.validate_config(&metadata, &invalid_config).is_err());
     }
+
+    #[test]
+    fn test_placeholder_service_creation() {
+        let service = PlaceholderService::new("test-service");
+        assert_eq!(service.name(), "test-service");
+    }
+
+    #[tokio::test]
+    async fn test_placeholder_service_do_something() {
+        let service = PlaceholderService::new("my-service");
+        let result = service.do_something().await;
+        assert!(result.is_ok());
+        let msg = result.unwrap();
+        assert!(msg.contains("my-service"));
+        assert!(msg.contains("执行操作"));
+    }
+
+    #[test]
+    fn test_service_factory_registry_default() {
+        let registry: ServiceFactoryRegistry = Default::default();
+        let _factory = registry.get_factory("any-service");
+        // 应该返回默认工厂
+    }
+
+    #[test]
+    fn test_service_factory_registry_register() {
+        let mut registry = ServiceFactoryRegistry::new();
+        let factory = Arc::new(DefaultServiceFactory);
+        registry.register_factory("custom-service", factory);
+        let retrieved = registry.get_factory("custom-service");
+        // 获取的工厂应该存在
+        assert_eq!(registry.factories.len(), 1);
+    }
+
+    #[test]
+    fn test_service_instance_manager_creation() {
+        let config = Config::default();
+        let manager = ServiceInstanceManager::new(config);
+        let debug_str = format!("{:?}", manager);
+        assert!(debug_str.contains("ServiceInstanceManager"));
+    }
+
+    #[tokio::test]
+    async fn test_service_instance_manager_get_or_create_unsupported() {
+        let config = Config {
+            app_id: "test".to_string(),
+            app_secret: "secret".to_string(),
+            ..Default::default()
+        };
+        let manager = ServiceInstanceManager::new(config);
+        let metadata = ServiceMetadata {
+            name: "unknown-service".to_string(),
+            version: "1.0.0".to_string(),
+            description: None,
+            dependencies: vec![],
+            provides: vec![],
+            status: ServiceStatus::Uninitialized,
+            priority: 1,
+        };
+        let deps: HashMap<String, Arc<dyn std::any::Any + Send + Sync>> = HashMap::new();
+        let result = manager.get_or_create_service(&metadata, &deps).await;
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_service_stats_creation() {
+        let stats = ServiceStats {
+            name: "test-service".to_string(),
+            created_at: chrono::Utc::now(),
+            last_accessed: chrono::Utc::now(),
+            access_count: 10,
+            is_singleton: true,
+        };
+        assert_eq!(stats.name, "test-service");
+        assert_eq!(stats.access_count, 10);
+        assert!(stats.is_singleton);
+    }
+
+    #[test]
+    fn test_factory_error_display() {
+        let err = FactoryError::CreationFailed {
+            name: "svc".to_string(),
+            reason: "test reason".to_string(),
+        };
+        let display = format!("{}", err);
+        assert!(display.contains("svc"));
+        assert!(display.contains("test reason"));
+    }
+
+    #[test]
+    fn test_factory_error_unsupported_service() {
+        let err = FactoryError::UnsupportedService {
+            name: "unknown".to_string(),
+        };
+        let display = format!("{}", err);
+        assert!(display.contains("unknown"));
+    }
+
+    #[test]
+    fn test_factory_error_invalid_config() {
+        let err = FactoryError::InvalidConfig {
+            reason: "missing field".to_string(),
+        };
+        let display = format!("{}", err);
+        assert!(display.contains("missing field"));
+    }
+
+    #[test]
+    fn test_factory_error_dependencies_not_ready() {
+        let err = FactoryError::DependenciesNotReady {
+            dependencies: vec!["dep1".to_string(), "dep2".to_string()],
+        };
+        let display = format!("{}", err);
+        assert!(display.contains("dep1"));
+        assert!(display.contains("dep2"));
+    }
+
+    #[test]
+    fn test_config_validation_empty_app_secret() {
+        let factory = DefaultServiceFactory;
+        let metadata = ServiceMetadata {
+            name: "auth".to_string(),
+            version: "1.0.0".to_string(),
+            description: None,
+            dependencies: vec![],
+            provides: vec![],
+            status: ServiceStatus::Ready,
+            priority: 1,
+        };
+
+        let invalid_config = Config {
+            app_id: "test-app".to_string(),
+            app_secret: "".to_string(),
+            ..Default::default()
+        };
+
+        let result = factory.validate_config(&metadata, &invalid_config);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_config_validation_communication_empty_base_url() {
+        let factory = DefaultServiceFactory;
+        let metadata = ServiceMetadata {
+            name: "communication".to_string(),
+            version: "1.0.0".to_string(),
+            description: None,
+            dependencies: vec![],
+            provides: vec![],
+            status: ServiceStatus::Ready,
+            priority: 1,
+        };
+
+        let invalid_config = Config {
+            app_id: "test-app".to_string(),
+            app_secret: "test-secret".to_string(),
+            base_url: "".to_string(),
+            ..Default::default()
+        };
+
+        let result = factory.validate_config(&metadata, &invalid_config);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_check_dependencies_success() {
+        let factory = DefaultServiceFactory;
+        let metadata = ServiceMetadata {
+            name: "test-service".to_string(),
+            version: "1.0.0".to_string(),
+            description: None,
+            dependencies: vec!["dep1".to_string()],
+            provides: vec![],
+            status: ServiceStatus::Ready,
+            priority: 1,
+        };
+
+        let mut deps: HashMap<String, Arc<dyn std::any::Any + Send + Sync>> = HashMap::new();
+        deps.insert("dep1".to_string(), Arc::new(PlaceholderService::new("dep1")));
+
+        let result = factory.check_dependencies(&metadata, &deps);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_check_dependencies_missing() {
+        let factory = DefaultServiceFactory;
+        let metadata = ServiceMetadata {
+            name: "test-service".to_string(),
+            version: "1.0.0".to_string(),
+            description: None,
+            dependencies: vec!["missing-dep".to_string()],
+            provides: vec![],
+            status: ServiceStatus::Ready,
+            priority: 1,
+        };
+
+        let deps: HashMap<String, Arc<dyn std::any::Any + Send + Sync>> = HashMap::new();
+        let result = factory.check_dependencies(&metadata, &deps);
+        assert!(result.is_err());
+    }
+
+    #[tokio::test]
+    async fn test_supported_service_creation() {
+        let factory = DefaultServiceFactory;
+        let services = vec!["auth", "communication", "docs", "hr", "ai", "calendar", "admin", "approval", "helpdesk"];
+        
+        for service_name in services {
+            let metadata = ServiceMetadata {
+                name: service_name.to_string(),
+                version: "1.0.0".to_string(),
+                description: None,
+                dependencies: vec![],
+                provides: vec![],
+                status: ServiceStatus::Ready,
+                priority: 1,
+            };
+            let config = Config {
+                app_id: "test".to_string(),
+                app_secret: "secret".to_string(),
+                ..Default::default()
+            };
+            let deps = HashMap::new();
+            let result = factory.create_service(&metadata, &config, &deps).await;
+            assert!(result.is_ok(), "Service {} should be created successfully", service_name);
+        }
+    }
+
+    #[test]
+    fn test_placeholder_service_created_at() {
+        let service = PlaceholderService::new("test");
+        let created = service.created_at();
+        assert!(created <= chrono::Utc::now());
+    }
 }

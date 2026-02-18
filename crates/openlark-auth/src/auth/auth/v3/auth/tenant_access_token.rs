@@ -105,3 +105,74 @@ impl TenantAccessTokenBuilder {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_tenant_access_token_builder_new() {
+        let config = create_test_config();
+        let builder = TenantAccessTokenBuilder::new(config);
+        assert!(builder.app_id.is_empty());
+        assert!(builder.app_secret.is_empty());
+        assert!(builder.app_ticket.is_empty());
+    }
+
+    #[test]
+    fn test_tenant_access_token_builder_chain() {
+        let config = create_test_config();
+        let builder = TenantAccessTokenBuilder::new(config)
+            .app_id("my_app_id")
+            .app_secret("my_app_secret")
+            .app_ticket("my_app_ticket");
+        assert_eq!(builder.app_id, "my_app_id");
+        assert_eq!(builder.app_secret, "my_app_secret");
+        assert_eq!(builder.app_ticket, "my_app_ticket");
+    }
+
+    #[test]
+    fn test_tenant_access_token_builder_app_id_chained() {
+        let config = create_test_config();
+        let builder = TenantAccessTokenBuilder::new(config)
+            .app_id("chained_app_id");
+        assert_eq!(builder.app_id, "chained_app_id");
+    }
+
+    #[test]
+    fn test_tenant_access_token_builder_app_secret_chained() {
+        let config = create_test_config();
+        let builder = TenantAccessTokenBuilder::new(config)
+            .app_secret("chained_secret");
+        assert_eq!(builder.app_secret, "chained_secret");
+    }
+
+    #[test]
+    fn test_tenant_access_token_builder_app_ticket_chained() {
+        let config = create_test_config();
+        let builder = TenantAccessTokenBuilder::new(config)
+            .app_ticket("chained_ticket");
+        assert_eq!(builder.app_ticket, "chained_ticket");
+    }
+
+    #[test]
+    fn test_tenant_access_token_response_data_deserialization() {
+        let json = r#"{"data":{"tenant_access_token":"token123","expires_in":7200}}"#;
+        let response: TenantAccessTokenResponseData = serde_json::from_str(json).unwrap();
+        assert_eq!(response.data.tenant_access_token, "token123");
+        assert_eq!(response.data.expires_in, 7200);
+    }
+
+    #[test]
+    fn test_tenant_access_token_response_data_format() {
+        assert_eq!(TenantAccessTokenResponseData::data_format(), ResponseFormat::Data);
+    }
+}

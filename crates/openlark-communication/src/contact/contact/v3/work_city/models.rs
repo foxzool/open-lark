@@ -6,7 +6,7 @@ use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 多语言内容
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct I18nContent {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
@@ -17,7 +17,7 @@ pub struct I18nContent {
 }
 
 /// 工作城市信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct WorkCity {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub work_city_id: Option<String>,
@@ -32,7 +32,7 @@ pub struct WorkCity {
 }
 
 /// 获取单个工作城市信息响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct WorkCityResponse {
     pub work_city: WorkCity,
 }
@@ -44,7 +44,7 @@ impl ApiResponseTrait for WorkCityResponse {
 }
 
 /// 获取租户工作城市列表响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListWorkCitiesResponse {
     #[serde(default)]
     pub items: Vec<WorkCity>,

@@ -114,3 +114,80 @@ impl UserInfoService {
         UserInfoBuilder::new(self.config.clone())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_user_info_builder_new() {
+        let config = create_test_config();
+        let builder = UserInfoBuilder::new(config);
+        assert!(builder.user_access_token.is_empty());
+        assert!(builder.user_id_type.is_none());
+    }
+
+    #[test]
+    fn test_user_info_builder_chain() {
+        let config = create_test_config();
+        let builder = UserInfoBuilder::new(config)
+            .user_access_token("my_token")
+            .user_id_type("open_id");
+        assert_eq!(builder.user_access_token, "my_token");
+        assert_eq!(builder.user_id_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_user_info_builder_user_access_token_chained() {
+        let config = create_test_config();
+        let builder = UserInfoBuilder::new(config)
+            .user_access_token("chained_token");
+        assert_eq!(builder.user_access_token, "chained_token");
+    }
+
+    #[test]
+    fn test_user_info_builder_user_id_type_chained() {
+        let config = create_test_config();
+        let builder = UserInfoBuilder::new(config)
+            .user_id_type("union_id");
+        assert_eq!(builder.user_id_type, Some("union_id".to_string()));
+    }
+
+    #[test]
+    fn test_user_info_response_data_deserialization() {
+        let json = r#"{"data":{"data":{"open_id":"ou_def456","union_id":"on_abc123","name":"张三","en_name":"John Zhang"}}}"#;
+        let response: UserInfoResponseData = serde_json::from_str(json).unwrap();
+        assert_eq!(response.data.data.open_id, "ou_def456");
+        assert_eq!(response.data.data.union_id, Some("on_abc123".to_string()));
+        assert_eq!(response.data.data.name, Some("张三".to_string()));
+        assert_eq!(response.data.data.en_name, Some("John Zhang".to_string()));
+    }
+
+    #[test]
+    fn test_user_info_response_data_format() {
+        assert_eq!(UserInfoResponseData::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_user_info_service_new() {
+        let config = create_test_config();
+        let service = UserInfoService::new(config);
+        assert!(service.config.app_id == "test_app");
+    }
+
+    #[test]
+    fn test_user_info_service_get() {
+        let config = create_test_config();
+        let service = UserInfoService::new(config);
+        let builder = service.get();
+        assert!(builder.user_access_token.is_empty());
+    }
+}

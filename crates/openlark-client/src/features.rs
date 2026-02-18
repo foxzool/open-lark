@@ -143,7 +143,7 @@ mod tests {
             available_features: 10,
             loaded_services: 3,
         };
-        let cloned = stats.clone();
+        let cloned = stats;
         assert_eq!(cloned.enabled_features, 5);
     }
 

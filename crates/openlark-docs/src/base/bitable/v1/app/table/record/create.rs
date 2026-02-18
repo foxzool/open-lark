@@ -176,3 +176,69 @@ impl ApiResponseTrait for CreateRecordResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_record_request_builder() {
+        let config = Config::default();
+        let fields = serde_json::json!({
+            "姓名": "张三",
+            "年龄": 25
+        });
+
+        let request = CreateRecordRequest::new(config)
+            .app_token("app_123".to_string())
+            .table_id("table_456".to_string())
+            .user_id_type("open_id".to_string())
+            .client_token("token_789".to_string())
+            .ignore_consistency_check(true)
+            .fields(fields);
+
+        assert_eq!(request.app_token, "app_123");
+        assert_eq!(request.table_id, "table_456");
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+        assert_eq!(request.client_token, Some("token_789".to_string()));
+        assert_eq!(request.ignore_consistency_check, Some(true));
+    }
+
+    #[test]
+    fn test_create_record_request_minimal() {
+        let config = Config::default();
+        let request = CreateRecordRequest::new(config);
+
+        assert_eq!(request.app_token, "");
+        assert_eq!(request.table_id, "");
+        assert!(request.user_id_type.is_none());
+        assert!(request.client_token.is_none());
+        assert!(request.ignore_consistency_check.is_none());
+    }
+
+    #[test]
+    fn test_create_record_request_partial() {
+        let config = Config::default();
+        let request = CreateRecordRequest::new(config)
+            .app_token("app_token".to_string())
+            .table_id("table_id".to_string());
+
+        assert_eq!(request.app_token, "app_token");
+        assert_eq!(request.table_id, "table_id");
+        assert!(request.user_id_type.is_none());
+    }
+
+    #[test]
+    fn test_create_record_request_fields() {
+        let config = Config::default();
+        let fields = serde_json::json!({
+            "字段1": "值1",
+            "字段2": 123,
+            "字段3": true
+        });
+
+        let request = CreateRecordRequest::new(config).fields(fields.clone());
+
+        assert_eq!(request.fields, fields);
+    }
+}

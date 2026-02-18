@@ -4,13 +4,13 @@ use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 指定/删除群管理员请求体
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ChatManagersBody {
     pub manager_ids: Vec<String>,
 }
 
 /// 指定/删除群管理员响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ChatManagersResponse {
     #[serde(default)]
     pub chat_managers: Option<Vec<String>>,

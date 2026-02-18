@@ -871,9 +871,9 @@ mod tests {
 
     #[test]
     fn test_enabled_features() {
-        let _features = utils::get_enabled_features();
-        // 至少应该有一些功能（或者为空）
-        // 这个测试主要确保函数能正常工作
+        let features = utils::get_enabled_features();
+        // auth 功能始终启用
+        assert!(features.contains(&"auth"));
     }
 
     #[test]
@@ -886,5 +886,305 @@ mod tests {
 
         // 测试配置创建
         let _config = Config::builder().app_id("test").app_secret("test").build();
+    }
+
+    #[test]
+    fn test_check_env_config_success() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", Some("test_app_id")),
+                ("OPENLARK_APP_SECRET", Some("test_secret")),
+            ],
+            || {
+                let result = utils::check_env_config();
+                assert!(result.is_ok());
+            },
+        );
+    }
+
+    #[test]
+    fn test_check_env_config_missing_app_id() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", None),
+                ("OPENLARK_APP_SECRET", Some("test_secret")),
+            ],
+            || {
+                let result = utils::check_env_config();
+                assert!(result.is_err());
+            },
+        );
+    }
+
+    #[test]
+    fn test_check_env_config_empty_app_id() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", Some("")),
+                ("OPENLARK_APP_SECRET", Some("test_secret")),
+            ],
+            || {
+                let result = utils::check_env_config();
+                assert!(result.is_err());
+            },
+        );
+    }
+
+    #[test]
+    fn test_check_env_config_missing_app_secret() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", Some("test_app_id")),
+                ("OPENLARK_APP_SECRET", None),
+            ],
+            || {
+                let result = utils::check_env_config();
+                assert!(result.is_err());
+            },
+        );
+    }
+
+    #[test]
+    fn test_check_env_config_empty_app_secret() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", Some("test_app_id")),
+                ("OPENLARK_APP_SECRET", Some("")),
+            ],
+            || {
+                let result = utils::check_env_config();
+                assert!(result.is_err());
+            },
+        );
+    }
+
+    #[test]
+    fn test_check_env_config_invalid_base_url() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", Some("test_app_id")),
+                ("OPENLARK_APP_SECRET", Some("test_secret")),
+                ("OPENLARK_BASE_URL", Some("invalid_url")),
+            ],
+            || {
+                let result = utils::check_env_config();
+                assert!(result.is_err());
+            },
+        );
+    }
+
+    #[test]
+    fn test_check_env_config_valid_base_url() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", Some("test_app_id")),
+                ("OPENLARK_APP_SECRET", Some("test_secret")),
+                ("OPENLARK_BASE_URL", Some("https://open.feishu.cn")),
+            ],
+            || {
+                let result = utils::check_env_config();
+                assert!(result.is_ok());
+            },
+        );
+    }
+
+    #[test]
+    fn test_check_env_config_invalid_timeout() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", Some("test_app_id")),
+                ("OPENLARK_APP_SECRET", Some("test_secret")),
+                ("OPENLARK_TIMEOUT", Some("not_a_number")),
+            ],
+            || {
+                let result = utils::check_env_config();
+                assert!(result.is_err());
+            },
+        );
+    }
+
+    #[test]
+    fn test_check_env_config_valid_timeout() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", Some("test_app_id")),
+                ("OPENLARK_APP_SECRET", Some("test_secret")),
+                ("OPENLARK_TIMEOUT", Some("30")),
+            ],
+            || {
+                let result = utils::check_env_config();
+                assert!(result.is_ok());
+            },
+        );
+    }
+
+    #[test]
+    fn test_create_config_from_env_success() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", Some("test_app_id")),
+                ("OPENLARK_APP_SECRET", Some("test_secret")),
+                ("OPENLARK_BASE_URL", Some("https://open.feishu.cn")),
+            ],
+            || {
+                let result = utils::create_config_from_env();
+                assert!(result.is_ok());
+                let config = result.unwrap();
+                assert_eq!(config.app_id, "test_app_id");
+                assert_eq!(config.app_secret, "test_secret");
+            },
+        );
+    }
+
+    #[test]
+    fn test_create_config_from_env_missing_vars() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", None),
+                ("OPENLARK_APP_SECRET", None),
+            ],
+            || {
+                let result = utils::create_config_from_env();
+                assert!(result.is_err());
+            },
+        );
+    }
+
+    #[test]
+    fn test_get_config_summary() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_secret_key")
+            .base_url("https://open.feishu.cn")
+            .timeout(std::time::Duration::from_secs(30))
+            .build()
+            .unwrap();
+
+        let summary = utils::get_config_summary(&config);
+        assert_eq!(summary.app_id, "test_app_id");
+        assert!(!summary.app_secret.is_empty());
+        assert!(summary.app_secret.contains("***"));
+        assert_eq!(summary.base_url, "https://open.feishu.cn");
+        assert!(summary.has_timeout);
+        assert!(summary.feature_count > 0);
+    }
+
+    #[test]
+    fn test_config_summary_friendly_description() {
+        let summary = utils::ConfigSummary {
+            app_id: "test_app".to_string(),
+            app_secret: "***secret***".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+            has_timeout: true,
+            feature_count: 5,
+        };
+
+        let description = summary.friendly_description();
+        assert!(description.contains("test_app"));
+        assert!(description.contains("open.feishu.cn"));
+        assert!(description.contains("已设置"));
+    }
+
+    #[test]
+    fn test_config_summary_friendly_description_no_timeout() {
+        let summary = utils::ConfigSummary {
+            app_id: "test_app".to_string(),
+            app_secret: "***secret***".to_string(),
+            base_url: "https://open.feishu.cn".to_string(),
+            has_timeout: false,
+            feature_count: 5,
+        };
+
+        let description = summary.friendly_description();
+        assert!(description.contains("使用默认值"));
+    }
+
+    #[test]
+    fn test_validate_feature_dependencies_success() {
+        // auth 始终启用，应该没有依赖问题
+        let result = utils::validate_feature_dependencies();
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_diagnose_system_success() {
+        test_utils::with_env_vars(
+            &[
+                ("OPENLARK_APP_ID", Some("test_app_id")),
+                ("OPENLARK_APP_SECRET", Some("test_secret")),
+            ],
+            || {
+                let diagnostics = utils::diagnose_system();
+                assert!(diagnostics.env_config_status.contains("✅") || diagnostics.env_config_status.contains("❌"));
+                assert!(diagnostics.feature_deps_status.contains("✅"));
+                assert!(!diagnostics.enabled_features.is_empty());
+            },
+        );
+    }
+
+    #[test]
+    fn test_system_diagnostics_new() {
+        let diagnostics = utils::SystemDiagnostics::new();
+        assert_eq!(diagnostics.env_config_status, "未检查");
+        assert_eq!(diagnostics.feature_deps_status, "未检查");
+        assert!(diagnostics.enabled_features.is_empty());
+        assert!(diagnostics.issues.is_empty());
+    }
+
+    #[test]
+    fn test_system_diagnostics_add_issue() {
+        let mut diagnostics = utils::SystemDiagnostics::new();
+        diagnostics.add_issue("测试类别", "测试描述");
+        assert_eq!(diagnostics.issues.len(), 1);
+        assert_eq!(diagnostics.issues[0].category, "测试类别");
+        assert_eq!(diagnostics.issues[0].description, "测试描述");
+    }
+
+    #[test]
+    fn test_system_diagnostics_health_summary_healthy() {
+        let diagnostics = utils::SystemDiagnostics::new();
+        let summary = diagnostics.health_summary();
+        assert!(summary.contains("🟢"));
+        assert!(summary.contains("健康"));
+    }
+
+    #[test]
+    fn test_system_diagnostics_health_summary_with_issues() {
+        let mut diagnostics = utils::SystemDiagnostics::new();
+        diagnostics.add_issue("测试类别", "测试描述");
+        let summary = diagnostics.health_summary();
+        assert!(summary.contains("🟡"));
+        assert!(summary.contains("1"));
+    }
+
+    #[test]
+    fn test_system_diagnostics_has_critical_issues_true() {
+        let mut diagnostics = utils::SystemDiagnostics::new();
+        diagnostics.add_issue("环境变量", "配置错误");
+        assert!(diagnostics.has_critical_issues());
+    }
+
+    #[test]
+    fn test_system_diagnostics_has_critical_issues_false() {
+        let mut diagnostics = utils::SystemDiagnostics::new();
+        diagnostics.add_issue("其他问题", "一般错误");
+        assert!(!diagnostics.has_critical_issues());
+    }
+
+    #[test]
+    fn test_system_diagnostics_default() {
+        let diagnostics: utils::SystemDiagnostics = Default::default();
+        assert_eq!(diagnostics.env_config_status, "未检查");
+    }
+
+    #[test]
+    fn test_diagnostic_issue_clone() {
+        let issue = utils::DiagnosticIssue {
+            category: "测试".to_string(),
+            description: "描述".to_string(),
+        };
+        let cloned = issue.clone();
+        assert_eq!(cloned.category, "测试");
+        assert_eq!(cloned.description, "描述");
     }
 }

@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// 群菜单一级菜单 ID 列表请求体
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ChatMenuTopLevelIdsBody {
     pub chat_menu_top_level_ids: Vec<String>,
 }

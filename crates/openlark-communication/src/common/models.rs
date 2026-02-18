@@ -8,11 +8,30 @@ use serde::{Deserialize, Serialize};
 /// 通用空 data 响应
 ///
 /// 适用于形如 `{ "code": 0, "msg": "success", "data": {} }` 的接口响应。
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct EmptyData {}
 
 impl ApiResponseTrait for EmptyData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_data_serialization() {
+        let data = EmptyData {};
+        let json = serde_json::to_string(&data).expect("序列化失败");
+        let deserialized: EmptyData = serde_json::from_str(&json).expect("反序列化失败");
+        assert_eq!(data, deserialized);
+    }
+
+    #[test]
+    fn test_empty_data_default() {
+        let data: EmptyData = Default::default();
+        assert_eq!(data, EmptyData {});
     }
 }

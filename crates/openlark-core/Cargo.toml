@@ -9,6 +9,10 @@ description = "Core infrastructure for OpenLark SDK"
 [lib]
 doctest = false
 
+[[test]]
+name = "error_context"
+path = "../../tests/unit/error/mod.rs"
+
 [dependencies]
 rstest = { workspace = true }
 tracing-test = { workspace = true }

@@ -115,3 +115,86 @@ impl OidcRefreshAccessTokenBuilder {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_oidc_refresh_access_token_builder_new() {
+        let config = create_test_config();
+        let builder = OidcRefreshAccessTokenBuilder::new(config);
+        assert!(builder.refresh_token.is_empty());
+        assert!(builder.client_id.is_none());
+        assert!(builder.client_secret.is_none());
+        assert_eq!(builder.grant_type, Some("refresh_token".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_refresh_access_token_builder_chain() {
+        let config = create_test_config();
+        let builder = OidcRefreshAccessTokenBuilder::new(config)
+            .refresh_token("my_refresh_token")
+            .client_id("my_client_id")
+            .client_secret("my_client_secret")
+            .grant_type("refresh_token");
+        assert_eq!(builder.refresh_token, "my_refresh_token");
+        assert_eq!(builder.client_id, Some("my_client_id".to_string()));
+        assert_eq!(builder.client_secret, Some("my_client_secret".to_string()));
+        assert_eq!(builder.grant_type, Some("refresh_token".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_refresh_access_token_builder_refresh_token_chained() {
+        let config = create_test_config();
+        let builder = OidcRefreshAccessTokenBuilder::new(config)
+            .refresh_token("chained_refresh_token");
+        assert_eq!(builder.refresh_token, "chained_refresh_token");
+    }
+
+    #[test]
+    fn test_oidc_refresh_access_token_builder_client_id_chained() {
+        let config = create_test_config();
+        let builder = OidcRefreshAccessTokenBuilder::new(config)
+            .client_id("chained_client_id");
+        assert_eq!(builder.client_id, Some("chained_client_id".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_refresh_access_token_builder_client_secret_chained() {
+        let config = create_test_config();
+        let builder = OidcRefreshAccessTokenBuilder::new(config)
+            .client_secret("chained_client_secret");
+        assert_eq!(builder.client_secret, Some("chained_client_secret".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_refresh_access_token_builder_grant_type_chained() {
+        let config = create_test_config();
+        let builder = OidcRefreshAccessTokenBuilder::new(config)
+            .grant_type("refresh_token");
+        assert_eq!(builder.grant_type, Some("refresh_token".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_refresh_access_token_response_data_deserialization() {
+        let json = r#"{"data":{"user_access_token":"token123","expires_in":7200,"refresh_token":"refresh456"}}"#;
+        let response: OidcRefreshAccessTokenResponseData = serde_json::from_str(json).unwrap();
+        assert_eq!(response.data.user_access_token, "token123");
+        assert_eq!(response.data.expires_in, 7200);
+        assert_eq!(response.data.refresh_token, Some("refresh456".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_refresh_access_token_response_data_format() {
+        assert_eq!(OidcRefreshAccessTokenResponseData::data_format(), ResponseFormat::Data);
+    }
+}

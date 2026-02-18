@@ -94,3 +94,38 @@ impl ListCalendarRequest {
         extract_response_data(response, "查询日历列表")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_calendar_request_builder() {
+        let config = Config::default();
+        let request = ListCalendarRequest::new(config)
+            .query_param("page_size", "20")
+            .query_param("page_token", "token123");
+
+        assert_eq!(request.query_params.len(), 2);
+        assert_eq!(request.query_params[0], ("page_size".to_string(), "20".to_string()));
+        assert_eq!(request.query_params[1], ("page_token".to_string(), "token123".to_string()));
+    }
+
+    #[test]
+    fn test_list_calendar_request_minimal() {
+        let config = Config::default();
+        let request = ListCalendarRequest::new(config);
+
+        assert!(request.query_params.is_empty());
+    }
+
+    #[test]
+    fn test_list_calendar_request_single_param() {
+        let config = Config::default();
+        let request = ListCalendarRequest::new(config)
+            .query_param("user_id_type", "union_id");
+
+        assert_eq!(request.query_params.len(), 1);
+        assert_eq!(request.query_params[0], ("user_id_type".to_string(), "union_id".to_string()));
+    }
+}

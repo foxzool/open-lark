@@ -274,4 +274,185 @@ mod tests {
         assert_eq!(options.retry_count, Some(3));
         assert!(options.headers.is_some());
     }
+
+    #[test]
+    fn test_api_response_data_success() {
+        let response: ApiResponseData<i32> = ApiResponseData::success(42);
+        assert!(response.is_success());
+        assert_eq!(response.data, 42);
+        assert!(response.error_message().is_none());
+        assert!(!response.request_id.is_empty());
+    }
+
+    #[test]
+    fn test_api_response_data_error() {
+        let response: ApiResponseData<String> = ApiResponseData::error("发生错误");
+        assert!(!response.is_success());
+        assert_eq!(response.error_message(), Some(&"发生错误".to_string()));
+        assert!(!response.request_id.is_empty());
+    }
+
+    #[test]
+    fn test_api_response_data_error_with_data() {
+        let response = ApiResponseData::error_with_data(123, "操作失败");
+        assert!(!response.is_success());
+        assert_eq!(response.data, 123);
+        assert_eq!(response.error_message(), Some(&"操作失败".to_string()));
+    }
+
+    #[test]
+    fn test_api_response_data_into_result_success() {
+        let response: ApiResponseData<i32> = ApiResponseData {
+            data: 42,
+            success: true,
+            message: None,
+            request_id: "test".to_string(),
+            timestamp: None,
+            extra: std::collections::HashMap::new(),
+        };
+        let result = response.into_result();
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), 42);
+    }
+
+    #[test]
+    fn test_api_response_data_into_result_error() {
+        let response: ApiResponseData<i32> = ApiResponseData {
+            data: 0,
+            success: false,
+            message: Some("出错了".to_string()),
+            request_id: "test".to_string(),
+            timestamp: None,
+            extra: std::collections::HashMap::new(),
+        };
+        let result = response.into_result();
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_api_response_trait() {
+        let response: ApiResponseData<String> = ApiResponseData {
+            data: "test".to_string(),
+            success: true,
+            message: None,
+            request_id: "req-123".to_string(),
+            timestamp: None,
+            extra: std::collections::HashMap::new(),
+        };
+        assert!(response.is_success());
+        assert!(response.error_message().is_none());
+    }
+
+    #[test]
+    fn test_api_response_trait_error() {
+        let response: ApiResponseData<String> = ApiResponseData {
+            data: String::new(),
+            success: false,
+            message: Some("错误信息".to_string()),
+            request_id: "req-456".to_string(),
+            timestamp: None,
+            extra: std::collections::HashMap::new(),
+        };
+        assert!(!response.is_success());
+        assert_eq!(response.error_message(), Some(&"错误信息".to_string()));
+    }
+
+    #[test]
+    fn test_paginated_response_empty() {
+        let response: PaginatedResponse<String> = PaginatedResponse::new(vec![]);
+        assert!(response.is_empty());
+        assert_eq!(response.len(), 0);
+        assert!(!response.has_more);
+    }
+
+    #[test]
+    fn test_paginated_response_with_total() {
+        let items = vec!["a", "b", "c"];
+        let response = PaginatedResponse {
+            items: items.clone(),
+            has_more: true,
+            page_token: Some("next".to_string()),
+            total: Some(100),
+        };
+        assert_eq!(response.len(), 3);
+        assert!(response.has_more);
+        assert_eq!(response.total, Some(100));
+    }
+
+    #[test]
+    fn test_request_options_default() {
+        let options: RequestOptions = Default::default();
+        assert!(options.timeout.is_none());
+        assert!(options.retry_count.is_none());
+        assert!(options.headers.is_none());
+    }
+
+    #[test]
+    fn test_request_options_new() {
+        let options = RequestOptions::new();
+        assert!(options.timeout.is_none());
+        assert!(options.retry_count.is_none());
+    }
+
+    #[test]
+    fn test_request_options_multiple_headers() {
+        let options = RequestOptions::new()
+            .header("Authorization".to_string(), "Bearer token".to_string())
+            .header("Content-Type".to_string(), "application/json".to_string());
+
+        let headers = options.headers.unwrap();
+        assert_eq!(
+            headers.get("Authorization"),
+            Some(&"Bearer token".to_string())
+        );
+        assert_eq!(
+            headers.get("Content-Type"),
+            Some(&"application/json".to_string())
+        );
+    }
+
+    #[test]
+    fn test_request_options_only_timeout() {
+        let options = RequestOptions::new().timeout(Duration::from_secs(60));
+        assert_eq!(options.timeout, Some(Duration::from_secs(60)));
+        assert!(options.retry_count.is_none());
+    }
+
+    #[test]
+    fn test_request_options_only_retry() {
+        let options = RequestOptions::new().retry_count(5);
+        assert_eq!(options.retry_count, Some(5));
+        assert!(options.timeout.is_none());
+    }
+
+    #[test]
+    fn test_api_response_data_clone() {
+        let response = ApiResponseData {
+            data: 42,
+            success: true,
+            message: Some("test".to_string()),
+            request_id: "req".to_string(),
+            timestamp: Some(1234567890),
+            extra: std::collections::HashMap::new(),
+        };
+        let cloned = response.clone();
+        assert_eq!(cloned.data, 42);
+        assert!(cloned.success);
+    }
+
+    #[test]
+    fn test_api_response_data_serialize() {
+        let response: ApiResponseData<i32> = ApiResponseData::success(42);
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains("42"));
+        assert!(json.contains("true"));
+    }
+
+    #[test]
+    fn test_api_response_data_deserialize() {
+        let json = r#"{"data":42,"success":true,"message":null,"request_id":"req-123","timestamp":1234567890,"extra":{}}"#;
+        let response: ApiResponseData<i32> = serde_json::from_str(json).unwrap();
+        assert_eq!(response.data, 42);
+        assert!(response.success);
+    }
 }

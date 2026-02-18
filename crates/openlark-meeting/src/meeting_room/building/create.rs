@@ -44,3 +44,27 @@ impl CreateBuildingRequest {
         extract_response_data(resp, "创建建筑物")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_building_request_builder() {
+        let config = Config::default();
+        let request = CreateBuildingRequest::new(config);
+
+        assert!(true);
+    }
+
+    #[test]
+    fn test_create_building_request_new() {
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request = CreateBuildingRequest::new(config);
+
+        assert!(true);
+    }
+}

@@ -5,7 +5,7 @@
 use serde::{Deserialize, Serialize};
 
 /// 用户 ID 类型（query: user_id_type）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum UserIdType {
     OpenId,
@@ -24,7 +24,7 @@ impl UserIdType {
 }
 
 /// 名称展示范围
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DisplayStatus {
     /// 对应名称是否在消息/云文档高亮
     pub allow_highlight: bool,
@@ -33,7 +33,7 @@ pub struct DisplayStatus {
 }
 
 /// 名称（词条名/别名）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Term {
     /// 名称的值
     pub key: String,
@@ -42,7 +42,7 @@ pub struct Term {
 }
 
 /// 相关信息条目
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Referer {
     /// 对应相关信息 ID（部分场景不返回）
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -56,7 +56,7 @@ pub struct Referer {
 }
 
 /// 更多相关信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RelatedMeta {
     /// 相关联系人
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -85,7 +85,7 @@ pub struct RelatedMeta {
 }
 
 /// 反馈统计
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct EntityStatistics {
     /// 累计点赞
     pub like_count: i32,
@@ -94,7 +94,7 @@ pub struct EntityStatistics {
 }
 
 /// 外部系统关联数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct OuterInfo {
     /// 外部系统（不能包含中横线 "-"）
     pub provider: String,
@@ -103,7 +103,7 @@ pub struct OuterInfo {
 }
 
 /// 词条信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Entity {
     /// 词条 ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -146,7 +146,7 @@ pub struct Entity {
 }
 
 /// 分类条目
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ClassificationItem {
     pub id: String,
     pub name: String,
@@ -155,8 +155,140 @@ pub struct ClassificationItem {
 }
 
 /// 图片信息（related_meta.images）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BaikeImage {
     /// 通过文件接口上传图片后，获得的图片 token
     pub token: String,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn test_roundtrip<T: Serialize + for<'de> Deserialize<'de> + PartialEq + std::fmt::Debug>(
+        original: &T,
+    ) {
+        let json = serde_json::to_string(original).expect("序列化失败");
+        let deserialized: T = serde_json::from_str(&json).expect("反序列化失败");
+        assert_eq!(original, &deserialized, "roundtrip 后数据不一致");
+    }
+
+    #[test]
+    fn test_user_id_type_serialization() {
+        test_roundtrip(&UserIdType::OpenId);
+        test_roundtrip(&UserIdType::UnionId);
+        test_roundtrip(&UserIdType::UserId);
+    }
+
+    #[test]
+    fn test_display_status_serialization() {
+        let status = DisplayStatus {
+            allow_highlight: true,
+            allow_search: false,
+        };
+        test_roundtrip(&status);
+    }
+
+    #[test]
+    fn test_term_serialization() {
+        let term = Term {
+            key: "词条名".to_string(),
+            display_status: DisplayStatus {
+                allow_highlight: true,
+                allow_search: true,
+            },
+        };
+        test_roundtrip(&term);
+    }
+
+    #[test]
+    fn test_referer_serialization() {
+        let referer = Referer {
+            id: Some("ref123".to_string()),
+            title: Some("标题".to_string()),
+            url: Some("https://example.com".to_string()),
+        };
+        test_roundtrip(&referer);
+    }
+
+    #[test]
+    fn test_related_meta_serialization() {
+        let meta = RelatedMeta {
+            users: Some(vec![Referer {
+                id: Some("user1".to_string()),
+                title: Some("用户".to_string()),
+                url: None,
+            }]),
+            chats: None,
+            docs: None,
+            oncalls: None,
+            links: None,
+            abbreviations: None,
+            classifications: None,
+            images: None,
+        };
+        test_roundtrip(&meta);
+    }
+
+    #[test]
+    fn test_entity_statistics_serialization() {
+        let stats = EntityStatistics {
+            like_count: 50,
+            dislike_count: 2,
+        };
+        test_roundtrip(&stats);
+    }
+
+    #[test]
+    fn test_outer_info_serialization() {
+        let info = OuterInfo {
+            provider: "provider1".to_string(),
+            outer_id: "outer123".to_string(),
+        };
+        test_roundtrip(&info);
+    }
+
+    #[test]
+    fn test_entity_serialization() {
+        let entity = Entity {
+            id: Some("entity123".to_string()),
+            main_keys: vec![Term {
+                key: "主词条".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
+            }],
+            aliases: None,
+            description: Some("词条描述".to_string()),
+            create_time: Some("1234567890".to_string()),
+            creator: Some("creator1".to_string()),
+            update_time: None,
+            updater: None,
+            related_meta: None,
+            statistics: None,
+            outer_info: None,
+            rich_text: None,
+            source: Some(1),
+        };
+        test_roundtrip(&entity);
+    }
+
+    #[test]
+    fn test_classification_item_serialization() {
+        let item = ClassificationItem {
+            id: "class123".to_string(),
+            name: "分类名称".to_string(),
+            father_id: Some("father123".to_string()),
+        };
+        test_roundtrip(&item);
+    }
+
+    #[test]
+    fn test_baike_image_serialization() {
+        let img = BaikeImage {
+            token: "img_token_123".to_string(),
+        };
+        test_roundtrip(&img);
+    }
 }

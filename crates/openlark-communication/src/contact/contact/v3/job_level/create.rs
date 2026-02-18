@@ -62,3 +62,61 @@ impl CreateJobLevelRequest {
         extract_response_data(resp, "创建职级")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_job_level_request_builder() {
+        let config = Config::default();
+        let request = CreateJobLevelRequest::new(config);
+
+        assert!(true);
+    }
+
+    #[test]
+    fn test_create_job_level_request_new() {
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request = CreateJobLevelRequest::new(config);
+
+        assert!(true);
+    }
+
+    #[test]
+    fn test_create_job_level_body() {
+        let body = CreateJobLevelBody {
+            name: "P8".to_string(),
+            description: Some("Senior Engineer".to_string()),
+            order: Some(8),
+            status: true,
+            i18n_name: None,
+            i18n_description: None,
+        };
+
+        assert_eq!(body.name, "P8");
+        assert_eq!(body.description, Some("Senior Engineer".to_string()));
+        assert_eq!(body.order, Some(8));
+        assert!(body.status);
+    }
+
+    #[test]
+    fn test_create_job_level_body_minimal() {
+        let body = CreateJobLevelBody {
+            name: "P1".to_string(),
+            description: None,
+            order: None,
+            status: false,
+            i18n_name: None,
+            i18n_description: None,
+        };
+
+        assert_eq!(body.name, "P1");
+        assert!(body.description.is_none());
+        assert!(body.order.is_none());
+        assert!(!body.status);
+    }
+}

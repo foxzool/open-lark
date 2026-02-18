@@ -47,3 +47,38 @@ impl ListRoomRequest {
         extract_response_data(resp, "获取会议室列表")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_room_request_builder() {
+        let config = Config::default();
+        let request = ListRoomRequest::new(config)
+            .query_param("building_id", "bld_123")
+            .query_param("floor_name", "3F");
+
+        assert_eq!(request.query_params.len(), 2);
+        assert_eq!(request.query_params[0], ("building_id".to_string(), "bld_123".to_string()));
+        assert_eq!(request.query_params[1], ("floor_name".to_string(), "3F".to_string()));
+    }
+
+    #[test]
+    fn test_list_room_request_minimal() {
+        let config = Config::default();
+        let request = ListRoomRequest::new(config);
+
+        assert!(request.query_params.is_empty());
+    }
+
+    #[test]
+    fn test_list_room_request_single_param() {
+        let config = Config::default();
+        let request = ListRoomRequest::new(config)
+            .query_param("page_size", "50");
+
+        assert_eq!(request.query_params.len(), 1);
+        assert_eq!(request.query_params[0], ("page_size".to_string(), "50".to_string()));
+    }
+}

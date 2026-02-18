@@ -1,7 +1,6 @@
 /// 导出任务API数据模型
 ///
 /// 定义文档导出任务API的数据结构。
-
 use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
@@ -202,5 +201,103 @@ pub struct DownloadExportFileResponse {
 impl ApiResponseTrait for DownloadExportFileResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn test_roundtrip<T: Serialize + for<'de> Deserialize<'de> + PartialEq + std::fmt::Debug>(
+        original: &T,
+    ) {
+        let json = serde_json::to_string(original).expect("序列化失败");
+        let deserialized: T = serde_json::from_str(&json).expect("反序列化失败");
+        assert_eq!(original, &deserialized, "roundtrip 后数据不一致");
+    }
+
+    #[test]
+    fn test_create_export_task_request_serialization() {
+        let req = CreateExportTaskRequest {
+            file_token: "file123".to_string(),
+            file_type: "docx".to_string(),
+            export_type: "pdf".to_string(),
+            export_name: Some("导出文件".to_string()),
+            locale: Some("zh-CN".to_string()),
+            include_comments: Some(true),
+            password_enable: Some(false),
+            password: None,
+            attachment_separate: None,
+        };
+        test_roundtrip(&req);
+    }
+
+    #[test]
+    fn test_create_export_task_response_serialization() {
+        let resp = CreateExportTaskResponse {
+            ticket: Some("ticket123".to_string()),
+        };
+        test_roundtrip(&resp);
+    }
+
+    #[test]
+    fn test_get_export_task_request_serialization() {
+        let req = GetExportTaskRequest {
+            ticket: "ticket123".to_string(),
+        };
+        test_roundtrip(&req);
+    }
+
+    #[test]
+    fn test_export_task_status_serialization() {
+        test_roundtrip(&ExportTaskStatus::Processing);
+        test_roundtrip(&ExportTaskStatus::Success);
+        test_roundtrip(&ExportTaskStatus::Failed);
+        test_roundtrip(&ExportTaskStatus::Cancelled);
+    }
+
+    #[test]
+    fn test_export_task_result_serialization() {
+        let result = ExportTaskResult {
+            status: Some(ExportTaskStatus::Success),
+            error_message: None,
+            file_token: Some("file456".to_string()),
+            file_url: Some("https://example.com/file".to_string()),
+            file_size: Some(1024000),
+        };
+        test_roundtrip(&result);
+    }
+
+    #[test]
+    fn test_get_export_task_response_serialization() {
+        let resp = GetExportTaskResponse {
+            result: Some(ExportTaskResult {
+                status: Some(ExportTaskStatus::Processing),
+                error_message: None,
+                file_token: None,
+                file_url: None,
+                file_size: None,
+            }),
+        };
+        test_roundtrip(&resp);
+    }
+
+    #[test]
+    fn test_download_export_file_request_serialization() {
+        let req = DownloadExportFileRequest {
+            file_token: "file789".to_string(),
+        };
+        test_roundtrip(&req);
+    }
+
+    #[test]
+    fn test_download_export_file_response_serialization() {
+        let resp = DownloadExportFileResponse {
+            file_content: Some("base64content".to_string()),
+            file_name: Some("exported.pdf".to_string()),
+            file_size: Some(1024000),
+            content_type: Some("application/pdf".to_string()),
+        };
+        test_roundtrip(&resp);
     }
 }
