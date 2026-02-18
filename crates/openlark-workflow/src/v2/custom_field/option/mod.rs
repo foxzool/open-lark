@@ -46,3 +46,39 @@ pub use patch::UpdateCustomFieldOptionRequest;
 // 重新导出响应类型
 pub use create::{CreateCustomFieldOptionBody, CreateCustomFieldOptionResponse, CustomFieldOption};
 pub use patch::{UpdateCustomFieldOptionBody, UpdateCustomFieldOptionResponse};
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<Config> {
+        Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        )
+    }
+
+    #[test]
+    fn test_custom_field_option_resource_new() {
+        let config = create_test_config();
+        let resource = CustomFieldOptionResource::new(config, "field_guid_123");
+        assert_eq!(resource.custom_field_guid, "field_guid_123");
+    }
+
+    #[test]
+    fn test_custom_field_option_create() {
+        let config = create_test_config();
+        let resource = CustomFieldOptionResource::new(config, "field_guid_123");
+        let _request = resource.create();
+    }
+
+    #[test]
+    fn test_custom_field_option_patch() {
+        let config = create_test_config();
+        let resource = CustomFieldOptionResource::new(config, "field_guid_123");
+        let _request = resource.patch("option_456");
+    }
+}
