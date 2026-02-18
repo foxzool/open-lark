@@ -60,3 +60,60 @@ pub use upload::UploadAttachmentRequest;
 pub use get::{AttachmentInfo, GetAttachmentResponse};
 pub use list::{AttachmentListItem, ListAttachmentsResponse};
 pub use models::{DeleteAttachmentResponse, UploadAttachmentResponse};
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<Config> {
+        Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        )
+    }
+
+    #[test]
+    fn test_attachment_new() {
+        let config = create_test_config();
+        let attachment = Attachment::new(config);
+        assert!(attachment.task_guid.is_empty());
+    }
+
+    #[test]
+    fn test_attachment_with_task() {
+        let config = create_test_config();
+        let attachment = Attachment::new(config).with_task("task_123");
+        assert_eq!(attachment.task_guid, "task_123");
+    }
+
+    #[test]
+    fn test_attachment_upload() {
+        let config = create_test_config();
+        let attachment = Attachment::new(config).with_task("task_123");
+        let _request = attachment.upload("/path/to/file.txt".to_string());
+    }
+
+    #[test]
+    fn test_attachment_delete() {
+        let config = create_test_config();
+        let attachment = Attachment::new(config).with_task("task_123");
+        let _request = attachment.delete("attachment_456");
+    }
+
+    #[test]
+    fn test_attachment_get() {
+        let config = create_test_config();
+        let attachment = Attachment::new(config);
+        let _request = attachment.get("attachment_456");
+    }
+
+    #[test]
+    fn test_attachment_list() {
+        let config = create_test_config();
+        let attachment = Attachment::new(config);
+        let _request = attachment.list();
+    }
+}

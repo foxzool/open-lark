@@ -39,3 +39,39 @@ pub use list::ListSubtasksRequest;
 // 重新导出响应类型
 pub use create::CreateSubtaskResponse;
 pub use list::ListSubtasksResponse;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<Config> {
+        Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        )
+    }
+
+    #[test]
+    fn test_subtask_new() {
+        let config = create_test_config();
+        let subtask = Subtask::new(config, "task_guid_123");
+        assert_eq!(subtask.task_guid, "task_guid_123");
+    }
+
+    #[test]
+    fn test_subtask_create() {
+        let config = create_test_config();
+        let subtask = Subtask::new(config, "task_guid_123");
+        let _request = subtask.create();
+    }
+
+    #[test]
+    fn test_subtask_list() {
+        let config = create_test_config();
+        let subtask = Subtask::new(config, "task_guid_123");
+        let _request = subtask.list();
+    }
+}

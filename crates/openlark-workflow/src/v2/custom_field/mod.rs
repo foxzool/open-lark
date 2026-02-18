@@ -87,3 +87,74 @@ pub use models::{
     CustomFieldType, DeleteCustomFieldResponse, GetCustomFieldResponse, ListCustomFieldsResponse,
     UpdateCustomFieldBody, UpdateCustomFieldResponse,
 };
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<Config> {
+        Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        )
+    }
+
+    #[test]
+    fn test_custom_field_new() {
+        let config = create_test_config();
+        let field = CustomField::new(config);
+        assert!(field.tasklist_guid.is_empty());
+    }
+
+    #[test]
+    fn test_custom_field_with_tasklist() {
+        let config = create_test_config();
+        let field = CustomField::new(config).with_tasklist("tasklist_123");
+        assert_eq!(field.tasklist_guid, "tasklist_123");
+    }
+
+    #[test]
+    fn test_custom_field_create() {
+        let config = create_test_config();
+        let field = CustomField::new(config).with_tasklist("tasklist_123");
+        let _request = field.create();
+    }
+
+    #[test]
+    fn test_custom_field_get() {
+        let config = create_test_config();
+        let field = CustomField::new(config).with_tasklist("tasklist_123");
+        let _request = field.get("field_456");
+    }
+
+    #[test]
+    fn test_custom_field_update() {
+        let config = create_test_config();
+        let field = CustomField::new(config).with_tasklist("tasklist_123");
+        let _request = field.update("field_456");
+    }
+
+    #[test]
+    fn test_custom_field_delete() {
+        let config = create_test_config();
+        let field = CustomField::new(config).with_tasklist("tasklist_123");
+        let _request = field.delete("field_456");
+    }
+
+    #[test]
+    fn test_custom_field_list() {
+        let config = create_test_config();
+        let field = CustomField::new(config).with_tasklist("tasklist_123");
+        let _request = field.list();
+    }
+
+    #[test]
+    fn test_custom_field_option() {
+        let config = create_test_config();
+        let field = CustomField::new(config);
+        let _resource = field.option("field_456");
+    }
+}
