@@ -161,3 +161,144 @@ pub use remove_members::{RemoveMembersBody, RemoveMembersResponse};
 pub use remove_reminders::{RemoveRemindersBody, RemoveRemindersResponse};
 pub use remove_tasklist::{RemoveTasklistBody, RemoveTasklistResponse};
 pub use tasklists::{GetTaskTasklistsResponse, TaskTasklistItem};
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<Config> {
+        Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        )
+    }
+
+    #[test]
+    fn test_task_v2_new() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_v2_create() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.create();
+    }
+
+    #[test]
+    fn test_task_v2_update() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.update("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_delete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.delete("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_get() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.get("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_list() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.list();
+    }
+
+    #[test]
+    fn test_task_v2_complete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.complete("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_uncomplete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.uncomplete("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_subtask() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _subtask = task.subtask("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_add_tasklist() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.add_tasklist("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_remove_tasklist() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.remove_tasklist("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_tasklists() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.tasklists("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_add_members() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.add_members("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_remove_members() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.remove_members("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_add_reminders() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.add_reminders("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_remove_reminders() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.remove_reminders("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_add_dependencies() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.add_dependencies("task_guid_123");
+    }
+
+    #[test]
+    fn test_task_v2_remove_dependencies() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let _request = task.remove_dependencies("task_guid_123");
+    }
+}
