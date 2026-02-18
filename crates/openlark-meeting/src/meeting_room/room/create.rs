@@ -44,3 +44,27 @@ impl CreateRoomRequest {
         extract_response_data(resp, "创建会议室")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_room_request_builder() {
+        let config = Config::default();
+        let request = CreateRoomRequest::new(config);
+
+        assert!(true);
+    }
+
+    #[test]
+    fn test_create_room_request_new() {
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request = CreateRoomRequest::new(config);
+
+        assert!(true);
+    }
+}

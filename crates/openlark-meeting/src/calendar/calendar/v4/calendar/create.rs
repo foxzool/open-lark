@@ -97,3 +97,38 @@ impl CreateCalendarRequest {
         Ok(data)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_calendar_request_builder() {
+        let config = Config::default();
+        let request = CreateCalendarRequest::new(config)
+            .query_param("user_id_type", "open_id");
+
+        assert_eq!(request.query_params.len(), 1);
+        assert_eq!(request.query_params[0], ("user_id_type".to_string(), "open_id".to_string()));
+    }
+
+    #[test]
+    fn test_create_calendar_request_minimal() {
+        let config = Config::default();
+        let request = CreateCalendarRequest::new(config);
+
+        assert!(request.query_params.is_empty());
+    }
+
+    #[test]
+    fn test_create_calendar_request_multiple_params() {
+        let config = Config::default();
+        let request = CreateCalendarRequest::new(config)
+            .query_param("key1", "value1")
+            .query_param("key2", "value2");
+
+        assert_eq!(request.query_params.len(), 2);
+        assert_eq!(request.query_params[0], ("key1".to_string(), "value1".to_string()));
+        assert_eq!(request.query_params[1], ("key2".to_string(), "value2".to_string()));
+    }
+}

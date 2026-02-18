@@ -13,7 +13,7 @@ use crate::common::api_utils::{extract_response_data, serialize_params};
 use crate::endpoints::TRANSLATION_V1_TEXT_TRANSLATE;
 
 /// 文本翻译请求体
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TextTranslateBody {
     /// 待翻译的文本列表
     pub texts: Vec<String>,
@@ -45,7 +45,7 @@ impl TextTranslateBody {
 }
 
 /// 文本翻译响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TextTranslateResponse {
     /// 翻译结果
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -55,7 +55,7 @@ pub struct TextTranslateResponse {
 impl openlark_core::api::ApiResponseTrait for TextTranslateResponse {}
 
 /// 文本翻译结果
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TextTranslateResult {
     /// 翻译后的文本列表
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -63,7 +63,7 @@ pub struct TextTranslateResult {
 }
 
 /// 翻译项
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TranslationItem {
     /// 原文
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -318,5 +318,62 @@ mod tests {
         assert_eq!(body.texts.len(), 2);
         assert_eq!(body.source_language, "en-US");
         assert_eq!(body.target_language, "zh-CN");
+    }
+
+    fn test_roundtrip<T: Serialize + for<'de> Deserialize<'de> + PartialEq + std::fmt::Debug>(
+        original: &T,
+    ) {
+        let json = serde_json::to_string(original).expect("序列化失败");
+        let deserialized: T = serde_json::from_str(&json).expect("反序列化失败");
+        assert_eq!(original, &deserialized, "roundtrip 后数据不一致");
+    }
+
+    #[test]
+    fn test_text_translate_body_serialization() {
+        let body = TextTranslateBody {
+            texts: vec!["Hello".to_string(), "World".to_string()],
+            source_language: "en-US".to_string(),
+            target_language: "zh-CN".to_string(),
+        };
+        test_roundtrip(&body);
+    }
+
+    #[test]
+    fn test_text_translate_response_serialization() {
+        let response = TextTranslateResponse {
+            data: Some(TextTranslateResult {
+                translations: Some(vec![
+                    TranslationItem {
+                        source_text: Some("Hello".to_string()),
+                        target_text: Some("你好".to_string()),
+                    },
+                    TranslationItem {
+                        source_text: Some("World".to_string()),
+                        target_text: Some("世界".to_string()),
+                    },
+                ]),
+            }),
+        };
+        test_roundtrip(&response);
+    }
+
+    #[test]
+    fn test_translation_item_serialization() {
+        let item = TranslationItem {
+            source_text: Some("Hello".to_string()),
+            target_text: Some("你好".to_string()),
+        };
+        test_roundtrip(&item);
+    }
+
+    #[test]
+    fn test_text_translate_result_serialization() {
+        let result = TextTranslateResult {
+            translations: Some(vec![TranslationItem {
+                source_text: Some("Test".to_string()),
+                target_text: Some("测试".to_string()),
+            }]),
+        };
+        test_roundtrip(&result);
     }
 }

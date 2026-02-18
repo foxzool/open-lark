@@ -6,7 +6,7 @@ use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 多语言内容
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct I18nContent {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
@@ -17,7 +17,7 @@ pub struct I18nContent {
 }
 
 /// 序列信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct JobFamily {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_family_id: Option<String>,
@@ -38,7 +38,7 @@ pub struct JobFamily {
 }
 
 /// 创建/更新/获取单个序列响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct JobFamilyResponse {
     pub job_family: JobFamily,
 }
@@ -50,7 +50,7 @@ impl ApiResponseTrait for JobFamilyResponse {
 }
 
 /// 获取租户序列列表响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListJobFamiliesResponse {
     #[serde(default)]
     pub items: Vec<JobFamily>,

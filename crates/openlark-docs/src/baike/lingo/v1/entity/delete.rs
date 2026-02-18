@@ -76,3 +76,59 @@ impl DeleteEntityRequest {
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_delete_entity_request_builder() {
+        let config = Config::default();
+        let request = DeleteEntityRequest::new(config, "entity_123")
+            .provider("test_provider")
+            .outer_id("outer_456");
+
+        assert_eq!(request.entity_id, "entity_123");
+        assert_eq!(request.provider, Some("test_provider".to_string()));
+        assert_eq!(request.outer_id, Some("outer_456".to_string()));
+    }
+
+    #[test]
+    fn test_delete_entity_request_minimal() {
+        let config = Config::default();
+        let request = DeleteEntityRequest::new(config, "entity_789");
+
+        assert_eq!(request.entity_id, "entity_789");
+        assert!(request.provider.is_none());
+        assert!(request.outer_id.is_none());
+    }
+
+    #[test]
+    fn test_delete_entity_request_with_string() {
+        let config = Config::default();
+        let entity_id = String::from("entity_str");
+        let request = DeleteEntityRequest::new(config, entity_id);
+
+        assert_eq!(request.entity_id, "entity_str");
+    }
+
+    #[test]
+    fn test_delete_entity_request_only_provider() {
+        let config = Config::default();
+        let request = DeleteEntityRequest::new(config, "entity_001").provider("prov_001");
+
+        assert_eq!(request.entity_id, "entity_001");
+        assert_eq!(request.provider, Some("prov_001".to_string()));
+        assert!(request.outer_id.is_none());
+    }
+
+    #[test]
+    fn test_delete_entity_request_only_outer_id() {
+        let config = Config::default();
+        let request = DeleteEntityRequest::new(config, "entity_002").outer_id("out_002");
+
+        assert_eq!(request.entity_id, "entity_002");
+        assert!(request.provider.is_none());
+        assert_eq!(request.outer_id, Some("out_002".to_string()));
+    }
+}

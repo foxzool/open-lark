@@ -104,3 +104,51 @@ impl MatchEntityRequest {
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_match_entity_request_builder() {
+        let config = Config::default();
+        let request = MatchEntityRequest::new(config, "search_term").repo_id("repo_123");
+
+        assert_eq!(request.body.word, "search_term");
+        assert_eq!(request.repo_id, Some("repo_123".to_string()));
+    }
+
+    #[test]
+    fn test_match_entity_request_minimal() {
+        let config = Config::default();
+        let request = MatchEntityRequest::new(config, "keyword");
+
+        assert_eq!(request.body.word, "keyword");
+        assert!(request.repo_id.is_none());
+    }
+
+    #[test]
+    fn test_match_entity_request_with_string() {
+        let config = Config::default();
+        let word = String::from("search_word");
+        let request = MatchEntityRequest::new(config, word);
+
+        assert_eq!(request.body.word, "search_word");
+    }
+
+    #[test]
+    fn test_match_entity_request_chinese() {
+        let config = Config::default();
+        let request = MatchEntityRequest::new(config, "中文搜索").repo_id("词库ID");
+
+        assert_eq!(request.body.word, "中文搜索");
+        assert_eq!(request.repo_id, Some("词库ID".to_string()));
+    }
+
+    #[test]
+    fn test_term_type_enum() {
+        assert_eq!(TermType::MainKey as i32, 0);
+        assert_eq!(TermType::FullName as i32, 1);
+        assert_eq!(TermType::Alias as i32, 2);
+    }
+}

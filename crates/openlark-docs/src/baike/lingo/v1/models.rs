@@ -36,7 +36,7 @@ pub enum Language {
 }
 
 /// 名称展示范围（display_status）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DisplayStatus {
     /// 是否允许在 IM 和 Doc 等场景进行高亮提示
     pub allow_highlight: bool,
@@ -45,7 +45,7 @@ pub struct DisplayStatus {
 }
 
 /// 词条名/别名（term）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Term {
     /// 名称
     pub key: String,
@@ -54,7 +54,7 @@ pub struct Term {
 }
 
 /// 外部系统关联数据（outer_info）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct OuterInfo {
     /// 数据提供方（不能包含 '-'）
     pub provider: String,
@@ -63,7 +63,7 @@ pub struct OuterInfo {
 }
 
 /// 相关联系人（referer）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RelatedUser {
     /// 格式根据 user_id_type 不同需要符合 open_id、user_id、union_id 格式的有效 id
     pub id: String,
@@ -72,14 +72,14 @@ pub struct RelatedUser {
 }
 
 /// 相关公开群（referer）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RelatedChat {
     /// 公开群 id
     pub id: String,
 }
 
 /// 相关飞书文档/wiki（referer）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RelatedDoc {
     /// 文档标题
     pub title: Option<String>,
@@ -88,14 +88,14 @@ pub struct RelatedDoc {
 }
 
 /// 相关值班号（referer）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RelatedOncall {
     /// 值班号 id
     pub id: String,
 }
 
 /// 其他网页链接（referer）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RelatedLink {
     /// 标题
     pub title: Option<String>,
@@ -104,14 +104,14 @@ pub struct RelatedLink {
 }
 
 /// 相关词条（abbreviation）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Abbreviation {
     /// 其他相关词条 id
     pub id: Option<String>,
 }
 
 /// 分类引用（classification）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ClassificationRef {
     /// 二级分类 ID
     pub id: String,
@@ -120,14 +120,14 @@ pub struct ClassificationRef {
 }
 
 /// 上传图片 token（baike_image）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BaikeImage {
     /// 通过文件接口上传后的图片 token
     pub token: String,
 }
 
 /// 关联信息（related_meta）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RelatedMeta {
     /// 相关联系人
     pub users: Option<Vec<RelatedUser>>,
@@ -148,7 +148,7 @@ pub struct RelatedMeta {
 }
 
 /// 国际化词条释义（i18n_entry_desc）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct I18nEntryDesc {
     /// 语言类型
     pub language: Language,
@@ -159,7 +159,7 @@ pub struct I18nEntryDesc {
 }
 
 /// 反馈统计数据（statistics）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Statistics {
     /// 点赞数量
     pub like_count: i32,
@@ -168,7 +168,7 @@ pub struct Statistics {
 }
 
 /// 创建/更新免审词条请求体（entity）
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct EntityInput {
     /// 词条名（最大 1 个）
     #[serde(default)]
@@ -194,7 +194,7 @@ pub struct EntityInput {
 }
 
 /// 创建/更新草稿请求体（entity）
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct DraftEntityInput {
     /// 词条 ID（可选）
     #[serde(default)]
@@ -223,7 +223,7 @@ pub struct DraftEntityInput {
 }
 
 /// 更新草稿请求体（entity）
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct DraftUpdateEntityInput {
     /// 词条 ID（可选）
     #[serde(default)]
@@ -249,7 +249,7 @@ pub struct DraftUpdateEntityInput {
 }
 
 /// 免审词条实体（entity）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Entity {
     /// 词条 ID
     pub id: Option<String>,
@@ -282,7 +282,7 @@ pub struct Entity {
 }
 
 /// 草稿信息（draft）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Draft {
     /// 草稿 ID
     pub draft_id: String,
@@ -291,14 +291,14 @@ pub struct Draft {
 }
 
 /// 分类国际化名称（i18n_cls_name）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct I18nClsName {
     pub language: Language,
     pub name: String,
 }
 
 /// 分类（classification）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Classification {
     /// 二级分类 ID
     pub id: String,
@@ -311,7 +311,7 @@ pub struct Classification {
 }
 
 /// 词库（repo）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Repo {
     /// 词库 id
     pub id: String,
@@ -322,3 +322,241 @@ pub struct Repo {
 /// 兼容导出：保留历史类型名（不建议在新代码中使用）
 pub type LingoEntity = Entity;
 pub type LingoDraft = Draft;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn test_roundtrip<T: Serialize + for<'de> Deserialize<'de> + PartialEq + std::fmt::Debug>(
+        original: &T,
+    ) {
+        let json = serde_json::to_string(original).expect("序列化失败");
+        let deserialized: T = serde_json::from_str(&json).expect("反序列化失败");
+        assert_eq!(original, &deserialized, "roundtrip 后数据不一致");
+    }
+
+    #[test]
+    fn test_user_id_type_serialization() {
+        test_roundtrip(&UserIdType::OpenId);
+        test_roundtrip(&UserIdType::UnionId);
+        test_roundtrip(&UserIdType::UserId);
+    }
+
+    #[test]
+    fn test_language_serialization() {
+        test_roundtrip(&Language::ZhCn);
+        test_roundtrip(&Language::EnUs);
+        test_roundtrip(&Language::JaJp);
+    }
+
+    #[test]
+    fn test_display_status_serialization() {
+        let status = DisplayStatus {
+            allow_highlight: true,
+            allow_search: false,
+        };
+        test_roundtrip(&status);
+    }
+
+    #[test]
+    fn test_term_serialization() {
+        let term = Term {
+            key: "测试词条".to_string(),
+            display_status: DisplayStatus {
+                allow_highlight: true,
+                allow_search: true,
+            },
+        };
+        test_roundtrip(&term);
+    }
+
+    #[test]
+    fn test_outer_info_serialization() {
+        let info = OuterInfo {
+            provider: "provider1".to_string(),
+            outer_id: "outer123".to_string(),
+        };
+        test_roundtrip(&info);
+    }
+
+    #[test]
+    fn test_related_user_serialization() {
+        let user = RelatedUser {
+            id: "user123".to_string(),
+            title: Some("负责人".to_string()),
+        };
+        test_roundtrip(&user);
+    }
+
+    #[test]
+    fn test_related_chat_serialization() {
+        let chat = RelatedChat {
+            id: "chat456".to_string(),
+        };
+        test_roundtrip(&chat);
+    }
+
+    #[test]
+    fn test_related_doc_serialization() {
+        let doc = RelatedDoc {
+            title: Some("文档标题".to_string()),
+            url: Some("https://doc.example.com".to_string()),
+        };
+        test_roundtrip(&doc);
+    }
+
+    #[test]
+    fn test_related_oncall_serialization() {
+        let oncall = RelatedOncall {
+            id: "oncall789".to_string(),
+        };
+        test_roundtrip(&oncall);
+    }
+
+    #[test]
+    fn test_related_link_serialization() {
+        let link = RelatedLink {
+            title: Some("链接标题".to_string()),
+            url: Some("https://example.com".to_string()),
+        };
+        test_roundtrip(&link);
+    }
+
+    #[test]
+    fn test_abbreviation_serialization() {
+        let abbr = Abbreviation {
+            id: Some("abbr123".to_string()),
+        };
+        test_roundtrip(&abbr);
+    }
+
+    #[test]
+    fn test_classification_ref_serialization() {
+        let class = ClassificationRef {
+            id: "class456".to_string(),
+            father_id: Some("father123".to_string()),
+        };
+        test_roundtrip(&class);
+    }
+
+    #[test]
+    fn test_baike_image_serialization() {
+        let img = BaikeImage {
+            token: "img_token_123".to_string(),
+        };
+        test_roundtrip(&img);
+    }
+
+    #[test]
+    fn test_related_meta_serialization() {
+        let meta = RelatedMeta {
+            users: Some(vec![RelatedUser {
+                id: "user1".to_string(),
+                title: None,
+            }]),
+            chats: None,
+            docs: None,
+            oncalls: None,
+            links: None,
+            abbreviations: None,
+            classifications: None,
+            images: None,
+        };
+        test_roundtrip(&meta);
+    }
+
+    #[test]
+    fn test_i18n_entry_desc_serialization() {
+        let desc = I18nEntryDesc {
+            language: Language::ZhCn,
+            description: Some("描述".to_string()),
+            rich_text: Some("<p>富文本</p>".to_string()),
+        };
+        test_roundtrip(&desc);
+    }
+
+    #[test]
+    fn test_statistics_serialization() {
+        let stats = Statistics {
+            like_count: 100,
+            dislike_count: 5,
+        };
+        test_roundtrip(&stats);
+    }
+
+    #[test]
+    fn test_entity_input_serialization() {
+        let input = EntityInput {
+            main_keys: vec![Term {
+                key: "主词条".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
+            }],
+            aliases: None,
+            description: Some("词条描述".to_string()),
+            related_meta: None,
+            outer_info: None,
+            rich_text: None,
+            i18n_descs: None,
+        };
+        test_roundtrip(&input);
+    }
+
+    #[test]
+    fn test_entity_serialization() {
+        let entity = Entity {
+            id: Some("entity123".to_string()),
+            main_keys: vec![Term {
+                key: "词条名".to_string(),
+                display_status: DisplayStatus {
+                    allow_highlight: true,
+                    allow_search: true,
+                },
+            }],
+            aliases: None,
+            description: Some("描述".to_string()),
+            creator: Some("creator1".to_string()),
+            create_time: Some("1234567890".to_string()),
+            updater: None,
+            update_time: None,
+            related_meta: None,
+            statistics: None,
+            outer_info: None,
+            rich_text: None,
+            source: Some(1),
+            i18n_descs: None,
+        };
+        test_roundtrip(&entity);
+    }
+
+    #[test]
+    fn test_classification_serialization() {
+        let class = Classification {
+            id: "class123".to_string(),
+            name: Some("分类名称".to_string()),
+            father_id: Some("father123".to_string()),
+            i18n_names: None,
+        };
+        test_roundtrip(&class);
+    }
+
+    #[test]
+    fn test_repo_serialization() {
+        let repo = Repo {
+            id: "repo123".to_string(),
+            name: "词库名称".to_string(),
+        };
+        test_roundtrip(&repo);
+    }
+
+    #[test]
+    fn test_i18n_cls_name_serialization() {
+        let name = I18nClsName {
+            language: Language::EnUs,
+            name: "English Name".to_string(),
+        };
+        test_roundtrip(&name);
+    }
+}

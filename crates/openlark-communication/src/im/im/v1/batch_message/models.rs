@@ -4,14 +4,14 @@ use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 批量消息推送与阅读情况
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchMessageReadUser {
     pub read_count: String,
     pub total_count: String,
 }
 
 /// 查询批量消息推送和阅读人数响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchMessageReadUserResponse {
     pub read_user: BatchMessageReadUser,
 }

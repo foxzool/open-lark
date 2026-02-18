@@ -4,7 +4,7 @@ use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 单个用户失败原因
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FailedUserReason {
     pub error_code: i32,
     pub error_message: String,
@@ -12,7 +12,7 @@ pub struct FailedUserReason {
 }
 
 /// 更新按钮响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ChatButtonUpdateResponse {
     #[serde(default)]
     pub failed_user_reasons: Option<Vec<FailedUserReason>>,

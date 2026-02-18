@@ -137,3 +137,100 @@ impl OidcAccessTokenBuilder {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_oidc_access_token_builder_new() {
+        let config = create_test_config();
+        let builder = OidcAccessTokenBuilder::new(config);
+        assert!(builder.code.is_empty());
+        assert!(builder.code_verifier.is_none());
+        assert!(builder.redirect_uri.is_none());
+        assert!(builder.client_id.is_none());
+        assert!(builder.client_secret.is_none());
+        assert_eq!(builder.grant_type, Some("authorization_code".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_access_token_builder_chain() {
+        let config = create_test_config();
+        let builder = OidcAccessTokenBuilder::new(config)
+            .code("my_code")
+            .code_verifier("my_verifier")
+            .redirect_uri("https://example.com/callback")
+            .client_id("my_client_id")
+            .client_secret("my_client_secret")
+            .grant_type("authorization_code");
+        assert_eq!(builder.code, "my_code");
+        assert_eq!(builder.code_verifier, Some("my_verifier".to_string()));
+        assert_eq!(builder.redirect_uri, Some("https://example.com/callback".to_string()));
+        assert_eq!(builder.client_id, Some("my_client_id".to_string()));
+        assert_eq!(builder.client_secret, Some("my_client_secret".to_string()));
+        assert_eq!(builder.grant_type, Some("authorization_code".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_access_token_builder_code_chained() {
+        let config = create_test_config();
+        let builder = OidcAccessTokenBuilder::new(config)
+            .code("chained_code");
+        assert_eq!(builder.code, "chained_code");
+    }
+
+    #[test]
+    fn test_oidc_access_token_builder_code_verifier_chained() {
+        let config = create_test_config();
+        let builder = OidcAccessTokenBuilder::new(config)
+            .code_verifier("chained_verifier");
+        assert_eq!(builder.code_verifier, Some("chained_verifier".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_access_token_builder_redirect_uri_chained() {
+        let config = create_test_config();
+        let builder = OidcAccessTokenBuilder::new(config)
+            .redirect_uri("https://redirect.com");
+        assert_eq!(builder.redirect_uri, Some("https://redirect.com".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_access_token_builder_client_id_chained() {
+        let config = create_test_config();
+        let builder = OidcAccessTokenBuilder::new(config)
+            .client_id("chained_client_id");
+        assert_eq!(builder.client_id, Some("chained_client_id".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_access_token_builder_client_secret_chained() {
+        let config = create_test_config();
+        let builder = OidcAccessTokenBuilder::new(config)
+            .client_secret("chained_client_secret");
+        assert_eq!(builder.client_secret, Some("chained_client_secret".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_access_token_response_data_deserialization() {
+        let json = r#"{"data":{"user_access_token":"token123","expires_in":7200,"refresh_token":"refresh456"}}"#;
+        let response: OidcAccessTokenResponseData = serde_json::from_str(json).unwrap();
+        assert_eq!(response.data.user_access_token, "token123");
+        assert_eq!(response.data.expires_in, 7200);
+        assert_eq!(response.data.refresh_token, Some("refresh456".to_string()));
+    }
+
+    #[test]
+    fn test_oidc_access_token_response_data_format() {
+        assert_eq!(OidcAccessTokenResponseData::data_format(), ResponseFormat::Data);
+    }
+}

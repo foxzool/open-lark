@@ -6,7 +6,7 @@ use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 国际化内容
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct I18nContent {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
@@ -17,7 +17,7 @@ pub struct I18nContent {
 }
 
 /// 人员类型枚举值
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct EmployeeTypeEnum {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enum_id: Option<String>,
@@ -36,7 +36,7 @@ pub struct EmployeeTypeEnum {
 }
 
 /// 创建/更新人员类型响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct EmployeeTypeEnumResponse {
     pub employee_type_enum: EmployeeTypeEnum,
 }
@@ -48,7 +48,7 @@ impl ApiResponseTrait for EmployeeTypeEnumResponse {
 }
 
 /// 查询人员类型响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListEmployeeTypeEnumsResponse {
     #[serde(default)]
     pub items: Vec<EmployeeTypeEnum>,

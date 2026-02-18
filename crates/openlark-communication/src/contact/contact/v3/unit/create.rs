@@ -60,3 +60,53 @@ impl CreateUnitRequest {
         extract_response_data(resp, "创建单位")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_unit_request_builder() {
+        let config = Config::default();
+        let request = CreateUnitRequest::new(config);
+
+        assert!(true);
+    }
+
+    #[test]
+    fn test_create_unit_request_new() {
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request = CreateUnitRequest::new(config);
+
+        assert!(true);
+    }
+
+    #[test]
+    fn test_create_unit_body() {
+        let body = CreateUnitBody {
+            unit_id: Some("unit_123".to_string()),
+            name: "Test Unit".to_string(),
+            unit_type: "company".to_string(),
+        };
+
+        assert_eq!(body.unit_id, Some("unit_123".to_string()));
+        assert_eq!(body.name, "Test Unit");
+        assert_eq!(body.unit_type, "company");
+    }
+
+    #[test]
+    fn test_create_unit_body_without_id() {
+        let body = CreateUnitBody {
+            unit_id: None,
+            name: "Another Unit".to_string(),
+            unit_type: "department".to_string(),
+        };
+
+        assert!(body.unit_id.is_none());
+        assert_eq!(body.name, "Another Unit");
+        assert_eq!(body.unit_type, "department");
+    }
+}

@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// 绑定/解绑标签请求体
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BizEntityTagRelationBody {
     pub tag_biz_type: String,
     pub biz_entity_id: String,

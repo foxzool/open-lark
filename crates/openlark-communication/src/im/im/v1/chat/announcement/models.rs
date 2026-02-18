@@ -4,7 +4,7 @@ use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 获取群公告信息响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetChatAnnouncementResponse {
     pub content: String,
     pub revision: String,
@@ -23,7 +23,7 @@ impl ApiResponseTrait for GetChatAnnouncementResponse {
 }
 
 /// 更新群公告信息请求体
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchChatAnnouncementBody {
     pub revision: String,
     pub requests: Vec<String>,

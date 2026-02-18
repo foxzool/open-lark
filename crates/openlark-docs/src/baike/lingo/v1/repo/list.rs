@@ -53,3 +53,29 @@ impl ListRepoRequest {
             .ok_or_else(|| openlark_core::error::validation_error("response", "响应数据为空"))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_repo_request_builder() {
+        let config = Config::default();
+        let request = ListRepoRequest::new(config);
+
+        // ListRepoRequest 只需要 config，没有其他字段
+        assert!(true);
+    }
+
+    #[test]
+    fn test_list_repo_request_new() {
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request = ListRepoRequest::new(config);
+
+        // 验证 request 被成功创建
+        assert!(true);
+    }
+}

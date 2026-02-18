@@ -105,3 +105,51 @@ impl GetCalendarRequest {
         extract_response_data(response, "查询日历信息")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_calendar_request_builder() {
+        let config = Config::default();
+        let request = GetCalendarRequest::new(config)
+            .calendar_id("cal_123")
+            .query_param("user_id_type", "open_id");
+
+        assert_eq!(request.calendar_id, "cal_123");
+        assert_eq!(request.query_params.len(), 1);
+        assert_eq!(request.query_params[0], ("user_id_type".to_string(), "open_id".to_string()));
+    }
+
+    #[test]
+    fn test_get_calendar_request_minimal() {
+        let config = Config::default();
+        let request = GetCalendarRequest::new(config);
+
+        assert!(request.calendar_id.is_empty());
+        assert!(request.query_params.is_empty());
+    }
+
+    #[test]
+    fn test_get_calendar_request_only_id() {
+        let config = Config::default();
+        let request = GetCalendarRequest::new(config)
+            .calendar_id("cal_abc");
+
+        assert_eq!(request.calendar_id, "cal_abc");
+        assert!(request.query_params.is_empty());
+    }
+
+    #[test]
+    fn test_get_calendar_request_multiple_params() {
+        let config = Config::default();
+        let request = GetCalendarRequest::new(config)
+            .calendar_id("cal_xyz")
+            .query_param("key1", "value1")
+            .query_param("key2", "value2");
+
+        assert_eq!(request.calendar_id, "cal_xyz");
+        assert_eq!(request.query_params.len(), 2);
+    }
+}

@@ -67,7 +67,7 @@ pub enum DocumentStatus {
 }
 
 /// 用户信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UserInfo {
     /// 用户ID
     pub user_id: String,
@@ -82,7 +82,7 @@ pub struct UserInfo {
 }
 
 /// 部门信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DepartmentInfo {
     /// 部门ID
     pub department_id: String,
@@ -91,7 +91,7 @@ pub struct DepartmentInfo {
 }
 
 /// 文件信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FileInfo {
     /// 文件ID
     pub file_id: String,
@@ -110,7 +110,7 @@ pub struct FileInfo {
 }
 
 /// 权限信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Permission {
     /// 权限类型
     pub permission_type: PermissionType,
@@ -143,7 +143,7 @@ pub enum PermissionType {
 }
 
 /// 分享信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ShareInfo {
     /// 分享链接
     pub share_url: String,
@@ -162,7 +162,7 @@ pub struct ShareInfo {
 }
 
 /// 版本信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct VersionInfo {
     /// 版本号
     pub version: i32,
@@ -192,7 +192,7 @@ pub struct SearchResult {
 }
 
 /// 文档统计信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DocumentStats {
     /// 浏览次数
     pub view_count: u64,
@@ -256,7 +256,7 @@ pub enum OperationType {
 }
 
 /// 文档导入/导出任务
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ImportExportTask {
     /// 任务ID
     pub task_id: String,
@@ -305,8 +305,8 @@ pub enum TaskStatus {
 }
 
 /// 通用响应结构
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CommonResponse<T> {
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CommonResponse<T: PartialEq> {
     /// 是否成功
     pub success: bool,
     /// 响应数据
@@ -318,7 +318,7 @@ pub struct CommonResponse<T> {
 }
 
 /// 错误信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ErrorInfo {
     /// 错误代码
     pub code: i32,
@@ -329,7 +329,7 @@ pub struct ErrorInfo {
 }
 
 /// 分页请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PageRequest {
     /// 页码（从1开始）
     pub page: u32,
@@ -352,8 +352,8 @@ pub enum SortDirection {
 }
 
 /// 分页响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PageResponse<T> {
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct PageResponse<T: PartialEq> {
     /// 数据列表
     pub items: Vec<T>,
     /// 总条数
@@ -381,3 +381,227 @@ impl Default for PageRequest {
 
 // Docs和Docx项目的特定模型
 // 注意：这些模型的定义在各自的模块中，这里不重复导入
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn test_roundtrip<T: Serialize + for<'de> Deserialize<'de> + PartialEq + std::fmt::Debug>(
+        original: &T,
+    ) {
+        let json = serde_json::to_string(original).expect("序列化失败");
+        let deserialized: T = serde_json::from_str(&json).expect("反序列化失败");
+        assert_eq!(original, &deserialized, "roundtrip 后数据不一致");
+    }
+
+    #[test]
+    fn test_document_type_serialization() {
+        test_roundtrip(&DocumentType::Doc);
+        test_roundtrip(&DocumentType::Sheet);
+        test_roundtrip(&DocumentType::Other("custom".to_string()));
+    }
+
+    #[test]
+    fn test_document_status_serialization() {
+        test_roundtrip(&DocumentStatus::Normal);
+        test_roundtrip(&DocumentStatus::Archived);
+    }
+
+    #[test]
+    fn test_permission_type_serialization() {
+        test_roundtrip(&PermissionType::Owner);
+        test_roundtrip(&PermissionType::Viewer);
+    }
+
+    #[test]
+    fn test_operation_type_serialization() {
+        test_roundtrip(&OperationType::Create);
+        test_roundtrip(&OperationType::Other("custom_op".to_string()));
+    }
+
+    #[test]
+    fn test_task_type_serialization() {
+        test_roundtrip(&TaskType::Import);
+        test_roundtrip(&TaskType::Export);
+    }
+
+    #[test]
+    fn test_task_status_serialization() {
+        test_roundtrip(&TaskStatus::Pending);
+        test_roundtrip(&TaskStatus::Completed);
+    }
+
+    #[test]
+    fn test_sort_direction_serialization() {
+        test_roundtrip(&SortDirection::Asc);
+        test_roundtrip(&SortDirection::Desc);
+    }
+
+    #[test]
+    fn test_user_info_serialization() {
+        let user = UserInfo {
+            user_id: "user123".to_string(),
+            name: "测试用户".to_string(),
+            email: Some("test@example.com".to_string()),
+            avatar_url: None,
+            department: Some(DepartmentInfo {
+                department_id: "dept456".to_string(),
+                name: "技术部".to_string(),
+            }),
+        };
+        test_roundtrip(&user);
+    }
+
+    #[test]
+    fn test_department_info_serialization() {
+        let dept = DepartmentInfo {
+            department_id: "dept789".to_string(),
+            name: "产品部".to_string(),
+        };
+        test_roundtrip(&dept);
+    }
+
+    #[test]
+    fn test_file_info_serialization() {
+        let file = FileInfo {
+            file_id: "file123".to_string(),
+            name: "test.pdf".to_string(),
+            size: 1024000,
+            mime_type: "application/pdf".to_string(),
+            url: "https://example.com/file".to_string(),
+            download_token: Some("token123".to_string()),
+            thumbnail_url: None,
+        };
+        test_roundtrip(&file);
+    }
+
+    #[test]
+    fn test_permission_serialization() {
+        let perm = Permission {
+            permission_type: PermissionType::Editor,
+            can_read: true,
+            can_write: true,
+            can_delete: false,
+            can_share: true,
+            expire_time: None,
+        };
+        test_roundtrip(&perm);
+    }
+
+    #[test]
+    fn test_share_info_serialization() {
+        let share = ShareInfo {
+            share_url: "https://share.example.com/doc".to_string(),
+            share_token: "token456".to_string(),
+            permission_type: PermissionType::Viewer,
+            need_password: false,
+            expire_time: None,
+            visit_limit: Some(100),
+            visit_count: 10,
+        };
+        test_roundtrip(&share);
+    }
+
+    #[test]
+    fn test_version_info_serialization() {
+        let version = VersionInfo {
+            version: 1,
+            version_name: "v1.0".to_string(),
+            create_time: Utc::now(),
+            creator: UserInfo {
+                user_id: "user001".to_string(),
+                name: "张三".to_string(),
+                email: None,
+                avatar_url: None,
+                department: None,
+            },
+            description: Some("初始版本".to_string()),
+            is_current: true,
+            size: 2048,
+        };
+        test_roundtrip(&version);
+    }
+
+    #[test]
+    fn test_document_stats_serialization() {
+        let stats = DocumentStats {
+            view_count: 100,
+            edit_count: 20,
+            comment_count: 5,
+            share_count: 10,
+            download_count: 3,
+            last_stats_time: Utc::now(),
+        };
+        test_roundtrip(&stats);
+    }
+
+    #[test]
+    fn test_import_export_task_serialization() {
+        let task = ImportExportTask {
+            task_id: "task789".to_string(),
+            task_type: TaskType::Convert,
+            status: TaskStatus::Processing,
+            progress: 50,
+            start_time: Utc::now(),
+            end_time: None,
+            error_message: None,
+            result_url: Some("https://result.example.com".to_string()),
+        };
+        test_roundtrip(&task);
+    }
+
+    #[test]
+    fn test_error_info_serialization() {
+        let mut details = HashMap::new();
+        details.insert("field".to_string(), serde_json::json!("value"));
+
+        let error = ErrorInfo {
+            code: 404,
+            message: "Not Found".to_string(),
+            details: Some(details),
+        };
+        test_roundtrip(&error);
+    }
+
+    #[test]
+    fn test_page_request_serialization() {
+        let req = PageRequest {
+            page: 1,
+            page_size: 20,
+            sort_field: Some("create_time".to_string()),
+            sort_direction: Some(SortDirection::Desc),
+        };
+        test_roundtrip(&req);
+    }
+
+    #[test]
+    fn test_page_request_default() {
+        let default_req = PageRequest::default();
+        assert_eq!(default_req.page, 1);
+        assert_eq!(default_req.page_size, 20);
+    }
+
+    #[test]
+    fn test_common_response_serialization() {
+        let response: CommonResponse<String> = CommonResponse {
+            success: true,
+            data: Some("test data".to_string()),
+            error: None,
+            request_id: "req123".to_string(),
+        };
+        test_roundtrip(&response);
+    }
+
+    #[test]
+    fn test_page_response_serialization() {
+        let response: PageResponse<String> = PageResponse {
+            items: vec!["item1".to_string(), "item2".to_string()],
+            total: 100,
+            page: 1,
+            page_size: 20,
+            total_page: 5,
+            has_next: true,
+        };
+        test_roundtrip(&response);
+    }
+}

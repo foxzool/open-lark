@@ -6,7 +6,7 @@ use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 角色成员信息（字段随文档演进，未显式建模字段使用 `extra` 透传）
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FunctionalRoleMember {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
@@ -19,7 +19,7 @@ pub struct FunctionalRoleMember {
 }
 
 /// 查询角色下某个成员的管理范围响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetMemberResponse {
     pub member: FunctionalRoleMember,
 }
@@ -31,7 +31,7 @@ impl ApiResponseTrait for GetMemberResponse {
 }
 
 /// 查询角色下的所有成员信息响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListMembersResponse {
     #[serde(default)]
     pub members: Vec<FunctionalRoleMember>,
@@ -50,7 +50,7 @@ impl ApiResponseTrait for ListMembersResponse {
 }
 
 /// 批量操作结果项
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct MemberOperationResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
@@ -61,7 +61,7 @@ pub struct MemberOperationResult {
 }
 
 /// 批量添加角色成员响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchCreateMembersResponse {
     #[serde(default)]
     pub results: Vec<MemberOperationResult>,
@@ -76,7 +76,7 @@ impl ApiResponseTrait for BatchCreateMembersResponse {
 }
 
 /// 批量设置角色成员管理范围响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchMembersScopesResponse {
     #[serde(default)]
     pub results: Vec<MemberOperationResult>,
@@ -91,7 +91,7 @@ impl ApiResponseTrait for PatchMembersScopesResponse {
 }
 
 /// 删除角色下的成员响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchDeleteMembersResponse {
     #[serde(default)]
     pub result: Vec<MemberOperationResult>,

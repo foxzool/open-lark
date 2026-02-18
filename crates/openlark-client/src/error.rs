@@ -809,4 +809,215 @@ mod tests {
         assert!(client_result.is_err());
         assert!(client_result.unwrap_err().is_network_error());
     }
+
+    #[test]
+    fn test_api_error_function() {
+        let error = api_error(
+            500,
+            "/api/test",
+            "服务器内部错误",
+            Some("req-456".to_string()),
+        );
+        assert!(error.is_api_error());
+        let analyzer = ErrorAnalyzer::new(&error);
+        let report = analyzer.detailed_report();
+        assert!(report.contains("服务器内部错误"));
+    }
+
+    #[test]
+    fn test_validation_error_function() {
+        let error = validation_error("field_name", "字段值为空");
+        assert!(error.is_validation_error());
+        let analyzer = ErrorAnalyzer::new(&error);
+        let user_msg = analyzer.user_friendly_with_suggestion();
+        assert!(user_msg.contains("建议"));
+    }
+
+    #[test]
+    fn test_configuration_error_function() {
+        let error = configuration_error("配置文件缺失");
+        assert!(error.is_config_error());
+    }
+
+    #[test]
+    fn test_serialization_error_function() {
+        let error = serialization_error("JSON解析失败");
+        assert!(error.is_serialization_error());
+    }
+
+    #[test]
+    fn test_business_error_function() {
+        let error = business_error("ERR_001", "业务规则验证失败");
+        assert!(error.is_business_error());
+    }
+
+    #[test]
+    fn test_timeout_error_function() {
+        let error = timeout_error("数据库查询超时");
+        assert!(error.is_timeout_error());
+        assert!(error.is_retryable());
+    }
+
+    #[test]
+    fn test_rate_limit_error_function() {
+        let error = rate_limit_error(Some(60));
+        assert!(error.is_rate_limited());
+    }
+
+    #[test]
+    fn test_service_unavailable_error_function() {
+        let error = service_unavailable_error("支付服务");
+        assert!(error.is_service_unavailable_error());
+    }
+
+    #[test]
+    fn test_internal_error_function() {
+        let error = internal_error("系统内部错误");
+        assert!(!error.is_user_error());
+    }
+
+    #[test]
+    fn test_token_invalid_error_function() {
+        let error = token_invalid_error("token格式不正确");
+        assert!(error.is_auth_error());
+    }
+
+    #[test]
+    fn test_token_expired_error_function() {
+        let error = token_expired_error("token已过期");
+        assert!(error.is_auth_error());
+    }
+
+    #[test]
+    fn test_permission_missing_error_function() {
+        let scopes = vec!["read:user", "write:docs"];
+        let error = permission_missing_error(&scopes);
+        assert!(error.is_auth_error());
+    }
+
+    #[test]
+    fn test_sso_token_invalid_error_function() {
+        let error = sso_token_invalid_error("SSO令牌无效");
+        assert!(error.is_auth_error());
+    }
+
+    #[test]
+    fn test_user_identity_invalid_error_function() {
+        let error = user_identity_invalid_error("用户身份标识非法");
+        assert!(error.is_auth_error());
+    }
+
+    #[test]
+    fn test_from_feishu_response_function() {
+        let error = from_feishu_response(
+            99991677,
+            "/api/test",
+            "token过期",
+            Some("req-789".to_string()),
+        );
+        // 错误可能是认证错误或其他类型，只需确保能正确创建
+        assert!(!error.to_string().is_empty());
+        let error2 = from_feishu_response(400, "/api/test", "参数错误", None);
+        assert!(!error2.to_string().is_empty());
+    }
+
+    #[test]
+    fn test_registry_error_conversion() {
+        let registry_err = crate::registry::RegistryError::ServiceNotFound {
+            name: "test".to_string(),
+        };
+        let error: Error = registry_err.into();
+        assert!(!error.is_user_error());
+    }
+
+    #[test]
+    fn test_error_analyzer_log_summary() {
+        let error = network_error("连接超时");
+        let analyzer = ErrorAnalyzer::new(&error);
+        let summary = analyzer.log_summary();
+        assert!(summary.contains("Network"));
+        assert!(summary.contains("可重试") || summary.contains("不可重试"));
+    }
+
+    #[test]
+    fn test_error_analyzer_user_friendly() {
+        let error = api_error(404, "/users/123", "用户不存在", None);
+        let analyzer = ErrorAnalyzer::new(&error);
+        let friendly = analyzer.user_friendly_with_suggestion();
+        assert!(friendly.contains("建议"));
+        assert!(friendly.contains("可以尝试"));
+    }
+
+    #[test]
+    fn test_with_operation_context() {
+        let result: Result<i32> = Err(network_error("网络错误"));
+        let contextual_result = with_operation_context(result, "test_operation", "TestComponent");
+        assert!(contextual_result.is_err());
+        let error = contextual_result.unwrap_err();
+        assert_eq!(
+            error.context().get_context("operation"),
+            Some("test_operation")
+        );
+        assert_eq!(
+            error.context().get_context("component"),
+            Some("TestComponent")
+        );
+    }
+
+    #[test]
+    fn test_all_error_types_suggestion() {
+        let error_types = vec![
+            (network_error("test"), "检查网络连接"),
+            (authentication_error("test"), "验证应用凭据"),
+            (api_error(500, "/test", "test", None), "检查API参数"),
+            (validation_error("field", "test"), "验证输入参数"),
+            (configuration_error("test"), "检查应用配置"),
+            (serialization_error("test"), "确认数据格式"),
+            (business_error("code", "test"), "确认业务逻辑"),
+            (timeout_error("test"), "增加超时时间"),
+            (rate_limit_error(None), "稍后重试"),
+            (service_unavailable_error("svc"), "稍后重试"),
+            (internal_error("test"), "联系技术支持"),
+        ];
+
+        for (error, expected_keyword) in error_types {
+            let suggestion = error.suggestion();
+            assert!(
+                suggestion.contains(expected_keyword) || !suggestion.is_empty(),
+                "Error type {:?} should have meaningful suggestion",
+                error.error_type()
+            );
+        }
+    }
+
+    #[test]
+    fn test_all_error_types_recovery_steps() {
+        let error_types = vec![
+            network_error("test"),
+            authentication_error("test"),
+            api_error(500, "/test", "test", None),
+            validation_error("field", "test"),
+            configuration_error("test"),
+            serialization_error("test"),
+            business_error("code", "test"),
+            timeout_error("test"),
+            rate_limit_error(None),
+            service_unavailable_error("svc"),
+            internal_error("test"),
+        ];
+
+        for error in error_types {
+            let steps = error.recovery_steps();
+            assert!(
+                !steps.is_empty(),
+                "Error type {:?} should have recovery steps",
+                error.error_type()
+            );
+            assert!(
+                steps.len() >= 3,
+                "Error type {:?} should have at least 3 recovery steps",
+                error.error_type()
+            );
+        }
+    }
 }

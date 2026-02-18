@@ -6,7 +6,7 @@ use openlark_core::api::{ApiResponseTrait, ResponseFormat};
 use serde::{Deserialize, Serialize};
 
 /// 用户组成员信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GroupMember {
     pub member_id: String,
     pub member_type: String,
@@ -16,7 +16,7 @@ pub struct GroupMember {
 }
 
 /// 查询用户组成员列表响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SimpleListGroupMembersResponse {
     #[serde(default)]
     pub memberlist: Vec<GroupMember>,
@@ -33,7 +33,7 @@ impl ApiResponseTrait for SimpleListGroupMembersResponse {
 }
 
 /// 批量添加用户组成员结果项
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchAddResult {
     pub member_id: String,
     pub code: i32,
@@ -42,7 +42,7 @@ pub struct BatchAddResult {
 }
 
 /// 批量添加用户组成员响应 data
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchAddGroupMembersResponse {
     #[serde(default)]
     pub results: Vec<BatchAddResult>,
