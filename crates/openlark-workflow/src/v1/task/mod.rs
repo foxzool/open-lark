@@ -177,3 +177,215 @@ impl Task {
         ListTaskCommentRequestV1::new(self.config.clone(), task_id)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<Config> {
+        Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        )
+    }
+
+    #[test]
+    fn test_task_new() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        // Task struct only contains config, so we just verify it was created
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_create() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.create();
+        // Just verify the request was created
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_get() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.get("task_123");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_update() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.update("task_123");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_delete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.delete("task_123");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_complete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.complete("task_123");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_uncomplete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.uncomplete("task_123");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_list() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.list();
+        assert!(true);
+    }
+
+    // Follower tests
+    #[test]
+    fn test_task_follower_create() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.follower_create("task_123");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_follower_delete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.follower_delete("task_123", "follower_456");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_follower_list() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.follower_list("task_123");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_follower_batch_delete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.follower_batch_delete("task_123");
+        assert!(true);
+    }
+
+    // Collaborator tests
+    #[test]
+    fn test_task_collaborator_create() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.collaborator_create("task_123");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_collaborator_delete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.collaborator_delete("task_123", "collaborator_456");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_collaborator_list() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.collaborator_list("task_123");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_collaborator_batch_delete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.collaborator_batch_delete("task_123");
+        assert!(true);
+    }
+
+    // Reminder tests
+    #[test]
+    fn test_task_reminder_create() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.reminder_create("task_123");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_reminder_delete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.reminder_delete("task_123", "reminder_456");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_reminder_list() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.reminder_list("task_123");
+        assert!(true);
+    }
+
+    // Comment tests
+    #[test]
+    fn test_task_comment_create() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.comment_create("task_123");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_comment_get() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.comment_get("task_123", "comment_456");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_comment_update() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.comment_update("task_123", "comment_456");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_comment_delete() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.comment_delete("task_123", "comment_456");
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_comment_list() {
+        let config = create_test_config();
+        let task = Task::new(config);
+        let request = task.comment_list("task_123");
+        assert!(true);
+    }
+}

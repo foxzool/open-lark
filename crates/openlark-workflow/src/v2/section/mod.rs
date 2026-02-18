@@ -74,3 +74,67 @@ pub use models::{
     CreateSectionBody, CreateSectionResponse, DeleteSectionResponse, GetSectionResponse,
     ListSectionsResponse, SectionItem, UpdateSectionBody, UpdateSectionResponse,
 };
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<Config> {
+        Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        )
+    }
+
+    #[test]
+    fn test_section_new() {
+        let config = create_test_config();
+        let section = Section::new(config);
+        assert!(section.tasklist_guid.is_empty());
+    }
+
+    #[test]
+    fn test_section_with_tasklist() {
+        let config = create_test_config();
+        let section = Section::new(config).with_tasklist("tasklist_123");
+        assert_eq!(section.tasklist_guid, "tasklist_123");
+    }
+
+    #[test]
+    fn test_section_create() {
+        let config = create_test_config();
+        let section = Section::new(config).with_tasklist("tasklist_123");
+        let _request = section.create();
+    }
+
+    #[test]
+    fn test_section_get() {
+        let config = create_test_config();
+        let section = Section::new(config).with_tasklist("tasklist_123");
+        let _request = section.get("section_456");
+    }
+
+    #[test]
+    fn test_section_update() {
+        let config = create_test_config();
+        let section = Section::new(config).with_tasklist("tasklist_123");
+        let _request = section.update("section_456");
+    }
+
+    #[test]
+    fn test_section_delete() {
+        let config = create_test_config();
+        let section = Section::new(config).with_tasklist("tasklist_123");
+        let _request = section.delete("section_456");
+    }
+
+    #[test]
+    fn test_section_list() {
+        let config = create_test_config();
+        let section = Section::new(config).with_tasklist("tasklist_123");
+        let _request = section.list();
+    }
+}

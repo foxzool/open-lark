@@ -94,3 +94,87 @@ pub use models::{
     ListTasklistsResponse, TasklistIcon, TasklistItem, UpdateTasklistBody, UpdateTasklistResponse,
 };
 pub use remove_members::{RemoveTasklistMembersBody, RemoveTasklistMembersResponse};
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<Config> {
+        Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        )
+    }
+
+    #[test]
+    fn test_tasklist_new() {
+        let config = create_test_config();
+        let _tasklist = Tasklist::new(config);
+    }
+
+    #[test]
+    fn test_tasklist_create() {
+        let config = create_test_config();
+        let tasklist = Tasklist::new(config);
+        let _request = tasklist.create();
+    }
+
+    #[test]
+    fn test_tasklist_get() {
+        let config = create_test_config();
+        let tasklist = Tasklist::new(config);
+        let _request = tasklist.get("tasklist_guid_123");
+    }
+
+    #[test]
+    fn test_tasklist_update() {
+        let config = create_test_config();
+        let tasklist = Tasklist::new(config);
+        let _request = tasklist.update("tasklist_guid_123");
+    }
+
+    #[test]
+    fn test_tasklist_delete() {
+        let config = create_test_config();
+        let tasklist = Tasklist::new(config);
+        let _request = tasklist.delete("tasklist_guid_123");
+    }
+
+    #[test]
+    fn test_tasklist_list() {
+        let config = create_test_config();
+        let tasklist = Tasklist::new(config);
+        let _request = tasklist.list();
+    }
+
+    #[test]
+    fn test_tasklist_activity_subscription() {
+        let config = create_test_config();
+        let tasklist = Tasklist::new(config);
+        let _resource = tasklist.activity_subscription("tasklist_guid_123");
+    }
+
+    #[test]
+    fn test_tasklist_tasks() {
+        let config = create_test_config();
+        let tasklist = Tasklist::new(config);
+        let _request = tasklist.tasks("tasklist_guid_123");
+    }
+
+    #[test]
+    fn test_tasklist_add_members() {
+        let config = create_test_config();
+        let tasklist = Tasklist::new(config);
+        let _request = tasklist.add_members("tasklist_guid_123");
+    }
+
+    #[test]
+    fn test_tasklist_remove_members() {
+        let config = create_test_config();
+        let tasklist = Tasklist::new(config);
+        let _request = tasklist.remove_members("tasklist_guid_123");
+    }
+}
