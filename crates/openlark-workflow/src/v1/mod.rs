@@ -19,3 +19,31 @@ impl TaskV1 {
         task::Task::new(self.config.clone())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<Config> {
+        Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        )
+    }
+
+    #[test]
+    fn test_task_v1_new() {
+        let config = create_test_config();
+        let _task_v1 = TaskV1::new(config);
+    }
+
+    #[test]
+    fn test_task_v1_task() {
+        let config = create_test_config();
+        let task_v1 = TaskV1::new(config);
+        let _task = task_v1.task();
+    }
+}
