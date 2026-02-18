@@ -73,3 +73,67 @@ pub use models::{
     CommentItem, CreateCommentBody, CreateCommentResponse, DeleteCommentResponse,
     GetCommentResponse, ListCommentsResponse, UpdateCommentBody, UpdateCommentResponse,
 };
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    fn create_test_config() -> Arc<Config> {
+        Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        )
+    }
+
+    #[test]
+    fn test_comment_new() {
+        let config = create_test_config();
+        let comment = Comment::new(config);
+        assert!(comment.task_guid.is_empty());
+    }
+
+    #[test]
+    fn test_comment_with_task() {
+        let config = create_test_config();
+        let comment = Comment::new(config).with_task("task_123");
+        assert_eq!(comment.task_guid, "task_123");
+    }
+
+    #[test]
+    fn test_comment_create() {
+        let config = create_test_config();
+        let comment = Comment::new(config).with_task("task_123");
+        let _request = comment.create();
+    }
+
+    #[test]
+    fn test_comment_get() {
+        let config = create_test_config();
+        let comment = Comment::new(config).with_task("task_123");
+        let _request = comment.get("comment_456");
+    }
+
+    #[test]
+    fn test_comment_update() {
+        let config = create_test_config();
+        let comment = Comment::new(config).with_task("task_123");
+        let _request = comment.update("comment_456");
+    }
+
+    #[test]
+    fn test_comment_delete() {
+        let config = create_test_config();
+        let comment = Comment::new(config).with_task("task_123");
+        let _request = comment.delete("comment_456");
+    }
+
+    #[test]
+    fn test_comment_list() {
+        let config = create_test_config();
+        let comment = Comment::new(config).with_task("task_123");
+        let _request = comment.list();
+    }
+}
