@@ -1,148 +1,164 @@
-# openlark-hr 测试指南
+# OpenLark HR 测试指南
 
-## 目录结构
+本指南旨在为 `openlark-hr` 模块建立统一的测试开发标准和规范。由于 HR 模块涉及大量 API（153+），测试开发应遵循“核心路径优先”策略，确保 Builder 逻辑正确、API 请求构造符合预期、以及对服务端响应的正确解析。
 
-测试文件位置: `tests/unit/hr/{module}_tests.rs`
+## 1. 目录结构说明
 
-```
+所有的 HR 单元测试应存放在项目根目录的 `tests/unit/hr/` 下。测试文件的组织应与 SDK 内部的模块结构保持一致：
+
+```text
 tests/unit/hr/
-├── mod.rs              # 模块导出
-├── attendance_tests.rs # 考勤模块测试
-├── payroll_tests.rs    # 工资模块测试
-├── hire_tests.rs       # 招聘模块测试
-├── feishu_people_tests.rs  # CoreHR 测试
-├── performance_tests.rs    # 绩效测试
-├── okr_tests.rs        # OKR 测试
-├── compensation_tests.rs   # 薪酬测试
-└── ehr_tests.rs        # 电子人事测试
+├── mod.rs                  # 模块声明
+├── corehr/                 # CoreHR 模块测试
+│   ├── v1/
+│   │   ├── employee_tests.rs
+│   │   └── department_tests.rs
+│   └── mod.rs
+├── attendance/             # 出勤模块测试
+│   ├── v1/
+│   │   └── mod.rs
+│   └── mod.rs
+└── builder_tests.rs        # 通用 Builder 链式调用测试
 ```
 
-## 测试命名规范
+### 对应关系
+- 测试文件命名：`{module}_tests.rs`
+- 测试函数命名：`test_{api_name}_{scenario}`
+- 测试模块内部：使用 `mod {api_name}_tests` 进行二级组织
+
+## 2. 测试命名规范
 
 ### 文件命名
-- 模块名 + `_tests.rs` (例如: `attendance_tests.rs`)
-- 全部小写，使用下划线分隔
+文件应反映其测试的业务资源。例如测试 `core_hr.v1.employee` 相关的接口，文件应命名为 `employee_tests.rs`。
 
 ### 函数命名
-- `test_{api_name}_{scenario}`
-- 例如: `test_create_group_success`, `test_create_group_invalid_name`
+采用 `test_{操作}_{场景}` 格式：
+- `test_create_employee_success`: 测试创建员工成功的场景。
+- `test_get_employee_invalid_id`: 测试获取员工时传入无效 ID 的场景。
 
-## Builder 测试模式
+## 3. Builder 测试模式
 
-### 基本测试
-```rust
-#[test]
-fn test_create_group_request_builder() {
-    let request = CreateGroupRequest::builder()
-        .group_name("技术部考勤组".to_string())
-        .build();
-    
-    assert_eq!(request.group_name, "技术部考勤组");
-}
-```
+Builder 测试是 SDK 健壮性的基础，需验证所有 setter 方法能否正确影响生成的请求参数。
 
-### 参数化测试
-```rust
-#[rstest]
-#[case("open_id", "ou_123456")]
-#[case("user_id", "u_123456")]
-fn test_create_request_different_id_types(
-    #[case] id_type: &str,
-    #[case] id: &str
-) {
-    // 测试不同 ID 类型的处理
-}
-```
+### 关键验证点
+1. **默认状态**: 验证 `default()` 或 `builder()` 初始状态下的参数。
+2. **Setter 覆盖**: 验证多次调用同一个 setter 是否正确覆盖旧值。
+3. **类型安全**: 确保复杂类型（如 Enum, Struct）能正确序列化到请求体或查询参数。
+4. **链式调用**: 验证 Builder 链式调用的连贯性。
 
-## HTTP Mock 测试
-
-使用 wiremock 模拟飞书 API:
+### 代码示例 (参考模式)
 
 ```rust
-use wiremock::{MockServer, Mock, ResponseTemplate};
-use wiremock::matchers::{method, path};
-
-#[tokio::test]
-async fn test_create_group_mock() {
-    let mock_server = MockServer::start().await;
-    
-    Mock::given(method("POST"))
-        .and(path("/open-apis/attendance/v1/groups"))
-        .respond_with(ResponseTemplate::new(200)
-            .set_body_json(json!({"data": {"group_id": "g123"}})))
-        .mount(&mock_server)
-        .await;
-    
-    // 执行测试...
-}
-```
-
-## Fixture 管理
-
-### JSON Mock 数据
-将 mock 响应保存在测试文件中:
-
-```rust
-const MOCK_GROUP_RESPONSE: &str = r#"
-{
-    "code": 0,
-    "msg": "success",
-    "data": {
-        "group_id": "g123",
-        "group_name": "技术部考勤组"
-    }
-}
-"#;
-```
-
-## 代码审查 Checklist
-
-每个 PR 必须检查:
-- [ ] 测试覆盖了 Builder 基本功能
-- [ ] 测试覆盖了序列化/反序列化
-- [ ] 使用了 `#[rstest]` 进行参数化测试（如适用）
-- [ ] 每个 API 至少一个成功场景和一个错误场景
-- [ ] 测试不依赖外部网络
-- [ ] 测试执行时间合理（< 30秒/文件）
-- [ ] 零 clippy 警告
-
-## 示例：完整的测试文件
-
-```rust
-//! 考勤模块单元测试
-
-use rstest::*;
-use serde_json::json;
-use wiremock::{
-    matchers::{body_json, method, path},
-    Mock, MockServer, ResponseTemplate,
-};
-
-// 引入被测试的类型
-use openlark_hr::attendance::*;
-
 #[cfg(test)]
-mod tests {
+mod create_employee_builder_tests {
     use super::*;
+    use open_lark::service::hr::corehr::v1::employee::*;
 
     #[test]
-    fn test_create_group_request_builder() {
-        let request = CreateGroupRequest::builder()
-            .group_name("技术部".to_string())
-            .time_zone("Asia/Shanghai".to_string())
+    fn test_builder_query_params() {
+        let request = CreateEmployeeRequest::builder()
+            .client_token("test-token")
+            .user_id_type("open_id")
             .build();
-        
-        assert_eq!(request.group_name, "技术部");
-        assert_eq!(request.time_zone, "Asia/Shanghai");
+            
+        assert_eq!(request.api_req.query_params.get("client_token"), Some(&"test-token".to_string()));
+        assert_eq!(request.api_req.query_params.get("user_id_type"), Some(&"open_id".to_string()));
     }
 
-    #[rstest]
-    #[case("", false)]  // 空名称应该失败
-    #[case("a", true)]  // 有效名称
-    #[case("a".repeat(100), false)]  // 超长名称应该失败
-    fn test_group_name_validation(#[case] name: &str, #[case] should_pass: bool) {
-        let result = validate_group_name(name);
-        assert_eq!(result.is_ok(), should_pass);
+    #[test]
+    fn test_builder_body_serialization() {
+        let body = CreateEmployeeRequestBody::builder()
+            .name("张三")
+            .mobile("13800138000")
+            .build();
+            
+        let request = CreateEmployeeRequest::builder()
+            .request_body(body)
+            .build();
+            
+        let parsed_body: CreateEmployeeRequestBody = serde_json::from_slice(&request.api_req.body).unwrap();
+        assert_eq!(parsed_body.name, "张三");
     }
 }
 ```
+
+## 4. Fixture 使用指南
+
+为了避免在测试代码中硬编码大量的长 JSON 字符串，应使用 Fixture 文件。
+
+### 管理方式
+- **位置**: `tests/fixtures/hr/{module}/{version}/{api_name}_{scenario}.json`
+- **读取**: 使用 `include_str!` 宏在编译时载入。
+
+### 静态 JSON vs 动态生成
+- **静态**: 复杂的响应报文推荐使用文件存放。
+- **动态**: 简单的请求体推荐使用 `serde_json::json!` 宏动态生成。
+
+## 5. 代码审查 Checklist
+
+提交 HR 模块测试 PR 时，请检查：
+- [ ] 测试覆盖了核心 API 的成功场景。
+- [ ] 边界测试：空字符串、特殊字符、极大/极小数值。
+- [ ] Builder 验证：验证了所有暴露的 setter 方法。
+- [ ] 错误处理：模拟 4xx/5xx 响应，验证 SDK 的 Error 类型转换。
+- [ ] 无 Panic：测试代码在任何情况下均不得产生 panic。
+
+## 6. 可运行代码示例
+
+以下展示一个结合 `rstest` 和 `wiremock` 的完整测试示例。
+
+```rust
+use rstest::*;
+use wiremock::{MockServer, Mock, ResponseTemplate};
+use wiremock::matchers::{method, path};
+use open_lark::prelude::*;
+use open_lark::service::hr::corehr::v1::employee::*;
+
+#[tokio::test]
+async fn test_get_employee_integration() {
+    // 1. 启动 Mock Server
+    let mock_server = MockServer::start().await;
+    
+    // 2. 配置预期行为
+    let response_body = serde_json::json!({
+        "code": 0,
+        "msg": "success",
+        "data": {
+            "employee": {
+                "employee_id": "emp_123",
+                "name": "Test User"
+            }
+        }
+    });
+    
+    Mock::given(method("GET"))
+        .and(path("/open-apis/corehr/v1/employees/emp_123"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(response_body))
+        .mount(&mock_server)
+        .await;
+
+    // 3. 构造 Client 并执行
+    let config = Config::new("id", "secret")
+        .with_base_url(mock_server.uri());
+    let client = Client::new(config);
+    
+    let resp = client.hr.corehr.v1().employee().get("emp_123").execute().await.unwrap();
+    
+    // 4. 断言结果
+    assert_eq!(resp.employee.employee_id, "emp_123");
+    assert_eq!(resp.employee.name, "Test User");
+}
+
+#[rstest]
+#[case("open_id")]
+#[case("user_id")]
+fn test_employee_id_types(#[case] id_type: &str) {
+    let request = GetEmployeeRequest::builder()
+        .user_id_type(id_type)
+        .build();
+    assert_eq!(request.api_req.query_params.get("user_id_type"), Some(&id_type.to_string()));
+}
+```
+
+---
+**注意**: 编写测试时应优先参考 `tests/unit/im/builder_tests.rs` 中的 Builder 测试模式。
