@@ -54,8 +54,7 @@ mod builder_tests {
     );
     smoke_builder!(
         test_builder_employee_v1_search,
-        employee::SearchRequest::new(test_config("https://open.feishu.cn"))
-            .query("张".to_string())
+        employee::SearchRequest::new(test_config("https://open.feishu.cn")).query("张".to_string())
     );
     smoke_builder!(
         test_builder_employee_v1_batch_get,
@@ -155,7 +154,8 @@ mod builder_tests {
     );
     smoke_builder!(
         test_builder_contract_get,
-        contract::GetRequest::new(test_config("https://open.feishu.cn")).contract_id("c_1".to_string())
+        contract::GetRequest::new(test_config("https://open.feishu.cn"))
+            .contract_id("c_1".to_string())
     );
     smoke_builder!(
         test_builder_contract_patch,
@@ -174,11 +174,13 @@ mod builder_tests {
 
     smoke_builder!(
         test_builder_location_create,
-        location::CreateRequest::new(test_config("https://open.feishu.cn")).name("上海办公室".to_string())
+        location::CreateRequest::new(test_config("https://open.feishu.cn"))
+            .name("上海办公室".to_string())
     );
     smoke_builder!(
         test_builder_location_get,
-        location::GetRequest::new(test_config("https://open.feishu.cn")).location_id("l_1".to_string())
+        location::GetRequest::new(test_config("https://open.feishu.cn"))
+            .location_id("l_1".to_string())
     );
     smoke_builder!(
         test_builder_location_patch,
@@ -187,7 +189,8 @@ mod builder_tests {
     );
     smoke_builder!(
         test_builder_location_delete,
-        location::DeleteRequest::new(test_config("https://open.feishu.cn")).location_id("l_1".to_string())
+        location::DeleteRequest::new(test_config("https://open.feishu.cn"))
+            .location_id("l_1".to_string())
     );
     smoke_builder!(
         test_builder_location_list,
@@ -196,7 +199,8 @@ mod builder_tests {
 
     smoke_builder!(
         test_builder_company_get,
-        company::GetRequest::new(test_config("https://open.feishu.cn")).company_id("co_1".to_string())
+        company::GetRequest::new(test_config("https://open.feishu.cn"))
+            .company_id("co_1".to_string())
     );
     smoke_builder!(
         test_builder_company_list,
@@ -404,9 +408,10 @@ mod http_tests {
         let server = MockServer::start().await;
         Mock::given(method("POST"))
             .and(path("/open-apis/corehr/v1/departments"))
-            .respond_with(ResponseTemplate::new(200).set_body_json(
-                json!({"code":0,"msg":"ok","data":{"department_id":"d_1"}}),
-            ))
+            .respond_with(
+                ResponseTemplate::new(200)
+                    .set_body_json(json!({"code":0,"msg":"ok","data":{"department_id":"d_1"}})),
+            )
             .mount(&server)
             .await;
 

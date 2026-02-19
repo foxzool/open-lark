@@ -233,4 +233,100 @@ mod tests {
         let result = body.validate();
         assert!(result.is_ok());
     }
+
+    #[test]
+    fn test_builder_is_async() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let builder = IdCardRecognizeRequestBuilder::new(config.clone()).is_async(true);
+        assert_eq!(builder.is_async, Some(true));
+    }
+
+    #[test]
+    fn test_builder_body_creation() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let body = IdCardRecognizeRequestBuilder::new(config.clone())
+            .file_token("token_123")
+            .is_async(true)
+            .body();
+        assert_eq!(body.file_token, "token_123");
+        assert_eq!(body.is_async, Some(true));
+    }
+
+    #[test]
+    fn test_body_validation_whitespace() {
+        let body = IdCardRecognizeBody {
+            file_token: "   ".to_string(),
+            is_async: None,
+        };
+        let result = body.validate();
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_body_serialization() {
+        let body = IdCardRecognizeBody {
+            file_token: "token_123".to_string(),
+            is_async: Some(true),
+        };
+        let json_str = serde_json::to_string(&body).expect("序列化失败");
+        assert!(json_str.contains("file_token"));
+        assert!(json_str.contains("token_123"));
+    }
+
+    #[test]
+    fn test_parsing_result_serialization() {
+        let parsing_result = ParsingResult {
+            name: Some("张三".to_string()),
+            gender: Some("男".to_string()),
+            nation: Some("汉".to_string()),
+            birth_date: Some("19900101".to_string()),
+            address: Some("北京市".to_string()),
+            id_number: Some("110101199001011234".to_string()),
+            issuing_authority: Some("北京市公安局".to_string()),
+            start_date: Some("20200101".to_string()),
+            end_date: Some("20300101".to_string()),
+            portrait: Some("base64_image_data".to_string()),
+        };
+        let json_str = serde_json::to_string(&parsing_result).expect("序列化失败");
+        assert!(json_str.contains("张三"));
+        assert!(json_str.contains("110101199001011234"));
+    }
+
+    #[test]
+    fn test_response_struct() {
+        let response = IdCardRecognizeResponse { data: None };
+        assert!(response.data.is_none());
+
+        let result = IdCardRecognizeResult {
+            parsing_result: Some(ParsingResult {
+                name: Some("李四".to_string()),
+                gender: None,
+                nation: None,
+                birth_date: None,
+                address: None,
+                id_number: None,
+                issuing_authority: None,
+                start_date: None,
+                end_date: None,
+                portrait: None,
+            }),
+        };
+        let response_with_data = IdCardRecognizeResponse { data: Some(result) };
+        assert!(response_with_data.data.is_some());
+        assert_eq!(
+            response_with_data
+                .data
+                .unwrap()
+                .parsing_result
+                .unwrap()
+                .name,
+            Some("李四".to_string())
+        );
+    }
 }

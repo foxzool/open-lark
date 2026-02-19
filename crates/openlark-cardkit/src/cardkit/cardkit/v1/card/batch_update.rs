@@ -8,7 +8,10 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    common::api_utils::{extract_response_data, serialize_params},
+    common::{
+        api_utils::{extract_response_data, serialize_params},
+        validation::validate_card_id,
+    },
     endpoints::cardkit_v1_card_batch_update,
 };
 
@@ -73,12 +76,7 @@ impl BatchUpdateCardRequest {
             body.operations = operations;
         }
 
-        if body.card_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "card_id 不能为空",
-                "card_id 不能为空",
-            ));
-        }
+        validate_card_id(&body.card_id)?;
         if body.operations.is_empty() {
             return Err(openlark_core::error::validation_error(
                 "operations 不能为空",

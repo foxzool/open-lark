@@ -201,4 +201,102 @@ mod tests {
         };
         assert!(body.validate().is_ok());
     }
+
+    #[test]
+    fn test_builder_is_async() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let builder = BankCardRecognizeRequestBuilder::new(config.clone()).is_async(true);
+        assert_eq!(builder.is_async, Some(true));
+    }
+
+    #[test]
+    fn test_builder_body_creation() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let body = BankCardRecognizeRequestBuilder::new(config.clone())
+            .file_token("token_123")
+            .is_async(true)
+            .body();
+        assert_eq!(body.file_token, "token_123");
+        assert_eq!(body.is_async, Some(true));
+    }
+
+    #[test]
+    fn test_body_validation_whitespace() {
+        let body = BankCardRecognizeBody {
+            file_token: "   ".to_string(),
+            is_async: None,
+        };
+        assert!(body.validate().is_err());
+    }
+
+    #[test]
+    fn test_body_serialization() {
+        let body = BankCardRecognizeBody {
+            file_token: "token_123".to_string(),
+            is_async: Some(true),
+        };
+        let json_str = serde_json::to_string(&body).expect("序列化失败");
+        assert!(json_str.contains("file_token"));
+        assert!(json_str.contains("token_123"));
+    }
+
+    #[test]
+    fn test_parsing_result_struct() {
+        let parsing_result = ParsingResult {
+            bank_name: Some("中国工商银行".to_string()),
+            card_number: Some("6222021234567890123".to_string()),
+            valid_date: Some("12/25".to_string()),
+            card_type: Some("借记卡".to_string()),
+        };
+        assert_eq!(parsing_result.bank_name, Some("中国工商银行".to_string()));
+        assert_eq!(
+            parsing_result.card_number,
+            Some("6222021234567890123".to_string())
+        );
+    }
+
+    #[test]
+    fn test_parsing_result_serialization() {
+        let parsing_result = ParsingResult {
+            bank_name: Some("招商银行".to_string()),
+            card_number: Some("6225881234567890".to_string()),
+            valid_date: Some("10/28".to_string()),
+            card_type: Some("信用卡".to_string()),
+        };
+        let json_str = serde_json::to_string(&parsing_result).expect("序列化失败");
+        assert!(json_str.contains("招商银行"));
+        assert!(json_str.contains("6225881234567890"));
+    }
+
+    #[test]
+    fn test_response_struct() {
+        let response = BankCardRecognizeResponse { data: None };
+        assert!(response.data.is_none());
+
+        let result = BankCardRecognizeResult {
+            parsing_result: Some(ParsingResult {
+                bank_name: Some("建设银行".to_string()),
+                card_number: None,
+                valid_date: None,
+                card_type: None,
+            }),
+        };
+        let response_with_data = BankCardRecognizeResponse { data: Some(result) };
+        assert!(response_with_data.data.is_some());
+        assert_eq!(
+            response_with_data
+                .data
+                .unwrap()
+                .parsing_result
+                .unwrap()
+                .bank_name,
+            Some("建设银行".to_string())
+        );
+    }
 }

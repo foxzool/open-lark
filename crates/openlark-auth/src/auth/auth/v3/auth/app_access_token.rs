@@ -126,19 +126,16 @@ mod tests {
     #[test]
     fn test_app_access_token_builder_app_id_chained() {
         let config = create_test_config();
-        let builder = AppAccessTokenBuilder::new(config)
-            .app_id("chained_app_id");
+        let builder = AppAccessTokenBuilder::new(config).app_id("chained_app_id");
         assert_eq!(builder.app_id, "chained_app_id");
     }
 
     #[test]
     fn test_app_access_token_builder_app_secret_chained() {
         let config = create_test_config();
-        let builder = AppAccessTokenBuilder::new(config)
-            .app_secret("chained_secret");
+        let builder = AppAccessTokenBuilder::new(config).app_secret("chained_secret");
         assert_eq!(builder.app_secret, "chained_secret");
     }
-
 
     #[test]
     fn test_app_access_token_response_data_deserialization() {
@@ -151,6 +148,9 @@ mod tests {
 
     #[test]
     fn test_app_access_token_response_data_format() {
-        assert_eq!(AppAccessTokenResponseData::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            AppAccessTokenResponseData::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

@@ -7,7 +7,10 @@ use openlark_core::{
 };
 
 use super::models::DeleteCardElementResponse;
-use crate::common::api_utils::extract_response_data;
+use crate::common::{
+    api_utils::extract_response_data,
+    validation::{validate_card_id, validate_element_id},
+};
 use crate::endpoints::cardkit_v1_card_element;
 
 /// 删除组件请求体
@@ -61,18 +64,8 @@ impl DeleteCardElementRequest {
             body.element_id = element_id;
         }
 
-        if body.card_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "card_id 不能为空",
-                "card_id 不能为空",
-            ));
-        }
-        if body.element_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "element_id 不能为空",
-                "element_id 不能为空",
-            ));
-        }
+        validate_card_id(&body.card_id)?;
+        validate_element_id(&body.element_id)?;
 
         // url: DELETE:/open-apis/cardkit/v1/cards/:card_id/elements/:element_id
         let req: ApiRequest<DeleteCardElementResponse> =

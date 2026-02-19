@@ -8,7 +8,10 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use super::models::ConvertCardIdResponse;
-use crate::common::api_utils::{extract_response_data, serialize_params};
+use crate::common::{
+    api_utils::{extract_response_data, serialize_params},
+    validation::{validate_id_list, validate_id_type},
+};
 use crate::endpoints::CARDKIT_V1_CARD_ID_CONVERT;
 
 /// 转换 ID 请求体
@@ -68,24 +71,9 @@ impl ConvertCardIdRequest {
             body.card_ids = card_ids;
         }
 
-        if body.source_id_type.trim().is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "source_id_type 不能为空",
-                "source_id_type 不能为空",
-            ));
-        }
-        if body.target_id_type.trim().is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "target_id_type 不能为空",
-                "target_id_type 不能为空",
-            ));
-        }
-        if body.card_ids.is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "card_ids 不能为空",
-                "card_ids 不能为空",
-            ));
-        }
+        validate_id_type(&body.source_id_type, "source_id_type")?;
+        validate_id_type(&body.target_id_type, "target_id_type")?;
+        validate_id_list(&body.card_ids, "card_ids")?;
 
         // url: POST:/open-apis/cardkit/v1/cards/id_convert
         let req: ApiRequest<ConvertCardIdResponse> =
@@ -160,24 +148,9 @@ pub async fn convert_with_options(
     body: ConvertCardIdBody,
     option: RequestOption,
 ) -> SDKResult<ConvertCardIdResponse> {
-    if body.source_id_type.trim().is_empty() {
-        return Err(openlark_core::error::validation_error(
-            "source_id_type 不能为空",
-            "source_id_type 不能为空",
-        ));
-    }
-    if body.target_id_type.trim().is_empty() {
-        return Err(openlark_core::error::validation_error(
-            "target_id_type 不能为空",
-            "target_id_type 不能为空",
-        ));
-    }
-    if body.card_ids.is_empty() {
-        return Err(openlark_core::error::validation_error(
-            "card_ids 不能为空",
-            "card_ids 不能为空",
-        ));
-    }
+    validate_id_type(&body.source_id_type, "source_id_type")?;
+    validate_id_type(&body.target_id_type, "target_id_type")?;
+    validate_id_list(&body.card_ids, "card_ids")?;
 
     // url: POST:/open-apis/cardkit/v1/cards/id_convert
     let req: ApiRequest<ConvertCardIdResponse> =

@@ -159,7 +159,11 @@ mod validation_tests {
         .await;
 
         assert!(result.is_err());
-        assert!(result.err().unwrap().to_string().contains("周期名称不能为空"));
+        assert!(result
+            .err()
+            .unwrap()
+            .to_string()
+            .contains("周期名称不能为空"));
     }
 
     #[rstest]
@@ -177,7 +181,11 @@ mod validation_tests {
         .await;
 
         assert!(result.is_err());
-        assert!(result.err().unwrap().to_string().contains("OKR ID 不能为空"));
+        assert!(result
+            .err()
+            .unwrap()
+            .to_string()
+            .contains("OKR ID 不能为空"));
     }
 
     #[rstest]
@@ -202,12 +210,10 @@ mod validation_tests {
 
     #[tokio::test]
     async fn test_okr_batch_get_empty_list_validation() {
-        let result = v1::okr::batch_get::BatchGetRequest::new(
-            test_config("https://127.0.0.1:9"),
-            vec![],
-        )
-        .execute_with_options(auth_option())
-        .await;
+        let result =
+            v1::okr::batch_get::BatchGetRequest::new(test_config("https://127.0.0.1:9"), vec![])
+                .execute_with_options(auth_option())
+                .await;
 
         assert!(result.is_err());
         assert!(result
@@ -219,10 +225,13 @@ mod validation_tests {
 
     #[tokio::test]
     async fn test_okr_batch_get_too_many_validation() {
-        let ids = (0..51).map(|idx| format!("okr_{}", idx)).collect::<Vec<_>>();
-        let result = v1::okr::batch_get::BatchGetRequest::new(test_config("https://127.0.0.1:9"), ids)
-            .execute_with_options(auth_option())
-            .await;
+        let ids = (0..51)
+            .map(|idx| format!("okr_{}", idx))
+            .collect::<Vec<_>>();
+        let result =
+            v1::okr::batch_get::BatchGetRequest::new(test_config("https://127.0.0.1:9"), ids)
+                .execute_with_options(auth_option())
+                .await;
 
         assert!(result.is_err());
         assert!(result

@@ -69,15 +69,21 @@ mod builder_tests {
     );
     smoke_builder!(
         test_lump_sum_batch_create_request_builder,
-        lump_sum_payment::batch_create::BatchCreateRequest::new(test_config("https://open.feishu.cn"))
+        lump_sum_payment::batch_create::BatchCreateRequest::new(test_config(
+            "https://open.feishu.cn"
+        ))
     );
     smoke_builder!(
         test_lump_sum_batch_remove_request_builder,
-        lump_sum_payment::batch_remove::BatchRemoveRequest::new(test_config("https://open.feishu.cn"))
+        lump_sum_payment::batch_remove::BatchRemoveRequest::new(test_config(
+            "https://open.feishu.cn"
+        ))
     );
     smoke_builder!(
         test_lump_sum_batch_update_request_builder,
-        lump_sum_payment::batch_update::BatchUpdateRequest::new(test_config("https://open.feishu.cn"))
+        lump_sum_payment::batch_update::BatchUpdateRequest::new(test_config(
+            "https://open.feishu.cn"
+        ))
     );
     smoke_builder!(
         test_lump_sum_query_request_builder,
@@ -87,9 +93,11 @@ mod builder_tests {
     );
     smoke_builder!(
         test_lump_sum_query_detail_request_builder,
-        lump_sum_payment::query_detail::QueryDetailRequest::new(test_config("https://open.feishu.cn"))
-            .page_size(20)
-            .page_token("next_lump_detail".to_string())
+        lump_sum_payment::query_detail::QueryDetailRequest::new(test_config(
+            "https://open.feishu.cn"
+        ))
+        .page_size(20)
+        .page_token("next_lump_detail".to_string())
     );
     smoke_builder!(
         test_plan_list_request_builder,
@@ -99,15 +107,21 @@ mod builder_tests {
     );
     smoke_builder!(
         test_recurring_batch_create_request_builder,
-        recurring_payment::batch_create::BatchCreateRequest::new(test_config("https://open.feishu.cn"))
+        recurring_payment::batch_create::BatchCreateRequest::new(test_config(
+            "https://open.feishu.cn"
+        ))
     );
     smoke_builder!(
         test_recurring_batch_remove_request_builder,
-        recurring_payment::batch_remove::BatchRemoveRequest::new(test_config("https://open.feishu.cn"))
+        recurring_payment::batch_remove::BatchRemoveRequest::new(test_config(
+            "https://open.feishu.cn"
+        ))
     );
     smoke_builder!(
         test_recurring_batch_update_request_builder,
-        recurring_payment::batch_update::BatchUpdateRequest::new(test_config("https://open.feishu.cn"))
+        recurring_payment::batch_update::BatchUpdateRequest::new(test_config(
+            "https://open.feishu.cn"
+        ))
     );
     smoke_builder!(
         test_recurring_query_request_builder,
@@ -123,9 +137,11 @@ mod builder_tests {
     );
     smoke_builder!(
         test_social_archive_adjust_record_query_request_builder,
-        social_archive_adjust_record::query::QueryRequest::new(test_config("https://open.feishu.cn"))
-            .page_size(20)
-            .page_token("next_adjust_record".to_string())
+        social_archive_adjust_record::query::QueryRequest::new(test_config(
+            "https://open.feishu.cn"
+        ))
+        .page_size(20)
+        .page_token("next_adjust_record".to_string())
     );
     smoke_builder!(
         test_social_insurance_list_request_builder,
@@ -650,14 +666,13 @@ mod http_tests {
             .mount(&mock_server)
             .await;
 
-        let resp = social_archive_adjust_record::query::QueryRequest::new(test_config(
-            &mock_server.uri(),
-        ))
-        .page_size(20)
-        .page_token("next_adjust_record".to_string())
-        .execute_with_options(auth_option())
-        .await
-        .unwrap();
+        let resp =
+            social_archive_adjust_record::query::QueryRequest::new(test_config(&mock_server.uri()))
+                .page_size(20)
+                .page_token("next_adjust_record".to_string())
+                .execute_with_options(auth_option())
+                .await
+                .unwrap();
         assert_eq!(resp.items[0].adjust_type, Some(2));
     }
 
@@ -711,7 +726,9 @@ mod http_tests {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
             .and(path("/open-apis/compensation/v1/social_plans/query"))
-            .and(body_json(json!({"plan_ids":["plan_1"],"effective_date":1735689600})))
+            .and(body_json(
+                json!({"plan_ids":["plan_1"],"effective_date":1735689600}),
+            ))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -948,11 +965,13 @@ mod serialization_tests {
         test_social_archive_adjust_record_query_response_serialization,
         social_archive_adjust_record::query::QueryResponse,
         social_archive_adjust_record::query::QueryResponse {
-            items: vec![social_archive_adjust_record::query::SocialArchiveAdjustRecord {
-                id: "adj_1".to_string(),
-                user_id: Some("ou_1".to_string()),
-                adjust_type: Some(2),
-            }],
+            items: vec![
+                social_archive_adjust_record::query::SocialArchiveAdjustRecord {
+                    id: "adj_1".to_string(),
+                    user_id: Some("ou_1".to_string()),
+                    adjust_type: Some(2),
+                }
+            ],
             has_more: false,
             page_token: Some("next".to_string()),
         }

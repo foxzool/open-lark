@@ -578,14 +578,14 @@ mod tests {
         cache.insert("session".to_string(), token);
 
         {
-            let cached = cache
-                .get_mut("session")
-                .expect("cached token should exist");
+            let cached = cache.get_mut("session").expect("cached token should exist");
             cached.update_access();
             cached.update_access();
         }
 
-        let cached = cache.get("session").expect("cached token should still exist");
+        let cached = cache
+            .get("session")
+            .expect("cached token should still exist");
         assert_eq!(cached.access_count, 2);
         assert!(cached.last_accessed_at >= cached.created_at);
     }
