@@ -27,10 +27,9 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Install Protoc
-        uses: arduino/setup-protoc@v3
+        uses: wokwi/setup-protoc@v1
         with:
           version: 23.4
-          include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check format
@@ -104,10 +103,9 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Install Protoc
-        uses: arduino/setup-protoc@v3
+        uses: wokwi/setup-protoc@v1
         with:
           version: 23.4
-          include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract version from tag

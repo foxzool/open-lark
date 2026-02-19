@@ -24,10 +24,9 @@ jobs:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
       - uses: Swatinem/rust-cache@v2
       - name: Install Protoc
-        uses: arduino/setup-protoc@v3
+        uses: wokwi/setup-protoc@v1
         with:
           version: 23.4
-          include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run cargo test (workspace, all features)
         run: cargo test --lib --workspace --all-features --no-fail-fast
@@ -44,10 +43,9 @@ jobs:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
       - uses: Swatinem/rust-cache@v2
       - name: Install Protoc
-        uses: arduino/setup-protoc@v3
+        uses: wokwi/setup-protoc@v1
         with:
           version: 23.4
-          include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run cargo doc
         run: cargo doc --workspace --all-features --no-deps
@@ -65,10 +63,9 @@ jobs:
           components: rustfmt, clippy
       - uses: Swatinem/rust-cache@v2
       - name: Install Protoc
-        uses: arduino/setup-protoc@v3
+        uses: wokwi/setup-protoc@v1
         with:
           version: 23.4
-          include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Check format
         run: cargo fmt --all -- --check
