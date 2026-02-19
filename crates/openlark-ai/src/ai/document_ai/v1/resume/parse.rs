@@ -350,4 +350,165 @@ mod tests {
         assert_eq!(body.file_token, "token_123");
         assert_eq!(body.is_async, Some(true));
     }
+
+    #[test]
+    fn test_body_validation_whitespace() {
+        let body = ResumeParseBody {
+            file_token: "   ".to_string(),
+            is_async: None,
+        };
+        let result = body.validate();
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_body_serialization() {
+        let body = ResumeParseBody {
+            file_token: "token_123".to_string(),
+            is_async: Some(true),
+        };
+        let json_str = serde_json::to_string(&body).expect("序列化失败");
+        assert!(json_str.contains("file_token"));
+        assert!(json_str.contains("token_123"));
+    }
+
+    #[test]
+    fn test_parsing_result_struct() {
+        let parsing_result = ParsingResult {
+            resume_id: Some("resume_001".to_string()),
+            resume_source: Some("upload".to_string()),
+            candidate_name: Some("李四".to_string()),
+            candidate_gender: Some("男".to_string()),
+            candidate_age: Some("28".to_string()),
+            target_position: Some("软件工程师".to_string()),
+            work_years: Some("5".to_string()),
+            highest_education: Some("本科".to_string()),
+            current_company: Some("ABC科技".to_string()),
+            current_position: Some("高级工程师".to_string()),
+            work_experiences: None,
+            education_experiences: None,
+            project_experiences: None,
+            certificates: None,
+            skills: None,
+            raw_text: None,
+        };
+        assert_eq!(parsing_result.candidate_name, Some("李四".to_string()));
+    }
+
+    #[test]
+    fn test_work_experience_struct() {
+        let work_exp = WorkExperience {
+            company: Some("ABC公司".to_string()),
+            position: Some("工程师".to_string()),
+            start_time: Some("2020-01".to_string()),
+            end_time: Some("2023-12".to_string()),
+            description: Some("负责后端开发".to_string()),
+        };
+        assert_eq!(work_exp.company, Some("ABC公司".to_string()));
+        assert_eq!(work_exp.position, Some("工程师".to_string()));
+    }
+
+    #[test]
+    fn test_work_experience_serialization() {
+        let work_exp = WorkExperience {
+            company: Some("ABC公司".to_string()),
+            position: Some("工程师".to_string()),
+            start_time: Some("2020-01".to_string()),
+            end_time: Some("2023-12".to_string()),
+            description: Some("负责后端开发".to_string()),
+        };
+        let json_str = serde_json::to_string(&work_exp).expect("序列化失败");
+        assert!(json_str.contains("ABC公司"));
+        assert!(json_str.contains("工程师"));
+    }
+
+    #[test]
+    fn test_education_experience_struct() {
+        let edu_exp = EducationExperience {
+            school: Some("清华大学".to_string()),
+            degree: Some("硕士".to_string()),
+            major: Some("计算机科学".to_string()),
+            start_time: Some("2015-09".to_string()),
+            end_time: Some("2018-06".to_string()),
+        };
+        assert_eq!(edu_exp.school, Some("清华大学".to_string()));
+        assert_eq!(edu_exp.degree, Some("硕士".to_string()));
+    }
+
+    #[test]
+    fn test_project_experience_struct() {
+        let proj_exp = ProjectExperience {
+            project_name: Some("智能客服系统".to_string()),
+            role: Some("技术负责人".to_string()),
+            start_time: Some("2021-03".to_string()),
+            end_time: Some("2022-06".to_string()),
+            description: Some("负责系统架构设计".to_string()),
+        };
+        assert_eq!(proj_exp.project_name, Some("智能客服系统".to_string()));
+        assert_eq!(proj_exp.role, Some("技术负责人".to_string()));
+    }
+
+    #[test]
+    fn test_resume_parsing_result_serialization() {
+        let parsing_result = ParsingResult {
+            resume_id: Some("resume_001".to_string()),
+            resume_source: Some("upload".to_string()),
+            candidate_name: Some("李四".to_string()),
+            candidate_gender: Some("男".to_string()),
+            candidate_age: Some("28".to_string()),
+            target_position: Some("软件工程师".to_string()),
+            work_years: Some("5".to_string()),
+            highest_education: Some("本科".to_string()),
+            current_company: Some("ABC科技".to_string()),
+            current_position: Some("高级工程师".to_string()),
+            work_experiences: None,
+            education_experiences: None,
+            project_experiences: None,
+            certificates: Some(vec!["PMP".to_string(), "AWS".to_string()]),
+            skills: Some(vec!["Rust".to_string(), "Python".to_string()]),
+            raw_text: Some("简历原文".to_string()),
+        };
+        let json_str = serde_json::to_string(&parsing_result).expect("序列化失败");
+        assert!(json_str.contains("李四"));
+        assert!(json_str.contains("软件工程师"));
+        assert!(json_str.contains("Rust"));
+    }
+
+    #[test]
+    fn test_response_struct() {
+        let response = ResumeParseResponse { data: None };
+        assert!(response.data.is_none());
+
+        let result = ResumeParseResult {
+            parsing_result: Some(ParsingResult {
+                resume_id: Some("resume_002".to_string()),
+                resume_source: None,
+                candidate_name: Some("王五".to_string()),
+                candidate_gender: None,
+                candidate_age: None,
+                target_position: None,
+                work_years: None,
+                highest_education: None,
+                current_company: None,
+                current_position: None,
+                work_experiences: None,
+                education_experiences: None,
+                project_experiences: None,
+                certificates: None,
+                skills: None,
+                raw_text: None,
+            }),
+        };
+        let response_with_data = ResumeParseResponse { data: Some(result) };
+        assert!(response_with_data.data.is_some());
+        assert_eq!(
+            response_with_data
+                .data
+                .unwrap()
+                .parsing_result
+                .unwrap()
+                .candidate_name,
+            Some("王五".to_string())
+        );
+    }
 }

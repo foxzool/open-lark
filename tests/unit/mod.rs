@@ -14,6 +14,8 @@ pub mod cardkit;
 pub mod ai;
 #[path = "unit/error"]
 pub mod error;
+#[path = "unit/client"]
+pub mod client;
 // pub mod contact;
 // pub mod group;
 // pub mod search;

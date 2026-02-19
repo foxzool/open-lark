@@ -300,7 +300,9 @@ mod http_tests {
     async fn test_additional_information_import_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path("/open-apis/performance/v1/additional_informations/import"))
+            .and(path(
+                "/open-apis/performance/v1/additional_informations/import",
+            ))
             .and(header("Authorization", "Bearer test_token"))
             .and(body_json(json!({
                 "cycle_id":"cycle_1",

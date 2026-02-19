@@ -53,7 +53,8 @@ mod builder_tests {
     );
     smoke_builder!(
         test_get_group_request_builder,
-        group::GetGroupRequest::new(test_config("https://open.feishu.cn")).group_id("g_1".to_string())
+        group::GetGroupRequest::new(test_config("https://open.feishu.cn"))
+            .group_id("g_1".to_string())
     );
     smoke_builder!(
         test_delete_group_request_builder,
@@ -75,9 +76,12 @@ mod builder_tests {
     );
     smoke_builder!(
         test_list_user_group_request_builder,
-        group::list_user::ListUserRequest::new(test_config("https://open.feishu.cn"), "g_1".to_string())
-            .page_size(20)
-            .page_token("next_3".to_string())
+        group::list_user::ListUserRequest::new(
+            test_config("https://open.feishu.cn"),
+            "g_1".to_string()
+        )
+        .page_size(20)
+        .page_token("next_3".to_string())
     );
 
     smoke_builder!(
@@ -115,7 +119,8 @@ mod builder_tests {
     );
     smoke_builder!(
         test_get_shift_request_builder,
-        shift::GetShiftRequest::new(test_config("https://open.feishu.cn")).shift_id("s_1".to_string())
+        shift::GetShiftRequest::new(test_config("https://open.feishu.cn"))
+            .shift_id("s_1".to_string())
     );
     smoke_builder!(
         test_delete_shift_request_builder,
@@ -211,7 +216,10 @@ mod builder_tests {
     );
     smoke_builder!(
         test_download_file_request_builder,
-        file::download::DownloadRequest::new(test_config("https://open.feishu.cn"), "p_1".to_string())
+        file::download::DownloadRequest::new(
+            test_config("https://open.feishu.cn"),
+            "p_1".to_string()
+        )
     );
     smoke_builder!(
         test_get_user_setting_request_builder,
@@ -312,7 +320,9 @@ mod http_tests {
         Mock::given(method("POST"))
             .and(path("/open-apis/attendance/v1/groups"))
             .and(header("Authorization", "Bearer test_token"))
-            .and(body_json(json!({"group_name":"技术部考勤组","group_type":0})))
+            .and(body_json(
+                json!({"group_name":"技术部考勤组","group_type":0}),
+            ))
             .respond_with(
                 ResponseTemplate::new(200)
                     .set_body_json(json!({"code":0,"msg":"success","data":{"group_id":"g_123"}})),
@@ -424,9 +434,9 @@ mod http_tests {
             test_config(&mock_server.uri()),
             "g_1".to_string(),
         )
-            .execute_with_options(auth_option())
-            .await
-            .unwrap();
+        .execute_with_options(auth_option())
+        .await
+        .unwrap();
         assert_eq!(resp.items[0].user_id, "ou_1");
     }
 
@@ -772,11 +782,13 @@ mod serialization_tests {
         test_query_user_allowed_remedys_response_serialization,
         user_task_remedy::query_user_allowed_remedys::QueryUserAllowedRemedysResponse,
         user_task_remedy::query_user_allowed_remedys::QueryUserAllowedRemedysResponse {
-            items: vec![user_task_remedy::query_user_allowed_remedys::AllowedRemedy {
-                start_time: 1735689600,
-                end_time: 1735776000,
-                day_of_week: 1,
-            }],
+            items: vec![
+                user_task_remedy::query_user_allowed_remedys::AllowedRemedy {
+                    start_time: 1735689600,
+                    end_time: 1735776000,
+                    day_of_week: 1,
+                }
+            ],
         }
     );
 

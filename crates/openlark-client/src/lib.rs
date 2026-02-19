@@ -1039,10 +1039,7 @@ mod tests {
     #[test]
     fn test_create_config_from_env_missing_vars() {
         test_utils::with_env_vars(
-            &[
-                ("OPENLARK_APP_ID", None),
-                ("OPENLARK_APP_SECRET", None),
-            ],
+            &[("OPENLARK_APP_ID", None), ("OPENLARK_APP_SECRET", None)],
             || {
                 let result = utils::create_config_from_env();
                 assert!(result.is_err());
@@ -1115,7 +1112,10 @@ mod tests {
             ],
             || {
                 let diagnostics = utils::diagnose_system();
-                assert!(diagnostics.env_config_status.contains("✅") || diagnostics.env_config_status.contains("❌"));
+                assert!(
+                    diagnostics.env_config_status.contains("✅")
+                        || diagnostics.env_config_status.contains("❌")
+                );
                 assert!(diagnostics.feature_deps_status.contains("✅"));
                 assert!(!diagnostics.enabled_features.is_empty());
             },

@@ -148,16 +148,14 @@ mod tests {
     #[test]
     fn test_user_info_builder_user_access_token_chained() {
         let config = create_test_config();
-        let builder = UserInfoBuilder::new(config)
-            .user_access_token("chained_token");
+        let builder = UserInfoBuilder::new(config).user_access_token("chained_token");
         assert_eq!(builder.user_access_token, "chained_token");
     }
 
     #[test]
     fn test_user_info_builder_user_id_type_chained() {
         let config = create_test_config();
-        let builder = UserInfoBuilder::new(config)
-            .user_id_type("union_id");
+        let builder = UserInfoBuilder::new(config).user_id_type("union_id");
         assert_eq!(builder.user_id_type, Some("union_id".to_string()));
     }
 

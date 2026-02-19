@@ -138,24 +138,21 @@ mod tests {
     #[test]
     fn test_user_access_token_v1_builder_grant_code_chained() {
         let config = create_test_config();
-        let builder = UserAccessTokenV1Builder::new(config)
-            .grant_code("chained_grant_code");
+        let builder = UserAccessTokenV1Builder::new(config).grant_code("chained_grant_code");
         assert_eq!(builder.grant_code, "chained_grant_code");
     }
 
     #[test]
     fn test_user_access_token_v1_builder_app_id_chained() {
         let config = create_test_config();
-        let builder = UserAccessTokenV1Builder::new(config)
-            .app_id("chained_app_id");
+        let builder = UserAccessTokenV1Builder::new(config).app_id("chained_app_id");
         assert_eq!(builder.app_id, "chained_app_id");
     }
 
     #[test]
     fn test_user_access_token_v1_builder_app_secret_chained() {
         let config = create_test_config();
-        let builder = UserAccessTokenV1Builder::new(config)
-            .app_secret("chained_secret");
+        let builder = UserAccessTokenV1Builder::new(config).app_secret("chained_secret");
         assert_eq!(builder.app_secret, "chained_secret");
     }
 
@@ -170,6 +167,9 @@ mod tests {
 
     #[test]
     fn test_user_access_token_v1_response_data_format() {
-        assert_eq!(UserAccessTokenV1ResponseData::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            UserAccessTokenV1ResponseData::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

@@ -174,7 +174,10 @@ mod tests {
             .grant_type("authorization_code");
         assert_eq!(builder.code, "my_code");
         assert_eq!(builder.code_verifier, Some("my_verifier".to_string()));
-        assert_eq!(builder.redirect_uri, Some("https://example.com/callback".to_string()));
+        assert_eq!(
+            builder.redirect_uri,
+            Some("https://example.com/callback".to_string())
+        );
         assert_eq!(builder.client_id, Some("my_client_id".to_string()));
         assert_eq!(builder.client_secret, Some("my_client_secret".to_string()));
         assert_eq!(builder.grant_type, Some("authorization_code".to_string()));
@@ -183,41 +186,42 @@ mod tests {
     #[test]
     fn test_oidc_access_token_builder_code_chained() {
         let config = create_test_config();
-        let builder = OidcAccessTokenBuilder::new(config)
-            .code("chained_code");
+        let builder = OidcAccessTokenBuilder::new(config).code("chained_code");
         assert_eq!(builder.code, "chained_code");
     }
 
     #[test]
     fn test_oidc_access_token_builder_code_verifier_chained() {
         let config = create_test_config();
-        let builder = OidcAccessTokenBuilder::new(config)
-            .code_verifier("chained_verifier");
+        let builder = OidcAccessTokenBuilder::new(config).code_verifier("chained_verifier");
         assert_eq!(builder.code_verifier, Some("chained_verifier".to_string()));
     }
 
     #[test]
     fn test_oidc_access_token_builder_redirect_uri_chained() {
         let config = create_test_config();
-        let builder = OidcAccessTokenBuilder::new(config)
-            .redirect_uri("https://redirect.com");
-        assert_eq!(builder.redirect_uri, Some("https://redirect.com".to_string()));
+        let builder = OidcAccessTokenBuilder::new(config).redirect_uri("https://redirect.com");
+        assert_eq!(
+            builder.redirect_uri,
+            Some("https://redirect.com".to_string())
+        );
     }
 
     #[test]
     fn test_oidc_access_token_builder_client_id_chained() {
         let config = create_test_config();
-        let builder = OidcAccessTokenBuilder::new(config)
-            .client_id("chained_client_id");
+        let builder = OidcAccessTokenBuilder::new(config).client_id("chained_client_id");
         assert_eq!(builder.client_id, Some("chained_client_id".to_string()));
     }
 
     #[test]
     fn test_oidc_access_token_builder_client_secret_chained() {
         let config = create_test_config();
-        let builder = OidcAccessTokenBuilder::new(config)
-            .client_secret("chained_client_secret");
-        assert_eq!(builder.client_secret, Some("chained_client_secret".to_string()));
+        let builder = OidcAccessTokenBuilder::new(config).client_secret("chained_client_secret");
+        assert_eq!(
+            builder.client_secret,
+            Some("chained_client_secret".to_string())
+        );
     }
 
     #[test]
@@ -231,6 +235,9 @@ mod tests {
 
     #[test]
     fn test_oidc_access_token_response_data_format() {
-        assert_eq!(OidcAccessTokenResponseData::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            OidcAccessTokenResponseData::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

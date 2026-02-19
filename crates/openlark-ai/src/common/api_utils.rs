@@ -44,6 +44,29 @@ pub fn serialize_params<T: Serialize>(params: &T, context: &str) -> SDKResult<se
     })
 }
 
+/// 无 data 的接口：仅用 code==0 判断成功
+///
+/// 用于响应中不包含 data 字段的 API，仅根据 code 判断调用是否成功。
+///
+/// # Arguments
+///
+/// * `response` - API 响应对象
+/// * `context` - 上下文信息，用于错误消息
+///
+/// # Returns
+///
+/// 成功返回 Ok(())，失败返回错误
+pub fn ensure_success(response: Response<serde_json::Value>, context: &str) -> SDKResult<()> {
+    if response.raw_response.is_success() {
+        Ok(())
+    } else {
+        Err(error::validation_error(
+            format!("{context}失败: {}", response.raw_response.code),
+            response.raw_response.msg.to_string(),
+        ))
+    }
+}
+
 /// 构建 API 端点 URL
 ///
 /// 将基础端点和路径参数组合成完整的 API URL。

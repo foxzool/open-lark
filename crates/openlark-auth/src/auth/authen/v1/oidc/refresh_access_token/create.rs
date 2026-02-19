@@ -155,32 +155,33 @@ mod tests {
     #[test]
     fn test_oidc_refresh_access_token_builder_refresh_token_chained() {
         let config = create_test_config();
-        let builder = OidcRefreshAccessTokenBuilder::new(config)
-            .refresh_token("chained_refresh_token");
+        let builder =
+            OidcRefreshAccessTokenBuilder::new(config).refresh_token("chained_refresh_token");
         assert_eq!(builder.refresh_token, "chained_refresh_token");
     }
 
     #[test]
     fn test_oidc_refresh_access_token_builder_client_id_chained() {
         let config = create_test_config();
-        let builder = OidcRefreshAccessTokenBuilder::new(config)
-            .client_id("chained_client_id");
+        let builder = OidcRefreshAccessTokenBuilder::new(config).client_id("chained_client_id");
         assert_eq!(builder.client_id, Some("chained_client_id".to_string()));
     }
 
     #[test]
     fn test_oidc_refresh_access_token_builder_client_secret_chained() {
         let config = create_test_config();
-        let builder = OidcRefreshAccessTokenBuilder::new(config)
-            .client_secret("chained_client_secret");
-        assert_eq!(builder.client_secret, Some("chained_client_secret".to_string()));
+        let builder =
+            OidcRefreshAccessTokenBuilder::new(config).client_secret("chained_client_secret");
+        assert_eq!(
+            builder.client_secret,
+            Some("chained_client_secret".to_string())
+        );
     }
 
     #[test]
     fn test_oidc_refresh_access_token_builder_grant_type_chained() {
         let config = create_test_config();
-        let builder = OidcRefreshAccessTokenBuilder::new(config)
-            .grant_type("refresh_token");
+        let builder = OidcRefreshAccessTokenBuilder::new(config).grant_type("refresh_token");
         assert_eq!(builder.grant_type, Some("refresh_token".to_string()));
     }
 
@@ -195,6 +196,9 @@ mod tests {
 
     #[test]
     fn test_oidc_refresh_access_token_response_data_format() {
-        assert_eq!(OidcRefreshAccessTokenResponseData::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            OidcRefreshAccessTokenResponseData::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

@@ -45,8 +45,8 @@ struct RuntimeConfig {
 
 impl RuntimeConfig {
     fn from_env() -> Result<Self, Box<dyn std::error::Error>> {
-        let app_id = std::env::var("OPENLARK_APP_ID")
-            .map_err(|_| "未找到环境变量 OPENLARK_APP_ID")?;
+        let app_id =
+            std::env::var("OPENLARK_APP_ID").map_err(|_| "未找到环境变量 OPENLARK_APP_ID")?;
         let app_secret = std::env::var("OPENLARK_APP_SECRET")
             .map_err(|_| "未找到环境变量 OPENLARK_APP_SECRET")?;
         let base_url = std::env::var("OPENLARK_BASE_URL")
@@ -111,13 +111,15 @@ async fn handle_payload(
 }
 
 fn extract_text(content: &str) -> Result<String, Box<dyn std::error::Error>> {
-    let content_json: TextContent = serde_json::from_str(content)
-        .map_err(|e| format!("解析文本消息 content 失败: {e}"))?;
+    let content_json: TextContent =
+        serde_json::from_str(content).map_err(|e| format!("解析文本消息 content 失败: {e}"))?;
 
     Ok(content_json.text)
 }
 
-fn resolve_receive_target(event: &EventBody) -> Result<(String, &'static str), Box<dyn std::error::Error>> {
+fn resolve_receive_target(
+    event: &EventBody,
+) -> Result<(String, &'static str), Box<dyn std::error::Error>> {
     if event.message.chat_type == "p2p" {
         let open_id = event.sender.sender_id.open_id.clone();
         if open_id.is_empty() {
@@ -277,7 +279,8 @@ mod tests {
             chat: None,
         };
 
-        let (receive_id, receive_id_type) = resolve_receive_target(&event).expect("should resolve p2p receive target");
+        let (receive_id, receive_id_type) =
+            resolve_receive_target(&event).expect("should resolve p2p receive target");
         assert_eq!(receive_id, "ou_test_user");
         assert_eq!(receive_id_type, "open_id");
     }
@@ -301,7 +304,8 @@ mod tests {
             }),
         };
 
-        let (receive_id, receive_id_type) = resolve_receive_target(&event).expect("should resolve group receive target");
+        let (receive_id, receive_id_type) =
+            resolve_receive_target(&event).expect("should resolve group receive target");
         assert_eq!(receive_id, "oc_group_001");
         assert_eq!(receive_id_type, "chat_id");
     }

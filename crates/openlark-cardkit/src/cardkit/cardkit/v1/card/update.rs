@@ -8,7 +8,10 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    common::api_utils::{extract_response_data, serialize_params},
+    common::{
+        api_utils::{extract_response_data, serialize_params},
+        validation::validate_card_id,
+    },
     endpoints::cardkit_v1_card,
 };
 
@@ -89,12 +92,7 @@ impl UpdateCardRequest {
             body.update_mask = Some(update_mask);
         }
 
-        if body.card_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "card_id 不能为空",
-                "card_id 不能为空",
-            ));
-        }
+        validate_card_id(&body.card_id)?;
 
         // url: PUT:/open-apis/cardkit/v1/cards/:card_id
         let url = cardkit_v1_card(&body.card_id);

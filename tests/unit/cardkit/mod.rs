@@ -4,3 +4,4 @@
 
 pub mod card_tests;
 pub mod element_tests;
+pub mod validation_tests;

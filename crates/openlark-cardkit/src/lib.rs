@@ -7,8 +7,6 @@
 //! 实现文件严格按 `src/bizTag/meta.project/meta.version/meta.resource/meta.name.rs` 组织，
 //! 数据源为仓库根目录 `api_list_export.csv`。
 
-#![allow(missing_docs)]
-
 pub mod common;
 pub mod endpoints;
 pub mod service;

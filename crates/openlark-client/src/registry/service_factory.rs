@@ -714,7 +714,10 @@ mod tests {
         };
 
         let mut deps: HashMap<String, Arc<dyn std::any::Any + Send + Sync>> = HashMap::new();
-        deps.insert("dep1".to_string(), Arc::new(PlaceholderService::new("dep1")));
+        deps.insert(
+            "dep1".to_string(),
+            Arc::new(PlaceholderService::new("dep1")),
+        );
 
         let result = factory.check_dependencies(&metadata, &deps);
         assert!(result.is_ok());
@@ -741,8 +744,18 @@ mod tests {
     #[tokio::test]
     async fn test_supported_service_creation() {
         let factory = DefaultServiceFactory;
-        let services = vec!["auth", "communication", "docs", "hr", "ai", "calendar", "admin", "approval", "helpdesk"];
-        
+        let services = vec![
+            "auth",
+            "communication",
+            "docs",
+            "hr",
+            "ai",
+            "calendar",
+            "admin",
+            "approval",
+            "helpdesk",
+        ];
+
         for service_name in services {
             let metadata = ServiceMetadata {
                 name: service_name.to_string(),
@@ -760,7 +773,11 @@ mod tests {
             };
             let deps = HashMap::new();
             let result = factory.create_service(&metadata, &config, &deps).await;
-            assert!(result.is_ok(), "Service {} should be created successfully", service_name);
+            assert!(
+                result.is_ok(),
+                "Service {} should be created successfully",
+                service_name
+            );
         }
     }
 

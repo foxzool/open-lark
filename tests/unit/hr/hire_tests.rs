@@ -265,10 +265,13 @@ mod http_tests {
         Mock::given(method("POST"))
             .and(path("/open-apis/hire/v1/talents/combined_create"))
             .and(header("Authorization", "Bearer test_token"))
-            .and(body_json(json!({"name":"张三","email":"zhangsan@example.com"})))
+            .and(body_json(
+                json!({"name":"张三","email":"zhangsan@example.com"}),
+            ))
             .respond_with(
-                ResponseTemplate::new(200)
-                    .set_body_json(json!({"code":0,"msg":"success","data":{"talent_id":"talent_001"}})),
+                ResponseTemplate::new(200).set_body_json(
+                    json!({"code":0,"msg":"success","data":{"talent_id":"talent_001"}}),
+                ),
             )
             .mount(&mock_server)
             .await;

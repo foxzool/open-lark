@@ -43,3 +43,28 @@ impl Service for AiService {
         "v1"
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_ai_service_creation() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let service = AiService::new(config);
+        assert_eq!(service.config().app_id(), "test_app_id");
+    }
+
+    #[test]
+    fn test_ai_service_service_name() {
+        assert_eq!(AiService::service_name(), "ai");
+    }
+
+    #[test]
+    fn test_ai_service_service_version() {
+        assert_eq!(AiService::service_version(), "v1");
+    }
+}

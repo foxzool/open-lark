@@ -1,6 +1,8 @@
 //! Open-Lark AI Module
 //!
 //! 飞书AI智能服务模块，提供完整的AI和智能助手功能。
+
+#![allow(clippy::module_inception)]  // 允许模块与父模块同名，这是 bizTag 组织模式
 //!
 //! ## 主要功能
 //!
@@ -47,6 +49,12 @@ pub mod endpoints;
 // AI service modules
 pub mod ai;
 
+// Document AI 模块（新的组织结构）
+pub mod document_ai;
+
+// Speech-to-Text 独立模块
+pub mod speech_to_text;
+
 // 服务入口
 pub mod service;
 
@@ -55,6 +63,9 @@ pub use service::AiClient;
 
 // 重新导出端点常量，方便外部使用
 pub use endpoints::*;
+
+// 重新导出 Document AI 链式调用入口
+pub use common::chain::DocumentAiClient;
 
 /// Re-exports from openlark-core for convenience.
 pub mod prelude {

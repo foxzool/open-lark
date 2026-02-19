@@ -20,3 +20,18 @@ impl DocumentAi {
         v1::DocumentAiV1::new(self.config.clone())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_document_ai_creation() {
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let doc_ai = DocumentAi::new(Arc::new(config));
+        let _v1 = doc_ai.v1();
+    }
+}

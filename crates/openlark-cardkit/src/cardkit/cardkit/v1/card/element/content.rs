@@ -7,7 +7,10 @@ use openlark_core::{
 };
 
 use super::models::UpdateCardElementContentResponse;
-use crate::common::api_utils::{extract_response_data, serialize_params};
+use crate::common::{
+    api_utils::{extract_response_data, serialize_params},
+    validation::{validate_card_id, validate_element_id},
+};
 use crate::endpoints::cardkit_v1_card_element_content;
 
 /// 流式更新文本请求体（结构以官方文档为准）
@@ -70,18 +73,8 @@ impl UpdateCardElementContentRequest {
             body.content = content;
         }
 
-        if body.card_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "card_id 不能为空",
-                "card_id 不能为空",
-            ));
-        }
-        if body.element_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "element_id 不能为空",
-                "element_id 不能为空",
-            ));
-        }
+        validate_card_id(&body.card_id)?;
+        validate_element_id(&body.element_id)?;
 
         // url: PUT:/open-apis/cardkit/v1/cards/:card_id/elements/:element_id/content
         let req: ApiRequest<UpdateCardElementContentResponse> = ApiRequest::put(

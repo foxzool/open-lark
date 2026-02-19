@@ -103,7 +103,6 @@ impl TokenProvider for NoOpTokenProvider {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;

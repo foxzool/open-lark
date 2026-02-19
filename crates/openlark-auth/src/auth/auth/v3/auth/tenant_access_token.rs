@@ -142,24 +142,21 @@ mod tests {
     #[test]
     fn test_tenant_access_token_builder_app_id_chained() {
         let config = create_test_config();
-        let builder = TenantAccessTokenBuilder::new(config)
-            .app_id("chained_app_id");
+        let builder = TenantAccessTokenBuilder::new(config).app_id("chained_app_id");
         assert_eq!(builder.app_id, "chained_app_id");
     }
 
     #[test]
     fn test_tenant_access_token_builder_app_secret_chained() {
         let config = create_test_config();
-        let builder = TenantAccessTokenBuilder::new(config)
-            .app_secret("chained_secret");
+        let builder = TenantAccessTokenBuilder::new(config).app_secret("chained_secret");
         assert_eq!(builder.app_secret, "chained_secret");
     }
 
     #[test]
     fn test_tenant_access_token_builder_app_ticket_chained() {
         let config = create_test_config();
-        let builder = TenantAccessTokenBuilder::new(config)
-            .app_ticket("chained_ticket");
+        let builder = TenantAccessTokenBuilder::new(config).app_ticket("chained_ticket");
         assert_eq!(builder.app_ticket, "chained_ticket");
     }
 
@@ -173,6 +170,9 @@ mod tests {
 
     #[test]
     fn test_tenant_access_token_response_data_format() {
-        assert_eq!(TenantAccessTokenResponseData::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            TenantAccessTokenResponseData::data_format(),
+            ResponseFormat::Data
+        );
     }
 }

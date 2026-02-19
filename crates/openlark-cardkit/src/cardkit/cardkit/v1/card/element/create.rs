@@ -7,7 +7,10 @@ use openlark_core::{
 };
 
 use super::models::CreateCardElementResponse;
-use crate::common::api_utils::{extract_response_data, serialize_params};
+use crate::common::{
+    api_utils::{extract_response_data, serialize_params},
+    validation::validate_card_id,
+};
 use crate::endpoints::cardkit_v1_card_elements;
 
 /// 新增组件请求体（结构以官方文档为准）
@@ -58,12 +61,7 @@ impl CreateCardElementRequest {
             body.card_id = card_id;
         }
 
-        if body.card_id.trim().is_empty() {
-            return Err(openlark_core::error::validation_error(
-                "card_id 不能为空",
-                "card_id 不能为空",
-            ));
-        }
+        validate_card_id(&body.card_id)?;
 
         // url: POST:/open-apis/cardkit/v1/cards/:card_id/elements
         let req: ApiRequest<CreateCardElementResponse> =
@@ -132,12 +130,7 @@ pub async fn create_with_options(
     body: CreateCardElementBody,
     option: RequestOption,
 ) -> SDKResult<CreateCardElementResponse> {
-    if body.card_id.trim().is_empty() {
-        return Err(openlark_core::error::validation_error(
-            "card_id 不能为空",
-            "card_id 不能为空",
-        ));
-    }
+    validate_card_id(&body.card_id)?;
 
     // url: POST:/open-apis/cardkit/v1/cards/:card_id/elements
     let req: ApiRequest<CreateCardElementResponse> =

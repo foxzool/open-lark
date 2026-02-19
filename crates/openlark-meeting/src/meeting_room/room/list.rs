@@ -60,8 +60,14 @@ mod tests {
             .query_param("floor_name", "3F");
 
         assert_eq!(request.query_params.len(), 2);
-        assert_eq!(request.query_params[0], ("building_id".to_string(), "bld_123".to_string()));
-        assert_eq!(request.query_params[1], ("floor_name".to_string(), "3F".to_string()));
+        assert_eq!(
+            request.query_params[0],
+            ("building_id".to_string(), "bld_123".to_string())
+        );
+        assert_eq!(
+            request.query_params[1],
+            ("floor_name".to_string(), "3F".to_string())
+        );
     }
 
     #[test]
@@ -75,10 +81,12 @@ mod tests {
     #[test]
     fn test_list_room_request_single_param() {
         let config = Config::default();
-        let request = ListRoomRequest::new(config)
-            .query_param("page_size", "50");
+        let request = ListRoomRequest::new(config).query_param("page_size", "50");
 
         assert_eq!(request.query_params.len(), 1);
-        assert_eq!(request.query_params[0], ("page_size".to_string(), "50".to_string()));
+        assert_eq!(
+            request.query_params[0],
+            ("page_size".to_string(), "50".to_string())
+        );
     }
 }
