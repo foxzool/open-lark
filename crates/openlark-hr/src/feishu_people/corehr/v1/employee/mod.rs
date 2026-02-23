@@ -10,9 +10,13 @@ pub mod models;
 pub mod search;
 
 // Re-export 公共类型
-pub use batch_get::*;
-pub use create::*;
-pub use delete::*;
-pub use list::*;
-pub use models::*;
-pub use search::*;
+pub use batch_get::BatchGetRequest;
+pub use create::CreateRequest;
+pub use delete::DeleteRequest;
+pub use list::ListRequest;
+pub use models::{
+    BatchGetRequestBody, BatchGetResponse, CreateRequestBody, CreateResponse, DeleteRequestBody,
+    DeleteResponse, Employee, EmployeeRoster, ListRequestBody, ListResponse, SearchRequestBody,
+    SearchResponse,
+};
+pub use search::SearchRequest;

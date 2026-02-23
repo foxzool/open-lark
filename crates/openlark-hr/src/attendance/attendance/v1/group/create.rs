@@ -262,3 +262,84 @@ impl ApiResponseTrait for CreateGroupResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+    use serde_json::json;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_create_group_request_builder() {
+        let request = CreateGroupRequest::new(create_test_config())
+            .group_name("测试考勤组".to_string())
+            .group_type(1)
+            .allow_pc_punch(true);
+
+        assert_eq!(request.group_name, "测试考勤组");
+        assert_eq!(request.group_type, 1);
+        assert_eq!(request.allow_pc_punch, Some(true));
+    }
+
+    #[test]
+    fn test_create_group_request_body_serialize() {
+        let request = CreateGroupRequest::new(create_test_config())
+            .group_name("研发组".to_string())
+            .group_type(0)
+            .allow_remedy(true)
+            .remedy_limit(3);
+
+        let body = CreateGroupRequestBody {
+            group_id: request.group_id,
+            group_name: request.group_name,
+            group_type: request.group_type,
+            user_list: request.user_list,
+            excluded_user_list: request.excluded_user_list,
+            manager_list: request.manager_list,
+            dept_list: request.dept_list,
+            shift_list: request.shift_list,
+            allow_out_punch: request.allow_out_punch,
+            out_punch_need_approval: request.out_punch_need_approval,
+            allow_pc_punch: request.allow_pc_punch,
+            need_photo: request.need_photo,
+            photo_punch_type: request.photo_punch_type,
+            allow_remedy: request.allow_remedy,
+            remedy_limit: request.remedy_limit,
+            remedy_period: request.remedy_period,
+            work_day_config: request.work_day_config,
+            overtime_info: request.overtime_info,
+        };
+
+        let value = serde_json::to_value(body).expect("序列化请求体失败");
+        assert_eq!(value["group_name"], json!("研发组"));
+        assert_eq!(value["group_type"], json!(0));
+        assert_eq!(value["allow_remedy"], json!(true));
+        assert_eq!(value["remedy_limit"], json!(3));
+    }
+
+    #[test]
+    fn test_create_group_response_deserialize() {
+        let value = json!({"group_id": "grp_123"});
+        let response: CreateGroupResponse =
+            serde_json::from_value(value).expect("反序列化响应失败");
+        assert_eq!(response.group_id, "grp_123");
+    }
+
+    #[test]
+    fn test_create_group_validation() {
+        let request = CreateGroupRequest::new(create_test_config()).group_name("   ".to_string());
+        let result: SDKResult<()> = (|| {
+            validate_required!(request.group_name.trim(), "考勤组名称不能为空");
+            Ok(())
+        })();
+
+        assert!(result.is_err());
+    }
+}

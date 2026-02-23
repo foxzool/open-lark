@@ -17,16 +17,23 @@ pub mod timeline;
 pub mod tree;
 
 // Re-export 公共类型
-pub use batch_get::*;
-pub use create::*;
-pub use delete::*;
-pub use get::*;
-pub use list::*;
-pub use models::*;
-pub use multi_timeline::*;
-pub use operation_logs::*;
-pub use parents::*;
-pub use patch::*;
-pub use search::*;
-pub use timeline::*;
-pub use tree::*;
+pub use batch_get::BatchGetRequest;
+pub use create::CreateRequest;
+pub use delete::DeleteRequest;
+pub use get::GetRequest;
+pub use list::ListRequest;
+pub use models::{
+    BatchGetRequestBody, BatchGetResponse, CreateRequestBody, CreateResponse, DeleteRequestBody,
+    DeleteResponse, Department, DepartmentChange, DepartmentOperationLog, DepartmentTimeline,
+    DepartmentTreeNode, GetRequestBody, GetResponse, ListRequestBody, ListResponse,
+    MultiTimelineRequestBody, MultiTimelineResponse, OperationLogsRequestBody,
+    OperationLogsResponse, ParentsResponse, PatchRequestBody, PatchResponse, SearchRequestBody,
+    SearchResponse, TimelineRequestBody, TimelineResponse, TreeRequestBody, TreeResponse,
+};
+pub use multi_timeline::MultiTimelineRequest;
+pub use operation_logs::OperationLogsRequest;
+pub use parents::ParentsRequest;
+pub use patch::PatchRequest;
+pub use search::SearchRequest;
+pub use timeline::TimelineRequest;
+pub use tree::TreeRequest;

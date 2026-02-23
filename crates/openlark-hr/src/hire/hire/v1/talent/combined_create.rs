@@ -146,3 +146,85 @@ impl ApiResponseTrait for CombinedCreateResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+    use serde_json::json;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_talent_combined_create_request_builder() {
+        let request = CombinedCreateRequest::new(create_test_config())
+            .name("张三".to_string())
+            .email("zhangsan@example.com".to_string())
+            .resume("<p>简历内容</p>".to_string());
+
+        assert_eq!(request.name, "张三");
+        assert_eq!(request.email.as_deref(), Some("zhangsan@example.com"));
+        assert_eq!(request.resume.as_deref(), Some("<p>简历内容</p>"));
+    }
+
+    #[test]
+    fn test_talent_combined_create_request_body_serialize() {
+        let request = CombinedCreateRequest::new(create_test_config())
+            .name("李四".to_string())
+            .phone("13800000000".to_string());
+
+        let body = CombinedCreateRequestBody {
+            name: request.name,
+            email: request.email,
+            phone: request.phone,
+            resume: request.resume,
+            education_list: request.education_list,
+            work_experience_list: request.work_experience_list,
+        };
+
+        let value = serde_json::to_value(body).expect("序列化请求体失败");
+        assert_eq!(value["name"], json!("李四"));
+        assert_eq!(value["phone"], json!("13800000000"));
+        assert!(value.get("email").is_none());
+    }
+
+    #[test]
+    fn test_talent_combined_create_response_deserialize() {
+        let value = json!({"talent_id": "talent_123"});
+        let response: CombinedCreateResponse =
+            serde_json::from_value(value).expect("反序列化响应失败");
+        assert_eq!(response.talent_id, "talent_123");
+    }
+
+    #[test]
+    fn test_talent_combined_create_validation() {
+        let request = CombinedCreateRequest::new(create_test_config()).name("   ".to_string());
+        let result: SDKResult<()> = (|| {
+            validate_required!(request.name.trim(), "候选人姓名不能为空");
+            let has_contact = request
+                .email
+                .as_ref()
+                .map(|email| !email.is_empty())
+                .unwrap_or(false)
+                || request
+                    .phone
+                    .as_ref()
+                    .map(|phone| !phone.is_empty())
+                    .unwrap_or(false);
+            if !has_contact {
+                return Err(openlark_core::error::validation_error(
+                    "缺少联系方式",
+                    "创建候选人时至少需要提供邮箱或手机号",
+                ));
+            }
+            Ok(())
+        })();
+
+        assert!(result.is_err());
+    }
+}

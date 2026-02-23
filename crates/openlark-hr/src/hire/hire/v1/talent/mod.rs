@@ -24,14 +24,18 @@ pub mod remove_to_folder;
 pub mod tag;
 
 // Re-export 公共类型
-pub use add_to_folder::*;
-pub use batch_get_id::*;
-pub use combined_create::*;
-pub use combined_update::*;
-pub use external_info::*;
-pub use get::*;
-pub use list::*;
-pub use models::*;
-pub use onboard_status::*;
-pub use remove_to_folder::*;
-pub use tag::*;
+pub use add_to_folder::{AddToFolderRequest, AddToFolderResponse};
+pub use batch_get_id::BatchGetIdRequest;
+pub use combined_create::CombinedCreateRequest;
+pub use combined_update::CombinedUpdateRequest;
+pub use get::GetRequest;
+pub use list::ListRequest;
+pub use models::{
+    BatchGetIdRequestBody, BatchGetIdResponse, CombinedCreateRequestBody, CombinedCreateResponse,
+    CombinedUpdateRequestBody, CombinedUpdateResponse, GetRequestBody, GetResponse,
+    ListRequestBody, ListResponse, Talent, TalentContact, TalentEducation, TalentIdInfo,
+    TalentWorkExperience,
+};
+pub use onboard_status::{OnboardStatusRequest, OnboardStatusResponse};
+pub use remove_to_folder::{RemoveToFolderRequest, RemoveToFolderResponse};
+pub use tag::{TagRequest, TagResponse};

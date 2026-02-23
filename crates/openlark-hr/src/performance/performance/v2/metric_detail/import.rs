@@ -122,3 +122,62 @@ impl ApiResponseTrait for ImportResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+    use serde_json::json;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_metric_detail_import_request_builder() {
+        let request = ImportRequest::new(create_test_config(), "cycle_1".to_string())
+            .add_metric_detail("u_1".to_string(), "m_1".to_string(), 98.5);
+
+        assert_eq!(request.cycle_id, "cycle_1");
+        assert_eq!(request.metric_details.len(), 1);
+        assert_eq!(request.metric_details[0].value, 98.5);
+    }
+
+    #[test]
+    fn test_metric_detail_import_request_body_serialize() {
+        let body = ImportRequestBody {
+            cycle_id: "cycle_2".to_string(),
+            metric_details: vec![MetricDetail {
+                user_id: "u_2".to_string(),
+                metric_id: "m_2".to_string(),
+                value: 88.0,
+            }],
+        };
+
+        let value = serde_json::to_value(body).expect("序列化请求体失败");
+        assert_eq!(value["cycle_id"], json!("cycle_2"));
+        assert_eq!(value["metric_details"][0]["metric_id"], json!("m_2"));
+        assert_eq!(value["metric_details"][0]["value"], json!(88.0));
+    }
+
+    #[test]
+    fn test_metric_detail_import_response_deserialize() {
+        let value = json!({"success_count": 12, "failed_count": 1});
+        let response: ImportResponse = serde_json::from_value(value).expect("反序列化响应失败");
+        assert_eq!(response.success_count, 12);
+        assert_eq!(response.failed_count, 1);
+    }
+
+    #[test]
+    fn test_metric_detail_import_validation() {
+        let request = ImportRequest::new(create_test_config(), "   ".to_string());
+        let result: SDKResult<()> = (|| {
+            validate_required!(request.cycle_id.trim(), "cycle_id");
+            Ok(())
+        })();
+        assert!(result.is_err());
+    }
+}
