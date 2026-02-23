@@ -1,14 +1,14 @@
 /// 表格管理模块
-//!
-//! 提供多维表格数据表的 CRUD 操作，包括：
-//! - 单个/批量创建数据表
-//! - 单个/批量删除数据表
-//! - 更新数据表
-//! - 列出数据表
-//! - 字段管理（field 子模块）
-//! - 记录管理（record 子模块）
-//! - 表单管理（form 子模块）
-//! - 视图管理（view 子模块）
+///
+/// 提供多维表格数据表的 CRUD 操作，包括：
+/// - 单个/批量创建数据表
+/// - 单个/批量删除数据表
+/// - 更新数据表
+/// - 列出数据表
+/// - 字段管理（field 子模块）
+/// - 记录管理（record 子模块）
+/// - 表单管理（form 子模块）
+/// - 视图管理（view 子模块）
 
 pub mod list;
 pub mod batch_create;
@@ -75,7 +75,6 @@ pub use record::{
     ListRecordRequest,
     ListRecordResponse,
     Record,
-    RecordFieldValue,
     SearchRecordRequest,
     SearchRecordResponse,
     UpdateRecordRequest,
@@ -95,7 +94,6 @@ pub use view::{
     CreateViewRequest,
     CreateViewResponse,
     ListViewsRequest,
-    ListViewsRequestBuilder,
     ListViewsResponse,
     PatchViewData,
     PatchViewRequest,

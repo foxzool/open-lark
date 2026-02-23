@@ -5,6 +5,10 @@ pub mod models;
 pub mod create;
 pub mod update;
 pub mod get;
+pub mod dashboard;
+pub mod role;
+pub mod table;
+pub mod workflow;
 
 pub use copy::*;
 pub use create::*;
