@@ -2,7 +2,7 @@
 //!
 //! 飞书AI智能服务模块，提供完整的AI和智能助手功能。
 
-#![allow(clippy::module_inception)]  // 允许模块与父模块同名，这是 bizTag 组织模式
+#![allow(clippy::module_inception)] // 允许模块与父模块同名，这是 bizTag 组织模式
 //!
 //! ## 主要功能
 //!

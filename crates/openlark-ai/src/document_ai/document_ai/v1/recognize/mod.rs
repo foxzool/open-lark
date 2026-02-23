@@ -24,13 +24,12 @@ pub use id_card_recognize::{
     IdCardRecognizeResponse, ParsingResult as IdCardParsingResult,
 };
 pub use resume_parse::{
-    EducationExperience, ParsingResult as ResumeParsingResult, ProjectExperience,
-    ResumeParseBody, ResumeParseRequest, ResumeParseRequestBuilder, ResumeParseResponse,
-    WorkExperience,
+    EducationExperience, ParsingResult as ResumeParsingResult, ProjectExperience, ResumeParseBody,
+    ResumeParseRequest, ResumeParseRequestBuilder, ResumeParseResponse, WorkExperience,
 };
 pub use vat_invoice_recognize::{
-    ParsingResult as VatInvoiceParsingResult, VatInvoiceRecognizeBody,
-    VatInvoiceRecognizeRequest, VatInvoiceRecognizeRequestBuilder, VatInvoiceRecognizeResponse,
+    ParsingResult as VatInvoiceParsingResult, VatInvoiceRecognizeBody, VatInvoiceRecognizeRequest,
+    VatInvoiceRecognizeRequestBuilder, VatInvoiceRecognizeResponse,
 };
 
 /// 创建简历解析请求构建器
@@ -58,8 +57,7 @@ pub use id_card_recognize::create_with_options as create_id_card_recognize_with_
 pub use bank_card_recognize::create_with_options as create_bank_card_recognize_with_options;
 
 /// 创建营业执照识别请求构建器（支持自定义选项）
-pub use business_license_recognize::create_with_options
-    as create_business_license_recognize_with_options;
+pub use business_license_recognize::create_with_options as create_business_license_recognize_with_options;
 
 /// 创建增值税发票识别请求构建器（支持自定义选项）
 pub use vat_invoice_recognize::create_with_options as create_vat_invoice_recognize_with_options;

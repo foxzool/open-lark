@@ -1,18 +1,17 @@
+pub mod batch_create;
+pub mod batch_delete;
 /// 记录管理模块
 ///
 /// 提供多维表格记录的 CRUD 操作，包括批量操作。
-
 pub mod batch_get;
-pub mod list;
-pub mod batch_create;
-pub mod models;
+pub mod batch_update;
 pub mod create;
 pub mod delete;
-pub mod update;
-pub mod batch_delete;
-pub mod batch_update;
 pub mod get;
+pub mod list;
+pub mod models;
 pub mod search;
+pub mod update;
 
 // 显式导出 - 避免使用 glob reexport
 pub use batch_create::{BatchCreateRecordRequest, BatchCreateRecordResponse};

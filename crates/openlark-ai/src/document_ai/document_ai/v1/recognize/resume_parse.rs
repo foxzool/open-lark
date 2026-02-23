@@ -259,10 +259,7 @@ pub fn create(config: Config) -> ResumeParseRequestBuilder {
 }
 
 /// 执行简历解析（支持自定义选项）
-pub fn create_with_options(
-    config: Config,
-    _options: RequestOption,
-) -> ResumeParseRequestBuilder {
+pub fn create_with_options(config: Config, _options: RequestOption) -> ResumeParseRequestBuilder {
     ResumeParseRequestBuilder::new(config)
 }
 
