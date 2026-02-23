@@ -32,6 +32,22 @@ impl QueryRequest {
         }
     }
 
+    fn validate(&self) -> SDKResult<()> {
+        if self.plan_ids.is_empty() {
+            return Err(openlark_core::error::validation_error(
+                "plan_ids 不能为空",
+                "至少需要提供一个参保方案 ID",
+            ));
+        }
+        if self.effective_date <= 0 {
+            return Err(openlark_core::error::validation_error(
+                "effective_date 无效",
+                "effective_date 必须为正整数时间戳",
+            ));
+        }
+        Ok(())
+    }
+
     /// 执行请求
     pub async fn execute(self) -> SDKResult<QueryResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
@@ -44,6 +60,8 @@ impl QueryRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
         use crate::common::api_endpoints::CompensationApiV1;
+
+        self.validate()?;
 
         // 1. 构建端点
         let api_endpoint = CompensationApiV1::SocialPlanQuery;
@@ -105,5 +123,77 @@ pub struct SocialPlan {
 impl ApiResponseTrait for QueryResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+    use serde_json::json;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_social_plan_query_request_builder() {
+        let request = QueryRequest::new(
+            create_test_config(),
+            vec!["plan_1".to_string(), "plan_2".to_string()],
+            1_706_000_000,
+        );
+
+        assert_eq!(request.plan_ids.len(), 2);
+        assert_eq!(request.effective_date, 1_706_000_000);
+    }
+
+    #[test]
+    fn test_social_plan_query_request_body_serialize() {
+        let body = QueryRequestBody {
+            plan_ids: vec!["plan_a".to_string()],
+            effective_date: 1_707_000_000,
+        };
+        let value = serde_json::to_value(body).expect("序列化请求体失败");
+
+        assert_eq!(value["plan_ids"], json!(["plan_a"]));
+        assert_eq!(value["effective_date"], json!(1_707_000_000));
+    }
+
+    #[test]
+    fn test_social_plan_query_response_deserialize() {
+        let value = json!({
+            "items": [
+                {
+                    "id": "sp_1",
+                    "name": "社保方案A",
+                    "effective_date": 1707000000
+                }
+            ]
+        });
+        let response: QueryResponse = serde_json::from_value(value).expect("反序列化响应失败");
+
+        assert_eq!(response.items.len(), 1);
+        assert_eq!(response.items[0].id, "sp_1");
+    }
+
+    #[test]
+    fn test_social_plan_query_validation() {
+        let request = QueryRequest::new(create_test_config(), vec![], 1_706_000_000);
+        assert!(request.validate().is_err());
+
+        let invalid_date_request =
+            QueryRequest::new(create_test_config(), vec!["plan_1".to_string()], 0);
+        assert!(invalid_date_request.validate().is_err());
+
+        let valid_request = QueryRequest::new(
+            create_test_config(),
+            vec!["plan_1".to_string()],
+            1_706_000_000,
+        );
+        assert!(valid_request.validate().is_ok());
     }
 }

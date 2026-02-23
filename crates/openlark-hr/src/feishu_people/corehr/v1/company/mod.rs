@@ -8,11 +8,15 @@ pub mod models;
 pub mod patch;
 
 // Re-export 公共类型
-pub use active::*;
-pub use batch_get::*;
-pub use create::*;
-pub use delete::*;
-pub use get::*;
-pub use list::*;
-pub use models::*;
-pub use patch::*;
+pub use active::ActiveRequest;
+pub use batch_get::BatchGetRequest;
+pub use create::CreateRequest;
+pub use delete::DeleteRequest;
+pub use get::GetRequest;
+pub use list::ListRequest;
+pub use models::{
+    ActiveRequestBody, ActiveResponse, BatchGetRequestBody, BatchGetResponse, Company,
+    CreateRequestBody, CreateResponse, DeleteRequestBody, DeleteResponse, GetRequestBody,
+    GetResponse, ListRequestBody, ListResponse, PatchRequestBody, PatchResponse,
+};
+pub use patch::PatchRequest;

@@ -11,10 +11,14 @@ pub mod patch;
 pub mod search;
 
 // Re-export 公共类型
-pub use create::*;
-pub use delete::*;
-pub use get::*;
-pub use list::*;
-pub use models::*;
-pub use patch::*;
-pub use search::*;
+pub use create::CreateRequest;
+pub use delete::DeleteRequest;
+pub use get::GetRequest;
+pub use list::ListRequest;
+pub use models::{
+    Contract, ContractFile, CreateRequestBody, CreateResponse, CustomField, DeleteRequestBody,
+    DeleteResponse, GetRequestBody, GetResponse, ListRequestBody, ListResponse, PatchRequestBody,
+    PatchResponse, SearchRequestBody, SearchResponse,
+};
+pub use patch::PatchRequest;
+pub use search::SearchRequest;

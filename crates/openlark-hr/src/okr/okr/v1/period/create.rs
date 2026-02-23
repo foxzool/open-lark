@@ -152,3 +152,75 @@ impl ApiResponseTrait for CreateResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+    use serde_json::json;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_okr_period_create_request_builder() {
+        let request = CreateRequest::new(
+            create_test_config(),
+            "2026Q1".to_string(),
+            1_706_000_000,
+            1_708_000_000,
+        )
+        .description("第一季度 OKR".to_string())
+        .review_time(1_708_100_000);
+
+        assert_eq!(request.name, "2026Q1");
+        assert_eq!(request.start_time, 1_706_000_000);
+        assert_eq!(request.review_time, Some(1_708_100_000));
+    }
+
+    #[test]
+    fn test_okr_period_create_request_body_serialize() {
+        let body = CreateRequestBody {
+            name: "2026Q2".to_string(),
+            start_time: 1_709_000_000,
+            end_time: 1_711_000_000,
+            description: Some("第二季度 OKR".to_string()),
+            target_setting_deadline: Some(1_709_100_000),
+            review_time: None,
+        };
+
+        let value = serde_json::to_value(body).expect("序列化请求体失败");
+        assert_eq!(value["name"], json!("2026Q2"));
+        assert_eq!(value["target_setting_deadline"], json!(1_709_100_000));
+        assert!(value.get("review_time").is_none());
+    }
+
+    #[test]
+    fn test_okr_period_create_response_deserialize() {
+        let value = json!({
+            "period_id": "period_1",
+            "name": "2026Q1",
+            "start_time": 1706000000,
+            "end_time": 1708000000,
+            "status": 1,
+            "created_at": 1705000000
+        });
+        let response: CreateResponse = serde_json::from_value(value).expect("反序列化响应失败");
+        assert_eq!(response.period_id, "period_1");
+        assert_eq!(response.status, 1);
+    }
+
+    #[test]
+    fn test_okr_period_create_validation() {
+        let request = CreateRequest::new(create_test_config(), " ".to_string(), 1, 2);
+        let result: SDKResult<()> = (|| {
+            validate_required!(request.name.trim(), "周期名称不能为空");
+            Ok(())
+        })();
+        assert!(result.is_err());
+    }
+}

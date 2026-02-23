@@ -136,3 +136,95 @@ impl ApiResponseTrait for SaveResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+    use serde_json::json;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    fn build_records() -> Vec<DatasourceRecord> {
+        vec![DatasourceRecord {
+            employee_id: "emp_1".to_string(),
+            items: vec![DatasourceRecordItem {
+                field_name: "base_salary".to_string(),
+                value: json!(10000),
+            }],
+        }]
+    }
+
+    #[test]
+    fn test_payroll_save_request_builder() {
+        let request = SaveRequest::new(
+            create_test_config(),
+            "ds_1".to_string(),
+            vec!["emp_1".to_string()],
+            build_records(),
+        );
+
+        assert_eq!(request.datasource_id, "ds_1");
+        assert_eq!(request.employee_ids, vec!["emp_1"]);
+        assert_eq!(request.records.len(), 1);
+    }
+
+    #[test]
+    fn test_payroll_save_request_body_serialize() {
+        let body = SaveRequestBody {
+            datasource_id: "ds_2".to_string(),
+            employee_ids: vec!["emp_2".to_string()],
+            records: vec![DatasourceRecord {
+                employee_id: "emp_2".to_string(),
+                items: vec![DatasourceRecordItem {
+                    field_name: "bonus".to_string(),
+                    value: json!(888),
+                }],
+            }],
+        };
+
+        let value = serde_json::to_value(body).expect("序列化请求体失败");
+        assert_eq!(value["datasource_id"], json!("ds_2"));
+        assert_eq!(value["employee_ids"], json!(["emp_2"]));
+        assert_eq!(
+            value["records"][0]["items"][0]["field_name"],
+            json!("bonus")
+        );
+    }
+
+    #[test]
+    fn test_payroll_save_response_deserialize() {
+        let value = json!({
+            "success": true,
+            "processed_count": 1,
+            "failed_count": 0,
+            "failed_employee_ids": ["emp_x"]
+        });
+        let response: SaveResponse = serde_json::from_value(value).expect("反序列化响应失败");
+
+        assert!(response.success);
+        assert_eq!(response.processed_count, 1);
+        assert_eq!(
+            response.failed_employee_ids,
+            Some(vec!["emp_x".to_string()])
+        );
+    }
+
+    #[test]
+    fn test_payroll_save_validation() {
+        let request = SaveRequest::new(create_test_config(), "  ".to_string(), vec![], vec![]);
+        let result: SDKResult<()> = (|| {
+            validate_required!(request.datasource_id.trim(), "datasource_id");
+            validate_required!(request.employee_ids, "employee_ids");
+            validate_required!(request.records, "records");
+            Ok(())
+        })();
+
+        assert!(result.is_err());
+    }
+}

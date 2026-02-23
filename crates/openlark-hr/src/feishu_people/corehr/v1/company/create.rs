@@ -104,3 +104,64 @@ impl ApiResponseTrait for CreateResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::config::Config;
+    use serde_json::json;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_company_create_request_builder() {
+        let request = CreateRequest::new(create_test_config())
+            .name("测试公司".to_string())
+            .code("COMP-001".to_string())
+            .description("用于单元测试".to_string());
+
+        assert_eq!(request.name, "测试公司");
+        assert_eq!(request.code.as_deref(), Some("COMP-001"));
+        assert_eq!(request.description.as_deref(), Some("用于单元测试"));
+    }
+
+    #[test]
+    fn test_company_create_request_body_serialize() {
+        let request = CreateRequest::new(create_test_config())
+            .name("测试公司".to_string())
+            .code("COMP-002".to_string());
+
+        let body = CreateRequestBody {
+            name: request.name,
+            code: request.code,
+            description: request.description,
+        };
+        let value = serde_json::to_value(body).expect("序列化请求体失败");
+
+        assert_eq!(value["name"], json!("测试公司"));
+        assert_eq!(value["code"], json!("COMP-002"));
+    }
+
+    #[test]
+    fn test_company_create_response_deserialize() {
+        let value = json!({"company_id": "com_123"});
+        let response: CreateResponse = serde_json::from_value(value).expect("反序列化响应失败");
+        assert_eq!(response.company_id, "com_123");
+    }
+
+    #[test]
+    fn test_company_create_validation() {
+        let request = CreateRequest::new(create_test_config()).name("  ".to_string());
+        let result: SDKResult<()> = (|| {
+            validate_required!(request.name.trim(), "公司名称不能为空");
+            Ok(())
+        })();
+
+        assert!(result.is_err());
+    }
+}
