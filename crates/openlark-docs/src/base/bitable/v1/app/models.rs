@@ -1,7 +1,23 @@
 /// Bitable V1 应用管理数据模型
 ///
 /// 定义了应用管理相关的数据结构，包括请求和响应模型。
+use openlark_core::config::Config;
 use serde::{Deserialize, Serialize};
+
+/// 应用服务
+///
+/// 用于在子模块中实现应用相关的方法。
+pub struct AppService {
+    /// 配置信息
+    pub config: Config,
+}
+
+impl AppService {
+    /// 创建新的应用服务
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+}
 
 /// 应用信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

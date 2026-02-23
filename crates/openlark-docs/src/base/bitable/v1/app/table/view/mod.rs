@@ -1,6 +1,6 @@
 /// 视图管理模块
-//!
-//! 提供多维表格视图的 CRUD 操作。
+///
+/// 提供多维表格视图的 CRUD 操作。
 
 pub mod list;
 pub mod create;

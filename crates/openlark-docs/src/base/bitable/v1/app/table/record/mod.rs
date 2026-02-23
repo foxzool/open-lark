@@ -1,6 +1,6 @@
 /// 记录管理模块
-//!
-//! 提供多维表格记录的 CRUD 操作，包括批量操作。
+///
+/// 提供多维表格记录的 CRUD 操作，包括批量操作。
 
 pub mod batch_get;
 pub mod list;
@@ -31,7 +31,7 @@ pub use get::{GetRecordRequest, GetRecordResponse};
 
 pub use list::{ListRecordRequest, ListRecordResponse};
 
-pub use models::{Person, Record, RecordFieldValue};
+pub use models::{Person, Record};
 
 pub use search::{SearchRecordRequest, SearchRecordResponse};
 

@@ -13,7 +13,6 @@ pub mod list;
 // copy 模块显式导出
 pub use copy::{
     CopyDashboardRequest, CopyDashboardResponse,
-    ListDashboardsRequest, ListDashboardsResponse,
 };
 // list 模块显式导出
 pub use list::{

@@ -1,6 +1,6 @@
 /// 字段管理模块
-//!
-//! 提供多维表格字段的 CRUD 操作。
+///
+/// 提供多维表格字段的 CRUD 操作。
 
 pub mod list;
 pub mod create;
