@@ -7,15 +7,18 @@ license.workspace = true
 description = "open-lark-hr-suite module for OpenLark SDK"
 
 [features]
-default = ["attendance", "corehr", "hire", "okr", "payroll", "performance", "compensation_management", "ehr"]
+default = ["attendance", "corehr", "compensation", "payroll", "performance", "okr", "hire", "ehr"]
+
 attendance = []
 corehr = []
-hire = []
-okr = []
+compensation = []
 payroll = []
 performance = []
-compensation_management = []
+okr = []
+hire = []
 ehr = []
+
+hr-full = ["attendance", "corehr", "compensation", "payroll", "performance", "okr", "hire", "ehr"]
 
 [dependencies]
 openlark-core = { workspace = true }

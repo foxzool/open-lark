@@ -38,13 +38,21 @@
 
 pub mod common;
 
+#[cfg(feature = "attendance")]
 pub mod attendance;
+#[cfg(feature = "compensation")]
 pub mod compensation_management;
+#[cfg(feature = "ehr")]
 pub mod ehr;
+#[cfg(feature = "corehr")]
 pub mod feishu_people;
+#[cfg(feature = "hire")]
 pub mod hire;
+#[cfg(feature = "okr")]
 pub mod okr;
+#[cfg(feature = "payroll")]
 pub mod payroll;
+#[cfg(feature = "performance")]
 pub mod performance;
 
 // 端点保留（已废弃，请使用 common::api_endpoints 中的枚举系统）
@@ -55,52 +63,60 @@ pub mod prelude {
     pub use openlark_core::{config::Config, SDKResult};
 }
 
-use common::service::HrService;
+use openlark_core::config::Config;
 use std::sync::Arc;
 
 /// HRClient：统一入口，提供 project-version-resource 链式访问
 #[derive(Clone)]
 pub struct HrClient {
-    service: Arc<HrService>,
+    config: Arc<Config>,
 }
 
 impl HrClient {
-    pub fn new(config: openlark_core::config::Config) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            service: Arc::new(HrService::new(config)),
+            config: Arc::new(config),
         }
     }
 
+    #[cfg(feature = "attendance")]
     pub fn attendance(&self) -> attendance::Attendance {
-        attendance::Attendance::new(self.service.config().clone())
+        attendance::Attendance::new((*self.config).clone())
     }
 
+    #[cfg(feature = "corehr")]
     pub fn corehr(&self) -> feishu_people::Corehr {
-        feishu_people::Corehr::new(self.service.config().clone())
+        feishu_people::Corehr::new((*self.config).clone())
     }
 
+    #[cfg(feature = "compensation")]
     pub fn compensation(&self) -> compensation_management::CompensationManagement {
-        compensation_management::CompensationManagement::new(self.service.config().clone())
+        compensation_management::CompensationManagement::new((*self.config).clone())
     }
 
+    #[cfg(feature = "payroll")]
     pub fn payroll(&self) -> payroll::Payroll {
-        payroll::Payroll::new(self.service.config().clone())
+        payroll::Payroll::new((*self.config).clone())
     }
 
+    #[cfg(feature = "performance")]
     pub fn performance(&self) -> performance::Performance {
-        performance::Performance::new(self.service.config().clone())
+        performance::Performance::new((*self.config).clone())
     }
 
+    #[cfg(feature = "okr")]
     pub fn okr(&self) -> okr::Okr {
-        okr::Okr::new(self.service.config().clone())
+        okr::Okr::new((*self.config).clone())
     }
 
+    #[cfg(feature = "hire")]
     pub fn hire(&self) -> hire::Hire {
-        hire::Hire::new(self.service.config().clone())
+        hire::Hire::new((*self.config).clone())
     }
 
+    #[cfg(feature = "ehr")]
     pub fn ehr(&self) -> ehr::Ehr {
-        ehr::Ehr::new(self.service.config().clone())
+        ehr::Ehr::new((*self.config).clone())
     }
 }
 
@@ -120,7 +136,7 @@ mod tests {
     fn test_hr_client_creation() {
         let config = create_test_config();
         let client = HrClient::new(config);
-        assert!(client.service.config().app_id() == "test_app");
+        assert!(client.config.app_id() == "test_app");
     }
 
     #[test]
@@ -128,9 +144,10 @@ mod tests {
         let config = create_test_config();
         let client = HrClient::new(config);
         let cloned = client.clone();
-        assert!(cloned.service.config().app_id() == "test_app");
+        assert!(cloned.config.app_id() == "test_app");
     }
 
+    #[cfg(feature = "attendance")]
     #[test]
     fn test_hr_client_attendance() {
         let config = create_test_config();
@@ -138,6 +155,7 @@ mod tests {
         let _attendance = client.attendance();
     }
 
+    #[cfg(feature = "corehr")]
     #[test]
     fn test_hr_client_corehr() {
         let config = create_test_config();
@@ -145,6 +163,7 @@ mod tests {
         let _corehr = client.corehr();
     }
 
+    #[cfg(feature = "compensation")]
     #[test]
     fn test_hr_client_compensation() {
         let config = create_test_config();
@@ -152,6 +171,7 @@ mod tests {
         let _compensation = client.compensation();
     }
 
+    #[cfg(feature = "payroll")]
     #[test]
     fn test_hr_client_payroll() {
         let config = create_test_config();
@@ -159,6 +179,7 @@ mod tests {
         let _payroll = client.payroll();
     }
 
+    #[cfg(feature = "performance")]
     #[test]
     fn test_hr_client_performance() {
         let config = create_test_config();
@@ -166,6 +187,7 @@ mod tests {
         let _performance = client.performance();
     }
 
+    #[cfg(feature = "okr")]
     #[test]
     fn test_hr_client_okr() {
         let config = create_test_config();
@@ -173,6 +195,7 @@ mod tests {
         let _okr = client.okr();
     }
 
+    #[cfg(feature = "hire")]
     #[test]
     fn test_hr_client_hire() {
         let config = create_test_config();
@@ -180,6 +203,7 @@ mod tests {
         let _hire = client.hire();
     }
 
+    #[cfg(feature = "ehr")]
     #[test]
     fn test_hr_client_ehr() {
         let config = create_test_config();
