@@ -74,7 +74,7 @@ pub async fn get_root_folder_meta(
         ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取根文件夹元信息")
 }
 
@@ -97,7 +97,7 @@ pub async fn get_folder_meta(
         ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取文件夹元信息")
 }
 
@@ -124,7 +124,7 @@ pub async fn create_file(
             .body(serialize_params(&params, "新建文件")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "新建文件")
 }
 
@@ -150,7 +150,7 @@ pub async fn copy_file(
             .body(serialize_params(&params, "复制文档")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "复制文档")
 }
 
@@ -173,7 +173,7 @@ pub async fn delete_doc(
         ApiRequest::delete(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "删除Doc")
 }
 
@@ -196,7 +196,7 @@ pub async fn delete_sheet(
         ApiRequest::delete(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "删除Sheet")
 }
 
@@ -224,7 +224,7 @@ pub async fn get_folder_children(
     };
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "获取文件夹子项")
 }
 
@@ -250,7 +250,7 @@ pub async fn create_folder(
             .body(serialize_params(&params, "新建文件夹")?);
 
     // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, Some(option)).await?;
+    let response = Transport::request(api_request, config, None).await?;
     extract_response_data(response, "新建文件夹")
 }
 
