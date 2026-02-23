@@ -11,13 +11,9 @@ pub mod list;
 
 // 重新导出所有服务类型
 // copy 模块显式导出
-pub use copy::{
-    CopyDashboardRequest, CopyDashboardResponse,
-};
+pub use copy::{CopyDashboardRequest, CopyDashboardResponse};
 // list 模块显式导出
-pub use list::{
-    ListDashboardsRequest, ListDashboardsResponse,
-};
+pub use list::{ListDashboardsRequest, ListDashboardsResponse};
 
 /// 仪表盘信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]

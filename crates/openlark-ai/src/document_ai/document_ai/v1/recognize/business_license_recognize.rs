@@ -229,7 +229,10 @@ mod tests {
             address: Some("北京市海淀区".to_string()),
             company_type: Some("有限责任公司".to_string()),
         };
-        assert_eq!(parsing_result.company_name, Some("测试科技有限公司".to_string()));
+        assert_eq!(
+            parsing_result.company_name,
+            Some("测试科技有限公司".to_string())
+        );
         assert_eq!(parsing_result.legal_person, Some("张三".to_string()));
     }
 }

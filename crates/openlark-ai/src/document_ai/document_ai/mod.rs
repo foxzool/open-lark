@@ -14,7 +14,8 @@ pub use v1::{
     BankCardRecognizeRequest, BankCardRecognizeRequestBuilder, BankCardRecognizeResponse,
     BusinessLicenseRecognizeBody, BusinessLicenseRecognizeRequest,
     BusinessLicenseRecognizeRequestBuilder, BusinessLicenseRecognizeResponse, IdCardRecognizeBody,
-    IdCardRecognizeRequest, IdCardRecognizeRequestBuilder, IdCardRecognizeResponse, ResumeParseBody,
-    ResumeParseRequest, ResumeParseRequestBuilder, ResumeParseResponse, VatInvoiceRecognizeBody,
-    VatInvoiceRecognizeRequest, VatInvoiceRecognizeRequestBuilder, VatInvoiceRecognizeResponse,
+    IdCardRecognizeRequest, IdCardRecognizeRequestBuilder, IdCardRecognizeResponse,
+    ResumeParseBody, ResumeParseRequest, ResumeParseRequestBuilder, ResumeParseResponse,
+    VatInvoiceRecognizeBody, VatInvoiceRecognizeRequest, VatInvoiceRecognizeRequestBuilder,
+    VatInvoiceRecognizeResponse,
 };

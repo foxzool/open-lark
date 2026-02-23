@@ -90,8 +90,9 @@ impl FileRecognizeRequest {
         body.validate()
             .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
 
-        let req: ApiRequest<FileRecognizeResponse> = ApiRequest::post(SPEECH_TO_TEXT_V1_FILE_RECOGNIZE)
-            .body(serialize_params(&body, "语音文件识别")?);
+        let req: ApiRequest<FileRecognizeResponse> =
+            ApiRequest::post(SPEECH_TO_TEXT_V1_FILE_RECOGNIZE)
+                .body(serialize_params(&body, "语音文件识别")?);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "语音文件识别")
@@ -315,9 +316,7 @@ mod tests {
             task_id: Some("task_123".to_string()),
             status: Some("completed".to_string()),
         };
-        let response_with_data = FileRecognizeResponse {
-            data: Some(result),
-        };
+        let response_with_data = FileRecognizeResponse { data: Some(result) };
         assert!(response_with_data.data.is_some());
         assert_eq!(
             response_with_data.data.unwrap().text,

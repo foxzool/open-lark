@@ -254,8 +254,7 @@ mod tests {
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
-        let builder =
-            StreamRecognizeRequestBuilder::new(config.clone()).audio("base64_audio_data");
+        let builder = StreamRecognizeRequestBuilder::new(config.clone()).audio("base64_audio_data");
 
         assert_eq!(builder.audio, Some("base64_audio_data".to_string()));
     }
@@ -365,9 +364,7 @@ mod tests {
             start_time: Some(0),
             end_time: Some(1500),
         };
-        let response_with_data = StreamRecognizeResponse {
-            data: Some(result),
-        };
+        let response_with_data = StreamRecognizeResponse { data: Some(result) };
         assert!(response_with_data.data.is_some());
         assert_eq!(
             response_with_data.data.unwrap().text,

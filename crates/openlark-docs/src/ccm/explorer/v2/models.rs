@@ -1,5 +1,4 @@
 /// CCM Drive Explorer V2 数据模型
-
 use serde::{Deserialize, Serialize};
 
 /// 获取文件夹元数据响应

@@ -229,7 +229,10 @@ mod tests {
             tax_amount: Some("130.00".to_string()),
             total_amount: Some("1130.00".to_string()),
         };
-        assert_eq!(parsing_result.invoice_code, Some("011001900211".to_string()));
+        assert_eq!(
+            parsing_result.invoice_code,
+            Some("011001900211".to_string())
+        );
         assert_eq!(parsing_result.total_amount, Some("1130.00".to_string()));
     }
 }
