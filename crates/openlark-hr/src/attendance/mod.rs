@@ -22,7 +22,7 @@ impl Attendance {
     }
 
     /// 获取 attendance 项目 v1 版本服务
-    pub fn v1(&self) -> attendance::v1::AttendanceV1 {
-        attendance::v1::AttendanceV1::new(self.config.clone())
+    pub fn v1(&self) -> attendance::AttendanceV1 {
+        attendance::AttendanceV1::new(self.config.clone())
     }
 }

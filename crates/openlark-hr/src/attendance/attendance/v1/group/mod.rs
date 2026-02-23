@@ -10,5 +10,6 @@ pub use create::*;
 pub use delete::*;
 pub use get::*;
 pub use list::*;
+pub use list_user::*;
 pub use models::*;
 pub use search::*;
