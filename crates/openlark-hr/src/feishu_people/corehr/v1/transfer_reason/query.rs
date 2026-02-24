@@ -3,6 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/transfer_reason/query
 
 use openlark_core::{
+    api::{ApiRequest, 
     api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     SDKResult,
@@ -16,7 +17,7 @@ use serde_json::Value;
 pub struct QueryRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    
 }
 
 impl QueryRequest {
@@ -24,11 +25,11 @@ impl QueryRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<QueryResponse> {
@@ -40,7 +41,7 @@ impl QueryRequest {
         self,
         _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
-        // TODO: 实现 API 调用逻辑
+        use crate::common::api_endpoints::CorehrApiV1;
         todo!("实现 获取异动原因列表 API 调用")
     }
 }

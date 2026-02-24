@@ -3,8 +3,9 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/transfer_type/query
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -16,7 +17,6 @@ use serde_json::Value;
 pub struct QueryRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl QueryRequest {
@@ -24,11 +24,8 @@ impl QueryRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
         }
     }
-
-    // TODO: 添加字段 setter 方法
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<QueryResponse> {
@@ -40,8 +37,18 @@ impl QueryRequest {
         self,
         _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 获取异动类型列表 API 调用")
+        use crate::common::api_endpoints::CorehrApiV1;
+
+        let api_endpoint = CorehrApiV1::TransferTypeQuery;
+        let request = ApiRequest::<QueryResponse>::post(api_endpoint.to_url());
+        let response = Transport::request(request, &self.config, Some(_option)).await?;
+
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取异动类型列表响应数据为空",
+                "服务器没有返回有效的数据"
+            )
+        })
     }
 }
 

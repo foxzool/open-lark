@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -15,9 +15,8 @@ use serde_json::Value;
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct WorkCalendarDateRequest {
-    /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    query_params: Vec<(String, String)>,
 }
 
 impl WorkCalendarDateRequest {
@@ -25,11 +24,14 @@ impl WorkCalendarDateRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            query_params: Vec::new(),
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn query_param(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
+        self.query_params.push((key.into(), value.into()));
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<WorkCalendarDateResponse> {
@@ -41,8 +43,21 @@ impl WorkCalendarDateRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<WorkCalendarDateResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 获取工作日历日期详情 API 调用")
+        use crate::common::api_endpoints::FeishuPeopleApiV1;
+
+        let api_endpoint = FeishuPeopleApiV1::LeaveWorkCalendarDate;
+        let mut request = ApiRequest::<WorkCalendarDateResponse>::get(api_endpoint.to_url());
+        for (key, value) in self.query_params {
+            request = request.query(&key, value);
+        }
+
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取工作日历日期详情响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 

@@ -3,6 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/process.form_variable_data/get
 
 use openlark_core::{
+    api::{ApiRequest, 
     api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     SDKResult,
@@ -40,7 +41,7 @@ impl GetRequest {
         self,
         _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
-        // TODO: 实现 API 调用逻辑
+        use crate::common::api_endpoints::CorehrApiV1;
         todo!("实现 获取流程表单数据 API 调用")
     }
 }
