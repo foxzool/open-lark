@@ -52,8 +52,6 @@ websocket = ["tokio-tungstenite", "prost", "openlark-protocol", "lark-websocket-
 # OpenTelemetry support
 otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
 
-# 额外校验（默认关闭，避免 core 体积与依赖边界膨胀）
-employee-extra-validation = []
 
 # Service modules (for conditional compilation in client)
 acs = []
