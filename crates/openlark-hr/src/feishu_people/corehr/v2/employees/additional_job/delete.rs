@@ -3,34 +3,41 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/employees.additional_job/delete
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-/// 删除兼职请求
 #[derive(Debug, Clone)]
-#[allow(dead_code)]
 pub struct DeleteRequest {
-    /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    additional_job_id: Option<String>,
+    request_body: Option<Value>,
 }
 
 impl DeleteRequest {
-    /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            additional_job_id: None,
+            request_body: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn additional_job_id(mut self, additional_job_id: String) -> Self {
+        self.additional_job_id = Some(additional_job_id);
+        self
+    }
 
-    /// 执行请求
+    pub fn request_body(mut self, request_body: Value) -> Self {
+        self.request_body = Some(request_body);
+        self
+    }
+
     pub async fn execute(self) -> SDKResult<DeleteResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
@@ -38,19 +45,32 @@ impl DeleteRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 删除兼职 API 调用")
+        use crate::common::api_endpoints::FeishuPeopleApiV2;
+
+        let additional_job_id = self.additional_job_id.unwrap_or_default();
+        validate_required!(additional_job_id.trim(), "additional_job_id 不能为空");
+        let api_endpoint = FeishuPeopleApiV2::EmployeesAdditionalJobDelete(additional_job_id);
+        let mut request = ApiRequest::<DeleteResponse>::delete(api_endpoint.to_url());
+
+        if let Some(request_body) = self.request_body {
+            request = request.body(request_body);
+        }
+
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "删除兼职响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
-/// 删除兼职响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     pub data: Value,
 }
 

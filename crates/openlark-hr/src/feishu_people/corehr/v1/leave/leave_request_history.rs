@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -15,9 +15,9 @@ use serde_json::Value;
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct LeaveRequestHistoryRequest {
-    /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    body: Option<Value>,
+    query_params: Vec<(String, String)>,
 }
 
 impl LeaveRequestHistoryRequest {
@@ -25,11 +25,20 @@ impl LeaveRequestHistoryRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            body: None,
+            query_params: Vec::new(),
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn body(mut self, body: Value) -> Self {
+        self.body = Some(body);
+        self
+    }
+
+    pub fn query_param(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
+        self.query_params.push((key.into(), value.into()));
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<LeaveRequestHistoryResponse> {
@@ -41,8 +50,24 @@ impl LeaveRequestHistoryRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<LeaveRequestHistoryResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 批量查询员工请假记录 API 调用")
+        use crate::common::api_endpoints::FeishuPeopleApiV1;
+
+        let api_endpoint = FeishuPeopleApiV1::LeaveLeaveRequestHistory;
+        let mut request = ApiRequest::<LeaveRequestHistoryResponse>::post(api_endpoint.to_url());
+        for (key, value) in self.query_params {
+            request = request.query(&key, value);
+        }
+        if let Some(body) = self.body {
+            request = request.body(body);
+        }
+
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "批量查询员工请假记录响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 

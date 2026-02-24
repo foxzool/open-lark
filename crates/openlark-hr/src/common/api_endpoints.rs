@@ -694,7 +694,6 @@ pub enum HireApiV1 {
     /// 批量更新内推账户自定义字段
     EcoAccountCustomFieldBatchUpdate,
 
-
     // === exam 资源 (2个) ===
     /// 创建笔试
     ExamCreate,
@@ -2072,6 +2071,11 @@ pub enum FeishuPeopleApiV1 {
     /// 获取组织类角色授权列表
     AssignedUserSearch,
 
+    /// 批量获取角色列表
+    SecurityGroupList,
+    /// 查询部门 / 地点的 HRBP / 属地 BP
+    SecurityGroupQuery,
+
     // === approval_groups 资源 (4个) ===
     /// 获取审批组
     ApprovalGroupsGet,
@@ -2398,16 +2402,54 @@ pub enum FeishuPeopleApiV1 {
     /// 更新国家证件类型
     NationalIdTypePatch(String), // national_id_type_id
 
-                                 // 注：由于 FeishuPeople API 数量巨大 (257+),
-                                 // 这里只列出部分主要资源，完整实现需要根据实际需求继续添加
-                                 // 主要资源还包括：
-                                 // - pre_hire (预入职)
-                                 // - offboarding (离职)
-                                 // - onboarding (入职)
-                                 // - work_calendar (工作日历)
-                                 // - organization (组织)
-                                 // - user (用户)
-                                 // 等等
+    // === subdivision 资源 (2个) ===
+    /// 查询单条省份/行政区信息
+    SubdivisionGet(String), // subdivision_id
+    /// 批量查询省份/行政区信息
+    SubdivisionList,
+
+    // === subregion 资源 (2个) ===
+    /// 查询单条城市/区域信息
+    SubregionGet(String), // subregion_id
+    /// 批量查询城市/区域信息
+    SubregionList,
+
+    // === working_hours_type 资源 (5个) ===
+    /// 创建工时制度
+    WorkingHoursTypeCreate,
+    /// 删除工时制度
+    WorkingHoursTypeDelete(String), // working_hours_type_id
+    /// 查询单个工时制度
+    WorkingHoursTypeGet(String), // working_hours_type_id
+    /// 批量查询工时制度
+    WorkingHoursTypeList,
+    /// 更新工时制度
+    WorkingHoursTypePatch(String), // working_hours_type_id
+
+    OffboardingQuery,
+    OffboardingSearch,
+    OffboardingSubmit,
+
+    PersonCreate,
+    PersonDelete(String),
+    PersonGet(String),
+    PersonPatch(String),
+    PersonUpload,
+
+    PreHireDelete(String),
+    PreHireGet(String),
+    PreHireList,
+    PreHirePatch(String),
+    // 注：由于 FeishuPeople API 数量巨大 (257+),
+    // 这里只列出部分主要资源，完整实现需要根据实际需求继续添加
+    // 主要资源还包括：
+    // - pre_hire (预入职)
+    // - offboarding (离职)
+    // - onboarding (入职)
+    // - work_calendar (工作日历)
+    // - organization (组织)
+    // - user (用户)
+    // 等等
 }
 
 impl FeishuPeopleApiV1 {
@@ -2447,6 +2489,13 @@ impl FeishuPeopleApiV1 {
             // assigned_user
             FeishuPeopleApiV1::AssignedUserSearch => {
                 "/open-apis/corehr/v1/assigned_users/search".to_string()
+            }
+
+            FeishuPeopleApiV1::SecurityGroupList => {
+                "/open-apis/corehr/v1/security_groups/list".to_string()
+            }
+            FeishuPeopleApiV1::SecurityGroupQuery => {
+                "/open-apis/corehr/v1/security_groups/query".to_string()
             }
 
             // approval_groups
@@ -2872,6 +2921,78 @@ impl FeishuPeopleApiV1 {
                     national_id_type_id
                 )
             }
+
+            // subdivision
+            FeishuPeopleApiV1::SubdivisionGet(subdivision_id) => {
+                format!("/open-apis/corehr/v1/subdivisions/{}", subdivision_id)
+            }
+            FeishuPeopleApiV1::SubdivisionList => "/open-apis/corehr/v1/subdivisions".to_string(),
+
+            // subregion
+            FeishuPeopleApiV1::SubregionGet(subregion_id) => {
+                format!("/open-apis/corehr/v1/subregions/{}", subregion_id)
+            }
+            FeishuPeopleApiV1::SubregionList => "/open-apis/corehr/v1/subregions".to_string(),
+
+            // working_hours_type
+            FeishuPeopleApiV1::WorkingHoursTypeCreate => {
+                "/open-apis/corehr/v1/working_hours_types".to_string()
+            }
+            FeishuPeopleApiV1::WorkingHoursTypeDelete(working_hours_type_id) => {
+                format!(
+                    "/open-apis/corehr/v1/working_hours_types/{}",
+                    working_hours_type_id
+                )
+            }
+            FeishuPeopleApiV1::WorkingHoursTypeGet(working_hours_type_id) => {
+                format!(
+                    "/open-apis/corehr/v1/working_hours_types/{}",
+                    working_hours_type_id
+                )
+            }
+            FeishuPeopleApiV1::WorkingHoursTypeList => {
+                "/open-apis/corehr/v1/working_hours_types".to_string()
+            }
+            FeishuPeopleApiV1::WorkingHoursTypePatch(working_hours_type_id) => {
+                format!(
+                    "/open-apis/corehr/v1/working_hours_types/{}",
+                    working_hours_type_id
+                )
+            }
+
+            // offboarding
+            FeishuPeopleApiV1::OffboardingQuery => {
+                "/open-apis/corehr/v1/offboardings/query".to_string()
+            }
+            FeishuPeopleApiV1::OffboardingSearch => {
+                "/open-apis/corehr/v1/offboardings/search".to_string()
+            }
+            FeishuPeopleApiV1::OffboardingSubmit => {
+                "/open-apis/corehr/v1/offboardings/submit".to_string()
+            }
+
+            FeishuPeopleApiV1::PersonCreate => "/open-apis/corehr/v1/persons".to_string(),
+            FeishuPeopleApiV1::PersonDelete(person_id) => {
+                format!("/open-apis/corehr/v1/persons/{}", person_id)
+            }
+            FeishuPeopleApiV1::PersonGet(person_id) => {
+                format!("/open-apis/corehr/v1/persons/{}", person_id)
+            }
+            FeishuPeopleApiV1::PersonPatch(person_id) => {
+                format!("/open-apis/corehr/v1/persons/{}", person_id)
+            }
+            FeishuPeopleApiV1::PersonUpload => "/open-apis/corehr/v1/persons/upload".to_string(),
+
+            FeishuPeopleApiV1::PreHireDelete(pre_hire_id) => {
+                format!("/open-apis/corehr/v1/pre_hires/{}", pre_hire_id)
+            }
+            FeishuPeopleApiV1::PreHireGet(pre_hire_id) => {
+                format!("/open-apis/corehr/v1/pre_hires/{}", pre_hire_id)
+            }
+            FeishuPeopleApiV1::PreHireList => "/open-apis/corehr/v1/pre_hires".to_string(),
+            FeishuPeopleApiV1::PreHirePatch(pre_hire_id) => {
+                format!("/open-apis/corehr/v1/pre_hires/{}", pre_hire_id)
+            }
         }
     }
 }
@@ -2915,9 +3036,72 @@ pub enum FeishuPeopleApiV2 {
     /// 搜索员工信息
     EmployeeSearch,
 
+    EmployeesAdditionalJobBatch,
+    EmployeesAdditionalJobCreate,
+    EmployeesAdditionalJobDelete(String),
+    EmployeesAdditionalJobPatch(String),
+
+    EmployeesBpBatchGet,
+
+    EmployeesInternationalAssignmentCreate,
+    EmployeesInternationalAssignmentDelete(String),
+    EmployeesInternationalAssignmentList,
+    EmployeesInternationalAssignmentPatch(String),
+
+    EmployeesJobDataBatchGet,
+    EmployeesJobDataQuery,
+
+    PersonCreate,
+    PersonPatch(String),
+
+    PreHireComplete,
+    PreHireCreate,
+    PreHireDelete(String),
+    PreHirePatch(String),
+    PreHireQuery,
+    PreHireRestoreFlowInstance,
+    PreHireSearch,
+    PreHireTransformOnboardingTask,
+    PreHireTransitTask,
+    PreHireWithdrawOnboarding,
+
+    OffboardingEdit,
+    OffboardingRevoke,
+    OffboardingSubmitV2,
+
+    ProbationEnableDisableAssessment,
+    ProbationSearch,
+    ProbationSubmit,
+    ProbationWithdraw,
+    ProbationAssessmentCreate,
+    ProbationAssessmentPatch(String),  // assessment_id
+    ProbationAssessmentDelete(String), // assessment_id
+
     // === location 资源 (1个) ===
     /// 更新地点
     LocationPatch(String), // location_id
+
+    // === basic_info 资源 (10个) ===
+    /// 查询银行信息
+    BasicInfoBankSearch,
+    /// 查询支行信息
+    BasicInfoBankBranchSearch,
+    /// 查询城市信息
+    BasicInfoCitySearch,
+    /// 查询国家/地区信息
+    BasicInfoCountryRegionSearch,
+    /// 查询省份/主要行政区信息
+    BasicInfoCountryRegionSubdivisionSearch,
+    /// 查询货币信息
+    BasicInfoCurrencySearch,
+    /// 查询区/县信息
+    BasicInfoDistrictSearch,
+    /// 查询语言信息
+    BasicInfoLanguageSearch,
+    /// 查询国籍信息
+    BasicInfoNationalitySearch,
+    /// 查询时区信息
+    BasicInfoTimeZoneSearch,
 }
 
 impl FeishuPeopleApiV2 {
@@ -2966,13 +3150,169 @@ impl FeishuPeopleApiV2 {
                 "/open-apis/corehr/v2/employees/search".to_string()
             }
 
+            FeishuPeopleApiV2::EmployeesAdditionalJobBatch => {
+                "/open-apis/corehr/v2/employees/additional_jobs/batch".to_string()
+            }
+            FeishuPeopleApiV2::EmployeesAdditionalJobCreate => {
+                "/open-apis/corehr/v2/employees/additional_jobs".to_string()
+            }
+            FeishuPeopleApiV2::EmployeesAdditionalJobDelete(additional_job_id) => {
+                format!(
+                    "/open-apis/corehr/v2/employees/additional_jobs/{}",
+                    additional_job_id
+                )
+            }
+            FeishuPeopleApiV2::EmployeesAdditionalJobPatch(additional_job_id) => {
+                format!(
+                    "/open-apis/corehr/v2/employees/additional_jobs/{}",
+                    additional_job_id
+                )
+            }
+
+            FeishuPeopleApiV2::EmployeesBpBatchGet => {
+                "/open-apis/corehr/v2/employees/bp/batch_get".to_string()
+            }
+
+            FeishuPeopleApiV2::EmployeesInternationalAssignmentCreate => {
+                "/open-apis/corehr/v2/employees/international_assignments".to_string()
+            }
+            FeishuPeopleApiV2::EmployeesInternationalAssignmentDelete(
+                international_assignment_id,
+            ) => {
+                format!(
+                    "/open-apis/corehr/v2/employees/international_assignments/{}",
+                    international_assignment_id
+                )
+            }
+            FeishuPeopleApiV2::EmployeesInternationalAssignmentList => {
+                "/open-apis/corehr/v2/employees/international_assignments/list".to_string()
+            }
+            FeishuPeopleApiV2::EmployeesInternationalAssignmentPatch(
+                international_assignment_id,
+            ) => {
+                format!(
+                    "/open-apis/corehr/v2/employees/international_assignments/{}",
+                    international_assignment_id
+                )
+            }
+
+            FeishuPeopleApiV2::EmployeesJobDataBatchGet => {
+                "/open-apis/corehr/v2/employees/job_datas/batch_get".to_string()
+            }
+            FeishuPeopleApiV2::EmployeesJobDataQuery => {
+                "/open-apis/corehr/v2/employees/job_datas/query".to_string()
+            }
+
+            FeishuPeopleApiV2::PersonCreate => "/open-apis/corehr/v2/persons".to_string(),
+            FeishuPeopleApiV2::PersonPatch(person_id) => {
+                format!("/open-apis/corehr/v2/persons/{}", person_id)
+            }
+
+            FeishuPeopleApiV2::PreHireComplete => {
+                "/open-apis/corehr/v2/pre_hires/complete".to_string()
+            }
+            FeishuPeopleApiV2::PreHireCreate => "/open-apis/corehr/v2/pre_hires".to_string(),
+            FeishuPeopleApiV2::PreHireDelete(pre_hire_id) => {
+                format!("/open-apis/corehr/v2/pre_hires/{}", pre_hire_id)
+            }
+            FeishuPeopleApiV2::PreHirePatch(pre_hire_id) => {
+                format!("/open-apis/corehr/v2/pre_hires/{}", pre_hire_id)
+            }
+            FeishuPeopleApiV2::PreHireQuery => "/open-apis/corehr/v2/pre_hires/query".to_string(),
+            FeishuPeopleApiV2::PreHireRestoreFlowInstance => {
+                "/open-apis/corehr/v2/pre_hires/restore_flow_instance".to_string()
+            }
+            FeishuPeopleApiV2::PreHireSearch => "/open-apis/corehr/v2/pre_hires/search".to_string(),
+            FeishuPeopleApiV2::PreHireTransformOnboardingTask => {
+                "/open-apis/corehr/v2/pre_hires/transform_onboarding_task".to_string()
+            }
+            FeishuPeopleApiV2::PreHireTransitTask => {
+                "/open-apis/corehr/v2/pre_hires/transit_task".to_string()
+            }
+            FeishuPeopleApiV2::PreHireWithdrawOnboarding => {
+                "/open-apis/corehr/v2/pre_hires/withdraw_onboarding".to_string()
+            }
+
             // location
             FeishuPeopleApiV2::LocationPatch(location_id) => {
                 format!("/open-apis/corehr/v2/locations/{}", location_id)
             }
+
+            FeishuPeopleApiV2::BasicInfoBankSearch => {
+                "/open-apis/corehr/v2/basic_info/banks/search".to_string()
+            }
+            FeishuPeopleApiV2::BasicInfoBankBranchSearch => {
+                "/open-apis/corehr/v2/basic_info/bank_branches/search".to_string()
+            }
+            FeishuPeopleApiV2::BasicInfoCitySearch => {
+                "/open-apis/corehr/v2/basic_info/cities/search".to_string()
+            }
+            FeishuPeopleApiV2::BasicInfoCountryRegionSearch => {
+                "/open-apis/corehr/v2/basic_info/country_regions/search".to_string()
+            }
+            FeishuPeopleApiV2::BasicInfoCountryRegionSubdivisionSearch => {
+                "/open-apis/corehr/v2/basic_info/country_region_subdivisions/search".to_string()
+            }
+            FeishuPeopleApiV2::BasicInfoCurrencySearch => {
+                "/open-apis/corehr/v2/basic_info/currencies/search".to_string()
+            }
+            FeishuPeopleApiV2::BasicInfoDistrictSearch => {
+                "/open-apis/corehr/v2/basic_info/districts/search".to_string()
+            }
+            FeishuPeopleApiV2::BasicInfoLanguageSearch => {
+                "/open-apis/corehr/v2/basic_info/languages/search".to_string()
+            }
+            FeishuPeopleApiV2::BasicInfoNationalitySearch => {
+                "/open-apis/corehr/v2/basic_info/nationalities/search".to_string()
+            }
+            FeishuPeopleApiV2::BasicInfoTimeZoneSearch => {
+                "/open-apis/corehr/v2/basic_info/time_zones/search".to_string()
+            }
+
+            FeishuPeopleApiV2::OffboardingEdit => {
+                "/open-apis/corehr/v2/offboardings/edit".to_string()
+            }
+            FeishuPeopleApiV2::OffboardingRevoke => {
+                "/open-apis/corehr/v2/offboardings/revoke".to_string()
+            }
+            FeishuPeopleApiV2::OffboardingSubmitV2 => {
+                "/open-apis/corehr/v2/offboardings/submit_v2".to_string()
+            }
+
+            FeishuPeopleApiV2::ProbationEnableDisableAssessment => {
+                "/open-apis/corehr/v2/probation/enable_disable_assessment".to_string()
+            }
+            FeishuPeopleApiV2::ProbationSearch => {
+                "/open-apis/corehr/v2/probation/search".to_string()
+            }
+            FeishuPeopleApiV2::ProbationSubmit => {
+                "/open-apis/corehr/v2/probation/submit".to_string()
+            }
+            FeishuPeopleApiV2::ProbationWithdraw => {
+                "/open-apis/corehr/v2/probation/withdraw".to_string()
+            }
+            FeishuPeopleApiV2::ProbationAssessmentCreate => {
+                "/open-apis/corehr/v2/probation/assessments".to_string()
+            }
+            FeishuPeopleApiV2::ProbationAssessmentPatch(assessment_id) => {
+                format!(
+                    "/open-apis/corehr/v2/probation/assessments/{}",
+                    assessment_id
+                )
+            }
+            FeishuPeopleApiV2::ProbationAssessmentDelete(assessment_id) => {
+                format!(
+                    "/open-apis/corehr/v2/probation/assessments/{}",
+                    assessment_id
+                )
+            }
         }
     }
 }
+
+pub type CorehrApiV1 = FeishuPeopleApiV1;
+
+pub type CorehrApiV2 = FeishuPeopleApiV2;
 
 // ============================================================================
 // 测试模块

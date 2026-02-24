@@ -3,8 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/draft/get
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -16,7 +18,7 @@ use serde_json::Value;
 pub struct GetRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    draft_id: Option<String>,
 }
 
 impl GetRequest {
@@ -24,11 +26,14 @@ impl GetRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            draft_id: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn draft_id(mut self, draft_id: String) -> Self {
+        self.draft_id = Some(draft_id);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<GetResponse> {
@@ -38,10 +43,21 @@ impl GetRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 根据组织架构调整 ID 查询发起的流程信息 API 调用")
+        let draft_id = self.draft_id.unwrap_or_default();
+        validate_required!(draft_id.trim(), "draft_id 不能为空");
+
+        let request = ApiRequest::<GetResponse>::get(format!("/open-apis/corehr/v2/drafts/{}", draft_id));
+
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "接口响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 

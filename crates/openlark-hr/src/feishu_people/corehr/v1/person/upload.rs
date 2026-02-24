@@ -3,8 +3,9 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/person/upload
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -12,23 +13,21 @@ use serde_json::Value;
 
 /// 上传文件请求
 #[derive(Debug, Clone)]
-#[allow(dead_code)]
 pub struct UploadRequest {
-    /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    file: Option<Value>,
 }
 
 impl UploadRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self {
-            config,
-            // TODO: 初始化字段
-        }
+        Self { config, file: None }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn file(mut self, file: Value) -> Self {
+        self.file = Some(file);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<UploadResponse> {
@@ -38,19 +37,30 @@ impl UploadRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UploadResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 上传文件 API 调用")
+        use crate::common::api_endpoints::FeishuPeopleApiV1;
+
+        let api_endpoint = FeishuPeopleApiV1::PersonUpload;
+        let mut request = ApiRequest::<UploadResponse>::post(api_endpoint.to_url());
+        if let Some(file) = self.file {
+            request = request.body(serde_json::json!({ "file": file }));
+        }
+
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "上传文件响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
 /// 上传文件响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UploadResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     pub data: Value,
 }
 

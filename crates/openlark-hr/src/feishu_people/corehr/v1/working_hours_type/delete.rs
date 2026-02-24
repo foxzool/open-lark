@@ -3,9 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/working_hours_type/delete
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    SDKResult,
+    http::Transport,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -16,7 +17,8 @@ use serde_json::Value;
 pub struct DeleteRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    /// 工时制度 ID（必填）
+    working_hours_type_id: String,
 }
 
 impl DeleteRequest {
@@ -24,11 +26,15 @@ impl DeleteRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            working_hours_type_id: String::new(),
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    /// 设置工时制度 ID（必填）
+    pub fn working_hours_type_id(mut self, working_hours_type_id: String) -> Self {
+        self.working_hours_type_id = working_hours_type_id;
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<DeleteResponse> {
@@ -38,10 +44,25 @@ impl DeleteRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 删除工时制度 API 调用")
+        use crate::common::api_endpoints::CorehrApiV1;
+
+        validate_required!(self.working_hours_type_id.trim(), "工时制度 ID 不能为空");
+
+        let api_endpoint = CorehrApiV1::WorkingHoursTypeDelete(self.working_hours_type_id);
+        let endpoint_url = api_endpoint.to_url();
+        validate_required!(endpoint_url.as_str(), "API 端点不能为空");
+
+        let request = ApiRequest::<DeleteResponse>::delete(endpoint_url);
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "删除工时制度响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
