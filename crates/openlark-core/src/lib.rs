@@ -20,7 +20,7 @@ pub mod testing;
 pub mod trait_system;
 pub mod validation;
 
-// crate 内部实现细节：不对外暴露（避免把 core 变成“全家桶”）
+// crate 内部实现细节：不对外暴露（避免把 core 变成"全家桶"）
 mod app_ticket_manager;
 mod content_disposition;
 mod improved_response_handler;
@@ -34,11 +34,36 @@ pub use error::{validation_error, CoreError, SDKResult};
 // Re-export validation utilities
 pub use validation::validate_required;
 
+// Validatable trait for unified validation semantics
+pub trait Validatable {
+    fn is_empty_trimmed(&self) -> bool;
+}
+
+impl Validatable for &str {
+    fn is_empty_trimmed(&self) -> bool { self.trim().is_empty() }
+}
+
+impl Validatable for String {
+    fn is_empty_trimmed(&self) -> bool { self.trim().is_empty() }
+}
+
+impl<T: Validatable> Validatable for &T {
+    fn is_empty_trimmed(&self) -> bool { (*self).is_empty_trimmed() }
+}
+
+impl<T> Validatable for Vec<T> {
+    fn is_empty_trimmed(&self) -> bool { self.is_empty() }
+}
+
+impl<T> Validatable for &[T] {
+    fn is_empty_trimmed(&self) -> bool { self.is_empty() }
+}
+
 // Re-export validate_required macro for docs module
 #[macro_export]
 macro_rules! validate_required {
     ($field:expr, $error_msg:expr) => {
-        if $field.is_empty() {
+        if openlark_core::Validatable::is_empty_trimmed(&$field) {
             return Err(openlark_core::error::CoreError::validation_msg($error_msg));
         }
     };
