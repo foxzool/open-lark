@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -24,7 +23,10 @@ pub struct GetRequest {
 impl GetRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, offer_id: String::new() }
+        Self {
+            config,
+            offer_id: String::new(),
+        }
     }
 
     pub fn offer_id(mut self, offer_id: String) -> Self {

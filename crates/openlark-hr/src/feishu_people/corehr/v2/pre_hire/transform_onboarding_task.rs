@@ -42,7 +42,8 @@ impl TransformOnboardingTaskRequest {
         use crate::common::api_endpoints::FeishuPeopleApiV2;
 
         let api_endpoint = FeishuPeopleApiV2::PreHireTransformOnboardingTask;
-        let mut request = ApiRequest::<TransformOnboardingTaskResponse>::post(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<TransformOnboardingTaskResponse>::post(api_endpoint.to_url());
 
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);

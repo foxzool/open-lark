@@ -23,7 +23,10 @@ pub struct GetByParamRequest {
 impl GetByParamRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: Value::Object(serde_json::Map::new()) }
+        Self {
+            config,
+            body: Value::Object(serde_json::Map::new()),
+        }
     }
 
     pub fn body(mut self, body: Value) -> Self {
@@ -58,7 +61,10 @@ impl GetByParamRequest {
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("获取字段详情响应数据为空", "服务器没有返回有效的数据")
+            openlark_core::error::validation_error(
+                "获取字段详情响应数据为空",
+                "服务器没有返回有效的数据",
+            )
         })
     }
 }

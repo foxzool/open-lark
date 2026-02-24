@@ -2999,9 +2999,15 @@ impl FeishuPeopleApiV1 {
             FeishuPeopleApiV1::PreHirePatch(pre_hire_id) => {
                 format!("/open-apis/corehr/v1/pre_hires/{}", pre_hire_id)
             }
-            FeishuPeopleApiV1::ProcessFormVariableDataGet => "/open-apis/corehr/v1/processes/form_variable_data".to_string(),
-            FeishuPeopleApiV1::TransferReasonQuery => "/open-apis/corehr/v1/transfer_reasons/query".to_string(),
-            FeishuPeopleApiV1::TransferTypeQuery => "/open-apis/corehr/v1/transfer_types/query".to_string(),
+            FeishuPeopleApiV1::ProcessFormVariableDataGet => {
+                "/open-apis/corehr/v1/processes/form_variable_data".to_string()
+            }
+            FeishuPeopleApiV1::TransferReasonQuery => {
+                "/open-apis/corehr/v1/transfer_reasons/query".to_string()
+            }
+            FeishuPeopleApiV1::TransferTypeQuery => {
+                "/open-apis/corehr/v1/transfer_types/query".to_string()
+            }
         }
     }
 }

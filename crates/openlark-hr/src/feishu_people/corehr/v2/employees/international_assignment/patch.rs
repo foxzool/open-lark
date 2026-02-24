@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -50,8 +49,12 @@ impl PatchRequest {
         use crate::common::api_endpoints::FeishuPeopleApiV2;
 
         let international_assignment_id = self.international_assignment_id.unwrap_or_default();
-        validate_required!(international_assignment_id.trim(), "international_assignment_id 不能为空");
-        let api_endpoint = FeishuPeopleApiV2::EmployeesInternationalAssignmentPatch(international_assignment_id);
+        validate_required!(
+            international_assignment_id.trim(),
+            "international_assignment_id 不能为空"
+        );
+        let api_endpoint =
+            FeishuPeopleApiV2::EmployeesInternationalAssignmentPatch(international_assignment_id);
         let mut request = ApiRequest::<PatchResponse>::patch(api_endpoint.to_url());
 
         if let Some(request_body) = self.request_body {

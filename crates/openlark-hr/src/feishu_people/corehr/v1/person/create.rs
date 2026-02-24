@@ -23,7 +23,10 @@ pub struct CreateRequest {
 impl CreateRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, person: None }
+        Self {
+            config,
+            person: None,
+        }
     }
 
     pub fn person(mut self, person: Value) -> Self {

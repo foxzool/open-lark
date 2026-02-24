@@ -13,9 +13,9 @@ pub use calendar_by_scope::CalendarByScopeRequest;
 pub use leave_balances::LeaveBalancesRequest;
 pub use leave_request_history::LeaveRequestHistoryRequest;
 pub use leave_types::LeaveTypesRequest;
-pub use work_calendar::WorkCalendarRequest;
-pub use work_calendar_date::WorkCalendarDateRequest;
 pub use models::{
     CalendarByScopeRequestBody, CalendarByScopeResponse, LeaveBalance, LeaveBalancesRequestBody,
     LeaveBalancesResponse,
 };
+pub use work_calendar::WorkCalendarRequest;
+pub use work_calendar_date::WorkCalendarDateRequest;

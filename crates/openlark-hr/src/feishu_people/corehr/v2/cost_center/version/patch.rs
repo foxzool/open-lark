@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -55,8 +54,10 @@ impl PatchRequest {
         let version_id = self.version_id.unwrap_or_default();
         validate_required!(version_id.trim(), "version_id 不能为空");
 
-        let mut request =
-            ApiRequest::<PatchResponse>::patch(format!("/open-apis/corehr/v2/cost_center_versions/{}", version_id));
+        let mut request = ApiRequest::<PatchResponse>::patch(format!(
+            "/open-apis/corehr/v2/cost_center_versions/{}",
+            version_id
+        ));
 
         if let Some(body) = self.body {
             request = request.body(body);
@@ -64,10 +65,7 @@ impl PatchRequest {
 
         let response = Transport::request(request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error(
-                "接口响应数据为空",
-                "服务器没有返回有效的数据",
-            )
+            openlark_core::error::validation_error("接口响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }

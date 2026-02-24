@@ -264,12 +264,11 @@ mod tests {
     fn test_update_record_request_builder_build() {
         let config = Config::default();
         let fields = serde_json::json!({"status": "active"});
-        let request = UpdateRecordRequestBuilder::new(config)
+        let request = UpdateRecordRequest::new(config)
             .app_token("app_token".to_string())
             .table_id("table_id".to_string())
             .record_id("record_id".to_string())
-            .fields(fields)
-            .build();
+            .fields(fields);
 
         assert_eq!(request.app_token, "app_token");
         assert_eq!(request.table_id, "table_id");

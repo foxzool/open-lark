@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -63,8 +62,8 @@ impl TransferStageRequest {
         }
 
         let api_endpoint = HireApiV1::ApplicationTransferStage(self.application_id.clone());
-        let request =
-            ApiRequest::<TransferStageResponse>::post(api_endpoint.to_url()).body(self.request_body);
+        let request = ApiRequest::<TransferStageResponse>::post(api_endpoint.to_url())
+            .body(self.request_body);
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

@@ -2,7 +2,6 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/location/batch_get
 
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -44,7 +43,8 @@ impl BatchGetRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchGetResponse> {
-        let mut request = ApiRequest::<BatchGetResponse>::post("/open-apis/corehr/v2/locations/batch_get");
+        let mut request =
+            ApiRequest::<BatchGetResponse>::post("/open-apis/corehr/v2/locations/batch_get");
 
         if let Some(body) = self.body {
             request = request.body(body);
@@ -52,10 +52,7 @@ impl BatchGetRequest {
 
         let response = Transport::request(request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error(
-                "接口响应数据为空",
-                "服务器没有返回有效的数据",
-            )
+            openlark_core::error::validation_error("接口响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }

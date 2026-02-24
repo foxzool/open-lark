@@ -22,9 +22,7 @@ pub struct SearchRequest {
 impl SearchRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self {
-            config,
-        }
+        Self { config }
     }
 
     /// 执行请求
