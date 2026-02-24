@@ -14,8 +14,6 @@ name = "error_context"
 path = "../../tests/unit/error/mod.rs"
 
 [dependencies]
-rstest = { workspace = true }
-tracing-test = { workspace = true }
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
@@ -117,3 +115,7 @@ optional = true
 [dependencies.tracing-opentelemetry]
 workspace = true
 optional = true
+
+[dev-dependencies]
+rstest = { workspace = true }
+tracing-test = { workspace = true }
