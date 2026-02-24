@@ -118,11 +118,11 @@ pub async fn read_single_range_with_options(
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
     validate_required!(params.value_range, "数据范围不能为空");
 
-    // 读取单个范围接口要求 range 在路径中，而不是 query 参数
-    let encoded_range = urlencoding::encode(&params.value_range);
+    // 兼容旧版稳定链路：使用 sheets v2 values 路径
+    // 参考旧实现：/open-apis/sheets/v2/spreadsheets/{token}/values/{range}
     let api_path = format!(
-        "/open-apis/sheets/v3/spreadsheets/{}/values/{}",
-        spreadsheet_token, encoded_range
+        "/open-apis/sheets/v2/spreadsheets/{}/values/{}",
+        spreadsheet_token, params.value_range
     );
 
     // 创建API请求

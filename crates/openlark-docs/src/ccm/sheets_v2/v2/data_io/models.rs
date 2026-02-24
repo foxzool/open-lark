@@ -1,5 +1,6 @@
 /// CCM Sheet V2 数据读写模型
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 /// 读取单个范围请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -16,10 +17,69 @@ pub struct ReadSingleRangeParams {
 }
 
 /// 读取单个范围响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Default)]
 pub struct ReadSingleRangeResponse {
     /// 范围数据
     pub data: Option<RangeData>,
+}
+
+impl<'de> Deserialize<'de> for ReadSingleRangeResponse {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let raw = Value::deserialize(deserializer)?;
+
+        // 兼容两种形状：
+        // 1) { data: { ... } }
+        // 2) { spreadsheetToken, revision, valueRange: { ... } }
+        if let Some(inner) = raw.get("data") {
+            let data: RangeData =
+                serde_json::from_value(inner.clone()).map_err(serde::de::Error::custom)?;
+            return Ok(Self { data: Some(data) });
+        }
+
+        let spreadsheet_token = raw
+            .get("spreadsheet_token")
+            .or_else(|| raw.get("spreadsheetToken"))
+            .and_then(Value::as_str)
+            .unwrap_or_default()
+            .to_string();
+
+        if let Some(value_range_obj) = raw.get("valueRange").or_else(|| raw.get("value_range")) {
+            let value_range = value_range_obj
+                .get("range")
+                .and_then(Value::as_str)
+                .unwrap_or_default()
+                .to_string();
+            let major_dimension = value_range_obj
+                .get("majorDimension")
+                .or_else(|| value_range_obj.get("major_dimension"))
+                .and_then(Value::as_str)
+                .unwrap_or("ROWS")
+                .to_string();
+            let values = value_range_obj
+                .get("values")
+                .and_then(Value::as_array)
+                .map(|rows| {
+                    rows.iter()
+                        .map(|row| row.as_array().cloned().unwrap_or_default())
+                        .collect::<Vec<Vec<Value>>>()
+                })
+                .unwrap_or_default();
+
+            return Ok(Self {
+                data: Some(RangeData {
+                    spreadsheet_token,
+                    value_range,
+                    major_dimension,
+                    values,
+                }),
+            });
+        }
+
+        Ok(Self { data: None })
+    }
 }
 
 /// 范围数据
