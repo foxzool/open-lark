@@ -69,8 +69,10 @@ use std::sync::Arc;
 /// HRClient：统一入口，提供 project-version-resource 链式访问
 #[derive(Clone)]
 pub struct HrClient {
+    #[allow(dead_code)]
     config: Arc<Config>,
 }
+
 
 impl HrClient {
     pub fn new(config: Config) -> Self {
