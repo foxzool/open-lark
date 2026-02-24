@@ -29,7 +29,7 @@ jobs:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
       - uses: Swatinem/rust-cache@v2
       - name: Install Protoc
-        uses: wokwi/setup-protoc@v1
+        uses: arduino/setup-protoc@v3
         with:
           version: 23.4
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -51,7 +51,7 @@ jobs:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
       - uses: Swatinem/rust-cache@v2
       - name: Install Protoc
-        uses: wokwi/setup-protoc@v1
+        uses: arduino/setup-protoc@v3
         with:
           version: 23.4
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -85,7 +85,7 @@ jobs:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
       - uses: Swatinem/rust-cache@v2
       - name: Install Protoc
-        uses: wokwi/setup-protoc@v1
+        uses: arduino/setup-protoc@v3
         with:
           version: 23.4
           repo-token: ${{ secrets.GITHUB_TOKEN }}
