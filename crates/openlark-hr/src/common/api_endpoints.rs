@@ -2440,6 +2440,12 @@ pub enum FeishuPeopleApiV1 {
     PreHireGet(String),
     PreHireList,
     PreHirePatch(String),
+    /// 获取流程表单数据
+    ProcessFormVariableDataGet,
+    /// 查询异动原因
+    TransferReasonQuery,
+    /// 查询异动类型
+    TransferTypeQuery,
     // 注：由于 FeishuPeople API 数量巨大 (257+),
     // 这里只列出部分主要资源，完整实现需要根据实际需求继续添加
     // 主要资源还包括：
@@ -2993,6 +2999,9 @@ impl FeishuPeopleApiV1 {
             FeishuPeopleApiV1::PreHirePatch(pre_hire_id) => {
                 format!("/open-apis/corehr/v1/pre_hires/{}", pre_hire_id)
             }
+            FeishuPeopleApiV1::ProcessFormVariableDataGet => "/open-apis/corehr/v1/processes/form_variable_data".to_string(),
+            FeishuPeopleApiV1::TransferReasonQuery => "/open-apis/corehr/v1/transfer_reasons/query".to_string(),
+            FeishuPeopleApiV1::TransferTypeQuery => "/open-apis/corehr/v1/transfer_types/query".to_string(),
         }
     }
 }

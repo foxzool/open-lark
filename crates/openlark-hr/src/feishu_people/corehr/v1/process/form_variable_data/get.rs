@@ -32,11 +32,11 @@ impl GetRequest {
         _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
         use crate::common::api_endpoints::CorehrApiV1;
-        
+
         let api_endpoint = CorehrApiV1::ProcessFormVariableDataGet;
         let request = ApiRequest::<GetResponse>::get(api_endpoint.to_url());
-        let response = Transport::request(request, \u0026self.config, Some(_option)).await?;
-        
+        let response = Transport::request(request, &self.config, Some(_option)).await?;
+
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error(
                 "获取流程表单数据响应为空",
