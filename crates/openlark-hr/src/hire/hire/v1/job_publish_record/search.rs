@@ -3,8 +3,9 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/job_publish_record/search
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -14,21 +15,24 @@ use serde_json::Value;
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct SearchRequest {
+    request_body: SearchRequestBody,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl SearchRequest {
     /// 创建请求
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Config, request_body: SearchRequestBody) -> Self {
         Self {
+            request_body,
             config,
-            // TODO: 初始化字段
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn request_body(mut self, request_body: SearchRequestBody) -> Self {
+        self.request_body = request_body;
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<SearchResponse> {
@@ -38,10 +42,51 @@ impl SearchRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<SearchResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 获取职位广告发布记录 API 调用")
+        use crate::common::api_endpoints::HireApiV1;
+
+        self.request_body.validate()?;
+
+        let api_endpoint = HireApiV1::JobPublishRecordSearch;
+        let request = ApiRequest::<SearchResponse>::post(api_endpoint.to_url());
+        let request = request.body(serde_json::to_value(&self.request_body).map_err(|e| {
+            openlark_core::error::validation_error(
+                "请求体序列化失败",
+                format!("无法序列化请求参数: {}", e),
+            )
+        })?);
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取职位广告发布记录响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct SearchRequestBody {
+    #[serde(flatten)]
+    pub fields: Value,
+}
+
+impl SearchRequestBody {
+    pub fn new(fields: Value) -> Self {
+        Self { fields }
+    }
+
+    fn validate(&self) -> SDKResult<()> {
+        if self.fields.is_null() {
+            return Err(openlark_core::error::validation_error(
+                "获取职位广告发布记录请求体不能为空",
+                "请传入有效的请求参数",
+            ));
+        }
+
+        Ok(())
     }
 }
 

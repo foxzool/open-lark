@@ -694,6 +694,12 @@ pub enum HireApiV1 {
     /// 批量更新内推账户自定义字段
     EcoAccountCustomFieldBatchUpdate,
 
+
+    // === exam 资源 (2个) ===
+    /// 创建笔试
+    ExamCreate,
+    /// 获取笔试信息
+    ExamGet(String), // exam_id
     // === ehr_import_task 资源 (1个) ===
     /// 更新导入任务结果
     EhrImportTaskPatch,
@@ -1182,6 +1188,8 @@ impl HireApiV1 {
             }
 
             // test
+            HireApiV1::ExamCreate => "/open-apis/hire/v1/exams".to_string(),
+            HireApiV1::ExamGet(exam_id) => format!("/open-apis/hire/v1/exams/{}", exam_id),
             HireApiV1::TestSearch => "/open-apis/hire/v1/tests/search".to_string(),
 
             // todo
@@ -1418,6 +1426,41 @@ impl HireApiV1 {
             // advertisement
             HireApiV1::AdvertisementPublish(job_id) => {
                 format!("/open-apis/hire/v1/jobs/{}/advertisement/publish", job_id)
+            }
+        }
+    }
+}
+
+/// Hire API V2 端点枚举
+#[derive(Debug, Clone, PartialEq)]
+pub enum HireApiV2 {
+    // === interview_record 资源 (2个) ===
+    /// 获取面试评价详细信息（新版）
+    InterviewRecordGet(String), // interview_record_id
+    /// 批量获取面试评价详细信息（新版）
+    InterviewRecordList,
+
+    // === talent 资源 (1个) ===
+    /// 获取人才详情
+    TalentGet(String), // talent_id
+}
+
+impl HireApiV2 {
+    /// 生成对应的 URL
+    pub fn to_url(&self) -> String {
+        match self {
+            // interview_record
+            HireApiV2::InterviewRecordGet(interview_record_id) => {
+                format!(
+                    "/open-apis/hire/v2/interview_records/{}",
+                    interview_record_id
+                )
+            }
+            HireApiV2::InterviewRecordList => "/open-apis/hire/v2/interview_records".to_string(),
+
+            // talent
+            HireApiV2::TalentGet(talent_id) => {
+                format!("/open-apis/hire/v2/talents/{}", talent_id)
             }
         }
     }

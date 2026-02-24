@@ -3,9 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/job/recruiter
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    SDKResult,
+    http::Transport,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -14,21 +15,16 @@ use serde_json::Value;
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct RecruiterRequest {
+    job_id: String,
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl RecruiterRequest {
     /// 创建请求
-    pub fn new(config: Config) -> Self {
-        Self {
-            config,
-            // TODO: 初始化字段
-        }
+    pub fn new(config: Config, job_id: String) -> Self {
+        Self { job_id, config }
     }
-
-    // TODO: 添加字段 setter 方法
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<RecruiterResponse> {
@@ -38,10 +34,22 @@ impl RecruiterRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<RecruiterResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 获取职位上的招聘人员信息 API 调用")
+        use crate::common::api_endpoints::HireApiV1;
+
+        validate_required!(self.job_id.trim(), "职位 ID 不能为空");
+
+        let api_endpoint = HireApiV1::JobRecruiter(self.job_id);
+        let request = ApiRequest::<RecruiterResponse>::get(api_endpoint.to_url());
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取职位上的招聘人员信息响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 

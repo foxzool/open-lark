@@ -3,8 +3,9 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/website.delivery/create_by_attachment
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -38,10 +39,20 @@ impl CreateByAttachmentRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateByAttachmentResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 根据简历附件创建招聘官网投递任务 API 调用")
+        use crate::common::api_endpoints::HireApiV1;
+
+        let api_endpoint = HireApiV1::WebsiteDeliveryCreateByAttachment;
+        let request = ApiRequest::<CreateByAttachmentResponse>::post(api_endpoint.to_url());
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "根据简历附件创建招聘官网投递任务响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 

@@ -3,8 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/offer/update
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
+    validate_required,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -16,7 +18,8 @@ use serde_json::Value;
 pub struct UpdateRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    offer_id: String,
+    request_body: Option<Value>,
 }
 
 impl UpdateRequest {
@@ -24,11 +27,20 @@ impl UpdateRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            offer_id: String::new(),
+            request_body: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn offer_id(mut self, offer_id: String) -> Self {
+        self.offer_id = offer_id;
+        self
+    }
+
+    pub fn request_body(mut self, request_body: Value) -> Self {
+        self.request_body = Some(request_body);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<UpdateResponse> {
@@ -38,10 +50,25 @@ impl UpdateRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UpdateResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 更新 Offer 信息 API 调用")
+        use crate::common::api_endpoints::HireApiV1;
+
+        validate_required!(self.offer_id.trim(), "Offer ID 不能为空");
+
+        let api_endpoint = HireApiV1::OfferUpdate(self.offer_id);
+        let mut request = ApiRequest::<UpdateResponse>::patch(api_endpoint.to_url());
+        if let Some(request_body) = self.request_body {
+            request = request.body(request_body);
+        }
+
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "更新 Offer 信息响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
