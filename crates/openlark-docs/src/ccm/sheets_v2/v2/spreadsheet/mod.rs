@@ -87,9 +87,9 @@ pub async fn get_spreadsheet_with_options(
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::GetSpreadsheet(spreadsheet_token.to_string());
 
-    // 创建API请求
-    let api_request: ApiRequest<GetSpreadsheetResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取表格信息")?);
+    // 创建API请求（飞书接口为 GET /sheets/v3/spreadsheets/{token}）
+    let api_request: ApiRequest<GetSpreadsheetResponse> = ApiRequest::get(&api_endpoint.to_url())
+        .query_opt("include_sheet", params.include_sheet.map(|v| v.to_string()));
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, Some(option)).await?;

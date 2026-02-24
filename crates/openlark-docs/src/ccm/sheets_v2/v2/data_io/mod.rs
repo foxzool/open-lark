@@ -118,14 +118,17 @@ pub async fn read_single_range_with_options(
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
     validate_required!(params.value_range, "数据范围不能为空");
 
-    // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::ReadSingleRange(spreadsheet_token.to_string());
+    // 读取单个范围接口要求 range 在路径中，而不是 query 参数
+    let encoded_range = urlencoding::encode(&params.value_range);
+    let api_path = format!(
+        "/open-apis/sheets/v3/spreadsheets/{}/values/{}",
+        spreadsheet_token, encoded_range
+    );
 
     // 创建API请求
-    let api_request: ApiRequest<ReadSingleRangeResponse> = ApiRequest::get(&api_endpoint.to_url())
-        .query("value_range", &params.value_range)
-        .query_opt("value_render_option", params.value_render_option.as_ref())
-        .query_opt("date_render_option", params.date_render_option.as_ref());
+    let api_request: ApiRequest<ReadSingleRangeResponse> = ApiRequest::get(&api_path)
+        .query_opt("valueRenderOption", params.value_render_option.as_ref())
+        .query_opt("dateTimeRenderOption", params.date_render_option.as_ref());
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, Some(option)).await?;

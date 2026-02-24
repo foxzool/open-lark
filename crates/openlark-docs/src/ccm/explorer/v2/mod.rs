@@ -13,11 +13,36 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    req_option::RequestOption,
     validate_required, SDKResult,
 };
+use serde::Deserialize;
 
-use crate::common::{api_endpoints::CcmDriveExplorerApiOld, api_utils::*};
+use crate::common::{
+    api_endpoints::{CcmDriveExplorerApiOld, DriveApi},
+    api_utils::*,
+};
+
+#[derive(Debug, Clone, Deserialize)]
+struct DriveListFilesData {
+    files: Vec<DriveListFileItem>,
+    next_page_token: Option<String>,
+    has_more: bool,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+struct DriveListFileItem {
+    token: String,
+    name: String,
+    r#type: String,
+    created_time: Option<String>,
+    modified_time: Option<String>,
+}
+
+impl ApiResponseTrait for DriveListFilesData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
 
 // 导出模型定义
 pub mod models;
@@ -198,18 +223,54 @@ pub async fn get_folder_children(
     validate_required!(folder_token.trim(), "文件夹Token不能为空");
 
     // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmDriveExplorerApiOld::FolderChildren(folder_token.to_string());
+    let mut api_request: ApiRequest<DriveListFilesData> = ApiRequest::get(&DriveApi::ListFiles.to_url())
+        .query("folder_token", folder_token);
 
-    // 创建API请求
-    let api_request: ApiRequest<GetFolderChildrenResponse> = if let Some(params) = params {
-        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取文件夹子项")?)
-    } else {
-        ApiRequest::get(&api_endpoint.to_url())
-    };
+    if let Some(params) = params {
+        api_request = api_request.query_opt("page_size", params.page_size.map(|v| v.to_string()));
+        api_request = api_request.query_opt("page_token", params.page_token);
+        if let Some(doc_type) = params.doc_type {
+            api_request = api_request.query("type", doc_type);
+        }
+    }
 
-    // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, None).await?;
-    extract_response_data(response, "获取文件夹子项")
+    let data: DriveListFilesData = extract_response_data(response, "获取文件夹子项")?;
+
+    let items = data
+        .files
+        .into_iter()
+        .map(|item| {
+            let doc_type = item.r#type;
+            let is_folder = doc_type == "folder";
+            FileItem {
+            file_token: item.token,
+            title: item.name,
+            doc_type,
+            is_folder,
+            create_time: item
+                .created_time
+                .as_deref()
+                .unwrap_or("0")
+                .parse::<i64>()
+                .unwrap_or(0),
+            update_time: item
+                .modified_time
+                .as_deref()
+                .unwrap_or("0")
+                .parse::<i64>()
+                .unwrap_or(0),
+        }
+        })
+        .collect::<Vec<_>>();
+
+    Ok(GetFolderChildrenResponse {
+        data: Some(FolderChildrenData {
+            items,
+            has_more: data.has_more,
+            page_token: data.next_page_token,
+        }),
+    })
 }
 
 /// 新建文件夹
