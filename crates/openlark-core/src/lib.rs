@@ -16,6 +16,7 @@ pub mod observability;
 pub mod query_params;
 pub mod req_option;
 pub mod request_builder;
+#[cfg(feature = "testing")]
 pub mod testing;
 pub mod trait_system;
 pub mod validation;

@@ -46,12 +46,16 @@ serde_with = "3"
 # Internal dependencies暂时移除，避免循环依赖
 
 [features]
+default = ["testing"]
+
 # WebSocket support
 websocket = ["tokio-tungstenite", "prost", "openlark-protocol", "lark-websocket-protobuf"]
 
 # OpenTelemetry support
 otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
 
+# Testing utilities (for other crates to use in tests)
+testing = []
 
 # Service modules (for conditional compilation in client)
 acs = []
