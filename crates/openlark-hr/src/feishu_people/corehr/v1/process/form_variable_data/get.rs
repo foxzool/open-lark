@@ -1,11 +1,11 @@
 //! 获取流程表单数据
 //!
-//! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/process.form_variable_data/get
+//! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/process-form-variable-data/get
 
 use openlark_core::{
-    api::{ApiRequest, 
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -15,26 +15,16 @@ use serde_json::Value;
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct GetRequest {
-    /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
 }
 
 impl GetRequest {
-    /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self {
-            config,
-            // TODO: 初始化字段
-        }
+        Self { config }
     }
 
-    // TODO: 添加字段 setter 方法
-
-    /// 执行请求
     pub async fn execute(self) -> SDKResult<GetResponse> {
-        self.execute_with_options(openlark_core::req_option::RequestOption::default())
-            .await
+        self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
@@ -42,16 +32,23 @@ impl GetRequest {
         _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
         use crate::common::api_endpoints::CorehrApiV1;
-        todo!("实现 获取流程表单数据 API 调用")
+        
+        let api_endpoint = CorehrApiV1::ProcessFormVariableDataGet;
+        let request = ApiRequest::<GetResponse>::get(api_endpoint.to_url());
+        let response = Transport::request(request, \u0026self.config, Some(_option)).await?;
+        
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取流程表单数据响应为空",
+                "服务器没有返回有效的数据"
+            )
+        })
     }
 }
 
 /// 获取流程表单数据响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     pub data: Value,
 }
 

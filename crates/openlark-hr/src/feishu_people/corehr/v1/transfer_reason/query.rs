@@ -3,9 +3,9 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/transfer_reason/query
 
 use openlark_core::{
-    api::{ApiRequest, 
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -15,26 +15,16 @@ use serde_json::Value;
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct QueryRequest {
-    /// 配置信息
     config: Config,
-    
 }
 
 impl QueryRequest {
-    /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self {
-            config,
-            
-        }
+        Self { config }
     }
 
-    
-
-    /// 执行请求
     pub async fn execute(self) -> SDKResult<QueryResponse> {
-        self.execute_with_options(openlark_core::req_option::RequestOption::default())
-            .await
+        self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
     }
 
     pub async fn execute_with_options(
@@ -42,16 +32,23 @@ impl QueryRequest {
         _option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
         use crate::common::api_endpoints::CorehrApiV1;
-        todo!("实现 获取异动原因列表 API 调用")
+        
+        let api_endpoint = CorehrApiV1::TransferReasonQuery;
+        let request = ApiRequest::<QueryResponse>::post(api_endpoint.to_url());
+        let response = Transport::request(request, \u0026self.config, Some(_option)).await?;
+        
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取异动原因列表响应为空",
+                "服务器没有返回有效的数据"
+            )
+        })
     }
 }
 
 /// 获取异动原因列表响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     pub data: Value,
 }
 
