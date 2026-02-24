@@ -23,7 +23,10 @@ pub struct AddRoleAssignRequest {
 impl AddRoleAssignRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: Value::Object(serde_json::Map::new()) }
+        Self {
+            config,
+            body: Value::Object(serde_json::Map::new()),
+        }
     }
 
     pub fn body(mut self, body: Value) -> Self {
@@ -54,11 +57,15 @@ impl AddRoleAssignRequest {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
         let api_endpoint = FeishuPeopleApiV1::AuthorizationAddRoleAssign;
-        let request = ApiRequest::<AddRoleAssignResponse>::post(api_endpoint.to_url()).body(self.body);
+        let request =
+            ApiRequest::<AddRoleAssignResponse>::post(api_endpoint.to_url()).body(self.body);
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("用户授权角色响应数据为空", "服务器没有返回有效的数据")
+            openlark_core::error::validation_error(
+                "用户授权角色响应数据为空",
+                "服务器没有返回有效的数据",
+            )
         })
     }
 }

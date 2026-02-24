@@ -7,8 +7,7 @@ use openlark_core::{
     api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;

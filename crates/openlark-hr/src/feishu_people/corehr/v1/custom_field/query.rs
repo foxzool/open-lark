@@ -23,7 +23,10 @@ pub struct QueryRequest {
 impl QueryRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: Value::Object(serde_json::Map::new()) }
+        Self {
+            config,
+            body: Value::Object(serde_json::Map::new()),
+        }
     }
 
     pub fn body(mut self, body: Value) -> Self {
@@ -58,7 +61,10 @@ impl QueryRequest {
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("获取自定义字段列表响应数据为空", "服务器没有返回有效的数据")
+            openlark_core::error::validation_error(
+                "获取自定义字段列表响应数据为空",
+                "服务器没有返回有效的数据",
+            )
         })
     }
 }

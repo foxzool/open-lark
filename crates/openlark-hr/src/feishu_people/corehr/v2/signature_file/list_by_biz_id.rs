@@ -41,8 +41,9 @@ impl ListByBizIdRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListByBizIdResponse> {
-        let mut request =
-            ApiRequest::<ListByBizIdResponse>::post("/open-apis/corehr/v2/signature_files/list_by_biz_id");
+        let mut request = ApiRequest::<ListByBizIdResponse>::post(
+            "/open-apis/corehr/v2/signature_files/list_by_biz_id",
+        );
 
         if let Some(body) = self.body {
             request = request.body(body);
@@ -50,10 +51,7 @@ impl ListByBizIdRequest {
 
         let response = Transport::request(request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error(
-                "接口响应数据为空",
-                "服务器没有返回有效的数据",
-            )
+            openlark_core::error::validation_error("接口响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }

@@ -23,7 +23,10 @@ pub struct ListRequest {
 impl ListRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, request_body: None }
+        Self {
+            config,
+            request_body: None,
+        }
     }
 
     pub fn request_body(mut self, request_body: Value) -> Self {

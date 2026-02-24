@@ -22,9 +22,7 @@ pub struct QueryRequest {
 impl QueryRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self {
-            config,
-        }
+        Self { config }
     }
 
     /// 执行请求
@@ -46,7 +44,7 @@ impl QueryRequest {
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error(
                 "获取异动类型列表响应数据为空",
-                "服务器没有返回有效的数据"
+                "服务器没有返回有效的数据",
             )
         })
     }

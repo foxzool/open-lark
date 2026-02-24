@@ -223,8 +223,8 @@ pub async fn get_folder_children(
     validate_required!(folder_token.trim(), "文件夹Token不能为空");
 
     // 使用enum+builder系统生成API端点
-    let mut api_request: ApiRequest<DriveListFilesData> = ApiRequest::get(&DriveApi::ListFiles.to_url())
-        .query("folder_token", folder_token);
+    let mut api_request: ApiRequest<DriveListFilesData> =
+        ApiRequest::get(&DriveApi::ListFiles.to_url()).query("folder_token", folder_token);
 
     if let Some(params) = params {
         api_request = api_request.query_opt("page_size", params.page_size.map(|v| v.to_string()));
@@ -244,23 +244,23 @@ pub async fn get_folder_children(
             let doc_type = item.r#type;
             let is_folder = doc_type == "folder";
             FileItem {
-            file_token: item.token,
-            title: item.name,
-            doc_type,
-            is_folder,
-            create_time: item
-                .created_time
-                .as_deref()
-                .unwrap_or("0")
-                .parse::<i64>()
-                .unwrap_or(0),
-            update_time: item
-                .modified_time
-                .as_deref()
-                .unwrap_or("0")
-                .parse::<i64>()
-                .unwrap_or(0),
-        }
+                file_token: item.token,
+                title: item.name,
+                doc_type,
+                is_folder,
+                create_time: item
+                    .created_time
+                    .as_deref()
+                    .unwrap_or("0")
+                    .parse::<i64>()
+                    .unwrap_or(0),
+                update_time: item
+                    .modified_time
+                    .as_deref()
+                    .unwrap_or("0")
+                    .parse::<i64>()
+                    .unwrap_or(0),
+            }
         })
         .collect::<Vec<_>>();
 

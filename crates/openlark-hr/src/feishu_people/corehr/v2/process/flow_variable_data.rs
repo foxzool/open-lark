@@ -41,8 +41,9 @@ impl FlowVariableDataRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<FlowVariableDataResponse> {
-        let mut request =
-            ApiRequest::<FlowVariableDataResponse>::get("/open-apis/corehr/v2/processes/flow_variable_data");
+        let mut request = ApiRequest::<FlowVariableDataResponse>::get(
+            "/open-apis/corehr/v2/processes/flow_variable_data",
+        );
 
         if let Some(body) = self.body {
             request = request.body(body);
@@ -51,10 +52,7 @@ impl FlowVariableDataRequest {
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error(
-                "接口响应数据为空",
-                "服务器没有返回有效的数据",
-            )
+            openlark_core::error::validation_error("接口响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }

@@ -24,7 +24,8 @@ impl QueryRequest {
     }
 
     pub async fn execute(self) -> SDKResult<QueryResponse> {
-        self.execute_with_options(openlark_core::req_option::RequestOption::default()).await
+        self.execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await
     }
 
     pub async fn execute_with_options(
@@ -40,7 +41,7 @@ impl QueryRequest {
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error(
                 "获取异动原因列表响应为空",
-                "服务器没有返回有效的数据"
+                "服务器没有返回有效的数据",
             )
         })
     }

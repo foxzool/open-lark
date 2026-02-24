@@ -152,9 +152,7 @@ impl AuthTokenProvider {
         let token = body
             .get(token_field)
             .and_then(Value::as_str)
-            .ok_or_else(|| {
-                configuration_error(format!("飞书认证响应缺少字段: {token_field}"))
-            })?
+            .ok_or_else(|| configuration_error(format!("飞书认证响应缺少字段: {token_field}")))?
             .to_string();
 
         let expires_in = body.get("expire").and_then(Value::as_i64).unwrap_or(7200);

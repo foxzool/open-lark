@@ -17,7 +17,7 @@ use crate::endpoints::OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE;
 pub struct BasicRecognizeBody {
     /// 用户的 file_id，通过上传文件接口获取
     pub file_token: String,
-    /// 识别结果的优先级顺序，默认值为 [0,1]，表示优先返回文本框位置信息
+    /// 识别结果的优先级顺序，默认值为 `[0,1]`，表示优先返回文本框位置信息
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recognition_model: Option<RecognitionModel>,
 }

@@ -11,6 +11,7 @@ pub use delete::*;
 pub use list::*;
 pub use member::*;
 pub use models::*;
+#[allow(unused_imports)]
 pub use tests::*;
 pub use update::*;
 

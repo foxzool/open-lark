@@ -54,7 +54,8 @@ impl CreateRequest {
         }
 
         let api_endpoint = HireApiV1::ApplicationCreate;
-        let request = ApiRequest::<CreateResponse>::post(api_endpoint.to_url()).body(self.request_body);
+        let request =
+            ApiRequest::<CreateResponse>::post(api_endpoint.to_url()).body(self.request_body);
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

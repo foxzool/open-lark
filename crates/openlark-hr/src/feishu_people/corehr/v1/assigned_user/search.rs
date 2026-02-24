@@ -23,7 +23,10 @@ pub struct SearchRequest {
 impl SearchRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: Value::Object(serde_json::Map::new()) }
+        Self {
+            config,
+            body: Value::Object(serde_json::Map::new()),
+        }
     }
 
     pub fn body(mut self, body: Value) -> Self {

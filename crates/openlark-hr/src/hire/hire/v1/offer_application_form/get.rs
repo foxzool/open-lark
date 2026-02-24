@@ -6,8 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -47,10 +46,7 @@ impl GetRequest {
     ) -> SDKResult<GetResponse> {
         use crate::common::api_endpoints::HireApiV1;
 
-        validate_required!(
-            self.application_form_id.trim(),
-            "Offer 申请表 ID 不能为空"
-        );
+        validate_required!(self.application_form_id.trim(), "Offer 申请表 ID 不能为空");
 
         let api_endpoint = HireApiV1::OfferApplicationFormGet(self.application_form_id);
         let request = ApiRequest::<GetResponse>::get(api_endpoint.to_url());

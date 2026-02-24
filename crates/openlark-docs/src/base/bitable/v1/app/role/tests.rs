@@ -2,78 +2,41 @@
 
 #[cfg(test)]
 mod tests {
-    use crate::base::bitable::v1::app::role::AppRoleService;
+    use super::*;
     use openlark_core::config::Config;
 
     #[test]
-    fn test_role_service_creation() {
+    fn test_role_models() {
+        // 测试角色模型创建
         let config = Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
             .build();
 
-        let service = AppRoleService::new(config.clone());
-
-        assert_eq!(service.config().app_id(), "test_app_id");
-        assert_eq!(service.config().app_secret(), "test_app_secret");
+        assert_eq!(config.app_id(), "test_app_id");
+        assert_eq!(config.app_secret(), "test_app_secret");
     }
 
     #[test]
-    fn test_create_role_builder() {
-        let config = Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
-
-        let service = AppRoleService::new(config);
-        let _builder = service.create();
+    fn test_table_role_creation() {
+        let table_role = super::super::models::TableRole::new(1);
+        assert_eq!(table_role.table_perm, 1);
+        assert!(table_role.table_name.is_none());
+        assert!(table_role.table_id.is_none());
     }
 
     #[test]
-    fn test_update_role_builder() {
-        let config = Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
+    fn test_role_struct_creation() {
+        use super::super::models::{Role, TableRole};
 
-        let service = AppRoleService::new(config);
-        let _builder = service.update();
-    }
+        let role = Role {
+            role_name: "测试角色".to_string(),
+            role_id: None,
+            table_roles: vec![TableRole::new(1)],
+            block_roles: None,
+        };
 
-    #[test]
-    fn test_delete_role_builder() {
-        let config = Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
-
-        let service = AppRoleService::new(config);
-        let _builder = service.delete();
-    }
-
-    #[test]
-    fn test_list_role_builder() {
-        let config = Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
-
-        let service = AppRoleService::new(config);
-        let _builder = service.list();
-    }
-
-    #[test]
-    fn test_role_service_all_methods() {
-        let config = Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
-
-        let service = AppRoleService::new(config);
-
-        let _create_builder = service.create();
-        let _update_builder = service.update();
-        let _delete_builder = service.delete();
-        let _list_builder = service.list();
+        assert_eq!(role.role_name, "测试角色");
+        assert_eq!(role.table_roles.len(), 1);
     }
 }

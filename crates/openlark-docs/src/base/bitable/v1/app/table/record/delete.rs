@@ -176,11 +176,10 @@ mod tests {
     #[test]
     fn test_delete_record_request_builder_build() {
         let config = Config::default();
-        let request = DeleteRecordRequestBuilder::new(config)
+        let request = DeleteRecordRequest::new(config)
             .app_token("app_token".to_string())
             .table_id("table_id".to_string())
-            .record_id("record_id".to_string())
-            .build();
+            .record_id("record_id".to_string());
 
         assert_eq!(request.app_token, "app_token");
         assert_eq!(request.table_id, "table_id");
