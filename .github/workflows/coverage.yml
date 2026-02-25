@@ -51,10 +51,9 @@ jobs:
           set -euo pipefail
           cargo llvm-cov clean --workspace
           mkdir -p target/llvm-cov
-          # 使用 --lib --tests 代替 --all-targets 以避免编译示例和基准
-          # 这样可以减少编译时间和内存使用，避免 LLVM 工具链崩溃
-          # 先运行测试收集覆盖率数据
-          cargo llvm-cov --workspace --all-features --lib --tests || {
+          # 使用 --no-report 只收集覆盖率数据，不生成报告
+          # 后续用 report 子命令分别生成 JSON/LCOV/HTML 报告
+          cargo llvm-cov --no-report --workspace --all-features --lib --tests || {
             echo "Tests failed" >&2
             exit 1
           }
@@ -82,8 +81,8 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           # 生成 JSON 摘要
-          # report 子命令需要 --workspace 以匹配测试收集时的范围（不支持 --all-features）
-          cargo llvm-cov report --workspace --json --summary-only --output-path target/llvm-cov/summary.json
+          # report 子命令不支持 --workspace/--all-features，直接使用已收集的 profraw 数据
+          cargo llvm-cov report --json --summary-only --output-path target/llvm-cov/summary.json
 
           cov=$(python3 -c 'import json; d=json.load(open("target/llvm-cov/summary.json","r",encoding="utf-8")); print("{:.2f}".format(d["data"][0]["totals"]["lines"]["percent"]))')
 
@@ -97,13 +96,13 @@ jobs:
 
       - name: Generate LCOV report
         run: |
-          # report 需要 --workspace 以匹配测试收集范围（不支持 --all-features）
-          cargo llvm-cov report --workspace --lcov --output-path target/llvm-cov/lcov.info
+          # report 从已收集的 profraw 数据生成 LCOV
+          cargo llvm-cov report --lcov --output-path target/llvm-cov/lcov.info
 
       - name: Generate HTML report
         run: |
-          # report 需要 --workspace 以匹配测试收集范围（不支持 --all-features）
-          cargo llvm-cov report --workspace --html --output-dir target/llvm-cov/html
+          # report 从已收集的 profraw 数据生成 HTML
+          cargo llvm-cov report --html --output-dir target/llvm-cov/html
 
       # 注意：Codecov 上传需要 CODECOV_TOKEN，暂时禁用
       # - name: Upload coverage to Codecov
