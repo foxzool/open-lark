@@ -51,11 +51,14 @@ mod tests {
 
     #[test]
     fn test_create_room_request_builder() {
-        let config = Config::default();
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
         let request = CreateRoomRequest::new(config);
 
-        // 验证 request 被成功创建
-        assert!(!request.config.app_id.is_empty());
+        // 验证 request 被成功创建且配置正确
+        assert_eq!(request.config.app_id, "test_app");
     }
 
     #[test]

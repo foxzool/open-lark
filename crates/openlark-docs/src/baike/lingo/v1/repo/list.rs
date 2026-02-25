@@ -60,12 +60,14 @@ mod tests {
 
     #[test]
     fn test_list_repo_request_builder() {
-        let config = Config::default();
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
         let request = ListRepoRequest::new(config);
 
-        // 验证 request 被成功创建
-        // ListRepoRequest 只需要 config，没有其他字段
-        assert!(!request.config.app_id.is_empty());
+        // 验证 request 被成功创建且配置正确
+        assert_eq!(request.config.app_id, "test_app");
     }
 
     #[test]
