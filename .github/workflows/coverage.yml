@@ -82,7 +82,9 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           # 生成 JSON 摘要
-          cargo llvm-cov report --workspace --all-features --json --summary-only --output-path target/llvm-cov/summary.json
+          # 注意: report 子命令不需要 --workspace --all-features 参数
+          # 因为覆盖率数据已经在前面的 cargo llvm-cov 命令中收集完成
+          cargo llvm-cov report --json --summary-only --output-path target/llvm-cov/summary.json
 
           cov=$(python3 -c 'import json; d=json.load(open("target/llvm-cov/summary.json","r",encoding="utf-8")); print("{:.2f}".format(d["data"][0]["totals"]["lines"]["percent"]))')
 
@@ -96,11 +98,14 @@ jobs:
 
       - name: Generate LCOV report
         run: |
-          cargo llvm-cov report --workspace --all-features --lcov --output-path target/llvm-cov/lcov.info
+          # 注意: report 子命令不需要 --workspace --all-features 参数
+          cargo llvm-cov report --lcov --output-path target/llvm-cov/lcov.info
 
       - name: Generate HTML report
         run: |
-          cargo llvm-cov report --workspace --all-features --html --output-dir target/llvm-cov/html
+          # 注意: report 子命令不需要 --workspace --all-features 参数
+          cargo llvm-cov report --html --output-dir target/llvm-cov/html
+
       # 注意：Codecov 上传需要 CODECOV_TOKEN，暂时禁用
       # - name: Upload coverage to Codecov
       #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
