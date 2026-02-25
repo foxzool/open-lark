@@ -3,7 +3,7 @@
 //! 文档: https://open.feishu.cn/document/mdm-v1/mdm-v3/country_region/list
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait},
     config::Config,
     http::Transport,
     req_option::RequestOption,
@@ -62,7 +62,7 @@ impl CountryRegionListBuilder {
             params.push(format!("page_token={}", page_token));
         }
         if !params.is_empty() {
-            url.push_str("?");
+            url.push('?');
             url.push_str(&params.join("&"));
         }
 
