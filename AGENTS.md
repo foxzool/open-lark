@@ -7,20 +7,20 @@
 
 ## OVERVIEW
 
-OpenLark 是为飞书（Feishu/Lark）开放平台构建的企业级 Rust SDK，提供 1,688+ 个 API 的类型安全访问。采用模块化架构设计，支持按需编译和功能组合。
+OpenLark 是为飞书（Feishu/Lark）开放平台构建的企业级 Rust SDK，提供 1,560+ 个 API 的类型安全访问。采用模块化架构设计，支持按需编译和功能组合。
 
 ## STRUCTURE
 
 ```
 .
-├── crates/                    # 19 个业务模块 crates
+├── crates/                    # 18 个业务模块 crates
 │   ├── openlark-core/        # 核心基础设施（HTTP、错误处理）
 │   ├── openlark-client/      # 高级客户端和服务注册表
 │   ├── openlark-protocol/    # WebSocket 协议
 │   ├── openlark-auth/        # 认证服务
 │   ├── openlark-communication/  # IM 消息和联系人
-│   ├── openlark-docs/        # 云文档和表格（254 APIs）
-│   ├── openlark-hr/          # HR 和招聘（484 APIs）
+│   ├── openlark-docs/        # 云文档和表格（158 APIs）
+│   ├── openlark-hr/          # HR 和招聘（562 APIs）
 │   ├── openlark-workflow/    # 任务和审批
 │   ├── openlark-meeting/     # 视频会议
 │   └── ... (其他业务模块)
