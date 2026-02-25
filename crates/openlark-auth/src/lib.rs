@@ -57,10 +57,12 @@
 
 pub mod auth;
 pub mod common;
+pub mod human_authentication;
 pub mod models;
 pub mod passport;
 pub mod services;
 pub mod token_provider;
+pub mod verification;
 
 // 重新导出核心类型，方便用户使用
 pub use services::{AuthService, AuthenService, OAuthService};

@@ -53,6 +53,15 @@ pub mod directory;
 #[cfg(feature = "admin")]
 pub mod admin;
 
+#[cfg(feature = "mdm")]
+pub mod mdm;
+
+#[cfg(feature = "tenant")]
+pub mod tenant;
+
+#[cfg(feature = "trust_party")]
+pub mod trust_party;
+
 // Prelude 模块
 pub mod prelude;
 

@@ -12,6 +12,8 @@ pub mod common;
 #[cfg(feature = "v1")]
 pub mod application;
 
+pub mod workplace;
+
 pub mod prelude;
 
 pub use service::ApplicationService;
