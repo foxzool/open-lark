@@ -51,11 +51,34 @@ jobs:
           set -euo pipefail
           cargo llvm-cov clean --workspace
           mkdir -p target/llvm-cov
-          # 使用 --all-targets 代替 --lib 以包含 integration tests
-          cargo llvm-cov --workspace --all-features --all-targets \
-            --lcov --output-path target/llvm-cov/lcov.info
-          cargo llvm-cov --workspace --all-features --all-targets \
-            --html --output-dir target/llvm-cov/html
+          # 使用 --lib --tests 代替 --all-targets 以避免编译示例和基准
+          # 这样可以减少编译时间和内存使用，避免 LLVM 工具链崩溃
+          cargo llvm-cov --workspace --all-features --lib --tests \
+            --lcov --output-path target/llvm-cov/lcov.info || {
+            echo "LCOV generation failed, checking for errors..." >&2
+            exit 1
+          }
+          cargo llvm-cov --workspace --all-features --lib --tests \
+            --html --output-dir target/llvm-cov/html || {
+            echo "HTML report generation failed" >&2
+            exit 1
+          }
+      - name: Diagnose coverage generation
+        if: failure()
+        run: |
+          echo "=== Checking LLVM tools ==="
+          llvm-cov --version || echo "llvm-cov not found"
+          llvm-profdata --version || echo "llvm-profdata not found"
+          echo ""
+          echo "=== Checking target directory ==="
+          ls -la target/llvm-cov/ || echo "target/llvm-cov not found"
+          echo ""
+          echo "=== Checking for .profraw files ==="
+          find target -name '*.profraw' -type f | head -20 || echo "No .profraw files found"
+          echo ""
+          echo "=== Cargo version ==="
+          cargo --version
+          rustc --version
       - name: Collect coverage summary
         id: coverage
         run: |
