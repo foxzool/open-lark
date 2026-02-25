@@ -53,14 +53,11 @@ jobs:
           mkdir -p target/llvm-cov
           # 使用 --lib --tests 代替 --all-targets 以避免编译示例和基准
           # 这样可以减少编译时间和内存使用，避免 LLVM 工具链崩溃
+          # 同时生成 lcov 和 html 报告，避免重复编译
           cargo llvm-cov --workspace --all-features --lib --tests \
-            --lcov --output-path target/llvm-cov/lcov.info || {
-            echo "LCOV generation failed, checking for errors..." >&2
-            exit 1
-          }
-          cargo llvm-cov --workspace --all-features --lib --tests \
+            --lcov --output-path target/llvm-cov/lcov.info \
             --html --output-dir target/llvm-cov/html || {
-            echo "HTML report generation failed" >&2
+            echo "Coverage report generation failed" >&2
             exit 1
           }
       - name: Diagnose coverage generation
@@ -98,15 +95,16 @@ jobs:
           printf 'Line coverage: %s%%\n' "$cov" | tee -a "$GITHUB_STEP_SUMMARY"
           echo "value=$cov" >> $GITHUB_OUTPUT
 
-      - name: Upload coverage to Codecov (optional)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        continue-on-error: true
-        uses: codecov/codecov-action@v4
-        with:
-          files: target/llvm-cov/lcov.info
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
+      # 注意：Codecov 上传需要 CODECOV_TOKEN，暂时禁用
+      # - name: Upload coverage to Codecov
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   continue-on-error: true
+      #   uses: codecov/codecov-action@v4
+      #   with:
+      #     files: target/llvm-cov/lcov.info
+      #     flags: unittests
+      #     name: codecov-umbrella
+      #     fail_ci_if_error: false
 
       - name: Upload HTML coverage report
         uses: actions/upload-artifact@v4
