@@ -70,7 +70,8 @@ mod tests {
         let config = Config::default();
         let request = CreateUnitRequest::new(config);
 
-        assert!(true);
+        // 验证 request 被成功创建
+        assert!(!request.config.app_id.is_empty());
     }
 
     #[test]
@@ -81,7 +82,9 @@ mod tests {
             .build();
         let request = CreateUnitRequest::new(config);
 
-        assert!(true);
+        // 验证配置正确
+        assert_eq!(request.config.app_id, "test_app");
+        assert_eq!(request.config.app_secret, "test_secret");
     }
 
     #[test]

@@ -12,7 +12,9 @@ mod template_tests {
     #[test]
     fn test_example() {
         // TODO: 实现实际测试
-        assert!(true);
+        // 模板示例，实际使用时删除或替换为有意义的测试
+        let value = 42;
+        assert_eq!(value, 42);
     }
 
     #[rstest]
