@@ -13,7 +13,8 @@ env:
   CARGO_TERM_COLOR: always
   CARGO_TOOLCHAIN: stable
   CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
-  # 当前基线覆盖率约 45%，设置渐进式目标
+  # 必须禁用增量编译才能正确收集覆盖率数据
+  CARGO_INCREMENTAL: "0"
   MIN_COVERAGE: "40.0"
 
 jobs:
