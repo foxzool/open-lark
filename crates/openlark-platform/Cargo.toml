@@ -7,12 +7,12 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 documentation.workspace = true
-description = "飞书开放平台服务模块 - 应用管理、目录服务、系统管理 API (72 APIs)"
+description = "飞书开放平台服务模块 - 应用管理、目录服务、系统管理 API (94 APIs)"
 keywords = ["feishu", "lark", "platform", "api", "admin", "directory"]
 categories = ["api-bindings", "web-programming"]
 
 [features]
-default = ["app-engine", "directory", "admin"]
+default = ["app-engine", "directory", "admin", "mdm", "tenant", "trust_party"]
 
 # === 核心功能模块 ===
 core = []
@@ -30,6 +30,18 @@ directory = ["directory-core", "core"]
 admin-core = []
 admin = ["admin-core", "core"]
 
+# 主数据管理 (4 APIs)
+mdm-core = []
+mdm = ["mdm-core", "core"]
+
+# 租户服务 (2 APIs)
+tenant-core = []
+tenant = ["tenant-core", "core"]
+
+# 关联组织 (5 APIs)
+trust_party-core = []
+trust_party = ["trust_party-core", "core"]
+
 # === API版本支持 ===
 v1 = ["core"]
 v2 = ["v1"]
@@ -38,7 +50,7 @@ v4 = ["v3"]
 
 # === 功能组合 ===
 # 完整平台功能
-full = ["app-engine", "directory", "admin", "v4"]
+full = ["app-engine", "directory", "admin", "mdm", "tenant", "trust_party", "v4"]
 
 # 向后兼容别名
 platform = ["app-engine", "directory", "admin"]

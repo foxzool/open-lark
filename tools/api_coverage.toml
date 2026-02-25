@@ -2,7 +2,7 @@
 #
 # 目的：
 # - 给 tools/validate_apis.py 提供 --crate 的自动补全（src + filter）
-# - 给 .claude/skills/openlark-api/ 提供一致的“选 crate 口径”
+# - 给 .claude/skills/openlark-api/ 提供一致的"选 crate 口径"
 #
 # 约定：
 # - key 使用 workspace crate/package 名（例如 openlark-docs）
@@ -47,11 +47,11 @@ biz_tags = ["ai"]
 
 [crates.openlark-auth]
 src = "crates/openlark-auth/src"
-biz_tags = ["auth", "passport"]
+biz_tags = ["auth", "passport", "verification", "human_authentication"]
 
 [crates.openlark-platform]
 src = "crates/openlark-platform/src"
-biz_tags = ["admin", "directory", "app_engine"]
+biz_tags = ["admin", "directory", "app_engine", "trust_party", "tenant", "mdm"]
 
 [crates.openlark-workflow]
 src = "crates/openlark-workflow/src"
@@ -75,4 +75,4 @@ biz_tags = ["helpdesk"]
 
 [crates.openlark-application]
 src = "crates/openlark-application/src"
-biz_tags = ["application"]
+biz_tags = ["application", "workplace"]
