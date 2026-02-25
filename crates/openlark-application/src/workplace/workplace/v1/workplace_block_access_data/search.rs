@@ -3,7 +3,7 @@
 //! 文档: https://open.feishu.cn/document/workplace-v1/workplace_access_data/search-2
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait},
     config::Config,
     http::Transport,
     req_option::RequestOption,
@@ -102,3 +102,5 @@ pub struct BlockAccessData {
     #[serde(rename = "visitor_count")]
     pub visitor_count: i64,
 }
+
+impl ApiResponseTrait for AccessDataSearchBlockResponse {}
