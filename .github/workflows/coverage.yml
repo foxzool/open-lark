@@ -51,11 +51,11 @@ jobs:
           set -euo pipefail
           cargo llvm-cov clean --workspace
           mkdir -p target/llvm-cov
-          cargo llvm-cov --workspace --all-features --lib \
+          # 使用 --all-targets 代替 --lib 以包含 integration tests
+          cargo llvm-cov --workspace --all-features --all-targets \
             --lcov --output-path target/llvm-cov/lcov.info
-          cargo llvm-cov --workspace --all-features --lib \
+          cargo llvm-cov --workspace --all-features --all-targets \
             --html --output-dir target/llvm-cov/html
-
       - name: Collect coverage summary
         id: coverage
         run: |
