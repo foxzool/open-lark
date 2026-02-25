@@ -164,7 +164,7 @@ pub use tasklists::{GetTaskTasklistsResponse, TaskTasklistItem};
 
 #[cfg(test)]
 #[allow(unused_variables)]
-    mod tests {
+mod tests {
     use super::*;
     use std::sync::Arc;
 
