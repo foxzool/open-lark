@@ -37,5 +37,5 @@ include-all-members = true
 exclude = []
 
 [test]
-# Test execution settings
-features = ["full"]  # Run coverage with all features
+# 使用 --all-features 代替 features 数组，确保所有功能都被测试
+all-features = true  # Run coverage with all features enabled

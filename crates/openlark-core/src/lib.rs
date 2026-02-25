@@ -41,23 +41,33 @@ pub trait Validatable {
 }
 
 impl Validatable for &str {
-    fn is_empty_trimmed(&self) -> bool { self.trim().is_empty() }
+    fn is_empty_trimmed(&self) -> bool {
+        self.trim().is_empty()
+    }
 }
 
 impl Validatable for String {
-    fn is_empty_trimmed(&self) -> bool { self.trim().is_empty() }
+    fn is_empty_trimmed(&self) -> bool {
+        self.trim().is_empty()
+    }
 }
 
 impl<T: Validatable> Validatable for &T {
-    fn is_empty_trimmed(&self) -> bool { (*self).is_empty_trimmed() }
+    fn is_empty_trimmed(&self) -> bool {
+        (*self).is_empty_trimmed()
+    }
 }
 
 impl<T> Validatable for Vec<T> {
-    fn is_empty_trimmed(&self) -> bool { self.is_empty() }
+    fn is_empty_trimmed(&self) -> bool {
+        self.is_empty()
+    }
 }
 
 impl<T> Validatable for &[T] {
-    fn is_empty_trimmed(&self) -> bool { self.is_empty() }
+    fn is_empty_trimmed(&self) -> bool {
+        self.is_empty()
+    }
 }
 
 // Re-export validate_required macro for docs module

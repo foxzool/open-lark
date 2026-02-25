@@ -81,5 +81,24 @@ impl OAuthApiOld {
 
 /// 模块导出
 pub mod prelude {
-    pub use super::{AuthApiV3, AuthenApiV1, OAuthApiOld};
+    pub use super::{AuthApiV3, AuthenApiV1, OAuthApiOld, PassportApiV1};
+}
+
+/// Passport V1 API 端点枚举
+#[derive(Debug, Clone)]
+pub enum PassportApiV1 {
+    /// 批量查询用户登录会话
+    SessionQuery,
+    /// 登出用户会话
+    SessionLogout,
+}
+
+impl PassportApiV1 {
+    /// 获取对应的 API 路径
+    pub fn path(&self) -> &'static str {
+        match self {
+            PassportApiV1::SessionQuery => "/open-apis/passport/v1/sessions/query",
+            PassportApiV1::SessionLogout => "/open-apis/passport/v1/sessions/logout",
+        }
+    }
 }

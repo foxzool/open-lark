@@ -36,3 +36,6 @@ pub struct SystemSettings {
     /// 设置描述
     pub description: Option<String>,
 }
+
+// API 端点定义
+pub mod api_endpoints;

@@ -1,4 +1,4 @@
-//! delete
+//! 删除门禁规则
 
-pub struct udeleteRequest;
-pub struct udeleteResponse;
+pub struct DeleteRuleExternalRequest;
+pub struct DeleteRuleExternalResponse;
