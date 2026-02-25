@@ -2,6 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/authentication-management/login-state-management/logout
 
+use crate::common::api_endpoints::PassportApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -36,8 +37,7 @@ impl LogoutRequest {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<LogoutResponse> {
-        let req: ApiRequest<LogoutResponse> =
-            ApiRequest::post("/open-apis/passport/v1/sessions/logout");
+        let req: ApiRequest<LogoutResponse> = ApiRequest::post(PassportApiV1::SessionLogout.path());
 
         let response = Transport::request(req, &self.config, Some(option)).await?;
         response

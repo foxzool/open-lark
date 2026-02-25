@@ -73,7 +73,6 @@ pub struct HrClient {
     config: Arc<Config>,
 }
 
-
 impl HrClient {
     pub fn new(config: Config) -> Self {
         Self {

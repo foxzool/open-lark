@@ -1,4 +1,4 @@
-//! delete
+//! 删除访客
 
-pub struct udeleteRequest;
-pub struct udeleteResponse;
+pub struct DeleteVisitorRequest;
+pub struct DeleteVisitorResponse;

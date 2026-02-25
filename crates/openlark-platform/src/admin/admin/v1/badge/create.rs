@@ -2,6 +2,7 @@
 //!
 //! API文档: https://open.feishu.cn/document/server-docs/admin-v1/badge/badge/create
 
+use crate::common::api_endpoints::AdminApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -61,7 +62,7 @@ impl CreateBadgeBuilder {
         };
 
         let api_request: ApiRequest<CreateBadgeResponse> =
-            ApiRequest::post("/open-apis/admin/v1/badges")
+            ApiRequest::post(AdminApiV1::CreateBadge.path())
                 .body(serde_json::to_value(&request_body)?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;

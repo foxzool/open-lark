@@ -2,6 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/authentication-management/login-state-management/query
 
+use crate::common::api_endpoints::PassportApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -10,6 +11,12 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
+
+/// 批量获取脱敏用户登录信息请求体
+#[derive(Debug, Serialize)]
+struct QuerySessionRequestBody {
+    user_ids: Vec<String>,
+}
 
 /// 批量获取脱敏用户登录信息请求
 pub struct QuerySessionRequest {
@@ -39,8 +46,12 @@ impl QuerySessionRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<QuerySessionResponse> {
+        let body = QuerySessionRequestBody {
+            user_ids: self.user_ids,
+        };
+
         let req: ApiRequest<QuerySessionResponse> =
-            ApiRequest::post("/open-apis/passport/v1/sessions/query");
+            ApiRequest::post(PassportApiV1::SessionQuery.path()).body(serde_json::to_value(&body)?);
 
         let response = Transport::request(req, &self.config, Some(option)).await?;
         response
