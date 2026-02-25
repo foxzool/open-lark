@@ -3,7 +3,7 @@
 //! 文档: https://open.feishu.cn/document/mdm-v1/mdm-v3/country_region/get
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait},
     config::Config,
     http::Transport,
     req_option::RequestOption,
