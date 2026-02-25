@@ -3,7 +3,7 @@
 //! 文档: https://open.feishu.cn/document/server-docs/verification-v1/get
 
 use openlark_core::{
-    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait},
     config::Config,
     http::Transport,
     req_option::RequestOption,
