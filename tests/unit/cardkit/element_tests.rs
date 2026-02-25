@@ -35,9 +35,9 @@ mod create_card_element_request_builder_tests {
     fn test_builder_default_state() {
         let config = create_test_config();
         let builder = CreateCardElementRequestBuilder::new(config.clone());
-        let request = builder.build();
+        let _request = builder.build();
 
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 
     #[test]
@@ -64,19 +64,19 @@ mod create_card_element_request_builder_tests {
         let config = create_test_config();
         let element = json!({"type": "div", "text": {"content": "test"}});
 
-        let request = CreateCardElementRequestBuilder::new(config.clone())
+        let _request = CreateCardElementRequestBuilder::new(config.clone())
             .card_id("card_123")
             .element(element)
             .build();
 
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 
     #[test]
     fn test_request_new() {
         let config = create_test_config();
-        let request = CreateCardElementRequest::new(config);
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        let _request = CreateCardElementRequest::new(config);
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 }
 
@@ -148,9 +148,9 @@ mod update_card_element_request_builder_tests {
     fn test_update_builder_default_state() {
         let config = create_test_config();
         let builder = UpdateCardElementRequestBuilder::new(config.clone());
-        let request = builder.build();
+        let _request = builder.build();
 
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 
     #[test]
@@ -169,21 +169,21 @@ mod update_card_element_request_builder_tests {
     #[test]
     fn test_request_new() {
         let config = create_test_config();
-        let request = UpdateCardElementRequest::new(config);
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        let _request = UpdateCardElementRequest::new(config);
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 
     #[test]
     fn test_update_builder_chaining() {
         let config = create_test_config();
 
-        let request = UpdateCardElementRequestBuilder::new(config.clone())
+        let _request = UpdateCardElementRequestBuilder::new(config.clone())
             .card_id("card_123")
             .element_id("elem_456")
             .patch(json!({"key": "value"}))
             .build();
 
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 }
 
@@ -228,9 +228,9 @@ mod patch_card_element_request_builder_tests {
     fn test_patch_builder_default_state() {
         let config = create_test_config();
         let builder = PatchCardElementRequestBuilder::new(config.clone());
-        let request = builder.build();
+        let _request = builder.build();
 
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 
     #[test]
@@ -249,21 +249,21 @@ mod patch_card_element_request_builder_tests {
     #[test]
     fn test_request_new() {
         let config = create_test_config();
-        let request = PatchCardElementRequest::new(config);
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        let _request = PatchCardElementRequest::new(config);
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 
     #[test]
     fn test_patch_builder_chaining() {
         let config = create_test_config();
 
-        let request = PatchCardElementRequestBuilder::new(config.clone())
+        let _request = PatchCardElementRequestBuilder::new(config.clone())
             .card_id("card_123")
             .element_id("elem_456")
             .patch(json!({"op": "add"}))
             .build();
 
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 }
 
@@ -312,9 +312,9 @@ mod delete_card_element_request_builder_tests {
     fn test_delete_builder_default_state() {
         let config = create_test_config();
         let builder = DeleteCardElementRequestBuilder::new(config.clone());
-        let request = builder.build();
+        let _request = builder.build();
 
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 
     #[test]
@@ -331,20 +331,20 @@ mod delete_card_element_request_builder_tests {
     #[test]
     fn test_request_new() {
         let config = create_test_config();
-        let request = DeleteCardElementRequest::new(config);
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        let _request = DeleteCardElementRequest::new(config);
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 
     #[test]
     fn test_delete_builder_chaining() {
         let config = create_test_config();
 
-        let request = DeleteCardElementRequestBuilder::new(config.clone())
+        let _request = DeleteCardElementRequestBuilder::new(config.clone())
             .card_id("card_123")
             .element_id("elem_456")
             .build();
 
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 }
 
@@ -386,9 +386,9 @@ mod update_element_content_request_builder_tests {
     fn test_content_builder_default_state() {
         let config = create_test_config();
         let builder = UpdateCardElementContentRequestBuilder::new(config.clone());
-        let request = builder.build();
+        let _request = builder.build();
 
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 
     #[test]
@@ -407,21 +407,21 @@ mod update_element_content_request_builder_tests {
     #[test]
     fn test_request_new() {
         let config = create_test_config();
-        let request = UpdateCardElementContentRequest::new(config);
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        let _request = UpdateCardElementContentRequest::new(config);
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 
     #[test]
     fn test_content_builder_chaining() {
         let config = create_test_config();
 
-        let request = UpdateCardElementContentRequestBuilder::new(config.clone())
+        let _request = UpdateCardElementContentRequestBuilder::new(config.clone())
             .card_id("card_123")
             .element_id("elem_456")
             .content(json!("streaming content"))
             .build();
 
-        assert!(std::ptr::addr_of!(request) != std::ptr::null());
+        // 验证 request 对象已创建（Rust 引用永不为 null）
     }
 }
 
