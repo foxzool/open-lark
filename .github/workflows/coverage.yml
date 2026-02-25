@@ -38,8 +38,8 @@ jobs:
       - name: Show cargo-llvm-cov version
         run: cargo llvm-cov --version
 
-      - uses: Swatinem/rust-cache@v2
-
+      # 注意：rust-cache 与覆盖率收集不兼容，禁用缓存
+      # - uses: Swatinem/rust-cache@v2
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
         with:
