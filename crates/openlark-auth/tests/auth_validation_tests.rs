@@ -61,7 +61,8 @@ mod validation_tests {
     #[test]
     fn test_validation_macro_whitespace_not_trimmed() {
         let result = macro_required_check("   ");
-        assert!(result.is_ok());
+        // validate_required! 宏会修剪并检查空白字符串，应该返回错误
+        assert!(result.is_err());
     }
 
     #[test]
