@@ -7,6 +7,8 @@
 pub enum AdminApiV1 {
     /// 创建勋章
     CreateBadge,
+    /// 获取勋章列表
+    ListBadge,
 }
 
 impl AdminApiV1 {
@@ -14,6 +16,7 @@ impl AdminApiV1 {
     pub fn path(&self) -> &'static str {
         match self {
             AdminApiV1::CreateBadge => "/open-apis/admin/v1/badges",
+            AdminApiV1::ListBadge => "/open-apis/admin/v1/badges",
         }
     }
 }
