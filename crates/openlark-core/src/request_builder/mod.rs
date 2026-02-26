@@ -68,7 +68,10 @@ impl UnifiedRequestBuilder {
                         );
                     }
                     RequestData::Json(json) => {
-                        let json_bytes = serde_json::to_vec(json).unwrap_or_default();
+                        let json_bytes = serde_json::to_vec(json).unwrap_or_else(|e| {
+                            tracing::warn!(error = %e, "request_builder body JSON 序列化失败，使用空 vec");
+                            vec![]
+                        });
                         req_builder = req_builder.body(json_bytes);
                         req_builder = req_builder.header(
                             crate::constants::CONTENT_TYPE_HEADER,
@@ -77,6 +80,11 @@ impl UnifiedRequestBuilder {
                     }
                     _ => {}
                 }
+            }
+
+            // 5. 应用超时：ApiRequest.timeout > Config.req_timeout > 无超时
+            if let Some(timeout) = req.timeout.or(config.req_timeout) {
+                req_builder = req_builder.timeout(timeout);
             }
 
             Ok(req_builder)
@@ -382,6 +390,48 @@ mod tests {
                 .await;
 
         assert!(result.is_ok());
+    }
+
+    #[tokio::test]
+    async fn test_build_request_applies_config_req_timeout() {
+        let mut api_req = create_test_api_request();
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("https://open.feishu.cn")
+            .req_timeout(std::time::Duration::from_secs(12))
+            .build();
+        let option = RequestOption::default();
+
+        let req_builder =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
+                .await
+                .expect("request builder should be created");
+        let request = req_builder.build().expect("request should build");
+
+        assert_eq!(request.timeout().copied(), Some(std::time::Duration::from_secs(12)));
+    }
+
+    #[tokio::test]
+    async fn test_build_request_prefers_api_timeout_over_config_req_timeout() {
+        let mut api_req = create_test_api_request().timeout(std::time::Duration::from_secs(3));
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("https://open.feishu.cn")
+            .req_timeout(std::time::Duration::from_secs(12))
+            .build();
+        let option = RequestOption::default();
+
+        let req_builder =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
+                .await
+                .expect("request builder should be created");
+        let request = req_builder.build().expect("request should build");
+
+        assert_eq!(request.timeout().copied(), Some(std::time::Duration::from_secs(3)));
     }
 
     #[test]
