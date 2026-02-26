@@ -1,6 +1,6 @@
 [package]
 name = "openlark-auth"
-version = "0.1.0-dev"
+version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
