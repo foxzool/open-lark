@@ -32,12 +32,12 @@ impl AuthHandler {
         config: &Config,
         option: &RequestOption,
     ) -> Result<RequestBuilder, LarkAPIError> {
-        let app_access_token = if !option.app_access_token.is_empty() {
-            option.app_access_token.clone()
+        let app_access_token = if let Some(ref token) = option.app_access_token {
+            token.clone()
         } else if config.enable_token_cache() {
             let mut request = TokenRequest::app();
-            if !option.app_ticket.is_empty() {
-                request = request.app_ticket(option.app_ticket.clone());
+            if let Some(ref ticket) = option.app_ticket {
+                request = request.app_ticket(ticket.clone());
             }
             config.token_provider().get_token(request).await?
         } else {
@@ -53,15 +53,15 @@ impl AuthHandler {
         config: &Config,
         option: &RequestOption,
     ) -> Result<RequestBuilder, LarkAPIError> {
-        let tenant_access_token = if !option.tenant_access_token.is_empty() {
-            option.tenant_access_token.clone()
+        let tenant_access_token = if let Some(ref token) = option.tenant_access_token {
+            token.clone()
         } else if config.enable_token_cache() {
             let mut request = TokenRequest::tenant();
-            if !option.tenant_key.is_empty() {
-                request = request.tenant_key(option.tenant_key.clone());
+            if let Some(ref key) = option.tenant_key {
+                request = request.tenant_key(key.clone());
             }
-            if !option.app_ticket.is_empty() {
-                request = request.app_ticket(option.app_ticket.clone());
+            if let Some(ref ticket) = option.app_ticket {
+                request = request.app_ticket(ticket.clone());
             }
             config.token_provider().get_token(request).await?
         } else {
@@ -73,7 +73,7 @@ impl AuthHandler {
 
     /// 应用用户级认证
     fn apply_user_auth(req_builder: RequestBuilder, option: &RequestOption) -> RequestBuilder {
-        Self::add_auth_header(req_builder, &option.user_access_token)
+        Self::add_auth_header(req_builder, option.user_access_token.as_deref().unwrap_or(""))
     }
 
     /// 添加 Authorization 头
@@ -142,7 +142,7 @@ mod tests {
         let req_builder = create_test_request_builder();
         let config = create_test_config();
         let option = RequestOption {
-            user_access_token: "user_token_123".to_string(),
+            user_access_token: Some("user_token_123".to_string()),
             ..Default::default()
         };
 
@@ -157,7 +157,7 @@ mod tests {
         let req_builder = create_test_request_builder();
         let config = create_test_config();
         let option = RequestOption {
-            app_access_token: "app_token_123".to_string(),
+            app_access_token: Some("app_token_123".to_string()),
             ..Default::default()
         };
 
@@ -185,7 +185,7 @@ mod tests {
         let req_builder = create_test_request_builder();
         let config = create_test_config();
         let option = RequestOption {
-            tenant_access_token: "tenant_token_123".to_string(),
+            tenant_access_token: Some("tenant_token_123".to_string()),
             ..Default::default()
         };
 
@@ -240,7 +240,7 @@ mod tests {
             .token_provider(StaticTokenProvider)
             .build();
         let option = RequestOption {
-            tenant_key: "test_tenant".to_string(),
+            tenant_key: Some("test_tenant".to_string()),
             ..Default::default()
         };
 
@@ -257,7 +257,7 @@ mod tests {
     fn test_apply_user_auth() {
         let req_builder = create_test_request_builder();
         let option = RequestOption {
-            user_access_token: "user_token_456".to_string(),
+            user_access_token: Some("user_token_456".to_string()),
             ..Default::default()
         };
 
@@ -300,21 +300,21 @@ mod tests {
             (
                 AccessTokenType::User,
                 RequestOption {
-                    user_access_token: "user_token".to_string(),
+                    user_access_token: Some("user_token".to_string()),
                     ..Default::default()
                 },
             ),
             (
                 AccessTokenType::App,
                 RequestOption {
-                    app_access_token: "app_token".to_string(),
+                    app_access_token: Some("app_token".to_string()),
                     ..Default::default()
                 },
             ),
             (
                 AccessTokenType::Tenant,
                 RequestOption {
-                    tenant_access_token: "tenant_token".to_string(),
+                    tenant_access_token: Some("tenant_token".to_string()),
                     ..Default::default()
                 },
             ),
@@ -418,7 +418,7 @@ mod tests {
             .token_provider(StaticTokenProvider)
             .build();
         let option = RequestOption {
-            app_ticket: "test_ticket_123".to_string(),
+            app_ticket: Some("test_ticket_123".to_string()),
             ..Default::default()
         };
 

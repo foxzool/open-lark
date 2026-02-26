@@ -12,10 +12,10 @@ pub mod config;
 pub mod constants;
 pub mod error;
 pub mod http;
-pub mod observability;
-pub mod query_params;
+pub(crate) mod observability;
+pub(crate) mod query_params;
 pub mod req_option;
-pub mod request_builder;
+pub(crate) mod request_builder;
 #[cfg(feature = "testing")]
 pub mod testing;
 pub mod trait_system;
@@ -114,8 +114,4 @@ pub mod prelude {
     pub use crate::validate_required;
     pub use crate::validate_required_list;
 
-    // Re-export commonly used dependencies
-    pub use serde::{Deserialize, Serialize};
-    pub use serde_json::Value;
-    pub use std::collections::HashMap;
 }
