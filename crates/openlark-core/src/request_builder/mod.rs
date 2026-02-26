@@ -410,7 +410,10 @@ mod tests {
                 .expect("request builder should be created");
         let request = req_builder.build().expect("request should build");
 
-        assert_eq!(request.timeout().copied(), Some(std::time::Duration::from_secs(12)));
+        assert_eq!(
+            request.timeout().copied(),
+            Some(std::time::Duration::from_secs(12))
+        );
     }
 
     #[tokio::test]
@@ -431,7 +434,10 @@ mod tests {
                 .expect("request builder should be created");
         let request = req_builder.build().expect("request should build");
 
-        assert_eq!(request.timeout().copied(), Some(std::time::Duration::from_secs(3)));
+        assert_eq!(
+            request.timeout().copied(),
+            Some(std::time::Duration::from_secs(3))
+        );
     }
 
     #[test]

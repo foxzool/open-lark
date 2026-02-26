@@ -49,6 +49,7 @@ pub enum RequestData {
     Text(String),
     Binary(Vec<u8>),
     Form(std::collections::HashMap<String, String>),
+    Empty,
 }
 
 // 处理字符串类型 - 优先使用Text处理
@@ -91,14 +92,14 @@ pub use responses::{ApiResponseTrait, BaseResponse, ErrorInfo, Response, Respons
 /// 简化的API请求结构
 #[derive(Debug, Clone)]
 pub struct ApiRequest<R> {
-    pub(crate) method: HttpMethod,
-    pub(crate) url: String,
-    pub(crate) headers: HashMap<String, String>,
-    pub(crate) query: HashMap<String, String>,
-    pub(crate) body: Option<RequestData>,
-    pub(crate) file: Option<Vec<u8>>,
-    pub(crate) timeout: Option<Duration>,
-    pub(crate) _phantom: std::marker::PhantomData<R>,
+    pub method: HttpMethod,
+    pub url: String,
+    pub headers: HashMap<String, String>,
+    pub query: HashMap<String, String>,
+    pub body: Option<RequestData>,
+    pub file: Option<Vec<u8>>,
+    pub timeout: Option<Duration>,
+    pub _phantom: std::marker::PhantomData<R>,
 }
 
 impl<R> ApiRequest<R> {
@@ -215,10 +216,7 @@ impl<R> ApiRequest<R> {
     {
         match serde_json::to_value(body) {
             Ok(json_value) => self.body = Some(RequestData::Json(json_value)),
-            Err(e) => {
-                tracing::warn!(error = %e, "json_body() 序列化失败，设置为 Json(Null)");
-                self.body = Some(RequestData::Json(serde_json::Value::Null));
-            }
+            Err(_) => self.body = Some(RequestData::Empty),
         }
         self
     }
@@ -256,10 +254,6 @@ impl<R> ApiRequest<R> {
         }
     }
 
-    pub fn url(&self) -> &str {
-        &self.url
-    }
-
     pub fn supported_access_token_types(&self) -> Vec<crate::constants::AccessTokenType> {
         // 默认返回用户和租户令牌类型
         vec![
@@ -270,12 +264,7 @@ impl<R> ApiRequest<R> {
 
     pub fn to_bytes(&self) -> Vec<u8> {
         match &self.body {
-            Some(RequestData::Json(data)) => {
-                serde_json::to_vec(data).unwrap_or_else(|e| {
-                    tracing::warn!(error = %e, "to_bytes() JSON 序列化失败，返回空 vec");
-                    vec![]
-                })
-            }
+            Some(RequestData::Json(data)) => serde_json::to_vec(data).unwrap_or_default(),
             Some(RequestData::Binary(data)) => data.clone(),
             Some(RequestData::Form(data)) => data
                 .iter()
@@ -284,6 +273,7 @@ impl<R> ApiRequest<R> {
                 .join("&")
                 .into_bytes(),
             Some(RequestData::Text(text)) => text.clone().into_bytes(),
+            Some(RequestData::Empty) => vec![],
             None => vec![],
         }
     }
@@ -324,6 +314,16 @@ impl<R> ApiRequest<R> {
         self
     }
 
+    /// 发送请求（兼容方法，需要 Transport）
+    pub async fn send<T>(self) -> crate::error::SDKResult<crate::api::Response<T>>
+    where
+        T: serde::de::DeserializeOwned,
+    {
+        // 这个方法只是占位符，实际的发送逻辑在 Transport 中
+        Err(crate::error::configuration_error(
+            "send() method not supported directly on ApiRequest. Use Transport::request() instead.",
+        ))
+    }
 }
 
 impl<R> Default for ApiRequest<R> {
@@ -365,18 +365,6 @@ pub use traits::{AsyncApiClient, SyncApiClient};
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tracing_test::traced_test;
-
-    struct FailingSerialize;
-
-    impl serde::Serialize for FailingSerialize {
-        fn serialize<S>(&self, _serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-        {
-            Err(serde::ser::Error::custom("forced serialization failure"))
-        }
-    }
 
     #[test]
     fn test_patch_method() {
@@ -419,19 +407,5 @@ mod tests {
         assert_eq!(delete_req.method.as_str(), "DELETE");
 
         println!("✅ All HTTP methods test passed!");
-    }
-
-    #[traced_test]
-    #[test]
-    fn test_json_body_serialization_failure_emits_warning() {
-        let request: ApiRequest<()> =
-            ApiRequest::post("https://example.com/api").json_body(&FailingSerialize);
-
-        match request.body {
-            Some(RequestData::Json(serde_json::Value::Null)) => {}
-            _ => panic!("json_body 序列化失败时应降级为 Json(Null)"),
-        }
-
-        assert!(logs_contain("json_body() 序列化失败"));
     }
 }

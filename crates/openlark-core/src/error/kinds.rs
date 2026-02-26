@@ -47,6 +47,7 @@ pub enum ErrorKind {
 }
 
 impl ErrorKind {
+    #[allow(deprecated)]
     /// 获取默认的用户友好消息
     pub fn default_user_message(&self) -> Cow<'static, str> {
         match self {
@@ -170,6 +171,7 @@ impl ErrorKind {
 }
 
 impl std::fmt::Display for ErrorKind {
+    #[allow(deprecated)]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.description())
     }
@@ -194,6 +196,7 @@ pub trait ErrorKindExt {
 }
 
 impl ErrorKindExt for ErrorKind {
+    #[allow(deprecated)]
     fn is_network_error(&self) -> bool {
         matches!(self, Self::Network)
     }
@@ -219,6 +222,7 @@ impl ErrorKindExt for ErrorKind {
 pub struct ErrorKindAnalyzer;
 
 impl ErrorKindAnalyzer {
+    #[allow(deprecated)]
     /// 分析错误模式的建议
     pub fn analyze_pattern(errors: &[ErrorKind]) -> ErrorAnalysis {
         let mut kind_counts = std::collections::HashMap::new();
@@ -317,6 +321,7 @@ impl ErrorKindAnalyzer {
 /// 错误分析结果
 #[derive(Debug, Clone)]
 pub struct ErrorAnalysis {
+    #[allow(deprecated)]
     /// 总错误数
     pub total_errors: usize,
     /// 错误种类分布
@@ -330,6 +335,7 @@ pub struct ErrorAnalysis {
 }
 
 #[cfg(test)]
+#[allow(deprecated)]
 mod tests {
     use super::*;
 
