@@ -148,7 +148,7 @@ impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> T
                 Err(err) => {
                     debug!("Request error: {err:?}");
                     tracing::Span::current().record("response_code", 0_u16); // Indicate network error
-                    Err(crate::error::network_error(err.to_string()))
+                    Err(err.into())
                 }
             }
         }
