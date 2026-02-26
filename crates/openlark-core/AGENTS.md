@@ -17,20 +17,31 @@ src/
 │   ├── token.rs             # 令牌管理
 │   └── sign.rs              # 请求签名
 ├── config.rs                 # 客户端配置
-├── constants.rs              # 全局常量
+├── constants.rs              # 全局常量（AppType、AccessTokenType 含 as_str()）
 ├── error/                    # CoreError 错误系统
-│   ├── core.rs              # 核心错误类型
+│   ├── core.rs              # 核心错误类型（CoreError 枚举）
 │   ├── codes.rs             # 飞书错误码映射
+│   ├── context.rs           # 错误上下文
+│   ├── traits.rs            # ErrorType 枚举（替代已删除的 ErrorKind）
 │   ├── observability.rs     # 可观测性集成
+│   ├── prelude.rs           # 错误系统预置导入
 │   └── reporter.rs          # 错误报告
 ├── http.rs                   # HTTP 客户端封装
-├── observability.rs          # 日志和追踪
-├── query_params.rs          # 查询参数构建
-├── req_option.rs            # 请求选项
-├── request_builder.rs       # 请求构建器
+├── req_option.rs            # 请求选项（字段为 Option<String>）
+├── response_handler.rs      # 响应处理器（原 improved_response_handler.rs）
 ├── trait_system.rs          # 核心 trait 定义
-├── validation.rs            # 参数验证
-└── ...
+├── validation/              # 参数验证
+│   ├── core.rs              # 核心验证函数 + ValidateBuilder
+│   └── mod.rs               # 模块入口
+└── (内部模块)
+    ├── app_ticket_manager.rs
+    ├── content_disposition.rs
+    ├── observability.rs      # pub(crate)
+    ├── performance.rs
+    ├── query_params.rs       # pub(crate)
+    ├── req_translator.rs
+    ├── request_builder/      # pub(crate)
+    └── utils.rs
 ```
 
 ## WHERE TO LOOK
@@ -39,26 +50,40 @@ src/
 |------|----------|-------|
 | 添加错误码 | `src/error/codes.rs` | 飞书通用错误码映射 |
 | 修改 HTTP 行为 | `src/http.rs` | reqwest 客户端配置 |
-| 添加验证规则 | `src/validation/` | 复用 validate_required 宏 |
+| 添加验证规则 | `src/validation/core.rs` | 复用 validate_required! 宏 |
 | 令牌管理 | `src/auth/token.rs` | AccessToken/RefreshToken |
 | 常量定义 | `src/constants.rs` | BASE_URL, 默认超时等 |
+| 请求选项 | `src/req_option.rs` | RequestOption（字段为 Option<String>） |
 
 ## CONVENTIONS
 
 ### 错误处理
 ```rust
-// 使用 CoreError 统一错误类型
+// 统一错误类型（LarkAPIError 别名已删除，统一使用 CoreError）
 pub type SDKResult<T> = Result<T, CoreError>;
 
-// 验证宏
+// 验证宏（validate_required 函数已删除，仅保留宏）
 validate_required!(self.field, "字段不能为空");
 validate_required_list!(self.items, 50, "列表不能为空且不能超过 50 项");
 ```
 
+### RequestOption 字段语义
+```rust
+// 字段为 Option<String>，None 表示未设置，Some("") 表示显式设置为空
+pub struct RequestOption {
+    pub(crate) tenant_key: Option<String>,
+    pub(crate) user_access_token: Option<String>,
+    // ...
+}
+// 判断是否设置：option.field.is_some() / option.field.is_none()
+// 获取值：option.field.as_deref().unwrap_or("")
+```
+
 ### 公开 API 设计
 - **最小化原则**: 只导出必要的类型（KISS）
-- **内部模块**: `mod xxx;` 不导出实现细节
+- **内部模块**: observability/query_params/request_builder 为 pub(crate)
 - **Re-export**: 常用类型从 crate root 重新导出
+- **Prelude**: 不 re-export 第三方类型（serde/HashMap 等）
 
 ### 错误码优先级
 1. 飞书通用 `code`（如 99991671 Token 无效）
@@ -70,6 +95,9 @@ validate_required_list!(self.items, 50, "列表不能为空且不能超过 50 �
 - ❌ 不要把 core 变成"全家桶"（避免暴露过多内部模块）
 - ❌ 不要在 core 引入业务逻辑
 - ❌ 不要破坏 Validatable trait 的语义一致性
+- ❌ 不要使用 LarkAPIError（已删除，统一使用 CoreError）
+- ❌ 不要使用 validate_required 函数（已删除，使用 validate_required! 宏）
+- ❌ 不要在 validation/ 下添加业务验证模块（file/pagination/password/uuid 已删除）
 
 ## COMMANDS
 

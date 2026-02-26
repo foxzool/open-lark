@@ -24,7 +24,7 @@ pub mod validation;
 // crate 内部实现细节：不对外暴露（避免把 core 变成"全家桶"）
 mod app_ticket_manager;
 mod content_disposition;
-mod improved_response_handler;
+mod response_handler;
 mod performance;
 mod req_translator;
 mod utils;
@@ -108,7 +108,7 @@ pub mod prelude {
     // Re-export commonly used core modules directly（最小集合）
     pub use crate::config::Config;
     pub use crate::constants::*;
-    pub use crate::error::{validation_error, CoreError, LarkAPIError, SDKResult};
+    pub use crate::error::{validation_error, CoreError, SDKResult};
     pub use crate::http::Transport;
     pub use crate::req_option::*;
     pub use crate::validate_required;

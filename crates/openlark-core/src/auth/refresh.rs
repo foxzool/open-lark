@@ -163,10 +163,10 @@
 //!     },
 //!     Err(error) => {
 //!         match error {
-//!             LarkAPIError::NetworkError(_) => {
+//!             CoreError::NetworkError(_) => {
 //!                 println!("网络错误，将自动重试");
 //!             },
-//!             LarkAPIError::AuthenticationError(msg) => {
+//!             CoreError::AuthenticationError(msg) => {
 //!                 println!("认证失败: {}", msg);
 //!                 // 可能需要检查 app_id 和 app_secret
 //!             },
@@ -307,7 +307,7 @@ use super::token::{TokenInfo, TokenType};
 use crate::{
     config::Config,
     constants::{APP_ACCESS_TOKEN_URL_PATH, TENANT_ACCESS_TOKEN_URL_PATH},
-    error::LarkAPIError,
+    error::CoreError,
     SDKResult,
 };
 
@@ -382,10 +382,10 @@ impl TokenRefresher {
         let request = self.config.http_client().post(&url);
         let request = request.form(&params);
 
-        let response = request.send().await.map_err(LarkAPIError::from)?;
+        let response = request.send().await.map_err(CoreError::from)?;
 
         let refresh_response: RefreshTokenResponse =
-            response.json().await.map_err(LarkAPIError::from)?;
+            response.json().await.map_err(CoreError::from)?;
 
         self.parse_refresh_response(refresh_response, TokenType::AppAccessToken)
     }
@@ -421,10 +421,10 @@ impl TokenRefresher {
             request = request.header("x-tenant-key", tenant_key);
         }
 
-        let response = request.send().await.map_err(LarkAPIError::from)?;
+        let response = request.send().await.map_err(CoreError::from)?;
 
         let refresh_response: RefreshTokenResponse =
-            response.json().await.map_err(LarkAPIError::from)?;
+            response.json().await.map_err(CoreError::from)?;
 
         let token_info = self.parse_refresh_response(refresh_response, token_type)?;
 

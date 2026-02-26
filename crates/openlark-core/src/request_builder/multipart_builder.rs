@@ -1,4 +1,4 @@
-use crate::error::{validation_error, LarkAPIError};
+use crate::error::{validation_error, CoreError};
 use reqwest::{multipart, RequestBuilder};
 use serde_json::Value;
 
@@ -11,7 +11,7 @@ impl MultipartBuilder {
         req_builder: RequestBuilder,
         body: &[u8],
         file_data: &[u8],
-    ) -> Result<RequestBuilder, LarkAPIError> {
+    ) -> Result<RequestBuilder, CoreError> {
         let json_value = serde_json::from_slice::<Value>(body)?;
 
         let form_obj = json_value
@@ -37,7 +37,7 @@ impl MultipartBuilder {
         mut form: multipart::Form,
         form_obj: &serde_json::Map<String, Value>,
         file_data: &[u8],
-    ) -> Result<multipart::Form, LarkAPIError> {
+    ) -> Result<multipart::Form, CoreError> {
         // 兼容两种用法：
         // - "__file_name": 仅用于设置 multipart 文件名，不作为表单字段发送
         // - "file_name": 既是表单字段，也可作为 multipart 文件名
@@ -74,7 +74,7 @@ impl MultipartBuilder {
     fn add_form_fields(
         mut form: multipart::Form,
         form_obj: &serde_json::Map<String, Value>,
-    ) -> Result<multipart::Form, LarkAPIError> {
+    ) -> Result<multipart::Form, CoreError> {
         for (key, value) in form_obj.iter() {
             // 跳过 __file_name 字段和 null 值
             if key == "__file_name" || value == &Value::Null {
@@ -104,7 +104,7 @@ impl MultipartBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::error::LarkAPIError;
+    use crate::error::CoreError;
     use reqwest::Client;
     use serde_json::json;
 
@@ -153,7 +153,7 @@ mod tests {
 
         assert!(result.is_err());
         match result {
-            Err(LarkAPIError::Serialization { .. }) => {}
+            Err(CoreError::Serialization { .. }) => {}
             _ => panic!("Expected DeserializeError"),
         }
     }
@@ -168,7 +168,7 @@ mod tests {
         let result = MultipartBuilder::build_multipart(req_builder, &body, file_data);
 
         assert!(result.is_err());
-        if let Err(LarkAPIError::Validation { message, .. }) = result {
+        if let Err(CoreError::Validation { message, .. }) = result {
             assert!(message.contains("Invalid form data"));
         } else {
             panic!("Expected BadRequest error");
@@ -301,7 +301,7 @@ mod tests {
         let result = MultipartBuilder::add_file_part(form, &form_data, file_data);
         assert!(result.is_err());
 
-        if let Err(LarkAPIError::Validation { message, .. }) = result {
+        if let Err(CoreError::Validation { message, .. }) = result {
             assert!(message.contains("file_name must be a string"));
         }
     }

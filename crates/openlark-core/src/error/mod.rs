@@ -21,7 +21,6 @@ pub use self::traits::{ErrorSeverity, ErrorType};
 // 主要类型别名（推荐使用）
 pub type SDKResult<T> = Result<T, CoreError>;
 pub type ErrorId = Uuid;
-pub type LarkAPIError = CoreError;
 
 // 核心模块
 pub mod codes;
@@ -829,10 +828,9 @@ mod tests {
         assert!(!id.to_string().is_empty());
     }
 
-    /// 测试 LarkAPIError 类型别名
     #[test]
     fn test_lark_api_error_type_alias() {
-        fn use_lark_api_error() -> LarkAPIError {
+        fn use_lark_api_error() -> CoreError {
             api_error(500, "/api", "test", None::<String>)
         }
 

@@ -10,8 +10,8 @@ use crate::{
     app_ticket_manager::apply_app_ticket,
     config::Config,
     constants::*,
-    error::LarkAPIError,
-    improved_response_handler::ImprovedResponseHandler,
+    error::CoreError,
+    response_handler::ImprovedResponseHandler,
     req_option::RequestOption,
     req_translator::ReqTranslator,
     SDKResult,
@@ -40,7 +40,7 @@ impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> T
         req: ApiRequest<R>,
         config: &Config,
         option: Option<RequestOption>,
-    ) -> Result<Response<T>, LarkAPIError> {
+    ) -> Result<Response<T>, CoreError> {
         // Create span for HTTP request tracing
         let span = info_span!(
             "http_request",
@@ -160,7 +160,7 @@ impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> T
 fn validate_token_type(
     access_token_types: &[AccessTokenType],
     option: &RequestOption,
-) -> Result<(), LarkAPIError> {
+) -> Result<(), CoreError> {
     // 未指定可用 token 类型时，不做额外校验。
     // 旧实现误将“非空”作为提前返回条件，并在空列表时访问 [0] 导致 panic。
     if access_token_types.is_empty() {
@@ -247,7 +247,7 @@ fn validate(
     config: &Config,
     option: &RequestOption,
     access_token_type: AccessTokenType,
-) -> Result<(), LarkAPIError> {
+) -> Result<(), CoreError> {
     if config.app_id.is_empty() {
         return Err(crate::error::validation_error("app_id", "AppId is empty"));
     }
@@ -471,7 +471,7 @@ mod test {
         let result = validate(&config, &option, AccessTokenType::None);
         assert!(matches!(
             result,
-            Err(crate::error::LarkAPIError::Validation { .. })
+            Err(crate::error::CoreError::Validation { .. })
         ));
     }
 
@@ -483,7 +483,7 @@ mod test {
         let result = validate(&config, &option, AccessTokenType::None);
         assert!(matches!(
             result,
-            Err(crate::error::LarkAPIError::Validation { .. })
+            Err(crate::error::CoreError::Validation { .. })
         ));
     }
 
@@ -499,7 +499,7 @@ mod test {
         let result = validate(&config, &option, AccessTokenType::User);
         assert!(matches!(
             result,
-            Err(crate::error::LarkAPIError::Validation { .. })
+            Err(crate::error::CoreError::Validation { .. })
         ));
     }
 
@@ -525,7 +525,7 @@ mod test {
         let result = validate(&config, &option, AccessTokenType::Tenant);
         assert!(matches!(
             result,
-            Err(crate::error::LarkAPIError::Validation { .. })
+            Err(crate::error::CoreError::Validation { .. })
         ));
     }
 
@@ -547,7 +547,7 @@ mod test {
         let result = validate(&config, &option, AccessTokenType::User);
         assert!(matches!(
             result,
-            Err(crate::error::LarkAPIError::Validation { .. })
+            Err(crate::error::CoreError::Validation { .. })
         ));
     }
 
@@ -572,7 +572,7 @@ mod test {
         let result = validate(&config, &option, AccessTokenType::None);
         assert!(matches!(
             result,
-            Err(crate::error::LarkAPIError::Validation { .. })
+            Err(crate::error::CoreError::Validation { .. })
         ));
     }
 
@@ -587,7 +587,7 @@ mod test {
         let result = validate(&config, &option, AccessTokenType::None);
         assert!(matches!(
             result,
-            Err(crate::error::LarkAPIError::Validation { .. })
+            Err(crate::error::CoreError::Validation { .. })
         ));
     }
 
@@ -808,9 +808,9 @@ mod test {
         let result = validate(&config, &option, AccessTokenType::User);
         assert!(matches!(
             result,
-            Err(crate::error::LarkAPIError::Validation { .. })
+            Err(crate::error::CoreError::Validation { .. })
         ));
-        if let Err(crate::error::LarkAPIError::Validation { message, .. }) = result {
+        if let Err(crate::error::CoreError::Validation { message, .. }) = result {
             assert!(message.contains("user access token is empty"));
         }
     }
@@ -827,7 +827,7 @@ mod test {
         let result = validate(&config, &option, AccessTokenType::None);
         assert!(matches!(
             result,
-            Err(crate::error::LarkAPIError::Validation { .. })
+            Err(crate::error::CoreError::Validation { .. })
         ));
     }
 
@@ -842,7 +842,7 @@ mod test {
         let result = validate(&config, &option, AccessTokenType::None);
         assert!(matches!(
             result,
-            Err(crate::error::LarkAPIError::Validation { .. })
+            Err(crate::error::CoreError::Validation { .. })
         ));
     }
 
@@ -985,7 +985,7 @@ mod test {
         let option = RequestOption::default();
 
         // Test specific error messages
-        if let Err(crate::error::LarkAPIError::Validation { message, .. }) =
+        if let Err(crate::error::CoreError::Validation { message, .. }) =
             validate(&config_empty_id, &option, AccessTokenType::None)
         {
             assert_eq!(message, "AppId is empty");
@@ -993,7 +993,7 @@ mod test {
             panic!("Expected IllegalParamError for empty app_id");
         }
 
-        if let Err(crate::error::LarkAPIError::Validation { message, .. }) =
+        if let Err(crate::error::CoreError::Validation { message, .. }) =
             validate(&config_empty_secret, &option, AccessTokenType::None)
         {
             assert_eq!(message, "AppSecret is empty");

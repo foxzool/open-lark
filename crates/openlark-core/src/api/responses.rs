@@ -180,7 +180,7 @@ impl<T> Response<T> {
     }
 
     /// 转换为结果类型
-    pub fn into_result(self) -> Result<T, crate::error::LarkAPIError> {
+    pub fn into_result(self) -> Result<T, crate::error::CoreError> {
         let is_success = self.is_success();
         let code = self.raw_response.code;
         let request_id = self.raw_response.request_id.clone();

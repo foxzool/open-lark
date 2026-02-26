@@ -2,7 +2,7 @@ use crate::{
     auth::TokenRequest,
     config::Config,
     constants::AccessTokenType,
-    error::{authentication_error, LarkAPIError},
+    error::{authentication_error, CoreError},
     req_option::RequestOption,
 };
 use reqwest::RequestBuilder;
@@ -17,7 +17,7 @@ impl AuthHandler {
         access_token_type: AccessTokenType,
         config: &Config,
         option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
+    ) -> Result<RequestBuilder, CoreError> {
         match access_token_type {
             AccessTokenType::None => Ok(req_builder),
             AccessTokenType::App => Self::apply_app_auth(req_builder, config, option).await,
@@ -31,7 +31,7 @@ impl AuthHandler {
         req_builder: RequestBuilder,
         config: &Config,
         option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
+    ) -> Result<RequestBuilder, CoreError> {
         let app_access_token = if let Some(ref token) = option.app_access_token {
             token.clone()
         } else if config.enable_token_cache() {
@@ -52,7 +52,7 @@ impl AuthHandler {
         req_builder: RequestBuilder,
         config: &Config,
         option: &RequestOption,
-    ) -> Result<RequestBuilder, LarkAPIError> {
+    ) -> Result<RequestBuilder, CoreError> {
         let tenant_access_token = if let Some(ref token) = option.tenant_access_token {
             token.clone()
         } else if config.enable_token_cache() {

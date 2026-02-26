@@ -13,7 +13,7 @@ use serde::Deserialize;
 use std::any::Any;
 
 #[cfg(test)]
-use crate::error::{ErrorCategory, ErrorCode, ErrorContext, LarkAPIError};
+use crate::error::{ErrorCategory, ErrorCode, ErrorContext, CoreError};
 
 /// 改进的响应处理器，解决双重解析问题
 /// 使用 #[serde(flatten)] 和高级 Serde 特性简化反序列化
@@ -305,7 +305,7 @@ where
     }
 
     /// 获取业务数据，如果请求失败则返回错误
-    pub fn into_data(self) -> Result<T, LarkAPIError> {
+    pub fn into_data(self) -> Result<T, CoreError> {
         if self.is_success() {
             self.data.ok_or_else(|| {
                 validation_error("data", "Response is successful but data is missing")
@@ -337,7 +337,7 @@ where
                         _ => 500,
                     });
 
-            Err(LarkAPIError::Api(Box::new(crate::error::ApiError {
+            Err(CoreError::Api(Box::new(crate::error::ApiError {
                 status,
                 endpoint: "unknown_endpoint".into(),
                 message: self.msg,
@@ -514,7 +514,7 @@ mod tests {
         let result = response.into_data();
         assert!(result.is_err());
         match result.unwrap_err() {
-            LarkAPIError::Api(api) => {
+            CoreError::Api(api) => {
                 assert_eq!(api.status, 400);
                 assert_eq!(api.message, "Bad Request");
             }
@@ -534,7 +534,7 @@ mod tests {
         let result = response.into_data();
         assert!(result.is_err());
         match result.unwrap_err() {
-            LarkAPIError::Validation { message, .. } => {
+            CoreError::Validation { message, .. } => {
                 assert!(message.contains("data is missing"));
             }
             _ => panic!("Expected IllegalParamError"),
