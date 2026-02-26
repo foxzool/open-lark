@@ -5,7 +5,6 @@ use openlark_core::{
     api::responses::{RawResponse, Response},
     config::Config,
     error::{timeout_error, CoreError, ErrorTrait},
-    validation::validate_required,
 };
 
 fn create_test_config(base_url: &str, timeout_ms: u64) -> Config {
@@ -27,27 +26,27 @@ mod validation_tests {
 
     #[test]
     fn test_validation_required_empty_string() {
-        assert!(!validate_required("", "app_id"));
+        assert!(openlark_core::Validatable::is_empty_trimmed(&""));
     }
 
     #[test]
     fn test_validation_required_whitespace_only() {
-        assert!(!validate_required("   \t\n", "app_id"));
+        assert!(openlark_core::Validatable::is_empty_trimmed(&"   \t\n"));
     }
 
     #[test]
     fn test_validation_required_non_empty_after_trim() {
-        assert!(validate_required("  app_123  ", "app_id"));
+        assert!(!openlark_core::Validatable::is_empty_trimmed(&"  app_123  "));
     }
 
     #[test]
     fn test_validation_required_special_characters_valid() {
-        assert!(validate_required("!@#$%^&*()", "secret"));
+        assert!(!openlark_core::Validatable::is_empty_trimmed(&"!@#$%^&*()"));
     }
 
     #[test]
     fn test_validation_required_unicode_valid() {
-        assert!(validate_required("应用ID-测试", "app_id"));
+        assert!(!openlark_core::Validatable::is_empty_trimmed(&"应用ID-测试"));
     }
 
     #[test]

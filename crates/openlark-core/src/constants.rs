@@ -45,15 +45,21 @@ pub enum AccessTokenType {
     User,
 }
 
+impl AccessTokenType {
+    /// 获取访问令牌类型字符串
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            AccessTokenType::None => "none_access_token",
+            AccessTokenType::App => "app_access_token",
+            AccessTokenType::Tenant => "tenant_access_token",
+            AccessTokenType::User => "user_access_token",
+        }
+    }
+}
+
 impl Display for AccessTokenType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let str = match self {
-            AccessTokenType::None => String::from("none_access_token"),
-            AccessTokenType::App => String::from("app_access_token"),
-            AccessTokenType::Tenant => String::from("tenant_access_token"),
-            AccessTokenType::User => String::from("user_access_token"),
-        };
-        write!(f, "{str}")
+        write!(f, "{}", self.as_str())
     }
 }
 

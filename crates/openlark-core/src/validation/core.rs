@@ -59,24 +59,6 @@ pub fn validate_string_length(input: String, max_len: usize, field_name: &str) -
     }
 }
 
-/// 验证必填字段
-///
-/// # 参数
-/// - `value`: 字段值
-/// - `field_name`: 字段名称（用于日志）
-///
-/// # 返回
-/// true 如果字段有效，false 否则
-pub fn validate_required(value: &str, field_name: &str) -> bool {
-    let trimmed = value.trim();
-    if trimmed.is_empty() {
-        error!("必填字段 {} 为空", field_name);
-        false
-    } else {
-        true
-    }
-}
-
 /// 验证必填列表字段
 ///
 /// # 参数
@@ -220,7 +202,7 @@ impl ValidateBuilder for DefaultValidateBuilder {
     fn required(mut self, value: Option<String>, field_name: &str) -> Self {
         match value {
             Some(v) => {
-                if !validate_required(&v, field_name) {
+                if v.trim().is_empty() {
                     self.errors.push(format!("字段 {} 不能为空", field_name));
                 } else {
                     self.value = Some(v);
@@ -314,14 +296,6 @@ mod tests {
         let short_string = "短".to_string();
         let result = validate_string_length(short_string, 10, "测试字段");
         assert_eq!(result, "短");
-    }
-
-    #[test]
-    fn test_validate_required() {
-        assert!(validate_required("有效值", "测试字段"));
-        assert!(!validate_required("", "测试字段"));
-        assert!(!validate_required("   ", "测试字段"));
-        assert!(validate_required("  有效值  ", "测试字段")); // trim后有效
     }
 
     #[test]

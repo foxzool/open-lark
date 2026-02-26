@@ -32,9 +32,6 @@ mod utils;
 // Re-export commonly used types from crate root
 pub use error::{validation_error, CoreError, SDKResult};
 
-// Re-export validation utilities
-pub use validation::validate_required;
-
 // Validatable trait for unified validation semantics
 pub trait Validatable {
     fn is_empty_trimmed(&self) -> bool;
