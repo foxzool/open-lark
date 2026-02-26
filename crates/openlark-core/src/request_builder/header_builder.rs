@@ -27,7 +27,7 @@ impl HeaderBuilder {
         }
 
         // 3. 添加配置中的全局头
-        for (key, value) in &config.header {
+        for (key, value) in config.header() {
             req_builder = req_builder.header(key, value);
         }
 

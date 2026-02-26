@@ -10,14 +10,14 @@ use crate::{config::Config, constants::APPLY_APP_TICKET_PATH, SDKResult};
 ///
 /// 说明：该接口是一个副作用操作，且不返回业务数据。
 pub async fn apply_app_ticket(config: &Config) -> SDKResult<()> {
-    let url = format!("{}{}", config.base_url, APPLY_APP_TICKET_PATH);
+    let url = format!("{}{}", config.base_url(), APPLY_APP_TICKET_PATH);
 
     let body = ResendAppTicketReq {
-        app_id: config.app_id.clone(),
-        app_secret: config.app_secret.clone(),
+        app_id: config.app_id().to_string(),
+        app_secret: config.app_secret().to_string(),
     };
 
-    let _response = config.http_client.post(&url).json(&body).send().await?;
+    let _response = config.http_client().post(&url).json(&body).send().await?;
     Ok(())
 }
 

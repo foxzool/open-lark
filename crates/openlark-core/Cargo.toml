@@ -32,7 +32,6 @@ base64 = { workspace = true }
 rand = { workspace = true }
 quick_cache = { workspace = true }
 futures-util = { workspace = true }
-log = { workspace = true }
 regex = { workspace = true }
 tokio-tungstenite = { workspace = true, optional = true }
 prost = { workspace = true, optional = true }

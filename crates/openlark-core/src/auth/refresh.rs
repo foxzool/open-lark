@@ -374,12 +374,12 @@ impl TokenRefresher {
 
     /// 使用刷新令牌获取新的访问令牌
     pub async fn refresh_with_refresh_token(&self, refresh_token: &str) -> SDKResult<TokenInfo> {
-        let url = self.config.base_url.clone() + APP_ACCESS_TOKEN_URL_PATH;
+        let url = self.config.base_url().to_string() + APP_ACCESS_TOKEN_URL_PATH;
         let mut params = std::collections::HashMap::new();
         params.insert("grant_type".to_string(), "refresh_token".to_string());
         params.insert("refresh_token".to_string(), refresh_token.to_string());
 
-        let request = self.config.http_client.post(&url);
+        let request = self.config.http_client().post(&url);
         let request = request.form(&params);
 
         let response = request.send().await.map_err(LarkAPIError::from)?;
@@ -396,7 +396,7 @@ impl TokenRefresher {
         token_type: TokenType,
         tenant_key: Option<&str>,
     ) -> SDKResult<TokenInfo> {
-        let url = self.config.base_url.clone()
+        let url = self.config.base_url().to_string()
             + match token_type {
                 TokenType::AppAccessToken => APP_ACCESS_TOKEN_URL_PATH,
                 TokenType::TenantAccessToken => TENANT_ACCESS_TOKEN_URL_PATH,
@@ -411,10 +411,10 @@ impl TokenRefresher {
         debug!("Refreshing token of type: {:?}", token_type);
 
         // 构建请求参数
-        let mut request = self.config.http_client.post(&url);
+        let mut request = self.config.http_client().post(&url);
 
         // 添加应用认证
-        request = request.basic_auth(&self.config.app_id, Some(&self.config.app_secret));
+        request = request.basic_auth(self.config.app_id(), Some(self.config.app_secret()));
 
         // 添加租户密钥（如果提供）
         if let Some(tenant_key) = tenant_key {
@@ -470,7 +470,7 @@ impl TokenRefresher {
             refresh_token: response.refresh_token,
             expires_at,
             token_type: expected_type,
-            app_type: self.config.app_type.to_string(),
+            app_type: self.config.app_type().to_string(),
             tenant_key: None,
             created_at: SystemTime::now(),
             last_accessed_at: SystemTime::now(),

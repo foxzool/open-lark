@@ -71,8 +71,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 演示配置验证
     println!("\n⚙️  配置信息：");
-    println!("  Base URL: {}", config.base_url);
-    println!("  App ID: {}", config.app_id);
+    println!("  Base URL: {}", config.base_url());
+    println!("  App ID: {}", config.app_id());
     println!("  版本: {}", env!("CARGO_PKG_VERSION"));
 
     println!("\n🎉 API 演示完成！所有API都已正确实现并可以使用。");

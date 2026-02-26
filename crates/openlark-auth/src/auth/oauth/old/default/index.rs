@@ -116,7 +116,7 @@ impl AuthorizationBuilder {
         // 构建基础URL
         let mut url = format!(
             "{}{}?app_id={}&redirect_uri={}",
-            self.config.base_url,
+            self.config.base_url(),
             api_endpoint.path(),
             urlencoding::encode(&self.app_id),
             urlencoding::encode(&self.redirect_uri)

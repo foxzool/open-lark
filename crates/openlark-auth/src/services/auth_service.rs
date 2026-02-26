@@ -104,7 +104,7 @@ mod tests {
         let config = Config::default();
         let service = AuthService::new(config.clone());
 
-        assert_eq!(service.config().app_id, config.app_id);
+        assert_eq!(service.config().app_id(), config.app_id());
     }
 
     #[test]

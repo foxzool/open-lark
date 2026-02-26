@@ -178,7 +178,7 @@ mod tests {
     fn test_user_info_service_new() {
         let config = create_test_config();
         let service = UserInfoService::new(config);
-        assert!(service.config.app_id == "test_app");
+        assert!(service.config.app_id() == "test_app");
     }
 
     #[test]
