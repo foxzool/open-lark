@@ -74,8 +74,8 @@ impl<T> Validatable for &[T] {
 #[macro_export]
 macro_rules! validate_required {
     ($field:expr, $error_msg:expr) => {
-        if openlark_core::Validatable::is_empty_trimmed(&$field) {
-            return Err(openlark_core::error::CoreError::validation_msg($error_msg));
+        if $crate::Validatable::is_empty_trimmed(&$field) {
+            return Err($crate::error::CoreError::validation_msg($error_msg));
         }
     };
 }
@@ -95,10 +95,10 @@ macro_rules! validate_required {
 macro_rules! validate_required_list {
     ($field:expr, $max_len:expr, $error_msg:expr) => {
         if $field.is_empty() {
-            return Err(openlark_core::error::CoreError::validation_msg($error_msg));
+            return Err($crate::error::CoreError::validation_msg($error_msg));
         }
         if $field.len() > $max_len {
-            return Err(openlark_core::error::CoreError::validation_msg($error_msg));
+            return Err($crate::error::CoreError::validation_msg($error_msg));
         }
     };
 }
