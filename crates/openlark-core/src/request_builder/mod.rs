@@ -10,7 +10,7 @@ use crate::{
     api::{ApiRequest, RequestData},
     config::Config,
     constants::AccessTokenType,
-    error::LarkAPIError,
+    error::CoreError,
     req_option::RequestOption,
 };
 use reqwest::RequestBuilder;
@@ -25,7 +25,7 @@ impl UnifiedRequestBuilder {
         access_token_type: AccessTokenType,
         config: &'a Config,
         option: &'a RequestOption,
-    ) -> Pin<Box<dyn Future<Output = Result<RequestBuilder, LarkAPIError>> + Send + 'a>> {
+    ) -> Pin<Box<dyn Future<Output = Result<RequestBuilder, CoreError>> + Send + 'a>> {
         Box::pin(async move {
             // 1. 构建基础请求
             let url = Self::build_url(config, req)?;
@@ -91,7 +91,7 @@ impl UnifiedRequestBuilder {
         })
     }
 
-    fn build_url<R: Send>(config: &Config, req: &ApiRequest<R>) -> Result<url::Url, LarkAPIError> {
+    fn build_url<R: Send>(config: &Config, req: &ApiRequest<R>) -> Result<url::Url, CoreError> {
         let path = format!("{}{}", config.base_url, req.api_path());
         let query = req
             .query

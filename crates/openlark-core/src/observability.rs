@@ -487,7 +487,7 @@ macro_rules! trace_auth_operation {
                 }
                 Err(err) => {
                     // 尝试从错误中提取错误码
-                    let error_code = if let $crate::error::LarkAPIError::Api(api) = &err {
+                    let error_code = if let $crate::error::CoreError::Api(api) = &err {
                         Some(api.status as i32)
                     } else {
                         None
@@ -763,11 +763,11 @@ mod tests {
     #[traced_test]
     #[tokio::test]
     async fn test_trace_auth_operation_macro() {
-        use crate::error::LarkAPIError;
+        use crate::error::CoreError;
 
         // 测试成功场景 - 需要返回元组 (结果, 是否缓存命中)
         let result = trace_auth_operation!("get_app_token", "test_app", "app", async {
-            Ok::<(String, bool), LarkAPIError>(("token_value".to_string(), true))
+            Ok::<(String, bool), CoreError>(("token_value".to_string(), true))
         })
         .await;
 
@@ -948,11 +948,11 @@ mod tests {
     #[traced_test]
     #[tokio::test]
     async fn test_trace_auth_operation_macro_error() {
-        use crate::error::LarkAPIError;
+        use crate::error::CoreError;
 
         // Test error scenario with API error code
         let result = trace_auth_operation!("get_tenant_token", "test_app", "tenant", async {
-            Err::<(String, bool), LarkAPIError>(crate::error::LarkAPIError::api_error(
+            Err::<(String, bool), CoreError>(crate::error::CoreError::api_error(
                 10001,
                 "auth",
                 "App not found",
@@ -970,11 +970,11 @@ mod tests {
     #[traced_test]
     #[tokio::test]
     async fn test_trace_auth_operation_macro_non_api_error() {
-        use crate::error::LarkAPIError;
+        use crate::error::CoreError;
 
         // Test with non-API error (no error code)
         let result = trace_auth_operation!("validate_token", "test_app", "user", async {
-            Err::<(String, bool), LarkAPIError>(crate::error::network_error(
+            Err::<(String, bool), CoreError>(crate::error::network_error(
                 "Network connection failed".to_string(),
             ))
         })

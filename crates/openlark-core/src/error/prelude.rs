@@ -8,7 +8,7 @@ pub use super::context::ErrorContext;
 pub use super::core::{BuilderKind, ErrorBuilder, ErrorRecord};
 pub use super::core::{RecoveryStrategy, RetryPolicy};
 pub use super::traits::{ErrorSeverity, ErrorType};
-pub use super::{CoreError, ErrorId, LarkAPIError, SDKResult};
+pub use super::{CoreError, ErrorId, SDKResult};
 
 // 特征系统重新导出
 pub use super::traits::{ErrorContextTrait, ErrorFormatTrait, ErrorTrait, FullErrorTrait};
@@ -141,11 +141,11 @@ mod tests {
     #[test]
     fn test_modern_prelude_imports() {
         // 确保所有重新导出的类型都可以使用
-        let _error: LarkAPIError = network_error("测试");
+        let _error: CoreError = network_error("测试");
         let _result: SDKResult<()> = Ok(());
         let _severity: ErrorSeverity = ErrorSeverity::Warning;
         let _code: ErrorCode = ErrorCode::BadRequest;
-        let _lark_error: LarkAPIError = network_error("测试");
+        let _lark_error: CoreError = network_error("测试");
     }
 
     #[test]
