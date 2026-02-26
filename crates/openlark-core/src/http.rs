@@ -1,7 +1,7 @@
 use std::{collections::HashSet, marker::PhantomData};
 
-use tracing::debug;
 use reqwest::RequestBuilder;
+use tracing::debug;
 use tracing::{info_span, Instrument};
 
 use crate::{

@@ -2,9 +2,9 @@
 //!
 //! 定义了符合Rust最佳实践的错误处理特征和接口
 
+use crate::error::ErrorCode;
 use serde::{Deserialize, Serialize};
 use std::fmt::{Debug, Display};
-use crate::error::ErrorCode;
 use std::time::Duration;
 
 /// 核心错误特征

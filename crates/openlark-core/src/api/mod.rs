@@ -91,14 +91,14 @@ pub use responses::{ApiResponseTrait, BaseResponse, ErrorInfo, Response, Respons
 /// 简化的API请求结构
 #[derive(Debug, Clone)]
 pub struct ApiRequest<R> {
-    pub method: HttpMethod,
-    pub url: String,
-    pub headers: HashMap<String, String>,
-    pub query: HashMap<String, String>,
-    pub body: Option<RequestData>,
-    pub file: Option<Vec<u8>>,
-    pub timeout: Option<Duration>,
-    pub _phantom: std::marker::PhantomData<R>,
+    pub(crate) method: HttpMethod,
+    pub(crate) url: String,
+    pub(crate) headers: HashMap<String, String>,
+    pub(crate) query: HashMap<String, String>,
+    pub(crate) body: Option<RequestData>,
+    pub(crate) file: Option<Vec<u8>>,
+    pub(crate) timeout: Option<Duration>,
+    pub(crate) _phantom: std::marker::PhantomData<R>,
 }
 
 impl<R> ApiRequest<R> {
@@ -215,7 +215,10 @@ impl<R> ApiRequest<R> {
     {
         match serde_json::to_value(body) {
             Ok(json_value) => self.body = Some(RequestData::Json(json_value)),
-            Err(e) => { tracing::warn!(error = %e, "json_body 序列化失败"); self.body = Some(RequestData::Json(serde_json::Value::Null)); }
+            Err(e) => {
+                tracing::warn!(error = %e, "json_body 序列化失败");
+                self.body = Some(RequestData::Json(serde_json::Value::Null));
+            }
         }
         self
     }
@@ -274,6 +277,16 @@ impl<R> ApiRequest<R> {
             Some(RequestData::Text(text)) => text.clone().into_bytes(),
             None => vec![],
         }
+    }
+
+    /// 获取 headers 的可变引用，用于直接插入多个 header
+    pub fn headers_mut(&mut self) -> &mut HashMap<String, String> {
+        &mut self.headers
+    }
+
+    /// 获取 query 的可变引用，用于直接插入多个查询参数
+    pub fn query_mut(&mut self) -> &mut HashMap<String, String> {
+        &mut self.query
     }
 
     pub fn file(&self) -> Vec<u8> {

@@ -78,7 +78,7 @@ impl UserInfoBuilder {
             ApiRequest::get(api_endpoint.path());
 
         // 添加Authorization头
-        api_request.headers.insert(
+        api_request.headers_mut().insert(
             "Authorization".to_string(),
             format!("Bearer {}", self.user_access_token),
         );
@@ -86,7 +86,7 @@ impl UserInfoBuilder {
         // 添加查询参数
         if let Some(ref user_id_type) = self.user_id_type {
             api_request
-                .query
+                .query_mut()
                 .insert("user_id_type".to_string(), user_id_type.clone());
         }
 
