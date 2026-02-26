@@ -84,8 +84,8 @@ mod validation_integration_tests {
         assert_eq!(validated, &long_string[..50]);
         
         // 测试必填字段验证
-        assert!(validate_required("non-empty", "test"));
-        assert!(!validate_required("", "test"));
+        assert!(!openlark_core::Validatable::is_empty_trimmed(&"non-empty"));
+        assert!(openlark_core::Validatable::is_empty_trimmed(&""));
         
         // 测试内容大小验证
         assert!(validate_content_size("small content", 100, "test"));

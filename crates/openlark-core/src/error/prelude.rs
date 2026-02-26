@@ -7,7 +7,6 @@ pub use super::codes::ErrorCode;
 pub use super::context::ErrorContext;
 pub use super::core::{BuilderKind, ErrorBuilder, ErrorRecord};
 pub use super::core::{RecoveryStrategy, RetryPolicy};
-pub use super::kinds::ErrorKind;
 pub use super::traits::{ErrorSeverity, ErrorType};
 pub use super::{CoreError, ErrorId, LarkAPIError, SDKResult};
 
@@ -20,10 +19,7 @@ pub use super::core::{
     timeout_error, validation_error,
 };
 
-pub use super::analysis;
 
-// 系统能力和默认配置
-pub use super::{capabilities, defaults, ERROR_SYSTEM_VERSION};
 
 // 常用的导入组合
 pub mod common_imports {
@@ -148,7 +144,6 @@ mod tests {
         let _error: LarkAPIError = network_error("测试");
         let _result: SDKResult<()> = Ok(());
         let _severity: ErrorSeverity = ErrorSeverity::Warning;
-        let _kind: ErrorKind = ErrorKind::Network;
         let _code: ErrorCode = ErrorCode::BadRequest;
         let _lark_error: LarkAPIError = network_error("测试");
     }
@@ -220,20 +215,5 @@ mod tests {
         assert!(!error.is_retryable());
         assert!(!error.is_user_error());
         assert_eq!(error.context().request_id(), Some("req-123"));
-    }
-
-    #[test]
-    fn test_error_analysis_integration() {
-        let error = network_error_with_details(
-            "连接超时",
-            Some("https://api.example.com".to_string()), // endpoint
-            Some("req-456".to_string()),                 // request_id
-        );
-
-        let analysis = super::analysis::analyze_error(&error);
-        assert_eq!(analysis.error_type, ErrorType::Network);
-        assert!(analysis.is_retryable);
-        assert!(analysis.system_error);
-        assert!(!analysis.user_error);
     }
 }
