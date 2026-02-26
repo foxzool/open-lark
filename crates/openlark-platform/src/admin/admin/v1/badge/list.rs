@@ -2,6 +2,7 @@
 //!
 //! API文档: https://open.feishu.cn/document/server-docs/admin-v1/badge/badge/list
 
+use crate::common::api_endpoints::AdminApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -42,7 +43,7 @@ impl ListBadgeBuilder {
     }
 
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListBadgeResponse> {
-        let mut url = String::from("/open-apis/admin/v1/badges");
+        let mut url = AdminApiV1::ListBadge.path().to_string();
         let mut params = Vec::new();
 
         if let Some(size) = self.page_size {
