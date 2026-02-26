@@ -685,7 +685,6 @@ impl CoreError {
         }
     }
 
-
     pub fn retry_delay(&self, attempt: u32) -> Option<Duration> {
         match self {
             Self::Network(net) => net.policy.retry_delay(attempt),
