@@ -49,7 +49,6 @@ pub enum RequestData {
     Text(String),
     Binary(Vec<u8>),
     Form(std::collections::HashMap<String, String>),
-    Empty,
 }
 
 // 处理字符串类型 - 优先使用Text处理
@@ -285,7 +284,6 @@ impl<R> ApiRequest<R> {
                 .join("&")
                 .into_bytes(),
             Some(RequestData::Text(text)) => text.clone().into_bytes(),
-            Some(RequestData::Empty) => vec![],
             None => vec![],
         }
     }
