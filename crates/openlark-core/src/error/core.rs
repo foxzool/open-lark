@@ -677,12 +677,14 @@ impl CoreError {
         match self {
             Self::Network(net) => net.policy.is_retryable(),
             Self::Api(api) => matches!(api.status, 429 | 500..=599),
-            Self::Timeout { .. } => true,
-            Self::RateLimit { .. } => true,
-            Self::ServiceUnavailable { .. } => true,
+            Self::Timeout { .. } => self.code().is_retryable(),
+            Self::RateLimit { .. } => self.code().is_retryable(),
+            Self::ServiceUnavailable { .. } => self.code().is_retryable(),
+            Self::Internal { .. } => self.code().is_retryable(),
             _ => false,
         }
     }
+
 
     pub fn retry_delay(&self, attempt: u32) -> Option<Duration> {
         match self {

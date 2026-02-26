@@ -4,6 +4,7 @@
 
 use serde::{Deserialize, Serialize};
 use std::fmt::{Debug, Display};
+use crate::error::ErrorCode;
 use std::time::Duration;
 
 /// 核心错误特征
@@ -208,6 +209,44 @@ impl Display for ErrorType {
             Self::RateLimit => write!(f, "RateLimit"),
             Self::ServiceUnavailable => write!(f, "ServiceUnavailable"),
             Self::Internal => write!(f, "Internal"),
+        }
+    }
+}
+
+/// 从 ErrorCode 转换到 ErrorType
+impl From<ErrorCode> for ErrorType {
+    fn from(code: ErrorCode) -> Self {
+        match code {
+            ErrorCode::NetworkTimeout
+            | ErrorCode::NetworkConnectionFailed
+            | ErrorCode::DnsResolutionFailed
+            | ErrorCode::SslCertificateError
+            | ErrorCode::ConnectionRefused => ErrorType::Network,
+            ErrorCode::Unauthorized
+            | ErrorCode::AccessTokenInvalid
+            | ErrorCode::AppAccessTokenInvalid
+            | ErrorCode::TenantAccessTokenInvalid
+            | ErrorCode::AuthenticationFailed
+            | ErrorCode::TokenExpired
+            | ErrorCode::PermissionDenied
+            | ErrorCode::AccessDenied => ErrorType::Authentication,
+            ErrorCode::BadRequest
+            | ErrorCode::ValidationError
+            | ErrorCode::MissingRequiredParameter
+            | ErrorCode::InvalidParameterFormat
+            | ErrorCode::ParameterOutOfRange => ErrorType::Validation,
+            ErrorCode::NotFound
+            | ErrorCode::MethodNotAllowed
+            | ErrorCode::Conflict
+            | ErrorCode::Forbidden => ErrorType::Api,
+            ErrorCode::TooManyRequests | ErrorCode::RateLimitExceeded => ErrorType::RateLimit,
+            ErrorCode::GatewayTimeout => ErrorType::Timeout,
+            ErrorCode::ServiceUnavailable
+            | ErrorCode::BadGateway
+            | ErrorCode::CacheServiceUnavailable => ErrorType::ServiceUnavailable,
+            ErrorCode::ConfigurationError => ErrorType::Configuration,
+            ErrorCode::Success => ErrorType::Api,
+            _ => ErrorType::Internal,
         }
     }
 }
