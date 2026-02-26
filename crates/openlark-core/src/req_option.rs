@@ -2,13 +2,13 @@ use std::collections::HashMap;
 
 #[derive(Debug, Clone, Default)]
 pub struct RequestOption {
-    pub(crate) tenant_key: String,
-    pub(crate) user_access_token: String,
-    pub(crate) app_access_token: String,
-    pub(crate) tenant_access_token: String,
+    pub(crate) tenant_key: Option<String>,
+    pub(crate) user_access_token: Option<String>,
+    pub(crate) app_access_token: Option<String>,
+    pub(crate) tenant_access_token: Option<String>,
     pub(crate) need_helpdesk_auth: bool,
-    pub(crate) request_id: String,
-    pub(crate) app_ticket: String,
+    pub(crate) request_id: Option<String>,
+    pub(crate) app_ticket: Option<String>,
     pub(crate) file_upload: bool,
     pub(crate) file_download: bool,
     pub(crate) header: HashMap<String, String>,
@@ -27,22 +27,22 @@ pub struct RequestOptionBuilder {
 
 impl RequestOptionBuilder {
     pub fn tenant_key(mut self, tenant_key: impl ToString) -> Self {
-        self.option.tenant_key = tenant_key.to_string();
+        self.option.tenant_key = Some(tenant_key.to_string());
         self
     }
 
     pub fn user_access_token(mut self, user_access_token: impl ToString) -> Self {
-        self.option.user_access_token = user_access_token.to_string();
+        self.option.user_access_token = Some(user_access_token.to_string());
         self
     }
 
     pub fn app_access_token(mut self, app_access_token: impl ToString) -> Self {
-        self.option.app_access_token = app_access_token.to_string();
+        self.option.app_access_token = Some(app_access_token.to_string());
         self
     }
 
     pub fn tenant_access_token(mut self, tenant_access_token: impl ToString) -> Self {
-        self.option.tenant_access_token = tenant_access_token.to_string();
+        self.option.tenant_access_token = Some(tenant_access_token.to_string());
         self
     }
 
@@ -52,12 +52,12 @@ impl RequestOptionBuilder {
     }
 
     pub fn request_id(mut self, request_id: impl ToString) -> Self {
-        self.option.request_id = request_id.to_string();
+        self.option.request_id = Some(request_id.to_string());
         self
     }
 
     pub fn app_ticket(mut self, app_ticket: impl ToString) -> Self {
-        self.option.app_ticket = app_ticket.to_string();
+        self.option.app_ticket = Some(app_ticket.to_string());
         self
     }
 
@@ -97,13 +97,13 @@ mod tests {
     #[test]
     fn test_request_option_default() {
         let option = RequestOption::default();
-        assert_eq!(option.tenant_key, "");
-        assert_eq!(option.user_access_token, "");
-        assert_eq!(option.app_access_token, "");
-        assert_eq!(option.tenant_access_token, "");
+        assert_eq!(option.tenant_key, None);
+        assert_eq!(option.user_access_token, None);
+        assert_eq!(option.app_access_token, None);
+        assert_eq!(option.tenant_access_token, None);
         assert!(!option.need_helpdesk_auth);
-        assert_eq!(option.request_id, "");
-        assert_eq!(option.app_ticket, "");
+        assert_eq!(option.request_id, None);
+        assert_eq!(option.app_ticket, None);
         assert!(!option.file_upload);
         assert!(!option.file_download);
         assert!(option.header.is_empty());
@@ -115,13 +115,13 @@ mod tests {
         let option = builder.build();
 
         // Should be same as default
-        assert_eq!(option.tenant_key, "");
-        assert_eq!(option.user_access_token, "");
-        assert_eq!(option.app_access_token, "");
-        assert_eq!(option.tenant_access_token, "");
+        assert_eq!(option.tenant_key, None);
+        assert_eq!(option.user_access_token, None);
+        assert_eq!(option.app_access_token, None);
+        assert_eq!(option.tenant_access_token, None);
         assert!(!option.need_helpdesk_auth);
-        assert_eq!(option.request_id, "");
-        assert_eq!(option.app_ticket, "");
+        assert_eq!(option.request_id, None);
+        assert_eq!(option.app_ticket, None);
         assert!(!option.file_upload);
         assert!(!option.file_download);
         assert!(option.header.is_empty());
@@ -131,14 +131,14 @@ mod tests {
     fn test_request_option_builder_tenant_key() {
         let option = RequestOption::builder().tenant_key("test_tenant").build();
 
-        assert_eq!(option.tenant_key, "test_tenant");
+        assert_eq!(option.tenant_key, Some("test_tenant".to_string()));
 
         // Test with String
         let option = RequestOption::builder()
             .tenant_key("another_tenant".to_string())
             .build();
 
-        assert_eq!(option.tenant_key, "another_tenant");
+        assert_eq!(option.tenant_key, Some("another_tenant".to_string()));
     }
 
     #[test]
@@ -147,14 +147,14 @@ mod tests {
             .user_access_token("user_token_123")
             .build();
 
-        assert_eq!(option.user_access_token, "user_token_123");
+        assert_eq!(option.user_access_token, Some("user_token_123".to_string()));
 
         // Test with String
         let option = RequestOption::builder()
             .user_access_token("user_token_456".to_string())
             .build();
 
-        assert_eq!(option.user_access_token, "user_token_456");
+        assert_eq!(option.user_access_token, Some("user_token_456".to_string()));
     }
 
     #[test]
@@ -163,14 +163,14 @@ mod tests {
             .app_access_token("app_token_789")
             .build();
 
-        assert_eq!(option.app_access_token, "app_token_789");
+        assert_eq!(option.app_access_token, Some("app_token_789".to_string()));
 
         // Test with String
         let option = RequestOption::builder()
             .app_access_token("app_token_012".to_string())
             .build();
 
-        assert_eq!(option.app_access_token, "app_token_012");
+        assert_eq!(option.app_access_token, Some("app_token_012".to_string()));
     }
 
     #[test]
@@ -179,14 +179,14 @@ mod tests {
             .tenant_access_token("tenant_token_345")
             .build();
 
-        assert_eq!(option.tenant_access_token, "tenant_token_345");
+        assert_eq!(option.tenant_access_token, Some("tenant_token_345".to_string()));
 
         // Test with String
         let option = RequestOption::builder()
             .tenant_access_token("tenant_token_678".to_string())
             .build();
 
-        assert_eq!(option.tenant_access_token, "tenant_token_678");
+        assert_eq!(option.tenant_access_token, Some("tenant_token_678".to_string()));
     }
 
     #[test]
@@ -204,28 +204,28 @@ mod tests {
     fn test_request_option_builder_request_id() {
         let option = RequestOption::builder().request_id("req_12345").build();
 
-        assert_eq!(option.request_id, "req_12345");
+        assert_eq!(option.request_id, Some("req_12345".to_string()));
 
         // Test with String
         let option = RequestOption::builder()
             .request_id("req_67890".to_string())
             .build();
 
-        assert_eq!(option.request_id, "req_67890");
+        assert_eq!(option.request_id, Some("req_67890".to_string()));
     }
 
     #[test]
     fn test_request_option_builder_app_ticket() {
         let option = RequestOption::builder().app_ticket("ticket_abc").build();
 
-        assert_eq!(option.app_ticket, "ticket_abc");
+        assert_eq!(option.app_ticket, Some("ticket_abc".to_string()));
 
         // Test with String
         let option = RequestOption::builder()
             .app_ticket("ticket_def".to_string())
             .build();
 
-        assert_eq!(option.app_ticket, "ticket_def");
+        assert_eq!(option.app_ticket, Some("ticket_def".to_string()));
     }
 
     #[test]
@@ -348,13 +348,13 @@ mod tests {
             .add_header("X-Test", "test_value")
             .build();
 
-        assert_eq!(option.tenant_key, "test_tenant");
-        assert_eq!(option.user_access_token, "user_token");
-        assert_eq!(option.app_access_token, "app_token");
-        assert_eq!(option.tenant_access_token, "tenant_token");
+        assert_eq!(option.tenant_key, Some("test_tenant".to_string()));
+        assert_eq!(option.user_access_token, Some("user_token".to_string()));
+        assert_eq!(option.app_access_token, Some("app_token".to_string()));
+        assert_eq!(option.tenant_access_token, Some("tenant_token".to_string()));
         assert!(option.need_helpdesk_auth);
-        assert_eq!(option.request_id, "req_123");
-        assert_eq!(option.app_ticket, "ticket_456");
+        assert_eq!(option.request_id, Some("req_123".to_string()));
+        assert_eq!(option.app_ticket, Some("ticket_456".to_string()));
         assert!(option.file_upload);
         assert!(!option.file_download);
         assert_eq!(option.header.len(), 1);
@@ -372,12 +372,12 @@ mod tests {
             .app_ticket("")
             .build();
 
-        assert_eq!(option.tenant_key, "");
-        assert_eq!(option.user_access_token, "");
-        assert_eq!(option.app_access_token, "");
-        assert_eq!(option.tenant_access_token, "");
-        assert_eq!(option.request_id, "");
-        assert_eq!(option.app_ticket, "");
+        assert_eq!(option.tenant_key, Some("".to_string()));
+        assert_eq!(option.user_access_token, Some("".to_string()));
+        assert_eq!(option.app_access_token, Some("".to_string()));
+        assert_eq!(option.tenant_access_token, Some("".to_string()));
+        assert_eq!(option.request_id, Some("".to_string()));
+        assert_eq!(option.app_ticket, Some("".to_string()));
     }
 
     #[test]
@@ -389,9 +389,9 @@ mod tests {
             .add_header("X-Special-Chars", "value@#$%")
             .build();
 
-        assert_eq!(option.tenant_key, "tenant@#$%^&*()");
-        assert_eq!(option.user_access_token, "token_with_symbols!@#");
-        assert_eq!(option.request_id, "req_with_unicode_测试");
+        assert_eq!(option.tenant_key, Some("tenant@#$%^&*()".to_string()));
+        assert_eq!(option.user_access_token, Some("token_with_symbols!@#".to_string()));
+        assert_eq!(option.request_id, Some("req_with_unicode_测试".to_string()));
         assert_eq!(
             option.header.get("X-Special-Chars"),
             Some(&"value@#$%".to_string())

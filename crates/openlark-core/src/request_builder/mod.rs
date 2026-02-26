@@ -194,7 +194,7 @@ mod tests {
         let mut api_req = create_test_api_request();
         let config = create_test_config();
         let option = RequestOption {
-            app_access_token: "app_token_123".to_string(),
+            app_access_token: Some("app_token_123".to_string()),
             ..Default::default()
         };
 
@@ -210,7 +210,7 @@ mod tests {
         let mut api_req = create_test_api_request();
         let config = create_test_config();
         let option = RequestOption {
-            tenant_access_token: "tenant_token_123".to_string(),
+            tenant_access_token: Some("tenant_token_123".to_string()),
             ..Default::default()
         };
 
@@ -226,7 +226,7 @@ mod tests {
         let mut api_req = create_test_api_request();
         let config = create_test_config();
         let option = RequestOption {
-            user_access_token: "user_token_123".to_string(),
+            user_access_token: Some("user_token_123".to_string()),
             ..Default::default()
         };
 
@@ -354,7 +354,7 @@ mod tests {
         let mut api_req = create_test_api_request();
         let config = create_test_config();
         let mut option = RequestOption {
-            request_id: "custom-request-123".to_string(),
+            request_id: Some("custom-request-123".to_string()),
             ..Default::default()
         };
         option
@@ -380,8 +380,8 @@ mod tests {
 
         let config = create_test_config();
         let option = RequestOption {
-            request_id: "complex-request-456".to_string(),
-            app_access_token: "app_token_456".to_string(),
+            request_id: Some("complex-request-456".to_string()),
+            app_access_token: Some("app_token_456".to_string()),
             ..Default::default()
         };
 

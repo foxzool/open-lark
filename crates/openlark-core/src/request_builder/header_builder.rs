@@ -17,8 +17,8 @@ impl HeaderBuilder {
         option: &RequestOption,
     ) -> RequestBuilder {
         // 1. 添加请求ID（如果有）
-        if !option.request_id.is_empty() {
-            req_builder = req_builder.header(CUSTOM_REQUEST_ID, &option.request_id);
+        if let Some(ref request_id) = option.request_id {
+            req_builder = req_builder.header(CUSTOM_REQUEST_ID, request_id);
         }
 
         // 2. 添加选项中的自定义头
@@ -76,7 +76,7 @@ mod tests {
 
     fn create_test_request_option() -> RequestOption {
         let mut option = RequestOption {
-            request_id: "test-request-123".to_string(),
+            request_id: Some("test-request-123".to_string()),
             ..Default::default()
         };
         option
@@ -114,7 +114,7 @@ mod tests {
         let req_builder = create_test_request_builder();
         let config = create_test_config();
         let mut option = create_test_request_option();
-        option.request_id = "".to_string(); // Empty request ID
+        option.request_id = None; // Empty request ID
 
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
 

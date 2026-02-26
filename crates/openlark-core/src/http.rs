@@ -169,14 +169,14 @@ fn validate_token_type(
 
     let access_token_type = access_token_types[0];
 
-    if access_token_type == AccessTokenType::Tenant && !option.user_access_token.is_empty() {
+    if access_token_type == AccessTokenType::Tenant && option.user_access_token.is_some() {
         return Err(crate::error::validation_error(
             "access_token_type",
             "tenant token type not match user access token",
         ));
     }
 
-    if access_token_type == AccessTokenType::App && !option.tenant_access_token.is_empty() {
+    if access_token_type == AccessTokenType::App && option.tenant_access_token.is_some() {
         return Err(crate::error::validation_error(
             "access_token_type",
             "user token type not match tenant access token",
@@ -192,13 +192,13 @@ fn determine_token_type(
     enable_token_cache: bool,
 ) -> AccessTokenType {
     if !enable_token_cache {
-        if !option.user_access_token.is_empty() {
+        if option.user_access_token.is_some() {
             return AccessTokenType::User;
         }
-        if !option.tenant_access_token.is_empty() {
+        if option.tenant_access_token.is_some() {
             return AccessTokenType::Tenant;
         }
-        if !option.app_access_token.is_empty() {
+        if option.app_access_token.is_some() {
             return AccessTokenType::App;
         }
 
@@ -207,13 +207,13 @@ fn determine_token_type(
 
     // 缓存开启但未指定 token 类型时，退回到“按显式传入的 token”推断，避免空列表 panic。
     if access_token_types.is_empty() {
-        if !option.user_access_token.is_empty() {
+        if option.user_access_token.is_some() {
             return AccessTokenType::User;
         }
-        if !option.tenant_access_token.is_empty() || !option.tenant_key.is_empty() {
+        if option.tenant_access_token.is_some() || option.tenant_key.is_some() {
             return AccessTokenType::Tenant;
         }
-        if !option.app_access_token.is_empty() {
+        if option.app_access_token.is_some() {
             return AccessTokenType::App;
         }
         return AccessTokenType::None;
@@ -229,12 +229,12 @@ fn determine_token_type(
         accessible_token_type_set.insert(*t);
     }
 
-    if !option.tenant_key.is_empty() && accessible_token_type_set.contains(&AccessTokenType::Tenant)
+    if option.tenant_key.is_some() && accessible_token_type_set.contains(&AccessTokenType::Tenant)
     {
         access_token_type = AccessTokenType::Tenant;
     }
 
-    if !option.user_access_token.is_empty()
+    if option.user_access_token.is_some()
         && accessible_token_type_set.contains(&AccessTokenType::User)
     {
         access_token_type = AccessTokenType::User;
@@ -263,9 +263,9 @@ fn validate(
         if access_token_type == AccessTokenType::None {
             return Ok(());
         }
-        if option.user_access_token.is_empty()
-            && option.tenant_access_token.is_empty()
-            && option.app_access_token.is_empty()
+        if option.user_access_token.is_none()
+            && option.tenant_access_token.is_none()
+            && option.app_access_token.is_none()
         {
             return Err(crate::error::validation_error(
                 "access_token",
@@ -276,7 +276,7 @@ fn validate(
 
     if config.app_type == AppType::Marketplace
         && access_token_type == AccessTokenType::Tenant
-        && option.tenant_key.is_empty()
+        && option.tenant_key.is_none()
     {
         return Err(crate::error::validation_error(
             "access_token",
@@ -284,7 +284,7 @@ fn validate(
         ));
     }
 
-    if access_token_type == AccessTokenType::User && option.user_access_token.is_empty() {
+    if access_token_type == AccessTokenType::User && option.user_access_token.is_none() {
         return Err(crate::error::validation_error(
             "user_access_token",
             "user access token is empty",
@@ -358,7 +358,7 @@ mod test {
     fn test_validate_token_type_tenant_with_user_token() {
         let types = vec![AccessTokenType::Tenant];
         let option = RequestOption {
-            user_access_token: "user_token".to_string(),
+            user_access_token: Some("user_token".to_string()),
             ..Default::default()
         };
 
@@ -370,7 +370,7 @@ mod test {
     fn test_validate_token_type_app_with_tenant_token() {
         let types = vec![AccessTokenType::App];
         let option = RequestOption {
-            tenant_access_token: "tenant_token".to_string(),
+            tenant_access_token: Some("tenant_token".to_string()),
             ..Default::default()
         };
 
@@ -382,7 +382,7 @@ mod test {
     fn test_validate_token_type_valid_combinations() {
         let types = vec![AccessTokenType::User];
         let mut option = RequestOption::default();
-        option.user_access_token = "user_token".to_string();
+        option.user_access_token = Some("user_token".to_string());
 
         let result = validate_token_type(&types, &option);
         assert!(result.is_ok());
@@ -392,7 +392,7 @@ mod test {
     fn test_determine_token_type_no_cache_user() {
         let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
         let mut option = RequestOption::default();
-        option.user_access_token = "user_token".to_string();
+        option.user_access_token = Some("user_token".to_string());
 
         let token_type = determine_token_type(&types, &option, false);
         assert_eq!(token_type, AccessTokenType::User);
@@ -402,7 +402,7 @@ mod test {
     fn test_determine_token_type_no_cache_tenant() {
         let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
         let option = RequestOption {
-            tenant_access_token: "tenant_token".to_string(),
+            tenant_access_token: Some("tenant_token".to_string()),
             ..Default::default()
         };
 
@@ -414,7 +414,7 @@ mod test {
     fn test_determine_token_type_no_cache_app() {
         let types = vec![AccessTokenType::App, AccessTokenType::Tenant];
         let option = RequestOption {
-            app_access_token: "app_token".to_string(),
+            app_access_token: Some("app_token".to_string()),
             ..Default::default()
         };
 
@@ -444,7 +444,7 @@ mod test {
     fn test_determine_token_type_with_cache_tenant_key() {
         let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
         let mut option = RequestOption::default();
-        option.tenant_key = "tenant_key".to_string();
+        option.tenant_key = Some("tenant_key".to_string());
 
         let token_type = determine_token_type(&types, &option, true);
         assert_eq!(token_type, AccessTokenType::Tenant);
@@ -454,7 +454,7 @@ mod test {
     fn test_determine_token_type_with_cache_user_access_token() {
         let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
         let mut option = RequestOption::default();
-        option.user_access_token = "user_token".to_string();
+        option.user_access_token = Some("user_token".to_string());
 
         let token_type = determine_token_type(&types, &option, true);
         assert_eq!(token_type, AccessTokenType::User);
@@ -511,7 +511,7 @@ mod test {
             .enable_token_cache(false)
             .build();
         let mut option = RequestOption::default();
-        option.user_access_token = "token".to_string();
+        option.user_access_token = Some("token".to_string());
 
         let result = validate(&config, &option, AccessTokenType::User);
         assert!(result.is_ok());
@@ -533,7 +533,7 @@ mod test {
     fn test_validate_marketplace_tenant_with_key() {
         let config = create_test_config_marketplace();
         let mut option = RequestOption::default();
-        option.tenant_key = "tenant_key".to_string();
+        option.tenant_key = Some("tenant_key".to_string());
 
         let result = validate(&config, &option, AccessTokenType::Tenant);
         assert!(result.is_ok());
@@ -555,7 +555,7 @@ mod test {
     fn test_validate_user_token_present() {
         let config = create_test_config();
         let mut option = RequestOption::default();
-        option.user_access_token = "user_token".to_string();
+        option.user_access_token = Some("user_token".to_string());
 
         let result = validate(&config, &option, AccessTokenType::User);
         assert!(result.is_ok());
@@ -636,7 +636,7 @@ mod test {
     fn test_validate_token_type_edge_case_single_element() {
         let types = vec![AccessTokenType::None];
         let mut option = RequestOption::default();
-        option.user_access_token = "user_token".to_string();
+        option.user_access_token = Some("user_token".to_string());
 
         let result = validate_token_type(&types, &option);
         assert!(result.is_ok());
@@ -675,8 +675,8 @@ mod test {
             AccessTokenType::App,
         ];
         let mut option = RequestOption::default();
-        option.user_access_token = "user_token".to_string();
-        option.tenant_key = "tenant_key".to_string();
+        option.user_access_token = Some("user_token".to_string());
+        option.tenant_key = Some("tenant_key".to_string());
 
         // User token should take priority when present
         let token_type = determine_token_type(&types, &option, true);
@@ -687,7 +687,7 @@ mod test {
     fn test_determine_token_type_tenant_key_without_tenant_type() {
         let types = vec![AccessTokenType::User, AccessTokenType::App];
         let mut option = RequestOption::default();
-        option.tenant_key = "tenant_key".to_string();
+        option.tenant_key = Some("tenant_key".to_string());
 
         // Should default to first type when Tenant not available
         let token_type = determine_token_type(&types, &option, true);
@@ -698,7 +698,7 @@ mod test {
     fn test_determine_token_type_user_token_without_user_type() {
         let types = vec![AccessTokenType::Tenant, AccessTokenType::App];
         let mut option = RequestOption::default();
-        option.user_access_token = "user_token".to_string();
+        option.user_access_token = Some("user_token".to_string());
 
         // Should use Tenant when User type not available
         let token_type = determine_token_type(&types, &option, true);
@@ -713,8 +713,8 @@ mod test {
             AccessTokenType::App,
         ];
         let mut option = RequestOption::default();
-        option.tenant_access_token = "tenant_token".to_string();
-        option.app_access_token = "app_token".to_string();
+        option.tenant_access_token = Some("tenant_token".to_string());
+        option.app_access_token = Some("app_token".to_string());
 
         // Tenant should be chosen over App when cache disabled
         let token_type = determine_token_type(&types, &option, false);
@@ -752,7 +752,7 @@ mod test {
             .app_type(AppType::Marketplace)
             .build();
         let mut option = RequestOption::default();
-        option.tenant_key = "valid_tenant_key".to_string();
+        option.tenant_key = Some("valid_tenant_key".to_string());
 
         let result = validate(&config, &option, AccessTokenType::Tenant);
         assert!(result.is_ok());
@@ -766,7 +766,7 @@ mod test {
             .app_type(AppType::Marketplace)
             .build();
         let mut option = RequestOption::default();
-        option.user_access_token = "user_token".to_string();
+        option.user_access_token = Some("user_token".to_string());
 
         // User token type needs user_access_token to be present
         let result = validate(&config, &option, AccessTokenType::User);
@@ -789,9 +789,9 @@ mod test {
             .enable_token_cache(false)
             .build();
         let mut option = RequestOption::default();
-        option.user_access_token = "user_token".to_string();
-        option.tenant_access_token = "tenant_token".to_string();
-        option.app_access_token = "app_token".to_string();
+        option.user_access_token = Some("user_token".to_string());
+        option.tenant_access_token = Some("tenant_token".to_string());
+        option.app_access_token = Some("app_token".to_string());
 
         // Should validate successfully with any token present
         let result = validate(&config, &option, AccessTokenType::User);
@@ -802,7 +802,7 @@ mod test {
     fn test_validate_user_token_type_with_empty_user_token() {
         let config = create_test_config();
         let mut option = RequestOption::default();
-        option.tenant_access_token = "tenant_token".to_string(); // Other tokens present
+        option.tenant_access_token = Some("tenant_token".to_string()); // Other tokens present
 
         // Should fail when User token type but user_access_token is empty
         let result = validate(&config, &option, AccessTokenType::User);
@@ -970,7 +970,7 @@ mod test {
         // types 与 option 中显式 token 类型不匹配时，应返回错误（避免静默放过错误 token）。
         let types = vec![AccessTokenType::Tenant];
         let mut option = RequestOption::default();
-        option.user_access_token = "user_token".to_string(); // Mismatch!
+        option.user_access_token = Some("user_token".to_string()); // Mismatch!
 
         let result = validate_token_type(&types, &option);
         assert!(result.is_err());
