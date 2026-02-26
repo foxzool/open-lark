@@ -1,6 +1,6 @@
 //! 核心验证功能
 
-use log::error;
+use tracing::error;
 
 /// 检查字符是否为中文字符
 ///

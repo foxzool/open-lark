@@ -47,20 +47,20 @@ pub struct Config {
 /// 内部配置数据，被多个服务共享
 #[derive(Debug)]
 pub struct ConfigInner {
-    pub app_id: String,
-    pub app_secret: String,
+    pub(crate) app_id: String,
+    pub(crate) app_secret: String,
     /// 域名, 默认为 <https://open.feishu.cn>
-    pub base_url: String,
+    pub(crate) base_url: String,
     /// 是否允许 core 在缺少显式 token 时自动获取 token
-    pub enable_token_cache: bool,
+    pub(crate) enable_token_cache: bool,
     /// 应用类型, 默认为自建应用
-    pub app_type: AppType,
-    pub http_client: reqwest::Client,
+    pub(crate) app_type: AppType,
+    pub(crate) http_client: reqwest::Client,
     /// 客户端超时时间, 默认永不超时
-    pub req_timeout: Option<Duration>,
-    pub header: HashMap<String, String>,
+    pub(crate) req_timeout: Option<Duration>,
+    pub(crate) header: HashMap<String, String>,
     /// Token 获取抽象（由业务 crate 实现，例如 openlark-auth）
-    pub token_provider: Arc<dyn TokenProvider>,
+    pub(crate) token_provider: Arc<dyn TokenProvider>,
 }
 
 impl Default for ConfigInner {
@@ -155,6 +155,26 @@ impl Config {
     /// 是否启用令牌缓存
     pub fn enable_token_cache(&self) -> bool {
         self.inner.enable_token_cache
+    }
+
+    /// 获取应用类型
+    pub fn app_type(&self) -> AppType {
+        self.inner.app_type
+    }
+
+    /// 获取 HTTP 客户端引用
+    pub fn http_client(&self) -> &reqwest::Client {
+        &self.inner.http_client
+    }
+
+    /// 获取自定义 header 引用
+    pub fn header(&self) -> &HashMap<String, String> {
+        &self.inner.header
+    }
+
+    /// 获取 TokenProvider 引用
+    pub fn token_provider(&self) -> &Arc<dyn TokenProvider> {
+        &self.inner.token_provider
     }
 }
 

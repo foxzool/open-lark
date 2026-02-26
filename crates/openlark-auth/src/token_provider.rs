@@ -116,13 +116,13 @@ impl AuthTokenProvider {
     ) -> SDKResult<(String, i64)> {
         let url = format!(
             "{}/{}",
-            self.config.base_url.trim_end_matches('/'),
+            self.config.base_url().trim_end_matches('/'),
             endpoint.trim_start_matches('/')
         );
 
         let response = self
             .config
-            .http_client
+            .http_client()
             .post(&url)
             .json(&payload)
             .send()
@@ -166,15 +166,15 @@ impl TokenProvider for AuthTokenProvider {
     async fn get_token(&self, request: TokenRequest) -> SDKResult<String> {
         match request.token_type {
             AccessTokenType::App => {
-                let cache_key = Self::cache_key(&AccessTokenType::App, &self.config.app_type);
+                let cache_key = Self::cache_key(&AccessTokenType::App, &self.config.app_type());
                 self.get_or_fetch(cache_key, || async {
-                    let (token, expires_in) = match self.config.app_type {
+                    let (token, expires_in) = match self.config.app_type() {
                         AppType::SelfBuild => {
                             self.fetch_token_via_http(
                                 "/open-apis/auth/v3/app_access_token/internal",
                                 json!({
-                                    "app_id": self.config.app_id,
-                                    "app_secret": self.config.app_secret,
+                                    "app_id": self.config.app_id(),
+                                    "app_secret": self.config.app_secret(),
                                 }),
                                 "app_access_token",
                             )
@@ -184,8 +184,8 @@ impl TokenProvider for AuthTokenProvider {
                             self.fetch_token_via_http(
                                 "/open-apis/auth/v3/app_access_token",
                                 json!({
-                                    "app_id": self.config.app_id,
-                                    "app_secret": self.config.app_secret,
+                                    "app_id": self.config.app_id(),
+                                    "app_secret": self.config.app_secret(),
                                 }),
                                 "app_access_token",
                             )
@@ -197,15 +197,15 @@ impl TokenProvider for AuthTokenProvider {
                 .await
             }
             AccessTokenType::Tenant => {
-                let cache_key = Self::cache_key(&AccessTokenType::Tenant, &self.config.app_type);
+                let cache_key = Self::cache_key(&AccessTokenType::Tenant, &self.config.app_type());
                 self.get_or_fetch(cache_key, || async {
-                    let (token, expires_in) = match self.config.app_type {
+                    let (token, expires_in) = match self.config.app_type() {
                         AppType::SelfBuild => {
                             self.fetch_token_via_http(
                                 "/open-apis/auth/v3/tenant_access_token/internal",
                                 json!({
-                                    "app_id": self.config.app_id,
-                                    "app_secret": self.config.app_secret,
+                                    "app_id": self.config.app_id(),
+                                    "app_secret": self.config.app_secret(),
                                 }),
                                 "tenant_access_token",
                             )
@@ -221,8 +221,8 @@ impl TokenProvider for AuthTokenProvider {
                             self.fetch_token_via_http(
                                 "/open-apis/auth/v3/tenant_access_token",
                                 json!({
-                                    "app_id": self.config.app_id,
-                                    "app_secret": self.config.app_secret,
+                                    "app_id": self.config.app_id(),
+                                    "app_secret": self.config.app_secret(),
                                     "app_ticket": app_ticket,
                                 }),
                                 "tenant_access_token",

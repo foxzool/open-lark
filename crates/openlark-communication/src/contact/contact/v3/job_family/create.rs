@@ -157,7 +157,7 @@ mod tests {
         let config = Config::default();
         let request = CreateJobFamilyRequest::new(config);
         // Just verify the request can be created
-        assert_eq!(request.config.app_id, "");
+        assert_eq!(request.config.app_id(), "");
     }
 
     #[test]

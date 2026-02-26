@@ -1,6 +1,6 @@
 use std::{collections::HashSet, marker::PhantomData};
 
-use log::debug;
+use tracing::debug;
 use reqwest::RequestBuilder;
 use tracing::{info_span, Instrument};
 

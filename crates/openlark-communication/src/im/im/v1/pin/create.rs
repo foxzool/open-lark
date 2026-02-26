@@ -71,7 +71,7 @@ mod tests {
         let config = Config::default();
         let request = CreatePinRequest::new(config);
         // Just verify the request can be created
-        assert_eq!(request.config.app_id, "");
+        assert_eq!(request.config.app_id(), "");
     }
 
     #[test]
@@ -79,6 +79,6 @@ mod tests {
         let config = Config::default();
         let request = CreatePinRequest::new(config);
         // Verify the request struct is properly initialized
-        assert_eq!(request.config.app_id, "");
+        assert_eq!(request.config.app_id(), "");
     }
 }

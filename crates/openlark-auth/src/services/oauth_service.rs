@@ -100,7 +100,7 @@ mod tests {
         let config = Config::default();
         let service = OAuthService::new(config.clone());
 
-        assert_eq!(service.config().app_id, config.app_id);
+        assert_eq!(service.config().app_id(), config.app_id());
     }
 
     #[test]

@@ -34,12 +34,12 @@ impl AuthHandler {
     ) -> Result<RequestBuilder, LarkAPIError> {
         let app_access_token = if !option.app_access_token.is_empty() {
             option.app_access_token.clone()
-        } else if config.enable_token_cache {
+        } else if config.enable_token_cache() {
             let mut request = TokenRequest::app();
             if !option.app_ticket.is_empty() {
                 request = request.app_ticket(option.app_ticket.clone());
             }
-            config.token_provider.get_token(request).await?
+            config.token_provider().get_token(request).await?
         } else {
             return Err(authentication_error("访问令牌缺失"));
         };
@@ -55,7 +55,7 @@ impl AuthHandler {
     ) -> Result<RequestBuilder, LarkAPIError> {
         let tenant_access_token = if !option.tenant_access_token.is_empty() {
             option.tenant_access_token.clone()
-        } else if config.enable_token_cache {
+        } else if config.enable_token_cache() {
             let mut request = TokenRequest::tenant();
             if !option.tenant_key.is_empty() {
                 request = request.tenant_key(option.tenant_key.clone());
@@ -63,7 +63,7 @@ impl AuthHandler {
             if !option.app_ticket.is_empty() {
                 request = request.app_ticket(option.app_ticket.clone());
             }
-            config.token_provider.get_token(request).await?
+            config.token_provider().get_token(request).await?
         } else {
             return Err(authentication_error("访问令牌缺失"));
         };
