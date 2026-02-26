@@ -49,7 +49,6 @@ pub enum RequestData {
     Text(String),
     Binary(Vec<u8>),
     Form(std::collections::HashMap<String, String>),
-    Empty,
 }
 
 // 处理字符串类型 - 优先使用Text处理
@@ -216,7 +215,7 @@ impl<R> ApiRequest<R> {
     {
         match serde_json::to_value(body) {
             Ok(json_value) => self.body = Some(RequestData::Json(json_value)),
-            Err(_) => self.body = Some(RequestData::Empty),
+            Err(e) => { tracing::warn!(error = %e, "json_body 序列化失败"); self.body = Some(RequestData::Json(serde_json::Value::Null)); }
         }
         self
     }
@@ -273,7 +272,6 @@ impl<R> ApiRequest<R> {
                 .join("&")
                 .into_bytes(),
             Some(RequestData::Text(text)) => text.clone().into_bytes(),
-            Some(RequestData::Empty) => vec![],
             None => vec![],
         }
     }
