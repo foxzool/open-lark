@@ -1,6 +1,7 @@
 //! 可观测性模块
 //!
 //! 提供统一的日志记录、跟踪和监控功能
+#![allow(dead_code)]
 
 use std::time::{Duration, Instant};
 use tracing::{span, Level, Span};
