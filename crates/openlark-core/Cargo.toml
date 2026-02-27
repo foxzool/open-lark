@@ -54,32 +54,6 @@ otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-ope
 # Testing utilities (for other crates to use in tests)
 testing = []
 
-# Service modules (for conditional compilation in client)
-group = []
-helpdesk = []
-hire = []
-human-authentication = []
-im = []
-lingo = []
-mail = []
-mdm = []
-minutes = []
-moments = []
-okr = []
-passport = []
-payroll = []
-performance = []
-personal-settings = []
-report = []
-search = []
-security-and-compliance = []
-task = []
-tenant = []
-tenant-tag = []
-trust-party = []
-vc = []
-verification = []
-workplace = []
 
 [dependencies.opentelemetry]
 workspace = true
