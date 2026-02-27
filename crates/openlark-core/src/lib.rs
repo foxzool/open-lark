@@ -29,41 +29,7 @@ mod utils;
 
 // Re-export commonly used types from crate root
 pub use error::{validation_error, CoreError, SDKResult};
-
-// Validatable trait for unified validation semantics
-pub trait Validatable {
-    fn is_empty_trimmed(&self) -> bool;
-}
-
-impl Validatable for &str {
-    fn is_empty_trimmed(&self) -> bool {
-        self.trim().is_empty()
-    }
-}
-
-impl Validatable for String {
-    fn is_empty_trimmed(&self) -> bool {
-        self.trim().is_empty()
-    }
-}
-
-impl<T: Validatable> Validatable for &T {
-    fn is_empty_trimmed(&self) -> bool {
-        (*self).is_empty_trimmed()
-    }
-}
-
-impl<T> Validatable for Vec<T> {
-    fn is_empty_trimmed(&self) -> bool {
-        self.is_empty()
-    }
-}
-
-impl<T> Validatable for &[T] {
-    fn is_empty_trimmed(&self) -> bool {
-        self.is_empty()
-    }
-}
+pub use validation::Validatable;
 
 // Re-export validate_required macro for docs module
 #[macro_export]
