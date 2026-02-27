@@ -36,6 +36,7 @@
 //! params.insert(QueryParams::PAGE_TOKEN, token);
 //! # }
 //! ```
+#![allow(dead_code)]
 
 use std::collections::HashMap;
 

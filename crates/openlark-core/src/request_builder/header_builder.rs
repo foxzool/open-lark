@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::{
     config::Config,
     constants::{CUSTOM_REQUEST_ID, USER_AGENT_HEADER},
