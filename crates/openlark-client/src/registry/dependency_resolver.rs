@@ -43,6 +43,7 @@ pub type DependencyResult<T> = Result<T, DependencyError>;
 #[derive(Debug)]
 pub struct DependencyResolver {
     /// 缓存已解析的依赖顺序
+    // TODO: resolved_orders 为缓存字段，当前未被读取；待实现缓存逻辑后移除此 allow
     #[allow(dead_code)]
     resolved_orders: HashMap<String, Vec<String>>,
 }
@@ -94,6 +95,7 @@ impl DependencyResolver {
     }
 
     /// 深度优先搜索检测循环依赖
+    // TODO: &self 仅在递归中传递，可考虑改为关联函数；当前保留方法签名以保持一致性
     #[allow(clippy::only_used_in_recursion)]
     fn dfs_detect_cycle(
         &self,
