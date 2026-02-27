@@ -2,10 +2,10 @@
 //!
 //! 负责创建和管理服务实例，支持延迟初始化和单例模式
 
-use std::future::Future;
-use std::pin::Pin;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::future::Future;
+use std::pin::Pin;
 use std::sync::{Arc, RwLock};
 use thiserror::Error;
 
@@ -65,7 +65,9 @@ pub trait ServiceFactory: Send + Sync {
         metadata: &ServiceMetadata,
         config: &Config,
         dependencies: &HashMap<String, Arc<dyn std::any::Any + Send + Sync>>,
-    ) -> Pin<Box<dyn Future<Output = FactoryResult<Arc<dyn std::any::Any + Send + Sync>>> + Send + '_>>;
+    ) -> Pin<
+        Box<dyn Future<Output = FactoryResult<Arc<dyn std::any::Any + Send + Sync>>> + Send + '_>,
+    >;
 
     /// 验证服务配置
     fn validate_config(&self, metadata: &ServiceMetadata, config: &Config) -> FactoryResult<()>;
@@ -251,7 +253,9 @@ impl ServiceFactory for DefaultServiceFactory {
         metadata: &ServiceMetadata,
         _config: &Config,
         _dependencies: &HashMap<String, Arc<dyn std::any::Any + Send + Sync>>,
-    ) -> Pin<Box<dyn Future<Output = FactoryResult<Arc<dyn std::any::Any + Send + Sync>>> + Send + '_>> {
+    ) -> Pin<
+        Box<dyn Future<Output = FactoryResult<Arc<dyn std::any::Any + Send + Sync>>> + Send + '_>,
+    > {
         let metadata_name = metadata.name.clone();
         Box::pin(async move {
             // 这里应该根据服务类型创建实际的服务实例

@@ -290,8 +290,8 @@ mod tests {
     use crate::auth::TokenProvider;
     use crate::auth::TokenRequest;
     use crate::constants::{AppType, FEISHU_BASE_URL};
-    use std::{future::Future, pin::Pin};
     use std::time::Duration;
+    use std::{future::Future, pin::Pin};
 
     #[test]
     fn test_config_creation() {

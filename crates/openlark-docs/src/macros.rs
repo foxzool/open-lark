@@ -11,7 +11,6 @@ macro_rules! impl_executable_builder {
         $response:ty,
         $method:ident
     ) => {
-        
         impl openlark_core::trait_system::ExecutableBuilder<$service, $request, $response>
             for $builder
         {
@@ -46,7 +45,6 @@ macro_rules! impl_executable_builder_owned {
         $response:ty,
         $method:ident
     ) => {
-        
         impl openlark_core::trait_system::ExecutableBuilder<$service, $request, $response>
             for $builder
         {

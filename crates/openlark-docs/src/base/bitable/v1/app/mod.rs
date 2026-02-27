@@ -24,7 +24,7 @@ pub use models::{App, AppService, AppSettings, DeleteAppResponse};
 
 // 显式导出 dashboard（避免 list 模块名与 role/table 冲突）
 pub use dashboard::{
-    CopyDashboardRequest, CopyDashboardResponse, Dashboard, Creator, ListDashboardsRequest,
+    CopyDashboardRequest, CopyDashboardResponse, Creator, Dashboard, ListDashboardsRequest,
     ListDashboardsResponse, Permission,
 };
 
@@ -32,8 +32,7 @@ pub use dashboard::{
 pub use role::{
     BlockRole, CreateAppRoleRequest, CreateAppRoleRequestBody, CreateAppRoleResponse,
     DeleteAppRoleRequest, DeleteAppRoleResponse, ListAppRoleRequest, ListAppRoleResponse, Role,
-    ServiceType, TableRole, UpdateAppRoleRequest, UpdateAppRoleRequestBody,
-    UpdateAppRoleResponse,
+    ServiceType, TableRole, UpdateAppRoleRequest, UpdateAppRoleRequestBody, UpdateAppRoleResponse,
 };
 
 // 显式导出 table（避免 create/delete/list 模块名与 role 冲突）

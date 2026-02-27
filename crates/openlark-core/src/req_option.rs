@@ -179,14 +179,20 @@ mod tests {
             .tenant_access_token("tenant_token_345")
             .build();
 
-        assert_eq!(option.tenant_access_token, Some("tenant_token_345".to_string()));
+        assert_eq!(
+            option.tenant_access_token,
+            Some("tenant_token_345".to_string())
+        );
 
         // Test with String
         let option = RequestOption::builder()
             .tenant_access_token("tenant_token_678".to_string())
             .build();
 
-        assert_eq!(option.tenant_access_token, Some("tenant_token_678".to_string()));
+        assert_eq!(
+            option.tenant_access_token,
+            Some("tenant_token_678".to_string())
+        );
     }
 
     #[test]
@@ -390,7 +396,10 @@ mod tests {
             .build();
 
         assert_eq!(option.tenant_key, Some("tenant@#$%^&*()".to_string()));
-        assert_eq!(option.user_access_token, Some("token_with_symbols!@#".to_string()));
+        assert_eq!(
+            option.user_access_token,
+            Some("token_with_symbols!@#".to_string())
+        );
         assert_eq!(option.request_id, Some("req_with_unicode_测试".to_string()));
         assert_eq!(
             option.header.get("X-Special-Chars"),

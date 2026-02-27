@@ -641,7 +641,6 @@ mod tests {
         assert_eq!(all.get("k2"), Some(&"v2".to_string()));
     }
 
-
     /// 测试 ErrorContextBuilder 链式调用完整流程
     #[test]
     fn test_error_context_builder_chaining() {
