@@ -1,4 +1,5 @@
 //! ExecutableBuilder trait
+#![allow(async_fn_in_trait)]
 //!
 //! 为“Builder → Request → execute”模式提供统一的 trait 约束，
 //! 以便在各业务 crate 里通过宏批量实现。
