@@ -31,7 +31,7 @@ impl CachedToken {
     fn now_epoch_secs() -> i64 {
         SystemTime::now()
             .duration_since(UNIX_EPOCH)
-            .map(|d| d.as_secs() as i64)
+            .map(|d| d.as_secs())
             .unwrap_or(0)
     }
 
