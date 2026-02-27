@@ -4,9 +4,10 @@
 //! 包含参数验证、数据清理、边界检查等安全机制。
 
 pub mod core;
+pub mod validatable;
 
 // Re-export commonly used types
 pub use core::{
-    validate_required_list_length, validate_string_length, ValidateBuilder,
-    ValidationResult,
+    validate_required_list_length, validate_string_length, ValidateBuilder, ValidationResult,
 };
+pub use validatable::Validatable;
