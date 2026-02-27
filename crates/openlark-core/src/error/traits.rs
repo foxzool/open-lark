@@ -310,7 +310,11 @@ impl ErrorContextTrait for ErrorContext {
     }
 
     fn timestamp(&self) -> Option<chrono::DateTime<chrono::Utc>> {
-        ErrorContext::timestamp(self)
+        ErrorContext::timestamp(self).map(|st| {
+            let duration = st.duration_since(std::time::UNIX_EPOCH).unwrap_or_default();
+            chrono::DateTime::from_timestamp(duration.as_secs() as i64, 0)
+                .unwrap_or_else(|| chrono::Utc::now())
+        })
     }
 
     fn get_context(&self, key: &str) -> Option<&str> {

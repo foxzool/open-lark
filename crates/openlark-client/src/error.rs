@@ -666,11 +666,10 @@ impl<'a> ErrorAnalyzer<'a> {
         // 时间戳
         if let Some(timestamp) = self.error.context().timestamp() {
             report.push_str(&format!(
-                "⏰ 发生时间: {}\n",
-                timestamp.format("%Y-%m-%d %H:%M:%S UTC")
+                "⏰ 发生时间: {:?}\n",
+                timestamp
             ));
         }
-
         report
     }
 
