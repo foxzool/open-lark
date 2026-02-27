@@ -6,6 +6,9 @@
 
 use crate::Config;
 
+#[cfg(feature = "auth")]
+use openlark_auth::AuthTokenProvider;
+
 /// 基础 core Config（不注入 TokenProvider）
 ///
 /// 说明：
@@ -32,6 +35,15 @@ pub(crate) fn build_core_config_with_default_token_provider(
     config: &Config,
 ) -> openlark_core::config::Config {
     let base_core_config = build_base_core_config(config);
-    let provider = openlark_auth::AuthTokenProvider::new(base_core_config.clone());
-    base_core_config.with_token_provider(provider)
+
+    #[cfg(feature = "auth")]
+    {
+        let provider = AuthTokenProvider::new(base_core_config.clone());
+        return base_core_config.with_token_provider(provider);
+    }
+
+    #[cfg(not(feature = "auth"))]
+    {
+        base_core_config
+    }
 }

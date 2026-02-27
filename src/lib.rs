@@ -5,40 +5,40 @@
 
 pub use openlark_core;
 
-#[cfg(feature = "openlark-client")]
+#[cfg(feature = "client")]
 pub use openlark_client;
 
-#[cfg(feature = "openlark-protocol")]
+#[cfg(feature = "protocol")]
 pub use openlark_protocol;
 
-#[cfg(feature = "openlark-auth")]
+#[cfg(feature = "auth")]
 pub use openlark_auth;
 
-#[cfg(feature = "openlark-communication")]
+#[cfg(feature = "communication")]
 pub use openlark_communication;
 
-#[cfg(feature = "openlark-docs")]
+#[cfg(feature = "docs")]
 pub use openlark_docs;
 
-#[cfg(feature = "openlark-hr")]
+#[cfg(feature = "hr")]
 pub use openlark_hr;
 
-#[cfg(feature = "openlark-ai")]
+#[cfg(feature = "ai")]
 pub use openlark_ai;
 
-#[cfg(feature = "openlark-helpdesk")]
+#[cfg(feature = "helpdesk")]
 pub use openlark_helpdesk;
 
-#[cfg(feature = "openlark-mail")]
+#[cfg(feature = "mail")]
 pub use openlark_mail;
 
-#[cfg(feature = "openlark-meeting")]
+#[cfg(feature = "meeting")]
 pub use openlark_meeting;
 
-#[cfg(feature = "openlark-application")]
+#[cfg(feature = "application")]
 pub use openlark_application;
 
-#[cfg(feature = "openlark-security")]
+#[cfg(feature = "security")]
 pub use openlark_security;
 
 #[cfg(feature = "workflow")]
