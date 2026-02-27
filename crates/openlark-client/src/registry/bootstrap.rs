@@ -5,9 +5,12 @@
 //!
 //! 这里集中管理 **按 feature 编译进来的服务**，避免在多个位置重复注册（DRY）。
 
-use super::{DefaultServiceRegistry, ServiceMetadata, ServiceRegistry, ServiceStatus};
+use super::{DefaultServiceRegistry, ServiceMetadata, ServiceRegistry};
+#[cfg(any(feature = "auth", feature = "communication", feature = "docs", feature = "cardkit", feature = "meeting", feature = "security", feature = "hr", feature = "ai"))]
+use super::ServiceStatus;
 use crate::{error, Result};
 
+#[allow(unused_variables, dead_code, unused_imports)]
 pub(crate) fn register_compiled_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
     #[cfg(feature = "auth")]
     register_auth(registry)?;
@@ -36,6 +39,7 @@ pub(crate) fn register_compiled_services(registry: &mut DefaultServiceRegistry) 
     Ok(())
 }
 
+#[allow(dead_code)]
 fn register(registry: &mut DefaultServiceRegistry, metadata: ServiceMetadata) -> Result<()> {
     registry
         .register_service(metadata)
