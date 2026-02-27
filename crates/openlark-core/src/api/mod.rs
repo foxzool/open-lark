@@ -325,16 +325,6 @@ impl<R> ApiRequest<R> {
         self
     }
 
-    /// 发送请求（兼容方法，需要 Transport）
-    pub async fn send<T>(self) -> crate::error::SDKResult<crate::api::Response<T>>
-    where
-        T: serde::de::DeserializeOwned,
-    {
-        // 这个方法只是占位符，实际的发送逻辑在 Transport 中
-        Err(crate::error::configuration_error(
-            "send() method not supported directly on ApiRequest. Use Transport::request() instead.",
-        ))
-    }
 }
 
 impl<R> Default for ApiRequest<R> {
