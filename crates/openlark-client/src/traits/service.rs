@@ -3,7 +3,6 @@
 //! 定义服务的统一接口和行为
 
 use crate::Result;
-use async_trait::async_trait;
 use std::time::SystemTime;
 
 /// 🌐 服务基础特征
@@ -15,7 +14,6 @@ use std::time::SystemTime;
 /// - 线程安全：服务可以跨线程安全使用
 /// - 生命周期：支持服务的启动、停止和重启
 /// - 监控支持：提供健康检查和统计信息
-#[async_trait]
 pub trait ServiceTrait: Send + Sync {
     /// 📋 服务名称
     fn name(&self) -> &'static str;
@@ -62,7 +60,6 @@ pub trait ServiceTrait: Send + Sync {
 /// 🔄 可重启服务特征
 ///
 /// 扩展服务，添加重启功能
-#[async_trait]
 pub trait RestartableService: ServiceTrait {
     /// 🔄 重启服务
     async fn restart(&self) -> Result<()> {
@@ -78,7 +75,6 @@ pub trait RestartableService: ServiceTrait {
 /// 📈 可监控服务特征
 ///
 /// 扩展服务，添加监控和统计功能
-#[async_trait]
 pub trait MonitorableService: ServiceTrait {
     /// 📊 获取服务统计信息
     async fn stats(&self) -> Result<ServiceStats>;
@@ -93,7 +89,6 @@ pub trait MonitorableService: ServiceTrait {
 /// 🔧 可配置服务特征
 ///
 /// 扩展服务，添加动态配置能力
-#[async_trait]
 pub trait ConfigurableService: ServiceTrait {
     /// ⚙️ 配置类型
     type Config: Send + Sync;
@@ -391,7 +386,6 @@ impl LogLevel {
 /// 🔄 服务生命周期特征
 ///
 /// 定义服务的启动、停止和健康检查生命周期管理
-#[async_trait]
 pub trait ServiceLifecycle: Send + Sync {
     /// 🚀 启动服务
     async fn start(&self) -> Result<()> {
@@ -427,7 +421,6 @@ mod tests {
         name: &'static str,
     }
 
-    #[async_trait]
     impl ServiceTrait for TestService {
         fn name(&self) -> &'static str {
             self.name

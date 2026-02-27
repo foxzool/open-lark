@@ -1,7 +1,7 @@
 #[macro_export]
 macro_rules! impl_executable_builder {
     ($builder:ty, $service:ty, $request:ty, $response:ty, $method:ident) => {
-        #[async_trait::async_trait]
+        
         impl
             openlark_core::trait_system::executable_builder::ExecutableBuilder<
                 $service,
@@ -33,7 +33,7 @@ macro_rules! impl_executable_builder {
 #[macro_export]
 macro_rules! impl_executable_builder_owned {
     ($builder:ty, $service:ty, $request:ty, $response:ty, $method:ident) => {
-        #[async_trait::async_trait]
+        
         impl
             openlark_core::trait_system::executable_builder::ExecutableBuilder<
                 $service,
@@ -65,7 +65,7 @@ macro_rules! impl_executable_builder_owned {
 #[macro_export]
 macro_rules! impl_executable_builder_config {
     ($builder:ty, $service:ty, $request:ty, $response:ty, $method:ident) => {
-        #[async_trait::async_trait]
+        
         impl
             openlark_core::trait_system::executable_builder::ExecutableBuilder<
                 $service,
