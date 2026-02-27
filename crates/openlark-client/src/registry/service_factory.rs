@@ -567,7 +567,7 @@ mod tests {
         let mut registry = ServiceFactoryRegistry::new();
         let factory = Arc::new(DefaultServiceFactory);
         registry.register_factory("custom-service", factory);
-        let retrieved = registry.get_factory("custom-service");
+        let _retrieved = registry.get_factory("custom-service");
         // 获取的工厂应该存在
         assert_eq!(registry.factories.len(), 1);
     }

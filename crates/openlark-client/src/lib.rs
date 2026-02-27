@@ -207,10 +207,8 @@
 //! ```
 
 //#![deny(missing_docs)]  // 暂时禁用以完成基本编译
-// openlark-client 仍处于快速迭代阶段：为了保证工作区 `just lint`（`-D warnings`）可通过，
-// 这里对 WIP 代码放宽 lint，避免未完成的占位实现阻塞其它稳定 crate 的质量门禁。
+// async_fn_in_trait: 保留以兼容 MSRV 1.75（该 lint 在 Rust 1.80+ 才稳定）
 #![allow(async_fn_in_trait)]
-#![allow(mismatched_lifetime_syntaxes)]
 
 // 核心模块
 pub mod client;
