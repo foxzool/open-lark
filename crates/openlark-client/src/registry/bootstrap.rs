@@ -5,9 +5,18 @@
 //!
 //! 这里集中管理 **按 feature 编译进来的服务**，避免在多个位置重复注册（DRY）。
 
-use super::{DefaultServiceRegistry, ServiceMetadata, ServiceRegistry};
-#[cfg(any(feature = "auth", feature = "communication", feature = "docs", feature = "cardkit", feature = "meeting", feature = "security", feature = "hr", feature = "ai"))]
+#[cfg(any(
+    feature = "auth",
+    feature = "communication",
+    feature = "docs",
+    feature = "cardkit",
+    feature = "meeting",
+    feature = "security",
+    feature = "hr",
+    feature = "ai"
+))]
 use super::ServiceStatus;
+use super::{DefaultServiceRegistry, ServiceMetadata, ServiceRegistry};
 use crate::{error, Result};
 
 #[allow(unused_variables, dead_code, unused_imports)]

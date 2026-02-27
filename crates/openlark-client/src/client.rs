@@ -2,6 +2,8 @@
 //!
 //! 极简设计：仅保留 meta 链式字段访问（单入口，KISS）
 
+#[cfg(feature = "auth")]
+use crate::core_config::build_base_core_config;
 use crate::{
     core_config::build_core_config_with_default_token_provider,
     error::{with_context, with_operation_context},
@@ -9,8 +11,6 @@ use crate::{
     Config, DefaultServiceRegistry, Result,
 };
 use openlark_core::error::ErrorTrait;
-#[cfg(feature = "auth")]
-use crate::core_config::build_base_core_config;
 use std::sync::Arc;
 
 /// 🔐 认证 meta 入口：`client.auth.app / client.auth.user / client.auth.oauth`
