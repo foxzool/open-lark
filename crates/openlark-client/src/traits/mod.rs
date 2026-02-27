@@ -5,6 +5,6 @@
 mod client;
 mod service;
 
-// 重新导出核心特征
-pub use client::*;
-pub use service::*;
+// 重新导出核心特征 - 仅保留实际实现的特征
+pub use client::LarkClient;
+pub use service::{ServiceLifecycle, ServiceTrait};

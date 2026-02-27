@@ -5,7 +5,6 @@
 //!
 //! ## 核心特性
 
-#![allow(unexpected_cfgs)] // 允许使用尚未加入工作区的功能标志
 //!
 //! - **🎯 Feature-driven**: 基于编译时功能标志的模块化设计
 //! - **⚡ 零配置**: 支持从环境变量自动配置客户端
@@ -270,13 +269,13 @@ pub use error::{
 };
 
 // 功能管理和服务注册
-pub use features::{FeatureLoader, FeatureSet, FeatureStats};
+pub use features::FeatureLoader;
 pub use registry::{
     DefaultServiceRegistry, ServiceEntry, ServiceMetadata, ServiceRegistry, ServiceStatus,
 };
 
 // 客户端特征
-pub use traits::*;
+pub use traits::{LarkClient, ServiceLifecycle};
 
 // 注意：legacy_client 已在 v0.15.0 中移除
 // 请使用 `Client` 与 `ClientBuilder`
@@ -389,7 +388,7 @@ pub mod prelude {
     // 功能管理
     // ============================================================================
 
-    pub use crate::{FeatureLoader, FeatureSet};
+    pub use crate::FeatureLoader;
 
     // meta 风格链式入口（字段链式）
     #[cfg(feature = "cardkit")]

@@ -220,7 +220,7 @@ crates/openlark-client/src/services/
 ├── mod.rs                # Facade 与预导出
 ├── service.rs            # Service / ServiceKind / Health / Lifecycle traits
 ├── context.rs            # ServiceContext：Config、HTTP client、token provider、tracing
-├── graph.rs              # 依赖图 & 拓扑排序，包装 registry::DependencyResolver
+├── graph.rs              # [已移除] 依赖图 & 拓扑排序
 ├── registry.rs           # TypedServiceRegistry，屏蔽 Any/Downcast
 ├── loader.rs             # 按 feature 注册 provider；支持动态插件
 ├── runtime.rs            # ServiceRuntime：init/start/stop/health 路径
@@ -267,7 +267,7 @@ pub struct ServiceContext {
 
 ### 渐进式迁移路径
 1. 引入 `service.rs` 与 `context.rs` 基础抽象，`AuthService` 先落地为示例。
-2. 将 `ServiceFactory` 迁移到 `runtime` + `registry`，保留旧 API 但内部委托新实现。
+2. [已简化] 直接使用字段挂载模式，`Client` 结构体通过 feature flags 条件编译挂载业务客户端（`docs`, `communication` 等），无需工厂模式。
 3. 逐个业务模块接入：communication → docs → hr → ...，每步补齐健康检查与配置覆盖。
 4. 删除遗留的 `services/mod.rs` 构造函数分支，转为 `loader` 自动注册。
 5. 更新集成测试，增加“服务图完整性”“生命周期幂等”两个维度的测试用例。
@@ -1184,6 +1184,9 @@ pub trait ClientErrorHandling {
 // 服务注册表
 pub struct ServiceRegistry {
     services: HashMap<String, ServiceEntry>,
+    // [已删除] factories: HashMap<String, Box<dyn ServiceFactoryTrait>>,
+}
+    services: HashMap<String, ServiceEntry>,
     factories: HashMap<String, Box<dyn ServiceFactoryTrait>>,
 }
 
@@ -1253,9 +1256,21 @@ impl ServiceRegistry {
 }
 ```
 
-#### 7.2.2 ServiceFactory工厂模式
+#### 7.2.2 [已删除/历史文档] ServiceFactory工厂模式
 
-服务工厂负责创建和初始化服务实例：
+> **注意**：ServiceFactory 工厂模式已在清理重构中移除（见 `openlark-client-cleanup` 计划）。
+> 当前采用简化架构：业务客户端直接作为 `Client` 结构体的字段挂载，通过 feature flags 条件编译控制，无需工厂创建。
+
+原工厂模式代码（已删除）：
+```rust
+// [已删除] ServiceFactory trait 及实现
+// 业务客户端现在直接通过字段访问：client.docs, client.communication 等
+```
+
+// [已删除] ServiceFactory trait 及实现
+// 业务客户端现在直接通过字段访问：client.docs, client.communication 等
+// 依赖通过 Cargo.toml 的 feature 依赖关系表达
+// 例如：docs = ["auth", "openlark-docs"]
 
 ```rust
 // 服务工厂特征
@@ -1305,12 +1320,13 @@ impl ServiceRegistry {
 }
 ```
 
-#### 7.2.3 依赖解析和拓扑排序
+#### 7.2.3 [已删除/历史文档] 依赖解析和拓扑排序
 
 依赖解析确保服务按正确顺序初始化：
 
 ```rust
-// 依赖解析器
+// [已删除] DependencyResolver 及拓扑排序代码
+// 当前架构简化：feature flags 在编译期决定服务可用性，无需运行时依赖解析
 pub struct DependencyResolver;
 
 impl DependencyResolver {

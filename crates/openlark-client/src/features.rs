@@ -25,136 +25,14 @@ impl FeatureLoader {
     }
 }
 
-/// 功能集统计信息
-#[derive(Debug, Clone, Copy)]
-pub struct FeatureStats {
-    /// 启用的功能数量
-    pub enabled_features: usize,
-    /// 可用的功能数量
-    pub available_features: usize,
-    /// 已加载的服务数量
-    pub loaded_services: usize,
-}
-
-/// 功能集合管理器
-#[derive(Debug)]
-pub struct FeatureSet {
-    /// 启用的功能列表
-    pub enabled_features: Vec<String>,
-    /// 功能统计
-    pub stats: FeatureStats,
-}
-
-impl FeatureSet {
-    /// 创建新的功能集合
-    pub fn new() -> Self {
-        Self {
-            enabled_features: vec![],
-            stats: FeatureStats {
-                enabled_features: 0,
-                available_features: 0,
-                loaded_services: 0,
-            },
-        }
-    }
-
-    /// 获取当前启用的功能
-    pub fn get_enabled_features(&self) -> &[String] {
-        &self.enabled_features
-    }
-
-    /// 检查功能是否启用
-    pub fn is_enabled(&self, feature: &str) -> bool {
-        self.enabled_features.iter().any(|f| f == feature)
-    }
-
-    /// 获取功能统计信息
-    pub fn get_stats(&self) -> &FeatureStats {
-        &self.stats
-    }
-}
-
-impl Default for FeatureSet {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn test_feature_set_new() {
-        let feature_set = FeatureSet::new();
-        assert!(feature_set.enabled_features.is_empty());
-        assert_eq!(feature_set.stats.enabled_features, 0);
-    }
-
-    #[test]
-    fn test_feature_set_default() {
-        let feature_set = FeatureSet::default();
-        assert!(feature_set.enabled_features.is_empty());
-    }
-
-    #[test]
-    fn test_feature_set_get_enabled_features() {
-        let feature_set = FeatureSet::new();
-        assert!(feature_set.get_enabled_features().is_empty());
-    }
-
-    #[test]
-    fn test_feature_set_is_enabled_empty() {
-        let feature_set = FeatureSet::new();
-        assert!(!feature_set.is_enabled("test_feature"));
-    }
-
-    #[test]
-    fn test_feature_set_get_stats() {
-        let feature_set = FeatureSet::new();
-        let stats = feature_set.get_stats();
-        assert_eq!(stats.enabled_features, 0);
-        assert_eq!(stats.available_features, 0);
-        assert_eq!(stats.loaded_services, 0);
-    }
 
     #[test]
     fn test_feature_loader_debug() {
         let loader = FeatureLoader;
         let debug_str = format!("{:?}", loader);
         assert!(debug_str.contains("FeatureLoader"));
-    }
-
-    #[test]
-    fn test_feature_stats_debug() {
-        let stats = FeatureStats {
-            enabled_features: 5,
-            available_features: 10,
-            loaded_services: 3,
-        };
-        let debug_str = format!("{:?}", stats);
-        assert!(debug_str.contains("enabled_features: 5"));
-    }
-
-    #[test]
-    fn test_feature_stats_clone() {
-        let stats = FeatureStats {
-            enabled_features: 5,
-            available_features: 10,
-            loaded_services: 3,
-        };
-        let cloned = stats;
-        assert_eq!(cloned.enabled_features, 5);
-    }
-
-    #[test]
-    fn test_feature_stats_copy() {
-        let stats = FeatureStats {
-            enabled_features: 5,
-            available_features: 10,
-            loaded_services: 3,
-        };
-        let copied: FeatureStats = stats;
-        assert_eq!(copied.enabled_features, 5);
     }
 }

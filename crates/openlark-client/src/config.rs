@@ -419,6 +419,21 @@ pub struct ConfigSummary {
     pub header_count: usize,
 }
 
+impl ConfigSummary {
+    /// 📋 获取友好的配置描述
+    pub fn friendly_description(&self) -> String {
+        format!(
+            "应用ID: {}, 基础URL: {}, 超时: {:?}, 重试: {}, 日志: {}, Headers: {}",
+            self.app_id,
+            self.base_url,
+            self.timeout,
+            self.retry_count,
+            if self.enable_log { "启用" } else { "禁用" },
+            self.header_count
+        )
+    }
+}
+
 impl std::fmt::Display for ConfigSummary {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
