@@ -4,12 +4,6 @@
 //! HTTP client configuration, error handling, authentication, and common utilities.
 
 // 对外稳定导出：尽量保持"少而清晰"的公共 API（KISS）
-//!
-//! This crate provides the core infrastructure for the OpenLark SDK including
-//! HTTP client configuration, error handling, authentication, and common utilities.
-
-
-// 对外稳定导出：尽量保持"少而清晰"的公共 API（KISS）
 pub mod api;
 pub mod auth;
 pub mod config;
