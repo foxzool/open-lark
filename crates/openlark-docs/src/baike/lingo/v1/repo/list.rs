@@ -67,7 +67,7 @@ mod tests {
         let request = ListRepoRequest::new(config);
 
         // 验证 request 被成功创建且配置正确
-        assert_eq!(request.config.app_id, "test_app");
+        assert_eq!(request.config.app_id(), "test_app");
     }
 
     #[test]
@@ -79,7 +79,7 @@ mod tests {
         let request = ListRepoRequest::new(config);
 
         // 验证 request 被成功创建且配置正确
-        assert_eq!(request.config.app_id, "test_app");
-        assert_eq!(request.config.app_secret, "test_secret");
+        assert_eq!(request.config.app_id(), "test_app");
+        assert_eq!(request.config.app_secret(), "test_secret");
     }
 }

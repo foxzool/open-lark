@@ -106,7 +106,7 @@ mod tests {
     fn test_create_session_request_builder() {
         let config = Config::default();
         let request = CreateSessionRequest::new(config);
-        assert_eq!(request.config.app_id, "");
+        assert_eq!(request.config.app_id(), "");
     }
 
     #[test]
