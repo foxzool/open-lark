@@ -89,7 +89,7 @@ mod tests {
     use crate::error::traits::ErrorTrait;
     use crate::error::ErrorType;
     use crate::{auth::TokenProvider, SDKResult};
-    use async_trait::async_trait;
+    use std::{future::Future, pin::Pin};
     use reqwest::Client;
 
     fn create_test_config() -> Config {
@@ -104,14 +104,18 @@ mod tests {
     #[derive(Debug)]
     struct StaticTokenProvider;
 
-    #[async_trait]
     impl TokenProvider for StaticTokenProvider {
-        async fn get_token(&self, request: TokenRequest) -> SDKResult<String> {
-            Ok(match request.token_type {
-                AccessTokenType::App => "static_app_token".to_string(),
-                AccessTokenType::Tenant => "static_tenant_token".to_string(),
-                AccessTokenType::User => "static_user_token".to_string(),
-                AccessTokenType::None => "".to_string(),
+        fn get_token(
+            &self,
+            request: TokenRequest,
+        ) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
+            Box::pin(async move {
+                Ok(match request.token_type {
+                    AccessTokenType::App => "static_app_token".to_string(),
+                    AccessTokenType::Tenant => "static_tenant_token".to_string(),
+                    AccessTokenType::User => "static_user_token".to_string(),
+                    AccessTokenType::None => "".to_string(),
+                })
             })
         }
     }

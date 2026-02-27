@@ -7,7 +7,6 @@ use crate::req_option::RequestOption;
 use crate::SDKResult;
 
 /// Builder 可执行抽象
-#[async_trait::async_trait]
 pub trait ExecutableBuilder<S: Sync, Req, Resp>: Sized {
     /// 构建请求
     fn build(self) -> Req;
@@ -40,7 +39,6 @@ mod tests {
         value: String,
     }
 
-    #[async_trait::async_trait]
     impl ExecutableBuilder<MockService, MockRequest, MockResponse> for MockBuilder {
         fn build(self) -> MockRequest {
             MockRequest { value: self.value }

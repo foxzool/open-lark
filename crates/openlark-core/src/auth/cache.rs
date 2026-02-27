@@ -137,7 +137,6 @@
 //!     // Redis连接和配置
 //! }
 //!
-//! #[async_trait::async_trait]
 //! impl TokenStorage for RedisTokenStorage {
 //!     async fn store(&self, key: &str, token: &TokenInfo) -> Result<(), Box<dyn std::error::Error>> {
 //!         // Redis存储实现

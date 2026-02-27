@@ -5,7 +5,7 @@
 //! - token 获取/刷新/缓存由业务 crate（例如 openlark-auth）实现
 
 use crate::{constants::AccessTokenType, SDKResult};
-use async_trait::async_trait;
+use std::{future::Future, pin::Pin};
 
 /// Token 获取请求上下文
 ///
@@ -54,30 +54,38 @@ impl TokenRequest {
 ///
 /// This trait allows `Transport` to obtain tokens without knowing
 /// concrete implementation (in-memory cache, distributed cache, custom refresh logic).
-#[async_trait]
 pub trait TokenProvider: Send + Sync + std::fmt::Debug {
     /// 获取指定类型的 access token
-    async fn get_token(&self, request: TokenRequest) -> SDKResult<String>;
+    fn get_token(
+        &self,
+        request: TokenRequest,
+    ) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>>;
 
     /// 便捷方法：获取 tenant token（可带 tenant_key）
-    async fn get_tenant_token(&self, tenant_key: Option<&str>) -> SDKResult<String> {
-        let mut req = TokenRequest::tenant();
-        if let Some(key) = tenant_key {
-            if !key.is_empty() {
-                req = req.tenant_key(key);
+    fn get_tenant_token(
+        &self,
+        tenant_key: Option<&str>,
+    ) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
+        let tenant_key = tenant_key.map(str::to_owned);
+        Box::pin(async move {
+            let mut req = TokenRequest::tenant();
+            if let Some(key) = tenant_key.as_deref() {
+                if !key.is_empty() {
+                    req = req.tenant_key(key);
+                }
             }
-        }
-        self.get_token(req).await
+            self.get_token(req).await
+        })
     }
 
     /// Optional: Get app access token explicitly
-    async fn get_app_token(&self) -> SDKResult<String> {
-        self.get_token(TokenRequest::app()).await
+    fn get_app_token(&self) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
+        Box::pin(async move { self.get_token(TokenRequest::app()).await })
     }
 
     /// Optional: Get user access token explicitly
-    async fn get_user_token(&self) -> SDKResult<String> {
-        self.get_token(TokenRequest::user()).await
+    fn get_user_token(&self) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
+        Box::pin(async move { self.get_token(TokenRequest::user()).await })
     }
 }
 
@@ -87,19 +95,19 @@ pub trait TokenProvider: Send + Sync + std::fmt::Debug {
 #[derive(Debug)]
 pub struct NoOpTokenProvider;
 
-#[async_trait]
 impl TokenProvider for NoOpTokenProvider {
-    async fn get_token(&self, request: TokenRequest) -> SDKResult<String> {
-        Err(crate::error::configuration_error(
-            format!(
-                "token_provider: NoOpTokenProvider 未实现 token 获取逻辑（请求：{:?}），请在 Config 中设置 TokenProvider（建议使用 openlark-auth 提供的实现）。",
-                request
-            ),
-        ))
-    }
-
-    async fn get_tenant_token(&self, tenant_key: Option<&str>) -> SDKResult<String> {
-        <Self as TokenProvider>::get_tenant_token(self, tenant_key).await
+    fn get_token(
+        &self,
+        request: TokenRequest,
+    ) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
+        Box::pin(async move {
+            Err(crate::error::configuration_error(
+                format!(
+                    "token_provider: NoOpTokenProvider 未实现 token 获取逻辑（请求：{:?}），请在 Config 中设置 TokenProvider（建议使用 openlark-auth 提供的实现）。",
+                    request
+                ),
+            ))
+        })
     }
 }
 
