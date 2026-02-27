@@ -5,6 +5,7 @@
 
 use std::time::{Duration, Instant};
 use tracing::{span, Level, Span};
+#[cfg(feature = "tracing-init")]
 use tracing_subscriber::{
     fmt::{self, format::FmtSpan},
     layer::SubscriberExt,
@@ -91,11 +92,13 @@ impl OperationTracker {
 }
 
 /// 初始化 tracing 基础设置
+#[cfg(feature = "tracing-init")]
 pub fn init_tracing() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     init_tracing_with_filter("info")
 }
 
 /// 使用指定过滤器初始化 tracing
+#[cfg(feature = "tracing-init")]
 pub fn init_tracing_with_filter(
     filter: &str,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
@@ -116,6 +119,7 @@ pub fn init_tracing_with_filter(
 }
 
 /// 初始化结构化 JSON 日志输出
+#[cfg(feature = "tracing-init")]
 pub fn init_structured_tracing() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
 
@@ -159,7 +163,7 @@ impl Default for OtelConfig {
 }
 
 /// 初始化 OpenTelemetry + tracing
-#[cfg(feature = "otel")]
+#[cfg(all(feature = "otel", feature = "tracing-init"))]
 pub fn init_otel_tracing(
     config: Option<OtelConfig>,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
@@ -425,7 +429,7 @@ impl HttpTracker {
 /// 性能监控宏
 ///
 /// 自动跟踪代码块的执行时间
-#[macro_export]
+#[allow(unused_macros)]
 macro_rules! trace_performance {
     ($name:expr, $code:block) => {{
         let _tracker = $crate::observability::OperationTracker::start("performance", $name);
@@ -442,7 +446,7 @@ macro_rules! trace_performance {
 }
 
 /// 异步性能监控宏
-#[macro_export]
+#[allow(unused_macros)]
 macro_rules! trace_async_performance {
     ($name:expr, $code:expr) => {{
         let tracker = $crate::observability::OperationTracker::start("performance", $name);
@@ -475,7 +479,7 @@ macro_rules! trace_async_performance {
 /// 认证操作跟踪宏
 ///
 /// 简化在认证流程中添加可观测性的过程
-#[macro_export]
+#[allow(unused_macros)]
 macro_rules! trace_auth_operation {
     ($operation:expr, $app_id:expr, $token_type:expr, $code:expr) => {
         async move {
@@ -504,7 +508,7 @@ macro_rules! trace_auth_operation {
 /// HTTP请求跟踪宏
 ///
 /// 为HTTP请求添加完整的可观测性
-#[macro_export]
+#[allow(unused_macros)]
 macro_rules! trace_http_request {
     ($method:expr, $url:expr, $code:expr) => {
         async move {
@@ -531,7 +535,7 @@ macro_rules! trace_http_request {
 /// 响应处理跟踪宏
 ///
 /// 为响应解析和处理添加可观测性
-#[macro_export]
+#[allow(unused_macros)]
 macro_rules! trace_response_processing {
     ($format:expr, $size:expr, $parsing:expr, $validation:expr) => {{
         let tracker = $crate::observability::ResponseTracker::start($format, $size);
@@ -1035,6 +1039,7 @@ mod tests {
         assert!(logs_contain("CSV data cannot be empty"));
     }
 
+    #[cfg(feature = "tracing-init")]
     #[traced_test]
     #[test]
     fn test_init_tracing_functions() {

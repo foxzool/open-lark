@@ -105,9 +105,18 @@ impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> T
     ) -> SDKResult<Response<T>> {
         let req =
             ReqTranslator::translate(&mut http_req, access_token_type, config, &option).await?;
-        debug!("Req:{req:?}");
+        debug!(
+            method = %http_req.method(),
+            path = %http_req.api_path(),
+            "Sending request"
+        );
         let resp = Self::do_send(req, http_req.to_bytes(), !http_req.file().is_empty()).await?;
-        debug!("Res:{resp:?}");
+        debug!(
+            success = resp.is_success(),
+            code = resp.raw_response.code,
+            msg = %resp.raw_response.msg,
+            "Received response"
+        );
 
         if !resp.is_success() && resp.raw_response.code == ERR_CODE_APP_TICKET_INVALID {
             apply_app_ticket(config).await?;

@@ -11,36 +11,55 @@ OpenLark 核心基础设施 crate，提供所有业务模块共享的底层能�
 
 ```
 src/
-├── api.rs                    # API 响应处理 trait
-├── api_endpoints.rs          # 端点常量定义
+├── api/                      # API 基础类型和 trait
+│   ├── mod.rs               # ApiRequest, ApiResponse 定义
+│   ├── prelude.rs           # API 模块预置导入
+│   ├── responses.rs         # Response<T>, RawResponse 定义
+│   └── traits.rs            # ApiResponseTrait 等 trait
 ├── auth/                     # 认证相关（令牌、签名）
-│   ├── token.rs             # 令牌管理
-│   └── sign.rs              # 请求签名
+│   ├── mod.rs               # 认证模块入口
+│   ├── app_ticket.rs        # App Ticket 管理
+│   ├── cache.rs             # 令牌缓存
+│   ├── refresh.rs           # 令牌刷新
+│   ├── token.rs             # AccessToken/RefreshToken
+│   ├── token_provider.rs    # 令牌提供者
+│   └── validator.rs         # 令牌验证
 ├── config.rs                 # 客户端配置
-├── constants.rs              # 全局常量（AppType、AccessTokenType 含 as_str()）
+├── constants.rs              # 全局常量（AppType、AccessTokenType 等）
 ├── error/                    # CoreError 错误系统
 │   ├── core.rs              # 核心错误类型（CoreError 枚举）
 │   ├── codes.rs             # 飞书错误码映射
 │   ├── context.rs           # 错误上下文
-│   ├── traits.rs            # ErrorType 枚举（替代已删除的 ErrorKind）
-│   ├── observability.rs     # 可观测性集成
+│   ├── traits.rs            # ErrorType 枚举
 │   ├── prelude.rs           # 错误系统预置导入
-│   └── reporter.rs          # 错误报告
+│   └── mod.rs               # 错误模块入口
 ├── http.rs                   # HTTP 客户端封装
-├── req_option.rs            # 请求选项（字段为 Option<String>）
-├── response_handler.rs      # 响应处理器（原 improved_response_handler.rs）
-├── trait_system.rs          # 核心 trait 定义
+├── req_option.rs            # 请求选项
+├── req_translator.rs        # 请求转换器
+├── response_handler.rs      # 响应处理器
+├── trait_system/            # 核心 trait 系统
+│   ├── mod.rs               # 模块入口
+│   ├── executable_builder.rs # 可执行构建器
+│   └── service.rs           # 服务 trait
 ├── validation/              # 参数验证
+│   ├── mod.rs               # 模块入口
 │   ├── core.rs              # 核心验证函数 + ValidateBuilder
-│   └── mod.rs               # 模块入口
+│   └── validatable.rs       # Validatable trait
 └── (内部模块)
-    ├── app_ticket_manager.rs
     ├── content_disposition.rs
-    ├── observability.rs      # pub(crate)
-    ├── performance.rs
+    ├── observability.rs      # pub(crate) - 可观测性
+    ├── performance/          # 性能监控
     ├── query_params.rs       # pub(crate)
-    ├── req_translator.rs
-    ├── request_builder/      # pub(crate)
+    ├── request_builder/      # pub(crate) - 请求构建
+    │   ├── auth_handler.rs
+    │   ├── header_builder.rs
+    │   ├── mod.rs
+    │   └── multipart_builder.rs
+    ├── testing/              # 测试工具
+    │   ├── mod.rs
+    │   ├── assertions.rs
+    │   ├── fixtures.rs
+    │   └── mock_context.rs
     └── utils.rs
 ```
 
