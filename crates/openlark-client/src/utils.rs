@@ -209,24 +209,6 @@ pub fn get_enabled_features() -> Vec<&'static str> {
     #[cfg(feature = "task")]
     features.push("task");
 
-    #[cfg(feature = "calendar")]
-    features.push("calendar");
-
-    #[cfg(feature = "admin")]
-    features.push("admin");
-
-    #[cfg(feature = "approval")]
-    features.push("approval");
-
-    #[cfg(feature = "helpdesk")]
-    features.push("helpdesk");
-
-    #[cfg(feature = "mail")]
-    features.push("mail");
-
-    #[cfg(feature = "application")]
-    features.push("application");
-
     features
 }
 
