@@ -2,7 +2,7 @@
 //!
 //! 与 thiserror-based CoreError 完美配合的高性能错误上下文系统
 
-use std::{collections::HashMap, sync::Arc};
+use std::collections::HashMap;
 
 /// 现代化错误上下文
 ///
@@ -170,7 +170,7 @@ impl ErrorContext {
             let duration = timestamp.duration_since(std::time::UNIX_EPOCH).unwrap_or_default();
             let secs = duration.as_secs();
             let datetime = chrono::DateTime::from_timestamp(secs as i64, 0)
-                .unwrap_or_else(|| chrono::Utc::now());
+                .unwrap_or_else(chrono::Utc::now);
             parts.push(format!(
                 "时间: {}",
                 datetime.format("%Y-%m-%d %H:%M:%S UTC")
