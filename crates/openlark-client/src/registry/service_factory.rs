@@ -2,7 +2,8 @@
 //!
 //! 负责创建和管理服务实例，支持延迟初始化和单例模式
 
-use async_trait::async_trait;
+use std::future::Future;
+use std::pin::Pin;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
@@ -57,15 +58,14 @@ pub enum FactoryError {
 pub type FactoryResult<T> = Result<T, FactoryError>;
 
 /// 服务工厂特征
-#[async_trait]
 pub trait ServiceFactory: Send + Sync {
     /// 创建服务实例
-    async fn create_service(
+    fn create_service(
         &self,
         metadata: &ServiceMetadata,
         config: &Config,
         dependencies: &HashMap<String, Arc<dyn std::any::Any + Send + Sync>>,
-    ) -> FactoryResult<Arc<dyn std::any::Any + Send + Sync>>;
+    ) -> Pin<Box<dyn Future<Output = FactoryResult<Arc<dyn std::any::Any + Send + Sync>>> + Send + '_>>;
 
     /// 验证服务配置
     fn validate_config(&self, metadata: &ServiceMetadata, config: &Config) -> FactoryResult<()>;
@@ -245,66 +245,68 @@ pub struct ServiceStats {
 #[derive(Debug, Clone, Copy)]
 pub struct DefaultServiceFactory;
 
-#[async_trait]
 impl ServiceFactory for DefaultServiceFactory {
-    async fn create_service(
+    fn create_service(
         &self,
         metadata: &ServiceMetadata,
         _config: &Config,
         _dependencies: &HashMap<String, Arc<dyn std::any::Any + Send + Sync>>,
-    ) -> FactoryResult<Arc<dyn std::any::Any + Send + Sync>> {
-        // 这里应该根据服务类型创建实际的服务实例
-        // 现在只是返回一个占位符
-        match metadata.name.as_str() {
-            "communication" => {
-                // 创建通讯服务实例
-                let service = PlaceholderService::new(&metadata.name);
-                Ok(Arc::new(service))
+    ) -> Pin<Box<dyn Future<Output = FactoryResult<Arc<dyn std::any::Any + Send + Sync>>> + Send + '_>> {
+        let metadata_name = metadata.name.clone();
+        Box::pin(async move {
+            // 这里应该根据服务类型创建实际的服务实例
+            // 现在只是返回一个占位符
+            match metadata_name.as_str() {
+                "communication" => {
+                    // 创建通讯服务实例
+                    let service = PlaceholderService::new(&metadata_name);
+                    Ok(Arc::new(service) as Arc<dyn std::any::Any + Send + Sync>)
+                }
+                "docs" => {
+                    // 创建文档服务实例
+                    let service = PlaceholderService::new(&metadata_name);
+                    Ok(Arc::new(service) as Arc<dyn std::any::Any + Send + Sync>)
+                }
+                "auth" => {
+                    // 创建认证服务实例
+                    let service = PlaceholderService::new(&metadata_name);
+                    Ok(Arc::new(service) as Arc<dyn std::any::Any + Send + Sync>)
+                }
+                "hr" => {
+                    // 创建人力资源服务实例
+                    let service = PlaceholderService::new(&metadata_name);
+                    Ok(Arc::new(service) as Arc<dyn std::any::Any + Send + Sync>)
+                }
+                "ai" => {
+                    // 创建AI服务实例
+                    let service = PlaceholderService::new(&metadata_name);
+                    Ok(Arc::new(service) as Arc<dyn std::any::Any + Send + Sync>)
+                }
+                "calendar" => {
+                    // 创建日历服务实例
+                    let service = PlaceholderService::new(&metadata_name);
+                    Ok(Arc::new(service) as Arc<dyn std::any::Any + Send + Sync>)
+                }
+                "admin" => {
+                    // 创建管理服务实例
+                    let service = PlaceholderService::new(&metadata_name);
+                    Ok(Arc::new(service) as Arc<dyn std::any::Any + Send + Sync>)
+                }
+                "approval" => {
+                    // 创建审批服务实例
+                    let service = PlaceholderService::new(&metadata_name);
+                    Ok(Arc::new(service) as Arc<dyn std::any::Any + Send + Sync>)
+                }
+                "helpdesk" => {
+                    // 创建帮助台服务实例
+                    let service = PlaceholderService::new(&metadata_name);
+                    Ok(Arc::new(service) as Arc<dyn std::any::Any + Send + Sync>)
+                }
+                _ => Err(FactoryError::UnsupportedService {
+                    name: metadata_name.clone(),
+                }),
             }
-            "docs" => {
-                // 创建文档服务实例
-                let service = PlaceholderService::new(&metadata.name);
-                Ok(Arc::new(service))
-            }
-            "auth" => {
-                // 创建认证服务实例
-                let service = PlaceholderService::new(&metadata.name);
-                Ok(Arc::new(service))
-            }
-            "hr" => {
-                // 创建人力资源服务实例
-                let service = PlaceholderService::new(&metadata.name);
-                Ok(Arc::new(service))
-            }
-            "ai" => {
-                // 创建AI服务实例
-                let service = PlaceholderService::new(&metadata.name);
-                Ok(Arc::new(service))
-            }
-            "calendar" => {
-                // 创建日历服务实例
-                let service = PlaceholderService::new(&metadata.name);
-                Ok(Arc::new(service))
-            }
-            "admin" => {
-                // 创建管理服务实例
-                let service = PlaceholderService::new(&metadata.name);
-                Ok(Arc::new(service))
-            }
-            "approval" => {
-                // 创建审批服务实例
-                let service = PlaceholderService::new(&metadata.name);
-                Ok(Arc::new(service))
-            }
-            "helpdesk" => {
-                // 创建帮助台服务实例
-                let service = PlaceholderService::new(&metadata.name);
-                Ok(Arc::new(service))
-            }
-            _ => Err(FactoryError::UnsupportedService {
-                name: metadata.name.clone(),
-            }),
-        }
+        })
     }
 
     fn validate_config(&self, metadata: &ServiceMetadata, config: &Config) -> FactoryResult<()> {

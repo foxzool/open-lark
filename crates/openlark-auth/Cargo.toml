@@ -18,7 +18,6 @@ serde_json = { workspace = true }
 
 # 异步运行时
 tokio = { workspace = true, features = ["full"] }
-async-trait = { workspace = true }
 
 # 时间处理
 chrono = { workspace = true, features = ["serde"] }

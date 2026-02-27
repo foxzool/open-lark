@@ -3,7 +3,6 @@
 //! 定义客户端的统一接口和行为
 
 use crate::{Config, Result};
-use async_trait::async_trait;
 use std::time::Duration;
 
 /// 🚀 OpenLark客户端核心特征
@@ -15,7 +14,6 @@ use std::time::Duration;
 /// - 线程安全：客户端可以跨线程安全使用
 /// - 配置访问：可以访问客户端配置
 /// - 错误处理：统一的错误处理机制
-#[async_trait]
 pub trait LarkClient: Send + Sync {
     /// 🔧 获取客户端配置
     fn config(&self) -> &Config;
@@ -62,7 +60,6 @@ pub trait LarkClient: Send + Sync {
 /// 🔐 可认证客户端特征
 ///
 /// 扩展LarkClient，添加认证相关功能
-#[async_trait]
 pub trait AuthenticatedClient: LarkClient {
     /// 🔐 获取访问令牌
     async fn get_access_token(&self) -> Result<String>;
@@ -80,7 +77,6 @@ pub trait AuthenticatedClient: LarkClient {
 /// 📡 请求发送客户端特征
 ///
 /// 扩展LarkClient，添加HTTP请求发送功能
-#[async_trait]
 pub trait RequestClient: LarkClient {
     /// 📡 发送HTTP请求（通用方法）
     async fn send_request<R, Resp>(&self, request: R) -> Result<Resp>
@@ -147,7 +143,6 @@ pub trait ClientBuilder: Sized {
 /// 📊 可监控客户端特征
 ///
 /// 扩展客户端，添加监控和统计功能
-#[async_trait]
 pub trait MonitorableClient: LarkClient {
     /// 📊 获取客户端统计信息
     async fn get_stats(&self) -> ClientStats;
@@ -236,7 +231,6 @@ impl ClientHealth {
 /// 🔧 可配置客户端特征
 ///
 /// 扩展客户端，添加动态配置能力
-#[async_trait]
 pub trait ConfigurableClient: LarkClient {
     /// 🔧 更新配置
     async fn update_config(&self, config: Config) -> Result<()>;
@@ -251,7 +245,6 @@ pub trait ConfigurableClient: LarkClient {
 /// 🔄 可重启客户端特征
 ///
 /// 扩展客户端，添加重启和重置功能
-#[async_trait]
 pub trait RestartableClient: LarkClient {
     /// 🔄 重启客户端
     async fn restart(&self) -> Result<()>;

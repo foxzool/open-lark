@@ -3,7 +3,6 @@
 //! `openlark-core` 通过 `TokenProvider` 抽象获取 token，而不关心具体获取/刷新/缓存策略。
 //! 这里提供一个带缓存的实现：缓存 token 并在过期前复用。
 
-use async_trait::async_trait;
 use openlark_core::{
     auth::{TokenProvider, TokenRequest},
     config::Config,
@@ -14,6 +13,7 @@ use openlark_core::{
 use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::future::Future;
+use std::pin::Pin;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 use tokio::sync::RwLock;
@@ -161,9 +161,9 @@ impl AuthTokenProvider {
     }
 }
 
-#[async_trait]
 impl TokenProvider for AuthTokenProvider {
-    async fn get_token(&self, request: TokenRequest) -> SDKResult<String> {
+    fn get_token(&self, request: TokenRequest) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
+        Box::pin(async move {
         match request.token_type {
             AccessTokenType::App => {
                 let cache_key = Self::cache_key(&AccessTokenType::App, &self.config.app_type());
@@ -241,6 +241,7 @@ impl TokenProvider for AuthTokenProvider {
                 "token_provider: AccessTokenType::None 不应触发 token 获取",
             )),
         }
+        })
     }
 }
 
