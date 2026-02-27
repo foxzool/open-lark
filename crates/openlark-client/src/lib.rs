@@ -209,11 +209,6 @@
 //#![deny(missing_docs)]  // 暂时禁用以完成基本编译
 // openlark-client 仍处于快速迭代阶段：为了保证工作区 `just lint`（`-D warnings`）可通过，
 // 这里对 WIP 代码放宽 lint，避免未完成的占位实现阻塞其它稳定 crate 的质量门禁。
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(missing_copy_implementations)]
-#![allow(missing_debug_implementations)]
 #![allow(async_fn_in_trait)]
 #![allow(mismatched_lifetime_syntaxes)]
 
@@ -323,17 +318,8 @@ pub use openlark_core::error::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, 
 // 类型别名和便利定义
 // ============================================================================
 
-/// 📦 客户端结果类型别名
-pub type ClientResult<T> = Result<T>;
-
 /// 🚨 SDK 结果类型别名（与 Core 系统兼容）
 pub type SDKResult<T> = openlark_core::SDKResult<T>;
-
-/// 📋 服务创建结果类型
-pub type ServiceResult<T> = Result<T>;
-
-/// 🔧 配置验证结果类型
-pub type ConfigResult<T> = Result<T>;
 
 /// 🚀 预导出模块 - 包含最常用的类型和特征
 ///
@@ -430,28 +416,14 @@ pub mod prelude {
     // 便利类型别名
     // ============================================================================
 
-    /// 📦 客户端结果类型别名
-    pub type ClientResult<T> = Result<T>;
-
     /// 🚨 SDK 结果类型别名（与 Core 系统兼容）
     pub type SDKResult<T> = openlark_core::SDKResult<T>;
-
-    /// 📋 服务创建结果类型
-    pub type ServiceResult<T> = Result<T>;
-
-    /// 🔧 配置验证结果类型
-    pub type ConfigResult<T> = Result<T>;
 
     // ============================================================================
     // 常用宏和便利导入
     // ============================================================================
 
-    // 重新导出常用的 core 类型，减少嵌套导入
     pub use openlark_core::{config::Config as CoreConfig, SDKResult as CoreResult};
-
-    // 常用的标准库类型
-    pub use std::collections::HashMap;
-    pub use std::time::Duration;
 }
 
 /// 🏷️ 库信息
