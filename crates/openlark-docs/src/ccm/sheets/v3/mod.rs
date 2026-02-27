@@ -85,7 +85,7 @@ mod tests {
         let config = Config::default();
         let service = SheetsService::new(config);
         // 验证服务实例创建成功
-        assert!(!service.config.base_url.is_empty());
+        assert!(!service.config.base_url().is_empty());
     }
 
     #[test]
@@ -102,6 +102,6 @@ mod tests {
     #[test]
     fn test_sheets_service_default() {
         let service = SheetsService::default();
-        assert!(!service.config.base_url.is_empty());
+        assert!(!service.config.base_url().is_empty());
     }
 }
