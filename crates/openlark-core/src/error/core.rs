@@ -713,6 +713,160 @@ impl CoreError {
         }
     }
 
+    pub fn map_context(self, f: impl FnOnce(&mut ErrorContext)) -> Self {
+        match self {
+            Self::Network(mut net) => {
+                f(net.ctx.as_mut());
+                Self::Network(net)
+            }
+            Self::Authentication {
+                message,
+                code,
+                mut ctx,
+            } => {
+                f(ctx.as_mut());
+                Self::Authentication { message, code, ctx }
+            }
+            Self::Api(mut api) => {
+                f(api.ctx.as_mut());
+                Self::Api(api)
+            }
+            Self::Validation {
+                field,
+                message,
+                code,
+                mut ctx,
+            } => {
+                f(ctx.as_mut());
+                Self::Validation {
+                    field,
+                    message,
+                    code,
+                    ctx,
+                }
+            }
+            Self::Configuration {
+                message,
+                code,
+                mut ctx,
+            } => {
+                f(ctx.as_mut());
+                Self::Configuration { message, code, ctx }
+            }
+            Self::Serialization {
+                message,
+                source,
+                code,
+                mut ctx,
+            } => {
+                f(ctx.as_mut());
+                Self::Serialization {
+                    message,
+                    source,
+                    code,
+                    ctx,
+                }
+            }
+            Self::Business {
+                code,
+                message,
+                mut ctx,
+            } => {
+                f(ctx.as_mut());
+                Self::Business { code, message, ctx }
+            }
+            Self::Timeout {
+                duration,
+                operation,
+                mut ctx,
+            } => {
+                f(ctx.as_mut());
+                Self::Timeout {
+                    duration,
+                    operation,
+                    ctx,
+                }
+            }
+            Self::RateLimit {
+                limit,
+                window,
+                reset_after,
+                code,
+                mut ctx,
+            } => {
+                f(ctx.as_mut());
+                Self::RateLimit {
+                    limit,
+                    window,
+                    reset_after,
+                    code,
+                    ctx,
+                }
+            }
+            Self::ServiceUnavailable {
+                service,
+                retry_after,
+                code,
+                mut ctx,
+            } => {
+                f(ctx.as_mut());
+                Self::ServiceUnavailable {
+                    service,
+                    retry_after,
+                    code,
+                    ctx,
+                }
+            }
+            Self::Internal {
+                code,
+                message,
+                source,
+                mut ctx,
+            } => {
+                f(ctx.as_mut());
+                Self::Internal {
+                    code,
+                    message,
+                    source,
+                    ctx,
+                }
+            }
+        }
+    }
+
+    pub fn with_context_kv(self, key: impl Into<String>, value: impl Into<String>) -> Self {
+        let key = key.into();
+        let value = value.into();
+        self.map_context(|ctx| {
+            ctx.add_context(key, value);
+        })
+    }
+
+    pub fn with_operation(
+        self,
+        operation: impl Into<String>,
+        component: impl Into<String>,
+    ) -> Self {
+        let operation = operation.into();
+        let component = component.into();
+
+        let mapped = self.map_context(|ctx| {
+            ctx.set_operation(operation.clone())
+                .set_component(component.clone())
+                .add_context("operation", operation.clone())
+                .add_context("component", component.clone());
+        });
+
+        match mapped {
+            Self::Timeout { duration, ctx, .. } => Self::Timeout {
+                duration,
+                operation: Some(operation),
+                ctx,
+            },
+            other => other,
+        }
+    }
+
     /// 观测记录（可序列化）——供日志/指标/告警统一使用
     pub fn record(&self) -> ErrorRecord {
         ErrorRecord::from(self)
@@ -1140,5 +1294,59 @@ mod tests {
         // 无法直接构造 reqwest::Error（构造函数为私有），跳过具体实例化，只验证 From trait 存在
         fn assert_from_reqwest<E: Into<CoreError>>() {}
         assert_from_reqwest::<reqwest::Error>();
+    }
+
+    #[test]
+    fn map_context_covers_all_variants() {
+        let errors = vec![
+            network_error("n"),
+            authentication_error("a"),
+            api_error(500, "/api", "api", None),
+            validation_error("field", "invalid"),
+            configuration_error("cfg"),
+            serialization_error("serde", None::<serde_json::Error>),
+            business_error("biz"),
+            timeout_error(Duration::from_secs(1), None),
+            rate_limit_error(100, Duration::from_secs(60), Some(Duration::from_secs(10))),
+            service_unavailable_error("svc", Some(Duration::from_secs(30))),
+            CoreError::Internal {
+                code: ErrorCode::InternalError,
+                message: "internal".to_string(),
+                source: None,
+                ctx: Box::new(ErrorContext::new()),
+            },
+        ];
+
+        for err in errors {
+            let updated = err.map_context(|ctx| {
+                ctx.add_context("k", "v");
+            });
+            assert_eq!(updated.context().get_context("k"), Some("v"));
+        }
+    }
+
+    #[test]
+    fn with_context_kv_adds_context() {
+        let err = validation_error("field", "invalid").with_context_kv("user_id", "u-1");
+        assert_eq!(err.context().get_context("user_id"), Some("u-1"));
+    }
+
+    #[test]
+    fn with_operation_updates_timeout_field_and_context() {
+        let err = timeout_error(Duration::from_secs(30), Some("old_op".to_string()))
+            .with_operation("new_op", "client");
+
+        match err {
+            CoreError::Timeout {
+                operation, ref ctx, ..
+            } => {
+                assert_eq!(operation.as_deref(), Some("new_op"));
+                assert_eq!(ctx.operation(), Some("new_op"));
+                assert_eq!(ctx.component(), Some("client"));
+                assert_eq!(ctx.get_context("operation"), Some("new_op"));
+                assert_eq!(ctx.get_context("component"), Some("client"));
+            }
+            other => panic!("expected timeout error, got {:?}", other.error_type()),
+        }
     }
 }

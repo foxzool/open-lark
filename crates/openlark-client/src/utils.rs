@@ -206,9 +206,6 @@ pub fn get_enabled_features() -> Vec<&'static str> {
     #[cfg(feature = "ai")]
     features.push("ai");
 
-    #[cfg(feature = "task")]
-    features.push("task");
-
     features
 }
 
@@ -236,15 +233,10 @@ pub fn validate_feature_dependencies() -> Result<Vec<String>> {
         issues.push("AI服务 (ai) 需要启用认证服务 (auth)".to_string());
     }
 
-    if enabled_features.contains(&"task") && !enabled_features.contains(&"auth") {
-        issues.push("任务管理服务 (task) 需要启用认证服务 (auth)".to_string());
-    }
-
     if enabled_features.contains(&"calendar") && !enabled_features.contains(&"auth") {
         issues.push("日历服务 (calendar) 需要启用认证服务 (auth)".to_string());
     }
 
-    // 检查高级功能依赖
     if enabled_features.contains(&"admin") && !enabled_features.contains(&"hr") {
         issues.push("管理服务 (admin) 建议启用人力资源服务 (hr) 以获得完整功能".to_string());
     }

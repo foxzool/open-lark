@@ -1,22 +1,12 @@
 //! 服务注册和发现机制
 //!
-//! 提供动态服务管理、功能标志控制和依赖解析功能
+//! 提供轻量级的服务元信息注册与查询功能
 
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::sync::{Arc, RwLock};
 use thiserror::Error;
 
 pub(crate) mod bootstrap;
-pub mod dependency_resolver;
-pub mod feature_flags;
-pub mod service_factory;
-
-pub use dependency_resolver::*;
-pub use feature_flags::{
-    FeatureFlagManager, FlagMetadata, FlagValue, SegmentCondition, UserSegment,
-};
-pub use service_factory::*;
 
 /// 服务注册和发现错误
 #[derive(Error, Debug, Clone)]
@@ -65,18 +55,6 @@ pub enum RegistryError {
         /// 无效的功能标志名称
         flag: String,
     },
-
-    /// 依赖解析错误
-    ///
-    /// 由依赖解析过程中产生的错误
-    #[error("依赖解析错误: {0}")]
-    DependencyError(#[from] dependency_resolver::DependencyError),
-
-    /// 功能标志错误
-    ///
-    /// 由功能标志管理过程中产生的错误
-    #[error("功能标志错误: {0}")]
-    FeatureFlagError(#[from] feature_flags::FeatureFlagError),
 }
 
 /// 服务注册表结果类型
@@ -165,13 +143,7 @@ pub trait ServiceRegistry: Send + Sync {
 pub struct DefaultServiceRegistry {
     /// 服务存储
     services: HashMap<String, ServiceEntry>,
-    /// 功能标志管理器
-    feature_flags: Arc<RwLock<FeatureFlagManager>>,
-    /// 依赖解析器
-    dependency_resolver: Arc<DependencyResolver>,
 }
-
-impl DefaultServiceRegistry {}
 
 impl Default for DefaultServiceRegistry {
     fn default() -> Self {
@@ -184,65 +156,7 @@ impl DefaultServiceRegistry {
     pub fn new() -> Self {
         Self {
             services: HashMap::new(),
-            feature_flags: Arc::new(RwLock::new(FeatureFlagManager::new())),
-            dependency_resolver: Arc::new(DependencyResolver::new()),
         }
-    }
-
-    /// 从配置创建服务注册表
-    pub fn from_config(config: RegistryConfig) -> Self {
-        let registry = Self::new();
-
-        // 设置功能标志
-        {
-            let flags = registry
-                .feature_flags
-                .write()
-                .unwrap_or_else(|e| e.into_inner());
-            for (flag, enabled) in config.feature_flags {
-                let _ = flags.set_flag(&flag, FlagValue::Bool(enabled));
-            }
-        }
-
-        registry
-    }
-
-    /// 初始化所有服务
-    pub fn initialize_services(&mut self) -> RegistryResult<()> {
-        // 按依赖顺序排序服务
-        let sorted_services = self
-            .dependency_resolver
-            .resolve_dependencies(self.get_dependency_graph())?;
-
-        // 按顺序初始化服务
-        for service_name in sorted_services {
-            if let Some(_entry) = self.services.get_mut(&service_name) {
-                self.update_service_status(&service_name, ServiceStatus::Initializing)?;
-
-                // 这里应该调用服务的初始化逻辑
-                // openlark-client 作为 SDK 聚合层，不在此处做阻塞式“模拟初始化”。
-
-                self.update_service_status(&service_name, ServiceStatus::Ready)?;
-            }
-        }
-
-        Ok(())
-    }
-
-    /// 启动所有就绪的服务
-    pub fn start_services(&mut self) -> RegistryResult<()> {
-        let ready_services: Vec<String> = self
-            .services
-            .iter()
-            .filter(|(_, entry)| entry.metadata.status == ServiceStatus::Ready)
-            .map(|(name, _)| name.clone())
-            .collect();
-
-        for service_name in ready_services {
-            self.update_service_status(&service_name, ServiceStatus::Running)?;
-        }
-
-        Ok(())
     }
 }
 
@@ -330,46 +244,6 @@ impl ServiceRegistry for DefaultServiceRegistry {
             .iter()
             .map(|(name, entry)| (name.clone(), entry.metadata.dependencies.clone()))
             .collect()
-    }
-}
-
-/// 注册表配置
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RegistryConfig {
-    /// 功能标志配置
-    pub feature_flags: HashMap<String, bool>,
-    /// 服务发现配置
-    pub service_discovery: ServiceDiscoveryConfig,
-}
-
-/// 服务发现配置
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ServiceDiscoveryConfig {
-    /// 自动发现服务
-    pub auto_discover: bool,
-    /// 扫描路径
-    pub scan_paths: Vec<String>,
-    /// 服务过滤器
-    /// 包含模式列表
-    pub include_patterns: Vec<String>,
-    /// 排除模式列表
-    ///
-    /// 用于过滤不需要的服务
-    pub exclude_patterns: Vec<String>,
-}
-
-impl Default for RegistryConfig {
-    fn default() -> Self {
-        Self {
-            feature_flags: HashMap::new(),
-            service_discovery: ServiceDiscoveryConfig {
-                auto_discover: true,
-                // openlark-client 采用「meta 单入口」聚合各业务 crate，不在本 crate 内做服务实现扫描。
-                scan_paths: vec![],
-                include_patterns: vec!["*".to_string()],
-                exclude_patterns: vec![],
-            },
-        }
     }
 }
 

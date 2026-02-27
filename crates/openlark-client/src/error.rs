@@ -271,17 +271,6 @@ impl From<RegistryError> for Error {
     }
 }
 
-impl From<crate::registry::feature_flags::FeatureFlagError> for Error {
-    fn from(err: crate::registry::feature_flags::FeatureFlagError) -> Self {
-        registry_error(RegistryError::FeatureFlagError(err))
-    }
-}
-
-impl From<crate::registry::dependency_resolver::DependencyError> for Error {
-    fn from(err: crate::registry::dependency_resolver::DependencyError) -> Self {
-        registry_error(RegistryError::DependencyError(err))
-    }
-}
 
 // ============================================================================
 // 便利函数
@@ -310,130 +299,9 @@ pub fn with_context<T>(
     context_key: impl Into<String>,
     context_value: impl Into<String>,
 ) -> Result<T> {
-    result.map_err(|err| {
-        let key = context_key.into();
-        let val = context_value.into();
-
-        match err {
-            CoreError::Network(mut net) => {
-                net.ctx.add_context(key, val);
-                CoreError::Network(net)
-            }
-            CoreError::Authentication {
-                message,
-                code,
-                mut ctx,
-            } => {
-                ctx.add_context(key, val);
-                CoreError::Authentication { message, code, ctx }
-            }
-            CoreError::Api(mut api) => {
-                api.ctx.add_context(key, val);
-                CoreError::Api(api)
-            }
-            CoreError::Validation {
-                field,
-                message,
-                code,
-                mut ctx,
-            } => {
-                ctx.add_context(key, val);
-                CoreError::Validation {
-                    field,
-                    message,
-                    code,
-                    ctx,
-                }
-            }
-            CoreError::Configuration {
-                message,
-                code,
-                mut ctx,
-            } => {
-                ctx.add_context(key, val);
-                CoreError::Configuration { message, code, ctx }
-            }
-            CoreError::Serialization {
-                message,
-                source,
-                code,
-                mut ctx,
-            } => {
-                ctx.add_context(key, val);
-                CoreError::Serialization {
-                    message,
-                    source,
-                    code,
-                    ctx,
-                }
-            }
-            CoreError::Business {
-                code,
-                message,
-                mut ctx,
-            } => {
-                ctx.add_context(key, val);
-                CoreError::Business { code, message, ctx }
-            }
-            CoreError::Timeout {
-                duration,
-                operation,
-                mut ctx,
-            } => {
-                ctx.add_context(key, val);
-                CoreError::Timeout {
-                    duration,
-                    operation,
-                    ctx,
-                }
-            }
-            CoreError::RateLimit {
-                limit,
-                window,
-                reset_after,
-                code,
-                mut ctx,
-            } => {
-                ctx.add_context(key, val);
-                CoreError::RateLimit {
-                    limit,
-                    window,
-                    reset_after,
-                    code,
-                    ctx,
-                }
-            }
-            CoreError::ServiceUnavailable {
-                service,
-                retry_after,
-                code,
-                mut ctx,
-            } => {
-                ctx.add_context(key, val);
-                CoreError::ServiceUnavailable {
-                    service,
-                    retry_after,
-                    code,
-                    ctx,
-                }
-            }
-            CoreError::Internal {
-                code,
-                message,
-                source,
-                mut ctx,
-            } => {
-                ctx.add_context(key, val);
-                CoreError::Internal {
-                    code,
-                    message,
-                    source,
-                    ctx,
-                }
-            }
-            _ => err,
-        }
-    })
+    let key = context_key.into();
+    let value = context_value.into();
+    result.map_err(|err| err.with_context_kv(key, value))
 }
 
 /// 🔧 创建带有操作上下文的错误的便利函数
@@ -442,159 +310,9 @@ pub fn with_operation_context<T>(
     operation: impl Into<String>,
     component: impl Into<String>,
 ) -> Result<T> {
-    result.map_err(|err| {
-        let op = operation.into();
-        let comp = component.into();
-
-        // 直接解构 CoreError，修改上下文后重新构建，保留所有其他信息
-        match err {
-            CoreError::Network(mut net) => {
-                net.ctx
-                    .set_operation(op.clone())
-                    .set_component(comp.clone());
-                net.ctx
-                    .add_context("operation", op)
-                    .add_context("component", comp);
-                CoreError::Network(net)
-            }
-            CoreError::Authentication {
-                message,
-                code,
-                mut ctx,
-            } => {
-                ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op)
-                    .add_context("component", comp);
-                CoreError::Authentication { message, code, ctx }
-            }
-            CoreError::Api(mut api) => {
-                api.ctx
-                    .set_operation(op.clone())
-                    .set_component(comp.clone());
-                api.ctx
-                    .add_context("operation", op)
-                    .add_context("component", comp);
-                CoreError::Api(api)
-            }
-            CoreError::Validation {
-                field,
-                message,
-                code,
-                mut ctx,
-            } => {
-                ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op)
-                    .add_context("component", comp);
-                CoreError::Validation {
-                    field,
-                    message,
-                    code,
-                    ctx,
-                }
-            }
-            CoreError::Configuration {
-                message,
-                code,
-                mut ctx,
-            } => {
-                ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op)
-                    .add_context("component", comp);
-                CoreError::Configuration { message, code, ctx }
-            }
-            CoreError::Serialization {
-                message,
-                source,
-                code,
-                mut ctx,
-            } => {
-                ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op)
-                    .add_context("component", comp);
-                CoreError::Serialization {
-                    message,
-                    source,
-                    code,
-                    ctx,
-                }
-            }
-            CoreError::Business {
-                code,
-                message,
-                mut ctx,
-            } => {
-                ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op)
-                    .add_context("component", comp);
-                CoreError::Business { code, message, ctx }
-            }
-            CoreError::Timeout {
-                duration,
-                operation: _, // 覆盖操作名
-                mut ctx,
-            } => {
-                ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op.clone())
-                    .add_context("component", comp);
-                CoreError::Timeout {
-                    duration,
-                    operation: Some(op), // 确保更新 Enum 字段
-                    ctx,
-                }
-            }
-            CoreError::RateLimit {
-                limit,
-                window,
-                reset_after,
-                code,
-                mut ctx,
-            } => {
-                ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op)
-                    .add_context("component", comp);
-                CoreError::RateLimit {
-                    limit,
-                    window,
-                    reset_after,
-                    code,
-                    ctx,
-                }
-            }
-            CoreError::ServiceUnavailable {
-                service,
-                retry_after,
-                code,
-                mut ctx,
-            } => {
-                ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op)
-                    .add_context("component", comp);
-                CoreError::ServiceUnavailable {
-                    service,
-                    retry_after,
-                    code,
-                    ctx,
-                }
-            }
-            CoreError::Internal {
-                code,
-                message,
-                source,
-                mut ctx,
-            } => {
-                ctx.set_operation(op.clone()).set_component(comp.clone());
-                ctx.add_context("operation", op)
-                    .add_context("component", comp);
-                CoreError::Internal {
-                    code,
-                    message,
-                    source,
-                    ctx,
-                }
-            }
-            _ => err,
-        }
-    })
+    let operation = operation.into();
+    let component = component.into();
+    result.map_err(|err| err.with_operation(operation, component))
 }
 
 // ============================================================================
@@ -958,6 +676,30 @@ mod tests {
             error.context().get_context("component"),
             Some("TestComponent")
         );
+    }
+
+    #[test]
+    fn test_with_operation_context_updates_timeout_operation_field() {
+        use std::time::Duration;
+
+        let result: Result<i32> = Err(openlark_core::error::timeout_error(
+            Duration::from_secs(3),
+            Some("old_operation".to_string()),
+        ));
+
+        let contextual_result = with_operation_context(result, "new_operation", "ClientLayer");
+        assert!(contextual_result.is_err());
+
+        match contextual_result.unwrap_err() {
+            CoreError::Timeout {
+                operation, ref ctx, ..
+            } => {
+                assert_eq!(operation.as_deref(), Some("new_operation"));
+                assert_eq!(ctx.operation(), Some("new_operation"));
+                assert_eq!(ctx.component(), Some("ClientLayer"));
+            }
+            other => panic!("expected timeout error, got {:?}", other.error_type()),
+        }
     }
 
     #[test]
