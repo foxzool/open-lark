@@ -249,7 +249,7 @@ impl<R> ApiRequest<R> {
 
     pub fn api_path(&self) -> &str {
         // 从URL中提取路径部分
-        if let Some(start) = self.url.find("/open-apis/") {
+        if let Some(start) = self.url.find(crate::constants::API_PATH_PREFIX) {
             &self.url[start..]
         } else {
             &self.url
