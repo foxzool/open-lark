@@ -29,7 +29,7 @@ reqwest = { workspace = true, optional = true }
 log = { workspace = true, optional = true }
 
 # P0 Phase 1 业务模块依赖
-openlark-auth = { workspace = true }  # 认证服务设为默认依赖
+openlark-auth = { workspace = true, optional = true }
 openlark-communication = { workspace = true, optional = true }
 openlark-docs = { workspace = true, optional = true }
 openlark-cardkit = { workspace = true, optional = true }
@@ -47,8 +47,7 @@ default = ["auth", "communication"]  # 单入口下建议默认启用认证链�
 # Core client feature
 client = []
 
-# Auth service (always enabled, but kept for feature flag compatibility)
-auth = []
+auth = ["openlark-auth"]
 
 # WebSocket support
 websocket = ["tokio-tungstenite", "futures-util", "lark-websocket-protobuf", "url", "prost", "reqwest", "log"]
@@ -66,18 +65,7 @@ ai = ["openlark-ai"]                     # AI服务
 # Additional business services
 bitable = ["openlark-docs"]            # 多维表格
 cardkit = ["openlark-cardkit"]         # CardKit 卡片能力（按 api_list_export.csv 生成的 meta 调用链）
-calendar = []                          # 日历会议
-admin = []                             # 管理功能
-approval = []                          # 审批流程
-helpdesk = []                          # 帮助台
-mail = []                              # 邮件服务
-application = []                       # 应用服务
 meeting = ["openlark-meeting"]         # 会议服务
-
-# Legacy features for backward compatibility (暂时保留，用于解决代码中的cfg引用)
-collab = []                             # 协作功能（集成到其他模块中）
-people = []                             # 人员管理（集成到其他模块中）
-hire = []                               # 招聘管理（集成到其他模块中）
 
 # P0 3-layer architecture features
 core-layer = [
