@@ -73,7 +73,10 @@ impl AuthHandler {
 
     /// 应用用户级认证
     fn apply_user_auth(req_builder: RequestBuilder, option: &RequestOption) -> RequestBuilder {
-        Self::add_auth_header(req_builder, option.user_access_token.as_deref().unwrap_or(""))
+        Self::add_auth_header(
+            req_builder,
+            option.user_access_token.as_deref().unwrap_or(""),
+        )
     }
 
     /// 添加 Authorization 头
@@ -89,8 +92,8 @@ mod tests {
     use crate::error::traits::ErrorTrait;
     use crate::error::ErrorType;
     use crate::{auth::TokenProvider, SDKResult};
-    use std::{future::Future, pin::Pin};
     use reqwest::Client;
+    use std::{future::Future, pin::Pin};
 
     fn create_test_config() -> Config {
         Config::builder()

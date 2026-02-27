@@ -36,7 +36,9 @@ mod validation_tests {
 
     #[test]
     fn test_validation_required_non_empty_after_trim() {
-        assert!(!openlark_core::Validatable::is_empty_trimmed(&"  app_123  "));
+        assert!(!openlark_core::Validatable::is_empty_trimmed(
+            &"  app_123  "
+        ));
     }
 
     #[test]
@@ -46,7 +48,9 @@ mod validation_tests {
 
     #[test]
     fn test_validation_required_unicode_valid() {
-        assert!(!openlark_core::Validatable::is_empty_trimmed(&"应用ID-测试"));
+        assert!(!openlark_core::Validatable::is_empty_trimmed(
+            &"应用ID-测试"
+        ));
     }
 
     #[test]

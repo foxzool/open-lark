@@ -324,7 +324,6 @@ impl<R> ApiRequest<R> {
         }
         self
     }
-
 }
 
 impl<R> Default for ApiRequest<R> {

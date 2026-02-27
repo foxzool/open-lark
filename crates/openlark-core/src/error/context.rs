@@ -167,10 +167,12 @@ impl ErrorContext {
 
         if let Some(timestamp) = self.timestamp {
             // 手动格式化 SystemTime
-            let duration = timestamp.duration_since(std::time::UNIX_EPOCH).unwrap_or_default();
+            let duration = timestamp
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap_or_default();
             let secs = duration.as_secs();
-            let datetime = chrono::DateTime::from_timestamp(secs as i64, 0)
-                .unwrap_or_else(chrono::Utc::now);
+            let datetime =
+                chrono::DateTime::from_timestamp(secs as i64, 0).unwrap_or_else(chrono::Utc::now);
             parts.push(format!(
                 "时间: {}",
                 datetime.format("%Y-%m-%d %H:%M:%S UTC")

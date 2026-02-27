@@ -22,9 +22,9 @@ pub mod validation;
 // crate 内部实现细节：不对外暴露（避免把 core 变成"全家桶"）
 // 已移动到 auth::app_ticket
 mod content_disposition;
-mod response_handler;
 mod performance;
 mod req_translator;
+mod response_handler;
 mod utils;
 
 // Re-export commonly used types from crate root
@@ -77,5 +77,4 @@ pub mod prelude {
     pub use crate::req_option::*;
     pub use crate::validate_required;
     pub use crate::validate_required_list;
-
 }

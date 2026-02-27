@@ -1,7 +1,6 @@
 //! API特征定义 - 独立版本
 #![allow(async_fn_in_trait)]
 
-
 pub use super::responses::RawResponse;
 use super::ApiRequest;
 use crate::error::SDKResult;

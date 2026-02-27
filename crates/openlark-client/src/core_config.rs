@@ -39,7 +39,7 @@ pub(crate) fn build_core_config_with_default_token_provider(
     #[cfg(feature = "auth")]
     {
         let provider = AuthTokenProvider::new(base_core_config.clone());
-        return base_core_config.with_token_provider(provider);
+        base_core_config.with_token_provider(provider)
     }
 
     #[cfg(not(feature = "auth"))]

@@ -3,7 +3,7 @@
 /// 提供文档服务开发中最常用的类型和trait的便捷导入。
 // 重新导出核心模块（避免歧义重导出）
 pub use openlark_core::prelude::{
-    AccessTokenType, ApiResponseTrait, BaseResponse, HttpMethod, CoreError, RequestOption,
+    AccessTokenType, ApiResponseTrait, BaseResponse, CoreError, HttpMethod, RequestOption,
     ResponseFormat, SDKResult,
 };
 

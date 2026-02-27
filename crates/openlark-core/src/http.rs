@@ -11,9 +11,9 @@ use crate::{
     config::Config,
     constants::*,
     error::CoreError,
-    response_handler::ImprovedResponseHandler,
     req_option::RequestOption,
     req_translator::ReqTranslator,
+    response_handler::ImprovedResponseHandler,
     SDKResult,
 };
 
@@ -238,8 +238,7 @@ fn determine_token_type(
         accessible_token_type_set.insert(*t);
     }
 
-    if option.tenant_key.is_some() && accessible_token_type_set.contains(&AccessTokenType::Tenant)
-    {
+    if option.tenant_key.is_some() && accessible_token_type_set.contains(&AccessTokenType::Tenant) {
         access_token_type = AccessTokenType::Tenant;
     }
 

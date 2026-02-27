@@ -162,9 +162,12 @@ impl AuthTokenProvider {
 }
 
 impl TokenProvider for AuthTokenProvider {
-    fn get_token(&self, request: TokenRequest) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
+    fn get_token(
+        &self,
+        request: TokenRequest,
+    ) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
         Box::pin(async move {
-        match request.token_type {
+            match request.token_type {
             AccessTokenType::App => {
                 let cache_key = Self::cache_key(&AccessTokenType::App, &self.config.app_type());
                 self.get_or_fetch(cache_key, || async {
