@@ -1,5 +1,4 @@
-//! 🔧 实用工具函数
-
+use crate::config::ConfigSummary;
 use crate::{configuration_error, validation_error, with_context, Config, Result};
 use openlark_core::error::ErrorTrait;
 use std::env;
@@ -132,55 +131,9 @@ pub fn create_config_from_env() -> Result<Config> {
 ///
 /// 返回当前配置的摘要信息，用于调试和监控
 pub fn get_config_summary(config: &Config) -> ConfigSummary {
-    ConfigSummary {
-        app_id: config.app_id.clone(),
-        app_secret: if config.app_secret.is_empty() {
-            "未设置".to_string()
-        } else {
-            format!(
-                "***{}***",
-                &config.app_secret[config.app_secret.len().saturating_sub(4)..]
-            )
-        },
-        base_url: config.base_url.clone(),
-        has_timeout: config.timeout > std::time::Duration::ZERO,
-        feature_count: get_enabled_features().len(),
-    }
+    config.summary()
 }
 
-/// 📋 配置摘要信息
-///
-/// 用于调试和监控的配置信息摘要
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct ConfigSummary {
-    /// 🆔 应用ID
-    pub app_id: String,
-    /// 🔒 应用密钥（已脱敏）
-    pub app_secret: String,
-    /// 🌐 基础URL
-    pub base_url: String,
-    /// ⏰ 是否设置了超时
-    pub has_timeout: bool,
-    /// 🔢 启用的功能数量
-    pub feature_count: usize,
-}
-
-impl ConfigSummary {
-    /// 📋 获取友好的配置描述
-    pub fn friendly_description(&self) -> String {
-        format!(
-            "应用ID: {}, 基础URL: {}, 启用功能数: {}, 超时设置: {}",
-            self.app_id,
-            self.base_url,
-            self.feature_count,
-            if self.has_timeout {
-                "已设置"
-            } else {
-                "使用默认值"
-            }
-        )
-    }
-}
 
 /// 🏷️ 获取启用的功能列表
 ///

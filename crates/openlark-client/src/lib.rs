@@ -639,41 +639,48 @@ mod tests {
 
         let summary = utils::get_config_summary(&config);
         assert_eq!(summary.app_id, "test_app_id");
-        assert!(!summary.app_secret.is_empty());
-        assert!(summary.app_secret.contains("***"));
+        assert!(summary.app_secret_set);
         assert_eq!(summary.base_url, "https://open.feishu.cn");
-        assert!(summary.has_timeout);
-        assert!(summary.feature_count > 0);
+        assert!(summary.timeout > std::time::Duration::ZERO);
     }
 
     #[test]
     fn test_config_summary_friendly_description() {
-        let summary = utils::ConfigSummary {
+        let summary = config::ConfigSummary {
             app_id: "test_app".to_string(),
-            app_secret: "***secret***".to_string(),
+            app_secret_set: true,
+            app_type: openlark_core::constants::AppType::SelfBuild,
+            enable_token_cache: true,
             base_url: "https://open.feishu.cn".to_string(),
-            has_timeout: true,
-            feature_count: 5,
+            timeout: std::time::Duration::from_secs(30),
+            retry_count: 3,
+            enable_log: false,
+            header_count: 0,
         };
 
         let description = summary.friendly_description();
         assert!(description.contains("test_app"));
         assert!(description.contains("open.feishu.cn"));
-        assert!(description.contains("已设置"));
+        assert!(description.contains("30s"));
     }
 
     #[test]
     fn test_config_summary_friendly_description_no_timeout() {
-        let summary = utils::ConfigSummary {
+        let summary = config::ConfigSummary {
             app_id: "test_app".to_string(),
-            app_secret: "***secret***".to_string(),
+            app_secret_set: true,
+            app_type: openlark_core::constants::AppType::SelfBuild,
+            enable_token_cache: true,
             base_url: "https://open.feishu.cn".to_string(),
-            has_timeout: false,
-            feature_count: 5,
+            timeout: std::time::Duration::ZERO,
+            retry_count: 3,
+            enable_log: false,
+            header_count: 0,
         };
 
         let description = summary.friendly_description();
-        assert!(description.contains("使用默认值"));
+        assert!(description.contains("test_app"));
+        assert!(description.contains("0ns"));
     }
 
     #[test]
