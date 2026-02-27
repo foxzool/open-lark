@@ -187,7 +187,7 @@ mod tests {
 
         assert!(context.timestamp().is_some());
 
-        let _ = context.backtrace();
+        // backtrace 检查已移除
     }
 
     #[test]

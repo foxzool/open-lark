@@ -761,7 +761,6 @@ pub struct ErrorRecord {
     pub request_id: Option<String>,
     pub operation: Option<String>,
     pub component: Option<String>,
-    pub backtrace: Option<String>,
 }
 
 impl From<&CoreError> for ErrorRecord {
@@ -777,7 +776,6 @@ impl From<&CoreError> for ErrorRecord {
             request_id: ctx.request_id().map(|s| s.to_string()),
             operation: ctx.operation().map(|s| s.to_string()),
             component: ctx.component().map(|s| s.to_string()),
-            backtrace: ctx.backtrace().map(|bt| format!("{bt:?}")),
         }
     }
 }

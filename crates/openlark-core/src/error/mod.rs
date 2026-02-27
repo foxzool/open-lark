@@ -641,13 +641,6 @@ mod tests {
         assert_eq!(all.get("k2"), Some(&"v2".to_string()));
     }
 
-    /// 测试 ErrorContext backtrace
-    #[test]
-    fn test_error_context_backtrace() {
-        let context = ErrorContext::new();
-        // backtrace 应该存在（在 debug 模式下）
-        let _bt = context.backtrace();
-    }
 
     /// 测试 ErrorContextBuilder 链式调用完整流程
     #[test]

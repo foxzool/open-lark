@@ -2,7 +2,7 @@
 //!
 //! 与 thiserror-based CoreError 完美配合的高性能错误上下文系统
 
-use std::{backtrace::Backtrace, collections::HashMap, sync::Arc};
+use std::{collections::HashMap, sync::Arc};
 
 /// 现代化错误上下文
 ///
@@ -14,15 +14,13 @@ pub struct ErrorContext {
     /// 上下文信息
     context: HashMap<String, String>,
     /// 时间戳（错误发生时间）
-    timestamp: Option<chrono::DateTime<chrono::Utc>>,
+    timestamp: Option<std::time::SystemTime>,
     /// 请求ID（用于链路追踪）
     request_id: Option<String>,
     /// 操作名称
     operation: Option<String>,
     /// 组件名称
     component: Option<String>,
-    /// 可选 backtrace，便于排查
-    backtrace: Option<Arc<Backtrace>>,
 }
 
 impl ErrorContext {
@@ -31,11 +29,10 @@ impl ErrorContext {
         Self {
             user_message: None,
             context: HashMap::new(),
-            timestamp: Some(chrono::Utc::now()),
+            timestamp: Some(std::time::SystemTime::now()),
             request_id: None,
             operation: None,
             component: None,
-            backtrace: Some(Arc::new(Backtrace::capture())),
         }
     }
 
@@ -44,11 +41,10 @@ impl ErrorContext {
         Self {
             user_message: Some(message.into()),
             context: HashMap::new(),
-            timestamp: Some(chrono::Utc::now()),
+            timestamp: Some(std::time::SystemTime::now()),
             request_id: None,
             operation: None,
             component: None,
-            backtrace: Some(Arc::new(Backtrace::capture())),
         }
     }
 
@@ -57,11 +53,10 @@ impl ErrorContext {
         Self {
             user_message: None,
             context: HashMap::new(),
-            timestamp: Some(chrono::Utc::now()),
+            timestamp: Some(std::time::SystemTime::now()),
             request_id: None,
             operation: Some(operation.into()),
             component: None,
-            backtrace: Some(Arc::new(Backtrace::capture())),
         }
     }
 
@@ -142,15 +137,11 @@ impl ErrorContext {
     }
 
     /// 获取时间戳
-    pub fn timestamp(&self) -> Option<chrono::DateTime<chrono::Utc>> {
+    pub fn timestamp(&self) -> Option<std::time::SystemTime> {
         self.timestamp
     }
 
-    /// 获取 backtrace（如有）
-    pub fn backtrace(&self) -> Option<&Backtrace> {
-        self.backtrace.as_deref()
-    }
-
+    /// 清空所有上下文信息
     /// 清空所有上下文信息
     pub fn clear_context(&mut self) {
         self.context.clear();
@@ -175,9 +166,14 @@ impl ErrorContext {
         let mut parts = Vec::new();
 
         if let Some(timestamp) = self.timestamp {
+            // 手动格式化 SystemTime
+            let duration = timestamp.duration_since(std::time::UNIX_EPOCH).unwrap_or_default();
+            let secs = duration.as_secs();
+            let datetime = chrono::DateTime::from_timestamp(secs as i64, 0)
+                .unwrap_or_else(|| chrono::Utc::now());
             parts.push(format!(
                 "时间: {}",
-                timestamp.format("%Y-%m-%d %H:%M:%S UTC")
+                datetime.format("%Y-%m-%d %H:%M:%S UTC")
             ));
         }
 
@@ -210,8 +206,7 @@ impl ErrorContext {
     /// 从当前上下文创建副本，并可以添加额外信息
     pub fn clone_with(&self) -> Self {
         let mut clone = self.clone();
-        clone.timestamp = Some(chrono::Utc::now());
-        clone.backtrace = Some(Arc::new(Backtrace::capture()));
+        clone.timestamp = Some(std::time::SystemTime::now());
         clone
     }
 }
