@@ -13,6 +13,6 @@ pub use create::*;
 pub use delete::*;
 pub use get::*;
 pub use list::*;
-pub use mget::*;
+pub use mget::{MgetRoomRequest, MgetRoomResponse};
 pub use patch::*;
 pub use search::*;

@@ -1,8 +1,6 @@
 #![warn(clippy::all)]
 #![allow(clippy::manual_range_contains)]
 #![allow(clippy::needless_borrows_for_generic_args)]
-#![allow(ambiguous_glob_reexports)]
-#![allow(hidden_glob_reexports)]
 
 //! # OpenLark 文档服务模块
 //!

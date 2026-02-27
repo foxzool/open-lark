@@ -1,6 +1,4 @@
 #![warn(clippy::all)]
-#![allow(ambiguous_glob_reexports)]
-#![allow(hidden_glob_reexports)]
 #![allow(missing_docs)]
 
 //! # OpenLark 会议与日程服务模块
