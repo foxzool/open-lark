@@ -121,7 +121,7 @@ mod tests {
         let api_request = ApiRequest::<GetResponse>::get(api_endpoint.to_url())
             .query("user_id", &request.user_id);
 
-        assert!(api_request.url.contains("att_2"));
+        assert!(api_request.build_url().contains("att_2"));
         assert!(api_request.build_url().contains("user_id=u_2"));
     }
 
