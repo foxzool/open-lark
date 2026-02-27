@@ -313,7 +313,7 @@ impl ErrorContextTrait for ErrorContext {
         ErrorContext::timestamp(self).map(|st| {
             let duration = st.duration_since(std::time::UNIX_EPOCH).unwrap_or_default();
             chrono::DateTime::from_timestamp(duration.as_secs() as i64, 0)
-                .unwrap_or_else(|| chrono::Utc::now())
+                .unwrap_or_else(chrono::Utc::now)
         })
     }
 
