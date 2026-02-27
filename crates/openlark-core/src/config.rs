@@ -290,7 +290,7 @@ mod tests {
     use crate::auth::TokenProvider;
     use crate::auth::TokenRequest;
     use crate::constants::{AppType, FEISHU_BASE_URL};
-    use async_trait::async_trait;
+    use std::{future::Future, pin::Pin};
     use std::time::Duration;
 
     #[test]
@@ -491,10 +491,12 @@ mod tests {
     #[derive(Debug)]
     struct TestTokenProvider;
 
-    #[async_trait]
     impl TokenProvider for TestTokenProvider {
-        async fn get_token(&self, _request: TokenRequest) -> crate::SDKResult<String> {
-            Ok("test_token".to_string())
+        fn get_token(
+            &self,
+            _request: TokenRequest,
+        ) -> Pin<Box<dyn Future<Output = crate::SDKResult<String>> + Send + '_>> {
+            Box::pin(async { Ok("test_token".to_string()) })
         }
     }
 

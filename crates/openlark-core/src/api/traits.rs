@@ -3,10 +3,8 @@
 pub use super::responses::RawResponse;
 use super::ApiRequest;
 use crate::error::SDKResult;
-use async_trait::async_trait;
 
 /// 异步API客户端特征
-#[async_trait]
 pub trait AsyncApiClient: Send + Sync {
     async fn execute_raw(&self, request: ApiRequest<()>) -> SDKResult<RawResponse>;
 }
