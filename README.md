@@ -2,7 +2,6 @@
 [![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](https://github.com/foxzool/open-lark#license)
 [![Quality](https://github.com/foxzool/open-lark/actions/workflows/quality.yml/badge.svg)](https://github.com/foxzool/open-lark/actions/workflows/quality.yml)
 [![Documentation](https://docs.rs/open-lark/badge.svg)](https://docs.rs/open-lark)
-![Discord Shield](https://discord.com/api/guilds/1319490473060073532/widget.png?style=shield)
 
 # 飞书开放平台非官方SDK - 企业级高覆盖率Rust实现
 
