@@ -1,6 +1,6 @@
 //! 核心验证功能
 
-use tracing::error;
+use tracing::warn;
 
 /// 检查字符是否为中文字符
 ///
@@ -46,7 +46,7 @@ pub fn is_chinese_char(c: char) -> bool {
 /// 验证后的字符串（可能被截断）
 pub fn validate_string_length(input: String, max_len: usize, field_name: &str) -> String {
     if input.len() > max_len {
-        error!(
+        warn!(
             "字段 {} 超过最大长度 {}，当前长度 {}，将被截断",
             field_name,
             max_len,
@@ -70,10 +70,10 @@ pub fn validate_string_length(input: String, max_len: usize, field_name: &str) -
 /// true 如果字段有效且长度合规，false 否则
 pub fn validate_required_list_length(values: &[String], max_len: usize, field_name: &str) -> bool {
     if values.is_empty() {
-        error!("必填列表字段 {} 为空", field_name);
+        warn!("必填列表字段 {} 为空", field_name);
         false
     } else if values.len() > max_len {
-        error!(
+        warn!(
             "必填列表字段 {} 长度 {} 超过最大限制 {}",
             field_name,
             values.len(),
@@ -97,7 +97,7 @@ pub fn validate_required_list_length(values: &[String], max_len: usize, field_na
 pub fn validate_content_size(content: &str, max_size: usize, content_type: &str) -> bool {
     let content_size = content.len();
     if content_size > max_size {
-        error!(
+        warn!(
             "{} 内容大小 {} 超过最大限制 {}",
             content_type, content_size, max_size
         );

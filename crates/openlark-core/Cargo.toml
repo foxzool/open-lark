@@ -22,7 +22,7 @@ reqwest = { workspace = true }
 chrono = { workspace = true }
 url = { workspace = true }
 tracing = { workspace = true }
-tracing-subscriber = { workspace = true }
+tracing-subscriber = { workspace = true, optional = true }
 uuid = { workspace = true }
 hmac = { workspace = true }
 sha2 = { workspace = true }
@@ -45,14 +45,17 @@ serde_with = "3"
 [features]
 default = ["testing"]
 
+# Tracing initialization support
+tracing-init = ["tracing-subscriber"]
+
 # WebSocket support
 websocket = ["tokio-tungstenite", "prost", "openlark-protocol", "lark-websocket-protobuf"]
 
 # OpenTelemetry support
-otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
+otel = ["tracing-init", "opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
 
 # Testing utilities (for other crates to use in tests)
-testing = []
+testing = ["tracing-init"]
 
 
 [dependencies.opentelemetry]
@@ -74,3 +77,4 @@ optional = true
 [dev-dependencies]
 rstest = { workspace = true }
 tracing-test = { workspace = true }
+tracing-subscriber = { workspace = true }
