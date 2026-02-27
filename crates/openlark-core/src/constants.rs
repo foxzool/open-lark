@@ -26,6 +26,7 @@ impl Display for AppType {
     }
 }
 
+pub const API_PATH_PREFIX: &str = "/open-apis/";
 pub const APP_ACCESS_TOKEN_INTERNAL_URL_PATH: &str = "/open-apis/auth/v3/app_access_token/internal";
 pub const APP_ACCESS_TOKEN_URL_PATH: &str = "/open-apis/auth/v3/app_access_token";
 pub const TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH: &str =

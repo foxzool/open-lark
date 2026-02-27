@@ -7,7 +7,7 @@ use tracing::{info_span, Instrument};
 use crate::{
     api::ApiResponseTrait,
     api::{ApiRequest, Response},
-    app_ticket_manager::apply_app_ticket,
+    auth::app_ticket::apply_app_ticket,
     config::Config,
     constants::*,
     error::CoreError,

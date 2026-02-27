@@ -8,7 +8,6 @@
 //! This crate provides the core infrastructure for the OpenLark SDK including
 //! HTTP client configuration, error handling, authentication, and common utilities.
 
-#![allow(missing_docs)]
 
 // 对外稳定导出：尽量保持"少而清晰"的公共 API（KISS）
 pub mod api;
@@ -27,7 +26,7 @@ pub mod trait_system;
 pub mod validation;
 
 // crate 内部实现细节：不对外暴露（避免把 core 变成"全家桶"）
-mod app_ticket_manager;
+// 已移动到 auth::app_ticket
 mod content_disposition;
 mod response_handler;
 mod performance;
