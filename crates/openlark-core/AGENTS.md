@@ -20,6 +20,10 @@ src/
 │   ├── mod.rs               # 认证模块入口
 │   ├── app_ticket.rs        # App Ticket 管理（保留在 core 因依赖 http 模块）
 │   └── token_provider.rs    # 令牌提供者 trait（抽象接口）
+├── config.rs                 # 客户端配置
+│   ├── mod.rs               # 认证模块入口
+│   ├── app_ticket.rs        # App Ticket 管理（保留在 core 因依赖 http 模块）
+│   └── token_provider.rs    # 令牌提供者 trait（抽象接口）
 │   ├── mod.rs               # 认证模块入口
 │   ├── app_ticket.rs        # App Ticket 管理
 │   ├── cache.rs             # 令牌缓存
@@ -73,7 +77,7 @@ src/
 | 添加错误码 | `src/error/codes.rs` | 飞书通用错误码映射 |
 | 修改 HTTP 行为 | `src/http.rs` | reqwest 客户端配置 |
 | 添加验证规则 | `src/validation/core.rs` | 复用 validate_required! 宏 |
-| 令牌管理 | `src/auth/token.rs` | AccessToken/RefreshToken |
+| 令牌管理 | `crates/openlark-auth/src/common/token.rs` | AccessToken/RefreshToken (已迁移) |
 | 常量定义 | `src/constants.rs` | BASE_URL, 默认超时等 |
 | 请求选项 | `src/req_option.rs` | RequestOption（字段为 Option<String>） |
 
