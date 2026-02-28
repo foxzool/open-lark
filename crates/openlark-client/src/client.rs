@@ -155,7 +155,9 @@ impl Client {
         #[cfg(feature = "auth")]
         let base_core_config = config.as_ref().build_core_config();
         #[cfg(feature = "auth")]
-        let core_config = config.as_ref().get_or_build_core_config_with_token_provider();
+        let core_config = config
+            .as_ref()
+            .get_or_build_core_config_with_token_provider();
         #[cfg(not(feature = "auth"))]
         let core_config = config.as_ref().get_or_build_core_config();
 
