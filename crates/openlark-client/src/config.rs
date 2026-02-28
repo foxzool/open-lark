@@ -55,7 +55,7 @@ pub struct Config {
     pub headers: std::collections::HashMap<String, String>,
     /// 🔧 底层 core 配置（按需生成）
     #[doc(hidden)]
-    pub core_config: Option<CoreConfig>,
+    pub(crate) core_config: Option<CoreConfig>,
 }
 
 impl Default for Config {
