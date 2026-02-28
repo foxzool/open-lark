@@ -84,6 +84,7 @@ mod tests {
             retry_count: 3,
             enable_log: true,
             headers: std::collections::HashMap::new(),
+            core_config: None,
         };
 
         let client = TestClient { config };

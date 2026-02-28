@@ -183,34 +183,12 @@ openlark-analytics = { workspace = true, optional = true }
 openlark-user = { workspace = true, optional = true }
 
 # 重新导出工作空间依赖，为用户提供便利访问
-anyhow = { workspace = true }
-async-trait = { workspace = true }
-base64 = { workspace = true }
 chrono = { workspace = true }
-futures-util = { workspace = true }
-hmac = { workspace = true }
-log = { workspace = true }
-tracing = { workspace = true }
-tracing-subscriber = { workspace = true }
-reqwest = { workspace = true }
-rand = { workspace = true }
 serde_repr = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
-sha2 = { workspace = true }
-urlencoding = { workspace = true }
-strum = { workspace = true }
-strum_macros = { workspace = true }
-thiserror = { workspace = true }
-tokio = { workspace = true }
-url = { workspace = true }
-uuid = { workspace = true }
-lark-websocket-protobuf = { workspace = true }
 
-# Examples 专用依赖
-colored = "2.1"  # 用于彩色输出
-clap = { version = "4.4", features = ["derive"] }  # 命令行参数解析
-
+# Examples 专用依赖（移至 dev-dependencies）
 [dev-dependencies]
 dotenvy = { workspace = true }
 env_logger = { workspace = true }
@@ -223,6 +201,8 @@ tracing-test = { workspace = true }
 wiremock = { workspace = true }
 once_cell = { workspace = true }
 mockall = { workspace = true }
+colored = "2.1"
+clap = { version = "4.4", features = ["derive"] }
 
 [lib]
 name = "open_lark"

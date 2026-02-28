@@ -6,6 +6,7 @@ use crate::Result;
 use std::time::Duration;
 
 use openlark_core::constants::AppType;
+use openlark_core::config::Config as CoreConfig;
 
 /// 🔧 OpenLark客户端配置
 ///
@@ -52,6 +53,9 @@ pub struct Config {
     pub enable_log: bool,
     /// 📋 自定义HTTP headers
     pub headers: std::collections::HashMap<String, String>,
+    /// 🔧 底层 core 配置（按需生成）
+    #[doc(hidden)]
+    pub core_config: Option<CoreConfig>,
 }
 
 impl Default for Config {
@@ -66,6 +70,7 @@ impl Default for Config {
             retry_count: 3,
             enable_log: true,
             headers: std::collections::HashMap::new(),
+            core_config: None,
         }
     }
 }
@@ -276,6 +281,45 @@ impl Config {
         for (key, value) in &other.headers {
             self.headers.insert(key.clone(), value.clone());
         }
+    }
+
+    /// 🔧 构建底层 core 配置（不含 TokenProvider）
+    pub fn build_core_config(&self) -> CoreConfig {
+        CoreConfig::builder()
+            .app_id(self.app_id.clone())
+            .app_secret(self.app_secret.clone())
+            .base_url(self.base_url.clone())
+            .app_type(self.app_type)
+            .enable_token_cache(self.enable_token_cache)
+            .req_timeout(self.timeout)
+            .header(self.headers.clone())
+            .build()
+    }
+
+    /// 🔧 构建带有默认 TokenProvider 的 core 配置
+    #[cfg(feature = "auth")]
+    pub fn build_core_config_with_token_provider(&self) -> CoreConfig {
+        use openlark_auth::AuthTokenProvider;
+        let base_config = self.build_core_config();
+        let provider = AuthTokenProvider::new(base_config.clone());
+        base_config.with_token_provider(provider)
+    }
+
+    /// 🔧 获取或构建 core 配置
+    pub fn get_or_build_core_config(&self) -> CoreConfig {
+        if let Some(ref core_config) = self.core_config {
+            return core_config.clone();
+        }
+        self.build_core_config()
+    }
+
+    /// 🔧 获取或构建带有 TokenProvider 的 core 配置
+    #[cfg(feature = "auth")]
+    pub fn get_or_build_core_config_with_token_provider(&self) -> CoreConfig {
+        if let Some(ref core_config) = self.core_config {
+            return core_config.clone();
+        }
+        self.build_core_config_with_token_provider()
     }
 }
 
@@ -539,6 +583,7 @@ mod tests {
             retry_count: 3,
             enable_log: true,
             headers: std::collections::HashMap::new(),
+            core_config: None,
         };
         assert!(config.validate().is_ok());
 
@@ -604,6 +649,7 @@ mod tests {
             retry_count: 3,
             enable_log: true,
             headers: std::collections::HashMap::new(),
+            core_config: None,
         };
 
         let summary = config.summary();
