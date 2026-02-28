@@ -16,7 +16,10 @@ src/
 │   ├── prelude.rs           # API 模块预置导入
 │   ├── responses.rs         # Response<T>, RawResponse 定义
 │   └── traits.rs            # ApiResponseTrait 等 trait
-├── auth/                     # 认证相关（令牌、签名）
+├── auth/                     # 认证相关（令牌抽象 - 具体实现已迁移到 openlark-auth）
+│   ├── mod.rs               # 认证模块入口
+│   ├── app_ticket.rs        # App Ticket 管理（保留在 core 因依赖 http 模块）
+│   └── token_provider.rs    # 令牌提供者 trait（抽象接口）
 │   ├── mod.rs               # 认证模块入口
 │   ├── app_ticket.rs        # App Ticket 管理
 │   ├── cache.rs             # 令牌缓存

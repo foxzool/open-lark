@@ -2,10 +2,7 @@
 //!
 //! 极简设计：仅保留 meta 链式字段访问（单入口，KISS）
 
-#[cfg(feature = "auth")]
-use crate::core_config::build_base_core_config;
 use crate::{
-    core_config::build_core_config_with_default_token_provider,
     error::{with_context, with_operation_context},
     traits::LarkClient,
     Config, DefaultServiceRegistry, Result,
@@ -154,9 +151,13 @@ impl Client {
 
         let registry = Arc::new(registry);
 
+        // 从 client Config 获取 core Config
         #[cfg(feature = "auth")]
-        let base_core_config = build_base_core_config(config.as_ref());
-        let core_config = build_core_config_with_default_token_provider(config.as_ref());
+        let base_core_config = config.as_ref().build_core_config();
+        #[cfg(feature = "auth")]
+        let core_config = config.as_ref().get_or_build_core_config_with_token_provider();
+        #[cfg(not(feature = "auth"))]
+        let core_config = config.as_ref().get_or_build_core_config();
 
         #[cfg(feature = "cardkit")]
         let cardkit = openlark_cardkit::CardkitClient::new(core_config.clone());

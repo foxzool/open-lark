@@ -304,7 +304,7 @@ use tracing::{debug, error, info, warn};
 
 use super::cache::MemoryTokenCache;
 use super::token::{TokenInfo, TokenType};
-use crate::{
+use openlark_core::{
     config::Config,
     constants::{APP_ACCESS_TOKEN_URL_PATH, TENANT_ACCESS_TOKEN_URL_PATH},
     error::CoreError,

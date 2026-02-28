@@ -92,7 +92,7 @@
 //! }
 //! ```
 
-use crate::error::SDKResult;
+use openlark_core::error::SDKResult;
 use serde::{Deserialize, Serialize};
 use std::time::{Duration, SystemTime};
 
