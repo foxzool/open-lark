@@ -5,8 +5,8 @@
 use crate::Result;
 use std::time::Duration;
 
-use openlark_core::constants::AppType;
 use openlark_core::config::Config as CoreConfig;
+use openlark_core::constants::AppType;
 
 /// 🔧 OpenLark客户端配置
 ///
