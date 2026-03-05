@@ -116,6 +116,7 @@ pub struct Response<T> {
     /// 响应数据
     pub data: Option<T>,
     /// 原始响应
+    #[serde(default)]
     pub raw_response: RawResponse,
 }
 
