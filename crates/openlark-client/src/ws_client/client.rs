@@ -23,10 +23,41 @@ use tokio_tungstenite::{
 use url::Url;
 
 use super::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine};
-use openlark_core::{
-    api::Response,
-    // event::dispatcher::EventDispatcherHandler, // TODO: 需要实现 event 模块
-};
+
+/// WebSocket endpoint API 专用响应结构（顶层 code/msg/data）
+#[derive(Debug, Deserialize)]
+struct WsEndpointApiResponse<T> {
+    #[serde(default)]
+    code: i32,
+    #[serde(default)]
+    msg: String,
+    data: Option<T>,
+}
+
+fn map_ws_api_error(code: i32, message: String) -> WsClientError {
+    match code {
+        1 | 1000040343 => WsClientError::ServerError { code, message },
+        _ => WsClientError::ClientError { code, message },
+    }
+}
+
+fn extract_endpoint_response(
+    resp: WsEndpointApiResponse<EndPointResponse>,
+) -> WsClientResult<EndPointResponse> {
+    if resp.code != 0 {
+        return Err(map_ws_api_error(resp.code, resp.msg));
+    }
+
+    let end_point = resp.data.ok_or(WsClientError::UnexpectedResponse)?;
+    if end_point.url.as_ref().is_none_or(|url| url.is_empty()) {
+        return Err(WsClientError::ServerError {
+            code: 500,
+            message: "No available endpoint".to_string(),
+        });
+    }
+
+    Ok(end_point)
+}
 
 /// 分包消息缓存（按 message_id 聚合）
 #[derive(Debug, Default)]
@@ -339,35 +370,12 @@ impl LarkWsClient {
             .send()
             .await?;
 
-        let resp = req.json::<Response<EndPointResponse>>().await?;
+        let resp = req
+            .json::<WsEndpointApiResponse<EndPointResponse>>()
+            .await?;
         debug!("{:?}", resp.data);
 
-        if !resp.is_success() {
-            return match resp.raw_response.code {
-                1 => Err(WsClientError::ServerError {
-                    code: resp.raw_response.code,
-                    message: resp.raw_response.msg,
-                }),
-                1000040343 => Err(WsClientError::ServerError {
-                    code: resp.raw_response.code,
-                    message: resp.raw_response.msg,
-                }),
-                _ => Err(WsClientError::ClientError {
-                    code: resp.raw_response.code,
-                    message: resp.raw_response.msg,
-                }),
-            };
-        }
-
-        let end_point = resp.data.ok_or(WsClientError::UnexpectedResponse)?;
-        if end_point.url.as_ref().is_none_or(|url| url.is_empty()) {
-            return Err(WsClientError::ServerError {
-                code: 500,
-                message: "No available endpoint".to_string(),
-            });
-        }
-
-        Ok(end_point)
+        extract_endpoint_response(resp)
     }
 }
 
@@ -644,4 +652,52 @@ pub struct WsCloseReason {
 
     /// Reason string
     pub message: String,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{
+        extract_endpoint_response, map_ws_api_error, WsEndpointApiResponse, WsClientError,
+    };
+
+    #[test]
+    fn test_ws_endpoint_error_response_not_treated_as_success() {
+        let payload = r#"{"code":400,"msg":"Bad Request"}"#;
+        let parsed = serde_json::from_str::<WsEndpointApiResponse<serde_json::Value>>(payload)
+            .expect("endpoint response should deserialize");
+
+        assert_eq!(parsed.code, 400);
+        assert_eq!(parsed.msg, "Bad Request");
+        assert!(parsed.data.is_none());
+
+        let mapped = map_ws_api_error(parsed.code, parsed.msg);
+        assert!(matches!(
+            mapped,
+            WsClientError::ClientError { code: 400, .. }
+        ));
+    }
+
+    #[test]
+    fn test_ws_endpoint_success_without_data_returns_unexpected_response() {
+        let resp = WsEndpointApiResponse::<super::EndPointResponse> {
+            code: 0,
+            msg: "success".to_string(),
+            data: None,
+        };
+
+        let result = extract_endpoint_response(resp);
+        assert!(matches!(result, Err(WsClientError::UnexpectedResponse)));
+    }
+
+    #[test]
+    fn test_ws_endpoint_server_error_mapping_is_preserved() {
+        let mapped = map_ws_api_error(1000040343, "No available endpoint".to_string());
+        assert!(matches!(
+            mapped,
+            WsClientError::ServerError {
+                code: 1000040343,
+                ..
+            }
+        ));
+    }
 }

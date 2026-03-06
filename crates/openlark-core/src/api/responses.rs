@@ -116,7 +116,6 @@ pub struct Response<T> {
     /// 响应数据
     pub data: Option<T>,
     /// 原始响应
-    #[serde(default)]
     pub raw_response: RawResponse,
 }
 
@@ -297,5 +296,21 @@ mod tests {
     #[test]
     fn test_response_format_default() {
         assert_eq!(<()>::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_response_deserialize_requires_raw_response() {
+        let payload = r#"{"code":400,"msg":"Bad Request"}"#;
+        let parsed = serde_json::from_str::<Response<serde_json::Value>>(payload);
+        assert!(parsed.is_err());
+    }
+
+    #[test]
+    fn test_response_deserialize_with_raw_response_error_keeps_code_and_msg() {
+        let payload = r#"{"raw_response":{"code":400,"msg":"Bad Request","request_id":null,"data":null,"error":null},"data":null}"#;
+        let parsed = serde_json::from_str::<Response<serde_json::Value>>(payload).unwrap();
+        assert_eq!(parsed.raw_response.code, 400);
+        assert_eq!(parsed.raw_response.msg, "Bad Request");
+        assert!(!parsed.is_success());
     }
 }
