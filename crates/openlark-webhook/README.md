@@ -1,9 +1,175 @@
 # openlark-webhook
 
-飞书开放平台 Webhook（自定义机器人）API 模块。
+[![crates.io](https://img.shields.io/crates/v/openlark-webhook)](https://crates.io/crates/openlark-webhook)
+[![Documentation](https://docs.rs/openlark-webhook/badge.svg)](https://docs.rs/openlark-webhook)
 
-本 crate 的 API 实现严格按 `api_list_export.csv` 的命名规范组织：
+飞书开放平台 Webhook 自定义机器人 API 模块。
 
-`src/bizTag/meta.project/meta.version/meta.resource/meta.name.rs`
+## 功能特性
 
-当前覆盖 `bizTag=webhook`（自定义机器人、Webhook 事件处理接口）。
+- ✅ **5 种消息类型**: 文本、富文本、图片、文件、交互式卡片
+- ✅ **Builder 模式 API**: 流畅的链式调用体验
+- ✅ **可选签名验证**: HMAC-SHA256 签名增强安全性
+- ✅ **Feature flags**: 按需编译，轻量级
+- ✅ **类型安全**: 编译时验证所有参数
+- ✅ **完整测试覆盖**: 单元测试 + 集成测试
+
+## 安装
+
+```toml
+[dependencies]
+openlark-webhook = "0.15"
+```
+
+或通过根 crate 使用：
+
+```toml
+[dependencies]
+open-lark = { version = "0.15", features = ["webhook"] }
+```
+
+## 快速开始
+
+### 发送文本消息
+
+```rust,no_run
+use openlark_webhook::prelude::*;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let response = SendWebhookMessageRequest::new(
+        "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_WEBHOOK_KEY".to_string()
+    )
+    .text("Hello from OpenLark!".to_string())
+    .execute()
+    .await?;
+
+    println!("Message sent: {:?}", response);
+    Ok(())
+}
+```
+
+### 发送卡片消息
+
+```rust,no_run
+use openlark_webhook::prelude::*;
+use serde_json::json;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let card = json!({
+        "elements": [
+            {
+                "tag": "div",
+                "text": {
+                    "content": "Hello from card!"
+                }
+            }
+        ]
+    });
+
+    let response = SendWebhookMessageRequest::new(
+        "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_WEBHOOK_KEY".to_string()
+    )
+    .card(card)
+    .execute()
+    .await?;
+
+    println!("Card sent: {:?}", response);
+    Ok(())
+}
+```
+
+## Feature Flags
+
+| Feature | 说明 | 默认 |
+|---------|------|------|
+| `robot` | 机器人消息发送功能 | ✅ 启用 |
+| `signature` | 签名验证功能（需要 hmac, sha2, base64） | ❌ 禁用 |
+| `card` | 卡片消息支持 | ❌ 禁用 |
+
+### 启用所有功能
+
+```toml
+[dependencies]
+openlark-webhook = { version = "0.15", features = ["robot", "signature", "card"] }
+```
+
+## 消息类型
+
+### 1. 文本消息
+
+```rust
+.text("Hello, World!".to_string())
+```
+
+### 2. 富文本消息
+
+```rust
+.post(r#"{"title":"标题","content":[{"tag":"text","text":"内容"}]}"#.to_string())
+```
+
+### 3. 图片消息
+
+```rust
+.image("img_xxxxxx".to_string())
+```
+
+### 4. 文件消息
+
+```rust
+.file("file_xxxxxx".to_string())
+```
+
+### 5. 交互式卡片
+
+```rust
+.card(json!({...}))
+```
+
+## 签名验证
+
+启用 `signature` feature 后，可以增强安全性：
+
+```rust,no_run
+use openlark_webhook::prelude::*;
+
+// 签名会自动添加到请求头
+// X-Lark-Signature: base64(hmac-sha256(timestamp + "\n" + secret))
+// X-Lark-Timestamp: unix_timestamp
+```
+
+## 错误处理
+
+```rust,no_run
+use openlark_webhook::prelude::*;
+
+match SendWebhookMessageRequest::new(webhook_url)
+    .text("Hello".to_string())
+    .execute()
+    .await
+{
+    Ok(response) => println!("Success: {:?}", response),
+    Err(WebhookError::Http(msg)) => eprintln!("HTTP Error: {}", msg),
+    Err(WebhookError::Serialization(msg)) => eprintln!("Serialization Error: {}", msg),
+    Err(e) => eprintln!("Error: {:?}", e),
+}
+```
+
+## 示例代码
+
+完整示例请参阅 `examples/` 目录：
+
+- `webhook_text_message.rs` - 基础文本消息
+- `webhook_card_message.rs` - 卡片消息
+- `webhook_with_signature.rs` - 带签名验证
+- `webhook_error_handling.rs` - 错误处理
+
+## API 文档
+
+- [飞书开放平台 - 自定义机器人](https://open.feishu.cn/document/feishu-cards/quick-start/send-message-cards-with-custom-bot)
+- [飞书开放平台 - 消息卡片](https://open.feishu.cn/document/feishu-cards/card-components/overview-of-message-cards)
+
+## 许可证
+
+MIT OR Apache-2.0
