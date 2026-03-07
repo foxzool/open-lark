@@ -126,8 +126,8 @@ mod tests {
             .app_secret("test_secret")
             .build();
         let request = ListRoomRequest::new(config.clone())
-            .query_param("test".to_string())
-            .query_param("test".to_string());
+            .query_param("key1".to_string(), "value1".to_string())
+            .query_param("key2".to_string(), "value2".to_string());
         let _ = request;
     }
 }
