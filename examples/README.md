@@ -53,9 +53,21 @@ examples/
    # 设置环境变量
    export OPENLARK_APP_ID="your_app_id"
    export OPENLARK_APP_SECRET="your_app_secret"
+   export OPENLARK_BASE_URL="https://open.feishu.cn" # 可选，国际版请改为 https://open.larksuite.com
    ```
 
    📖 **详细配置指南**：查看 [配置管理文档](docs/configuration.md)
+
+### Endpoint 说明
+
+- 国内飞书：`https://open.feishu.cn`
+- 国际版 Lark：`https://open.larksuite.com`
+
+如果你的应用注册在国际版 Lark，请显式设置：
+
+```bash
+export OPENLARK_BASE_URL="https://open.larksuite.com"
+```
 
 ### 运行第一个示例
 
