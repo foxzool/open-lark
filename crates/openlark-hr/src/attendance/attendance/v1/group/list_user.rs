@@ -116,3 +116,15 @@ impl ApiResponseTrait for ListUserResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_list_user_request_builder_new() {
+        let request = ListUserRequest::new(TestConfigBuilder::new().build(), "test".to_string());
+        let _ = request;
+    }
+}

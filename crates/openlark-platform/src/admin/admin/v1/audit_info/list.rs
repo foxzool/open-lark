@@ -95,3 +95,17 @@ impl ApiResponseTrait for ListAuditInfoResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_builder_basic() {
+        let config = openlark_core::config::Config::builder().app_id("test_app").app_secret("test_secret").build();
+        let request = ListAuditInfoBuilder::new(config.clone())
+            .start_time("test".to_string())
+            .end_time("test".to_string());
+        let _ = request;
+    }
+}

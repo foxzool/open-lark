@@ -104,3 +104,15 @@ impl ApiResponseTrait for CombinedCreateResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_combined_create_request_builder_new() {
+        let request = CombinedCreateRequest::new(TestConfigBuilder::new().build());
+        let _ = request;
+    }
+}

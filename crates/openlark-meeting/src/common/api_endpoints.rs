@@ -836,3 +836,136 @@ impl MeetingRoomApi {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_calendarapiv4_to_url_coverage() {
+        let urls = vec![
+            CalendarApiV4::CalendarGet("id1".to_string()).to_url(),
+            CalendarApiV4::CalendarCreate.to_url(),
+            CalendarApiV4::CalendarDelete("id1".to_string()).to_url(),
+            CalendarApiV4::CalendarPatch("id1".to_string()).to_url(),
+            CalendarApiV4::CalendarList.to_url(),
+            CalendarApiV4::CalendarBatchGet.to_url(),
+            CalendarApiV4::CalendarSearch.to_url(),
+            CalendarApiV4::CalendarMget.to_url(),
+            CalendarApiV4::CalendarSubscription.to_url(),
+            CalendarApiV4::CalendarPrimary.to_url(),
+            CalendarApiV4::CalendarPrimaryGet.to_url(),
+            CalendarApiV4::EventGet("id1".to_string(), "id2".to_string()).to_url(),
+            CalendarApiV4::EventCreate("id1".to_string()).to_url(),
+            CalendarApiV4::EventDelete("id1".to_string(), "id2".to_string()).to_url(),
+            CalendarApiV4::EventPatch("id1".to_string(), "id2".to_string()).to_url(),
+            CalendarApiV4::EventList("id1".to_string()).to_url(),
+            CalendarApiV4::EventSearch("id1".to_string()).to_url(),
+            CalendarApiV4::EventBatchGet("id1".to_string()).to_url(),
+            CalendarApiV4::EventReply("id1".to_string(), "id2".to_string()).to_url(),
+            CalendarApiV4::CalendarAclCreate("id1".to_string()).to_url(),
+            CalendarApiV4::CalendarAclSubscription("id1".to_string()).to_url(),
+            CalendarApiV4::CalendarAclUnsubscription("id1".to_string()).to_url(),
+            CalendarApiV4::ExchangeBindingCreate.to_url(),
+            CalendarApiV4::TimeoffEventCreate.to_url(),
+            CalendarApiV4::FreebusyBatch.to_url(),
+        ];
+        assert!(urls.iter().all(|url| url.starts_with("/open-apis/")));
+    }
+
+    #[test]
+    fn test_vcapiv1_to_url_coverage() {
+        let urls = vec![
+            VcApiV1::RoomCreate.to_url(),
+            VcApiV1::RoomGet("id1".to_string()).to_url(),
+            VcApiV1::RoomDelete("id1".to_string()).to_url(),
+            VcApiV1::RoomList.to_url(),
+            VcApiV1::RoomBatchGet.to_url(),
+            VcApiV1::RoomSearch.to_url(),
+            VcApiV1::RoomPatch("id1".to_string()).to_url(),
+            VcApiV1::MeetingGet("id1".to_string()).to_url(),
+            VcApiV1::MeetingInvite("id1".to_string()).to_url(),
+            VcApiV1::MeetingKickout("id1".to_string()).to_url(),
+            VcApiV1::MeetingEnd("id1".to_string()).to_url(),
+            VcApiV1::MeetingSetHost("id1".to_string()).to_url(),
+            VcApiV1::MeetingList.to_url(),
+            VcApiV1::MeetingRecordingGet("id1".to_string(), "id2".to_string()).to_url(),
+            VcApiV1::MeetingRecordingList("id1".to_string()).to_url(),
+            VcApiV1::MeetingRecordingStart("id1".to_string()).to_url(),
+            VcApiV1::MeetingRecordingStop("id1".to_string()).to_url(),
+            VcApiV1::MeetingRecordingSetPermission("id1".to_string()).to_url(),
+            VcApiV1::ReserveCreate.to_url(),
+            VcApiV1::ReserveDelete("id1".to_string()).to_url(),
+            VcApiV1::ReserveGet("id1".to_string()).to_url(),
+            VcApiV1::ReserveGetActiveMeeting("id1".to_string()).to_url(),
+            VcApiV1::ReservePatch("id1".to_string()).to_url(),
+            VcApiV1::ReportDailyGet.to_url(),
+            VcApiV1::ReportTopUserGet.to_url(),
+            VcApiV1::ExportGet("id1".to_string()).to_url(),
+            VcApiV1::ExportDownload("id1".to_string()).to_url(),
+            VcApiV1::ExportMeetingList.to_url(),
+            VcApiV1::ExportParticipantList.to_url(),
+            VcApiV1::ExportParticipantQualityList.to_url(),
+            VcApiV1::ExportResourceReservationList.to_url(),
+            VcApiV1::RoomLevelCreate.to_url(),
+            VcApiV1::RoomLevelDelete("id1".to_string()).to_url(),
+            VcApiV1::RoomLevelGet("id1".to_string()).to_url(),
+            VcApiV1::RoomLevelList.to_url(),
+            VcApiV1::RoomLevelPatch("id1".to_string()).to_url(),
+            VcApiV1::RoomConfigCreate.to_url(),
+            VcApiV1::RoomConfigDelete("id1".to_string()).to_url(),
+            VcApiV1::RoomConfigGet("id1".to_string()).to_url(),
+            VcApiV1::RoomConfigList.to_url(),
+            VcApiV1::RoomConfigPatch("id1".to_string()).to_url(),
+            VcApiV1::RoomConfigSetRoomAccessCode.to_url(),
+            VcApiV1::ReserveConfigCreate.to_url(),
+            VcApiV1::ReserveConfigDelete("id1".to_string()).to_url(),
+            VcApiV1::ReserveConfigGet("id1".to_string()).to_url(),
+            VcApiV1::ReserveConfigList.to_url(),
+            VcApiV1::ReserveConfigPatch("id1".to_string()).to_url(),
+            VcApiV1::ReserveConfigAdminPatch("id1".to_string()).to_url(),
+            VcApiV1::ReserveConfigFormPatch("id1".to_string()).to_url(),
+            VcApiV1::ReserveConfigDisableInformPatch("id1".to_string()).to_url(),
+            VcApiV1::ScopeConfigCreate.to_url(),
+            VcApiV1::ScopeConfigDelete("id1".to_string()).to_url(),
+            VcApiV1::ScopeConfigGet("id1".to_string()).to_url(),
+            VcApiV1::ScopeConfigList.to_url(),
+            VcApiV1::ScopeConfigPatch("id1".to_string()).to_url(),
+            VcApiV1::AlertList.to_url(),
+            VcApiV1::AlertGet("id1".to_string()).to_url(),
+            VcApiV1::MeetingListList.to_url(),
+            VcApiV1::ParticipantListList.to_url(),
+            VcApiV1::ParticipantQualityListList.to_url(),
+            VcApiV1::ResourceReservationListList.to_url(),
+        ];
+        assert!(urls.iter().all(|url| url.starts_with("/open-apis/")));
+    }
+
+    #[test]
+    fn test_meetingroomapi_to_url_coverage() {
+        let urls = vec![
+            MeetingRoomApi::BuildingCreate.to_url(),
+            MeetingRoomApi::BuildingDelete("id1".to_string()).to_url(),
+            MeetingRoomApi::BuildingGet("id1".to_string()).to_url(),
+            MeetingRoomApi::BuildingList.to_url(),
+            MeetingRoomApi::BuildingPatch("id1".to_string()).to_url(),
+            MeetingRoomApi::BuildingBatchGet.to_url(),
+            MeetingRoomApi::BuildingBatchGetId.to_url(),
+            MeetingRoomApi::RoomCreate.to_url(),
+            MeetingRoomApi::RoomDelete("id1".to_string()).to_url(),
+            MeetingRoomApi::RoomGet("id1".to_string()).to_url(),
+            MeetingRoomApi::RoomList.to_url(),
+            MeetingRoomApi::RoomPatch("id1".to_string()).to_url(),
+            MeetingRoomApi::RoomBatchGet.to_url(),
+            MeetingRoomApi::RoomBatchGetId.to_url(),
+            MeetingRoomApi::InstanceBatchGetFreebusy.to_url(),
+            MeetingRoomApi::InstanceReply("id1".to_string()).to_url(),
+            MeetingRoomApi::CountryList.to_url(),
+            MeetingRoomApi::DistrictList.to_url(),
+            MeetingRoomApi::RoomBatchGetSummary.to_url(),
+            MeetingRoomApi::RoomUpdate.to_url(),
+            MeetingRoomApi::InstanceReplyOld.to_url(),
+        ];
+        assert!(urls.iter().all(|url| url.starts_with("/open-apis/")));
+    }
+}

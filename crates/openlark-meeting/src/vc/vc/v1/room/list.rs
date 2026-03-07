@@ -114,3 +114,20 @@ impl ListRoomRequestBuilder {
         self.request
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_builder_basic() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request = ListRoomRequest::new(config.clone())
+            .query_param("test".to_string())
+            .query_param("test".to_string());
+        let _ = request;
+    }
+}

@@ -401,3 +401,83 @@ impl MailApiV1 {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_mailapiv1_to_url_coverage() {
+        let urls = vec![
+            MailApiV1::MailGroupCreate.to_url(),
+            MailApiV1::MailGroupGet("id1".to_string()).to_url(),
+            MailApiV1::MailGroupUpdate("id1".to_string()).to_url(),
+            MailApiV1::MailGroupDelete("id1".to_string()).to_url(),
+            MailApiV1::MailGroupList.to_url(),
+            MailApiV1::MailGroupPatch("id1".to_string()).to_url(),
+            MailApiV1::MailGroupAliasCreate("id1".to_string()).to_url(),
+            MailApiV1::MailGroupAliasDelete("id1".to_string(), "id2".to_string()).to_url(),
+            MailApiV1::MailGroupAliasList("id1".to_string()).to_url(),
+            MailApiV1::MailGroupManagerBatchCreate("id1".to_string()).to_url(),
+            MailApiV1::MailGroupManagerBatchDelete("id1".to_string()).to_url(),
+            MailApiV1::MailGroupManagerList("id1".to_string()).to_url(),
+            MailApiV1::MailGroupMemberCreate("id1".to_string()).to_url(),
+            MailApiV1::MailGroupMemberDelete("id1".to_string(), "id2".to_string()).to_url(),
+            MailApiV1::MailGroupMemberGet("id1".to_string(), "id2".to_string()).to_url(),
+            MailApiV1::MailGroupMemberList("id1".to_string()).to_url(),
+            MailApiV1::MailGroupMemberBatchCreate("id1".to_string()).to_url(),
+            MailApiV1::MailGroupMemberBatchDelete("id1".to_string()).to_url(),
+            MailApiV1::MailGroupPermissionMemberCreate("id1".to_string()).to_url(),
+            MailApiV1::MailGroupPermissionMemberDelete("id1".to_string(), "id2".to_string())
+                .to_url(),
+            MailApiV1::MailGroupPermissionMemberGet("id1".to_string(), "id2".to_string()).to_url(),
+            MailApiV1::MailGroupPermissionMemberList("id1".to_string()).to_url(),
+            MailApiV1::MailGroupPermissionMemberBatchCreate("id1".to_string()).to_url(),
+            MailApiV1::MailGroupPermissionMemberBatchDelete("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxCreate.to_url(),
+            MailApiV1::PublicMailboxGet("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxUpdate("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxDelete("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxList.to_url(),
+            MailApiV1::PublicMailboxPatch("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxRemoveToRecycleBin("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxAliasCreate("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxAliasDelete("id1".to_string(), "id2".to_string()).to_url(),
+            MailApiV1::PublicMailboxAliasList("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxMemberCreate("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxMemberDelete("id1".to_string(), "id2".to_string()).to_url(),
+            MailApiV1::PublicMailboxMemberGet("id1".to_string(), "id2".to_string()).to_url(),
+            MailApiV1::PublicMailboxMemberList("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxMemberBatchCreate("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxMemberBatchDelete("id1".to_string()).to_url(),
+            MailApiV1::PublicMailboxMemberClear("id1".to_string()).to_url(),
+            MailApiV1::UserQuery.to_url(),
+            MailApiV1::UserMailboxDelete("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxAliasCreate("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxAliasDelete("id1".to_string(), "id2".to_string()).to_url(),
+            MailApiV1::UserMailboxAliasList("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxEventSubscribe("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxEventUnsubscribe("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxEventSubscription("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxFolderCreate("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxFolderDelete("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxFolderList("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxFolderPatch("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxMailContactCreate("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxMailContactDelete("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxMailContactList("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxMailContactPatch("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxMessageGet("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxMessageGetByCard("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxMessageList("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxMessageSend("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxMessageAttachmentDownloadUrl("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxRuleCreate("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxRuleDelete("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxRuleList("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxRuleReorder("id1".to_string()).to_url(),
+            MailApiV1::UserMailboxRuleUpdate("id1".to_string()).to_url(),
+        ];
+        assert!(urls.iter().all(|url| url.starts_with("/open-apis/")));
+    }
+}

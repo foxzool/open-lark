@@ -81,3 +81,18 @@ impl ApiResponseTrait for CollaborationRuleListResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_builder_basic() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request = CollaborationRuleListBuilder::new(config.clone());
+        let _ = request;
+    }
+}

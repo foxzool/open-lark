@@ -186,3 +186,67 @@ impl HelpdeskApiV1 {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_helpdeskapiv1_to_url_coverage() {
+        let urls = vec![
+            HelpdeskApiV1::TicketCreate.to_url(),
+            HelpdeskApiV1::TicketGet("id1".to_string()).to_url(),
+            HelpdeskApiV1::TicketUpdate("id1".to_string()).to_url(),
+            HelpdeskApiV1::TicketList.to_url(),
+            HelpdeskApiV1::AgentEmail.to_url(),
+            HelpdeskApiV1::AgentPatch("id1".to_string()).to_url(),
+            HelpdeskApiV1::AgentScheduleList.to_url(),
+            HelpdeskApiV1::AgentScheduleCreate.to_url(),
+            HelpdeskApiV1::AgentScheduleGet("id1".to_string()).to_url(),
+            HelpdeskApiV1::AgentSchedulePatch("id1".to_string()).to_url(),
+            HelpdeskApiV1::AgentScheduleDelete("id1".to_string()).to_url(),
+            HelpdeskApiV1::AgentSkillList.to_url(),
+            HelpdeskApiV1::AgentSkillGet("id1".to_string()).to_url(),
+            HelpdeskApiV1::AgentSkillCreate.to_url(),
+            HelpdeskApiV1::AgentSkillPatch("id1".to_string()).to_url(),
+            HelpdeskApiV1::AgentSkillDelete("id1".to_string()).to_url(),
+            HelpdeskApiV1::AgentSkillRuleList.to_url(),
+            HelpdeskApiV1::CategoryList.to_url(),
+            HelpdeskApiV1::CategoryGet("id1".to_string()).to_url(),
+            HelpdeskApiV1::CategoryCreate.to_url(),
+            HelpdeskApiV1::CategoryPatch("id1".to_string()).to_url(),
+            HelpdeskApiV1::CategoryDelete("id1".to_string()).to_url(),
+            HelpdeskApiV1::FaqList.to_url(),
+            HelpdeskApiV1::FaqGet("id1".to_string()).to_url(),
+            HelpdeskApiV1::FaqCreate.to_url(),
+            HelpdeskApiV1::FaqPatch("id1".to_string()).to_url(),
+            HelpdeskApiV1::FaqDelete("id1".to_string()).to_url(),
+            HelpdeskApiV1::FaqSearch.to_url(),
+            HelpdeskApiV1::FaqImage("id1".to_string(), "id2".to_string()).to_url(),
+            HelpdeskApiV1::NotificationList.to_url(),
+            HelpdeskApiV1::NotificationGet("id1".to_string()).to_url(),
+            HelpdeskApiV1::NotificationCreate.to_url(),
+            HelpdeskApiV1::NotificationPatch("id1".to_string()).to_url(),
+            HelpdeskApiV1::NotificationSubmitApprove("id1".to_string()).to_url(),
+            HelpdeskApiV1::NotificationCancelApprove("id1".to_string()).to_url(),
+            HelpdeskApiV1::NotificationExecuteSend("id1".to_string()).to_url(),
+            HelpdeskApiV1::NotificationPreview("id1".to_string()).to_url(),
+            HelpdeskApiV1::NotificationCancelSend("id1".to_string()).to_url(),
+            HelpdeskApiV1::TicketMessageList("id1".to_string()).to_url(),
+            HelpdeskApiV1::TicketMessageCreate("id1".to_string()).to_url(),
+            HelpdeskApiV1::TicketCustomizedFieldList.to_url(),
+            HelpdeskApiV1::TicketCustomizedFieldGet("id1".to_string()).to_url(),
+            HelpdeskApiV1::TicketCustomizedFieldCreate.to_url(),
+            HelpdeskApiV1::TicketCustomizedFieldPatch("id1".to_string()).to_url(),
+            HelpdeskApiV1::TicketCustomizedFieldDelete("id1".to_string()).to_url(),
+            HelpdeskApiV1::EventSubscribe.to_url(),
+            HelpdeskApiV1::EventUnsubscribe.to_url(),
+            HelpdeskApiV1::BotMessageCreate.to_url(),
+            HelpdeskApiV1::TicketAnswerUserQuery("id1".to_string()).to_url(),
+            HelpdeskApiV1::TicketCustomizedFields.to_url(),
+            HelpdeskApiV1::TicketStartService.to_url(),
+            HelpdeskApiV1::TicketImage.to_url(),
+        ];
+        assert!(urls.iter().all(|url| url.starts_with("/open-apis/")));
+    }
+}

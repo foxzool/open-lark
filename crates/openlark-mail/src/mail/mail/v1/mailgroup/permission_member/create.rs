@@ -76,3 +76,27 @@ impl CreateMailGroupPermissionMemberRequest {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    #[test]
+    fn test_builder_basic() {
+        let arc_config = Arc::new(
+            openlark_core::config::Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        );
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request =
+            CreateMailGroupPermissionMemberRequest::new(arc_config.clone(), "test".to_string())
+                .member_id("test".to_string());
+        let _ = request;
+    }
+}

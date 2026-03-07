@@ -80,3 +80,27 @@ impl CreateMailGroupMemberRequest {
             .ok_or_else(|| openlark_core::error::validation_error("创建邮件组成员", "响应数据为空"))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    #[test]
+    fn test_builder_basic() {
+        let arc_config = Arc::new(
+            openlark_core::config::Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        );
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request = CreateMailGroupMemberRequest::new(arc_config.clone(), "test".to_string())
+            .member_id("test".to_string())
+            .member_type("test".to_string());
+        let _ = request;
+    }
+}

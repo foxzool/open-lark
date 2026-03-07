@@ -319,3 +319,88 @@ pub struct QueryShiftResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_shift_models_serialization_roundtrip() {
+        let shift = ShiftInfo {
+            shift_id: "shift_1".to_string(),
+            shift_name: "白班".to_string(),
+            shift_type: 0,
+            flexible_minutes: None,
+            flexible_on_duty_time: None,
+            flexible_off_duty_time: None,
+            punch_times: vec![PunchTime {
+                on_duty_time: 540,
+                off_duty_time: 1080,
+                earliest_on_duty_time: Some(510),
+                latest_off_duty_time: Some(1110),
+                on_duty_places: Some(vec![PunchPlace {
+                    place_name: "总部".to_string(),
+                    place_id: Some("p_1".to_string()),
+                    longitude: 121.4737,
+                    latitude: 31.2304,
+                    punch_range: 200,
+                    address: Some("上海黄浦区".to_string()),
+                }]),
+                off_duty_places: None,
+                on_duty_wifis: Some(vec![PunchWifi {
+                    wifi_name: "Office-Wifi".to_string(),
+                    wifi_mac: "AA:BB:CC:DD:EE:FF".to_string(),
+                }]),
+                off_duty_wifis: None,
+            }],
+            late_rule: Some(LateRule {
+                late_type: 1,
+                allow_minutes: 5,
+                serious_late_minutes: Some(30),
+            }),
+            early_leave_rule: Some(EarlyLeaveRule {
+                early_leave_type: 1,
+                allow_minutes: 5,
+                serious_early_leave_minutes: Some(30),
+            }),
+            rest_rule: Some(RestRule {
+                rest_begin_time: 720,
+                rest_end_time: 780,
+                allow_punch_during_rest: Some(false),
+            }),
+            overtime_rule: Some(OvertimeRule {
+                overtime_type: 2,
+                overtime_start_time: Some(30),
+                overtime_min_unit: Some(15),
+                deduct_rest_time: Some(true),
+            }),
+            allow_out_punch: Some(true),
+            out_punch_need_approval: Some(false),
+            allow_pc_punch: Some(true),
+            need_photo: Some(false),
+            photo_punch_type: Some(1),
+            allow_remedy: Some(true),
+            remedy_limit: Some(2),
+            remedy_period: Some(30),
+        };
+
+        let json = serde_json::to_string(&shift).expect("序列化失败");
+        let parsed: ShiftInfo = serde_json::from_str(&json).expect("反序列化失败");
+        assert_eq!(parsed.shift_id, "shift_1");
+        assert_eq!(parsed.punch_times.len(), 1);
+    }
+
+    #[test]
+    fn test_shift_response_deserialization() {
+        let response: ListShiftResponse = serde_json::from_value(json!({
+            "shift_list": [{"shift_id": "shift_2", "shift_name": "夜班", "shift_type": 1}],
+            "has_more": true,
+            "page_token": "next"
+        }))
+        .expect("反序列化失败");
+
+        assert!(response.has_more);
+        assert_eq!(response.page_token.as_deref(), Some("next"));
+    }
+}

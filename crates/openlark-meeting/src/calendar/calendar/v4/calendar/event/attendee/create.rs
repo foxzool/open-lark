@@ -68,3 +68,18 @@ impl CreateCalendarEventAttendeeRequest {
         extract_response_data(resp, "添加日程参与人")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_builder_basic() {
+        let config = openlark_core::config::Config::builder().app_id("test_app").app_secret("test_secret").build();
+        let request = CreateCalendarEventAttendeeRequest::new(config.clone())
+            .calendar_id("test".to_string())
+            .event_id("test".to_string());
+        let _ = request;
+    }
+}

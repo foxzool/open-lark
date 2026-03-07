@@ -122,3 +122,55 @@ pub struct MailGroupItem {
     /// 创建时间
     pub created_at: String,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_create_mailgroup_body_serialize() {
+        let body = CreateMailGroupBody {
+            mail_group_id: "eng@example.com".to_string(),
+            description: Some("工程组".to_string()),
+            owner: Some("ou_owner".to_string()),
+            members: Some(vec![
+                "a@example.com".to_string(),
+                "b@example.com".to_string(),
+            ]),
+            only_admins_send: Some(true),
+        };
+
+        let value = serde_json::to_value(body).expect("serialize body");
+        assert_eq!(
+            value,
+            json!({
+                "mail_group_id": "eng@example.com",
+                "description": "工程组",
+                "owner": "ou_owner",
+                "members": ["a@example.com", "b@example.com"],
+                "only_admins_send": true
+            })
+        );
+    }
+
+    #[test]
+    fn test_mailgroup_list_response_deserialize() {
+        let value = json!({
+            "mail_groups": [
+                {
+                    "mail_group_id": "eng@example.com",
+                    "description": "工程组",
+                    "created_at": "1700000000"
+                }
+            ],
+            "page_token": "next",
+            "has_more": true
+        });
+
+        let resp: MailGroupListResponse =
+            serde_json::from_value(value).expect("deserialize list response");
+        assert_eq!(resp.mail_groups.len(), 1);
+        assert_eq!(resp.mail_groups[0].mail_group_id, "eng@example.com");
+    }
+}

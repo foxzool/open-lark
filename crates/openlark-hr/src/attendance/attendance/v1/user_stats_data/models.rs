@@ -85,3 +85,33 @@ pub struct QueryResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_user_stats_data_serialization_roundtrip() {
+        let item = UserStatsDataItem {
+            user_id: "u_1".to_string(),
+            user_name: Some("张三".to_string()),
+            date: "2024-01-01".to_string(),
+            group_id: Some("g_1".to_string()),
+            group_name: Some("研发组".to_string()),
+            basic_info: Some(json!({"dept": "RD"})),
+            attendance_stats: Some(json!({"normal": 1})),
+            abnormal_stats: Some(json!({"late": 0})),
+            leave_stats: Some(json!({"annual": 1})),
+            overtime_stats: Some(json!({"hours": 2})),
+            punch_time: Some(json!({"start": "09:00"})),
+            check_result: Some(json!({"status": "normal"})),
+            custom_fields: Some(json!({"level": "P7"})),
+        };
+
+        let text = serde_json::to_string(&item).expect("序列化失败");
+        let parsed: UserStatsDataItem = serde_json::from_str(&text).expect("反序列化失败");
+        assert_eq!(parsed.user_id, "u_1");
+        assert_eq!(parsed.group_name.as_deref(), Some("研发组"));
+    }
+}

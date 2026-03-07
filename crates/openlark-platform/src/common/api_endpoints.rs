@@ -25,3 +25,14 @@ impl AdminApiV1 {
 pub mod prelude {
     pub use super::AdminApiV1;
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_adminapiv1_path_coverage() {
+        let paths = vec![AdminApiV1::CreateBadge.path(), AdminApiV1::ListBadge.path()];
+        assert!(paths.iter().all(|path| path.starts_with("/open-apis/")));
+    }
+}

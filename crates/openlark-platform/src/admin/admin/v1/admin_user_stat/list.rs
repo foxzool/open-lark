@@ -99,3 +99,20 @@ impl ApiResponseTrait for ListAdminUserStatResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_builder_basic() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request = ListAdminUserStatBuilder::new(config.clone())
+            .start_date("test".to_string())
+            .end_date("test".to_string());
+        let _ = request;
+    }
+}

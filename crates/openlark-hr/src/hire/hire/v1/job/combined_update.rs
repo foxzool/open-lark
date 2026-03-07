@@ -104,3 +104,15 @@ impl ApiResponseTrait for CombinedUpdateResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_combined_update_request_builder_new() {
+        let request = CombinedUpdateRequest::new(TestConfigBuilder::new().build());
+        let _ = request;
+    }
+}

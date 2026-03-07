@@ -173,3 +173,52 @@ pub struct RemoveToRecycleBinResponse {
     /// 是否成功
     pub success: bool,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_create_public_mailbox_body_serialize() {
+        let body = CreatePublicMailboxBody {
+            name: "support@example.com".to_string(),
+            description: Some("技术支持邮箱".to_string()),
+            owner_user_id: Some("ou_xxx".to_string()),
+        };
+
+        let value = serde_json::to_value(body).expect("serialize body");
+        assert_eq!(
+            value,
+            json!({
+                "name": "support@example.com",
+                "description": "技术支持邮箱",
+                "owner_user_id": "ou_xxx"
+            })
+        );
+    }
+
+    #[test]
+    fn test_public_mailbox_list_response_deserialize() {
+        let value = json!({
+            "items": [
+                {
+                    "public_mailbox_id": "pm_1",
+                    "name": "邮箱一",
+                    "description": "描述",
+                    "owner_user_id": "ou_1",
+                    "is_deleted": false,
+                    "created_time": "1700000000"
+                }
+            ],
+            "page_token": "next",
+            "has_more": true
+        });
+
+        let resp: PublicMailboxListResponse =
+            serde_json::from_value(value).expect("deserialize list response");
+        assert_eq!(resp.items.len(), 1);
+        assert_eq!(resp.page_token.as_deref(), Some("next"));
+        assert_eq!(resp.has_more, Some(true));
+    }
+}

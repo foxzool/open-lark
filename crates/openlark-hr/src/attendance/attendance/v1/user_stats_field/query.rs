@@ -171,3 +171,16 @@ impl ApiResponseTrait for QueryResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_query_request_builder_new() {
+        let request =
+            QueryRequest::new(TestConfigBuilder::new().build()).unit_id("test".to_string());
+        let _ = request;
+    }
+}

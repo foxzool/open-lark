@@ -102,3 +102,37 @@ pub struct QueryUserTaskResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_user_task_record_serialization_roundtrip() {
+        let record = UserTaskRecord {
+            user_id: "u_1".to_string(),
+            date: "2024-01-01".to_string(),
+            check_in_type: 1,
+            check_in_time: "2024-01-01 09:00:00".to_string(),
+            check_in_place_name: Some("总部".to_string()),
+            check_in_place_id: Some("p_1".to_string()),
+            check_in_result: 1,
+            check_in_method: 1,
+            device_id: Some("dev_1".to_string()),
+            device_name: Some("iPhone".to_string()),
+            wifi_name: Some("Office".to_string()),
+            wifi_mac: Some("AA:BB:CC:DD:EE:FF".to_string()),
+            remark: Some("正常".to_string()),
+            photo_list: Some(vec!["url_1".to_string()]),
+            longitude: Some(121.0),
+            latitude: Some(31.0),
+            out_address: None,
+            out_remark: None,
+        };
+
+        let text = serde_json::to_string(&record).expect("序列化失败");
+        let parsed: UserTaskRecord = serde_json::from_str(&text).expect("反序列化失败");
+        assert_eq!(parsed.user_id, "u_1");
+        assert_eq!(parsed.check_in_result, 1);
+    }
+}

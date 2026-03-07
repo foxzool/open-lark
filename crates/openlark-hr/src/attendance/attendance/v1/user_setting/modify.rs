@@ -100,3 +100,16 @@ impl ApiResponseTrait for ModifyResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_modify_request_builder_new() {
+        let request =
+            ModifyRequest::new(TestConfigBuilder::new().build(), "test".to_string(), true);
+        let _ = request;
+    }
+}

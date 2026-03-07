@@ -67,3 +67,15 @@ impl ApiResponseTrait for RecruiterResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_recruiter_request_builder_new() {
+        let request = RecruiterRequest::new(TestConfigBuilder::new().build(), "test".to_string());
+        let _ = request;
+    }
+}

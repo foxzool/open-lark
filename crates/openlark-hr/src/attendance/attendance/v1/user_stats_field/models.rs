@@ -57,3 +57,23 @@ pub struct QueryResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_stat_field_serialization_roundtrip() {
+        let field = StatField {
+            field_id: "f_1".to_string(),
+            field_name: Some("出勤天数".to_string()),
+            field_type: Some("number".to_string()),
+            field_desc: Some("统计字段".to_string()),
+        };
+
+        let text = serde_json::to_string(&field).expect("序列化失败");
+        let parsed: StatField = serde_json::from_str(&text).expect("反序列化失败");
+        assert_eq!(parsed.field_id, "f_1");
+        assert_eq!(parsed.field_type.as_deref(), Some("number"));
+    }
+}

@@ -113,3 +113,15 @@ impl ApiResponseTrait for ProcessResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_process_request_builder_new() {
+        let request = ProcessRequest::new(TestConfigBuilder::new().build(), "test".to_string(), 1);
+        let _ = request;
+    }
+}

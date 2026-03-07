@@ -56,3 +56,27 @@ impl ApiResponseTrait for CreateTicketResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    #[test]
+    fn test_builder_basic() {
+        let arc_config = Arc::new(
+            openlark_core::config::Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        );
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request = CreateTicketRequest::new(arc_config.clone())
+            .title("test".to_string())
+            .description("test".to_string());
+        let _ = request;
+    }
+}
