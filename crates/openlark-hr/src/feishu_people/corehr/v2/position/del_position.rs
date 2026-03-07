@@ -70,7 +70,7 @@ impl ApiResponseTrait for DelPositionResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

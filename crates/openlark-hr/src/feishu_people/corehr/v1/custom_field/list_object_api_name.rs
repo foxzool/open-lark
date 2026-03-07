@@ -79,7 +79,7 @@ impl ApiResponseTrait for ListObjectApiNameResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

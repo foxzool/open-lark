@@ -129,7 +129,7 @@ impl ApiResponseTrait for OperationLogsResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

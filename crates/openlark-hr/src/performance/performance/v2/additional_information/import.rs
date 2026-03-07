@@ -120,7 +120,7 @@ impl ApiResponseTrait for ImportResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

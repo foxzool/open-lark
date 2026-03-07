@@ -62,7 +62,7 @@ impl ApiResponseTrait for UpdateResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

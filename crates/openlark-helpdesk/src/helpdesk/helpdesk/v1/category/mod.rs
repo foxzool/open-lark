@@ -57,7 +57,7 @@ pub use patch::{PatchCategoryRequest, PatchCategoryRequestBuilder};
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

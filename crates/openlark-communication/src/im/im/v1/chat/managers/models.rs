@@ -26,7 +26,7 @@ impl ApiResponseTrait for ChatManagersResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

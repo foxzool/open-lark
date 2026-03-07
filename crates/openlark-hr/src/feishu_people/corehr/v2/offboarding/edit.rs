@@ -81,7 +81,7 @@ impl ApiResponseTrait for EditResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

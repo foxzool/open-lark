@@ -63,7 +63,7 @@ pub use models::{
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

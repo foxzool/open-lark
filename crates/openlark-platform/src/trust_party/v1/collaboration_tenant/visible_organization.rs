@@ -88,7 +88,7 @@ impl ApiResponseTrait for VisibleOrganizationResponse {}
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

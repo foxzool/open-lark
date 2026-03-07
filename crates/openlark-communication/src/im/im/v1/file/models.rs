@@ -17,7 +17,7 @@ impl ApiResponseTrait for CreateFileResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

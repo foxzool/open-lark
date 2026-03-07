@@ -92,7 +92,7 @@ impl ApiResponseTrait for CancelOnboardResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

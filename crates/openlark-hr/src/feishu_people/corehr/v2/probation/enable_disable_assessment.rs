@@ -82,7 +82,7 @@ impl ApiResponseTrait for EnableDisableAssessmentResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

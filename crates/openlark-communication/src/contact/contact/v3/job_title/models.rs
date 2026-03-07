@@ -64,7 +64,7 @@ impl ApiResponseTrait for ListJobTitlesResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -74,7 +74,7 @@ impl ApiResponseTrait for OpenQueryPositionChangeListByIdsResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

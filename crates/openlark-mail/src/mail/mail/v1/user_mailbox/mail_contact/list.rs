@@ -58,7 +58,7 @@ impl ListMailContactRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     use std::sync::Arc;
 
     #[test]

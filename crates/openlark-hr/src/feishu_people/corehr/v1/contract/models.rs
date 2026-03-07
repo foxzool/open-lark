@@ -306,7 +306,7 @@ pub struct SearchResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

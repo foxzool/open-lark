@@ -67,7 +67,7 @@ impl ApiResponseTrait for UpdateMailGroupResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

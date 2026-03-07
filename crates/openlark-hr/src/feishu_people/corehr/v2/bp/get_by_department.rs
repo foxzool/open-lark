@@ -73,7 +73,7 @@ impl ApiResponseTrait for GetByDepartmentResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -29,7 +29,7 @@ impl Attendance {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

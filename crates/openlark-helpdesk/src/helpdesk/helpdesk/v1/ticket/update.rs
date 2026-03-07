@@ -61,7 +61,7 @@ impl ApiResponseTrait for UpdateTicketResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

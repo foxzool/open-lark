@@ -107,7 +107,7 @@ impl ApiResponseTrait for SearchResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

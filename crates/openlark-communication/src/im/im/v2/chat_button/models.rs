@@ -26,7 +26,7 @@ impl ApiResponseTrait for ChatButtonUpdateResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

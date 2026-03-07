@@ -76,7 +76,7 @@ impl ApiResponseTrait for BatchRemoveResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

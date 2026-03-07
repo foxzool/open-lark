@@ -73,7 +73,7 @@ impl ApiResponseTrait for WithdrawResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

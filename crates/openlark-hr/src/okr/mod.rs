@@ -29,7 +29,7 @@ impl Okr {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

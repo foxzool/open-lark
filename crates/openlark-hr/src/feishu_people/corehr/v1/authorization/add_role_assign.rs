@@ -87,7 +87,7 @@ impl ApiResponseTrait for AddRoleAssignResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

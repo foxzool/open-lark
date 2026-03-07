@@ -107,7 +107,7 @@ impl ApiResponseTrait for BatchDeleteMembersResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

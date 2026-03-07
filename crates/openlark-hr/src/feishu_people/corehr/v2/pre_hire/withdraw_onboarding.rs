@@ -72,7 +72,7 @@ impl ApiResponseTrait for WithdrawOnboardingResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -17,7 +17,7 @@ impl ApiResponseTrait for CreateFunctionalRoleResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

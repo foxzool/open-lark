@@ -81,7 +81,7 @@ impl ApiResponseTrait for SubmitV2Response {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

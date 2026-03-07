@@ -118,7 +118,7 @@ impl DeleteCardElementRequestBuilder {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -330,7 +330,7 @@ pub enum VerificationMethod {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

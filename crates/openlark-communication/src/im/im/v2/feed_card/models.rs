@@ -33,7 +33,7 @@ impl ApiResponseTrait for FeedCardActionResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

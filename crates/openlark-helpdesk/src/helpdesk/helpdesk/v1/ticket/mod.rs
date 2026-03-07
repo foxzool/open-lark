@@ -83,7 +83,7 @@ pub use update::UpdateTicketRequest;
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

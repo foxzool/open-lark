@@ -92,7 +92,7 @@ impl ApiResponseTrait for TransferStageResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

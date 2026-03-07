@@ -77,7 +77,7 @@ impl ApiResponseTrait for ArchiveResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

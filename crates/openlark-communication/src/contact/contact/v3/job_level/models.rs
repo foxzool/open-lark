@@ -70,7 +70,7 @@ impl ApiResponseTrait for ListJobLevelsResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

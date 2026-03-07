@@ -58,7 +58,7 @@ impl ApiResponseTrait for BatchAddGroupMembersResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

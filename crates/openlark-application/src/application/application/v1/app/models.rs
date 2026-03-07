@@ -10,7 +10,7 @@ pub struct GetAppResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

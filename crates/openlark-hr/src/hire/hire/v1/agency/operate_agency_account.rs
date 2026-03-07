@@ -88,7 +88,7 @@ impl ApiResponseTrait for OperateAgencyAccountResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]
