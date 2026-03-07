@@ -38,6 +38,7 @@
 #![allow(missing_docs)]
 
 pub mod common;
+pub mod models;
 
 #[cfg(feature = "robot")]
 pub mod robot;

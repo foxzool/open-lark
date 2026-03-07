@@ -17,6 +17,9 @@ members = [
     # === CardKit 卡片能力
     "crates/openlark-cardkit",        # CardKit 卡片实体与组件
 
+    # === Webhook 自定义机器人
+    "crates/openlark-webhook",        # Webhook 自定义机器人
+
     # === 文档管理
     "crates/openlark-docs",           # 云文档和表格服务
 
