@@ -60,7 +60,7 @@ impl ApiResponseTrait for LogoutResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -82,7 +82,7 @@ impl ApiResponseTrait for EditEnumOptionResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

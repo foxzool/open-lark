@@ -88,7 +88,7 @@ impl ApiResponseTrait for OfferStatusResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

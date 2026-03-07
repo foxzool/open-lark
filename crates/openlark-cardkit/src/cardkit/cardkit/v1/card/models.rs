@@ -19,7 +19,7 @@ impl ApiResponseTrait for ConvertCardIdResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

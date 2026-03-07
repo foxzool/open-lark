@@ -57,7 +57,7 @@ pub use patch::{PatchAgentSkillRequest, PatchAgentSkillRequestBuilder};
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

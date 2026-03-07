@@ -180,7 +180,7 @@ impl ApiResponseTrait for UploadResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

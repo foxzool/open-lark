@@ -57,7 +57,7 @@ pub use patch::{PatchAgentScheduleRequest, PatchAgentScheduleRequestBuilder};
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

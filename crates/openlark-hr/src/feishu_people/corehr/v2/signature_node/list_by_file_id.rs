@@ -71,7 +71,7 @@ impl ApiResponseTrait for ListByFileIdResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

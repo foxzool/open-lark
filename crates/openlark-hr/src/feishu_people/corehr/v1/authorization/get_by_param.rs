@@ -86,7 +86,7 @@ impl ApiResponseTrait for GetByParamResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

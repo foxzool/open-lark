@@ -71,7 +71,7 @@ impl ApiResponseTrait for BatchsaveResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

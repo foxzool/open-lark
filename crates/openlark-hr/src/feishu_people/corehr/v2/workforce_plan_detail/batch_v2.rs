@@ -71,7 +71,7 @@ impl ApiResponseTrait for BatchV2Response {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

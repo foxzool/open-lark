@@ -81,7 +81,7 @@ impl ApiResponseTrait for ConvertResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

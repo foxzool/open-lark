@@ -58,7 +58,7 @@ impl ListMailboxMessageRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     use std::sync::Arc;
 
     #[test]

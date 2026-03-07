@@ -70,7 +70,7 @@ impl ApiResponseTrait for ActiveResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

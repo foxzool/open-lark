@@ -109,7 +109,7 @@ impl ApiResponseTrait for TimelineResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

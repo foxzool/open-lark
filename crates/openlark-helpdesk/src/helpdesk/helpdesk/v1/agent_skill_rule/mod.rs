@@ -29,7 +29,7 @@ pub use list::{ListAgentSkillRuleRequest, ListAgentSkillRuleRequestBuilder};
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

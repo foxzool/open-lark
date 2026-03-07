@@ -49,7 +49,7 @@ impl ApiResponseTrait for ListPinsResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -70,7 +70,7 @@ impl ApiResponseTrait for DeleteOrgResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -37,7 +37,7 @@ impl DocumentAiV1 {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

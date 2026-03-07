@@ -152,7 +152,7 @@ pub struct ListActivitySubscriptionsResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

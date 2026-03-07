@@ -137,7 +137,7 @@ async fn get_app_token(_config: &crate::models::SecurityConfig) -> crate::Securi
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

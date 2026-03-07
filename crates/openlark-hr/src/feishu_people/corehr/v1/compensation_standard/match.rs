@@ -89,7 +89,7 @@ impl ApiResponseTrait for MatchResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

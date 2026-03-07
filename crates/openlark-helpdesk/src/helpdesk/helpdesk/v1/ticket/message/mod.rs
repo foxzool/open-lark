@@ -33,7 +33,7 @@ pub use list::{ListTicketMessageRequest, ListTicketMessageRequestBuilder};
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

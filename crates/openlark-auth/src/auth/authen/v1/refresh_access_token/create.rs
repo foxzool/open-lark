@@ -105,7 +105,7 @@ impl RefreshUserAccessTokenV1Builder {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

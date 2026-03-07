@@ -74,7 +74,7 @@ impl ApiResponseTrait for FlowVariableDataResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -62,7 +62,7 @@ impl ApiResponseTrait for BatchUpdateResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

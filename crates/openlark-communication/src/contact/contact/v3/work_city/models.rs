@@ -64,7 +64,7 @@ impl ApiResponseTrait for ListWorkCitiesResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -60,7 +60,7 @@ impl openlark_core::api::ApiResponseTrait for DeleteMailGroupMemberResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

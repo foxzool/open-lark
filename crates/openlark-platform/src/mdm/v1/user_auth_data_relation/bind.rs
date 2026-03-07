@@ -108,7 +108,7 @@ impl ApiResponseTrait for UserAuthDataRelationBindResponse {}
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

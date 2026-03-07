@@ -80,7 +80,7 @@ impl ApiResponseTrait for GetResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -22,7 +22,7 @@ impl CardkitV1Service {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

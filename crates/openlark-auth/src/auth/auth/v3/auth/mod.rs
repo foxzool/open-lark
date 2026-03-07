@@ -57,7 +57,7 @@ impl AuthServiceV3 {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]
