@@ -58,7 +58,7 @@ impl<'de> Deserialize<'de> for ReadSingleRangeResponse {
             .and_then(|v| v.as_str())
             .map(|s| s.to_string());
 
-        let value_range = raw_value.get("value_range").and_then(|v| {
+        let value_range = raw_value.get("valueRange").and_then(|v| {
             // 手动解析 ValueRange
             let range = v
                 .get("range")
@@ -153,7 +153,7 @@ impl<'de> Deserialize<'de> for ReadMultipleRangesResponse {
             .map(|s| s.to_string());
 
         let value_ranges = raw_value
-            .get("value_ranges")
+            .get("valueRanges")
             .and_then(|vals| vals.as_array())
             .and_then(|arr| {
                 let mut ranges = vec![];
