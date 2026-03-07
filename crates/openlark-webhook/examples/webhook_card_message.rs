@@ -42,5 +42,7 @@ async fn main() -> Result<()> {
 #[cfg(not(feature = "card"))]
 fn main() {
     println!("This example requires the 'card' feature to be enabled.");
-    println!("Run with: cargo run --example webhook_card_message -p openlark-webhook --features card");
+    println!(
+        "Run with: cargo run --example webhook_card_message -p openlark-webhook --features card"
+    );
 }

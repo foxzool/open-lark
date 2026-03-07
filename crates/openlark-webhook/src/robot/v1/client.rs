@@ -16,7 +16,11 @@ impl WebhookClient {
     }
 
     /// 发送原始 JSON 负载到 Webhook
-    pub async fn send(&self, webhook_url: &str, payload: serde_json::Value) -> Result<SendWebhookMessageResponse> {
+    pub async fn send(
+        &self,
+        webhook_url: &str,
+        payload: serde_json::Value,
+    ) -> Result<SendWebhookMessageResponse> {
         let response = self
             .client
             .post(webhook_url)
@@ -27,10 +31,7 @@ impl WebhookClient {
 
         let status = response.status();
         if !status.is_success() {
-            return Err(WebhookError::Http(format!(
-                "HTTP error: {}",
-                status
-            )));
+            return Err(WebhookError::Http(format!("HTTP error: {}", status)));
         }
 
         let body = response
@@ -43,7 +44,11 @@ impl WebhookClient {
     }
 
     /// 发送文本消息
-    pub async fn send_text(&self, webhook_url: &str, text: String) -> Result<SendWebhookMessageResponse> {
+    pub async fn send_text(
+        &self,
+        webhook_url: &str,
+        text: String,
+    ) -> Result<SendWebhookMessageResponse> {
         let payload = json!({
             "msg_type": "text",
             "content": {
@@ -54,7 +59,11 @@ impl WebhookClient {
     }
 
     /// 发送富文本消息
-    pub async fn send_post(&self, webhook_url: &str, post: String) -> Result<SendWebhookMessageResponse> {
+    pub async fn send_post(
+        &self,
+        webhook_url: &str,
+        post: String,
+    ) -> Result<SendWebhookMessageResponse> {
         let payload = json!({
             "msg_type": "post",
             "content": {
@@ -65,7 +74,11 @@ impl WebhookClient {
     }
 
     /// 发送图片消息
-    pub async fn send_image(&self, webhook_url: &str, image_key: String) -> Result<SendWebhookMessageResponse> {
+    pub async fn send_image(
+        &self,
+        webhook_url: &str,
+        image_key: String,
+    ) -> Result<SendWebhookMessageResponse> {
         let payload = json!({
             "msg_type": "image",
             "content": {
@@ -76,7 +89,11 @@ impl WebhookClient {
     }
 
     /// 发送文件消息
-    pub async fn send_file(&self, webhook_url: &str, file_key: String) -> Result<SendWebhookMessageResponse> {
+    pub async fn send_file(
+        &self,
+        webhook_url: &str,
+        file_key: String,
+    ) -> Result<SendWebhookMessageResponse> {
         let payload = json!({
             "msg_type": "file",
             "content": {
@@ -88,7 +105,11 @@ impl WebhookClient {
 
     /// 发送卡片消息（需要启用 card feature）
     #[cfg(feature = "card")]
-    pub async fn send_card(&self, webhook_url: &str, card: serde_json::Value) -> Result<SendWebhookMessageResponse> {
+    pub async fn send_card(
+        &self,
+        webhook_url: &str,
+        card: serde_json::Value,
+    ) -> Result<SendWebhookMessageResponse> {
         let payload = json!({
             "msg_type": "interactive",
             "content": {

@@ -1,5 +1,5 @@
 use crate::common::error::{Result, WebhookError};
-use crate::models::{TextContent, PostContent, ImageContent, FileContent};
+use crate::models::{FileContent, ImageContent, PostContent, TextContent};
 use serde_json::json;
 
 #[cfg(feature = "card")]
@@ -25,32 +25,30 @@ impl SendWebhookMessageRequest {
     /// 设置文本消息
     pub fn text(mut self, text: String) -> Self {
         self.msg_type = "text".to_string();
-        self.content = serde_json::to_value(TextContent::new(text))
-            .unwrap_or_else(|_| json!({}));
+        self.content = serde_json::to_value(TextContent::new(text)).unwrap_or_else(|_| json!({}));
         self
     }
 
     /// 设置富文本消息
     pub fn post(mut self, post: String) -> Self {
         self.msg_type = "post".to_string();
-        self.content = serde_json::to_value(PostContent::new(post))
-            .unwrap_or_else(|_| json!({}));
+        self.content = serde_json::to_value(PostContent::new(post)).unwrap_or_else(|_| json!({}));
         self
     }
 
     /// 设置图片消息
     pub fn image(mut self, image_key: String) -> Self {
         self.msg_type = "image".to_string();
-        self.content = serde_json::to_value(ImageContent::new(image_key))
-            .unwrap_or_else(|_| json!({}));
+        self.content =
+            serde_json::to_value(ImageContent::new(image_key)).unwrap_or_else(|_| json!({}));
         self
     }
 
     /// 设置文件消息
     pub fn file(mut self, file_key: String) -> Self {
         self.msg_type = "file".to_string();
-        self.content = serde_json::to_value(FileContent::new(file_key))
-            .unwrap_or_else(|_| json!({}));
+        self.content =
+            serde_json::to_value(FileContent::new(file_key)).unwrap_or_else(|_| json!({}));
         self
     }
 
@@ -58,8 +56,8 @@ impl SendWebhookMessageRequest {
     #[cfg(feature = "card")]
     pub fn card(mut self, card: serde_json::Value) -> Self {
         self.msg_type = "interactive".to_string();
-        self.content = serde_json::to_value(InteractiveContent::new(card))
-            .unwrap_or_else(|_| json!({}));
+        self.content =
+            serde_json::to_value(InteractiveContent::new(card)).unwrap_or_else(|_| json!({}));
         self
     }
 
@@ -80,10 +78,7 @@ impl SendWebhookMessageRequest {
 
         let status = response.status();
         if !status.is_success() {
-            return Err(WebhookError::Http(format!(
-                "HTTP error: {}",
-                status
-            )));
+            return Err(WebhookError::Http(format!("HTTP error: {}", status)));
         }
 
         let body = response
@@ -113,7 +108,7 @@ mod tests {
     fn test_send_webhook_message_request_text() {
         let req = SendWebhookMessageRequest::new("https://example.com/webhook".to_string())
             .text("Hello, World!".to_string());
-        
+
         assert_eq!(req.msg_type, "text");
         assert_eq!(req.webhook_url, "https://example.com/webhook");
     }
@@ -122,7 +117,7 @@ mod tests {
     fn test_send_webhook_message_request_post() {
         let req = SendWebhookMessageRequest::new("https://example.com/webhook".to_string())
             .post(r#"{"title":"Test"}"#.to_string());
-        
+
         assert_eq!(req.msg_type, "post");
     }
 
@@ -130,7 +125,7 @@ mod tests {
     fn test_send_webhook_message_request_image() {
         let req = SendWebhookMessageRequest::new("https://example.com/webhook".to_string())
             .image("img_abc123".to_string());
-        
+
         assert_eq!(req.msg_type, "image");
     }
 
@@ -138,7 +133,7 @@ mod tests {
     fn test_send_webhook_message_request_file() {
         let req = SendWebhookMessageRequest::new("https://example.com/webhook".to_string())
             .file("file_xyz789".to_string());
-        
+
         assert_eq!(req.msg_type, "file");
     }
 
@@ -151,9 +146,9 @@ mod tests {
                 "template_id": "test_template"
             }
         });
-        let req = SendWebhookMessageRequest::new("https://example.com/webhook".to_string())
-            .card(card);
-        
+        let req =
+            SendWebhookMessageRequest::new("https://example.com/webhook".to_string()).card(card);
+
         assert_eq!(req.msg_type, "interactive");
     }
 
