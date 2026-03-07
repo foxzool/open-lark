@@ -102,7 +102,7 @@ impl ApiResponseTrait for IdentityCreateResponse {}
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

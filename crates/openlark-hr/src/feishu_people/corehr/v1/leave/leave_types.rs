@@ -78,7 +78,7 @@ impl ApiResponseTrait for LeaveTypesResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

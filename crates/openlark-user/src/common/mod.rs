@@ -26,7 +26,7 @@ pub struct UserPreference {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

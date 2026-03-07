@@ -58,7 +58,7 @@ impl CreateMailContactRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use serde_json::json;
+    
     use std::sync::Arc;
 
     #[test]
@@ -69,7 +69,7 @@ mod tests {
                 .app_secret("test_secret")
                 .build(),
         );
-        let config = openlark_core::config::Config::builder()
+        let _config = openlark_core::config::Config::builder()
             .app_id("test_app")
             .app_secret("test_secret")
             .build();

@@ -60,7 +60,7 @@ impl openlark_core::api::ApiResponseTrait for DeleteMailGroupPermissionMemberRes
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]
