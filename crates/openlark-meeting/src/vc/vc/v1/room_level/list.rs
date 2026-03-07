@@ -60,7 +60,8 @@ mod tests {
             .app_id("test_app")
             .app_secret("test_secret")
             .build();
-        let request = ListRoomLevelRequest::new(config.clone()).query_param("key1".to_string(), "value1".to_string());
+        let request = ListRoomLevelRequest::new(config.clone())
+            .query_param("key1".to_string(), "value1".to_string());
         let _ = request;
     }
 }
