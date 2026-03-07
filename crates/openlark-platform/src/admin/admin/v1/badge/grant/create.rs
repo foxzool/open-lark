@@ -97,7 +97,7 @@ mod tests {
             .build();
         let request = CreateBadgeGrantBuilder::new(config.clone())
             .badge_id("test".to_string())
-            .user_ids("test".to_string());
+            .user_ids(vec!["user_001".to_string()]);
         let _ = request;
     }
 }
