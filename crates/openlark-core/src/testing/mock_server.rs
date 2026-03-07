@@ -1,0 +1,119 @@
+//! 统一的 HTTP Mock 服务器封装
+
+use serde_json::Value;
+#[cfg(test)]
+use wiremock::{Mock, MockServer, ResponseTemplate};
+#[cfg(test)]
+use wiremock::matchers::{method, path as path_matcher, body_json};
+
+/// 统一的 HTTP Mock 服务器封装，提供简洁的 API 来 Mock HTTP 请求。
+#[cfg(test)]
+pub struct TestServer {
+    inner: MockServer,
+}
+
+#[cfg(test)]
+impl TestServer {
+    pub async fn new() -> Self {
+        Self {
+            inner: MockServer::start().await,
+        }
+    }
+    
+    pub fn uri(&self) -> String {
+        self.inner.uri()
+    }
+    
+    pub async fn mock_success(&self, route: &str, body: Value) {
+        Mock::given(method("POST"))
+            .and(path_matcher(route))
+            .respond_with(ResponseTemplate::new(200).set_body_json(body))
+            .mount(&self.inner)
+            .await;
+    }
+    
+    pub async fn mock_error(&self, route: &str, code: u16, error: Value) {
+        Mock::given(method("POST"))
+            .and(path_matcher(route))
+            .respond_with(ResponseTemplate::new(code).set_body_json(error))
+            .mount(&self.inner)
+            .await;
+    }
+    
+    pub async fn mock_timeout(&self, route: &str, delay: std::time::Duration) {
+        Mock::given(method("POST"))
+            .and(path_matcher(route))
+            .respond_with(ResponseTemplate::new(200).set_delay(delay))
+            .mount(&self.inner)
+            .await;
+    }
+    
+    pub async fn mock_with_verification(
+        &self,
+        route: &str,
+        expected_body: Value,
+        response: Value,
+    ) {
+        Mock::given(method("POST"))
+            .and(path_matcher(route))
+            .and(body_json(&expected_body))
+            .respond_with(ResponseTemplate::new(200).set_body_json(response))
+            .mount(&self.inner)
+            .await;
+    }
+    
+    pub async fn mock_get(&self, route: &str, body: Value) {
+        Mock::given(method("GET"))
+            .and(path_matcher(route))
+            .respond_with(ResponseTemplate::new(200).set_body_json(body))
+            .mount(&self.inner)
+            .await;
+    }
+    
+    pub async fn mock_put(&self, route: &str, body: Value) {
+        Mock::given(method("PUT"))
+            .and(path_matcher(route))
+            .respond_with(ResponseTemplate::new(200).set_body_json(body))
+            .mount(&self.inner)
+            .await;
+    }
+    
+    pub async fn mock_delete(&self, route: &str, body: Value) {
+        Mock::given(method("DELETE"))
+            .and(path_matcher(route))
+            .respond_with(ResponseTemplate::new(200).set_body_json(body))
+            .mount(&self.inner)
+            .await;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::testing::prelude::*;
+    use serde_json::json;
+    
+    #[tokio::test]
+    async fn test_mock_server_basic() {
+        let server = TestServer::new().await;
+        assert!(!server.uri().is_empty());
+    }
+    
+    #[tokio::test]
+    async fn test_mock_success() {
+        let server = TestServer::new().await;
+        server.mock_success("/api/v1/test", json!({"code": 0})).await;
+    }
+    
+    #[tokio::test]
+    async fn test_mock_error() {
+        let server = TestServer::new().await;
+        server.mock_error("/api/v1/error", 400, json!({"code": 99991663})).await;
+    }
+    
+    #[tokio::test]
+    async fn test_mock_timeout() {
+        let server = TestServer::new().await;
+        server.mock_timeout("/api/v1/slow", std::time::Duration::from_millis(100)).await;
+    }
+}
