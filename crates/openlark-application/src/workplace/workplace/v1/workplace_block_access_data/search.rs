@@ -107,7 +107,7 @@ impl ApiResponseTrait for AccessDataSearchBlockResponse {}
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

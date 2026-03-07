@@ -113,7 +113,7 @@ pub use submit_approve::{
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

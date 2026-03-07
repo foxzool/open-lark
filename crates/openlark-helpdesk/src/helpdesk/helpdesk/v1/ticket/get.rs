@@ -39,7 +39,7 @@ impl ApiResponseTrait for GetTicketResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

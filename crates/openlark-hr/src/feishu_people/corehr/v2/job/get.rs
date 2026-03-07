@@ -71,7 +71,7 @@ impl ApiResponseTrait for GetResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

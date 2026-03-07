@@ -76,7 +76,7 @@ impl openlark_core::api::ApiResponseTrait for PatchMailGroupResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]
