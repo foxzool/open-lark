@@ -67,3 +67,15 @@ impl ApiResponseTrait for ConfigResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_config_request_builder_new() {
+        let request = ConfigRequest::new(TestConfigBuilder::new().build(), "test".to_string());
+        let _ = request;
+    }
+}

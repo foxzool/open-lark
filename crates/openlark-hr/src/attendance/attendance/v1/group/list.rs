@@ -87,3 +87,15 @@ impl ApiResponseTrait for ListGroupResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_list_group_request_builder_new() {
+        let request = ListGroupRequest::new(TestConfigBuilder::new().build()).page_size(1);
+        let _ = request;
+    }
+}

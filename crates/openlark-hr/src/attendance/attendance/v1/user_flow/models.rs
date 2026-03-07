@@ -242,3 +242,47 @@ pub struct BatchDelUserFlowResponse {
     /// 删除结果列表
     pub results: Vec<BatchDelUserFlowResult>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_user_flow_info_serialization_roundtrip() {
+        let flow = UserFlowInfo {
+            user_flow_id: "flow_1".to_string(),
+            user_id: "u_1".to_string(),
+            punch_date: "2024-01-01".to_string(),
+            punch_time: "2024-01-01 09:00:00".to_string(),
+            punch_type: 1,
+            punch_method: 1,
+            punch_place_name: Some("总部".to_string()),
+            punch_place_id: Some("p_1".to_string()),
+            longitude: Some(121.0),
+            latitude: Some(31.0),
+            wifi_name: Some("Office".to_string()),
+            wifi_mac: Some("AA:BB:CC:DD:EE:FF".to_string()),
+            device_id: Some("dev_1".to_string()),
+            device_name: Some("iPhone".to_string()),
+            remark: Some("正常打卡".to_string()),
+            photo_list: Some(vec!["url_1".to_string()]),
+            out_address: None,
+            out_remark: None,
+        };
+
+        let json = serde_json::to_string(&flow).expect("序列化失败");
+        let parsed: UserFlowInfo = serde_json::from_str(&json).expect("反序列化失败");
+        assert_eq!(parsed.user_flow_id, "flow_1");
+        assert_eq!(parsed.punch_type, 1);
+    }
+
+    #[test]
+    fn test_batch_del_response_deserialization() {
+        let response: BatchDelUserFlowResponse =
+            serde_json::from_str(r#"{"results":[{"user_flow_id":"flow_2","success":true}]}"#)
+                .expect("反序列化失败");
+
+        assert_eq!(response.results.len(), 1);
+        assert!(response.results[0].success);
+    }
+}

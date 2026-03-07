@@ -730,3 +730,490 @@ impl BoardApiV1 {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_task_api_v1_to_url() {
+        let cases = vec![
+            (
+                TaskApiV1::TaskCreate,
+                "/open-apis/task/v1/tasks".to_string(),
+            ),
+            (
+                TaskApiV1::TaskGet("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1".to_string(),
+            ),
+            (
+                TaskApiV1::TaskUpdate("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1".to_string(),
+            ),
+            (
+                TaskApiV1::TaskDelete("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1".to_string(),
+            ),
+            (
+                TaskApiV1::TaskComplete("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/complete".to_string(),
+            ),
+            (
+                TaskApiV1::TaskUncomplete("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/uncomplete".to_string(),
+            ),
+            (TaskApiV1::TaskList, "/open-apis/task/v1/tasks".to_string()),
+            (
+                TaskApiV1::TaskFollowerCreate("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/followers".to_string(),
+            ),
+            (
+                TaskApiV1::TaskFollowerDelete("task_1".to_string(), "f1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/followers/f1".to_string(),
+            ),
+            (
+                TaskApiV1::TaskFollowerList("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/followers".to_string(),
+            ),
+            (
+                TaskApiV1::TaskFollowerBatchDelete("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/batch_delete_follower".to_string(),
+            ),
+            (
+                TaskApiV1::TaskCollaboratorCreate("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/collaborators".to_string(),
+            ),
+            (
+                TaskApiV1::TaskCollaboratorDelete("task_1".to_string(), "c1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/collaborators/c1".to_string(),
+            ),
+            (
+                TaskApiV1::TaskCollaboratorList("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/collaborators".to_string(),
+            ),
+            (
+                TaskApiV1::TaskCollaboratorBatchDelete("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/batch_delete_collaborator".to_string(),
+            ),
+            (
+                TaskApiV1::TaskReminderCreate("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/reminders".to_string(),
+            ),
+            (
+                TaskApiV1::TaskReminderDelete("task_1".to_string(), "r1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/reminders/r1".to_string(),
+            ),
+            (
+                TaskApiV1::TaskReminderList("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/reminders".to_string(),
+            ),
+            (
+                TaskApiV1::TaskCommentCreate("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/comments".to_string(),
+            ),
+            (
+                TaskApiV1::TaskCommentGet("task_1".to_string(), "cm1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/comments/cm1".to_string(),
+            ),
+            (
+                TaskApiV1::TaskCommentUpdate("task_1".to_string(), "cm1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/comments/cm1".to_string(),
+            ),
+            (
+                TaskApiV1::TaskCommentDelete("task_1".to_string(), "cm1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/comments/cm1".to_string(),
+            ),
+            (
+                TaskApiV1::TaskCommentList("task_1".to_string()),
+                "/open-apis/task/v1/tasks/task_1/comments".to_string(),
+            ),
+        ];
+
+        for (api, expected) in cases {
+            assert_eq!(api.to_url(), expected);
+        }
+    }
+
+    #[test]
+    fn test_task_api_v2_to_url() {
+        let cases = vec![
+            (
+                TaskApiV2::TaskCreate,
+                "/open-apis/task/v2/tasks".to_string(),
+            ),
+            (
+                TaskApiV2::TaskGet("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1".to_string(),
+            ),
+            (
+                TaskApiV2::TaskUpdate("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1".to_string(),
+            ),
+            (
+                TaskApiV2::TaskDelete("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1".to_string(),
+            ),
+            (
+                TaskApiV2::TaskComplete("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/complete".to_string(),
+            ),
+            (
+                TaskApiV2::TaskUncomplete("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/uncomplete".to_string(),
+            ),
+            (TaskApiV2::TaskList, "/open-apis/task/v2/tasks".to_string()),
+            (
+                TaskApiV2::TasklistCreate,
+                "/open-apis/task/v2/tasklists".to_string(),
+            ),
+            (
+                TaskApiV2::TasklistGet("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1".to_string(),
+            ),
+            (
+                TaskApiV2::TasklistUpdate("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1".to_string(),
+            ),
+            (
+                TaskApiV2::TasklistDelete("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1".to_string(),
+            ),
+            (
+                TaskApiV2::TasklistList,
+                "/open-apis/task/v2/tasklists".to_string(),
+            ),
+            (
+                TaskApiV2::SectionCreate("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/sections".to_string(),
+            ),
+            (
+                TaskApiV2::SectionGet("tl1".to_string(), "s1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/sections/s1".to_string(),
+            ),
+            (
+                TaskApiV2::SectionUpdate("tl1".to_string(), "s1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/sections/s1".to_string(),
+            ),
+            (
+                TaskApiV2::SectionDelete("tl1".to_string(), "s1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/sections/s1".to_string(),
+            ),
+            (
+                TaskApiV2::SectionList("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/sections".to_string(),
+            ),
+            (
+                TaskApiV2::CustomFieldCreate("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/custom_fields".to_string(),
+            ),
+            (
+                TaskApiV2::CustomFieldGet("tl1".to_string(), "f1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/custom_fields/f1".to_string(),
+            ),
+            (
+                TaskApiV2::CustomFieldUpdate("tl1".to_string(), "f1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/custom_fields/f1".to_string(),
+            ),
+            (
+                TaskApiV2::CustomFieldDelete("tl1".to_string(), "f1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/custom_fields/f1".to_string(),
+            ),
+            (
+                TaskApiV2::CustomFieldList("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/custom_fields".to_string(),
+            ),
+            (
+                TaskApiV2::CommentCreate("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/comments".to_string(),
+            ),
+            (
+                TaskApiV2::CommentGet("t1".to_string(), "c1".to_string()),
+                "/open-apis/task/v2/tasks/t1/comments/c1".to_string(),
+            ),
+            (
+                TaskApiV2::CommentUpdate("t1".to_string(), "c1".to_string()),
+                "/open-apis/task/v2/tasks/t1/comments/c1".to_string(),
+            ),
+            (
+                TaskApiV2::CommentDelete("t1".to_string(), "c1".to_string()),
+                "/open-apis/task/v2/tasks/t1/comments/c1".to_string(),
+            ),
+            (
+                TaskApiV2::CommentList("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/comments".to_string(),
+            ),
+            (
+                TaskApiV2::AttachmentUpload("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/attachments".to_string(),
+            ),
+            (
+                TaskApiV2::AttachmentDelete("t1".to_string(), "a1".to_string()),
+                "/open-apis/task/v2/tasks/t1/attachments/a1".to_string(),
+            ),
+            (
+                TaskApiV2::SubtaskCreate("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/subtasks".to_string(),
+            ),
+            (
+                TaskApiV2::SubtaskList("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/subtasks".to_string(),
+            ),
+            (
+                TaskApiV2::TaskAddTasklist("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/add_tasklist".to_string(),
+            ),
+            (
+                TaskApiV2::TaskRemoveTasklist("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/remove_tasklist".to_string(),
+            ),
+            (
+                TaskApiV2::TaskGetTasklists("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/tasklists".to_string(),
+            ),
+            (
+                TaskApiV2::TaskAddMembers("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/add_members".to_string(),
+            ),
+            (
+                TaskApiV2::TaskRemoveMembers("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/remove_members".to_string(),
+            ),
+            (
+                TaskApiV2::TaskAddReminders("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/add_reminders".to_string(),
+            ),
+            (
+                TaskApiV2::TaskRemoveReminders("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/remove_reminders".to_string(),
+            ),
+            (
+                TaskApiV2::TaskAddDependencies("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/add_dependencies".to_string(),
+            ),
+            (
+                TaskApiV2::TaskRemoveDependencies("t1".to_string()),
+                "/open-apis/task/v2/tasks/t1/remove_dependencies".to_string(),
+            ),
+            (
+                TaskApiV2::TasklistGetTasks("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/tasks".to_string(),
+            ),
+            (
+                TaskApiV2::TasklistAddMembers("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/add_members".to_string(),
+            ),
+            (
+                TaskApiV2::TasklistRemoveMembers("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/remove_members".to_string(),
+            ),
+            (
+                TaskApiV2::SectionGetTasks("s1".to_string()),
+                "/open-apis/task/v2/sections/s1/tasks".to_string(),
+            ),
+            (
+                TaskApiV2::ActivitySubscriptionCreate("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/activity_subscriptions".to_string(),
+            ),
+            (
+                TaskApiV2::ActivitySubscriptionGet("tl1".to_string(), "as1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/activity_subscriptions/as1".to_string(),
+            ),
+            (
+                TaskApiV2::ActivitySubscriptionUpdate("tl1".to_string(), "as1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/activity_subscriptions/as1".to_string(),
+            ),
+            (
+                TaskApiV2::ActivitySubscriptionDelete("tl1".to_string(), "as1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/activity_subscriptions/as1".to_string(),
+            ),
+            (
+                TaskApiV2::ActivitySubscriptionList("tl1".to_string()),
+                "/open-apis/task/v2/tasklists/tl1/activity_subscriptions".to_string(),
+            ),
+            (
+                TaskApiV2::CustomFieldOptionCreate("cf1".to_string()),
+                "/open-apis/task/v2/custom_fields/cf1/options".to_string(),
+            ),
+            (
+                TaskApiV2::CustomFieldOptionUpdate("cf1".to_string(), "op1".to_string()),
+                "/open-apis/task/v2/custom_fields/cf1/options/op1".to_string(),
+            ),
+            (
+                TaskApiV2::AttachmentGet("a1".to_string()),
+                "/open-apis/task/v2/attachments/a1".to_string(),
+            ),
+            (
+                TaskApiV2::AttachmentList,
+                "/open-apis/task/v2/attachments".to_string(),
+            ),
+            (
+                TaskApiV2::CustomFieldAdd("cf1".to_string()),
+                "/open-apis/task/v2/custom_fields/cf1/add".to_string(),
+            ),
+            (
+                TaskApiV2::CustomFieldRemove("cf1".to_string()),
+                "/open-apis/task/v2/custom_fields/cf1/remove".to_string(),
+            ),
+        ];
+
+        for (api, expected) in cases {
+            assert_eq!(api.to_url(), expected);
+        }
+    }
+
+    #[test]
+    fn test_approval_api_v4_to_url() {
+        let cases = vec![
+            (
+                ApprovalApiV4::ApprovalCreate,
+                "/open-apis/approval/v4/approvals".to_string(),
+            ),
+            (
+                ApprovalApiV4::ApprovalGet("code1".to_string()),
+                "/open-apis/approval/v4/approvals/code1".to_string(),
+            ),
+            (
+                ApprovalApiV4::ApprovalSubscribe("code1".to_string()),
+                "/open-apis/approval/v4/approvals/code1/subscribe".to_string(),
+            ),
+            (
+                ApprovalApiV4::ApprovalUnsubscribe("code1".to_string()),
+                "/open-apis/approval/v4/approvals/code1/unsubscribe".to_string(),
+            ),
+            (
+                ApprovalApiV4::ExternalApprovalCreate,
+                "/open-apis/approval/v4/external_approvals".to_string(),
+            ),
+            (
+                ApprovalApiV4::ExternalApprovalGet("code1".to_string()),
+                "/open-apis/approval/v4/external_approvals/code1".to_string(),
+            ),
+            (
+                ApprovalApiV4::ExternalInstanceCheck,
+                "/open-apis/approval/v4/external_instances/check".to_string(),
+            ),
+            (
+                ApprovalApiV4::ExternalInstanceCreate,
+                "/open-apis/approval/v4/external_instances".to_string(),
+            ),
+            (
+                ApprovalApiV4::ExternalTaskList,
+                "/open-apis/approval/v4/external_tasks".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceAddSign,
+                "/open-apis/approval/v4/instances/add_sign".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceCancel,
+                "/open-apis/approval/v4/instances/cancel".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceCc,
+                "/open-apis/approval/v4/instances/cc".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceCreate,
+                "/open-apis/approval/v4/instances".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceGet("ins1".to_string()),
+                "/open-apis/approval/v4/instances/ins1".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceList("code1".to_string()),
+                "/open-apis/approval/v4/instances?approval_code=code1".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstancePreview,
+                "/open-apis/approval/v4/instances/preview".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceQuery,
+                "/open-apis/approval/v4/instances/query".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceSearchCc,
+                "/open-apis/approval/v4/instances/search_cc".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceSpecifiedRollback("ins1".to_string()),
+                "/open-apis/approval/v4/instances/ins1/specified_rollback".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceCommentCreate("ins1".to_string()),
+                "/open-apis/approval/v4/instances/ins1/comments".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceCommentDelete("ins1".to_string(), "c1".to_string()),
+                "/open-apis/approval/v4/instances/ins1/comments/c1".to_string(),
+            ),
+            (
+                ApprovalApiV4::InstanceCommentList("ins1".to_string()),
+                "/open-apis/approval/v4/instances/ins1/comments".to_string(),
+            ),
+            (
+                ApprovalApiV4::TaskApprove,
+                "/open-apis/approval/v4/tasks/approve".to_string(),
+            ),
+            (
+                ApprovalApiV4::TaskQuery,
+                "/open-apis/approval/v4/tasks/query".to_string(),
+            ),
+            (
+                ApprovalApiV4::TaskReject,
+                "/open-apis/approval/v4/tasks/reject".to_string(),
+            ),
+            (
+                ApprovalApiV4::TaskResubmit,
+                "/open-apis/approval/v4/tasks/resubmit".to_string(),
+            ),
+            (
+                ApprovalApiV4::TaskSearch,
+                "/open-apis/approval/v4/tasks/search".to_string(),
+            ),
+            (
+                ApprovalApiV4::TaskTransfer,
+                "/open-apis/approval/v4/tasks/transfer".to_string(),
+            ),
+        ];
+
+        for (api, expected) in cases {
+            assert_eq!(api.to_url(), expected);
+        }
+    }
+
+    #[test]
+    fn test_board_api_v1_to_url() {
+        let cases = vec![
+            (
+                BoardApiV1::WhiteboardNodeCreate("b1".to_string()),
+                "/open-apis/board/v1/whiteboards/b1/nodes".to_string(),
+            ),
+            (
+                BoardApiV1::WhiteboardNodeList("b1".to_string()),
+                "/open-apis/board/v1/whiteboards/b1/nodes".to_string(),
+            ),
+            (
+                BoardApiV1::WhiteboardUpdateTheme("b1".to_string()),
+                "/open-apis/board/v1/whiteboards/b1/theme".to_string(),
+            ),
+            (
+                BoardApiV1::WhiteboardTheme("b1".to_string()),
+                "/open-apis/board/v1/whiteboards/b1/theme".to_string(),
+            ),
+            (
+                BoardApiV1::WhiteboardDownloadAsImage("b1".to_string()),
+                "/open-apis/board/v1/whiteboards/b1/image".to_string(),
+            ),
+            (
+                BoardApiV1::WhiteboardNodeCreatePlantuml("b1".to_string()),
+                "/open-apis/board/v1/whiteboards/b1/nodes/create_plantuml".to_string(),
+            ),
+        ];
+
+        for (api, expected) in cases {
+            assert_eq!(api.to_url(), expected);
+        }
+    }
+}

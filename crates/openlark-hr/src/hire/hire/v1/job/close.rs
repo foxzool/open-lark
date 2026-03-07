@@ -67,3 +67,15 @@ impl ApiResponseTrait for CloseResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_close_request_builder_new() {
+        let request = CloseRequest::new(TestConfigBuilder::new().build(), "test".to_string());
+        let _ = request;
+    }
+}

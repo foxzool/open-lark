@@ -98,3 +98,16 @@ impl ApiResponseTrait for UserStatsFieldsQueryResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_user_stats_fields_query_request_builder_new() {
+        let request = UserStatsFieldsQueryRequest::new(TestConfigBuilder::new().build())
+            .archive_rule_id("test".to_string());
+        let _ = request;
+    }
+}

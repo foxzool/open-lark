@@ -131,3 +131,21 @@ impl ApiResponseTrait for CreateResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_create_request_builder_new() {
+        let request = CreateRequest::new(
+            TestConfigBuilder::new().build(),
+            "test".to_string(),
+            1,
+            1,
+            1,
+        );
+        let _ = request;
+    }
+}

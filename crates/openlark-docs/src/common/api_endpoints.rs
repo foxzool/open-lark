@@ -2384,3 +2384,449 @@ impl LingoApiV1 {
 
 // Lingo API v1 端点
 pub const LINGO_API_V1: &str = "/open-apis/lingo/v1";
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // ========== BaseApiV2 Tests ==========
+    #[test]
+    fn test_base_api_v2_role_create() {
+        let endpoint = BaseApiV2::RoleCreate("app_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/base/v2/apps/app_token_123/roles"
+        );
+    }
+
+    #[test]
+    fn test_base_api_v2_role_update() {
+        let endpoint =
+            BaseApiV2::RoleUpdate("app_token_123".to_string(), "role_id_456".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/base/v2/apps/app_token_123/roles/role_id_456"
+        );
+    }
+
+    #[test]
+    fn test_base_api_v2_role_list() {
+        let endpoint = BaseApiV2::RoleList("app_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/base/v2/apps/app_token_123/roles"
+        );
+    }
+
+    #[test]
+    fn test_base_api_v2_with_special_chars() {
+        let endpoint = BaseApiV2::RoleCreate("app-token_123".to_string());
+        assert!(endpoint.to_url().contains("app-token_123"));
+    }
+
+    // ========== BitableApiV1 Tests ==========
+    #[test]
+    fn test_bitable_api_v1_app_create() {
+        let endpoint = BitableApiV1::AppCreate;
+        assert_eq!(endpoint.to_url(), "/open-apis/bitable/v1/apps");
+    }
+
+    #[test]
+    fn test_bitable_api_v1_app_copy() {
+        let endpoint = BitableApiV1::AppCopy("app_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/bitable/v1/apps/app_token_123/copy"
+        );
+    }
+
+    #[test]
+    fn test_bitable_api_v1_table_create() {
+        let endpoint = BitableApiV1::TableCreate("app_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/bitable/v1/apps/app_token_123/tables"
+        );
+    }
+
+    #[test]
+    fn test_bitable_api_v1_record_create() {
+        let endpoint =
+            BitableApiV1::RecordCreate("app_token_123".to_string(), "table_id_456".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/bitable/v1/apps/app_token_123/tables/table_id_456/records"
+        );
+    }
+
+    #[test]
+    fn test_bitable_api_v1_field_create() {
+        let endpoint =
+            BitableApiV1::FieldCreate("app_token_123".to_string(), "table_id_456".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/bitable/v1/apps/app_token_123/tables/table_id_456/fields"
+        );
+    }
+
+    #[test]
+    fn test_bitable_api_v1_view_create() {
+        let endpoint =
+            BitableApiV1::ViewCreate("app_token_123".to_string(), "table_id_456".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/bitable/v1/apps/app_token_123/tables/table_id_456/views"
+        );
+    }
+
+    #[test]
+    fn test_bitable_api_v1_form_get() {
+        let endpoint = BitableApiV1::FormGet(
+            "app_token_123".to_string(),
+            "table_id_456".to_string(),
+            "form_id_789".to_string(),
+        );
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/bitable/v1/apps/app_token_123/tables/table_id_456/forms/form_id_789"
+        );
+    }
+
+    #[test]
+    fn test_bitable_api_v1_role_member_create() {
+        let endpoint =
+            BitableApiV1::RoleMemberCreate("app_token_123".to_string(), "role_id_456".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/bitable/v1/apps/app_token_123/roles/role_id_456/members"
+        );
+    }
+
+    #[test]
+    fn test_bitable_api_v1_batch_operations() {
+        let endpoint = BitableApiV1::TableBatchCreate("app_token_123".to_string());
+        assert!(endpoint.to_url().contains("batch_create"));
+
+        let endpoint = BitableApiV1::RecordBatchDelete(
+            "app_token_123".to_string(),
+            "table_id_456".to_string(),
+        );
+        assert!(endpoint.to_url().contains("batch_delete"));
+    }
+
+    // ========== MinutesApiV1 Tests ==========
+    #[test]
+    fn test_minutes_api_v1_get() {
+        let endpoint = MinutesApiV1::Get("minute_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/minutes/v1/minutes/minute_token_123"
+        );
+    }
+
+    #[test]
+    fn test_minutes_api_v1_media_get() {
+        let endpoint = MinutesApiV1::MediaGet("minute_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/minutes/v1/minutes/minute_token_123/media"
+        );
+    }
+
+    #[test]
+    fn test_minutes_api_v1_transcript_get() {
+        let endpoint = MinutesApiV1::TranscriptGet("minute_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/minutes/v1/minutes/minute_token_123/transcript"
+        );
+    }
+
+    #[test]
+    fn test_minutes_api_v1_statistics_get() {
+        let endpoint = MinutesApiV1::StatisticsGet("minute_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/minutes/v1/minutes/minute_token_123/statistics"
+        );
+    }
+
+    // ========== WikiApiV1 Tests ==========
+    #[test]
+    fn test_wiki_api_v1_node_search() {
+        let endpoint = WikiApiV1::NodeSearch;
+        assert_eq!(endpoint.to_url(), "/open-apis/wiki/v2/nodes/search");
+    }
+
+    // ========== DocsApiV1 Tests ==========
+    #[test]
+    fn test_docs_api_v1_content_get() {
+        let endpoint = DocsApiV1::ContentGet;
+        assert_eq!(endpoint.to_url(), "/open-apis/docs/v1/content");
+    }
+
+    // ========== DocxApiV1 Tests ==========
+    #[test]
+    fn test_docx_api_v1_document_create() {
+        let endpoint = DocxApiV1::DocumentCreate;
+        assert_eq!(endpoint.to_url(), "/open-apis/docx/v1/documents");
+    }
+
+    #[test]
+    fn test_docx_api_v1_document_get() {
+        let endpoint = DocxApiV1::DocumentGet("doc_id_123".to_string());
+        assert_eq!(endpoint.to_url(), "/open-apis/docx/v1/documents/doc_id_123");
+    }
+
+    #[test]
+    fn test_docx_api_v1_document_block_list() {
+        let endpoint = DocxApiV1::DocumentBlockList("doc_id_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/docx/v1/documents/doc_id_123/blocks"
+        );
+    }
+
+    #[test]
+    fn test_docx_api_v1_chat_announcement_get() {
+        let endpoint = DocxApiV1::ChatAnnouncementGet("chat_id_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/docx/v1/chats/chat_id_123/announcement"
+        );
+    }
+
+    #[test]
+    fn test_docx_api_v1_document_convert() {
+        let endpoint = DocxApiV1::DocumentConvert;
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/docx/documents/blocks/convert"
+        );
+    }
+
+    #[test]
+    fn test_docx_api_v1_document_block_children_create() {
+        let endpoint = DocxApiV1::DocumentBlockChildrenCreate(
+            "doc_id_123".to_string(),
+            "block_id_456".to_string(),
+        );
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/docx/v1/documents/doc_id_123/blocks/block_id_456/children"
+        );
+    }
+
+    // ========== WikiApiV2 Tests ==========
+    #[test]
+    fn test_wiki_api_v2_space_list() {
+        let endpoint = WikiApiV2::SpaceList;
+        assert_eq!(endpoint.to_url(), "/open-apis/wiki/v2/spaces");
+    }
+
+    #[test]
+    fn test_wiki_api_v2_space_get() {
+        let endpoint = WikiApiV2::SpaceGet("space_id_123".to_string());
+        assert_eq!(endpoint.to_url(), "/open-apis/wiki/v2/spaces/space_id_123");
+    }
+
+    #[test]
+    fn test_wiki_api_v2_space_create() {
+        let endpoint = WikiApiV2::SpaceCreate;
+        assert_eq!(endpoint.to_url(), "/open-apis/wiki/v2/spaces");
+    }
+
+    #[test]
+    fn test_wiki_api_v2_space_node_list() {
+        let endpoint = WikiApiV2::SpaceNodeList("space_id_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/wiki/v2/spaces/space_id_123/nodes"
+        );
+    }
+
+    #[test]
+    fn test_wiki_api_v2_space_member_delete() {
+        let endpoint =
+            WikiApiV2::SpaceMemberDelete("space_id_123".to_string(), "member_id_456".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/wiki/v2/spaces/space_id_123/members/member_id_456"
+        );
+    }
+
+    #[test]
+    fn test_wiki_api_v2_task_get() {
+        let endpoint = WikiApiV2::TaskGet("task_id_123".to_string());
+        assert_eq!(endpoint.to_url(), "/open-apis/wiki/v2/tasks/task_id_123");
+    }
+
+    // ========== CcmDocApiOld Tests ==========
+    #[test]
+    fn test_ccm_doc_api_old_create() {
+        let endpoint = CcmDocApiOld::Create;
+        assert_eq!(endpoint.to_url(), "/open-apis/doc/v2/create");
+    }
+
+    #[test]
+    fn test_ccm_doc_api_old_meta() {
+        let endpoint = CcmDocApiOld::Meta("doc_token_123".to_string());
+        assert_eq!(endpoint.to_url(), "/open-apis/doc/v2/meta/doc_token_123");
+    }
+
+    #[test]
+    fn test_ccm_doc_api_old_raw_content() {
+        let endpoint = CcmDocApiOld::RawContent("doc_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/doc/v2/doc_token_123/raw_content"
+        );
+    }
+
+    #[test]
+    fn test_ccm_doc_api_old_batch_update() {
+        let endpoint = CcmDocApiOld::BatchUpdate("doc_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/doc/v2/doc_token_123/batch_update"
+        );
+    }
+
+    // ========== CcmDocsApiOld Tests ==========
+    #[test]
+    fn test_ccm_docs_api_old_search_object() {
+        let endpoint = CcmDocsApiOld::SearchObject;
+        assert_eq!(endpoint.to_url(), "/open-apis/suite/docs-api/search/object");
+    }
+
+    #[test]
+    fn test_ccm_docs_api_old_meta() {
+        let endpoint = CcmDocsApiOld::Meta;
+        assert_eq!(endpoint.to_url(), "/open-apis/suite/docs-api/meta");
+    }
+
+    // ========== CcmDriveExplorerApiOld Tests ==========
+    #[test]
+    fn test_ccm_drive_explorer_api_old_root_folder_meta() {
+        let endpoint = CcmDriveExplorerApiOld::RootFolderMeta;
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/drive/explorer/v2/root_folder/meta"
+        );
+    }
+
+    #[test]
+    fn test_ccm_drive_explorer_api_old_folder_meta() {
+        let endpoint = CcmDriveExplorerApiOld::FolderMeta("folder_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/drive/explorer/v2/folder/folder_token_123/meta"
+        );
+    }
+
+    #[test]
+    fn test_ccm_drive_explorer_api_old_file_copy() {
+        let endpoint = CcmDriveExplorerApiOld::FileCopy("file_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/drive/explorer/v2/file/copy/files/file_token_123"
+        );
+    }
+
+    // ========== CcmDriveExplorerApi Tests ==========
+    #[test]
+    fn test_ccm_drive_explorer_api_root_folder_meta() {
+        let endpoint = CcmDriveExplorerApi::RootFolderMeta;
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/drive/v1/explorer/root_folder/meta"
+        );
+    }
+
+    #[test]
+    fn test_ccm_drive_explorer_api_folder_meta() {
+        let endpoint = CcmDriveExplorerApi::FolderMeta("folder_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/drive/v1/explorer/folder/folder_token_123/meta"
+        );
+    }
+
+    #[test]
+    fn test_ccm_drive_explorer_api_folder() {
+        let endpoint = CcmDriveExplorerApi::Folder;
+        assert_eq!(endpoint.to_url(), "/open-apis/drive/v1/explorer/folder");
+    }
+
+    #[test]
+    fn test_ccm_drive_explorer_api_to_url_with_params() {
+        let endpoint = CcmDriveExplorerApi::RootFolderMeta;
+        let params = vec![("key", "value".to_string())];
+        let url = endpoint.to_url_with_params(&params);
+        assert!(url.contains("?"));
+        assert!(url.contains("key=value"));
+    }
+
+    #[test]
+    fn test_ccm_drive_explorer_api_to_url_with_empty_params() {
+        let endpoint = CcmDriveExplorerApi::RootFolderMeta;
+        let params: Vec<(&str, String)> = vec![];
+        let url = endpoint.to_url_with_params(&params);
+        assert!(!url.contains("?"));
+    }
+
+    #[test]
+    fn test_ccm_drive_explorer_api_to_url_with_special_chars() {
+        let endpoint = CcmDriveExplorerApi::RootFolderMeta;
+        let params = vec![("query", "hello world".to_string())];
+        let url = endpoint.to_url_with_params(&params);
+        assert!(url.contains("%20"));
+    }
+
+    // ========== PermissionApi Tests ==========
+    #[test]
+    fn test_permission_api_member_permitted() {
+        let endpoint = PermissionApi::MemberPermitted;
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/drive/v1/permission/member/permitted"
+        );
+    }
+
+    #[test]
+    fn test_permission_api_member_transfer() {
+        let endpoint = PermissionApi::MemberTransfer;
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/drive/v1/permission/member/transfer"
+        );
+    }
+
+    #[test]
+    fn test_permission_api_public() {
+        let endpoint = PermissionApi::Public;
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/drive/v1/permission/v2/public/"
+        );
+    }
+
+    // ========== PermissionApiOld Tests ==========
+    #[test]
+    fn test_permission_api_old_member_permitted() {
+        let endpoint = PermissionApiOld::MemberPermitted;
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/drive/v1/permission/member/permitted"
+        );
+    }
+
+    #[test]
+    fn test_permission_api_old_public() {
+        let endpoint = PermissionApiOld::Public;
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/drive/v1/permission/v2/public/"
+        );
+    }
+}

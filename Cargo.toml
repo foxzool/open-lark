@@ -139,6 +139,7 @@ tracing-test = "0.2"
 wiremock = "0.6"
 once_cell = "1.19"
 mockall = "0.12"
+insta = { version = "1.39", features = ["json"] }
 
 # Examples需要的依赖
 dotenvy = "0.15"

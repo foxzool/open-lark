@@ -16,3 +16,22 @@ impl ApiResponseTrait for EmptyData {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_data_serde_roundtrip() {
+        let value = serde_json::to_value(EmptyData {}).expect("serialize empty data");
+        assert_eq!(value, serde_json::json!({}));
+
+        let parsed: EmptyData = serde_json::from_str("{}").expect("deserialize empty data");
+        let _ = parsed;
+    }
+
+    #[test]
+    fn test_empty_data_response_format() {
+        assert!(matches!(EmptyData::data_format(), ResponseFormat::Data));
+    }
+}

@@ -59,3 +59,15 @@ impl ApiResponseTrait for RemoveToFolderResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_remove_to_folder_request_builder_new() {
+        let request = RemoveToFolderRequest::new(TestConfigBuilder::new().build());
+        let _ = request;
+    }
+}

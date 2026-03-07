@@ -83,3 +83,21 @@ impl ApiResponseTrait for CreateBadgeGrantResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_builder_basic() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request = CreateBadgeGrantBuilder::new(config.clone())
+            .badge_id("test".to_string())
+            .user_ids("test".to_string());
+        let _ = request;
+    }
+}

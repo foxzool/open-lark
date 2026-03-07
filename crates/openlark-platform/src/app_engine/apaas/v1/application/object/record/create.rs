@@ -93,3 +93,21 @@ impl ApiResponseTrait for RecordCreateResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_builder_basic() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request =
+            RecordCreateBuilder::new(config.clone(), "test".to_string(), "test".to_string())
+                .data(serde_json::json!({}));
+        let _ = request;
+    }
+}

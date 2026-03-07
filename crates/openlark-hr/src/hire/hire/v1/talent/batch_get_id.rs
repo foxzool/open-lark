@@ -94,3 +94,16 @@ impl ApiResponseTrait for BatchGetIdResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_batch_get_id_request_builder_new() {
+        let request = BatchGetIdRequest::new(TestConfigBuilder::new().build())
+            .talent_ids(vec!["test".to_string()]);
+        let _ = request;
+    }
+}

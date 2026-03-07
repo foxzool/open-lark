@@ -215,3 +215,52 @@ pub struct PatchResponse {
     /// 更新结果
     pub result: bool,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_employment_serialization_roundtrip() {
+        let employment = Employment {
+            employment_id: "emp_001".to_string(),
+            employee_id: Some("user_001".to_string()),
+            department_id: Some("dept_001".to_string()),
+            position_id: Some("pos_001".to_string()),
+            start_date: Some("2024-01-01".to_string()),
+            end_date: None,
+            status: Some(2),
+            employment_type: Some(1),
+            probation_start_date: Some("2024-01-01".to_string()),
+            probation_end_date: Some("2024-03-31".to_string()),
+            probation_duration: Some(3),
+            work_location: Some("上海".to_string()),
+            custom_fields: Some(vec![CustomField {
+                field_api_name: "custom_rank".to_string(),
+                field_value: json!("P7"),
+            }]),
+            created_time: Some(1700000000000),
+            updated_time: Some(1700000001000),
+        };
+
+        let json = serde_json::to_string(&employment).expect("序列化失败");
+        let parsed: Employment = serde_json::from_str(&json).expect("反序列化失败");
+        assert_eq!(parsed.employment_id, "emp_001");
+        assert_eq!(parsed.status, Some(2));
+    }
+
+    #[test]
+    fn test_employment_response_deserialization() {
+        let create_response: CreateResponse =
+            serde_json::from_value(json!({"employment_id": "emp_new"})).expect("反序列化失败");
+        let delete_response: DeleteResponse =
+            serde_json::from_value(json!({"result": true})).expect("反序列化失败");
+        let patch_response: PatchResponse =
+            serde_json::from_value(json!({"result": true})).expect("反序列化失败");
+
+        assert_eq!(create_response.employment_id, "emp_new");
+        assert!(delete_response.result);
+        assert!(patch_response.result);
+    }
+}

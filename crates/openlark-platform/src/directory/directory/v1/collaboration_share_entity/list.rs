@@ -83,3 +83,19 @@ impl ApiResponseTrait for CollaborationShareEntityListResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_builder_basic() {
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
+        let request =
+            CollaborationShareEntityListBuilder::new(config.clone()).tenant_id("test".to_string());
+        let _ = request;
+    }
+}

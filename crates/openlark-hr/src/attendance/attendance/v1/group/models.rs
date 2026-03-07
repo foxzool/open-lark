@@ -252,3 +252,62 @@ pub struct SearchGroupResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_group_models_serialization_roundtrip() {
+        let group = GroupInfo {
+            group_id: "grp_001".to_string(),
+            group_name: "研发组".to_string(),
+            group_type: 0,
+            user_list: Some(vec!["u_1".to_string()]),
+            excluded_user_list: None,
+            manager_list: Some(vec!["u_mgr".to_string()]),
+            dept_list: Some(vec!["d_1".to_string()]),
+            shift_list: Some(vec![ShiftInfo {
+                shift_id: "s_1".to_string(),
+                shift_name: Some("早班".to_string()),
+            }]),
+            allow_out_punch: Some(true),
+            out_punch_need_approval: Some(false),
+            allow_pc_punch: Some(true),
+            need_photo: Some(false),
+            photo_punch_type: Some(1),
+            allow_remedy: Some(true),
+            remedy_limit: Some(3),
+            remedy_period: Some(30),
+            work_day_config: Some(vec![WorkDayConfig {
+                day: 1,
+                is_work_day: true,
+                shift_id: Some("s_1".to_string()),
+            }]),
+            overtime_info: Some(OvertimeInfo {
+                overtime_type: Some(2),
+                overtime_start_time: Some(30),
+                overtime_min_unit: Some(15),
+                deduct_rest_time: Some(true),
+            }),
+        };
+
+        let json = serde_json::to_string(&group).expect("序列化失败");
+        let parsed: GroupInfo = serde_json::from_str(&json).expect("反序列化失败");
+        assert_eq!(parsed.group_name, "研发组");
+        assert_eq!(parsed.group_type, 0);
+    }
+
+    #[test]
+    fn test_group_response_deserialization() {
+        let response: ListGroupResponse = serde_json::from_value(json!({
+            "group_list": [{"group_id": "grp_1", "group_name": "A组", "group_type": 1}],
+            "has_more": false
+        }))
+        .expect("反序列化失败");
+
+        assert_eq!(response.group_list.len(), 1);
+        assert_eq!(response.group_list[0].group_id, "grp_1");
+    }
+}

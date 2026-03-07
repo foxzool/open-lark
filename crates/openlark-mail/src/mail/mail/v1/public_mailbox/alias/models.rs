@@ -56,3 +56,39 @@ pub struct DeletePublicMailboxAliasResponse {
     /// 是否删除成功
     pub success: bool,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_create_public_mailbox_alias_body_serialize() {
+        let body = CreatePublicMailboxAliasBody {
+            email: "alias@example.com".to_string(),
+        };
+
+        let value = serde_json::to_value(body).expect("serialize body");
+        assert_eq!(value, json!({"email": "alias@example.com"}));
+    }
+
+    #[test]
+    fn test_public_mailbox_alias_list_response_deserialize() {
+        let value = json!({
+            "items": [
+                {
+                    "alias_id": "alias_1",
+                    "email": "alias@example.com",
+                    "create_time": "1700000000"
+                }
+            ],
+            "page_token": "next",
+            "has_more": false
+        });
+
+        let resp: PublicMailboxAliasListResponse =
+            serde_json::from_value(value).expect("deserialize alias list");
+        assert_eq!(resp.items.len(), 1);
+        assert_eq!(resp.has_more, Some(false));
+    }
+}

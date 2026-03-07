@@ -207,3 +207,163 @@ pub struct BatchGetResponse {
     /// 员工列表
     pub items: Vec<Employee>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_employee_serialization() {
+        let employee = Employee {
+            employee_id: "emp_001".to_string(),
+            name: "张三".to_string(),
+            email: Some("zhangsan@example.com".to_string()),
+            phone: Some("13800138000".to_string()),
+            department_id: Some("dept_001".to_string()),
+            position_id: Some("pos_001".to_string()),
+            employee_no: Some("10001".to_string()),
+            status: Some(1),
+            hire_date: Some("2024-01-01".to_string()),
+            termination_date: None,
+            created_time: Some(1704067200000),
+            updated_time: Some(1704067200000),
+        };
+
+        let json = serde_json::to_string(&employee).unwrap();
+        let parsed: Employee = serde_json::from_str(&json).unwrap();
+        assert_eq!(employee.employee_id, parsed.employee_id);
+        assert_eq!(employee.name, parsed.name);
+        assert_eq!(employee.status, parsed.status);
+    }
+
+    #[test]
+    fn test_employee_roster_deserialization() {
+        let json = r#"{
+            "employee_id": "emp_002",
+            "name": "李四",
+            "email": "lisi@example.com",
+            "department_name": "研发部",
+            "position_name": "工程师",
+            "employee_no": "10002",
+            "status": 1,
+            "hire_date": "2024-02-01"
+        }"#;
+
+        let roster: EmployeeRoster = serde_json::from_str(json).unwrap();
+        assert_eq!(roster.employee_id, "emp_002");
+        assert_eq!(roster.name, "李四");
+        assert_eq!(roster.department_name, Some("研发部".to_string()));
+    }
+
+    #[test]
+    fn test_create_request_body() {
+        let request = CreateRequestBody {
+            name: "王五".to_string(),
+            email: Some("wangwu@example.com".to_string()),
+            phone: Some("13900139000".to_string()),
+            department_id: Some("dept_001".to_string()),
+            position_id: Some("pos_001".to_string()),
+            employee_no: Some("10003".to_string()),
+            hire_date: Some("2024-03-01".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        let parsed: CreateRequestBody = serde_json::from_str(&json).unwrap();
+        assert_eq!(request.name, parsed.name);
+        assert_eq!(request.email, parsed.email);
+    }
+
+    #[test]
+    fn test_create_response() {
+        let response = CreateResponse {
+            employee_id: "emp_new".to_string(),
+        };
+
+        let json = serde_json::to_string(&response).unwrap();
+        let parsed: CreateResponse = serde_json::from_str(&json).unwrap();
+        assert_eq!(response.employee_id, parsed.employee_id);
+    }
+
+    #[test]
+    fn test_delete_response() {
+        let response = DeleteResponse { result: true };
+
+        let json = serde_json::to_string(&response).unwrap();
+        let parsed: DeleteResponse = serde_json::from_str(&json).unwrap();
+        assert_eq!(response.result, parsed.result);
+    }
+
+    #[test]
+    fn test_list_response() {
+        let response = ListResponse {
+            items: vec![EmployeeRoster {
+                employee_id: "emp_001".to_string(),
+                name: "张三".to_string(),
+                email: None,
+                phone: None,
+                department_name: None,
+                position_name: None,
+                employee_no: None,
+                status: None,
+                hire_date: None,
+            }],
+            has_more: false,
+            page_token: None,
+        };
+
+        let json = serde_json::to_string(&response).unwrap();
+        let parsed: ListResponse = serde_json::from_str(&json).unwrap();
+        assert_eq!(response.items.len(), parsed.items.len());
+        assert_eq!(response.has_more, parsed.has_more);
+    }
+
+    #[test]
+    fn test_search_request_body() {
+        let request = SearchRequestBody {
+            query: "张三".to_string(),
+            page_size: Some(50),
+            page_token: None,
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        let parsed: SearchRequestBody = serde_json::from_str(&json).unwrap();
+        assert_eq!(request.query, parsed.query);
+        assert_eq!(request.page_size, parsed.page_size);
+    }
+
+    #[test]
+    fn test_batch_get_request_body() {
+        let request = BatchGetRequestBody {
+            employee_ids: vec!["emp_001".to_string(), "emp_002".to_string()],
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        let parsed: BatchGetRequestBody = serde_json::from_str(&json).unwrap();
+        assert_eq!(request.employee_ids.len(), parsed.employee_ids.len());
+    }
+
+    #[test]
+    fn test_batch_get_response() {
+        let response = BatchGetResponse {
+            items: vec![Employee {
+                employee_id: "emp_001".to_string(),
+                name: "张三".to_string(),
+                email: None,
+                phone: None,
+                department_id: None,
+                position_id: None,
+                employee_no: None,
+                status: None,
+                hire_date: None,
+                termination_date: None,
+                created_time: None,
+                updated_time: None,
+            }],
+        };
+
+        let json = serde_json::to_string(&response).unwrap();
+        let parsed: BatchGetResponse = serde_json::from_str(&json).unwrap();
+        assert_eq!(response.items.len(), parsed.items.len());
+    }
+}

@@ -99,3 +99,24 @@ impl ApiResponseTrait for GetUserFlowResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_get_user_flow_request_builder_new() {
+        let request = GetUserFlowRequest::new(TestConfigBuilder::new().build())
+            .user_flow_id("test".to_string());
+        let _ = request;
+    }
+
+    #[test]
+    fn test_get_user_flow_request_validation_fails_on_default_request() {
+        let request = GetUserFlowRequest::new(TestConfigBuilder::new().build());
+        let rt = tokio::runtime::Runtime::new().expect("创建 tokio runtime 失败");
+        let result = rt.block_on(request.execute());
+        assert!(result.is_err());
+    }
+}

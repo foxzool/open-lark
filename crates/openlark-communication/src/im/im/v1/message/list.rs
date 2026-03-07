@@ -124,3 +124,48 @@ impl ListMessagesRequest {
         extract_response_data(resp, "获取会话历史消息")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_messages_request_builder() {
+        let request = ListMessagesRequest::new(Config::default())
+            .container_id_type(ContainerIdType::Chat)
+            .container_id("oc_123")
+            .start_time("1700000000")
+            .end_time("1700003600")
+            .sort_type(SortType::ByCreateTimeDesc)
+            .page_size(50)
+            .page_token("next_page");
+
+        assert_eq!(request.container_id_type, Some(ContainerIdType::Chat));
+        assert_eq!(request.container_id, "oc_123");
+        assert_eq!(request.start_time, Some("1700000000".to_string()));
+        assert_eq!(request.end_time, Some("1700003600".to_string()));
+        assert_eq!(request.sort_type, Some(SortType::ByCreateTimeDesc));
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.page_token, Some("next_page".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_list_messages_request_validate_container_id() {
+        let result = ListMessagesRequest::new(Config::default())
+            .container_id_type(ContainerIdType::Chat)
+            .execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await;
+
+        assert!(result.is_err());
+    }
+
+    #[tokio::test]
+    async fn test_list_messages_request_validate_container_id_type() {
+        let result = ListMessagesRequest::new(Config::default())
+            .container_id("oc_123")
+            .execute_with_options(openlark_core::req_option::RequestOption::default())
+            .await;
+
+        assert!(result.is_err());
+    }
+}

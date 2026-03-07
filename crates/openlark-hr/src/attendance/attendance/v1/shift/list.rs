@@ -87,3 +87,15 @@ impl ApiResponseTrait for ListShiftResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_list_shift_request_builder_new() {
+        let request = ListShiftRequest::new(TestConfigBuilder::new().build()).page_size(1);
+        let _ = request;
+    }
+}

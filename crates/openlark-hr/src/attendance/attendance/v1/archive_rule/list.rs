@@ -117,3 +117,15 @@ impl ApiResponseTrait for ListResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_list_request_builder_new() {
+        let request = ListRequest::new(TestConfigBuilder::new().build()).page_size(1);
+        let _ = request;
+    }
+}

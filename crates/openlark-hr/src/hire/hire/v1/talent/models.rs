@@ -245,3 +245,38 @@ pub struct BatchGetIdResponse {
     /// 候选人ID列表
     pub talent_id_list: Vec<TalentIdInfo>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_talent_serialization_roundtrip() {
+        let talent = Talent {
+            talent_id: "talent_1".to_string(),
+            name: Some("张三".to_string()),
+            resume: Some("<p>简历</p>".to_string()),
+            email: Some("zhangsan@example.com".to_string()),
+            phone: Some("13800000000".to_string()),
+            status: Some(2),
+            create_time: Some(1700000000000),
+            update_time: Some(1700000001000),
+        };
+
+        let text = serde_json::to_string(&talent).expect("序列化失败");
+        let parsed: Talent = serde_json::from_str(&text).expect("反序列化失败");
+        assert_eq!(parsed.talent_id, "talent_1");
+        assert_eq!(parsed.status, Some(2));
+    }
+
+    #[test]
+    fn test_talent_response_deserialization() {
+        let response: BatchGetIdResponse = serde_json::from_str(
+            r#"{"talent_id_list":[{"talent_id":"talent_2","is_valid":true}]}"#,
+        )
+        .expect("反序列化失败");
+
+        assert_eq!(response.talent_id_list.len(), 1);
+        assert!(response.talent_id_list[0].is_valid);
+    }
+}

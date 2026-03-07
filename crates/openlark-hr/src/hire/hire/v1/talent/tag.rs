@@ -59,3 +59,15 @@ impl ApiResponseTrait for TagResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_tag_request_builder_new() {
+        let request = TagRequest::new(TestConfigBuilder::new().build());
+        let _ = request;
+    }
+}

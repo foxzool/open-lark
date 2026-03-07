@@ -123,3 +123,15 @@ impl ApiResponseTrait for GetResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use openlark_core::testing::prelude::TestConfigBuilder;
+
+    #[test]
+    fn test_get_request_builder_new() {
+        let request = GetRequest::new(TestConfigBuilder::new().build(), 1, 1);
+        let _ = request;
+    }
+}

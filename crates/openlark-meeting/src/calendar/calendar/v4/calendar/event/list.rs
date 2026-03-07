@@ -61,3 +61,18 @@ impl ListCalendarEventRequest {
         extract_response_data(resp, "获取日程列表")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_builder_basic() {
+        let config = openlark_core::config::Config::builder().app_id("test_app").app_secret("test_secret").build();
+        let request = ListCalendarEventRequest::new(config.clone())
+            .calendar_id("test".to_string())
+            .query_param("test".to_string());
+        let _ = request;
+    }
+}
