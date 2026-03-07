@@ -75,7 +75,7 @@ mod tests {
             .build();
         let request = ListCalendarAclRequest::new(config.clone())
             .calendar_id("test".to_string())
-            .query_param("test".to_string());
+            .query_param("key1".to_string(), "value1".to_string());
         let _ = request;
     }
 }

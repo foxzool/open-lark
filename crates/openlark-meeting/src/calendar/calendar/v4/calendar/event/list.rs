@@ -72,7 +72,7 @@ mod tests {
         let config = openlark_core::config::Config::builder().app_id("test_app").app_secret("test_secret").build();
         let request = ListCalendarEventRequest::new(config.clone())
             .calendar_id("test".to_string())
-            .query_param("test".to_string());
+            .query_param("key1".to_string(), "value1".to_string());
         let _ = request;
     }
 }
