@@ -97,7 +97,10 @@ async fn test_send_all_message_types_request_format() {
         .expect("text request body should match Feishu webhook format");
 
     SendWebhookMessageRequest::new(url.clone())
-        .post("{\"zh_cn\":{\"title\":\"t\",\"content\":[[{\"tag\":\"text\",\"text\":\"body\"}]]}}".to_string())
+        .post(
+            "{\"zh_cn\":{\"title\":\"t\",\"content\":[[{\"tag\":\"text\",\"text\":\"body\"}]]}}"
+                .to_string(),
+        )
         .execute()
         .await
         .expect("post request body should match Feishu webhook format");
@@ -159,7 +162,8 @@ async fn test_error_response_400_returns_webhook_error() {
     Mock::given(method("POST"))
         .and(path("/webhook"))
         .respond_with(
-            ResponseTemplate::new(400).set_body_json(json!({ "code": 19001, "msg": "invalid request" })),
+            ResponseTemplate::new(400)
+                .set_body_json(json!({ "code": 19001, "msg": "invalid request" })),
         )
         .mount(&server)
         .await;
@@ -207,7 +211,8 @@ async fn test_error_response_500_returns_webhook_error() {
     Mock::given(method("POST"))
         .and(path("/webhook"))
         .respond_with(
-            ResponseTemplate::new(500).set_body_json(json!({ "code": 20000, "msg": "internal error" })),
+            ResponseTemplate::new(500)
+                .set_body_json(json!({ "code": 20000, "msg": "internal error" })),
         )
         .mount(&server)
         .await;
