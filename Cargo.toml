@@ -115,6 +115,7 @@ openlark-auth = { path = "crates/openlark-auth" }
 openlark-security = { path = "crates/openlark-security" }
 openlark-communication = { path = "crates/openlark-communication" }
 openlark-cardkit = { path = "crates/openlark-cardkit" }
+openlark-webhook = { path = "crates/openlark-webhook" }
 openlark-docs = { path = "crates/openlark-docs" }
 openlark-hr = { path = "crates/openlark-hr" }
 
@@ -169,6 +170,7 @@ openlark-client = { workspace = true, optional = true }
 openlark-protocol = { workspace = true, optional = true }
 openlark-communication = { workspace = true, optional = true }
 openlark-cardkit = { workspace = true, optional = true }
+openlark-webhook = { workspace = true, optional = true }
 openlark-auth = { workspace = true, optional = true }
 openlark-docs = { workspace = true, optional = true }
 openlark-security = { workspace = true, optional = true }
@@ -238,6 +240,9 @@ communication = ["client", "openlark-communication"]
 
 # CardKit 卡片能力
 cardkit = ["client", "openlark-cardkit"]
+
+# Webhook 自定义机器人
+webhook = ["client", "openlark-webhook"]
 
 # 文档管理
 docs = ["client", "openlark-docs"]

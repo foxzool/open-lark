@@ -52,3 +52,6 @@ pub use openlark_analytics;
 
 #[cfg(feature = "user")]
 pub use openlark_user;
+
+#[cfg(feature = "webhook")]
+pub use openlark_webhook;

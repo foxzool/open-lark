@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ✨ 新增功能
 
+- **feat(webhook)**: 集成 openlark-webhook 模块到工作空间（8 个 API）
+  - 自定义机器人、Webhook 事件处理
 - **feat(hr)**: 实现 462 个 API (Wave 1-5)，涵盖招聘、CoreHR、考勤、薪酬等模块，总计 562 个 API
 - **feat(workflow)**: 完成 workflow 模块 100% API 覆盖（117 个 API）
   - TASK v1 剩余 28 个 API、TASK v2 剩余 24 个 API

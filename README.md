@@ -34,6 +34,9 @@ open-lark = "0.15"  # 包含 IM 消息、文档协作、认证功能
 # 纯通讯功能（IM + 联系人 + 群组）
 open-lark = { version = "0.15", features = ["communication"] }
 
+# 自定义机器人（Webhook）
+open-lark = { version = "0.15", features = ["webhook"] }
+
 # 企业协作套件（IM + 文档 + 认证 + 工作流）
 open-lark = { version = "0.15", features = ["core-services"] }
 
@@ -42,6 +45,37 @@ open-lark = { version = "0.15", features = ["core-services", "hr"] }
 
 # 按需组合更多模块
 open-lark = { version = "0.15", features = ["core-services", "hr", "meeting", "ai"] }
+```
+
+### 2.1 选择平台 Endpoint
+
+OpenLark 默认使用国内飞书开放平台 endpoint：
+
+- 国内飞书：`https://open.feishu.cn`
+- 国际版 Lark：`https://open.larksuite.com`
+
+两者的 API 路径结构保持一致，通常都是 `/open-apis/...`，切换时只需要修改 `base_url`。
+
+### 2.2 配置 Endpoint
+
+可以通过构建器或环境变量切换：
+
+```rust,no_run
+use open_lark::prelude::*;
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let _client = Client::builder()
+        .app_id("your_app_id")
+        .app_secret("your_app_secret")
+        .base_url("https://open.larksuite.com")
+        .build()?;
+
+    Ok(())
+}
+```
+
+```bash
+export OPENLARK_BASE_URL="https://open.larksuite.com"
 ```
 
 ### 3. 基础使用
@@ -149,6 +183,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | openlark-ai | ✅ 完成 | 29 | AI 智能助手 |
 | openlark-analytics | ✅ 完成 | 20 | 数据分析 |
 | openlark-cardkit | ✅ 完成 | 10 | 卡片组件 |
+| openlark-webhook | ✅ 完成 | 8 | 自定义机器人、Webhook |
 | openlark-user | ✅ 完成 | 9 | 用户设置 |
 
 ### 新架构特点
