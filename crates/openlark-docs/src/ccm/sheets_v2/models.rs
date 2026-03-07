@@ -792,4 +792,48 @@ mod tests {
         let value: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(value["field"], "data");
     }
+
+    #[test]
+    fn test_read_single_range_request_validation() {
+        let valid_request = ReadSingleRangeRequest {
+            spreadsheet_token: "token123".to_string(),
+            range: "Sheet1!A1:C10".to_string(),
+            include_format: Some(true),
+            value_render_option: Some("FORMATTED_VALUE".to_string()),
+        };
+        assert!(valid_request.validate().is_ok());
+
+        let empty_token_request = ReadSingleRangeRequest {
+            spreadsheet_token: "".to_string(),
+            range: "Sheet1!A1:C10".to_string(),
+            include_format: None,
+            value_render_option: None,
+        };
+        assert!(empty_token_request.validate().is_err());
+
+        let empty_range_request = ReadSingleRangeRequest {
+            spreadsheet_token: "token123".to_string(),
+            range: "".to_string(),
+            include_format: None,
+            value_render_option: None,
+        };
+        assert!(empty_range_request.validate().is_err());
+    }
+
+    #[test]
+    fn test_read_single_range_response_deserialization() {
+        let json = r#"{
+            "valueRange": {
+                "range": "Sheet1!A1:C10",
+                "values": [["1", "2", "3"], ["4", "5", "6"]]
+            },
+            "spreadsheetId": "spreadsheet_id_123"
+        }"#;
+        let response: ReadSingleRangeResponse = serde_json::from_str(json).unwrap();
+        assert!(response.value_range.is_some());
+        assert_eq!(
+            response.spreadsheet_id,
+            Some("spreadsheet_id_123".to_string())
+        );
+    }
 }
