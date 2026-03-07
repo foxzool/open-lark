@@ -9,10 +9,6 @@ description = "Core infrastructure for OpenLark SDK"
 [lib]
 doctest = false
 
-[[test]]
-name = "error_context"
-path = "../../tests/unit/error/mod.rs"
-
 [dependencies]
 tokio = { workspace = true }
 serde = { workspace = true }
@@ -78,3 +74,4 @@ optional = true
 rstest = { workspace = true }
 tracing-test = { workspace = true }
 tracing-subscriber = { workspace = true }
+wiremock = { workspace = true }

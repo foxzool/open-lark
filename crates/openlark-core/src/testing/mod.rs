@@ -28,11 +28,15 @@ pub mod assertions;
 pub mod fixtures;
 pub mod mock_context;
 
-/// 预置导入模块
-/// 包含所有常用的测试工具和宏
+#[cfg(test)]
+pub mod mock_server;
+
 pub mod prelude {
     pub use super::fixtures::{test_config, TestConfigBuilder};
     pub use super::mock_context::{test_runtime, TestRuntime};
+    
+    #[cfg(test)]
+    pub use super::mock_server::TestServer;
 
     // 宏通过 #[macro_export] 自动导出，不需要 pub use
 }

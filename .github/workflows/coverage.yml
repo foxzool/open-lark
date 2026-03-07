@@ -76,7 +76,7 @@ jobs:
         id: coverage
         run: |
           set -euo pipefail
-          echo "## Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Coverage Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           # 使用 --no-run 跳过重复测试，--workspace 覆盖全部 crate
@@ -89,12 +89,62 @@ jobs:
             exit 1
           fi
 
-          printf 'Line coverage: %s%%\n' "$cov" | tee -a "$GITHUB_STEP_SUMMARY"
+          printf '**Global Line coverage: %s%%**\n' "$cov" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "" >> $GITHUB_STEP_SUMMARY
           echo "value=$cov" >> $GITHUB_OUTPUT
+
+      - name: Generate per-crate coverage reports
+        run: |
+          set -euo pipefail
+          echo "### Per-Crate Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Crate | Line Coverage |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|---------------|" >> $GITHUB_STEP_SUMMARY
+          
+          # 核心模块
+          for crate in openlark-core openlark-client openlark-auth; do
+            echo "Generating coverage for $crate..."
+            mkdir -p "target/llvm-cov/crates/$crate"
+            cargo llvm-cov -p "$crate" --html --output-dir "target/llvm-cov/crates/$crate" || true
+            cargo llvm-cov -p "$crate" --json --summary-only --output-path "target/llvm-cov/crates/$crate/summary.json" || true
+            
+            if [ -f "target/llvm-cov/crates/$crate/summary.json" ]; then
+              crate_cov=$(python3 -c "import json; d=json.load(open('target/llvm-cov/crates/$crate/summary.json','r',encoding='utf-8')); print('{:.2f}'.format(d['data'][0]['totals']['lines']['percent']))" 2>/dev/null || echo "N/A")
+              printf '| %s | %s%% |\n' "$crate" "$crate_cov" >> "$GITHUB_STEP_SUMMARY"
+            else
+              printf '| %s | N/A |\n' "$crate" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
+          
+          # 业务模块
+          for crate in openlark-communication openlark-docs openlark-hr; do
+            echo "Generating coverage for $crate..."
+            mkdir -p "target/llvm-cov/crates/$crate"
+            cargo llvm-cov -p "$crate" --html --output-dir "target/llvm-cov/crates/$crate" || true
+            cargo llvm-cov -p "$crate" --json --summary-only --output-path "target/llvm-cov/crates/$crate/summary.json" || true
+            
+            if [ -f "target/llvm-cov/crates/$crate/summary.json" ]; then
+              crate_cov=$(python3 -c "import json; d=json.load(open('target/llvm-cov/crates/$crate/summary.json','r',encoding='utf-8')); print('{:.2f}'.format(d['data'][0]['totals']['lines']['percent']))" 2>/dev/null || echo "N/A")
+              printf '| %s | %s%% |\n' "$crate" "$crate_cov" >> "$GITHUB_STEP_SUMMARY"
+            else
+              printf '| %s | N/A |\n' "$crate" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_Per-crate HTML reports are available in the coverage artifact._" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Generate LCOV report
         run: |
           cargo llvm-cov --no-run --workspace --all-features --lcov --output-path target/llvm-cov/lcov.info
+
+      - name: Generate missing lines report
+        run: |
+          echo "### Missing Lines Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_Top 50 uncovered lines in core crates:_" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          cargo llvm-cov --workspace --show-missing-lines 2>/dev/null | head -100 >> "$GITHUB_STEP_SUMMARY" || echo "_Report generation failed_" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Generate HTML report
         run: |
@@ -116,14 +166,57 @@ jobs:
         if: always()
         with:
           name: coverage-report
-          path: target/llvm-cov/html/
+          path: |
+            target/llvm-cov/html/
+            target/llvm-cov/crates/
           retention-days: 30
 
       - name: Enforce coverage threshold on main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
+          set -euo pipefail
           cov=${{ steps.coverage.outputs.value }}
-          awk -v cov="$cov" -v min="$MIN_COVERAGE" 'BEGIN { if (cov+0 < min+0) { printf("Coverage %.2f%% < threshold %.2f%%\n", cov, min); exit 1 } else { printf("Coverage %.2f%% >= threshold %.2f%%\n", cov, min); } }'
+          
+          # 全局门禁
+          echo "=== Global Coverage Check ==="
+          awk -v cov="$cov" -v min="$MIN_COVERAGE" 'BEGIN { 
+            if (cov+0 < min+0) { 
+              printf("❌ Global coverage %.2f%% < threshold %.2f%%\n", cov, min); 
+              exit 1 
+            } else { 
+              printf("✅ Global coverage %.2f%% >= threshold %.2f%%\n", cov, min); 
+            } 
+          }'
+          
+          # Per-crate 门禁（仅警告，不阻塞）
+          echo ""
+          echo "=== Per-Crate Coverage Checks ==="
+          
+          check_crate() {
+            local crate=$1
+            local min=$2
+            local summary_file="target/llvm-cov/crates/$crate/summary.json"
+            
+            if [ -f "$summary_file" ]; then
+              crate_cov=$(python3 -c "import json; d=json.load(open('$summary_file','r',encoding='utf-8')); print('{:.2f}'.format(d['data'][0]['totals']['lines']['percent']))" 2>/dev/null || echo "0")
+              
+              if awk -v cov="$crate_cov" -v min="$min" 'BEGIN { exit !(cov+0 >= min+0) }'; then
+                echo "✅ $crate: ${crate_cov}% >= ${min}%"
+              else
+                echo "⚠️  $crate: ${crate_cov}% < ${min}% (warning only)"
+              fi
+            fi
+          }
+          
+          # 核心模块基线
+          check_crate "openlark-core" 40
+          check_crate "openlark-client" 35
+          check_crate "openlark-auth" 50
+          
+          # 业务模块基线
+          check_crate "openlark-communication" 40
+          check_crate "openlark-docs" 35
+          check_crate "openlark-hr" 30
 
       - name: Report coverage threshold (PR)
         if: github.event_name == 'pull_request'

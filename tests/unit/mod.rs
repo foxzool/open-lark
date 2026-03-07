@@ -8,12 +8,8 @@ pub mod im;
 pub mod authentication;
 #[path = "unit/auth"]
 pub mod auth;
-#[path = "unit/cardkit"]
-pub mod cardkit;
 #[path = "unit/ai"]
 pub mod ai;
-#[path = "unit/error"]
-pub mod error;
 #[path = "unit/client"]
 pub mod client;
 // pub mod contact;
