@@ -79,7 +79,7 @@ pub use sheet_operations::SheetOperationsApi;
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

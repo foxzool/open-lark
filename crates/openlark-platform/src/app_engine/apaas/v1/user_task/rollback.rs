@@ -98,7 +98,7 @@ impl ApiResponseTrait for RollbackTaskResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

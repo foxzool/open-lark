@@ -164,7 +164,7 @@ impl ApiResponseTrait for ListFieldResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

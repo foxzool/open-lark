@@ -216,7 +216,7 @@ pub async fn batch_query(
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

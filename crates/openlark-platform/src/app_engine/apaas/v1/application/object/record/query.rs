@@ -114,7 +114,7 @@ impl ApiResponseTrait for RecordQueryResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

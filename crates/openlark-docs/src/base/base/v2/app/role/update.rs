@@ -141,7 +141,7 @@ impl ApiResponseTrait for UpdateResp {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

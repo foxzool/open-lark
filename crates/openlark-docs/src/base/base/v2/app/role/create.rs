@@ -136,7 +136,7 @@ impl ApiResponseTrait for CreateResp {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

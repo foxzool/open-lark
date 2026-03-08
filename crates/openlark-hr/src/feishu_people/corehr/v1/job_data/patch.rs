@@ -151,7 +151,6 @@ impl ApiResponseTrait for PatchResponse {
 #[cfg(test)]
 mod tests {
 
-
     #[test]
     fn test_serialization_roundtrip() {
         // 基础序列化测试

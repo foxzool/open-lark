@@ -69,7 +69,6 @@ impl ApiResponseTrait for CreateBadgeImageResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
 
     #[test]
     fn test_builder_basic() {

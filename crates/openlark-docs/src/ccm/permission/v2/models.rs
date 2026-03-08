@@ -110,7 +110,7 @@ pub struct UserInfo {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

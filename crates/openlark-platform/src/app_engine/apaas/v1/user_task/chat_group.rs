@@ -127,7 +127,7 @@ impl ApiResponseTrait for ChatGroupResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -175,7 +175,7 @@ pub async fn update_spreadsheet_with_options(
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

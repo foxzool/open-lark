@@ -37,7 +37,6 @@ impl CreateTimeoffEventRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
 
     #[test]
     fn test_builder_basic() {

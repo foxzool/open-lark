@@ -60,7 +60,7 @@ impl ApiResponseTrait for AgreeTaskResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

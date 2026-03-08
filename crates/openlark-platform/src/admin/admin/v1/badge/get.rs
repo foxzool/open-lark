@@ -63,7 +63,7 @@ impl ApiResponseTrait for GetBadgeResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

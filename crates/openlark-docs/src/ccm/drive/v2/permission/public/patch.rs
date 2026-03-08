@@ -133,7 +133,7 @@ pub async fn update_permission_public_with_options(
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

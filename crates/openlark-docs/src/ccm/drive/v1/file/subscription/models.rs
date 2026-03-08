@@ -23,7 +23,7 @@ impl ApiResponseTrait for Subscription {}
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

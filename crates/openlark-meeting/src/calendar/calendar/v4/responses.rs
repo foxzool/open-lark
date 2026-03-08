@@ -151,7 +151,7 @@ pub struct ExchangeBindingInfo {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

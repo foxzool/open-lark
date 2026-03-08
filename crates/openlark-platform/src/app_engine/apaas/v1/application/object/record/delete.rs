@@ -88,7 +88,7 @@ impl ApiResponseTrait for RecordDeleteResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

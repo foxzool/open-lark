@@ -430,7 +430,7 @@ pub struct PagedResponse<T> {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

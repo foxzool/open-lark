@@ -780,7 +780,7 @@ impl ApiResponseTrait for PatchMeetingMinuteResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

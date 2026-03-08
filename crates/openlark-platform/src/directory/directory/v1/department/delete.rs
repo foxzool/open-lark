@@ -66,7 +66,7 @@ impl ApiResponseTrait for DepartmentDeleteResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

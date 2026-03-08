@@ -57,7 +57,6 @@ impl ApiResponseTrait for GetChatLinkResponse {
 #[allow(unused_imports)]
 mod tests {
 
-
     #[test]
     fn test_serialization_roundtrip() {
         // 基础序列化测试

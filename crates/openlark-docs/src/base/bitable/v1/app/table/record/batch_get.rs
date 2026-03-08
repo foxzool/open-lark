@@ -138,7 +138,7 @@ impl ApiResponseTrait for BatchGetRecordResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

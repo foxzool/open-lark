@@ -111,7 +111,7 @@ impl ApiResponseTrait for BatchDeleteTableResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

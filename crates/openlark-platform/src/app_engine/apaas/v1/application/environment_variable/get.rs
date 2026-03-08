@@ -90,7 +90,7 @@ impl ApiResponseTrait for EnvironmentVariableGetResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

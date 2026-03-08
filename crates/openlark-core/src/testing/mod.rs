@@ -34,7 +34,7 @@ pub mod mock_server;
 pub mod prelude {
     pub use super::fixtures::{test_config, TestConfigBuilder};
     pub use super::mock_context::{test_runtime, TestRuntime};
-    
+
     #[cfg(test)]
     pub use super::mock_server::TestServer;
 
