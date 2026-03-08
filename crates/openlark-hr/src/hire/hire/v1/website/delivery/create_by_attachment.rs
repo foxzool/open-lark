@@ -72,9 +72,9 @@ impl ApiResponseTrait for CreateByAttachmentResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
 
-    use serde_json;
 
     #[test]
     fn test_serialization_roundtrip() {

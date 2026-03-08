@@ -69,6 +69,7 @@ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 pub type AnalyticsConfig = Config;
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

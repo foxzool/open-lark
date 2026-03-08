@@ -86,6 +86,7 @@ pub const EPHEMERAL_V1_SEND: &str = "/open-apis/ephemeral/v1/send";
 pub const INTERACTIVE_V1_CARD_UPDATE: &str = "/open-apis/interactive/v1/card/update";
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

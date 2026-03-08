@@ -117,6 +117,7 @@ impl ApiResponseTrait for CreatePlantumlNodeResponseV1 {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
 
     #[test]

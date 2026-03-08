@@ -101,6 +101,7 @@ pub async fn list_ticket_customized_fields(config: &Config) -> SDKResult<ListTic
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

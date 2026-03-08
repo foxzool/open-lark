@@ -201,6 +201,7 @@ pub async fn patch_faq_with_options(
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

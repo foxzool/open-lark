@@ -111,6 +111,7 @@ pub async fn get_agent_skill(
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

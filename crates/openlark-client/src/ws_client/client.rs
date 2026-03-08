@@ -655,6 +655,7 @@ pub struct WsCloseReason {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::{
         extract_endpoint_response, map_ws_api_error, WsClientError, WsEndpointApiResponse,

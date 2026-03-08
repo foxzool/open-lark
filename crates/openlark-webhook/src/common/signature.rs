@@ -29,6 +29,7 @@ pub fn verify_signature(timestamp: i64, secret: &str, signature: &str) -> bool {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 
@@ -41,7 +42,6 @@ mod tests {
 
         // Verify it's base64 encoded and not empty
         assert!(!signature.is_empty());
-        assert!(signature.len() > 0);
     }
 
     #[test]

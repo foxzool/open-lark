@@ -166,9 +166,9 @@ impl ApiResponseTrait for AuditLogGetResponse {
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
-    use serde_json;
 
     #[test]
     fn test_openapi_log_list_request() {

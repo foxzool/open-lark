@@ -105,6 +105,7 @@ pub async fn get_category(config: &Config, id: String) -> SDKResult<GetCategoryR
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

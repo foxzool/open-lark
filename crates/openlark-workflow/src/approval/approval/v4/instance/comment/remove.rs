@@ -66,6 +66,7 @@ impl ApiResponseTrait for RemoveInstanceCommentResponseV4 {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     
 

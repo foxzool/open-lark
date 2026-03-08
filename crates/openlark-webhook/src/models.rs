@@ -92,6 +92,7 @@ impl InteractiveContent {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 
@@ -127,11 +128,11 @@ mod tests {
     #[test]
     fn test_msg_type_serialization() {
         let text_type = MsgType::Text;
-        let json = serde_json::to_value(&text_type).unwrap();
+        let json = serde_json::to_value(text_type).unwrap();
         assert_eq!(json, "text");
 
         let image_type = MsgType::Image;
-        let json = serde_json::to_value(&image_type).unwrap();
+        let json = serde_json::to_value(image_type).unwrap();
         assert_eq!(json, "image");
     }
 
@@ -153,7 +154,7 @@ mod tests {
     #[test]
     fn test_msg_type_interactive_serialization() {
         let interactive_type = MsgType::Interactive;
-        let json = serde_json::to_value(&interactive_type).unwrap();
+        let json = serde_json::to_value(interactive_type).unwrap();
         assert_eq!(json, "interactive");
     }
 }

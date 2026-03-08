@@ -42,6 +42,7 @@ pub const AILY_V1_SKILL: &str = "/open-apis/aily/v1/apps/{app_id}/skills/{skill_
 pub const AILY_V1_SKILL_START: &str = "/open-apis/aily/v1/apps/{app_id}/skills/{skill_id}/start";
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

@@ -104,6 +104,7 @@ pub async fn list_categories(config: &Config) -> SDKResult<ListCategoryResponse>
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

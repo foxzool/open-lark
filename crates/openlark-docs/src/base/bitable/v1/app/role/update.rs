@@ -130,7 +130,7 @@ impl ApiResponseTrait for UpdateAppRoleResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

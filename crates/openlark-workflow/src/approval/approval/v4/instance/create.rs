@@ -102,6 +102,7 @@ impl ApiResponseTrait for CreateInstanceResponseV4 {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     
 

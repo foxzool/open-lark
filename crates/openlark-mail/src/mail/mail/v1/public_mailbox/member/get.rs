@@ -55,6 +55,7 @@ impl ApiResponseTrait for GetPublicMailboxMemberResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

@@ -131,6 +131,7 @@ impl ApiResponseTrait for CreateExternalInstanceResponseV4 {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     
 

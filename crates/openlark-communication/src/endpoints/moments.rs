@@ -22,6 +22,7 @@ pub const MOMENTS_V1_POST_GET: &str = "/open-apis/moments/v1/posts/{post_id}";
 pub const MOMENTS_V1_POSTS: &str = "/open-apis/moments/v1/posts";
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

@@ -75,9 +75,9 @@ pub use patch::{PatchFaqRequest, PatchFaqRequestBuilder};
 pub use search::{SearchFaqRequest, SearchFaqRequestBuilder};
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
 
-    use serde_json;
 
     #[test]
     fn test_serialization_roundtrip() {

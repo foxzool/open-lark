@@ -6,7 +6,7 @@ pub struct DocumentId(pub String);
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

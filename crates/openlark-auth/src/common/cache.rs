@@ -512,6 +512,7 @@ impl TokenStorage for MemoryTokenCache {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
     use crate::auth::TokenType;

@@ -141,7 +141,7 @@ impl ApiResponseTrait for CollaborationRuleUpdateResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

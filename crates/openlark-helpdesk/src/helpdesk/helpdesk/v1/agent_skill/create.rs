@@ -183,6 +183,7 @@ pub async fn create_agent_skill_with_options(
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

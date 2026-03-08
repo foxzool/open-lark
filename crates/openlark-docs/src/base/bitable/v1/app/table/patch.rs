@@ -169,7 +169,7 @@ impl ApiResponseTrait for PatchTableResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

@@ -456,6 +456,7 @@ pub mod info {
 pub mod utils;
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

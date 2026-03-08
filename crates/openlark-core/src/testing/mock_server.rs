@@ -90,7 +90,6 @@ impl TestServer {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::testing::prelude::*;
     use serde_json::json;
     
     #[tokio::test]

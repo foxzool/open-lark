@@ -245,7 +245,7 @@ pub async fn delete_float_image_with_options(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]
