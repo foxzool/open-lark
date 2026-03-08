@@ -75,7 +75,7 @@ pub async fn create_filter_view_with_options(
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

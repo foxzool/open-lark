@@ -127,7 +127,7 @@ impl ApiResponseTrait for EnvironmentVariableQueryResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

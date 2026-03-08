@@ -78,7 +78,7 @@ pub async fn create_filter_condition_with_options(
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

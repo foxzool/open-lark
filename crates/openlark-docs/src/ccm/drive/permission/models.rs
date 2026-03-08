@@ -164,7 +164,7 @@ pub struct UserPermission {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

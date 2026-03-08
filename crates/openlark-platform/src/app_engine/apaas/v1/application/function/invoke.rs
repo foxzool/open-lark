@@ -101,7 +101,7 @@ impl ApiResponseTrait for FunctionInvokeResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -319,7 +319,6 @@ pub struct DiagnosticIssue {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-    
 
     #[test]
     fn test_serialization_roundtrip() {

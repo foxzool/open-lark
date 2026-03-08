@@ -78,7 +78,7 @@ impl DownloadExportRequest {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

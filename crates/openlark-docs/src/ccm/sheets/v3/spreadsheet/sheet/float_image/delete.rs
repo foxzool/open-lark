@@ -62,7 +62,7 @@ pub async fn delete_float_image_with_options(
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

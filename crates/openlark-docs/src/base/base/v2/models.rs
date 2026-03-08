@@ -25,7 +25,7 @@ pub struct AppRole {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -94,7 +94,7 @@ impl ApiResponseTrait for CopyDashboardResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

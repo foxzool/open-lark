@@ -135,7 +135,7 @@ pub struct MoveDocsToWikiParams {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -79,7 +79,7 @@ impl ApiResponseTrait for CollaborationRuleDeleteResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

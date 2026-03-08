@@ -170,7 +170,7 @@ impl ApiResponseTrait for TableRecordsGetResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -115,7 +115,7 @@ impl ApiResponseTrait for EmployeeMgetResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

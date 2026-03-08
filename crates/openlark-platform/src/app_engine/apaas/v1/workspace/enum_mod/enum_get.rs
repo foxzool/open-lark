@@ -96,7 +96,7 @@ impl ApiResponseTrait for EnumGetResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

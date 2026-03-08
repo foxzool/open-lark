@@ -58,7 +58,7 @@ pub async fn query_float_images_with_options(
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -112,7 +112,7 @@ impl ApiResponseTrait for DeleteRoomResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

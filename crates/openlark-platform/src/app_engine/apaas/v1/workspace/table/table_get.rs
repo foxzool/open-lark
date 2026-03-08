@@ -99,7 +99,7 @@ impl ApiResponseTrait for TableGetResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

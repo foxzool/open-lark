@@ -162,7 +162,7 @@ impl ApiResponseTrait for AuditLogListResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

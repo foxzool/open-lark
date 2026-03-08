@@ -65,7 +65,7 @@ impl GetReserveConfigFormRequest {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

@@ -114,7 +114,7 @@ impl ApiResponseTrait for BatchCreateRoleMemberResponse {
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

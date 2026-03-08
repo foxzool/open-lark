@@ -128,7 +128,7 @@ impl ApiResponseTrait for Comment {}
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

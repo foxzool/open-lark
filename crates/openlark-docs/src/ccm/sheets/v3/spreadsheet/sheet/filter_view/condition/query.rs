@@ -65,7 +65,7 @@ pub async fn query_filter_conditions_with_options(
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

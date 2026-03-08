@@ -81,7 +81,7 @@ pub async fn create_float_image_with_options(
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]

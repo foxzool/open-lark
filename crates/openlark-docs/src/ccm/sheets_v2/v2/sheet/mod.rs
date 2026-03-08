@@ -224,7 +224,7 @@ pub async fn delete_sheet_with_options(
 
 #[cfg(test)]
 mod tests {
-    
+
     use serde_json;
 
     #[test]
