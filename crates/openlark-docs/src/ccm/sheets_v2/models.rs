@@ -54,7 +54,7 @@ impl<'de> Deserialize<'de> for ReadSingleRangeResponse {
 
         // 从原始 JSON 值中提取数据
         let spreadsheet_id = raw_value
-            .get("spreadsheet_id")
+            .get("spreadsheetId")
             .and_then(|v| v.as_str())
             .map(|s| s.to_string());
 
@@ -148,7 +148,7 @@ impl<'de> Deserialize<'de> for ReadMultipleRangesResponse {
 
         // 从原始 JSON 值中提取数据
         let spreadsheet_id = raw_value
-            .get("spreadsheet_id")
+            .get("spreadsheetId")
             .and_then(|v| v.as_str())
             .map(|s| s.to_string());
 
