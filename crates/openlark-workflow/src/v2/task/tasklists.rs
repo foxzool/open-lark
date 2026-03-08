@@ -84,6 +84,7 @@ impl ApiResponseTrait for GetTaskTasklistsResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use std::sync::Arc;
 

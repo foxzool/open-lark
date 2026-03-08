@@ -183,6 +183,7 @@ fn register_ai(registry: &mut DefaultServiceRegistry) -> Result<()> {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

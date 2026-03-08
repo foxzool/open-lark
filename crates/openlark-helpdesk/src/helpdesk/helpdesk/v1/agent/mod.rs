@@ -41,9 +41,9 @@ pub use agent_email::GetAgentEmailRequest;
 pub use patch::{PatchAgentRequest, PatchAgentRequestBuilder};
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
 
-    use serde_json;
 
     #[test]
     fn test_serialization_roundtrip() {

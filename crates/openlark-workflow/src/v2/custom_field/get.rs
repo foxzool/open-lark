@@ -63,6 +63,7 @@ impl ApiResponseTrait for GetCustomFieldResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use std::sync::Arc;
 

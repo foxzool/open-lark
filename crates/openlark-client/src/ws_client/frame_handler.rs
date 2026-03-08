@@ -223,6 +223,7 @@ impl NewWsResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
     // use crate::event::dispatcher::EventDispatcherHandler; // TODO: 需要实现 event 模块

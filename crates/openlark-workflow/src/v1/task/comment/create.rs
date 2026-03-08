@@ -94,6 +94,7 @@ impl ApiResponseTrait for CreateTaskCommentResponseV1 {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use std::sync::Arc;
 

@@ -70,6 +70,7 @@ impl ApiResponseTrait for SearchCcResponseV4 {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     
 

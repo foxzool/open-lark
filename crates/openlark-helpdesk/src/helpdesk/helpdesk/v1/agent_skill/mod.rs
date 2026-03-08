@@ -56,9 +56,9 @@ pub use list::{ListAgentSkillRequest, ListAgentSkillRequestBuilder};
 pub use patch::{PatchAgentSkillRequest, PatchAgentSkillRequestBuilder};
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
 
-    use serde_json;
 
     #[test]
     fn test_serialization_roundtrip() {

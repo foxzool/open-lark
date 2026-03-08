@@ -23,9 +23,9 @@ pub use get::GetAppRequest;
 pub use models::*;
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
-    use serde_json;
 
     #[test]
     fn test_serialization_roundtrip() {

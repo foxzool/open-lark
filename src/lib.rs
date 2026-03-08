@@ -3,6 +3,9 @@
 //! 这个 crate 是 OpenLark SDK 的统一入口，重新导出了各个功能模块。
 //! 用户可以根据需要开启对应的 feature 来使用特定功能。
 
+// 允许测试模块中的未使用导入（测试桩代码常见模式）
+#![allow(unused_imports)]
+
 pub use openlark_core;
 
 #[cfg(feature = "client")]

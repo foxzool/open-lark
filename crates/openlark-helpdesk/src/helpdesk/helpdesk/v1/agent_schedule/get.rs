@@ -192,6 +192,7 @@ pub async fn get_agent_schedule(
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

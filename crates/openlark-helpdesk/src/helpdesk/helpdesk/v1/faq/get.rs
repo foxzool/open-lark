@@ -108,6 +108,7 @@ pub async fn get_faq(config: &Config, id: String) -> SDKResult<GetFaqResponse> {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

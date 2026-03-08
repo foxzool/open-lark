@@ -69,6 +69,7 @@ impl ApiResponseTrait for GetActivitySubscriptionResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use std::sync::Arc;
 

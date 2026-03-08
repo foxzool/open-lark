@@ -116,6 +116,7 @@ pub async fn delete_ticket_customized_field_with_options(
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

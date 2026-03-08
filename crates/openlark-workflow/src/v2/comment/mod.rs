@@ -75,6 +75,7 @@ pub use models::{
 };
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
     use std::sync::Arc;

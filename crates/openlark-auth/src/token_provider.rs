@@ -249,6 +249,7 @@ impl TokenProvider for AuthTokenProvider {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::AuthTokenProvider;
     use openlark_core::{

@@ -110,7 +110,7 @@ impl ApiResponseTrait for DataChangeLogDetailResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

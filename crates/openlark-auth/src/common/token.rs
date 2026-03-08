@@ -322,6 +322,7 @@ pub trait TokenManager: Send + Sync {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
     use std::collections::HashMap;

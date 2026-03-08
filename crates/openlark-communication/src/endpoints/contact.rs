@@ -107,6 +107,7 @@ pub const MEETING_LIST: &str = "/open-apis/vc/v1/meetings";
 pub const MAILGROUP_LIST: &str = "/open-apis/mail/v1/mailgroups";
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

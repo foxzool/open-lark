@@ -114,6 +114,7 @@ pub async fn get_notification(
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

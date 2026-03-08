@@ -71,7 +71,7 @@ pub struct UserViewDetail {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

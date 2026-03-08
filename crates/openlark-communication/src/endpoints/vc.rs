@@ -36,6 +36,7 @@ pub const VC_V1_MEETING_LIST_BY_NO: &str = "/open-apis/vc/v1/meetings/list_by_no
 pub const VC_V1_MEETING_SET_HOST: &str = "/open-apis/vc/v1/meetings/{meeting_id}/set_host";
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

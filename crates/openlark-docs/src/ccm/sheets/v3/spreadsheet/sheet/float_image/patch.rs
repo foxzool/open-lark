@@ -83,7 +83,7 @@ pub async fn update_float_image_with_options(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

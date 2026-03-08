@@ -197,6 +197,7 @@ pub async fn search_faqs(config: &Config) -> SDKResult<SearchFaqResponse> {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

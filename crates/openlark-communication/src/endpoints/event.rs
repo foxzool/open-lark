@@ -39,6 +39,7 @@ pub const EVENT_V1_DISPATCHER_STATUS: &str = "/open-apis/event/v1/dispatcher/sta
 pub const EVENT_V1_OUTBOUND_IP: &str = "/open-apis/event/v1/outbound_ip";
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

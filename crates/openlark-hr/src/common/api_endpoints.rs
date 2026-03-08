@@ -3334,6 +3334,7 @@ pub type CorehrApiV2 = FeishuPeopleApiV2;
 // ============================================================================
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

@@ -210,6 +210,7 @@ pub const SALARY_GROUPS: &str = PAYROLL_V1_SALARY_GROUPS;
 pub const APPRAISALS: &str = PERFORMANCE_V1_APPRAISALS;
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

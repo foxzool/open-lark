@@ -80,7 +80,7 @@ pub async fn get_permission_public_with_options(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
     use serde_json;
 
     #[test]

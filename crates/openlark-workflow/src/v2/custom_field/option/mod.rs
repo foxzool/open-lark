@@ -48,6 +48,7 @@ pub use create::{CreateCustomFieldOptionBody, CreateCustomFieldOptionResponse, C
 pub use patch::{UpdateCustomFieldOptionBody, UpdateCustomFieldOptionResponse};
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
     use std::sync::Arc;

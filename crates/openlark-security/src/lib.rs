@@ -153,8 +153,6 @@ pub mod prelude {
 #[cfg(test)]
 mod tests {
 
-    use serde_json;
-
     #[test]
     fn test_serialization_roundtrip() {
         // 基础序列化测试

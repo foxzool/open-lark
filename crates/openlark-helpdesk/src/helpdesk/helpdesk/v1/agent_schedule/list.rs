@@ -185,6 +185,7 @@ pub async fn list_agent_schedules(config: &Config) -> SDKResult<ListAgentSchedul
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

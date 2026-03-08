@@ -109,6 +109,7 @@ pub async fn delete_category_with_options(
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

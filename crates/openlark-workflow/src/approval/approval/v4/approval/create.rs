@@ -91,6 +91,7 @@ impl ApiResponseTrait for CreateApprovalResponseV4 {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     
 

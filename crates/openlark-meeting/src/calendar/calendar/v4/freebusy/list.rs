@@ -47,7 +47,7 @@ impl ListFreebusyRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use serde_json::json;
+    
 
     #[test]
     fn test_builder_basic() {

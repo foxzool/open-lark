@@ -109,6 +109,7 @@ pub async fn list_ticket_messages(
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

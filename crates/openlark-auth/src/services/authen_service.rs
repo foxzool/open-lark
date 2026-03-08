@@ -95,6 +95,7 @@ impl Default for AuthenService {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

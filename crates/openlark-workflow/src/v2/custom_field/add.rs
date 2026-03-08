@@ -81,6 +81,7 @@ impl ApiResponseTrait for AddCustomFieldResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

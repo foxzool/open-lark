@@ -170,6 +170,7 @@ pub async fn create_ticket_message_with_options(
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

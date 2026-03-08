@@ -36,6 +36,7 @@ impl PreferencesService {
 pub mod v1;
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

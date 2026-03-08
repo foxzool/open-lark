@@ -86,6 +86,7 @@ impl ApiResponseTrait for CreateTaskCollaboratorResponseV1 {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use std::sync::Arc;
 

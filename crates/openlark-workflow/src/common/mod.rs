@@ -32,6 +32,7 @@ pub mod types {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::constants;
     use super::types;

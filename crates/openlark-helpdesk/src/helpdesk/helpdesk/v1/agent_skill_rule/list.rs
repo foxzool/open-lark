@@ -101,6 +101,7 @@ pub async fn list_agent_skill_rules(config: &Config) -> SDKResult<ListAgentSkill
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
     use super::*;
 

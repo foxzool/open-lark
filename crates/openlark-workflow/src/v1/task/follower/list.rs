@@ -100,6 +100,7 @@ impl ApiResponseTrait for ListTaskFollowerResponseV1 {
 }
 
 #[cfg(test)]
+#[allow(unused_imports)]
 mod tests {
 
     #[test]
