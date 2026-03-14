@@ -23,6 +23,28 @@ impl WebhookClient {
         }
     }
 
+    /// 使用自定义 HTTP 客户端创建 Webhook 客户端
+    ///
+    /// 允许配置连接池、超时等参数：
+    /// ```rust,no_run
+    /// use openlark_webhook::prelude::*;
+    ///
+    /// let http_client = reqwest::Client::builder()
+    ///     .timeout(std::time::Duration::from_secs(30))
+    ///     .pool_max_idle_per_host(10)
+    ///     .build()
+    ///     .expect("Failed to build HTTP client");
+    ///
+    /// let client = WebhookClient::with_client(http_client);
+    /// ```
+    pub fn with_client(client: reqwest::Client) -> Self {
+        Self {
+            client,
+            #[cfg(feature = "signature")]
+            secret: None,
+        }
+    }
+
     /// 设置签名密钥（启用签名验证）
     #[cfg(feature = "signature")]
     pub fn with_secret(mut self, secret: String) -> Self {
