@@ -39,8 +39,7 @@ impl SendWebhookMessageRequest {
 
     /// 设置文本消息
     pub fn text(mut self, text: String) -> Self {
-        validation::validate_message_content(&text)
-            .expect("Text message content cannot be empty");
+        validation::validate_message_content(&text).expect("Text message content cannot be empty");
         self.msg_type = "text".to_string();
         self.content = serde_json::to_value(TextContent::new(text)).unwrap_or_else(|_| json!({}));
         self
@@ -48,8 +47,7 @@ impl SendWebhookMessageRequest {
 
     /// 设置富文本消息
     pub fn post(mut self, post: String) -> Self {
-        validation::validate_message_content(&post)
-            .expect("Post message content cannot be empty");
+        validation::validate_message_content(&post).expect("Post message content cannot be empty");
         self.msg_type = "post".to_string();
         self.content = serde_json::to_value(PostContent::new(post)).unwrap_or_else(|_| json!({}));
         self
@@ -57,8 +55,7 @@ impl SendWebhookMessageRequest {
 
     /// 设置图片消息
     pub fn image(mut self, image_key: String) -> Self {
-        validation::validate_message_content(&image_key)
-            .expect("Image key cannot be empty");
+        validation::validate_message_content(&image_key).expect("Image key cannot be empty");
         self.msg_type = "image".to_string();
         self.content =
             serde_json::to_value(ImageContent::new(image_key)).unwrap_or_else(|_| json!({}));
@@ -67,8 +64,7 @@ impl SendWebhookMessageRequest {
 
     /// 设置文件消息
     pub fn file(mut self, file_key: String) -> Self {
-        validation::validate_message_content(&file_key)
-            .expect("File key cannot be empty");
+        validation::validate_message_content(&file_key).expect("File key cannot be empty");
         self.msg_type = "file".to_string();
         self.content =
             serde_json::to_value(FileContent::new(file_key)).unwrap_or_else(|_| json!({}));

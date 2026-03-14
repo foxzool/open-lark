@@ -194,10 +194,14 @@ async fn test_send_with_signature_headers() {
     let server = MockServer::start().await;
 
     fn has_signature_headers(req: &Request) -> bool {
-        let has_signature = req.headers.get("X-Lark-Signature")
+        let has_signature = req
+            .headers
+            .get("X-Lark-Signature")
             .map(|v| !v.as_bytes().is_empty())
             .unwrap_or(false);
-        let has_timestamp = req.headers.get("X-Lark-Timestamp")
+        let has_timestamp = req
+            .headers
+            .get("X-Lark-Timestamp")
             .map(|v| !v.as_bytes().is_empty())
             .unwrap_or(false);
         has_signature && has_timestamp
@@ -227,10 +231,14 @@ async fn test_client_send_with_signature_headers() {
     let server = MockServer::start().await;
 
     fn has_signature_headers(req: &Request) -> bool {
-        let has_signature = req.headers.get("X-Lark-Signature")
+        let has_signature = req
+            .headers
+            .get("X-Lark-Signature")
             .map(|v| !v.as_bytes().is_empty())
             .unwrap_or(false);
-        let has_timestamp = req.headers.get("X-Lark-Timestamp")
+        let has_timestamp = req
+            .headers
+            .get("X-Lark-Timestamp")
             .map(|v| !v.as_bytes().is_empty())
             .unwrap_or(false);
         has_signature && has_timestamp
