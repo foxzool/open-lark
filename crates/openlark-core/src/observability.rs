@@ -28,7 +28,6 @@ use tracing_opentelemetry::OpenTelemetryLayer;
 pub struct OperationTracker {
     span: Span,
     start_time: Instant,
-    #[allow(dead_code)]
     operation_name: String,
 }
 

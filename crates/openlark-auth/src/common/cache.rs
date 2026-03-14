@@ -234,7 +234,6 @@ pub struct CacheStats {
 
 /// 缓存条目
 #[derive(Debug, Clone)]
-#[allow(dead_code)]
 struct CacheEntry {
     token_info: TokenInfo,
     created_at: Instant,
