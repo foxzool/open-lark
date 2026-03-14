@@ -19,6 +19,7 @@ async fn main() -> Result<()> {
 
     let response = SendWebhookMessageRequest::new(webhook_url)
         .text("Message with signature verification".to_string())
+        .with_secret(secret.clone())
         .execute()
         .await?;
 
