@@ -1,6 +1,10 @@
 use crate::common::error::{Result, WebhookError};
+use crate::common::validation;
 use crate::models::{FileContent, ImageContent, PostContent, TextContent};
 use serde_json::json;
+
+#[cfg(feature = "signature")]
+use crate::common::signature;
 
 #[cfg(feature = "card")]
 use crate::models::InteractiveContent;
@@ -10,6 +14,8 @@ pub struct SendWebhookMessageRequest {
     webhook_url: String,
     msg_type: String,
     content: serde_json::Value,
+    #[cfg(feature = "signature")]
+    secret: Option<String>,
 }
 
 impl SendWebhookMessageRequest {
@@ -19,7 +25,16 @@ impl SendWebhookMessageRequest {
             webhook_url,
             msg_type: "text".to_string(),
             content: json!({}),
+            #[cfg(feature = "signature")]
+            secret: None,
         }
+    }
+
+    /// 设置签名密钥（启用签名验证）
+    #[cfg(feature = "signature")]
+    pub fn with_secret(mut self, secret: String) -> Self {
+        self.secret = Some(secret);
+        self
     }
 
     /// 设置文本消息
@@ -63,15 +78,28 @@ impl SendWebhookMessageRequest {
 
     /// 执行发送请求
     pub async fn execute(self) -> Result<SendWebhookMessageResponse> {
+        validation::validate_webhook_url(&self.webhook_url)
+            .map_err(|e| WebhookError::Http(e.to_string()))?;
+
         let payload = json!({
             "msg_type": self.msg_type,
             "content": self.content,
         });
 
-        let client = reqwest::Client::new();
-        let response = client
+        let mut request_builder = reqwest::Client::new()
             .post(&self.webhook_url)
-            .json(&payload)
+            .json(&payload);
+
+        #[cfg(feature = "signature")]
+        if let Some(secret) = &self.secret {
+            let timestamp = signature::current_timestamp();
+            let sign = signature::sign(timestamp, secret);
+            request_builder = request_builder
+                .header("X-Lark-Signature", sign)
+                .header("X-Lark-Timestamp", timestamp.to_string());
+        }
+
+        let response = request_builder
             .send()
             .await
             .map_err(|e| WebhookError::Http(e.to_string()))?;
@@ -159,5 +187,16 @@ mod tests {
         let response: SendWebhookMessageResponse = serde_json::from_str(json).unwrap();
         assert_eq!(response.code, 0);
         assert_eq!(response.msg, "ok");
+    }
+
+    #[cfg(feature = "signature")]
+    #[test]
+    fn test_send_webhook_message_request_with_secret() {
+        let req = SendWebhookMessageRequest::new("https://example.com/webhook".to_string())
+            .text("Hello".to_string())
+            .with_secret("my-secret".to_string());
+
+        assert!(req.secret.is_some());
+        assert_eq!(req.secret.unwrap(), "my-secret");
     }
 }
