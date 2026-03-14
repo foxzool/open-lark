@@ -1,10 +1,16 @@
 use crate::common::error::{Result, WebhookError};
+use crate::common::validation;
 use crate::robot::v1::send::SendWebhookMessageResponse;
 use serde_json::json;
+
+#[cfg(feature = "signature")]
+use crate::common::signature;
 
 /// Webhook 客户端
 pub struct WebhookClient {
     client: reqwest::Client,
+    #[cfg(feature = "signature")]
+    secret: Option<String>,
 }
 
 impl WebhookClient {
@@ -12,7 +18,38 @@ impl WebhookClient {
     pub fn new() -> Self {
         Self {
             client: reqwest::Client::new(),
+            #[cfg(feature = "signature")]
+            secret: None,
         }
+    }
+
+    /// 使用自定义 HTTP 客户端创建 Webhook 客户端
+    ///
+    /// 允许配置连接池、超时等参数：
+    /// ```rust,no_run
+    /// use openlark_webhook::prelude::*;
+    ///
+    /// let http_client = reqwest::Client::builder()
+    ///     .timeout(std::time::Duration::from_secs(30))
+    ///     .pool_max_idle_per_host(10)
+    ///     .build()
+    ///     .expect("Failed to build HTTP client");
+    ///
+    /// let client = WebhookClient::with_client(http_client);
+    /// ```
+    pub fn with_client(client: reqwest::Client) -> Self {
+        Self {
+            client,
+            #[cfg(feature = "signature")]
+            secret: None,
+        }
+    }
+
+    /// 设置签名密钥（启用签名验证）
+    #[cfg(feature = "signature")]
+    pub fn with_secret(mut self, secret: String) -> Self {
+        self.secret = Some(secret);
+        self
     }
 
     /// 发送原始 JSON 负载到 Webhook
@@ -21,10 +58,21 @@ impl WebhookClient {
         webhook_url: &str,
         payload: serde_json::Value,
     ) -> Result<SendWebhookMessageResponse> {
-        let response = self
-            .client
-            .post(webhook_url)
-            .json(&payload)
+        validation::validate_webhook_url(webhook_url)
+            .map_err(|e| WebhookError::Http(e.to_string()))?;
+
+        let mut request_builder = self.client.post(webhook_url).json(&payload);
+
+        #[cfg(feature = "signature")]
+        if let Some(secret) = &self.secret {
+            let timestamp = signature::current_timestamp();
+            let sign = signature::sign(timestamp, secret);
+            request_builder = request_builder
+                .header("X-Lark-Signature", sign)
+                .header("X-Lark-Timestamp", timestamp.to_string());
+        }
+
+        let response = request_builder
             .send()
             .await
             .map_err(|e| WebhookError::Http(e.to_string()))?;
@@ -143,5 +191,12 @@ mod tests {
         // Test that the method exists and can be called
         // (actual HTTP call would require mocking)
         let _client_ref = &client;
+    }
+
+    #[cfg(feature = "signature")]
+    #[test]
+    fn test_webhook_client_with_secret() {
+        let client = WebhookClient::new().with_secret("my-secret".to_string());
+        let _ = client;
     }
 }

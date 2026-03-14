@@ -49,6 +49,32 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
+### 使用 WebhookClient（推荐）
+
+```rust,no_run
+use openlark_webhook::prelude::*;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = WebhookClient::new();
+    let webhook_url = "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_WEBHOOK_KEY";
+
+    // 发送文本消息
+    let response = client
+        .send_text(webhook_url, "Hello from WebhookClient!".to_string())
+        .await?;
+    println!("Text sent: {}", response.msg);
+
+    // 发送图片消息
+    let response = client
+        .send_image(webhook_url, "img_xxxxxx".to_string())
+        .await?;
+    println!("Image sent: {}", response.msg);
+
+    Ok(())
+}
+```
+
 ### 发送卡片消息
 
 ```rust,no_run
@@ -134,10 +160,34 @@ openlark-webhook = { version = "0.15", features = ["robot", "signature", "card"]
 ```rust,no_run
 use openlark_webhook::prelude::*;
 
-// 签名会自动添加到请求头
-// X-Lark-Signature: base64(hmac-sha256(timestamp + "\n" + secret))
-// X-Lark-Timestamp: unix_timestamp
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let webhook_url = "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_WEBHOOK_KEY".to_string();
+    let secret = "YOUR_WEBHOOK_SECRET".to_string();
+
+    // 使用 SendWebhookMessageRequest 发送带签名的消息
+    let response = SendWebhookMessageRequest::new(webhook_url.clone())
+        .text("Secure message with signature".to_string())
+        .with_secret(secret.clone())
+        .execute()
+        .await?;
+
+    println!("Signed message sent: {}", response.msg);
+
+    // 使用 WebhookClient 发送带签名的消息
+    let client = WebhookClient::new().with_secret(secret);
+    let response = client
+        .send_text(&webhook_url, "Another secure message".to_string())
+        .await?;
+
+    println!("Client signed message sent: {}", response.msg);
+    Ok(())
+}
 ```
+
+签名头会自动添加到请求中：
+- `X-Lark-Signature`: base64(hmac-sha256(timestamp + "\n" + secret))
+- `X-Lark-Timestamp`: Unix 时间戳
 
 ## 错误处理
 
@@ -162,7 +212,8 @@ match SendWebhookMessageRequest::new(webhook_url)
 
 - `webhook_text_message.rs` - 基础文本消息
 - `webhook_card_message.rs` - 卡片消息
-- `webhook_with_signature.rs` - 带签名验证
+- `webhook_with_signature.rs` - 使用 SendWebhookMessageRequest 带签名验证
+- `webhook_client_with_signature.rs` - 使用 WebhookClient 带签名验证
 - `webhook_error_handling.rs` - 错误处理
 
 ## API 文档
