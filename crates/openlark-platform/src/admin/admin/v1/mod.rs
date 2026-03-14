@@ -13,7 +13,6 @@ pub mod users;
 
 /// Admin V1 API
 #[derive(Debug, Clone)]
-#[allow(dead_code)]
 pub struct AdminV1 {
     config: Arc<PlatformConfig>,
 }
