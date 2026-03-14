@@ -22,7 +22,10 @@ async fn main() -> Result<()> {
 
     // Send text message
     let response = client
-        .send_text(&webhook_url, "Hello from WebhookClient with signature!".to_string())
+        .send_text(
+            &webhook_url,
+            "Hello from WebhookClient with signature!".to_string(),
+        )
         .await?;
 
     println!("Message sent successfully using WebhookClient!");
