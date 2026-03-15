@@ -61,16 +61,21 @@ impl WebhookClient {
         validation::validate_webhook_url(webhook_url)
             .map_err(|e| WebhookError::Http(e.to_string()))?;
 
-        let mut request_builder = self.client.post(webhook_url).json(&payload);
-
         #[cfg(feature = "signature")]
-        if let Some(secret) = &self.secret {
-            let timestamp = signature::current_timestamp();
-            let sign = signature::sign(timestamp, secret);
-            request_builder = request_builder
-                .header("X-Lark-Signature", sign)
-                .header("X-Lark-Timestamp", timestamp.to_string());
-        }
+        let request_builder = {
+            let mut rb = self.client.post(webhook_url).json(&payload);
+            if let Some(secret) = &self.secret {
+                let timestamp = signature::current_timestamp();
+                let sign = signature::sign(timestamp, secret);
+                rb = rb
+                    .header("X-Lark-Signature", sign)
+                    .header("X-Lark-Timestamp", timestamp.to_string());
+            }
+            rb
+        };
+
+        #[cfg(not(feature = "signature"))]
+        let request_builder = self.client.post(webhook_url).json(&payload);
 
         let response = request_builder
             .send()
