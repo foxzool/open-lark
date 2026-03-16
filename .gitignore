@@ -54,7 +54,6 @@ flycheck0/
 # Temporary development files
 /tmp/
 /temp/
-.sisyphus/
 
 # POC and experimental files
 *_poc.toml
