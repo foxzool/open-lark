@@ -1,0 +1,21 @@
+     Running unittests src/lib.rs (target/llvm-cov-target/debug/deps/openlark_core-c021894dc2eb6f39)
+
+running 528 tests
+test api::responses::tests::test_error_info_creation ... ok
+test api::responses::tests::test_response_format ... ok
+test api::responses::tests::test_raw_response_get_error ... ok
+test api::responses::tests::test_raw_response_success ... ok
+test api::responses::tests::test_raw_response_error ... ok
+test api::responses::tests::test_raw_response_default ... ok
+test api::responses::tests::test_response_format_binary ... ok
+test api::responses::tests::test_response_format_default ... ok
+test api::responses::tests::test_raw_response_success_with_data ... ok
+test api::tests::test_patch_method ... ok
+test api::tests::test_all_http_methods ... ok
+test api::responses::tests::test_raw_response_serialization ... ok
+test auth::token::tests::test_expiring_soon_exact_threshold_boundary ... ok
+test auth::token::tests::test_expiring_soon_below_threshold_boundary ... ok
+test auth::token::tests::test_expired_token_time_until_expiry ... ok
+test auth::token::tests::test_refresh_retry_interval_is_capped ... ok
+test auth::token::tests::test_time_until_expiry ... ok
+test auth::refresh::tests::test_token_refresher_creation ... ok

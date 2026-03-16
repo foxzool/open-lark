@@ -1,0 +1,434 @@
+info: cargo-llvm-cov currently setting cfg(coverage); you can opt-out it by passing --no-cfg-coverage
+   Compiling openlark-core v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-core)
+   Compiling openlark-communication v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-communication)
+   Compiling openlark-docs v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-docs)
+   Compiling openlark-security v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-security)
+   Compiling openlark-ai v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-ai)
+   Compiling openlark-meeting v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-meeting)
+   Compiling openlark-cardkit v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-cardkit)
+   Compiling openlark-auth v0.1.0-dev (/Users/zool/workspace/open-lark/crates/openlark-auth)
+   Compiling openlark-hr v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-hr)
+   Compiling openlark-client v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 14.20s
+     Running unittests src/lib.rs (target/llvm-cov-target/debug/deps/openlark_client-e1e66ad9b58a0c2e)
+
+running 208 tests
+test client::tests::test_builder_default ... ok
+test config::tests::test_config_builder ... ok
+test client::tests::test_from_env_missing_vars ... ok
+test client::tests::test_client_not_configured ... ok
+test config::tests::test_config_default ... ok
+test config::tests::test_config_headers ... ok
+test config::tests::test_config_is_complete ... ok
+test config::tests::test_config_update_with ... ok
+test config::tests::test_config_summary ... ok
+test config::tests::test_config_validation ... ok
+test error::tests::test_all_error_types_recovery_steps ... ok
+test error::tests::test_all_error_types_suggestion ... ok
+test error::tests::test_business_error_function ... ok
+test error::tests::test_api_error_function ... ok
+test client::tests::test_docs_chain_exists ... ok
+test client::tests::test_cardkit_chain_exists ... ok
+test client::tests::test_client_clone ... ok
+test client::tests::test_client_builder ... ok
+test client::tests::test_from_app_id_string ... ok
+test client::tests::test_client_error_handling ... ok
+test error::tests::test_client_error_ext ... ok
+test client::tests::test_communication_chain_exists ... ok
+test client::tests::test_meeting_chain_exists ... ok
+test client::tests::test_client_config ... ok
+test client::tests::test_communication_service_access ... ok
+test error::tests::test_configuration_error_function ... ok
+test client::tests::test_async_error_handling ... ok
+test config::tests::test_config_from_env ... ok
+test error::tests::test_context_functions ... ok
+test error::tests::test_error_analyzer_log_summary ... ok
+test error::tests::test_error_analyzer ... ok
+test error::tests::test_error_analyzer_user_friendly ... ok
+test error::tests::test_error_convenience_functions ... ok
+test error::tests::test_from_feishu_response_function ... ok
+test error::tests::test_internal_error_function ... ok
+test error::tests::test_permission_missing_error_function ... ok
+test error::tests::test_error_conversions ... ok
+test error::tests::test_rate_limit_error_function ... ok
+test error::tests::test_registry_error_conversion ... ok
+test error::tests::test_sdk_result_conversion ... ok
+test error::tests::test_serialization_error_function ... ok
+test error::tests::test_service_unavailable_error_function ... ok
+test error::tests::test_sso_token_invalid_error_function ... ok
+test error::tests::test_timeout_error_function ... ok
+test error::tests::test_token_expired_error_function ... ok
+test error::tests::test_token_invalid_error_function ... ok
+test error::tests::test_user_identity_invalid_error_function ... ok
+test error::tests::test_validation_error_function ... ok
+test error::tests::test_with_operation_context ... ok
+test features::tests::test_feature_loader_debug ... ok
+test features::tests::test_feature_set_default ... ok
+test features::tests::test_feature_set_get_enabled_features ... ok
+test features::tests::test_feature_set_get_stats ... ok
+test features::tests::test_feature_set_is_enabled_empty ... ok
+test features::tests::test_feature_set_new ... ok
+test features::tests::test_feature_stats_clone ... ok
+test features::tests::test_feature_stats_copy ... ok
+test features::tests::test_feature_stats_debug ... ok
+test registry::bootstrap::tests::test_service_metadata_creation ... ok
+test registry::bootstrap::tests::test_service_metadata_priority_ordering ... ok
+test registry::bootstrap::tests::test_register_compiled_services ... ok
+test registry::bootstrap::tests::test_service_metadata_with_empty_dependencies ... ok
+test registry::bootstrap::tests::test_service_status_clone ... ok
+test registry::bootstrap::tests::test_service_status_debug ... ok
+test registry::dependency_resolver::tests::test_circular_dependency_detection ... ok
+test registry::feature_flags::tests::test_flag_operations ... ok
+test registry::dependency_resolver::tests::test_simple_dependencies ... ok
+test registry::feature_flags::tests::test_locked_flag ... ok
+test registry::service_factory::tests::test_check_dependencies_missing ... ok
+test registry::dependency_resolver::tests::test_dependency_report ... ok
+test registry::service_factory::tests::test_check_dependencies_success ... ok
+test registry::service_factory::tests::test_config_validation ... ok
+test registry::service_factory::tests::test_config_validation_communication_empty_base_url ... ok
+test registry::service_factory::tests::test_config_validation_empty_app_secret ... ok
+test registry::service_factory::tests::test_factory_error_dependencies_not_ready ... ok
+test registry::service_factory::tests::test_factory_error_display ... ok
+test registry::service_factory::tests::test_factory_error_invalid_config ... ok
+test registry::service_factory::tests::test_factory_error_unsupported_service ... ok
+test registry::service_factory::tests::test_placeholder_service_created_at ... ok
+test registry::service_factory::tests::test_placeholder_service_creation ... ok
+test registry::service_factory::tests::test_service_factory_registry ... ok
+test registry::service_factory::tests::test_service_factory_registry_default ... ok
+test registry::service_factory::tests::test_service_creation ... ok
+test registry::service_factory::tests::test_placeholder_service_do_something ... ok
+test registry::service_factory::tests::test_service_factory_registry_register ... ok
+test registry::service_factory::tests::test_service_instance_manager_creation ... ok
+test registry::service_factory::tests::test_service_stats_creation ... ok
+test registry::service_factory::tests::test_service_instance_manager_get_or_create_unsupported ... ok
+test registry::tests::test_duplicate_registration ... ok
+test registry::tests::test_service_registration ... ok
+test registry::service_factory::tests::test_supported_service_creation ... ok
+test tests::test_check_env_config_empty_app_id ... ok
+test tests::test_check_env_config_empty_app_secret ... ok
+test tests::test_check_env_config_invalid_base_url ... ok
+test tests::test_check_env_config_invalid_timeout ... ok
+test tests::test_check_env_config_missing_app_id ... ok
+test tests::test_check_env_config_missing_app_secret ... ok
+test tests::test_check_env_config_success ... ok
+test tests::test_check_env_config_valid_base_url ... ok
+test tests::test_check_env_config_valid_timeout ... ok
+test tests::test_config_summary_friendly_description ... ok
+test tests::test_config_summary_friendly_description_no_timeout ... ok
+test tests::test_create_config_from_env_missing_vars ... ok
+test tests::test_create_config_from_env_success ... ok
+test tests::test_diagnose_system_success ... ok
+test tests::test_diagnostic_issue_clone ... ok
+test tests::test_enabled_features ... ok
+test tests::test_get_config_summary ... ok
+test tests::test_library_info ... ok
+test tests::test_prelude_reexports ... ok
+test tests::test_system_diagnostics_add_issue ... ok
+test tests::test_system_diagnostics_default ... ok
+test tests::test_system_diagnostics_has_critical_issues_false ... ok
+test tests::test_system_diagnostics_has_critical_issues_true ... ok
+test tests::test_system_diagnostics_health_summary_healthy ... ok
+test tests::test_system_diagnostics_health_summary_with_issues ... ok
+test tests::test_system_diagnostics_new ... ok
+test tests::test_validate_feature_dependencies_success ... ok
+test traits::client::tests::test_client_health ... ok
+test traits::client::tests::test_client_metadata_default ... ok
+test traits::client::tests::test_client_stats_default ... ok
+test traits::client::tests::test_lark_client_basic_methods ... ok
+test traits::client::tests::test_not_configured_client ... ok
+test traits::service::tests::test_log_level ... ok
+test traits::service::tests::test_service_endpoint ... ok
+test traits::service::tests::test_service_metadata ... ok
+test traits::service::tests::test_service_stats ... ok
+test traits::service::tests::test_service_status ... ok
+test types::auth::tests::test_access_token_creation ... ok
+test traits::service::tests::test_service_trait ... ok
+test types::auth::tests::test_access_token_expiry ... ok
+test types::auth::tests::test_access_token_remaining_seconds ... ok
+test types::auth::tests::test_clone_functionality ... ok
+test types::auth::tests::test_debug_formatting ... ok
+test types::auth::tests::test_edge_case_expiry_times ... ok
+test types::auth::tests::test_token_info_creation ... ok
+test types::auth::tests::test_user_access_token_creation ... ok
+test types::auth::tests::test_user_access_token_expiry ... ok
+test types::auth::tests::test_token_serialization ... ok
+test types::auth::tests::test_user_access_token_remaining_seconds ... ok
+test types::auth::tests::test_user_info_creation ... ok
+test types::auth::tests::test_user_info_optional_fields ... ok
+test types::client::tests::test_api_response_data ... ok
+test types::auth::tests::test_user_token_serialization ... ok
+test types::client::tests::test_api_response_data_clone ... ok
+test types::client::tests::test_api_response_data_deserialize ... ok
+test types::client::tests::test_api_response_data_error ... ok
+test types::client::tests::test_api_response_data_error_with_data ... ok
+test types::client::tests::test_api_response_data_into_result_error ... ok
+test types::client::tests::test_api_response_data_into_result_success ... ok
+test types::client::tests::test_api_response_data_serialize ... ok
+test types::client::tests::test_api_response_data_success ... ok
+test types::client::tests::test_api_response_trait ... ok
+test types::client::tests::test_api_response_trait_error ... ok
+test types::client::tests::test_paginated_response ... ok
+test types::client::tests::test_paginated_response_empty ... ok
+test types::client::tests::test_paginated_response_with_total ... ok
+test types::client::tests::test_request_options ... ok
+test types::client::tests::test_request_options_default ... ok
+test types::client::tests::test_request_options_multiple_headers ... ok
+test types::client::tests::test_request_options_new ... ok
+test types::client::tests::test_request_options_only_retry ... ok
+test types::client::tests::test_request_options_only_timeout ... ok
+test ws_client::frame_handler::tests::test_build_ping_frame ... ok
+test ws_client::frame_handler::tests::test_build_response_frame ... ok
+test ws_client::frame_handler::tests::test_event_dispatcher_no_sender_still_ok ... ok
+test ws_client::frame_handler::tests::test_event_dispatcher_forwards_payload_when_sender_exists ... ok
+test ws_client::frame_handler::tests::test_event_dispatcher_returns_err_when_sender_closed ... ok
+test ws_client::frame_handler::tests::test_frame_handler_empty_and_large_payloads ... ok
+test ws_client::frame_handler::tests::test_frame_handler_unicode_headers ... ok
+test ws_client::frame_handler::tests::test_frame_type_clone_and_copy ... ok
+test ws_client::frame_handler::tests::test_frame_handler_serialization_error_handling ... ok
+test ws_client::frame_handler::tests::test_frame_type_debug_format ... ok
+test ws_client::frame_handler::tests::test_frame_type_variants ... ok
+test ws_client::frame_handler::tests::test_frame_handler_with_complex_headers ... ok
+test ws_client::frame_handler::tests::test_get_header_value_duplicate_keys ... ok
+test ws_client::frame_handler::tests::test_get_header_value_empty_list ... ok
+test ws_client::frame_handler::tests::test_get_header_value_existing ... ok
+test ws_client::frame_handler::tests::test_concurrent_frame_handling ... ok
+test ws_client::frame_handler::tests::test_get_header_value_nonexistent ... ok
+test ws_client::frame_handler::tests::test_handle_control_frame_no_type_header ... ok
+test ws_client::frame_handler::tests::test_handle_control_frame_pong_invalid_json ... ok
+test ws_client::frame_handler::tests::test_handle_control_frame_pong_no_payload ... ok
+test ws_client::frame_handler::tests::test_handle_control_frame_pong_valid ... ok
+test ws_client::frame_handler::tests::test_handle_control_frame_unhandled_type ... ok
+test ws_client::frame_handler::tests::test_header_value_edge_cases ... ok
+test ws_client::frame_handler::tests::test_handle_data_frame_card ... ok
+test ws_client::frame_handler::tests::test_new_ws_response_error ... ok
+test ws_client::frame_handler::tests::test_new_ws_response_debug_format ... ok
+test ws_client::frame_handler::tests::test_new_ws_response_ok ... ok
+test ws_client::frame_handler::tests::test_new_ws_response_serialization ... ok
+test ws_client::frame_handler::tests::test_handle_data_frame_event_no_payload ... ok
+test ws_client::frame_handler::tests::test_new_ws_response_with_headers ... ok
+test ws_client::frame_handler::tests::test_handle_data_frame_event_failure ... ok
+test ws_client::frame_handler::tests::test_handle_data_frame_missing_headers ... ok
+test ws_client::frame_handler::tests::test_handle_data_frame_event_success ... ok
+test ws_client::frame_handler::tests::test_handle_unknown_frame_method ... ok
+test ws_client::frame_handler::tests::test_handle_data_frame_unknown_type ... ok
+test ws_client::frame_handler::tests::test_process_event_failure ... ok
+test ws_client::frame_handler::tests::test_process_event_performance_timing ... ok
+test ws_client::state_machine::tests::test_invalid_transitions ... ok
+test ws_client::state_machine::tests::test_state_transitions ... ok
+test ws_client::frame_handler::tests::test_process_event_success ... ok
+test ws_client::tests::test_process_frame_packages_missing_payload_returns_none ... ok
+test ws_client::tests::test_multi_package_payload_combination ... ok
+test ws_client::tests::test_process_frame_packages_sum_change_resets_buffer ... ok
+test ws_client::tests::test_single_package_payload_preservation ... ok
+test ws_client::tests::test_process_frame_packages_without_sum_passthrough ... ok
+
+test result: ok. 208 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/registry_tests.rs (target/llvm-cov-target/debug/deps/registry_tests-1b5836ab31ca4d0e)
+
+running 47 tests
+test dependency_resolver_tests::test_can_start_service ... ok
+test dependency_resolver_tests::test_cannot_start_service_missing_deps ... ok
+test dependency_resolver_tests::test_detect_circular_dependency ... ok
+test dependency_resolver_tests::test_get_direct_dependencies ... ok
+test dependency_resolver_tests::test_get_all_dependencies_transitive ... ok
+test dependency_resolver_tests::test_calculate_priorities ... ok
+test dependency_resolver_tests::test_missing_dependency ... ok
+test dependency_resolver_tests::test_resolve_simple_dependencies ... ok
+test dependency_resolver_tests::test_generate_dependency_report ... ok
+test dependency_report_tests::test_dependency_report_to_text ... ok
+test feature_flags_tests::test_add_user_segment ... ok
+test feature_flags_tests::test_feature_flag_manager_creation ... ok
+test feature_flags_tests::test_flag_value_as_bool ... ok
+test feature_flags_tests::test_flag_value_as_float ... ok
+test feature_flags_tests::test_flag_value_as_integer ... ok
+test feature_flags_tests::test_flag_value_as_string ... ok
+test feature_flags_tests::test_get_nonexistent_flag ... ok
+test feature_flags_tests::test_init_default_flags ... ok
+test feature_flags_tests::test_list_flags_by_group ... ok
+test feature_flags_tests::test_lock_and_unlock_flag ... ok
+test feature_flags_tests::test_locked_flag_cannot_be_modified ... ok
+test feature_flags_tests::test_register_and_get_flag ... ok
+test feature_flags_tests::test_set_bool_flag ... ok
+test feature_flags_tests::test_set_integer_flag ... ok
+test feature_flags_tests::test_set_percentage_flag_invalid ... ok
+test feature_flags_tests::test_set_percentage_flag_valid ... ok
+test feature_flags_tests::test_set_string_flag ... ok
+test registry_config_tests::test_registry_config_default ... ok
+test registry_config_tests::test_service_discovery_config ... ok
+test service_entry_tests::test_service_status_equality ... ok
+test service_entry_tests::test_service_status_variants ... ok
+test service_entry_tests::test_service_metadata_serialization ... ok
+test service_factory_tests::test_instance_manager_creation ... ok
+test service_factory_tests::test_instance_manager_register_factory ... ok
+test service_factory_tests::test_service_factory_registry_creation ... ok
+test service_factory_tests::test_service_factory_registry_default_factory ... ok
+test service_registry_tests::test_get_dependency_graph ... ok
+test service_registry_tests::test_get_service_not_found ... ok
+test service_registry_tests::test_get_service_success ... ok
+test service_registry_tests::test_list_services_empty ... ok
+test service_registry_tests::test_register_duplicate_service_fails ... ok
+test service_registry_tests::test_list_services_multiple ... ok
+test service_registry_tests::test_register_service_success ... ok
+test service_registry_tests::test_unregister_nonexistent_service_fails ... ok
+test service_registry_tests::test_unregister_service_success ... ok
+test service_registry_tests::test_update_service_status ... ok
+test service_registry_tests::test_update_status_nonexistent_service ... ok
+
+test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+Filename                                                                                  Regions    Missed Regions     Cover   Functions  Missed Functions  Executed       Lines      Missed Lines     Cover    Branches   Missed Branches     Cover
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+openlark-auth/src/auth/auth/v3/auth/app_access_token.rs                                        58                58     0.00%           9                 9     0.00%          42                42     0.00%           0                 0         -
+openlark-auth/src/auth/auth/v3/auth/app_access_token_internal.rs                               58                58     0.00%           9                 9     0.00%          42                42     0.00%           0                 0         -
+openlark-auth/src/auth/auth/v3/auth/app_ticket_resend.rs                                        9                 9     0.00%           4                 4     0.00%          15                15     0.00%           0                 0         -
+openlark-auth/src/auth/auth/v3/auth/mod.rs                                                     28                28     0.00%           6                 6     0.00%          18                18     0.00%           0                 0         -
+openlark-auth/src/auth/auth/v3/auth/tenant_access_token.rs                                     69                69     0.00%          10                10     0.00%          49                49     0.00%           0                 0         -
+openlark-auth/src/auth/auth/v3/auth/tenant_access_token_internal.rs                            58                58     0.00%           9                 9     0.00%          42                42     0.00%           0                 0         -
+openlark-auth/src/auth/authen/v1/access_token/create.rs                                        10                10     0.00%           4                 4     0.00%          16                16     0.00%           0                 0         -
+openlark-auth/src/auth/authen/v1/mod.rs                                                        23                23     0.00%           5                 5     0.00%          15                15     0.00%           0                 0         -
+openlark-auth/src/auth/authen/v1/oidc/access_token/create.rs                                   13                13     0.00%           4                 4     0.00%          19                19     0.00%           0                 0         -
+openlark-auth/src/auth/authen/v1/oidc/mod.rs                                                   13                13     0.00%           3                 3     0.00%           9                 9     0.00%           0                 0         -
+openlark-auth/src/auth/authen/v1/oidc/refresh_access_token/create.rs                           11                11     0.00%           4                 4     0.00%          17                17     0.00%           0                 0         -
+openlark-auth/src/auth/authen/v1/refresh_access_token/create.rs                                10                10     0.00%           4                 4     0.00%          16                16     0.00%           0                 0         -
+openlark-auth/src/auth/authen/v1/user_info/get.rs                                              17                17     0.00%           6                 6     0.00%          21                21     0.00%           0                 0         -
+openlark-auth/src/auth/oauth/old/default/index.rs                                              59                59     0.00%           9                 9     0.00%          47                47     0.00%           0                 0         -
+openlark-auth/src/common/api_endpoints.rs                                                      20                20     0.00%           3                 3     0.00%          20                20     0.00%           0                 0         -
+openlark-auth/src/models/auth/mod.rs                                                           23                23     0.00%           4                 4     0.00%          20                20     0.00%           0                 0         -
+openlark-auth/src/models/authen/mod.rs                                                         81                81     0.00%          10                10     0.00%          82                82     0.00%           0                 0         -
+openlark-auth/src/services/auth_service.rs                                                     15                12    20.00%           4                 3    25.00%          12                 9    25.00%           0                 0         -
+openlark-auth/src/services/authen_service.rs                                                   15                12    20.00%           4                 3    25.00%          12                 9    25.00%           0                 0         -
+openlark-auth/src/services/oauth_service.rs                                                    15                12    20.00%           4                 3    25.00%          12                 9    25.00%           0                 0         -
+openlark-auth/src/token_provider.rs                                                           154               149     3.25%          21                20     4.76%         104                98     5.77%           0                 0         -
+openlark-cardkit/src/cardkit/cardkit/v1/card/create.rs                                         66                66     0.00%          11                11     0.00%          56                56     0.00%           0                 0         -
+openlark-cardkit/src/cardkit/cardkit/v1/card/element/create.rs                                 46                46     0.00%           9                 9     0.00%          53                53     0.00%           0                 0         -
+openlark-cardkit/src/cardkit/cardkit/v1/card/element/models.rs                                 15                15     0.00%           5                 5     0.00%          15                15     0.00%           0                 0         -
+openlark-cardkit/src/cardkit/cardkit/v1/card/id_convert.rs                                     57                57     0.00%           9                 9     0.00%          63                63     0.00%           0                 0         -
+openlark-cardkit/src/cardkit/cardkit/v1/card/models.rs                                          3                 3     0.00%           1                 1     0.00%           3                 3     0.00%           0                 0         -
+openlark-cardkit/src/common/api_utils.rs                                                       18                18     0.00%           4                 4     0.00%          20                20     0.00%           0                 0         -
+openlark-cardkit/src/common/chain.rs                                                           43                22    48.84%          18                14    22.22%          88                66    25.00%           0                 0         -
+openlark-cardkit/src/endpoints/mod.rs                                                          18                18     0.00%           6                 6     0.00%          18                18     0.00%           0                 0         -
+openlark-client/src/client.rs                                                                 412                58    85.92%          45                12    73.33%         285                48    83.16%           0                 0         -
+openlark-client/src/config.rs                                                                 416                74    82.21%          37                 9    75.68%         355                63    82.25%           0                 0         -
+openlark-client/src/core_config.rs                                                             34                 0   100.00%           2                 0   100.00%          18                 0   100.00%           0                 0         -
+openlark-client/src/error.rs                                                                 1030               275    73.30%          62                 2    96.77%         670               194    71.04%           0                 0         -
+openlark-client/src/features.rs                                                                97                11    88.66%          17                 3    82.35%          90                12    86.67%           0                 0         -
+openlark-client/src/lib.rs                                                                    624                72    88.46%          58                 3    94.83%         440                29    93.41%           0                 0         -
+openlark-client/src/registry/bootstrap.rs                                                     266                 9    96.62%          16                 0   100.00%         190                 0   100.00%           0                 0         -
+openlark-client/src/registry/dependency_resolver.rs                                           506                33    93.48%          18                 3    83.33%         277                24    91.34%           0                 0         -
+openlark-client/src/registry/feature_flags.rs                                                 500               125    75.00%          44                19    56.82%         344                73    78.78%           0                 0         -
+openlark-client/src/registry/mod.rs                                                           212                80    62.26%          24                10    58.33%         157                52    66.88%           0                 0         -
+openlark-client/src/registry/service_factory.rs                                               613                87    85.81%          59                12    79.66%         448                54    87.95%           0                 0         -
+openlark-client/src/test_utils.rs                                                              50                 6    88.00%           5                 1    80.00%          23                 2    91.30%           0                 0         -
+openlark-client/src/traits/client.rs                                                          164                 0   100.00%          21                 0   100.00%         126                 0   100.00%           0                 0         -
+openlark-client/src/traits/service.rs                                                         317                67    78.86%          42                15    64.29%         228                56    75.44%           0                 0         -
+openlark-client/src/types/auth.rs                                                             369                 0   100.00%          24                 0   100.00%         240                 0   100.00%           0                 0         -
+openlark-client/src/types/client.rs                                                           393                14    96.44%          37                 3    91.89%         291                16    94.50%           0                 0         -
+openlark-client/src/ws_client/client.rs                                                       554               374    32.49%          48                23    52.08%         391               266    31.97%           0                 0         -
+openlark-client/src/ws_client/frame_handler.rs                                               1027                16    98.44%          78                 1    98.72%         608                11    98.19%           0                 0         -
+openlark-client/src/ws_client/state_machine.rs                                                109                27    75.23%          11                 5    54.55%          81                23    71.60%           0                 0         -
+openlark-client/src/ws_client/tests.rs                                                        274                 0   100.00%          10                 0   100.00%         292                 0   100.00%           0                 0         -
+openlark-communication/src/common/chain.rs                                                     35                 9    74.29%           8                 3    62.50%          33                 9    72.73%           0                 0         -
+openlark-core/src/api/mod.rs                                                                  241               241     0.00%          33                33     0.00%         217               217     0.00%           0                 0         -
+openlark-core/src/api/responses.rs                                                             89                89     0.00%          19                19     0.00%         102               102     0.00%           0                 0         -
+openlark-core/src/app_ticket_manager.rs                                                        19                19     0.00%           2                 2     0.00%          10                10     0.00%           0                 0         -
+openlark-core/src/auth/cache.rs                                                               294               294     0.00%          47                47     0.00%         194               194     0.00%           0                 0         -
+openlark-core/src/auth/refresh.rs                                                             218               218     0.00%          12                12     0.00%         108               108     0.00%           0                 0         -
+openlark-core/src/auth/token.rs                                                                96                96     0.00%          14                14     0.00%          97                97     0.00%           0                 0         -
+openlark-core/src/auth/token_provider.rs                                                       29                29     0.00%          10                10     0.00%          36                36     0.00%           0                 0         -
+openlark-core/src/auth/validator.rs                                                           116               116     0.00%          13                13     0.00%          92                92     0.00%           0                 0         -
+openlark-core/src/config.rs                                                                   164                62    62.20%          26                13    50.00%         132                51    61.36%           0                 0         -
+openlark-core/src/constants.rs                                                                 21                21     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-core/src/content_disposition.rs                                                       40                40     0.00%           1                 1     0.00%          21                21     0.00%           0                 0         -
+openlark-core/src/error/codes.rs                                                              566               530     6.36%          34                28    17.65%         494               464     6.07%           0                 0         -
+openlark-core/src/error/context.rs                                                            235               178    24.26%          36                25    30.56%         182               139    23.63%           0                 0         -
+openlark-core/src/error/core.rs                                                               832               592    28.85%          95                65    31.58%         700               481    31.29%           0                 0         -
+openlark-core/src/error/kinds.rs                                                              208               208     0.00%          20                20     0.00%         183               183     0.00%           0                 0         -
+openlark-core/src/error/mod.rs                                                                 27                27     0.00%           2                 2     0.00%          21                21     0.00%           0                 0         -
+openlark-core/src/error/traits.rs                                                              96                61    36.46%          22                12    45.45%          72                41    43.06%           0                 0         -
+openlark-core/src/http.rs                                                                     260               260     0.00%          14                14     0.00%         218               218     0.00%           0                 0         -
+openlark-core/src/improved_response_handler.rs                                                228               228     0.00%          10                10     0.00%         159               159     0.00%           0                 0         -
+openlark-core/src/observability.rs                                                            314               314     0.00%          25                25     0.00%         191               191     0.00%           0                 0         -
+openlark-core/src/performance/mod.rs                                                           44                44     0.00%           5                 5     0.00%          59                59     0.00%           0                 0         -
+openlark-core/src/query_params.rs                                                              90                90     0.00%          13                13     0.00%          58                58     0.00%           0                 0         -
+openlark-core/src/req_option.rs                                                                45                45     0.00%           7                 7     0.00%          30                30     0.00%           0                 0         -
+openlark-core/src/req_translator.rs                                                             6                 6     0.00%           1                 1     0.00%           8                 8     0.00%           0                 0         -
+openlark-core/src/request_builder/auth_handler.rs                                              75                75     0.00%           8                 8     0.00%          56                56     0.00%           0                 0         -
+openlark-core/src/request_builder/header_builder.rs                                            42                42     0.00%           3                 3     0.00%          29                29     0.00%           0                 0         -
+openlark-core/src/request_builder/mod.rs                                                       97                97     0.00%           5                 5     0.00%          63                63     0.00%           0                 0         -
+openlark-core/src/request_builder/multipart_builder.rs                                        112               112     0.00%           4                 4     0.00%          60                60     0.00%           0                 0         -
+openlark-core/src/testing/fixtures.rs                                                          18                18     0.00%           3                 3     0.00%          12                12     0.00%           0                 0         -
+openlark-core/src/testing/mock_context.rs                                                       5                 5     0.00%           1                 1     0.00%           5                 5     0.00%           0                 0         -
+openlark-core/src/trait_system/executable_builder.rs                                            2                 2     0.00%           1                 1     0.00%           2                 2     0.00%           0                 0         -
+openlark-core/src/trait_system/service.rs                                                       3                 3     0.00%           1                 1     0.00%           5                 5     0.00%           0                 0         -
+openlark-core/src/utils.rs                                                                      3                 3     0.00%           1                 1     0.00%           3                 3     0.00%           0                 0         -
+openlark-core/src/validation/core.rs                                                           10                10     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-core/src/validation/file.rs                                                            2                 2     0.00%           1                 1     0.00%           1                 1     0.00%           0                 0         -
+openlark-core/src/validation/pagination.rs                                                      4                 4     0.00%           1                 1     0.00%           1                 1     0.00%           0                 0         -
+openlark-core/src/validation/uuid.rs                                                            2                 2     0.00%           1                 1     0.00%           1                 1     0.00%           0                 0         -
+openlark-docs/src/common/api_utils.rs                                                          28                28     0.00%           5                 5     0.00%          30                30     0.00%           0                 0         -
+openlark-docs/src/common/chain.rs                                                               9                 0   100.00%           2                 0   100.00%          17                 0   100.00%           0                 0         -
+openlark-docs/src/common/mod.rs                                                                14                14     0.00%           3                 3     0.00%          15                15     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/calendar/acl/create.rs                               37                37     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/calendar/acl/delete.rs                               36                36     0.00%           4                 4     0.00%          18                18     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/calendar/acl/list.rs                                 43                43     0.00%           4                 4     0.00%          20                20     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/calendar/acl/subscription.rs                         31                31     0.00%           2                 2     0.00%          12                12     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/calendar/acl/unsubscription.rs                       37                37     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/calendar/event/attendee/chat_member/list.rs          59                59     0.00%           6                 6     0.00%          30                30     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/calendar/event/meeting_chat/create.rs                36                36     0.00%           4                 4     0.00%          18                18     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/calendar/event/meeting_chat/delete.rs                36                36     0.00%           4                 4     0.00%          18                18     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/calendar/event/meeting_minute/create.rs              36                36     0.00%           4                 4     0.00%          18                18     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/exchange_binding/create.rs                           23                23     0.00%           1                 1     0.00%           7                 7     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/exchange_binding/delete.rs                           28                28     0.00%           3                 3     0.00%          13                13     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/exchange_binding/get.rs                              28                28     0.00%           3                 3     0.00%          13                13     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/freebusy/batch.rs                                    23                23     0.00%           1                 1     0.00%           7                 7     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/freebusy/list.rs                                     28                28     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/setting/generate_caldav_conf.rs                      19                19     0.00%           2                 2     0.00%           9                 9     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/timeoff_event/create.rs                              23                23     0.00%           1                 1     0.00%           7                 7     0.00%           0                 0         -
+openlark-meeting/src/calendar/calendar/v4/timeoff_event/delete.rs                              28                28     0.00%           3                 3     0.00%          13                13     0.00%           0                 0         -
+openlark-meeting/src/common/api_utils.rs                                                       28                28     0.00%           5                 5     0.00%          30                30     0.00%           0                 0         -
+openlark-meeting/src/common/chain.rs                                                           76                24    68.42%          18                 8    55.56%          77                24    68.83%           0                 0         -
+openlark-meeting/src/vc/vc/v1/alert/list.rs                                                    38                38     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/export/download.rs                                               39                39     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/export/get.rs                                                    46                46     0.00%           4                 4     0.00%          21                21     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/export/meeting_list.rs                                           29                29     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/export/participant_list.rs                                       29                29     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/export/participant_quality_list.rs                               29                29     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/export/resource_reservation_list.rs                              29                29     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/meeting/recording/get.rs                                         46                46     0.00%           4                 4     0.00%          21                21     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/meeting/recording/set_permission.rs                              37                37     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/meeting/recording/start.rs                                       37                37     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/meeting/recording/stop.rs                                        37                37     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/meeting_list/get.rs                                              38                38     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/participant_list/get.rs                                          38                38     0.00%           3                 3     0.00%          17                17     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/participant_quality_list/get.rs                                  38                38     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/report/get_daily.rs                                              38                38     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/report/get_top_user.rs                                           38                38     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/reserve/apply.rs                                                 28                28     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/reserve/delete.rs                                                34                34     0.00%           3                 3     0.00%          15                15     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/reserve/get.rs                                                   49                49     0.00%           4                 4     0.00%          22                22     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/reserve/get_active_meeting.rs                                    46                46     0.00%           4                 4     0.00%          21                21     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/reserve/update.rs                                                39                39     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/reserve_config/admin/get.rs                                      43                43     0.00%           4                 4     0.00%          20                20     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/reserve_config/admin/patch.rs                                    37                37     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/reserve_config/disable_inform/get.rs                             43                43     0.00%           4                 4     0.00%          20                20     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/reserve_config/disable_inform/patch.rs                           37                37     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/reserve_config/form/get.rs                                       43                43     0.00%           4                 4     0.00%          20                20     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/reserve_config/form/patch.rs                                     37                37     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/resource_reservation_list/get.rs                                 34                34     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room/create.rs                                                   28                28     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room/delete.rs                                                   34                34     0.00%           3                 3     0.00%          14                14     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room/get.rs                                                      49                49     0.00%           4                 4     0.00%          21                21     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room/list.rs                                                     46                46     0.00%           4                 4     0.00%          20                20     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room/mget.rs                                                     28                28     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room/patch.rs                                                    39                39     0.00%           3                 3     0.00%          16                16     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room/search.rs                                                   29                29     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room_config/query.rs                                             28                28     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room_config/set.rs                                               28                28     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room_config/set_checkboard_access_code.rs                        25                25     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room_config/set_room_access_code.rs                              29                29     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/room_level/list.rs                                               34                34     0.00%           3                 3     0.00%          15                15     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/scope_config/create.rs                                           29                29     0.00%           2                 2     0.00%          11                11     0.00%           0                 0         -
+openlark-meeting/src/vc/vc/v1/scope_config/get.rs                                              34                34     0.00%           3                 3     0.00%          15                15     0.00%           0                 0         -
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                       15902              8671    45.47%        1566               934    40.36%       11242              6076    45.95%           0                 0         -

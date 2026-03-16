@@ -1,0 +1,36 @@
+   Compiling openlark-auth v0.1.0-dev (/Users/zool/workspace/open-lark/crates/openlark-auth)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.77s
+     Running unittests src/lib.rs (target/debug/deps/openlark_auth-1f4db83d8f508ca9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 38 filtered out; finished in 0.00s
+
+     Running tests/auth_validation_tests.rs (target/debug/deps/auth_validation_tests-29b26d74053d0c3f)
+
+running 16 tests
+test validation_tests::test_validation_macro_whitespace_not_trimmed ... ok
+test validation_tests::test_validation_network_error_is_retryable ... ok
+test validation_tests::test_validation_required_non_empty_after_trim ... ok
+test validation_tests::test_validation_required_empty_string ... ok
+test validation_tests::test_validation_required_special_characters_valid ... ok
+test validation_tests::test_validation_api_error_response_parsing ... ok
+test validation_tests::test_validation_required_unicode_valid ... ok
+test validation_tests::test_validation_required_whitespace_only ... ok
+test validation_tests::test_validation_api_error_response_into_result_returns_api_error ... ok
+test validation_tests::test_validation_success_response_without_data_returns_api_error ... ok
+test validation_tests::test_validation_macro_empty_returns_validation_error ... ok
+test validation_tests::test_validation_timeout_error_handling ... ok
+test validation_tests::test_validation_empty_app_secret_returns_validation_error_before_network ... ok
+test validation_tests::test_validation_empty_app_id_returns_validation_error_before_network ... ok
+test validation_tests::test_validation_app_access_token_network_error_handling ... ok
+test validation_tests::test_validation_whitespace_app_id_not_blocked_by_macro_and_fails_on_network ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests openlark_auth
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+

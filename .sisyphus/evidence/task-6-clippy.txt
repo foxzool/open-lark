@@ -1,0 +1,8 @@
+    Checking openlark-core v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-core)
+    Checking openlark-auth v0.1.0-dev (/Users/zool/workspace/open-lark/crates/openlark-auth)
+    Checking openlark-communication v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-communication)
+    Checking openlark-docs v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-docs)
+    Checking openlark-workflow v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-workflow)
+    Checking openlark-client v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-client)
+    Checking open-lark v0.15.0-dev (/Users/zool/workspace/open-lark)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.45s

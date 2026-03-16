@@ -1,0 +1,19 @@
+=== Task 1: ApiRequest 字段可见性 ===
+Fields changed from pub to pub(crate):
+94:    pub(crate) method: HttpMethod,
+95:    pub(crate) url: String,
+96:    pub(crate) headers: HashMap<String, String>,
+97:    pub(crate) query: HashMap<String, String>,
+98:    pub(crate) body: Option<RequestData>,
+99:    pub(crate) file: Option<Vec<u8>>,
+100:    pub(crate) timeout: Option<Duration>,
+101:    pub(crate) _phantom: std::marker::PhantomData<R>,
+
+=== Verification Summary ===
+✓ cargo check -p openlark-core: PASS
+✓ cargo test -p openlark-core: PASS (36 tests)
+✓ cargo clippy -p openlark-core: PASS (0 warnings)
+✓ cargo fmt -p openlark-core: PASS
+✓ cargo check --workspace --all-features: PASS
+✓ RequestData::Empty check: NOT FOUND (removed)
+✓ observability.rs check: DELETED

@@ -1,0 +1,60 @@
+   Compiling openlark-core v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s
+     Running unittests src/lib.rs (target/debug/deps/openlark_core-1d6f46ea5c048777)
+
+running 10 tests
+test error::context::tests::test_error_context_is_empty ... ok
+test error::context::tests::test_error_context_extend ... ok
+test error::context::tests::test_error_context_constructors ... ok
+test error::context::tests::test_error_context_builder ... ok
+test error::context::tests::test_error_context_basic ... ok
+test error::context::tests::test_error_context_chain_operations ... ok
+test error::tests::test_error_context_builder_full ... ok
+test error::context::tests::test_error_context_clone_with ... ok
+test error::tests::test_error_context_extend ... ok
+test error::context::tests::test_error_context_debug_format ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 518 filtered out; finished in 0.00s
+
+     Running ../../tests/unit/error/mod.rs (target/debug/deps/error_context-400a144972b25dea)
+
+running 36 tests
+test error_context_tests::tests::test_error_context_builder_basic ... ok
+test error_context_tests::tests::test_error_context_add_get ... ok
+test error_context_tests::tests::test_context_and_policy_combination ... ok
+test error_context_tests::tests::test_error_context_builder_all_methods ... ok
+test error_context_tests::tests::test_error_context_builder_chain ... ok
+test error_context_tests::tests::test_error_context_builder_default ... ok
+test error_context_tests::tests::test_error_context_builder_extend ... ok
+test error_context_tests::tests::test_error_context_clone_with ... ok
+test error_context_tests::tests::test_error_context_constructors ... ok
+test error_context_tests::tests::test_error_context_has_context ... ok
+test error_context_tests::tests::test_error_context_debug_format ... ok
+test error_context_tests::tests::test_error_context_is_empty ... ok
+test error_context_tests::tests::test_error_context_timestamp_backtrace ... ok
+test error_context_tests::tests::test_error_context_clear ... ok
+test error_context_tests::tests::test_error_severity_from_error ... ok
+test error_context_tests::tests::test_is_retryable_auth_error ... ok
+test error_context_tests::tests::test_error_type_retryable_consistency ... ok
+test error_context_tests::tests::test_is_retryable_network_error ... ok
+test error_context_tests::tests::test_is_retryable_business_error ... ok
+test error_context_tests::tests::test_is_retryable_server_error ... ok
+test error_context_tests::tests::test_is_retryable_timeout_error ... ok
+test error_context_tests::tests::test_is_retryable_validation_error ... ok
+test error_context_tests::tests::test_is_retryable_rate_limit ... ok
+test error_context_tests::tests::test_recovery_strategy_clone ... ok
+test error_context_tests::tests::test_recovery_strategy_debug ... ok
+test error_context_tests::tests::test_recovery_strategy_variants ... ok
+test error_context_tests::tests::test_retry_delay_rate_limit ... ok
+test error_context_tests::tests::test_retry_delay_service_unavailable ... ok
+test error_context_tests::tests::test_retry_delay_validation_error ... ok
+test error_context_tests::tests::test_retry_policy_default ... ok
+test error_context_tests::tests::test_retry_policy_delay ... ok
+test error_context_tests::tests::test_retry_policy_exponential_calculation ... ok
+test error_context_tests::tests::test_retry_policy_exponential ... ok
+test error_context_tests::tests::test_retry_policy_fixed ... ok
+test error_context_tests::tests::test_retry_policy_max_delay ... ok
+test error_context_tests::tests::test_retry_policy_no_retry ... ok
+
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

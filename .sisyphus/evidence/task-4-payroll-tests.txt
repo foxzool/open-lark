@@ -1,0 +1,65 @@
+   Compiling openlark-hr v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-hr)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.80s
+     Running unittests src/lib.rs (target/debug/deps/openlark_hr-97836b7728b317ab)
+
+running 3 tests
+test common::api_endpoints::tests::test_payroll_api_urls ... ok
+test endpoints::tests::test_payroll_endpoints ... ok
+test tests::test_hr_client_payroll ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 32 filtered out; finished in 0.00s
+
+     Running ../../tests/unit/hr/mod.rs (target/debug/deps/unit-36ccf931e0c080d1)
+
+running 42 tests
+test payroll_tests::builder_tests::test_list_cost_allocation_report_request_builder ... ok
+test payroll_tests::builder_tests::test_list_acct_item_request_builder ... ok
+test payroll_tests::builder_tests::test_list_payment_activity_detail_request_builder ... ok
+test payroll_tests::builder_tests::test_list_payment_activity_request_builder ... ok
+test payroll_tests::builder_tests::test_query_paygroup_request_builder ... ok
+test payroll_tests::builder_tests::test_list_cost_allocation_plan_request_builder ... ok
+test payroll_tests::builder_tests::test_query_payment_detail_request_builder ... ok
+test payroll_tests::builder_tests::test_list_datasource_request_builder ... ok
+test payroll_tests::builder_tests::test_list_cost_allocation_detail_request_builder ... ok
+test payroll_tests::builder_tests::test_query_datasource_record_request_builder ... ok
+test payroll_tests::builder_tests::test_archive_payment_activity_request_builder ... ok
+test payroll_tests::builder_tests::test_save_datasource_record_request_builder ... ok
+test payroll_tests::serialization_tests::test_archive_payment_activity_response_serialization ... ok
+test payroll_tests::serialization_tests::test_list_acct_item_response_serialization ... ok
+test payroll_tests::serialization_tests::test_list_cost_allocation_plan_response_serialization ... ok
+test payroll_tests::serialization_tests::test_list_cost_allocation_detail_response_serialization ... ok
+test payroll_tests::serialization_tests::test_list_cost_allocation_report_response_serialization ... ok
+test payroll_tests::serialization_tests::test_list_datasource_response_serialization ... ok
+test payroll_tests::serialization_tests::test_list_payment_activity_detail_response_serialization ... ok
+test payroll_tests::serialization_tests::test_list_payment_activity_response_serialization ... ok
+test payroll_tests::http_tests::test_list_acct_item_http_mock ... ok
+test payroll_tests::http_tests::test_query_payment_detail_http_mock ... ok
+test payroll_tests::http_tests::test_list_cost_allocation_detail_http_mock ... ok
+test payroll_tests::http_tests::test_query_datasource_record_http_mock ... ok
+test payroll_tests::http_tests::test_save_datasource_record_http_mock ... ok
+test payroll_tests::http_tests::test_archive_payment_activity_http_mock ... ok
+test payroll_tests::http_tests::test_list_cost_allocation_plan_http_mock ... ok
+test payroll_tests::http_tests::test_list_datasource_http_mock ... ok
+test payroll_tests::http_tests::test_list_cost_allocation_report_http_mock ... ok
+test payroll_tests::serialization_tests::test_query_datasource_record_response_serialization ... ok
+test payroll_tests::http_tests::test_list_payment_activity_http_mock ... ok
+test payroll_tests::http_tests::test_query_paygroup_http_mock ... ok
+test payroll_tests::http_tests::test_list_payment_activity_detail_http_mock ... ok
+test payroll_tests::serialization_tests::test_save_datasource_record_response_serialization ... ok
+test payroll_tests::serialization_tests::test_query_paygroup_response_serialization ... ok
+test payroll_tests::serialization_tests::test_query_payment_detail_response_serialization ... ok
+test payroll_tests::validation_tests::test_payment_detail_activity_id_validation::case_2 ... ok
+test payroll_tests::validation_tests::test_payment_detail_activity_id_validation::case_1 ... ok
+test payroll_tests::validation_tests::test_save_datasource_record_datasource_id_validation::case_2 ... ok
+test payroll_tests::validation_tests::test_save_datasource_record_datasource_id_validation::case_1 ... ok
+test payroll_tests::validation_tests::test_save_datasource_record_requires_employee_ids ... ok
+test payroll_tests::validation_tests::test_save_datasource_record_requires_records ... ok
+
+test result: ok. 42 passed; 0 failed; 0 ignored; 0 measured; 73 filtered out; finished in 0.02s
+
+   Doc-tests openlark_hr
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+

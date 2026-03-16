@@ -1,0 +1,114 @@
+# Task 6: send() 移除证据
+
+## 执行日期
+2026-02-26
+
+## 任务
+移除 api/mod.rs 中的 send() 占位 API
+
+## 验证日期
+2026-02-26 (重新验证)
+
+## 执行步骤
+
+### 1. 检查 send() 方法定义
+- 文件: `crates/openlark-core/src/api/mod.rs`
+- 原位置: 第 318-326 行
+- 方法签名:
+```rust
+pub async fn send<T>(self) -> crate::error::SDKResult<crate::api::Response<T>>
+where
+    T: serde::de::DeserializeOwned,
+{
+    // 这个方法只是占位符，实际的发送逻辑在 Transport 中
+    Err(crate::error::configuration_error(
+        "send() method not supported directly on ApiRequest. Use Transport::request() instead.",
+    ))
+}
+```
+
+### 2. 检查调用方
+- 执行: `grep -rn '\.send()' crates/ --include='*.rs'`
+- 结果: 所有 31 处 `.send()` 都是 reqwest 的 `RequestBuilder::send()` 调用
+- 执行: `grep -rn 'ApiRequest.*\.send(' crates/ --include='*.rs'`
+- 结果: 无匹配，确认没有调用 ApiRequest::send() 的代码
+
+### 3. 删除操作 (已执行)
+- 操作: 删除 api/mod.rs 第 317-326 行（send() 方法及前面的空行）
+- 原因: 无调用方，占位方法应移除
+
+### 4. 验证编译
+- 命令: `cargo check --workspace`
+- 结果: 编译通过（18 crates 全部成功）
+- 输出: `Finished dev profile [unoptimized + debuginfo] target(s) in 0.11s`
+
+### 5. 验证方法已删除
+- 命令: `grep -n 'fn send' crates/openlark-core/src/api/mod.rs`
+- 结果: No matches found（确认已删除）
+
+### 6. 重新验证 (2026-02-26)
+- 命令: `grep -n 'fn send' crates/openlark-core/src/api/mod.rs`
+- 结果: 无匹配 ✅
+- 命令: `cargo check -p openlark-core`
+- 结果: 编译通过（仅有91个deprecation警告，与任务无关）✅
+- 命令: `grep -rn '\.send()' crates/ --include='*.rs'`
+- 结果: 31处调用均为 reqwest API ✅
+
+## 成功标准
+- [x] `cargo check --workspace` 通过
+- [x] grep 确认 `send()` 方法已移除
+- [x] 无调用方依赖（已验证）
+
+## 结论
+send() 占位方法已成功移除，无破坏性影响。
+
+## 执行日期
+2026-02-26
+
+## 任务
+移除 api/mod.rs 中的 send() 占位 API
+
+## 执行步骤
+
+### 1. 检查 send() 方法定义
+- 文件: `crates/openlark-core/src/api/mod.rs`
+- 原位置: 第 318-326 行
+- 方法签名:
+```rust
+pub async fn send<T>(self) -> crate::error::SDKResult<crate::api::Response<T>>
+where
+    T: serde::de::DeserializeOwned,
+{
+    // 这个方法只是占位符，实际的发送逻辑在 Transport 中
+    Err(crate::error::configuration_error(
+        "send() method not supported directly on ApiRequest. Use Transport::request() instead.",
+    ))
+}
+```
+
+### 2. 检查调用方
+- 执行: `grep -rn '\.send()' crates/ --include='*.rs'`
+- 结果: 所有 31 处 `.send()` 都是 reqwest 的 `RequestBuilder::send()` 调用
+- 执行: `grep -rn 'ApiRequest.*\.send(' crates/ --include='*.rs'`
+- 结果: 无匹配，确认没有调用 ApiRequest::send() 的代码
+
+### 3. 删除操作
+- 操作: 删除 api/mod.rs 第 317-326 行（send() 方法及前面的空行）
+- 原因: 无调用方，占位方法应移除
+
+### 4. 验证编译
+- 命令: `cargo check --workspace`
+- 结果: 编译通过（18 crates 全部成功）
+- 输出: `Finished dev profile [unoptimized + debuginfo] target(s) in 5.47s`
+
+### 5. 验证方法已删除
+- 命令: `grep -n 'fn send' crates/openlark-core/src/api/mod.rs`
+- 结果: No matches found（确认已删除）
+
+## 成功标准
+- [x] `cargo check --workspace` 通过
+- [x] grep 确认 `send()` 方法已移除
+- [x] 无调用方依赖（已验证）
+
+## 结论
+send() 占位方法已成功移除，无破坏性影响。

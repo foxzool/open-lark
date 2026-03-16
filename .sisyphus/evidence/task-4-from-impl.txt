@@ -1,0 +1,47 @@
+# Task 4 验证结果
+
+## 任务内容
+为 `ErrorType` 实现 `From<ErrorCode>`，并修改 `CoreError::is_retryable()` 方法委托给 `ErrorCode::is_retryable()`。
+
+## 验证结果
+
+### 1. cargo check 通过
+```
+cargo check -p openlark-core
+    Checking openlark-core v0.15.0-dev
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.97s
+```
+
+### 2. cargo test 全部通过 (零回归)
+```
+running 597 tests (unit tests)
+test result: ok. 597 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+running 36 tests (integration tests)
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```
+
+## 修改摘要
+
+### traits.rs
+- 添加 `use super::codes::ErrorCode;` 导入
+- 添加 `From<ErrorCode> for ErrorType` 实现，映射规则：
+  - Network 类 -> ErrorType::Network
+  - Auth 类 -> ErrorType::Authentication
+  - Validation 类 -> ErrorType::Validation
+  - Api 类 -> ErrorType::Api
+  - RateLimit 类 -> ErrorType::RateLimit
+  - Timeout 类 -> ErrorType::Timeout
+  - ServiceUnavailable 类 -> ErrorType::ServiceUnavailable
+  - Configuration 类 -> ErrorType::Configuration
+  - Success 兜底 -> ErrorType::Api
+  - 其余 -> ErrorType::Internal
+
+### core.rs
+- 修改 `is_retryable()` 方法：
+  - 保留 Network 变体: `Self::Network(net) => net.policy.is_retryable()`
+  - 保留 Api 变体: `Self::Api(api) => matches!(api.status, 429 | 500..=599)`
+  - 委托其他变体: `Self::Timeout { .. } | Self::RateLimit { .. } | Self::ServiceUnavailable { .. } | Self::Internal { .. } => self.code().is_retryable()`
+
+## 验证时间
+2026-02-26

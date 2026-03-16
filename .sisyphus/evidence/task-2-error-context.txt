@@ -1,0 +1,38 @@
+Task: Wave 1 Task 2 - 下沉 error context 能力到 openlark-core
+Date: 2026-02-27
+
+变更文件:
+- crates/openlark-core/src/error/core.rs
+- crates/openlark-client/src/error.rs
+
+实现结果:
+- CoreError 新增 `map_context(self, f: impl FnOnce(&mut ErrorContext)) -> Self`
+- CoreError 新增 `with_context_kv(self, key, value) -> Self`
+- CoreError 新增 `with_operation(self, operation, component) -> Self`
+- `with_context()` 已简化为 4 行函数体（<20 行）
+- `with_operation_context()` 已简化为 4 行函数体（<20 行）
+
+新增/更新测试:
+- openlark-core:
+  - `map_context_covers_all_variants`
+  - `with_context_kv_adds_context`
+  - `with_operation_updates_timeout_field_and_context`
+- openlark-client:
+  - `test_with_operation_context_updates_timeout_operation_field`
+
+LSP 验证:
+- lsp_diagnostics crates/openlark-core/src/error/core.rs: No diagnostics found
+- lsp_diagnostics crates/openlark-client/src/error.rs: No diagnostics found
+
+命令验证:
+1) `cargo test -p openlark-core`
+   - result: PASS
+   - summary: 556 passed, 0 failed; unit error-context suite 36 passed, 0 failed
+
+2) `cargo test -p openlark-client --all-features`
+   - result: PASS
+   - summary: lib tests 209 passed, integration 47 passed, doc tests 15 passed
+   - note: 存在既有 dead_code warning（traits/service.rs），与本任务改动无关
+
+结论:
+- 目标完成：CoreError 上下文注入能力已统一下沉，client error context 逻辑显著简化，测试通过。

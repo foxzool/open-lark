@@ -1,0 +1,50 @@
+Test Run Evidence for auth module
+=================================
+Date: 2026-02-18
+Command: cargo test -p openlark-core auth
+
+Results:
+- Total tests: 103 passed
+- 0 failed
+- 0 ignored
+
+New Tests Added:
+================
+
+token.rs (12 new tests):
+1. test_all_token_types_properties
+2. test_token_with_refresh_token
+3. test_token_with_tenant_key
+4. test_token_multiple_accesses
+5. test_token_validation_result_all_states
+6. test_token_refresh_config_custom_values
+7. test_token_expiry_boundary
+8. test_different_token_types_expiry
+9. test_token_refresh_config_clone
+10. test_token_info_serialization
+11. test_token_type_serialization
+
+validator.rs (17 new tests):
+1. test_validate_batch_empty_list
+2. test_filter_valid_tokens_empty_list
+3. test_validator_default_configuration
+4. test_validator_custom_threshold
+5. test_validator_zero_threshold
+6. test_validate_token_format_all_types
+7. test_validate_token_with_different_app_types
+8. test_validate_token_with_refresh_token
+9. test_validator_large_threshold
+10. test_validator_exact_boundary
+11. test_validate_batch_all_expired
+12. test_validate_batch_all_valid
+13. test_filter_valid_tokens_returns_correct_references
+
+Coverage Areas:
+- Token lifecycle (creation, expiry, refresh)
+- Token types (App, Tenant, User)
+- Token validation states (Valid, Expired, Invalid, ExpiringSoon)
+- Refresh configuration strategies
+- Empty token handling
+- Batch operations
+- Threshold boundary conditions
+- Serialization/deserialization

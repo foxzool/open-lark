@@ -1,0 +1,61 @@
+    Blocking waiting for file lock on artifact directory
+   Compiling openlark-core v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.24s
+     Running unittests src/lib.rs (target/debug/deps/openlark_core-1d6f46ea5c048777)
+
+running 52 tests
+test auth::token::tests::test_token_validation_result ... ok
+test auth::validator::tests::test_token_type_validation ... ok
+test auth::validator::tests::test_token_format_validation ... ok
+test validation::core::tests::test_is_chinese_char ... ok
+test improved_response_handler::tests::test_response_format_validation ... ok
+test validation::core::tests::test_is_chinese_char_unicode_boundaries ... ok
+test validation::core::tests::test_default_validate_builder_value_only_build ... ok
+test validation::core::tests::test_validate_content_size ... ok
+test validation::core::tests::test_validate_content_size_multibyte_edge ... ok
+test validation::core::tests::test_default_validate_builder ... ok
+test validation::core::tests::test_validate_content_size_various_sizes ... ok
+test validation::core::tests::test_validate_required ... ok
+test auth::validator::tests::test_batch_validation ... ok
+test validation::core::tests::test_default_validate_builder_all_methods ... ok
+test validation::core::tests::test_validate_required_list_length_boundaries ... ok
+test validation::core::tests::test_validate_required_list_length_exact_match ... ok
+test validation::core::tests::test_validate_string_length ... ok
+test validation::core::tests::test_validate_string_length_empty_string ... ok
+test validation::core::tests::test_validate_string_length_utf8_truncation ... ok
+test validation::core::tests::test_validation_result ... ok
+test validation::core::tests::test_validation_result_into_result_variants ... ok
+test validation::file::tests::test_file_limits ... ok
+test validation::file::tests::test_validate_file_extension ... ok
+test validation::file::tests::test_validate_file_name ... ok
+test validation::file::tests::test_validate_image_file ... ok
+test validation::file::tests::test_validate_file_size ... ok
+test validation::pagination::tests::test_sanitize_tag_normal ... ok
+test validation::file::tests::test_validate_upload_file ... ok
+test validation::pagination::tests::test_sanitize_tag_uppercase ... ok
+test validation::pagination::tests::test_sanitize_tag_with_spaces ... ok
+test auth::cache::tests::test_cache_validation ... ok
+test validation::pagination::tests::test_validate_page_size_invalid ... ok
+test validation::pagination::tests::test_validate_page_size_valid ... ok
+test validation::pagination::tests::test_validate_page_token_empty ... ok
+test validation::pagination::tests::test_validate_pagination_params_invalid_size ... ok
+test validation::pagination::tests::test_validate_pagination_params_valid ... ok
+test validation::password::tests::test_password_limits ... ok
+test validation::password::tests::test_password_validation ... ok
+test validation::password::tests::test_validate_and_sanitize_password ... ok
+test observability::tests::test_trace_response_processing_macro_validation_error ... ok
+test validation::uuid::tests::test_sanitize_uuid ... ok
+test validation::uuid::tests::test_uuid_limits ... ok
+test validation::uuid::tests::test_is_nil_uuid ... ok
+test validation::pagination::tests::test_validate_page_token_valid ... ok
+test validation::uuid::tests::test_validate_short_uuid ... ok
+test validation::uuid::tests::test_get_uuid_info ... ok
+test validation::uuid::tests::test_generate_uuid ... ok
+test validation::uuid::tests::test_generate_short_uuid ... ok
+test validation::uuid::tests::test_validate_uuid_list ... ok
+test validation::uuid::tests::test_validate_uuid_version ... ok
+test validation::uuid::tests::test_validate_uuid ... ok
+test observability::tests::test_response_tracker_validation_timing ... ok
+
+test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 424 filtered out; finished in 0.01s
+

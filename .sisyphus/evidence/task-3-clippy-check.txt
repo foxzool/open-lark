@@ -1,0 +1,2 @@
+    Checking openlark-hr v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-hr)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.80s

@@ -1,0 +1,37 @@
+=== F3: Real Manual QA - Final Summary ===
+Date: 2026-02-26T07:08:38Z
+Plan: core-p0p1-fix
+
+╔══════════════════════════════════════════════════════════════╗
+║                    QA SCENARIO RESULTS                       ║
+╠══════════════════════════════════════════════════════════════╣
+║ T1  网络错误 source chain 保留       PASS ✅                ║
+║ T2  业务 feature 已全部移除          PASS ✅                ║
+║ T3  req_timeout 接入请求链           PASS ✅                ║
+║ T4  孤儿模块已处理                   PASS ✅                ║
+║ T5  宏 hygiene 修复                  PASS ✅                ║
+║ T6  send() 占位 API 已移除           PASS ✅                ║
+║ T7  ApiRequest 字段可见性收紧        PASS ✅                ║
+║ T8  序列化失败不再静默               PASS ✅                ║
+║ T9  错误分类体系收敛                 PASS ✅                ║
+║ T10 全量测试通过                     PASS ✅                ║
+╠══════════════════════════════════════════════════════════════╣
+║                   INTEGRATION CHECKS                         ║
+╠══════════════════════════════════════════════════════════════╣
+║ cargo check -p openlark-core         PASS ✅                ║
+║ cargo check --workspace              PASS ✅                ║
+║ cargo test -p openlark-core          36/36 PASS ✅          ║
+║ cargo test --workspace               2378+/0 PASS ✅        ║
+║ cargo clippy -p openlark-core        No new warnings ✅     ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  Scenarios [10/10 pass] | Integration [PASS] | VERDICT: PASS ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+Notes:
+- T8: RequestData::Empty at line 288 is a match-arm read in to_bytes(),
+  not a serialization fallback. json_body() now uses Json(Null) + warn!.
+- T9: 91 clippy warnings are all deprecated ErrorKind usage — expected
+  behavior from the #[deprecated] annotation added in T9.
+- T10: All 2,378+ workspace tests pass with 0 failures.

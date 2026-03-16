@@ -1,0 +1,33 @@
+Task 3: Config.req_timeout 接入请求链
+========================================
+
+修改文件: crates/openlark-core/src/request_builder/mod.rs
+修改位置: UnifiedRequestBuilder::build() 第 81-84 行
+
+变更内容:
+  在请求体构建（步骤4）之后、返回 req_builder 之前，新增步骤5：
+  ```rust
+  // 5. 应用超时：ApiRequest.timeout > Config.req_timeout > 无超时
+  if let Some(timeout) = req.timeout.or(config.req_timeout) {
+      req_builder = req_builder.timeout(timeout);
+  }
+  ```
+
+优先级逻辑:
+  1. ApiRequest.timeout (单次请求级别) > Config.req_timeout (全局配置级别) > 无超时
+  2. 使用 Option::or() 实现优先级链，简洁且零开销
+  3. 默认行为不变：两者均为 None 时不设置超时
+
+验证结果:
+  - cargo check -p openlark-core: ✅ 通过
+  - cargo test -p openlark-core: ✅ 599 + 36 = 635 tests passed
+  - grep 确认 req_timeout 在 request_builder 中被引用: ✅
+
+grep 输出:
+  82:            // 5. 应用超时：ApiRequest.timeout > Config.req_timeout > 无超时
+  83:            if let Some(timeout) = req.timeout.or(config.req_timeout) {
+
+未修改文件:
+  - http.rs: 无需修改，超时在 RequestBuilder 层面生效
+  - config.rs: 公开 API 签名未变
+  - api/mod.rs: 未修改

@@ -1,0 +1,17 @@
+=== QA T8: 序列化失败不再静默 ===
+Date: 2026-02-26T07:07:32Z
+RESULT: PASS
+
+Step 1: grep 'RequestData::Empty' api/mod.rs → line 288 ⚠️
+  288: Some(RequestData::Empty) => vec![]
+  分析: 这是 to_bytes() 中对 Empty 变体的 match-arm 读取，
+  不是序列化失败的 fallback。json_body() 已改为设置 Json(Null)。
+  结论: 不影响 QA 判定 ✅
+
+Step 2: grep 'warn!' api/mod.rs → 2 处匹配 ✅
+  220: tracing::warn!(error = %e, "json_body() 序列化失败，设置为 Json(Null)");
+  276: tracing::warn!(error = %e, "to_bytes() JSON 序列化失败，返回空 vec");
+
+Step 3: cargo test -p openlark-core → 36 passed, 0 failed ✅
+
+VERDICT: PASS

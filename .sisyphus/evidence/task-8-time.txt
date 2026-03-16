@@ -1,0 +1,100 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s
+     Running unittests src/lib.rs (target/debug/deps/openlark_hr-97836b7728b317ab)
+
+running 6 tests
+test endpoints::tests::test_corehr_endpoints ... ok
+test common::api_endpoints::tests::test_ehr_api_urls ... ok
+test common::api_endpoints::tests::test_compensation_api_urls ... ok
+test tests::test_hr_client_corehr ... ok
+test tests::test_hr_client_ehr ... ok
+test tests::test_hr_client_compensation ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 29 filtered out; finished in 0.01s
+
+     Running ../../tests/unit/hr/mod.rs (target/debug/deps/unit-36ccf931e0c080d1)
+
+running 75 tests
+test compensation_tests::builder_tests::test_lump_sum_batch_remove_request_builder ... ok
+test compensation_tests::builder_tests::test_change_reason_list_request_builder ... ok
+test compensation_tests::builder_tests::test_plan_list_request_builder ... ok
+test compensation_tests::builder_tests::test_lump_sum_query_detail_request_builder ... ok
+test compensation_tests::builder_tests::test_indicator_list_request_builder ... ok
+test compensation_tests::builder_tests::test_lump_sum_query_request_builder ... ok
+test compensation_tests::builder_tests::test_lump_sum_batch_update_request_builder ... ok
+test compensation_tests::builder_tests::test_item_list_request_builder ... ok
+test compensation_tests::builder_tests::test_item_category_list_request_builder ... ok
+test compensation_tests::builder_tests::test_recurring_batch_create_request_builder ... ok
+test compensation_tests::builder_tests::test_archive_query_request_builder ... ok
+test compensation_tests::builder_tests::test_recurring_batch_remove_request_builder ... ok
+test compensation_tests::builder_tests::test_lump_sum_batch_create_request_builder ... ok
+test compensation_tests::builder_tests::test_archive_create_request_builder ... ok
+test compensation_tests::builder_tests::test_recurring_query_request_builder ... ok
+test compensation_tests::builder_tests::test_social_archive_adjust_record_query_request_builder ... ok
+test compensation_tests::builder_tests::test_recurring_batch_update_request_builder ... ok
+test compensation_tests::builder_tests::test_social_archive_query_request_builder ... ok
+test compensation_tests::builder_tests::test_social_insurance_list_request_builder ... ok
+test compensation_tests::builder_tests::test_social_plan_list_request_builder ... ok
+test compensation_tests::builder_tests::test_social_plan_query_request_builder ... ok
+test compensation_tests::http_tests::test_item_category_list_http_mock ... ok
+test compensation_tests::http_tests::test_change_reason_list_http_mock ... ok
+test compensation_tests::http_tests::test_item_list_http_mock ... ok
+test compensation_tests::http_tests::test_indicator_list_http_mock ... ok
+test compensation_tests::http_tests::test_plan_list_http_mock ... ok
+test compensation_tests::http_tests::test_lump_sum_query_http_mock ... ok
+test compensation_tests::http_tests::test_lump_sum_batch_create_http_mock ... ok
+test compensation_tests::http_tests::test_lump_sum_query_detail_http_mock ... ok
+test compensation_tests::http_tests::test_lump_sum_batch_update_http_mock ... ok
+test compensation_tests::http_tests::test_recurring_batch_remove_http_mock ... ok
+test compensation_tests::http_tests::test_archive_create_http_mock ... ok
+test compensation_tests::http_tests::test_archive_query_http_mock ... ok
+test compensation_tests::http_tests::test_recurring_batch_create_http_mock ... ok
+test compensation_tests::http_tests::test_lump_sum_batch_remove_http_mock ... ok
+test compensation_tests::serialization_tests::test_archive_create_response_serialization ... ok
+test compensation_tests::serialization_tests::test_lump_sum_batch_create_response_serialization ... ok
+test compensation_tests::serialization_tests::test_archive_query_response_serialization ... ok
+test compensation_tests::serialization_tests::test_indicator_list_response_serialization ... ok
+test compensation_tests::serialization_tests::test_change_reason_list_response_serialization ... ok
+test compensation_tests::serialization_tests::test_item_list_response_serialization ... ok
+test compensation_tests::serialization_tests::test_lump_sum_batch_remove_response_serialization ... ok
+test compensation_tests::serialization_tests::test_item_category_list_response_serialization ... ok
+test compensation_tests::http_tests::test_social_insurance_list_http_mock ... ok
+test compensation_tests::http_tests::test_recurring_batch_update_http_mock ... ok
+test compensation_tests::serialization_tests::test_lump_sum_batch_update_response_serialization ... ok
+test compensation_tests::serialization_tests::test_lump_sum_query_detail_response_serialization ... ok
+test compensation_tests::serialization_tests::test_lump_sum_query_response_serialization ... ok
+test compensation_tests::serialization_tests::test_plan_list_response_serialization ... ok
+test compensation_tests::serialization_tests::test_recurring_batch_create_response_serialization ... ok
+test compensation_tests::serialization_tests::test_recurring_batch_remove_response_serialization ... ok
+test compensation_tests::serialization_tests::test_recurring_batch_update_response_serialization ... ok
+test compensation_tests::serialization_tests::test_recurring_query_response_serialization ... ok
+test compensation_tests::serialization_tests::test_social_archive_adjust_record_query_response_serialization ... ok
+test compensation_tests::serialization_tests::test_social_insurance_list_response_serialization ... ok
+test compensation_tests::serialization_tests::test_social_archive_query_response_serialization ... ok
+test compensation_tests::serialization_tests::test_social_plan_list_response_serialization ... ok
+test compensation_tests::serialization_tests::test_social_plan_query_response_serialization ... ok
+test compensation_tests::http_tests::test_social_archive_adjust_record_query_http_mock ... ok
+test compensation_tests::http_tests::test_recurring_query_http_mock ... ok
+test compensation_tests::http_tests::test_social_archive_query_http_mock ... ok
+test compensation_tests::http_tests::test_social_plan_list_http_mock ... ok
+test compensation_tests::http_tests::test_social_plan_query_http_mock ... ok
+test ehr_tests::builder_tests::test_attachment_get_builder ... ok
+test ehr_tests::builder_tests::test_employee_list_builder ... ok
+test ehr_tests::serialization_tests::test_attachment_get_response_serialization ... ok
+test ehr_tests::serialization_tests::test_employee_list_response_serialization ... ok
+test compensation_tests::validation_tests::test_archive_query_data_missing_validation ... ok
+test compensation_tests::validation_tests::test_social_plan_list_data_missing_validation ... ok
+test compensation_tests::validation_tests::test_archive_create_data_missing_validation ... ok
+test compensation_tests::validation_tests::test_social_plan_query_data_missing_validation ... ok
+test ehr_tests::validation_tests::test_employee_list_data_missing_validation ... ok
+test ehr_tests::http_tests::test_employee_list_http_mock ... ok
+test ehr_tests::validation_tests::test_attachment_get_data_missing_validation ... ok
+test ehr_tests::http_tests::test_attachment_get_http_mock ... ok
+
+test result: ok. 75 passed; 0 failed; 0 ignored; 0 measured; 380 filtered out; finished in 0.07s
+
+   Doc-tests openlark_hr
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+

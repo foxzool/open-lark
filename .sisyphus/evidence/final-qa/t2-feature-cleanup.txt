@@ -1,0 +1,16 @@
+=== QA T2: 业务 feature 已全部移除 ===
+Date: 2026-02-26T07:07:32Z
+RESULT: PASS
+
+Step 1: grep 43 business features in Cargo.toml → 无匹配 ✅
+  所有业务 feature (acs, admin, ai, aily, ..., workplace) 已移除
+
+Step 2: grep 基础 feature 保留 → 4 个匹配 ✅
+  default = ["testing"]
+  websocket = [...]
+  otel = [...]
+  testing = []
+
+Step 3: cargo check --workspace → Finished ✅
+
+VERDICT: PASS

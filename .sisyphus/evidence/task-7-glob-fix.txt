@@ -1,0 +1,34 @@
+=== Task 7: P1-3 glob re-export 冲突修复 ===
+Date: 2026-02-27
+
+== 诊断结果 ==
+openlark-docs (3 个文件触发 ambiguous_glob_reexports):
+  1. src/base/bitable/v1/app/mod.rs - models.rs 重复定义 + role/table/dashboard 子模块名冲突
+  2. src/baike/mod.rs - baike/lingo 子模块名冲突 + models 类型名冲突
+
+openlark-meeting (1 个文件):
+  1. src/vc/vc/v1/room/mod.rs - list/mget 都定义 RoomItem
+
+== 修复方案 ==
+1. app/mod.rs: models/role/table/dashboard 改为显式 re-export
+2. baike/mod.rs: 移除 baike/lingo glob，显式导出 models 类型
+3. room/mod.rs: mget 改为显式导出（排除重复 RoomItem）
+
+== allow 指令 ==
+- 移除 openlark-docs #![allow(ambiguous_glob_reexports)]
+- 移除 openlark-docs #![allow(hidden_glob_reexports)]
+- 移除 openlark-meeting #![allow(ambiguous_glob_reexports)]
+- 移除 openlark-meeting #![allow(hidden_glob_reexports)]
+
+== 验证: cargo check ==
+openlark-docs --features full:
+openlark-meeting --all-features:
+
+== 验证: grep ambiguous ==
+docs:
+(无输出)
+meeting:
+(无输出)
+
+== 验证: root crate check ==
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s

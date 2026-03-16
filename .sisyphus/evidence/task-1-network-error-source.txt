@@ -1,0 +1,37 @@
+# Task 1: 修复 openlark-core 中网络错误 source 丢失问题
+
+## 修改内容
+文件: crates/openlark-core/src/http.rs
+行号: 151
+
+修改前:
+```rust
+Err(crate::error::network_error(err.to_string()))
+```
+
+修改后:
+```rust
+Err(err.into())
+```
+
+## 验证结果
+
+### cargo check
+```
+$ cargo check -p openlark-core
+    Checking openlark-core v0.15.0-dev
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.00s
+```
+✅ 通过
+
+### grep 确认
+```
+$ grep -n 'err.into()' crates/openlark-core/src/http.rs
+151:     Err(err.into())
+```
+✅ 确认修改生效
+
+## 理论依据
+- error/core.rs:784 存在 `From<reqwest::Error> for CoreError` 实现
+- 该实现保留了原始错误 source: `source: Some(Box::new(source))`
+- 使用 `err.into()` 可以自动调用该转换实现，保留完整错误链

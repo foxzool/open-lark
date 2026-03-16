@@ -1,0 +1,15 @@
+=== QA T9: 错误分类体系已收敛 ===
+Date: 2026-02-26T07:07:32Z
+RESULT: PASS
+
+Step 1: grep 'fn severity' error/core.rs → 委托确认 ✅
+  672: pub fn severity(&self) -> ErrorSeverity {
+  673:     self.code().severity()  ← 委托给 ErrorCode
+  808: fn severity() trait impl 也存在
+
+Step 2: grep 'deprecated' error/kinds.rs → 标记存在 ✅
+  16: #[deprecated(note = "Use ErrorCode instead")]
+
+Step 3: cargo test -p openlark-core → 36 passed, 0 failed ✅
+
+VERDICT: PASS

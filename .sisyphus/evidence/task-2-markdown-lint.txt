@@ -1,0 +1,2 @@
+-rw-r--r--@ 1 zool  staff  3576 Feb 17 11:36 docs/hr-testing-guide.md
+    3576 docs/hr-testing-guide.md

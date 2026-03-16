@@ -1,0 +1,16 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running unittests src/lib.rs (target/debug/deps/openlark_webhook-13bf61dd61f82b9d)
+
+running 9 tests
+test common::validation::tests::test_validate_message_content_valid ... ok
+test common::validation::tests::test_validate_webhook_url_valid ... ok
+test common::validation::tests::test_validate_webhook_url_empty ... ok
+test common::validation::tests::test_validate_message_content_empty ... ok
+test models::tests::test_image_content_serialization ... ok
+test models::tests::test_file_content_serialization ... ok
+test models::tests::test_msg_type_serialization ... ok
+test models::tests::test_post_content_serialization ... ok
+test models::tests::test_text_content_serialization ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

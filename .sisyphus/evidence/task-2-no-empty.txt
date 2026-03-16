@@ -1,0 +1,45 @@
+# Task 2 - 移除 RequestData::Empty 验证结果
+
+## 验证项目
+
+- [x] `RequestData::Empty` 变体已移除
+- [x] `json_body()` 序列化失败时调用 `tracing::warn!` 并设置 `Json(Value::Null)`
+- [x] `grep -r 'RequestData::Empty' crates/openlark-core/src/` 返回空
+- [x] `cargo check -p openlark-core` 通过
+- [x] `cargo test -p openlark-core` 通过 (597 tests)
+
+## 修改摘要
+
+文件: `crates/openlark-core/src/api/mod.rs`
+
+1. **移除 Empty 变体** (line 52)
+   - 从 `RequestData` 枚举中删除 `Empty,`
+
+2. **修改 json_body 方法** (line 218)
+   - 原: `Err(_) => self.body = Some(RequestData::Empty),`
+   - 新: 
+     ```rust
+     Err(e) => {
+         tracing::warn!(error = %e, "json_body 序列化失败");
+         self.body = Some(RequestData::Json(serde_json::Value::Null));
+     }
+     ```
+
+3. **移除 to_bytes 中的 Empty 分支** (line 276)
+   - 删除 `Some(RequestData::Empty) => vec![]`
+
+## 验证命令输出
+
+```bash
+# grep 结果
+$ grep -r 'RequestData::Empty' crates/openlark-core/src/
+# (无输出 - 确认 Empty 不存在)
+
+# cargo check
+$ cargo check -p openlark-core
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.38s
+
+# cargo test
+$ cargo test -p openlark-core
+    test result: ok. 597 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```

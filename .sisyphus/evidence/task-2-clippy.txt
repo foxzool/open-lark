@@ -1,0 +1,2 @@
+    Checking openlark-auth v0.1.0-dev (/Users/zool/workspace/open-lark/crates/openlark-auth)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.43s

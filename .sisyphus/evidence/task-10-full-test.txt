@@ -1,0 +1,33 @@
+Task 10 - openlark-core 全量测试更新与验证
+Date: 2026-02-26
+
+[执行结果]
+1) cargo test -p openlark-core 2>&1
+- 结果: PASS
+- 关键结果: test result: ok. 600 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+- 外部测试: test result: ok. 36 passed; 0 failed
+- 原始输出文件: /Users/zool/.local/share/opencode/tool-output/tool_c98e8eaa0001fIatXY1bESYsSV
+
+2) cargo test --workspace 2>&1
+- 结果: PASS
+- 关键结果: 各 crate 测试均为 ok，未检出 failures/FAILED
+- 原始输出文件: /Users/zool/.local/share/opencode/tool-output/tool_c98eaa19f0016ok7TsC9iQsCBV
+
+3) cargo clippy -p openlark-core 2>&1
+- 结果: 通过（无 clippy 新增告警）
+- 说明: 仍有既有 deprecated 警告（ErrorKind 弃用链），非本任务新增
+
+[LSP Diagnostics]
+- crates/openlark-core/src/error/core.rs: clean
+- crates/openlark-core/src/error/kinds.rs: clean
+- crates/openlark-core/src/error/mod.rs: clean
+- crates/openlark-core/src/error/traits.rs: clean
+- crates/openlark-hr/src/ehr/ehr/v1/attachment/get.rs: clean
+- crates/openlark-core/Cargo.toml: 无可用 LSP server（.toml）
+
+[本轮代码变更说明]
+- 未新增代码修改。
+- 未新增测试用例：因为 openlark-core 与 workspace 测试均已通过，未出现需补测的回归行为。
+
+[结论]
+- Task 10 要求的三项验证均已完成并通过。
