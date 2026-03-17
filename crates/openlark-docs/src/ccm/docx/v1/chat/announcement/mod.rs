@@ -7,26 +7,15 @@ pub mod get;
 pub use block::{
     BatchDeleteChatAnnouncementBlockChildrenParams,
     BatchDeleteChatAnnouncementBlockChildrenRequest,
-    BatchDeleteChatAnnouncementBlockChildrenResponse,
-    BatchUpdateChatAnnouncementBlocksParams,
-    BatchUpdateChatAnnouncementBlocksRequest,
-    BatchUpdateChatAnnouncementBlocksResponse,
-    BatchUpdateRequest,
-    CreateChatAnnouncementBlockChildrenParams,
-    CreateChatAnnouncementBlockChildrenRequest,
-    CreateChatAnnouncementBlockChildrenResponse,
-    GetChatAnnouncementBlockChildrenParams,
-    GetChatAnnouncementBlockChildrenRequest,
-    GetChatAnnouncementBlockChildrenResponse,
-    GetChatAnnouncementBlockParams,
-    GetChatAnnouncementBlockRequest,
-    GetChatAnnouncementBlockResponse,
-    GetChatAnnouncementBlocksParams,
-    GetChatAnnouncementBlocksRequest,
+    BatchDeleteChatAnnouncementBlockChildrenResponse, BatchUpdateChatAnnouncementBlocksParams,
+    BatchUpdateChatAnnouncementBlocksRequest, BatchUpdateChatAnnouncementBlocksResponse,
+    BatchUpdateRequest, CreateChatAnnouncementBlockChildrenParams,
+    CreateChatAnnouncementBlockChildrenRequest, CreateChatAnnouncementBlockChildrenResponse,
+    GetChatAnnouncementBlockChildrenParams, GetChatAnnouncementBlockChildrenRequest,
+    GetChatAnnouncementBlockChildrenResponse, GetChatAnnouncementBlockParams,
+    GetChatAnnouncementBlockRequest, GetChatAnnouncementBlockResponse,
+    GetChatAnnouncementBlocksParams, GetChatAnnouncementBlocksRequest,
     GetChatAnnouncementBlocksResponse,
 };
 // get 模块显式导出
-pub use get::{
-    GetChatAnnouncementRequest,
-    GetChatAnnouncementResponse,
-};
+pub use get::{GetChatAnnouncementRequest, GetChatAnnouncementResponse};

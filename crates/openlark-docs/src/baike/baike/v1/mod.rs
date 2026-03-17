@@ -7,9 +7,7 @@ pub mod models;
 pub mod service;
 
 // 重新导出分类模块
-pub use classification::{
-    ListClassificationRequest, ListClassificationResponse,
-};
+pub use classification::{ListClassificationRequest, ListClassificationResponse};
 
 // 重新导出草稿模块
 pub use draft::{
@@ -19,12 +17,12 @@ pub use draft::{
 
 // 重新导出实体模块
 pub use entity::{
-    ClassificationFilter, CreateEntityReq, CreateEntityRequest, CreateEntityResp, ExtractedWord,
-    ExtractEntityReqBody, ExtractEntityRequest, ExtractEntityResponse, GetEntityRequest,
-    GetEntityResp, HighlightEntityReqBody, HighlightEntityRequest, HighlightEntityResponse,
-    ListEntityRequest, ListEntityResp, MatchEntityReq, MatchEntityRequest, MatchEntityResp,
-    MatchEntityResult, Phrase, SearchEntityReqBody, SearchEntityRequest, SearchEntityResponse,
-    Span, UpdateEntityReq, UpdateEntityRequest, UpdateEntityResp,
+    ClassificationFilter, CreateEntityReq, CreateEntityRequest, CreateEntityResp,
+    ExtractEntityReqBody, ExtractEntityRequest, ExtractEntityResponse, ExtractedWord,
+    GetEntityRequest, GetEntityResp, HighlightEntityReqBody, HighlightEntityRequest,
+    HighlightEntityResponse, ListEntityRequest, ListEntityResp, MatchEntityReq, MatchEntityRequest,
+    MatchEntityResp, MatchEntityResult, Phrase, SearchEntityReqBody, SearchEntityRequest,
+    SearchEntityResponse, Span, UpdateEntityReq, UpdateEntityRequest, UpdateEntityResp,
 };
 
 // 重新导出文件模块

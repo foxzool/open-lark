@@ -6,28 +6,14 @@ pub mod list;
 // batch_delete 模块显式导出
 
 pub use batch_delete::{
-
-    BatchDeleteTaskFollowerBodyV1,
-
-    BatchDeleteTaskFollowerRequestV1,
-
+    BatchDeleteTaskFollowerBodyV1, BatchDeleteTaskFollowerRequestV1,
     BatchDeleteTaskFollowerResponseV1,
-
 };
 // create 模块显式导出
 pub use create::{
-    CreateTaskFollowerBodyV1,
-    CreateTaskFollowerRequestV1,
-    CreateTaskFollowerResponseV1,
+    CreateTaskFollowerBodyV1, CreateTaskFollowerRequestV1, CreateTaskFollowerResponseV1,
 };
 // delete 模块显式导出
-pub use delete::{
-    DeleteTaskFollowerRequestV1,
-    DeleteTaskFollowerResponseV1,
-};
+pub use delete::{DeleteTaskFollowerRequestV1, DeleteTaskFollowerResponseV1};
 // list 模块显式导出
-pub use list::{
-    ListTaskFollowerRequestV1,
-    ListTaskFollowerResponseV1,
-    TaskFollowerItemV1,
-};
+pub use list::{ListTaskFollowerRequestV1, ListTaskFollowerResponseV1, TaskFollowerItemV1};

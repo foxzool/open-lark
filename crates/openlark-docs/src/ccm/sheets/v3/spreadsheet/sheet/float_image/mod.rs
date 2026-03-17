@@ -10,27 +10,12 @@ pub use crate::ccm::sheets::v3::models::FloatImageInfo as FloatImage;
 
 // create 模块显式导出
 
-pub use create::{
-
-    CreateFloatImageRequest,
-
-    CreateFloatImageResponse,
-
-};
+pub use create::{CreateFloatImageRequest, CreateFloatImageResponse};
 // delete 模块显式导出
-pub use delete::{
-    DeleteFloatImageResponse,
-};
+pub use delete::DeleteFloatImageResponse;
 // get 模块显式导出
-pub use get::{
-    GetFloatImageResponse,
-};
+pub use get::GetFloatImageResponse;
 // patch 模块显式导出
-pub use patch::{
-    UpdateFloatImageRequest,
-    UpdateFloatImageResponse,
-};
+pub use patch::{UpdateFloatImageRequest, UpdateFloatImageResponse};
 // query 模块显式导出
-pub use query::{
-    QueryFloatImagesResponse,
-};
+pub use query::QueryFloatImagesResponse;

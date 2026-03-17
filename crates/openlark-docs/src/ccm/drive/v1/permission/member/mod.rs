@@ -10,42 +10,18 @@ pub mod update;
 
 // 使用通配符导出所有子模块,避免维护大量重复的导出列表
 // auth 模块显式导出
-pub use auth::{
-    AuthPermissionMemberRequest,
-    AuthPermissionMemberResponse,
-};
+pub use auth::{AuthPermissionMemberRequest, AuthPermissionMemberResponse};
 // batch_create 模块显式导出
-pub use batch_create::{
-    BatchCreatePermissionMemberRequest,
-    BatchCreatePermissionMemberResponse,
-};
+pub use batch_create::{BatchCreatePermissionMemberRequest, BatchCreatePermissionMemberResponse};
 // create 模块显式导出
-pub use create::{
-    CreatePermissionMemberRequest,
-    CreatePermissionMemberResponse,
-};
+pub use create::{CreatePermissionMemberRequest, CreatePermissionMemberResponse};
 // delete 模块显式导出
-pub use delete::{
-    DeletePermissionMemberRequest,
-    DeletePermissionMemberResponse,
-};
+pub use delete::{DeletePermissionMemberRequest, DeletePermissionMemberResponse};
 // list 模块显式导出
-pub use list::{
-    ListPermissionMembersRequest,
-    ListPermissionMembersResponse,
-};
+pub use list::{ListPermissionMembersRequest, ListPermissionMembersResponse};
 // models 模块显式导出
-pub use models::{
-    PermissionMember,
-    PermissionMemberItem,
-};
+pub use models::{PermissionMember, PermissionMemberItem};
 // transfer_owner 模块显式导出
-pub use transfer_owner::{
-    TransferOwnerRequest,
-    TransferOwnerResponse,
-};
+pub use transfer_owner::{TransferOwnerRequest, TransferOwnerResponse};
 // update 模块显式导出
-pub use update::{
-    UpdatePermissionMemberRequest,
-    UpdatePermissionMemberResponse,
-};
+pub use update::{UpdatePermissionMemberRequest, UpdatePermissionMemberResponse};

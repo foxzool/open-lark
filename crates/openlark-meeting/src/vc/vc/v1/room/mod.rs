@@ -10,34 +10,15 @@ pub mod search;
 
 // 导出所有模块内容
 // create 模块显式导出
-pub use create::{
-    CreateRoomRequest,
-    CreateRoomResponse,
-};
+pub use create::{CreateRoomRequest, CreateRoomResponse};
 // delete 模块显式导出
-pub use delete::{
-    DeleteRoomRequest,
-    DeleteRoomResponse,
-};
+pub use delete::{DeleteRoomRequest, DeleteRoomResponse};
 // get 模块显式导出
-pub use get::{
-    GetRoomRequest,
-    GetRoomResponse,
-};
+pub use get::{GetRoomRequest, GetRoomResponse};
 // list 模块显式导出
-pub use list::{
-    ListRoomRequest,
-    ListRoomRequestBuilder,
-    ListRoomResponse,
-    RoomItem,
-};
+pub use list::{ListRoomRequest, ListRoomRequestBuilder, ListRoomResponse, RoomItem};
 pub use mget::{MgetRoomRequest, MgetRoomResponse};
 // patch 模块显式导出
-pub use patch::{
-    PatchRoomRequest,
-    PatchRoomResponse,
-};
+pub use patch::{PatchRoomRequest, PatchRoomResponse};
 // search 模块显式导出
-pub use search::{
-    SearchRoomRequest,
-};
+pub use search::SearchRoomRequest;

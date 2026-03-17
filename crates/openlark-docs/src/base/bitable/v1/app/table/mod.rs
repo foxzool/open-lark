@@ -46,10 +46,11 @@ pub use record::{
     BatchCreateRecordRequest, BatchCreateRecordResponse, BatchDeleteRecordRequest,
     BatchDeleteRecordResponse, BatchGetRecordRequest, BatchGetRecordResponse,
     BatchUpdateRecordRequest, BatchUpdateRecordResponse, CreateRecordItem, CreateRecordRequest,
-    CreateRecordResponse, DeletedRecord, DeleteRecordRequest, DeleteRecordResponse,
+    CreateRecordResponse, DeleteRecordRequest, DeleteRecordResponse, DeletedRecord,
     FilterCondition, FilterInfo, GetRecordRequest, GetRecordResponse, ListRecordRequest,
     ListRecordResponse, Person, Record, SearchRecordRequest, SearchRecordRequestBody,
-    SearchRecordResponse, SortCondition, UpdateRecordItem, UpdateRecordRequest, UpdateRecordResponse,
+    SearchRecordResponse, SortCondition, UpdateRecordItem, UpdateRecordRequest,
+    UpdateRecordResponse,
 };
 
 pub use form::{

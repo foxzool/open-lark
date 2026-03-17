@@ -6,11 +6,6 @@ pub mod models;
 
 // 使用通配符导出所有子模块
 // content 模块显式导出
-pub use content::{
-    GetDocsContentRequest,
-    GetDocsContentResponse,
-};
+pub use content::{GetDocsContentRequest, GetDocsContentResponse};
 // models 模块显式导出
-pub use models::{
-    DocsContent,
-};
+pub use models::DocsContent;

@@ -22,4 +22,7 @@ pub use move_docs_to_wiki::{MoveDocsToWikiParams, MoveDocsToWikiRequest, MoveDoc
 
 pub use r#move::{MoveWikiSpaceNodeParams, MoveWikiSpaceNodeRequest, MoveWikiSpaceNodeResponse};
 
-pub use update_title::{UpdateWikiSpaceNodeTitleParams, UpdateWikiSpaceNodeTitleRequest, UpdateWikiSpaceNodeTitleResponse};
+pub use update_title::{
+    UpdateWikiSpaceNodeTitleParams, UpdateWikiSpaceNodeTitleRequest,
+    UpdateWikiSpaceNodeTitleResponse,
+};

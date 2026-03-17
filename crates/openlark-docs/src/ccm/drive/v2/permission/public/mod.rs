@@ -4,16 +4,8 @@ pub mod patch;
 
 // 使用通配符导出所有子模块
 // get 模块显式导出
-pub use get::{
-    GetPermissionPublicRequest,
-    GetPermissionPublicResponse,
-};
+pub use get::{GetPermissionPublicRequest, GetPermissionPublicResponse};
 // models 模块显式导出
-pub use models::{
-    PermissionPublic,
-};
+pub use models::PermissionPublic;
 // patch 模块显式导出
-pub use patch::{
-    UpdatePermissionPublicRequest,
-    UpdatePermissionPublicResponse,
-};
+pub use patch::{UpdatePermissionPublicRequest, UpdatePermissionPublicResponse};

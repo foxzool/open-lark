@@ -2,6 +2,4 @@
 
 pub mod list;
 // list 模块显式导出
-pub use list::{
-    ListRolesRequest,
-};
+pub use list::ListRolesRequest;

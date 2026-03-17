@@ -3,12 +3,4 @@ pub mod list;
 
 // list 模块显式导出
 
-pub use list::{
-
-    FileLike,
-
-    ListFileLikesRequest,
-
-    ListFileLikesResponse,
-
-};
+pub use list::{FileLike, ListFileLikesRequest, ListFileLikesResponse};

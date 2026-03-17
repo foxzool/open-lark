@@ -6,8 +6,4 @@ pub mod v1;
 
 // 可选：统一 re-export，方便外部调用路径更短
 // v1 模块显式导出
-pub use v1::{
-    GetPostRequest,
-    GetPostResponse,
-    Post,
-};
+pub use v1::{GetPostRequest, GetPostResponse, Post};
