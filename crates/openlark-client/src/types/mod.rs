@@ -6,11 +6,7 @@ mod client;
 
 // 重新导出类型
 // client 模块显式导出
-pub use client::{
-    ApiResponseData,
-    PaginatedResponse,
-    RequestOptions,
-};
+pub use client::{ApiResponse, ApiResponseData, PaginatedResponse, RequestOptions};
 
 // 保留原有的auth模块用于兼容性
 pub mod auth;

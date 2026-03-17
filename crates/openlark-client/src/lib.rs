@@ -236,6 +236,12 @@ pub mod registry;
 pub mod traits;
 pub mod types;
 
+/// 延迟初始化工具模块
+///
+/// 提供 `LazyService` 包装器，用于延迟初始化服务实例。
+/// 这在客户端构造时不想立即初始化所有服务时很有用。
+pub mod lazy;
+
 #[cfg(test)]
 mod test_utils;
 
