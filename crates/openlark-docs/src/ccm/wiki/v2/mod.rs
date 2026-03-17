@@ -10,49 +10,6 @@ pub use models::{
     WikiSearchResult, WikiSpace, WikiSpaceMember, WikiSpaceNode, WikiSpaceSetting, WikiTask,
 };
 
-// 导出API服务 - 使用glob导入避免复杂的路径指定
-// space 模块显式导出
+// 导出API服务 - 使用通配符导出space模块的所有内容
 #[allow(deprecated)]
-// space 模块显式导出
-pub use space::{
-    CopyWikiSpaceNodeParams,
-    CopyWikiSpaceNodeRequest,
-    CopyWikiSpaceNodeResponse,
-    CreateWikiSpaceMemberParams,
-    CreateWikiSpaceMemberRequest,
-    CreateWikiSpaceMemberResponse,
-    CreateWikiSpaceNodeParams,
-    CreateWikiSpaceNodeRequest,
-    CreateWikiSpaceNodeResponse,
-    CreateWikiSpaceParams,
-    CreateWikiSpaceRequest,
-    CreateWikiSpaceResponse,
-    DeleteWikiSpaceMemberParams,
-    DeleteWikiSpaceMemberRequest,
-    DeleteWikiSpaceMemberResponse,
-    GetWikiSpaceNodeParams,
-    GetWikiSpaceNodeRequest,
-    GetWikiSpaceNodeResponse,
-    GetWikiSpaceRequest,
-    GetWikiSpaceResponse,
-    ListWikiSpaceMembersParams,
-    ListWikiSpaceMembersRequest,
-    ListWikiSpaceMembersResponse,
-    ListWikiSpaceNodesParams,
-    ListWikiSpaceNodesRequest,
-    ListWikiSpaceNodesResponse,
-    ListWikiSpacesParams,
-    ListWikiSpacesRequest,
-    ListWikiSpacesResponse,
-    MoveDocsToWikiParams,
-    MoveDocsToWikiRequest,
-    MoveDocsToWikiResponse,
-    MoveWikiSpaceNodeParams,
-    MoveWikiSpaceNodeRequest,
-    MoveWikiSpaceNodeResponse,
-    UpdateWikiSpaceNodeTitleParams,
-    UpdateWikiSpaceNodeTitleRequest,
-    UpdateWikiSpaceNodeTitleResponse,
-    UpdateWikiSpaceSettingRequest,
-    UpdateWikiSpaceSettingResponse,
-};
+pub use space::*;

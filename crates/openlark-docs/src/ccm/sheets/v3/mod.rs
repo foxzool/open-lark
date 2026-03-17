@@ -35,21 +35,29 @@ pub mod spreadsheet;
 // pub mod spreadsheet_info; // Generated: Module file not found
 
 // 重新导出所有服务类型
-// pub use charts::*; // Generated: Module use not found
-// pub use comments::*; // Generated: Module use not found
-// pub use conditional_format::*; // Generated: Module use not found
-// pub use data_filter::*; // Generated: Module use not found
-// pub use filter_views::*; // Generated: Module use not found
-// pub use find_replace::*; // 暂时注释
-// pub use float_images::*; // Generated: Module use not found
-// pub use macros::*; // Generated: Module use not found
-// pub use move_dimension::*; // 暂时注释
-// pub use pivot_tables::*; // Generated: Module use not found
-// pub use sheet::*; // Generated: Module use not found
-// pub use sheet_protection::*; // Generated: Module use not found
-// pub use crate::ccm::sheets::*;
-// pub use crate::ccm::sheets_create::*;
-// pub use crate::ccm::sheets_info::*;
+pub use spreadsheet::{
+    CreateFilterConditionRequest, CreateFilterConditionResponse, CreateFilterRequest,
+    CreateFilterResponse, CreateFilterViewRequest, CreateFilterViewResponse,
+    CreateFloatImageRequest, CreateFloatImageResponse, CreateSpreadsheetParams,
+    CreateSpreadsheetResponse, CreatedSpreadsheet, DeleteFilterConditionResponse,
+    DeleteFilterResponse, DeleteFilterViewResponse, DeleteFloatImageResponse,
+    DimensionSource, FindCondition, FindParams, FindReplaceParams, FindReplaceResponse,
+    FindResponse, FindResult, GetFilterConditionResponse, GetFilterResponse,
+    GetFilterViewResponse, GetFloatImageResponse, GetSheetResponse, GetSpreadsheetResponse,
+    GridProperties, MergeRange, MoveDimensionParams, MoveDimensionResponse, QueryFilterConditionsResponse,
+    QueryFilterViewsResponse, QueryFloatImagesResponse, QuerySheetResponse, Sheet,
+    SpreadsheetInfo, UpdateFilterConditionRequest, UpdateFilterConditionResponse,
+    UpdateFilterRequest, UpdateFilterResponse, UpdateFilterViewRequest,
+    UpdateFilterViewResponse, UpdateFloatImageRequest, UpdateFloatImageResponse,
+    UpdateSpreadsheetParams, UpdateSpreadsheetResponse,
+};
+// 重新导出 models 中的类型（排除已在 spreadsheet 中导出的类型，以及模块顶部定义的类型别名）
+pub use models::{
+    CellPosition, CellReference, FilterCondition, FilterInfo, FilterViewCondition,
+    FilterViewId, FilterViewInfo, FloatImageId, FloatImageInfo, FloatImageToken, Locale,
+    PagedResponse, ReplaceCellsRequest, ReplaceResult, SheetInfo, SheetProperty, SheetsResponse,
+    TimeZone,
+};
 
 /// Sheets 服务主结构
 #[derive(Clone, Debug)]

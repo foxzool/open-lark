@@ -14,7 +14,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::ccm::docx::common_types::DocxBlock;
+use crate::ccm::docx::models::common_types::DocxBlock;
 
 /// 获取所有子块请求参数
 #[derive(Debug, Clone, Serialize, Deserialize)]

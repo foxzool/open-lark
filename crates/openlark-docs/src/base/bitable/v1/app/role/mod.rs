@@ -60,9 +60,5 @@ pub use update::{
     UpdateAppRoleResponse,
 };
 
-// 兼容历史导出（在 app/mod.rs 中被引用）
-pub use create::CreateAppRoleRequestBody;
-pub use update::UpdateAppRoleRequestBody;
-
 // Type alias for compatibility
 pub type ServiceType = ();

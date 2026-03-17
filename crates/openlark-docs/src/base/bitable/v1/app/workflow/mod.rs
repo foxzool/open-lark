@@ -3,7 +3,7 @@ pub mod list;
 pub mod update;
 
 pub use list::{ListWorkflowRequest, ListWorkflowResponse, Workflow};
-pub use update::{UpdateWorkflowRequest, UpdateWorkflowResponse, WorkflowStatus};
+pub use update::{UpdateWorkflowBody, UpdateWorkflowRequest, UpdateWorkflowResponse, WorkflowStatus};
 
 // Type alias for compatibility
 pub type ServiceType = ();

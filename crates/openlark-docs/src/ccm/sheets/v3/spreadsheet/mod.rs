@@ -5,11 +5,7 @@ pub mod models;
 pub mod patch;
 pub mod sheet;
 
-// 使用通配符重新导出所有子模块,避免手动维护大量重复的导出列表
-// create 模块显式导出
-pub use create::{};
-// get 模块显式导出
-pub use get::{};
+// create 和 get 模块保留但不导出具体类型
 // models 模块显式导出
 pub use models::{
     CreateSpreadsheetParams,
@@ -34,8 +30,7 @@ pub use models::{
     UpdateSpreadsheetParams,
     UpdateSpreadsheetResponse,
 };
-// patch 模块显式导出
-pub use patch::{};
+
 // sheet 模块显式导出
 pub use sheet::{
     CreateFilterConditionRequest,

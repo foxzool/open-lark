@@ -9,17 +9,17 @@ pub mod move_docs_to_wiki;
 pub mod update_title;
 
 // 显式导出 - 避免使用 glob reexport
-pub use copy::{CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse};
+pub use copy::{CopyWikiSpaceNodeParams, CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse};
 
 pub use create::{
     CreateWikiSpaceNodeParams, CreateWikiSpaceNodeRequest, CreateWikiSpaceNodeResponse,
 };
 
-pub use list::{ListWikiSpaceNodesRequest, ListWikiSpaceNodesResponse};
+pub use list::{ListWikiSpaceNodesParams, ListWikiSpaceNodesRequest, ListWikiSpaceNodesResponse};
 
 #[allow(deprecated)]
-pub use move_docs_to_wiki::{MoveDocsToWikiRequest, MoveDocsToWikiResponse};
+pub use move_docs_to_wiki::{MoveDocsToWikiParams, MoveDocsToWikiRequest, MoveDocsToWikiResponse};
 
-pub use r#move::{MoveWikiSpaceNodeRequest, MoveWikiSpaceNodeResponse};
+pub use r#move::{MoveWikiSpaceNodeParams, MoveWikiSpaceNodeRequest, MoveWikiSpaceNodeResponse};
 
-pub use update_title::{UpdateWikiSpaceNodeTitleRequest, UpdateWikiSpaceNodeTitleResponse};
+pub use update_title::{UpdateWikiSpaceNodeTitleParams, UpdateWikiSpaceNodeTitleRequest, UpdateWikiSpaceNodeTitleResponse};

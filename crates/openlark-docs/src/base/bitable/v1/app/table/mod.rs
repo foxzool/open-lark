@@ -37,22 +37,30 @@ pub use batch_delete::{BatchDeleteTableRequest, BatchDeleteTableResponse};
 
 // 显式导出子模块类型
 pub use field::{
-    CreateFieldRequest, DeleteFieldRequest, Field, FieldProperty, FieldType, ListFieldRequest,
-    ListFieldResponse, UpdateFieldRequest, UpdateFieldResponse,
+    CreateFieldRequest, CreateFieldResponse, DeleteFieldRequest, DeleteFieldResponse, Field,
+    FieldProperty, FieldType, ListFieldRequest, ListFieldResponse, UpdateFieldRequest,
+    UpdateFieldResponse,
 };
 
 pub use record::{
     BatchCreateRecordRequest, BatchCreateRecordResponse, BatchDeleteRecordRequest,
     BatchDeleteRecordResponse, BatchGetRecordRequest, BatchGetRecordResponse,
-    BatchUpdateRecordRequest, BatchUpdateRecordResponse, CreateRecordRequest, CreateRecordResponse,
-    DeleteRecordRequest, DeleteRecordResponse, GetRecordRequest, GetRecordResponse,
-    ListRecordRequest, ListRecordResponse, Record, SearchRecordRequest, SearchRecordResponse,
-    UpdateRecordRequest, UpdateRecordResponse,
+    BatchUpdateRecordRequest, BatchUpdateRecordResponse, CreateRecordItem, CreateRecordRequest,
+    CreateRecordResponse, DeletedRecord, DeleteRecordRequest, DeleteRecordResponse,
+    FilterCondition, FilterInfo, GetRecordRequest, GetRecordResponse, ListRecordRequest,
+    ListRecordResponse, Person, Record, SearchRecordRequest, SearchRecordRequestBody,
+    SearchRecordResponse, SortCondition, UpdateRecordItem, UpdateRecordRequest, UpdateRecordResponse,
 };
 
-pub use form::{Form, GetFormRequest, GetFormResponse, PatchFormRequest, PatchFormResponse};
+pub use form::{
+    Form, FormFieldQuestion, GetFormRequest, GetFormResponse, ListFormFieldQuestionRequest,
+    ListFormFieldQuestionResponse, PatchFormFieldQuestionBuilder, PatchFormFieldQuestionRequest,
+    PatchFormFieldQuestionResponse, PatchFormFieldRequest, PatchFormRequest, PatchFormResponse,
+    PatchedFormFieldQuestion,
+};
 
 pub use view::{
-    CreateViewData, CreateViewRequest, CreateViewResponse, ListViewsRequest, ListViewsResponse,
-    PatchViewData, PatchViewRequest, PatchViewResponse, View,
+    CreateViewData, CreateViewRequest, CreateViewResponse, DeleteViewRequest, DeleteViewResponse,
+    GetViewRequest, GetViewResponse, ListViewsRequest, ListViewsResponse, PatchViewData,
+    PatchViewRequest, PatchViewResponse, View,
 };

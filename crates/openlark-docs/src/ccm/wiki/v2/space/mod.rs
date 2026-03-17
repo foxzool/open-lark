@@ -25,12 +25,14 @@ pub use member::{
     DeleteWikiSpaceMemberResponse, ListWikiSpaceMembersRequest, ListWikiSpaceMembersResponse,
 };
 
+#[allow(deprecated)]
 pub use node::{
-    CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse, CreateWikiSpaceNodeParams,
-    CreateWikiSpaceNodeRequest, CreateWikiSpaceNodeResponse, ListWikiSpaceNodesRequest,
-    ListWikiSpaceNodesResponse, MoveDocsToWikiRequest, MoveDocsToWikiResponse,
-    MoveWikiSpaceNodeRequest, MoveWikiSpaceNodeResponse, UpdateWikiSpaceNodeTitleRequest,
-    UpdateWikiSpaceNodeTitleResponse,
+    CopyWikiSpaceNodeParams, CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse,
+    CreateWikiSpaceNodeParams, CreateWikiSpaceNodeRequest, CreateWikiSpaceNodeResponse,
+    ListWikiSpaceNodesParams, ListWikiSpaceNodesRequest, ListWikiSpaceNodesResponse,
+    MoveDocsToWikiParams, MoveDocsToWikiRequest, MoveDocsToWikiResponse,
+    MoveWikiSpaceNodeParams, MoveWikiSpaceNodeRequest, MoveWikiSpaceNodeResponse,
+    UpdateWikiSpaceNodeTitleParams, UpdateWikiSpaceNodeTitleRequest, UpdateWikiSpaceNodeTitleResponse,
 };
 
 pub use setting::{UpdateWikiSpaceSettingRequest, UpdateWikiSpaceSettingResponse};
