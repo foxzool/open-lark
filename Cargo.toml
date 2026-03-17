@@ -209,6 +209,8 @@ once_cell = { workspace = true }
 mockall = { workspace = true }
 colored = "2.1"
 clap = { version = "4.4", features = ["derive"] }
+tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
+reqwest = { workspace = true }
 
 [lib]
 name = "open_lark"
@@ -222,6 +224,11 @@ harness = false
 name = "websocket_echo_bot"
 path = "examples/01_getting_started/websocket_echo_bot.rs"
 required-features = ["communication", "websocket"]
+
+[[example]]
+name = "workflow_api_example"
+path = "examples/workflow_api_example.rs"
+required-features = ["workflow"]
 
 [features]
 default = ["core-services"]
