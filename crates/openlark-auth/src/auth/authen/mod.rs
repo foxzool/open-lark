@@ -7,7 +7,10 @@
 //! - oidc.access_token.create: 获取user_access_token (OIDC)
 //! - oidc.refresh_access_token.create: 刷新user_access_token (OIDC)
 
-// 重新导出具体API实现
-pub use self::v1::*;
+// v1 模块显式导出
+pub use v1::{
+    AuthenServiceV1, OidcAccessTokenBuilder, OidcRefreshAccessTokenBuilder, OidcService,
+    RefreshUserAccessTokenV1Builder, UserAccessTokenV1Builder, UserInfoBuilder, UserInfoService,
+};
 
 pub mod v1;

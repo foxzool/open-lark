@@ -76,7 +76,17 @@ pub use message::{
     CreateTicketMessageRequest, CreateTicketMessageRequestBuilder, ListTicketMessageRequest,
     ListTicketMessageRequestBuilder,
 };
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    CreateTicketBody,
+    CreateTicketResponse,
+    DeleteTicketResponse,
+    GetTicketResponse,
+    TicketItem,
+    TicketListResponse,
+    UpdateTicketBody,
+    UpdateTicketResponse,
+};
 pub use start_service::StartServiceRequest;
 pub use ticket_image::GetTicketImageRequest;
 pub use update::UpdateTicketRequest;

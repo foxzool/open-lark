@@ -4,4 +4,10 @@
 pub mod create;
 
 // 使用通配符导出所有子模块
-pub use create::*;
+// create 模块显式导出
+pub use create::{
+    BlockIdRelation,
+    CreateDocumentBlockDescendantParams,
+    CreateDocumentBlockDescendantRequest,
+    CreateDocumentBlockDescendantResponse,
+};

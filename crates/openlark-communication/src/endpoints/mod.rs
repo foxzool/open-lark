@@ -10,11 +10,17 @@ pub mod mail;
 pub mod moments;
 pub mod vc;
 
-// Re-export commonly used endpoints
+// aily 模块显式导出
 pub use aily::*;
+// contact 模块显式导出
 pub use contact::*;
+// event 模块显式导出
 pub use event::*;
+// im 模块显式导出
 pub use im::*;
+// mail 模块显式导出
 pub use mail::*;
+// moments 模块显式导出
 pub use moments::*;
+// vc 模块显式导出
 pub use vc::*;

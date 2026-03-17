@@ -5,5 +5,12 @@ pub mod content;
 pub mod models;
 
 // 使用通配符导出所有子模块
-pub use content::*;
-pub use models::*;
+// content 模块显式导出
+pub use content::{
+    GetDocsContentRequest,
+    GetDocsContentResponse,
+};
+// models 模块显式导出
+pub use models::{
+    DocsContent,
+};

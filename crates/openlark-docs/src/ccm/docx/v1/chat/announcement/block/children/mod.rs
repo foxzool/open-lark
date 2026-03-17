@@ -6,6 +6,21 @@ pub mod create;
 pub mod get;
 
 // 使用通配符导出所有子模块
-pub use batch_delete::*;
-pub use create::*;
-pub use get::*;
+// batch_delete 模块显式导出
+pub use batch_delete::{
+    BatchDeleteChatAnnouncementBlockChildrenParams,
+    BatchDeleteChatAnnouncementBlockChildrenRequest,
+    BatchDeleteChatAnnouncementBlockChildrenResponse,
+};
+// create 模块显式导出
+pub use create::{
+    CreateChatAnnouncementBlockChildrenParams,
+    CreateChatAnnouncementBlockChildrenRequest,
+    CreateChatAnnouncementBlockChildrenResponse,
+};
+// get 模块显式导出
+pub use get::{
+    GetChatAnnouncementBlockChildrenParams,
+    GetChatAnnouncementBlockChildrenRequest,
+    GetChatAnnouncementBlockChildrenResponse,
+};

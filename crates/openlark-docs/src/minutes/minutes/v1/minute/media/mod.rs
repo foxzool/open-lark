@@ -2,4 +2,8 @@
 pub mod get;
 
 // 使用通配符导出所有子模块
-pub use get::*;
+// get 模块显式导出
+pub use get::{
+    GetMinuteMediaRequest,
+    GetMinuteMediaResponse,
+};

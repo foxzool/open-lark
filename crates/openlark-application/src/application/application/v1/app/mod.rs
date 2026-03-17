@@ -20,7 +20,10 @@ impl App {
 }
 
 pub use get::GetAppRequest;
-pub use models::*;
+// models 模块显式导出
+pub use models::{
+    GetAppResponse,
+};
 
 #[cfg(test)]
 #[allow(unused_imports)]

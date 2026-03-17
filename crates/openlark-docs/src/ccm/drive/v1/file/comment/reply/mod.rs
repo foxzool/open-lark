@@ -13,7 +13,28 @@ pub fn validate_comment_file_type_for_list_like(file_type: &str) -> SDKResult<()
 }
 
 // 使用通配符导出所有子模块
-pub use delete::*;
-pub use list::*;
-pub use models::*;
-pub use update::*;
+// delete 模块显式导出
+pub use delete::{
+    DeleteCommentReplyRequest,
+    DeleteCommentReplyResponse,
+};
+// list 模块显式导出
+pub use list::{
+    ListCommentReplyRequest,
+    ListCommentReplyResponse,
+};
+// models 模块显式导出
+pub use models::{
+    DocsLink,
+    Person,
+    ReplyContent,
+    ReplyElement,
+    ReplyExtra,
+    ReplyInfo,
+    TextRun,
+};
+// update 模块显式导出
+pub use update::{
+    UpdateReplyRequest,
+    UpdateReplyResponse,
+};

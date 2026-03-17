@@ -9,8 +9,19 @@ pub mod section;
 pub mod comment;
 
 // 重新导出所有子模块
-pub use custom_field::*;
-pub use task::*;
-pub use tasklist::*;
-pub use section::*;
-pub use comment::*;
+// custom_field 模块显式导出
+pub use custom_field::{
+    PatchCustomFieldBody,
+    PatchCustomFieldRequest,
+    PatchCustomFieldResponse,
+};
+// task 模块显式导出
+pub use task::{};
+// tasklist 模块显式导出
+pub use tasklist::{};
+// section 模块显式导出
+pub use section::{};
+// comment 模块显式导出
+pub use comment::{
+    PatchCommentRequest,
+};
