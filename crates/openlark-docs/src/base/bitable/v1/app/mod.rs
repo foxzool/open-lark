@@ -55,15 +55,14 @@ pub use dashboard::{
 
 // 显式导出 role（避免 create/delete/list/update 模块名与 table 冲突）
 pub use role::{
-    BlockRole, CreateAppRoleRequest, CreateAppRoleRequestBody, CreateAppRoleResponse,
-    DeleteAppRoleRequest, DeleteAppRoleResponse, ListAppRoleRequest, ListAppRoleResponse, Role,
-    ServiceType, TableRole, UpdateAppRoleRequest, UpdateAppRoleRequestBody, UpdateAppRoleResponse,
+    BatchCreateRoleMemberRequest, BatchCreateRoleMemberResponse, BatchDeleteRoleMemberRequest,
+    BatchDeleteRoleMemberResponse, BlockRole, CreateAppRoleRequest, CreateAppRoleRequestBody,
+    CreateAppRoleResponse, CreateRoleMemberRequest, CreateRoleMemberResponse, DeleteAppRoleRequest,
+    DeleteAppRoleResponse, DeleteRoleMemberRequest, DeleteRoleMemberResponse, ListAppRoleRequest,
+    ListAppRoleResponse, ListRoleMembersRequest, ListRoleMembersResponse, Role, RoleMemberId,
+    RoleMemberIdType, RoleMemberInfo, RoleMemberType, ServiceType, TableRole, UpdateAppRoleRequest,
+    UpdateAppRoleRequestBody, UpdateAppRoleResponse,
 };
 
 // 显式导出 table（避免 create/delete/list 模块名与 role 冲突）
-pub use table::{
-    BatchCreateTableRequest, BatchCreateTableResponse, BatchDeleteTableRequest,
-    BatchDeleteTableResponse, CreateTableRequest, CreateTableResponse, DeleteTableRequest,
-    DeleteTableResponse, Field, FieldDescription, FieldProperty, FieldType, ListTablesRequest,
-    ListTablesResponse, PatchTableRequest, PatchTableResponse, TableData, TableField, TableInfo,
-};
+pub use table::*;

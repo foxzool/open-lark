@@ -14,13 +14,13 @@ pub mod search;
 pub mod update;
 
 // 显式导出 - 避免使用 glob reexport
-pub use batch_create::{BatchCreateRecordRequest, BatchCreateRecordResponse};
+pub use batch_create::{BatchCreateRecordRequest, BatchCreateRecordResponse, CreateRecordItem};
 
-pub use batch_delete::{BatchDeleteRecordRequest, BatchDeleteRecordResponse};
+pub use batch_delete::{BatchDeleteRecordRequest, BatchDeleteRecordResponse, DeletedRecord};
 
 pub use batch_get::{BatchGetRecordRequest, BatchGetRecordResponse};
 
-pub use batch_update::{BatchUpdateRecordRequest, BatchUpdateRecordResponse};
+pub use batch_update::{BatchUpdateRecordRequest, BatchUpdateRecordResponse, UpdateRecordItem};
 
 pub use create::{CreateRecordRequest, CreateRecordResponse};
 
@@ -32,6 +32,6 @@ pub use list::{ListRecordRequest, ListRecordResponse};
 
 pub use models::{Person, Record};
 
-pub use search::{SearchRecordRequest, SearchRecordResponse};
+pub use search::{FilterCondition, FilterInfo, SearchRecordRequest, SearchRecordRequestBody, SearchRecordResponse, SortCondition};
 
 pub use update::{UpdateRecordRequest, UpdateRecordResponse};

@@ -1,32 +1,7 @@
 pub mod app;
 
 // app 模块显式导出
-
-pub use app::{
-
-    AppGetResponse,
-
-    CreateAppRequest,
-
-    CreateAppResponse,
-
-    DeleteAppRequest,
-
-    DeleteAppResponse,
-
-    GetAppRequest,
-
-    GetAppResponse,
-
-    ListAppRequest,
-
-    ListAppResponse,
-
-    PatchAppRequest,
-
-    PatchAppResponse,
-
-};
+pub use app::{GetAppRequest, GetAppResponse};
 
 use openlark_core::config::Config;
 use std::sync::Arc;

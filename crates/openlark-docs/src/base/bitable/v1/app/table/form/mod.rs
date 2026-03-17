@@ -9,8 +9,8 @@ pub mod patch;
 // 显式导出 - 避免使用 glob reexport
 pub use field::{
     FormFieldQuestion, ListFormFieldQuestionRequest, ListFormFieldQuestionResponse,
-    PatchFormFieldQuestionRequest, PatchFormFieldQuestionResponse, PatchFormFieldRequest,
-    PatchedFormFieldQuestion,
+    PatchFormFieldQuestionBuilder, PatchFormFieldQuestionRequest, PatchFormFieldQuestionResponse,
+    PatchFormFieldRequest, PatchedFormFieldQuestion,
 };
 
 pub use get::{GetFormRequest, GetFormResponse};

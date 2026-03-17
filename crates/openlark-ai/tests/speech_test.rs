@@ -1,7 +1,5 @@
 //! Speech 集成测试
 
-use openlark_ai::prelude::*;
-
 /// 语音文件识别测试占位
 #[test]
 fn test_file_recognize_placeholder() {

@@ -12,7 +12,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::ccm::docx::common_types::DocxBlock;
+use crate::ccm::docx::models::common_types::DocxBlock;
 use crate::common::{api_endpoints::DocxApiV1, api_utils::*};
 
 /// 获取所有子块请求参数

@@ -17,6 +17,18 @@ pub enum WebhookError {
     MissingField(String),
 }
 
+impl PartialEq for WebhookError {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::Http(a), Self::Http(b)) => a == b,
+            (Self::Serialization(_), Self::Serialization(_)) => true,
+            (Self::InvalidSignature, Self::InvalidSignature) => true,
+            (Self::MissingField(a), Self::MissingField(b)) => a == b,
+            _ => false,
+        }
+    }
+}
+
 pub type Result<T> = std::result::Result<T, WebhookError>;
 
 #[cfg(test)]
@@ -58,7 +70,7 @@ mod tests {
     #[test]
     fn test_result_type() {
         let ok_result: Result<i32> = Ok(42);
-        assert_eq!(ok_result.unwrap(), 42);
+        assert_eq!(ok_result, Ok(42));
 
         let err_result: Result<i32> = Err(WebhookError::InvalidSignature);
         assert!(err_result.is_err());

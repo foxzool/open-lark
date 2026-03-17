@@ -13,16 +13,16 @@ pub mod update;
 // 显式导出 - 避免使用 glob reexport
 pub use create::{CreateEntityReq, CreateEntityRequest, CreateEntityResp};
 
-pub use extract::{ExtractEntityRequest, ExtractEntityResponse};
+pub use extract::{ExtractedWord, ExtractEntityReqBody, ExtractEntityRequest, ExtractEntityResponse};
 
 pub use get::{GetEntityRequest, GetEntityResp};
 
-pub use highlight::{HighlightEntityRequest, HighlightEntityResponse};
+pub use highlight::{HighlightEntityReqBody, HighlightEntityRequest, HighlightEntityResponse, Phrase, Span};
 
 pub use list::{ListEntityRequest, ListEntityResp};
 
-pub use r#match::{MatchEntityRequest, MatchEntityResp};
+pub use r#match::{MatchEntityReq, MatchEntityRequest, MatchEntityResp, MatchEntityResult};
 
-pub use search::{SearchEntityRequest, SearchEntityResponse};
+pub use search::{ClassificationFilter, SearchEntityReqBody, SearchEntityRequest, SearchEntityResponse};
 
 pub use update::{UpdateEntityReq, UpdateEntityRequest, UpdateEntityResp};

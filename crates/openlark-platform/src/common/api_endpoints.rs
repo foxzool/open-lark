@@ -32,7 +32,7 @@ mod tests {
 
     #[test]
     fn test_adminapiv1_path_coverage() {
-        let paths = vec![AdminApiV1::CreateBadge.path(), AdminApiV1::ListBadge.path()];
+        let paths = [AdminApiV1::CreateBadge.path(), AdminApiV1::ListBadge.path()];
         assert!(paths.iter().all(|path| path.starts_with("/open-apis/")));
     }
 }
