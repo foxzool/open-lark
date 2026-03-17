@@ -78,14 +78,8 @@ pub use message::{
 };
 // models 模块显式导出
 pub use models::{
-    CreateTicketBody,
-    CreateTicketResponse,
-    DeleteTicketResponse,
-    GetTicketResponse,
-    TicketItem,
-    TicketListResponse,
-    UpdateTicketBody,
-    UpdateTicketResponse,
+    CreateTicketBody, CreateTicketResponse, DeleteTicketResponse, GetTicketResponse, TicketItem,
+    TicketListResponse, UpdateTicketBody, UpdateTicketResponse,
 };
 pub use start_service::StartServiceRequest;
 pub use ticket_image::GetTicketImageRequest;

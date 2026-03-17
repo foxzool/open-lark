@@ -25,7 +25,7 @@ pub use filter_view::{
 
 // 显式导出 float_image 模块的类型
 pub use float_image::{
-    CreateFloatImageRequest, CreateFloatImageResponse, DeleteFloatImageResponse,
-    FloatImage, GetFloatImageResponse, QueryFloatImagesResponse, UpdateFloatImageRequest,
+    CreateFloatImageRequest, CreateFloatImageResponse, DeleteFloatImageResponse, FloatImage,
+    GetFloatImageResponse, QueryFloatImagesResponse, UpdateFloatImageRequest,
     UpdateFloatImageResponse,
 };

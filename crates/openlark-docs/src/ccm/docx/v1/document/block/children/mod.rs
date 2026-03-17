@@ -8,19 +8,16 @@ pub mod get;
 // 使用通配符导出所有子模块
 // batch_delete 模块显式导出
 pub use batch_delete::{
-    BatchDeleteDocumentBlockChildrenParams,
-    BatchDeleteDocumentBlockChildrenRequest,
+    BatchDeleteDocumentBlockChildrenParams, BatchDeleteDocumentBlockChildrenRequest,
     BatchDeleteDocumentBlockChildrenResponse,
 };
 // create 模块显式导出
 pub use create::{
-    CreateDocumentBlockChildrenParams,
-    CreateDocumentBlockChildrenRequest,
+    CreateDocumentBlockChildrenParams, CreateDocumentBlockChildrenRequest,
     CreateDocumentBlockChildrenResponse,
 };
 // get 模块显式导出
 pub use get::{
-    GetDocumentBlockChildrenParams,
-    GetDocumentBlockChildrenRequest,
+    GetDocumentBlockChildrenParams, GetDocumentBlockChildrenRequest,
     GetDocumentBlockChildrenResponse,
 };

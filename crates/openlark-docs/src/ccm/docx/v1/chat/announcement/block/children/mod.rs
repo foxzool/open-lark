@@ -14,13 +14,11 @@ pub use batch_delete::{
 };
 // create 模块显式导出
 pub use create::{
-    CreateChatAnnouncementBlockChildrenParams,
-    CreateChatAnnouncementBlockChildrenRequest,
+    CreateChatAnnouncementBlockChildrenParams, CreateChatAnnouncementBlockChildrenRequest,
     CreateChatAnnouncementBlockChildrenResponse,
 };
 // get 模块显式导出
 pub use get::{
-    GetChatAnnouncementBlockChildrenParams,
-    GetChatAnnouncementBlockChildrenRequest,
+    GetChatAnnouncementBlockChildrenParams, GetChatAnnouncementBlockChildrenRequest,
     GetChatAnnouncementBlockChildrenResponse,
 };

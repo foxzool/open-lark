@@ -32,6 +32,9 @@ pub use list::{ListRecordRequest, ListRecordResponse};
 
 pub use models::{Person, Record};
 
-pub use search::{FilterCondition, FilterInfo, SearchRecordRequest, SearchRecordRequestBody, SearchRecordResponse, SortCondition};
+pub use search::{
+    FilterCondition, FilterInfo, SearchRecordRequest, SearchRecordRequestBody,
+    SearchRecordResponse, SortCondition,
+};
 
 pub use update::{UpdateRecordRequest, UpdateRecordResponse};

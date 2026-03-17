@@ -11,23 +11,10 @@ pub use crate::ccm::sheets::v3::models::{
 
 // create 模块显式导出
 
-pub use create::{
-
-    CreateFilterRequest,
-
-    CreateFilterResponse,
-
-};
+pub use create::{CreateFilterRequest, CreateFilterResponse};
 // delete 模块显式导出
-pub use delete::{
-    DeleteFilterResponse,
-};
+pub use delete::DeleteFilterResponse;
 // get 模块显式导出
-pub use get::{
-    GetFilterResponse,
-};
+pub use get::GetFilterResponse;
 // update 模块显式导出
-pub use update::{
-    UpdateFilterRequest,
-    UpdateFilterResponse,
-};
+pub use update::{UpdateFilterRequest, UpdateFilterResponse};

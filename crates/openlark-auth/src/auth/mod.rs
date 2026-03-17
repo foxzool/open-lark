@@ -11,8 +11,8 @@
 
 // v3 auth 模块显式导出
 pub use self::auth::v3::auth::{
-    AppAccessTokenBuilder, AppAccessTokenInternalBuilder, AppTicketResendBuilder,
-    AuthServiceV3, TenantAccessTokenBuilder, TenantAccessTokenInternalRequestBuilder,
+    AppAccessTokenBuilder, AppAccessTokenInternalBuilder, AppTicketResendBuilder, AuthServiceV3,
+    TenantAccessTokenBuilder, TenantAccessTokenInternalRequestBuilder,
 };
 
 pub mod auth;

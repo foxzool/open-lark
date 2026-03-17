@@ -7,20 +7,10 @@ pub mod set_room_access_code;
 
 // 导出所有模块内容
 // query 模块显式导出
-pub use query::{
-    QueryRoomConfigRequest,
-    QueryRoomConfigResponse,
-    RoomConfigItem,
-};
+pub use query::{QueryRoomConfigRequest, QueryRoomConfigResponse, RoomConfigItem};
 // set 模块显式导出
-pub use set::{
-    SetRoomConfigRequest,
-};
+pub use set::SetRoomConfigRequest;
 // set_checkboard_access_code 模块显式导出
-pub use set_checkboard_access_code::{
-    SetCheckboardAccessCodeRequest,
-};
+pub use set_checkboard_access_code::SetCheckboardAccessCodeRequest;
 // set_room_access_code 模块显式导出
-pub use set_room_access_code::{
-    SetRoomAccessCodeRequest,
-};
+pub use set_room_access_code::SetRoomAccessCodeRequest;
