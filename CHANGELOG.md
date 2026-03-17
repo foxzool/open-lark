@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.0-rc.1] - 2026-03-17
+
 ### ✨ 新增功能
 
 - **feat(webhook)**: 集成 openlark-webhook 模块到工作空间（8 个 API）
@@ -20,17 +22,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **feat(ai)**: 完成 openlark-ai 模块 27 个 API 实现
 - **feat**: 实现缺失的 bizTag API（100% 覆盖）
 - **feat(examples)**: 新增长连接 WebSocket Echo 示例并补充测试
+- **feat(core)**: 新增测试基础设施模块（testing）
+  - `test_runtime()` - 安全的测试运行时
+  - `assert_res_ok!`, `assert_err_contains!` 等断言宏
+- **feat(client)**: 新增 LazyService 延迟初始化工具
 - **docs**: 添加 AGENTS.md 项目知识库
 
 ### 🔄 变更
 
 - **refactor(docs)**: 简化 API 入口设计，删除 Service 层，统一 Request 模式
-- **refactor(docs)**: 将 glob 重导出转换为显式导出
+- **refactor(docs)**: 将 glob 重导出转换为显式导出（258 → 7 处）
 - **perf(docs)**: 优化 Config 传递，使用 `Arc<Config>` 替代 `Config`
 - **refactor(meeting)**: 统一 Request 模式，删除冗余 RequestBuilder
 - **refactor(hr)**: 统一架构并添加 feature gating 支持
 - **refactor(core)**: 为 testing 模块添加 feature gate
 - **refactor(core)**: 清理未使用的空 features，将测试依赖移动到 dev-dependencies
+- **refactor**: 实现显式导出系统，消除 251+ 个通配符导出
 - **style(security)**: 修复命名规范异常，替换硬编码 URL，统一代码风格
 
 ### 🐛 修复
@@ -42,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **fix(hr)**: 添加 CoreHR 缺失的 API 端点定义并修复语法错误
 - **fix**: 修复 no-default-features 编译错误
 - **fix**: 修复多个 crate 的代码风格和导出
+- **fix(examples)**: 修复 examples 编译错误
 - **fix(ci)**: 修复 Coverage 工作流覆盖率收集问题（多次迭代修复）
 
 ### 🧪 测试
@@ -49,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 大幅提升测试覆盖率至 ~47%
 - 为所有主要模块添加测试：docs、workflow、platform、cardkit、hr、meeting、auth、core
 - 为 workflow v1/v2 模块添加完整测试套件
+- 迁移 44 个测试文件到新框架，消除 144 处 `Runtime::new().unwrap()`
 
 ## [0.15.1] - 2025-11-20
 

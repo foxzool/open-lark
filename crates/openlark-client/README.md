@@ -26,7 +26,7 @@
 
 ```toml
 [dependencies]
-openlark-client = { version = "0.15.0-dev", features = ["docs"] }
+openlark-client = { version = "0.15.0-rc.1", features = ["docs"] }
 ```
 
 ### 功能标志
