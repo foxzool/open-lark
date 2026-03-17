@@ -9,11 +9,40 @@ pub mod table;
 pub mod update;
 pub mod workflow;
 
-pub use copy::*;
-pub use create::*;
-pub use get::*;
-pub use update::*;
-pub use workflow::*;
+// copy 模块显式导出
+
+pub use copy::{
+
+    CopyAppRequest,
+
+    CopyAppResponse,
+
+};
+// create 模块显式导出
+pub use create::{
+    CreateAppRequest,
+    CreateAppResponse,
+};
+// get 模块显式导出
+pub use get::{
+    GetAppRequest,
+    GetAppResponse,
+};
+// update 模块显式导出
+pub use update::{
+    UpdateAppRequest,
+    UpdateAppResponse,
+};
+// workflow 模块显式导出
+pub use workflow::{
+    ListWorkflowRequest,
+    ListWorkflowResponse,
+    UpdateWorkflowBody,
+    UpdateWorkflowRequest,
+    UpdateWorkflowResponse,
+    Workflow,
+    WorkflowStatus,
+};
 
 // 显式导出 models 中不与操作文件冲突的类型
 pub use models::{App, AppService, AppSettings, DeleteAppResponse};

@@ -9,10 +9,35 @@ pub mod patch;
 pub mod search;
 
 // 导出所有模块内容
-pub use create::*;
-pub use delete::*;
-pub use get::*;
-pub use list::*;
+// create 模块显式导出
+pub use create::{
+    CreateRoomRequest,
+    CreateRoomResponse,
+};
+// delete 模块显式导出
+pub use delete::{
+    DeleteRoomRequest,
+    DeleteRoomResponse,
+};
+// get 模块显式导出
+pub use get::{
+    GetRoomRequest,
+    GetRoomResponse,
+};
+// list 模块显式导出
+pub use list::{
+    ListRoomRequest,
+    ListRoomRequestBuilder,
+    ListRoomResponse,
+    RoomItem,
+};
 pub use mget::{MgetRoomRequest, MgetRoomResponse};
-pub use patch::*;
-pub use search::*;
+// patch 模块显式导出
+pub use patch::{
+    PatchRoomRequest,
+    PatchRoomResponse,
+};
+// search 模块显式导出
+pub use search::{
+    SearchRoomRequest,
+};

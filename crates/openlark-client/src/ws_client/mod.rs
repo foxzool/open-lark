@@ -7,7 +7,17 @@ mod frame_handler;
 mod state_machine;
 
 #[cfg(feature = "websocket")]
-pub use client::*;
+// client 模块显式导出
+pub use client::{
+    ClientConfig,
+    EndPointResponse,
+    EventDispatcherHandler,
+    LarkWsClient,
+    WsClientError,
+    WsClientResult,
+    WsCloseReason,
+    WsEvent,
+};
 
 pub use frame_handler::{FrameHandler, FrameType};
 pub use state_machine::{ConnectionState, WebSocketStateMachine};

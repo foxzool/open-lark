@@ -7,6 +7,9 @@ pub mod authen;
 pub mod oauth;
 
 // 重新导出所有公共类型
-pub use auth::*;
-pub use authen::*;
-pub use oauth::*;
+// auth 模块显式导出
+pub use auth::{};
+// authen 模块显式导出
+pub use authen::{};
+// oauth 模块显式导出
+pub use oauth::{};

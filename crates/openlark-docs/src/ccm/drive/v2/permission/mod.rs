@@ -1,4 +1,11 @@
 pub mod public;
 
 // 使用通配符导出所有子模块
-pub use public::*;
+// public 模块显式导出
+pub use public::{
+    GetPermissionPublicRequest,
+    GetPermissionPublicResponse,
+    PermissionPublic,
+    UpdatePermissionPublicRequest,
+    UpdatePermissionPublicResponse,
+};

@@ -9,12 +9,49 @@ pub mod models;
 pub mod patch;
 pub mod update;
 
-pub use content::*;
-pub use create::*;
-pub use delete::*;
-pub use models::*;
-pub use patch::*;
-pub use update::*;
+// content 模块显式导出
+
+pub use content::{
+
+    UpdateCardElementContentBody,
+
+    UpdateCardElementContentRequest,
+
+    UpdateCardElementContentRequestBuilder,
+
+};
+// create 模块显式导出
+pub use create::{
+    CreateCardElementBody,
+    CreateCardElementRequest,
+    CreateCardElementRequestBuilder,
+};
+// delete 模块显式导出
+pub use delete::{
+    DeleteCardElementBody,
+    DeleteCardElementRequest,
+    DeleteCardElementRequestBuilder,
+};
+// models 模块显式导出
+pub use models::{
+    CreateCardElementResponse,
+    DeleteCardElementResponse,
+    PatchCardElementResponse,
+    UpdateCardElementContentResponse,
+    UpdateCardElementResponse,
+};
+// patch 模块显式导出
+pub use patch::{
+    PatchCardElementBody,
+    PatchCardElementRequest,
+    PatchCardElementRequestBuilder,
+};
+// update 模块显式导出
+pub use update::{
+    UpdateCardElementBody,
+    UpdateCardElementRequest,
+    UpdateCardElementRequestBuilder,
+};
 
 use openlark_core::config::Config;
 

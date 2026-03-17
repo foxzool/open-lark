@@ -9,11 +9,43 @@ pub mod transfer_owner;
 pub mod update;
 
 // 使用通配符导出所有子模块,避免维护大量重复的导出列表
-pub use auth::*;
-pub use batch_create::*;
-pub use create::*;
-pub use delete::*;
-pub use list::*;
-pub use models::*;
-pub use transfer_owner::*;
-pub use update::*;
+// auth 模块显式导出
+pub use auth::{
+    AuthPermissionMemberRequest,
+    AuthPermissionMemberResponse,
+};
+// batch_create 模块显式导出
+pub use batch_create::{
+    BatchCreatePermissionMemberRequest,
+    BatchCreatePermissionMemberResponse,
+};
+// create 模块显式导出
+pub use create::{
+    CreatePermissionMemberRequest,
+    CreatePermissionMemberResponse,
+};
+// delete 模块显式导出
+pub use delete::{
+    DeletePermissionMemberRequest,
+    DeletePermissionMemberResponse,
+};
+// list 模块显式导出
+pub use list::{
+    ListPermissionMembersRequest,
+    ListPermissionMembersResponse,
+};
+// models 模块显式导出
+pub use models::{
+    PermissionMember,
+    PermissionMemberItem,
+};
+// transfer_owner 模块显式导出
+pub use transfer_owner::{
+    TransferOwnerRequest,
+    TransferOwnerResponse,
+};
+// update 模块显式导出
+pub use update::{
+    UpdatePermissionMemberRequest,
+    UpdatePermissionMemberResponse,
+};

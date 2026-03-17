@@ -9,8 +9,11 @@
 
 #![allow(clippy::module_inception)]
 
-// 重新导出具体API实现
-pub use self::auth::v3::{auth::*, AuthServiceV3};
+// v3 auth 模块显式导出
+pub use self::auth::v3::auth::{
+    AppAccessTokenBuilder, AppAccessTokenInternalBuilder, AppTicketResendBuilder,
+    AuthServiceV3, TenantAccessTokenBuilder, TenantAccessTokenInternalRequestBuilder,
+};
 
 pub mod auth;
 pub mod authen;
