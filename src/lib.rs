@@ -58,3 +58,11 @@ pub use openlark_user;
 
 #[cfg(feature = "webhook")]
 pub use openlark_webhook;
+
+#[cfg(feature = "cardkit")]
+pub use openlark_cardkit;
+
+/// Prelude module for convenient imports
+pub mod prelude {
+    pub use openlark_core::prelude::*;
+}
