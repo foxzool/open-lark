@@ -1,0 +1,96 @@
+# Task 7 - RC Documentation Convergence
+
+## Documentation Audit Summary
+
+### Current State (from Task 2)
+- ✅ README quick start promotes `open-lark` correctly
+- ❌ README "Basic Usage" uses direct sub-crate imports
+- ❌ Examples use sub-crates and manual `reqwest` calls
+- ❌ CHANGELOG focuses on internal crate names
+
+## RC Documentation Fixes Required
+
+### 1. README.md Updates
+
+#### Section: Basic Usage (Lines ~60-90)
+**Current**: Uses `use openlark_docs::base::bitable::...`
+**Required**: Use `use open_lark::...` or `use open_lark::prelude::*;`
+
+**Example Fix**:
+```rust
+// Before
+use openlark_docs::base::bitable::v1::app::table::{CreateTableRequest, TableData};
+
+// After
+use open_lark::prelude::*;
+// or explicitly
+use open_lark::docs::base::bitable::v1::app::table::{CreateTableRequest, TableData};
+```
+
+### 2. Example Files Updates
+
+#### File: `examples/01_getting_started/first_api_call.rs`
+**Issues**:
+- Uses `openlark_communication` and `openlark_auth` directly
+- Manual HTTP request construction with `reqwest`
+
+**Required**: Use `open_lark::Client` facade
+
+#### File: `examples/01_getting_started/websocket_echo_bot.rs`
+**Issues**:
+- Uses multiple sub-crates directly
+- Manual HTTP calls
+
+**Required**: Use unified `open_lark` imports
+
+### 3. Sub-crate README Headers
+
+Each sub-crate README should have this header added:
+
+```markdown
+> **Note**: This is an internal crate. Most users should use the [`open-lark`](https://crates.io/crates/open-lark) 
+> crate with appropriate features instead of depending on this crate directly.
+```
+
+### 4. CHANGELOG.md Style Guide
+
+**Current**: `feat(webhook): 集成 openlark-webhook 模块`
+**Recommended**: `feat(webhook): Add webhook support to open-lark SDK`
+
+Focus on user-facing features, not internal crate names.
+
+## Documentation Fix Checklist
+
+### RC Must Fix (High Priority)
+- [ ] Fix README "Basic Usage" section to use `open-lark` imports
+- [ ] Update `first_api_call.rs` example to use `open_lark::Client`
+- [ ] Update `websocket_echo_bot.rs` example to use unified facade
+- [ ] Add canonical package note to main README
+
+### RC Should Fix (Medium Priority)
+- [ ] Add header to sub-crate READMEs pointing to `open-lark`
+- [ ] Update CHANGELOG to focus on SDK features, not internal crates
+
+### Stable Can Address (Lower Priority)
+- [ ] Full example suite rewrite
+- [ ] Comprehensive migration guide from sub-crates to `open-lark`
+- [ ] Video/tutorial content using unified facade
+
+## Verification
+
+1. Check README examples compile:
+   ```bash
+   cargo check --example first_api_call --features communication,auth
+   ```
+
+2. Verify documentation links work:
+   ```bash
+   cargo doc --no-deps --all-features
+   # Check for broken links
+   ```
+
+3. Test that quickstart flows work:
+   - Fresh clone
+   - `cargo add open-lark --features core-services`
+   - Copy example from README
+   - Should compile without errors

@@ -1,0 +1,39 @@
+# OpenLark Messaging Audit - Task 2
+
+## 1. Overview
+The goal of this audit was to determine if `open-lark` is consistently positioned as the primary entry point for users. While the main README starts strong, there is significant "mixed messaging" and direct sub-crate promotion in examples and deeper documentation.
+
+## 2. Aligned Messaging (Correctly promoting open-lark)
+- **Main README.md (Quick Start)**: Correctly instructs users to add `open-lark = "0.15"` to `Cargo.toml`.
+- **Release Workflow**: The `.github/workflows/release.yml` correctly targets the `open-lark` crate for publishing to crates.io.
+- **Root Cargo.toml**: Correctly implements the facade pattern, where `open-lark` re-exports sub-crates as optional features.
+
+## 3. Misaligned Messaging (Promoting sub-crates or manual implementation)
+- **Main README.md (Basic Usage)**:
+    - Uses direct imports from sub-crates: `use openlark_docs::base::bitable::v1::app::table::{CreateTableRequest, TableData};`
+    - Should instead use `open_lark::prelude::*` or `open_lark::docs::...`.
+- **Examples (Critical)**:
+    - `examples/01_getting_started/first_api_call.rs`:
+        - Uses `openlark_communication` and `openlark_auth` directly.
+        - **Manually constructs HTTP requests** using `reqwest` instead of using the SDK's `Client` and generated API methods. This is highly misleading for a "getting started" example.
+    - `examples/01_getting_started/websocket_echo_bot.rs`:
+        - Uses `openlark_client`, `openlark_communication`, `openlark_core`, and `openlark_auth` directly.
+        - Also manually constructs HTTP requests for the echo message.
+- **CHANGELOG.md**:
+    - Focuses heavily on internal crate names (e.g., `feat(webhook): 集成 openlark-webhook 模块`).
+    - While technically accurate, it doesn't emphasize that these are accessible via the main `open-lark` crate.
+- **Sub-crate Documentation**:
+    - Many sub-crates have their own `README.md` and `AGENTS.md` files that treat the sub-crate as an independent entity without mentioning it should primarily be used via `open-lark`.
+
+## 4. RC Must Fix (High Priority)
+- [ ] **Update Examples**: Rewrite `first_api_call.rs` and `websocket_echo_bot.rs` to use the unified `open_lark` crate and its `Client`/API methods. Remove manual `reqwest` calls.
+- [ ] **Update Main README**: Fix the "Basic Usage" example to use unified imports from `open_lark`.
+- [ ] **Standardize Terminology**: Ensure `open-lark` is referred to as "the SDK" and sub-crates as "modules" or "features".
+
+## 5. Stable Can Address (Medium/Low Priority)
+- [ ] **Sub-crate READMEs**: Add a standard header to all sub-crate `README.md` files explaining that they are part of the `open-lark` SDK and should be used via the main crate.
+- [ ] **Changelog Style**: Shift changelog focus from "crate X updated" to "feature Y added to open-lark".
+- [ ] **Internal Tools**: Some internal scripts still use `openlark-` naming conventions, which is fine for development but should be kept out of public-facing docs.
+
+## 6. Conclusion
+The project is in a "transitional" state. The infrastructure for a single entry point exists, but the documentation and examples (especially the "getting started" ones) still reflect the old "multi-crate" or "manual" approach. This needs to be corrected before the stable release to avoid user confusion.

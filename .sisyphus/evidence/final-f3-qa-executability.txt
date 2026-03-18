@@ -1,0 +1,59 @@
+# F3 - Verification Command Review
+
+## QA Scenario Executability
+
+### Task 1: Feature Audit
+**Command**: Read and compare files
+```bash
+cat Cargo.toml | grep -A 50 "\[features\]"
+cat src/lib.rs | grep "pub use"
+```
+**Status**: ✅ Executable
+
+### Task 2: Messaging Audit
+**Command**: Search documentation
+```bash
+grep -n "open-lark" README.md | head -20
+grep -n "openlark-" README.md | head -20
+```
+**Status**: ✅ Executable
+
+### Task 3: Workflow Audit
+**Command**: Read workflow file
+```bash
+cat .github/workflows/release.yml | grep -A 5 "crates-io-release"
+```
+**Status**: ✅ Executable
+
+### Task 4: Crate Tiering
+**Command**: Count lines per crate
+```bash
+find crates/openlark-hr/src -name "*.rs" -exec wc -l {} + | tail -1
+```
+**Status**: ✅ Executable
+
+### Task 6: Entry Fixes
+**Verification**: Code change validation
+```bash
+grep -n "cardkit" src/lib.rs
+grep -n "prelude" src/lib.rs
+```
+**Status**: ✅ Executable (will fail until fixes applied)
+
+### Task 8: Verification Matrix
+**Commands**: Build and test
+```bash
+cargo build --features core-services
+cargo test --lib --all-features
+```
+**Status**: ✅ Executable
+
+## Command Completeness
+
+All QA scenarios have specific, executable commands. No manual "verify this" steps without commands.
+
+## Status
+
+**Status**: ✅ PASS
+
+All verification commands are concrete and automatable.

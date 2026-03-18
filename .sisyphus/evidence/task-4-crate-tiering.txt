@@ -1,0 +1,85 @@
+# Task 4 - Crate Tiering Analysis (workspace-wide)
+
+日期: 2026-03-18
+范围: `crates/` 下全部 crate 目录（20 个目录；其中 19 个在 workspace members）
+
+## 方法与证据
+
+1) 规模证据（Rust 代码行）
+- 使用 Python 脚本统计 `crates/<name>/src/**/*.rs` 行数：
+  - `openlark-hr` 73,709 LOC / 861 files
+  - `openlark-docs` 54,163 LOC / 367 files
+  - `openlark-communication` 25,808 LOC / 319 files
+  - `openlark-workflow` 18,786 LOC / 166 files
+  - `openlark-core` 15,472 LOC / 40 files
+  - `openlark-platform` 13,616 LOC / 174 files
+  - `openlark-meeting` 13,207 LOC / 177 files
+  - `openlark-helpdesk` 10,489 LOC / 80 files
+  - `openlark-ai` 9,844 LOC / 76 files
+  - `openlark-security` 9,267 LOC / 79 files
+  - `openlark-mail` 8,341 LOC / 96 files
+  - `openlark-client` 7,185 LOC / 21 files
+  - `openlark-auth` 7,255 LOC / 56 files
+  - `openlark-application` 7,083 LOC / 111 files
+  - `openlark-cardkit` 2,624 LOC / 24 files
+  - `openlark-analytics` 1,852 LOC / 28 files
+  - `openlark-user` 1,196 LOC / 17 files
+  - `openlark-webhook` 926 LOC / 12 files
+  - `open-lark-docs` 6 LOC / 1 file（非 workspace member，遗留目录）
+  - `openlark-protocol` 3 LOC / 1 file（主要是 include 生成 protobuf）
+
+2) 公开 API 面证据（启发式）
+- 统计 `pub mod|pub struct|pub enum|pub trait|pub fn|pub use` 行数，头部结果：
+  - `openlark-hr` 2418, `openlark-docs` 1657, `openlark-communication` 691
+  - `openlark-workflow` 695, `openlark-platform` 466, `openlark-meeting` 463
+  - `openlark-webhook` 38, `openlark-user` 44, `openlark-protocol` 1
+
+3) 清单与角色证据
+- workspace 成员与注释来源：`Cargo.toml:3`
+- 基础设施示例：`crates/openlark-core/Cargo.toml:1`, `crates/openlark-client/Cargo.toml:1`, `crates/openlark-protocol/Cargo.toml:1`
+- 大域示例：`crates/openlark-hr/Cargo.toml:1`, `crates/openlark-docs/Cargo.toml:1`
+- 小专用示例：`crates/openlark-webhook/Cargo.toml:1`, `crates/openlark-cardkit/Cargo.toml:1`
+
+## 分层标准
+
+- canonical: 稳定版必须优先保障，具有平台级或主场景不可替代价值。
+- expert-tier: 有明确独立价值，但通常按场景启用，不是最小稳定版必需核心。
+- support-only: 主要作为支撑/兼容/生成产物，或独立价值较弱，建议以“支持模块”定位。
+
+## 全量分类结果（20/20）
+
+| crate | workspace member | 主分类 | 价值层级 | 结论依据（简述） |
+|---|---:|---|---|---|
+| openlark-core | yes | infrastructure | canonical | 核心传输/错误/配置基础设施，15k+ LOC，所有业务依赖。 |
+| openlark-client | yes | infrastructure | canonical | 统一入口与 feature 聚合层，承载对外调用体验。 |
+| openlark-protocol | yes | infrastructure | support-only | 极小且以 protobuf 生成物为主（3 LOC），独立产品价值低，属 websocket 支撑件。 |
+| openlark-auth | yes | large domain crate | canonical | 鉴权链路是全域能力前置条件，7k+ LOC 且跨模块复用高。 |
+| openlark-communication | yes | large domain crate | canonical | 高 API 密度（25k+ LOC，pub 指标高），IM/联系人是主流场景。 |
+| openlark-docs | yes | large domain crate | canonical | 文档/表格/知识库主战场，54k+ LOC，API 面积超大。 |
+| openlark-hr | yes | large domain crate | canonical | 最大业务域（73k+ LOC），对企业客户独立价值最高之一。 |
+| openlark-workflow | yes | large domain crate | expert-tier | 体量大（18k+ LOC）且业务闭环强，但相对核心三域可后置。 |
+| openlark-meeting | yes | large domain crate | expert-tier | 13k+ LOC，会议能力完整但通常按需启用。 |
+| openlark-platform | yes | large domain crate | expert-tier | 平台与管理 API 广，13k+ LOC，偏企业管理扩展面。 |
+| openlark-application | yes | large domain crate | expert-tier | 应用管理域独立可用，7k+ LOC，但非所有租户必需。 |
+| openlark-helpdesk | yes | large domain crate | expert-tier | 帮助台场景明确，10k+ LOC，行业/团队选择性强。 |
+| openlark-mail | yes | large domain crate | expert-tier | 邮件域可独立使用（8k+ LOC），但非核心路径。 |
+| openlark-security | yes | large domain crate | expert-tier | 安全域价值明确（9k+ LOC），通常与企业治理场景绑定。 |
+| openlark-ai | yes | small/specialized crate | expert-tier | AI 领域增长性高（9k+ LOC）但不是当前最小稳定版刚需。 |
+| openlark-cardkit | yes | small/specialized crate | expert-tier | 卡片生态专用能力，2.6k LOC，场景窄但独立价值清晰。 |
+| openlark-webhook | yes | small/specialized crate | expert-tier | 机器人 webhook 入口轻量高频，适合作为独立专用模块。 |
+| openlark-analytics | yes | small/specialized crate | support-only | API 面和规模较小（1.8k LOC，~14 APIs），更像辅助分析扩展。 |
+| openlark-user | yes | small/specialized crate | support-only | 用户设置/偏好域较窄（1.2k LOC，~21 APIs），可作为配套模块。 |
+| open-lark-docs | no | potential support-only crate | support-only | 无 Cargo.toml、非 workspace member，仅遗留最小代码，判定为历史残留支持目录。 |
+
+## 对 stable release 的直接回答（expert-tier vs support-only）
+
+- 应进入 expert-tier 的非 canonical 模块:
+  - `openlark-workflow`, `openlark-meeting`, `openlark-platform`, `openlark-application`, `openlark-helpdesk`, `openlark-mail`, `openlark-security`, `openlark-ai`, `openlark-cardkit`, `openlark-webhook`
+
+- 建议定位为 support-only 的模块:
+  - `openlark-protocol`（基础设施子件，非独立卖点）
+  - `openlark-analytics`（小体量分析扩展）
+  - `openlark-user`（窄域设置能力）
+  - `open-lark-docs`（非成员遗留目录）
+
+备注: 本任务仅做分类，不涉及合并/移除建议。

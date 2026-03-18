@@ -1,0 +1,79 @@
+# Task 9 - Stable Crate Tiering List
+
+## Tier Summary (from Task 4 & 5)
+
+### Canonical (Tier 1)
+| Crate | Role | Notes |
+|-------|------|-------|
+| open-lark | Unified SDK facade | Primary user entry point |
+| openlark-core | Core infrastructure | Required by all |
+| openlark-client | Client abstraction | Service registry, config |
+| openlark-auth | Authentication | Cross-cutting concern |
+| openlark-communication | IM & contacts | Core collaboration |
+| openlark-docs | Documents & wiki | Core collaboration |
+| openlark-hr | HR suite | Major business domain |
+
+### Expert-Tier (Tier 2) - 10 crates
+| Crate | Domain | Size | Standalone Value |
+|-------|--------|------|------------------|
+| openlark-workflow | Tasks/approvals | 18k LOC | Complete workflow engine |
+| openlark-meeting | Video conferencing | 13k LOC | Meeting management |
+| openlark-platform | Admin/platform | 13k LOC | Enterprise admin |
+| openlark-application | App management | 7k LOC | ISV tools |
+| openlark-helpdesk | Support tickets | 10k LOC | Service desk |
+| openlark-mail | Email groups | 8k LOC | Mail integration |
+| openlark-security | Security/ACS | 9k LOC | Access control |
+| openlark-ai | AI assistants | 9k LOC | AI capabilities |
+| openlark-cardkit | Card messages | 2.6k LOC | Bot cards |
+| openlark-webhook | Webhook bots | 926 LOC | Custom bots |
+
+**Expert-Tier Characteristics**:
+- Complete business domain
+- >5k LOC or >30 public APIs
+- Clear standalone use cases
+- Published to crates.io with independent discoverability
+
+### Support-Only (Tier 3) - 4 crates
+| Crate | Role | Recommendation |
+|-------|------|----------------|
+| openlark-protocol | Protobuf types | Merge into core |
+| openlark-analytics | Analytics APIs | Keep, minimal promotion |
+| openlark-user | User preferences | Keep, bundle with auth |
+| open-lark-docs | Legacy directory | Remove/hide |
+
+**Support-Only Characteristics**:
+- Implementation detail or wrapper
+- <2k LOC and <20 APIs
+- No clear standalone value
+- Compatibility publishing only
+
+## Stable Release Recommendations
+
+### Short Term (v0.15.x)
+- Keep all crates as-is
+- Update documentation to reflect tiers
+- Add deprecation warnings to support-only crates (soft, not enforced)
+
+### Medium Term (v0.16.x)
+- Consider merging `openlark-protocol` into `openlark-core`
+- Consolidate `openlark-analytics` into `openlark-platform`
+- Evaluate `openlark-user` merge with `openlark-auth`
+
+### Long Term (v1.0)
+- Support-only crates become private implementation details
+- Only canonical and expert-tier remain public
+- Migration tooling provided if needed
+
+## Tier Assignment Rationale
+
+### Why Expert-Tier?
+These crates represent complete, usable domains:
+- A user building a meeting room booking system needs only `openlark-meeting`
+- A support ticket system only needs `openlark-helpdesk`
+- Each has enough API surface to justify standalone discovery
+
+### Why Support-Only?
+These crates lack standalone value:
+- `openlark-protocol`: 3 LOC wrapper around generated protobuf
+- `openlark-analytics`: Small API surface, typically bundled
+- `openlark-user`: Narrow scope, usually combined with auth

@@ -1,0 +1,55 @@
+# F4 - Scope Fidelity Check
+
+## RC vs Stable Boundary Verification
+
+### RC Scope (Verified ✅)
+- [x] Audit tasks only (1-4) - No implementation
+- [x] Policy definition (5) - Documentation only
+- [x] Fix specification (6-7) - What to fix, not fixing yet
+- [x] Verification planning (8) - Checklist creation
+
+### Stable Scope (Verified ✅)
+- [x] Roadmap documentation (9-12) - Future planning only
+- [x] No stable work in RC phase
+- [x] Clear separation maintained
+
+## Scope Creep Check
+
+### Proposed Changes
+| Change | Type | RC/Stable | Scope Compliance |
+|--------|------|-----------|------------------|
+| Add cardkit export | Fix | RC | ✅ In scope (consistency fix) |
+| Add prelude module | Fix | RC | ✅ In scope (consistency fix) |
+| Update examples | Docs | RC | ✅ In scope (messaging) |
+| Crate tiering | Policy | RC | ✅ In scope (positioning) |
+| Merge protocol | Restructure | Stable | ✅ Correctly deferred |
+| Merge analytics | Restructure | Stable | ✅ Correctly deferred |
+| cargo-smart-release | Tooling | Stable | ✅ Correctly deferred |
+
+### Anti-Patterns Checked
+- ❌ No "rewrite everything" proposals
+- ❌ No "redesign API" in RC
+- ❌ No "deprecate all sub-crates" in RC
+- ❌ No breaking changes in RC
+
+## User Intent Alignment
+
+### Original Request
+> "Design external release strategy: should we promote open-lark main crate + features, or continue promoting many small crates?"
+
+### Plan Response
+✅ **Canonical package strategy defined** (Task 5)
+✅ **Three-tier positioning system** (Tasks 4, 5, 9)
+✅ **RC release rules** (Task 3)
+✅ **Stable roadmap** (Tasks 9-12)
+
+### No Deviation
+- No scope expansion beyond release strategy
+- No implementation work in planning phase
+- No unrelated refactoring proposed
+
+## Final Status
+
+**Status**: ✅ PASS
+
+Plan stays within requested scope. RC and Stable phases properly separated. No premature optimization or scope creep.

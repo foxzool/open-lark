@@ -1,0 +1,57 @@
+# Task 6 - RC Entry Consistency Fixes
+
+## Summary of Issues (from Task 1 Audit)
+
+### Critical Issue 1: Missing `cardkit` Export
+- **File**: `src/lib.rs`
+- **Missing**: `#[cfg(feature = "cardkit")] pub use openlark_cardkit;`
+- **Impact**: Users cannot access cardkit module even with feature enabled
+
+### Critical Issue 2: Missing `prelude` Module
+- **File**: `src/lib.rs`
+- **Missing**: `pub mod prelude` or re-export
+- **Impact**: README examples using `use open_lark::prelude::*;` won't compile
+
+## Required Fixes for RC
+
+### Fix 1: Add cardkit Export
+```rust
+// In src/lib.rs, add after line 60:
+#[cfg(feature = "cardkit")]
+pub use openlark_cardkit;
+```
+
+### Fix 2: Add prelude Module
+```rust
+// In src/lib.rs, add at end of file:
+pub mod prelude {
+    pub use openlark_core::prelude::*;
+}
+```
+
+## Verification Steps
+
+1. Check that `cardkit` feature compiles:
+   ```bash
+   cargo check --features cardkit
+   ```
+
+2. Check that prelude is accessible:
+   ```bash
+   cargo doc --no-deps --features core-services
+   # Verify prelude appears in docs
+   ```
+
+3. Verify README examples would work:
+   ```rust
+   // Test snippet that should compile after fixes
+   use open_lark::prelude::*;
+   ```
+
+## Files to Modify
+- `src/lib.rs` - Add missing exports
+
+## Implementation Notes
+- These are additive changes (adding exports, not removing)
+- No breaking changes to existing API
+- Aligns root exports with documented features
