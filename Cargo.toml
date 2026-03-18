@@ -106,29 +106,29 @@ walkdir = "2.4"
 
 # === 工作空间内部依赖 (Internal Workspace Dependencies) ===
 # 核心基础设施模块
-openlark-core = { path = "crates/openlark-core" }
-openlark-protocol = { path = "crates/openlark-protocol" }
-openlark-client = { path = "crates/openlark-client" }
+openlark-core = { path = "crates/openlark-core", version = "0.15.0-rc.1" }
+openlark-protocol = { path = "crates/openlark-protocol", version = "0.15.0-rc.1" }
+openlark-client = { path = "crates/openlark-client", version = "0.15.0-rc.1" }
 
 # 生产就绪服务模块
-openlark-auth = { path = "crates/openlark-auth" }
-openlark-security = { path = "crates/openlark-security" }
-openlark-communication = { path = "crates/openlark-communication" }
-openlark-cardkit = { path = "crates/openlark-cardkit" }
-openlark-webhook = { path = "crates/openlark-webhook" }
-openlark-docs = { path = "crates/openlark-docs" }
-openlark-hr = { path = "crates/openlark-hr" }
+openlark-auth = { path = "crates/openlark-auth", version = "0.15.0-rc.1" }
+openlark-security = { path = "crates/openlark-security", version = "0.15.0-rc.1" }
+openlark-communication = { path = "crates/openlark-communication", version = "0.15.0-rc.1" }
+openlark-cardkit = { path = "crates/openlark-cardkit", version = "0.15.0-rc.1" }
+openlark-webhook = { path = "crates/openlark-webhook", version = "0.15.0-rc.1" }
+openlark-docs = { path = "crates/openlark-docs", version = "0.15.0-rc.1" }
+openlark-hr = { path = "crates/openlark-hr", version = "0.15.0-rc.1" }
 
 # 开发中服务模块
-openlark-ai = { path = "crates/openlark-ai" }
-openlark-application = { path = "crates/openlark-application" }
-openlark-platform = { path = "crates/openlark-platform" }
-openlark-helpdesk = { path = "crates/openlark-helpdesk" }
-openlark-mail = { path = "crates/openlark-mail" }
-openlark-meeting = { path = "crates/openlark-meeting" }
-openlark-workflow = { path = "crates/openlark-workflow" }
-openlark-analytics = { path = "crates/openlark-analytics" }
-openlark-user = { path = "crates/openlark-user" }
+openlark-ai = { path = "crates/openlark-ai", version = "0.15.0-rc.1" }
+openlark-application = { path = "crates/openlark-application", version = "0.15.0-rc.1" }
+openlark-platform = { path = "crates/openlark-platform", version = "0.15.0-rc.1" }
+openlark-helpdesk = { path = "crates/openlark-helpdesk", version = "0.15.0-rc.1" }
+openlark-mail = { path = "crates/openlark-mail", version = "0.15.0-rc.1" }
+openlark-meeting = { path = "crates/openlark-meeting", version = "0.15.0-rc.1" }
+openlark-workflow = { path = "crates/openlark-workflow", version = "0.15.0-rc.1" }
+openlark-analytics = { path = "crates/openlark-analytics", version = "0.15.0-rc.1" }
+openlark-user = { path = "crates/openlark-user", version = "0.15.0-rc.1" }
 
 # Test dependencies shared across workspace
 rstest = "0.19"
