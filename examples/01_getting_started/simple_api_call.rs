@@ -1,6 +1,6 @@
 //! 第一个API调用示例（简化版）
 //!
-//! 演示如何使用 openlark SDK facade 进行飞书API调用。
+//! 演示如何使用 openlark SDK 进行飞书API调用。
 //!
 //! 运行方式：
 //! ```bash
@@ -9,6 +9,9 @@
 //! cargo run --example simple_api_call --features "auth,communication"
 //! ```
 
+use openlark_auth::AuthService;
+use openlark_communication::endpoints::IM_V1_MESSAGES;
+use openlark_core::config::Config;
 use serde_json::json;
 
 #[tokio::main]
@@ -24,10 +27,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("应用ID: {}", &app_id[..8.min(app_id.len())]);
 
-    // 使用 openlark facade 访问 auth 模块
-    // 注意：当启用 auth feature 时，openlark_auth 被导出为 openlark::openlark_auth
-    let _auth_service = openlark::openlark_auth::AuthService::new(
-        openlark::openlark_core::config::Config::builder()
+    // 使用子 crate 创建 AuthService
+    let _auth_service = AuthService::new(
+        Config::builder()
             .app_id(app_id)
             .app_secret(app_secret)
             .build(),
@@ -36,7 +38,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("✅ AuthService 创建成功");
 
     // 访问 communication 模块的常量
-    let endpoint = openlark::openlark_communication::endpoints::IM_V1_MESSAGES;
+    let endpoint = IM_V1_MESSAGES;
     println!("消息API端点: {}", endpoint);
 
     // 构建消息请求
