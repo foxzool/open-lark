@@ -1,7 +1,7 @@
-[![crates.io](https://img.shields.io/crates/v/open-lark)](https://crates.io/crates/open-lark)
-[![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](https://github.com/foxzool/open-lark#license)
-[![Quality](https://github.com/foxzool/open-lark/actions/workflows/quality.yml/badge.svg)](https://github.com/foxzool/open-lark/actions/workflows/quality.yml)
-[![Documentation](https://docs.rs/open-lark/badge.svg)](https://docs.rs/open-lark)
+[![crates.io](https://img.shields.io/crates/v/openlark)](https://crates.io/crates/openlark)
+[![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](https://github.com/foxzool/openlark#license)
+[![Quality](https://github.com/foxzool/openlark/actions/workflows/quality.yml/badge.svg)](https://github.com/foxzool/openlark/actions/workflows/quality.yml)
+[![Documentation](https://docs.rs/openlark/badge.svg)](https://docs.rs/openlark)
 
 # 飞书开放平台非官方SDK - 企业级高覆盖率Rust实现
 
@@ -19,32 +19,32 @@
 
 ```toml
 [dependencies]
-open-lark = "0.15"
+openlark = "0.15"
 ```
 
 ### 2. 选择功能组合
 
 **默认配置**（推荐新手）：
 ```toml
-open-lark = "0.15"  # 包含 IM 消息、文档协作、认证功能
+openlark = "0.15"  # 包含 IM 消息、文档协作、认证功能
 ```
 
 **按需选择**：
 ```toml
 # 纯通讯功能（IM + 联系人 + 群组）
-open-lark = { version = "0.15", features = ["communication"] }
+openlark = { version = "0.15", features = ["communication"] }
 
 # 自定义机器人（Webhook）
-open-lark = { version = "0.15", features = ["webhook"] }
+openlark = { version = "0.15", features = ["webhook"] }
 
 # 企业协作套件（IM + 文档 + 认证 + 工作流）
-open-lark = { version = "0.15", features = ["core-services"] }
+openlark = { version = "0.15", features = ["core-services"] }
 
 # 人力资源套件
-open-lark = { version = "0.15", features = ["core-services", "hr"] }
+openlark = { version = "0.15", features = ["core-services", "hr"] }
 
 # 按需组合更多模块
-open-lark = { version = "0.15", features = ["core-services", "hr", "meeting", "ai"] }
+openlark = { version = "0.15", features = ["core-services", "hr", "meeting", "ai"] }
 ```
 
 ### 2.1 选择平台 Endpoint

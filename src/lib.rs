@@ -1,7 +1,14 @@
-//! OpenLark SDK - 飞书开放平台 Rust SDK
+//! openlark - 飞书开放平台 Rust SDK
 //!
 //! 这个 crate 是 OpenLark SDK 的统一入口，重新导出了各个功能模块。
 //! 用户可以根据需要开启对应的 feature 来使用特定功能。
+//!
+//! # 安装
+//!
+//! ```toml
+//! [dependencies]
+//! openlark = "0.15"
+//! ```
 
 // 允许测试模块中的未使用导入（测试桩代码常见模式）
 #![allow(unused_imports)]

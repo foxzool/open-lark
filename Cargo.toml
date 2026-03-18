@@ -148,7 +148,7 @@ criterion = "0.5"
 
 ## Convenience package configuration for unified publishing
 [package]
-name = "open-lark"
+name = "openlark"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
