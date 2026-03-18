@@ -230,6 +230,11 @@ name = "workflow_api_example"
 path = "examples/workflow_api_example.rs"
 required-features = ["workflow"]
 
+[[example]]
+name = "simple_api_call"
+path = "examples/01_getting_started/simple_api_call.rs"
+required-features = ["auth", "communication"]
+
 [features]
 default = ["core-services"]
 
