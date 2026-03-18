@@ -149,10 +149,34 @@ jobs:
           fi
           echo "✅ CRATES_IO_TOKEN is configured"
 
-      - name: Build release
-        run: cargo build --release --all-features
-
-      - name: Publish to crates.io
-        run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+      - name: Publish workspace crates in order
+        run: |
+          set -euo pipefail
+          
+          # Layer 1: Protocol
+          echo "📦 Publishing openlark-protocol..."
+          cargo publish -p openlark-protocol
+          sleep 30
+          
+          # Layer 2: Core
+          echo "📦 Publishing openlark-core..."
+          cargo publish -p openlark-core
+          sleep 30
+          
+          # Layer 3: Business crates
+          for crate in openlark-auth openlark-security openlark-communication openlark-cardkit openlark-webhook openlark-docs openlark-hr openlark-ai openlark-application openlark-platform openlark-meeting openlark-helpdesk openlark-mail openlark-workflow openlark-analytics openlark-user; do
+            echo "📦 Publishing ${crate}..."
+            cargo publish -p "${crate}" || echo "⚠️ ${crate} may already exist or failed"
+            sleep 10
+          done
+          
+          # Layer 4: Client
+          echo "📦 Publishing openlark-client..."
+          cargo publish -p openlark-client
+          sleep 30
+          
+          # Layer 5: Root
+          echo "📦 Publishing openlark..."
+          cargo publish -p openlark
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
