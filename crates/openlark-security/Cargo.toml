@@ -8,7 +8,7 @@ repository.workspace = true
 homepage.workspace = true
 documentation.workspace = true
 description = "飞书开放平台安全认证服务模块 - 身份认证、权限管理、安全审计 (44 APIs)"
-keywords = ["feishu", "lark", "security", "api", "auth", "acs"]
+keywords = ["feishu", "lark", "security", "auth", "acs"]
 categories = ["api-bindings", "web-programming", "authentication"]
 
 [features]

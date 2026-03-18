@@ -161,11 +161,12 @@ jobs:
           cargo publish -p openlark-core || echo "⚠️ openlark-core may already exist"
           sleep 30
           
-          # Layer 3: Business crates
+          # Layer 3: Business crates (with longer sleep to avoid rate limits)
           for crate in openlark-auth openlark-security openlark-communication openlark-cardkit openlark-webhook openlark-docs openlark-hr openlark-ai openlark-application openlark-platform openlark-meeting openlark-helpdesk openlark-mail openlark-workflow openlark-analytics openlark-user; do
             echo "📦 Publishing ${crate}..."
             cargo publish -p "${crate}" || echo "⚠️ ${crate} may already exist or failed"
-            sleep 10
+            echo "⏳ Waiting 60s to avoid rate limits..."
+            sleep 60
           done
           
           # Layer 4: Client
