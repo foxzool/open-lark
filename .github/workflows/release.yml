@@ -89,12 +89,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   # 发布到 crates.io
-  # 跳过 RC 和 Beta 版本，只发布正式版
+  # 所有版本都发布到 crates.io（包括 RC、Beta）
   crates-io-release:
     needs: [validate, github-release]
     runs-on: ubuntu-latest
-    # 只有当版本号不包含 -rc 或 -beta 时才发布到 crates.io
-    if: ${{ !contains(github.ref, '-rc') && !contains(github.ref, '-beta') && !contains(github.ref, '-alpha') }}
     steps:
       - uses: actions/checkout@v4
 
