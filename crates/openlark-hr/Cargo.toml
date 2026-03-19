@@ -4,7 +4,11 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "open-lark-hr-suite module for OpenLark SDK"
+description = "OpenLark 人力资源模块 - 招聘、CoreHR、考勤、薪酬等 562 个 API"
+repository.workspace = true
+homepage.workspace = true
+keywords = ["feishu", "lark", "hr", "sdk", "api"]
+categories = ["api-bindings", "web-programming", "development-tools"]
 
 [features]
 default = ["attendance", "corehr", "compensation", "payroll", "performance", "okr", "hire", "ehr"]

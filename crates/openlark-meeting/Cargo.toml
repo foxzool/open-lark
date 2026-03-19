@@ -4,7 +4,11 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "openlark-meeting module for OpenLark SDK"
+description = "OpenLark 会议与日程模块 - 视频会议、日历、会议室管理 API"
+repository.workspace = true
+homepage.workspace = true
+keywords = ["feishu", "lark", "meeting", "sdk", "api"]
+categories = ["api-bindings", "web-programming", "development-tools"]
 
 [features]
 # 默认配置 - 包含视频会议和日历功能

@@ -4,7 +4,11 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "现代化飞书开放平台 Rust SDK - 简化客户端，支持功能驱动的模块化编译"
+description = "OpenLark 高级客户端 - 统一入口点和轻量级服务注册表"
+repository.workspace = true
+homepage.workspace = true
+keywords = ["feishu", "lark", "api", "sdk", "client"]
+categories = ["api-bindings", "web-programming", "development-tools"]
 
 [dependencies]
 # Core dependencies

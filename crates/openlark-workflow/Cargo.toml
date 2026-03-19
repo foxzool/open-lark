@@ -7,6 +7,7 @@ license.workspace = true
 repository.workspace = true
 documentation.workspace = true
 description = "OpenLark 工作流模块 - 提供飞书任务/审批/看板 API"
+keywords = ["feishu", "lark", "workflow", "api", "sdk"]
 
 [dependencies]
 openlark-core = { workspace = true }
