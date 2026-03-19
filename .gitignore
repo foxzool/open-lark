@@ -113,6 +113,9 @@ Thumbs.db
 # Claude Code Assistant and AI Analysis
 # ============================================================================
 
+# Sisyphus AI work files
+.sisyphus/
+
 # AI assistant work files and memories
 .claude/memories/
 .claude/plan/
