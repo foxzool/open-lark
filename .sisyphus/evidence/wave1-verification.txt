@@ -1,4 +1,0 @@
-Task 1-4 Verification Results
-Compilation: PASSED
-Tests: 9/9 PASSED
-Documentation: GENERATED

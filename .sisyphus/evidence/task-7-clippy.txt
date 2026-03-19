@@ -1,2 +1,0 @@
-    Checking openlark-client v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-client)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.36s

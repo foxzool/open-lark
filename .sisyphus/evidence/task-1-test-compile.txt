@@ -1,4 +1,0 @@
-    Blocking waiting for file lock on artifact directory
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 18.09s
-  Executable unittests src/lib.rs (target/debug/deps/openlark_hr-97836b7728b317ab)
-  Executable ../../tests/unit/hr/mod.rs (target/debug/deps/unit-36ccf931e0c080d1)

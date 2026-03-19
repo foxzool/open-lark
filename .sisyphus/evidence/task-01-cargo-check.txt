@@ -1,2 +1,0 @@
-    Checking openlark-webhook v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-webhook)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.37s

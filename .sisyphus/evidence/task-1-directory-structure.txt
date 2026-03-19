@@ -1,5 +1,0 @@
-total 16
-drwxr-xr-x@  4 zool  staff  128 Feb 17 11:36 .
-drwxr-xr-x@ 13 zool  staff  416 Feb 17 11:36 ..
--rw-r--r--@  1 zool  staff  416 Feb 17 11:36 __template__.rs
--rw-r--r--@  1 zool  staff  227 Feb 17 11:36 mod.rs

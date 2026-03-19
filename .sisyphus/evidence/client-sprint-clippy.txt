@@ -1,6 +1,0 @@
-    Checking openlark-docs v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-docs)
-    Checking openlark-ai v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-ai)
-    Checking openlark-meeting v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-meeting)
-    Checking openlark-communication v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-communication)
-    Checking openlark-client v0.15.0-dev (/Users/zool/workspace/open-lark/crates/openlark-client)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.28s
