@@ -8,7 +8,7 @@ repository.workspace = true
 homepage.workspace = true
 documentation.workspace = true
 description = "飞书开放平台用户设置模块 - 个人设置、用户偏好 API (21 APIs)"
-keywords = ["feishu", "lark", "user", "api", "settings", "preferences"]
+keywords = ["feishu", "lark", "user", "api", "sdk"]
 categories = ["api-bindings", "web-programming"]
 
 [features]

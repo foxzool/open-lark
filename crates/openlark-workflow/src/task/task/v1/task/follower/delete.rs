@@ -1,1 +1,0 @@
-../../../../v1/task/follower/delete.rs

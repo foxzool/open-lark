@@ -4,7 +4,11 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "Core infrastructure for OpenLark SDK"
+description = "OpenLark 核心基础设施 crate - HTTP 客户端、错误处理、认证和核心工具"
+repository.workspace = true
+homepage.workspace = true
+keywords = ["feishu", "lark", "api", "sdk", "core"]
+categories = ["api-bindings", "web-programming", "development-tools"]
 
 [lib]
 doctest = false

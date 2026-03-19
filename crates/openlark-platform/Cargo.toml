@@ -8,7 +8,7 @@ repository.workspace = true
 homepage.workspace = true
 documentation.workspace = true
 description = "飞书开放平台服务模块 - 应用管理、目录服务、系统管理 API (94 APIs)"
-keywords = ["feishu", "lark", "platform", "api", "admin", "directory"]
+keywords = ["feishu", "lark", "platform", "api", "sdk"]
 categories = ["api-bindings", "web-programming"]
 
 [features]
