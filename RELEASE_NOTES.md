@@ -1,219 +1,176 @@
-# 🎉 open-lark 0.15.0 发布说明
+# OpenLark 0.15.0-rc.1 发布说明草案
 
-**发布日期：** 2025年10月29日
-**版本类型：** Major (重大版本更新)
+**发布日期：** 待定  
+**版本类型：** Release Candidate  
+**适用版本：** `0.15.0-rc.1`
 
-## 🚀 重大发布亮点
+## 概览
 
-### 🏗️ 多Crate架构重构
-从单体库重构为专业级workspace架构，实现：
-- ✅ **核心库分离** - 独立的 `open-lark-core` 核心功能库
-- ✅ **模块化编译** - 智能特性标志系统，按需编译
-- ✅ **构建优化** - 显著减少编译时间和二进制文件大小
+`0.15` 的核心目标不是继续堆叠 API 数量，而是把 SDK 的对外使用方式收敛成一个清晰、稳定、可解释的模型。
 
-### 📊 API实现透明化革命
-- 🔍 **全面代码库验证** - 1,134个API方法，86.3%覆盖率
-- 📋 **四级分类体系** - 完整/基本/部分/未实现模块状态透明化
-- 📈 **自动化统计监控** - 持续的API覆盖率和质量监控
+这一版完成了三件关键事情：
 
-## 📦 安装和升级
+- 将 `openlark` 明确为唯一官方入口 crate
+- 将根 crate feature 收敛为面向用户理解的业务能力模型
+- 将 README、示例和公开导出统一到同一套使用路径
 
-### 新安装
+这意味着新用户不再需要先区分 “到底应该依赖 `openlark` 还是 `openlark-client`”，也不需要理解 `client`、`protocol` 这类内部实现细节才能开始接入。
 
-```toml
-[dependencies]
-open-lark = "0.15"
-```
+## 这版最重要的变化
 
-### 从 0.14.x 升级
+### 1. `openlark` 成为唯一官方入口
+
+普通用户现在应直接依赖根 crate：
 
 ```toml
 [dependencies]
-open-lark = "0.15"
+openlark = "0.15.0-rc.1"
 ```
 
-**🎉 升级无需代码修改！** 保持100% API兼容性。
+根 crate 现在直接导出以下高频入口：
 
-详细迁移指南：[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)
+- `Client`
+- `ClientBuilder`
+- `Config`
+- `CoreConfig`
+- `RequestOption`
+- `Result`
+- `CoreError`
 
-## 🔧 主要变更
+同时，业务模块也统一从根 crate 暴露：
 
-### 架构重构
+- `open_lark::auth`
+- `open_lark::communication`
+- `open_lark::docs`
+- `open_lark::workflow`
+- `open_lark::security`
+- 以及其它业务域模块
+
+### 2. `openlark-client` 降级为高级入口
+
+`openlark-client` 仍然保留，但它不再是普通用户的默认入口。
+
+它现在的定位是：
+
+- 给高级用户直接复用统一 `Client` 实现
+- 给需要更细粒度控制客户端层 feature 的场景使用
+- 作为根 crate 的底层客户端实现层
+
+### 3. feature 模型按用户视角重构
+
+根 crate 不再将 `client`、`protocol` 作为公开 feature 暴露。
+
+对外建议只关注三类 feature：
+
+- 业务 feature：`auth`、`communication`、`docs`、`security`、`hr`、`workflow`、`meeting`、`ai`、`cardkit`、`webhook` 等
+- 技术 feature：`websocket`、`otel`
+- 组合 feature：`essential`、`enterprise`、`full`
+
+当前组合建议如下：
+
+```toml
+[dependencies]
+openlark = "0.15.0-rc.1"                                # 默认: auth
+openlark = { version = "0.15.0-rc.1", features = ["essential"] }
+openlark = { version = "0.15.0-rc.1", features = ["enterprise"] }
+openlark = { version = "0.15.0-rc.1", features = ["full"] }
 ```
-open-lark/
-├── Cargo.toml (workspace root)      # 新增
-├── open-lark/ (主SDK库)              # 重构
-├── open-lark-core/ (核心库)          # 新增
-└── scripts/ (验证工具)              # 新增
+
+## 推荐安装方式
+
+### 最小接入
+
+```toml
+[dependencies]
+openlark = "0.15.0-rc.1"
 ```
 
-### 功能标志优化
-- **default**: `im`, `cloud-docs`, `contact`, `group`, `authentication`, `search`
-- **full**: 所有40+服务模块（适合完整应用）
-- **自定义**: 选择特定服务实现最小化二进制文件
+默认提供统一入口和认证能力，适合先完成应用配置、鉴权和最小化接入。
 
-### 构建性能提升
-- 🏎️ **增量编译** - workspace级别依赖缓存
-- ⚡ **并行构建** - 多crate同时编译
-- 📦 **条件编译** - 只编译使用的功能
+### 推荐业务开发
 
-## 📊 API实现状态总览
+```toml
+[dependencies]
+openlark = { version = "0.15.0-rc.1", features = ["essential"] }
+```
 
-### 🟢 完整实现模块 (4个)
-- **cloud_docs**: 296个API - 云文档协作核心功能
-- **hire**: 153个API - 完整招聘管理系统
-- **contact**: 76个API - 企业通讯录管理
-- **task**: 50个API - 任务协作和项目管理
+`essential` 包含：
 
-### 🟡 基本实现模块 (22个)
-- IM、云文档、审批、视频会议等核心业务模块
-- 提供主要功能的完整实现，适合大部分企业应用场景
+- `auth`
+- `communication`
+- `docs`
 
-### 🟠 部分实现模块 (18个)
-- 提供基础功能，支持特定业务场景
+### 企业级组合
 
-### 🔴 待实现模块 (7个)
-- **feishu_people**: 105+ APIs - 企业核心HR功能 (🔴 高优先级)
-- **analytics**: 50+ APIs - 企业决策支持
-- **group**: 30+ APIs - IM功能重要补充
+```toml
+[dependencies]
+openlark = { version = "0.15.0-rc.1", features = ["enterprise"] }
+```
 
-详细报告：[API_COVERAGE_REPORT.md](docs/API_COVERAGE_REPORT.md)
+`enterprise` 包含：
 
-## 🎯 使用示例
+- `essential`
+- `security`
+- `hr`
+- `workflow`
 
-### 基础用法 (与之前版本相同)
+### 全量组合
+
+```toml
+[dependencies]
+openlark = { version = "0.15.0-rc.1", features = ["full"] }
+```
+
+## 示例入口统一
+
+主 README 和根 examples 现在统一使用 `openlark` 根路径。
+
+例如：
 
 ```rust
 use open_lark::prelude::*;
+use open_lark::communication::endpoints::IM_V1_MESSAGES;
 
-let client = LarkClient::builder("app_id", "app_secret")
-    .with_app_type(AppType::SelfBuild)
-    .build();
-
-// 发送消息
-let message = CreateMessageRequestBody::builder()
-    .receive_id("user_id")
-    .receive_id_type("open_id")
-    .content("{\"text\":\"Hello World!\"}")
-    .build();
-
-let result = client.im.v1.message.create(message, None).await?;
+let client = Client::builder()
+    .app_id("your_app_id")
+    .app_secret("your_app_secret")
+    .build()?;
 ```
 
-### 功能标志优化
+工作流示例也统一到了根 crate，而不是直接要求用户引入 `openlark-workflow`。
 
-```toml
-# 最小配置 - 仅IM功能
-[dependencies]
-open-lark = { version = "0.15", features = ["im"] }
+## 升级说明
 
-# 企业级配置 - 常用功能组合
-[dependencies]
-open-lark = { version = "0.15", features = ["im", "contact", "approval", "task"] }
+如果你之前直接使用根 crate，并且把它当成“功能聚合层”，这次升级主要需要注意两点：
 
-# 完整功能 - 所有API
-[dependencies]
-open-lark = { version = "0.15", features = ["full"] }
-```
+1. 不再依赖根 crate 的 `client` / `protocol` 这类实现细节 feature
+2. README 和示例应切换到 `openlark` 根入口路径
 
-## 📈 性能改进
+如果你之前直接依赖 `openlark-client`，代码仍可继续使用，但文档推荐路径已经调整为 `openlark`。
 
-### 构建时间优化
-- **首次构建**: 提升30-50%
-- **增量构建**: 提升60-80%
-- **并行编译**: 支持多核CPU充分利用
+## 兼容性与验证
 
-### 二进制文件大小优化
-```bash
-# 完整功能: ~50MB
-cargo build --release --all-features
+本次改造已完成以下验证：
 
-# 企业配置: ~25MB
-cargo build --release --features="im,contact,approval,task"
+- `cargo check -p openlark`
+- `cargo check -p openlark --no-default-features --features docs`
+- `cargo check -p openlark --example simple_api_call --features "auth,communication"`
+- `cargo check --workspace --all-features`
 
-# 基础配置: ~12MB
-cargo build --release --features="im,authentication"
-```
+另外，`workspace.lints` 已经真正落到所有成员 crate。当前会看到较多 `missing_docs` 警告，这是存量文档问题被显式暴露，不是本次改造引入的编译失败。
 
-## 🔍 质量保证
+## 对用户意味着什么
 
-### 编译状态
-- ✅ **零警告编译** - 所有代码通过clippy检查
-- ✅ **测试覆盖** - 299个测试100%通过
-- ✅ **文档完整** - 72个文档测试全部通过
+这版最直接的价值是：
 
-### 验证工具
-- **API统计脚本** - `scripts/verify_api_stats.sh`
-- **一致性检查** - 自动化API设计质量监控
-- **覆盖率监控** - 实时跟踪模块实现进度
+- 安装路径更清晰：默认只需要记住 `openlark`
+- feature 更可理解：表达的是“我要什么业务能力”，不是“我要内部实现层”
+- 示例更一致：README、examples、crate 导出不再混用多套入口
+- 后续版本更稳：根 crate 已经具备长期作为官方门面的结构基础
 
-## 🛠️ 开发工具更新
+## 后续计划
 
-### 新增工具
-- **API验证脚本** - 持续监控API实现状态
-- **覆盖率报告** - 详细的模块实现分析
-- **自动化文档生成** - 保持文档与代码同步
+`0.15` 正式版后，接下来的重点会放在两类工作：
 
-### 改进功能
-- **更好的错误信息** - 详细的问题诊断和解决建议
-- **增强的日志系统** - 结构化日志和性能监控
-- **优化的调试体验** - 更清晰的编译和运行时信息
-
-## ⚠️ 重要注意事项
-
-### 功能标志必需
-某些功能现在需要明确的功能标志：
-
-```toml
-[dependencies]
-open-lark = { version = "0.15", features = ["im", "contact"] }
-```
-
-### 文档准确性
-本版本实现了文档数据的完全透明化：
-- 📊 **真实统计数据** - 基于代码验证的准确API数量
-- 🎯 **透明实现状态** - 清楚标识已完成和待开发功能
-- 📋 **详细路线图** - 明确的改进计划和优先级
-
-## 🔗 相关文档
-
-- [迁移指南](MIGRATION_GUIDE.md) - 详细的升级指导
-- [API覆盖率报告](docs/API_COVERAGE_REPORT.md) - 完整的实现分析
-- [待实现模块](docs/PENDING_MODULES.md) - 未实现模块清单
-- [文档更新摘要](docs/DOCUMENTATION_UPDATE_SUMMARY.md) - 修正过程记录
-
-## 🎉 致谢
-
-### 贡献者
-感谢所有为这次重大版本更新做出贡献的开发者！
-
-### 社区反馈
-特别感谢提供反馈和建议的用户，帮助我们实现更透明的项目状态管理。
-
-### 测试支持
-感谢所有参与测试和验证的开发者，确保了这个版本的稳定性和可靠性。
-
-## 🚀 下一步计划
-
-### 短期目标 (0.15.x系列)
-- 🔧 完善条件编译系统
-- 📊 扩展自动化验证工具
-- 🐛 修复发现的问题和优化
-
-### 中期目标 (0.16.0)
-- 🎯 实现高优先级待开发模块
-- ⚡ 进一步性能优化
-- 📚 完善文档和示例
-
-### 长期愿景
-- 🏆 100% API覆盖率实现
-- 🌟 企业级功能完善
-- 🤝 社区生态建设
-
----
-
-**🎊 欢迎使用 open-lark 0.15.0！**
-
-这是项目历史上最重要的版本更新之一，不仅带来了架构上的重大改进，更重要的是实现了项目管理的透明化和数据准确性承诺。我们相信这个版本将为所有用户提供更好的开发体验和更可靠的功能支持。
-
-如有任何问题或建议，请通过GitHub Issues联系我们，我们将及时为您提供帮助。
+- 继续补齐公开 API 文档，消化这次 lint 落地后暴露的 `missing_docs`
+- 在统一入口稳定的前提下，继续推进业务模块覆盖率和示例质量

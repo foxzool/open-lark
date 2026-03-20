@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 🔄 变更
+
+- **refactor(root)**: 将 `openlark` 收敛为唯一官方入口 crate，直接导出 `Client`、`ClientBuilder`、`Config`、`RequestOption`、`CoreError` 等高频类型
+- **refactor(features)**: 重构根 crate feature 模型，移除面向用户的 `client`/`protocol` 心智，统一为业务 feature、技术 feature 与组合 feature
+- **refactor(client)**: 将 `openlark-client` 明确为高级入口，不再作为普通用户的默认接入方式
+- **docs(examples)**: 统一 README 和主 examples 到 `openlark` 根入口，修复 `workflow` 示例门槛与实际依赖不一致问题
+- **build(lints)**: 将 `workspace.lints` 真正落到各成员 crate，统一工作区 lint 配置
+
 ## [0.15.0-rc.1] - 2026-03-17
 
 ### ✨ 新增功能
@@ -109,4 +117,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **编译性能** - 默认功能 0.6s，全功能验证 0.37s
 - **零警告构建** - 所有模块通过 clippy 检查
 - **测试覆盖** - 核心功能完整测试覆盖
-
