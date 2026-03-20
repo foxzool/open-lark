@@ -4,6 +4,7 @@
 //! 包含参数验证、数据清理、边界检查等安全机制。
 
 pub mod core;
+/// 可验证特质模块
 pub mod validatable;
 
 // Re-export commonly used types

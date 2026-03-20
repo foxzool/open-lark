@@ -258,21 +258,25 @@ impl ConfigBuilder {
         self.optimized_http_client(config)
     }
 
+    /// 设置请求超时时间
     pub fn req_timeout(mut self, timeout: Duration) -> Self {
         self.req_timeout = Some(timeout);
         self
     }
 
+    /// 设置自定义 HTTP 头
     pub fn header(mut self, header: HashMap<String, String>) -> Self {
         self.header = Some(header);
         self
     }
 
+    /// 设置令牌提供者
     pub fn token_provider(mut self, provider: impl TokenProvider + 'static) -> Self {
         self.token_provider = Some(Arc::new(provider));
         self
     }
 
+    /// 构建 Config 实例
     pub fn build(self) -> Config {
         let default = ConfigInner::default();
         Config::new(ConfigInner {

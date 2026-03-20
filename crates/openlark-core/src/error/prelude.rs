@@ -20,6 +20,9 @@ pub use super::core::{
 };
 
 // 常用的导入组合
+/// 常用导入组合模块
+///
+/// 包含错误处理核心类型、集合类型和时间类型，方便快速导入
 pub mod common_imports {
     pub use super::*;
     pub use std::collections::HashMap;

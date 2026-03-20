@@ -17,6 +17,9 @@ use crate::{
     SDKResult,
 };
 
+/// HTTP 传输层
+///
+/// 负责处理 API 请求的发送和响应接收，支持多种认证令牌类型
 pub struct Transport<T> {
     phantom_data: PhantomData<T>,
 }
@@ -28,6 +31,7 @@ impl<T> Default for Transport<T> {
 }
 
 impl<T> Transport<T> {
+    /// 创建新的 Transport 实例
     pub fn new() -> Self {
         Self {
             phantom_data: PhantomData,
@@ -36,6 +40,15 @@ impl<T> Transport<T> {
 }
 
 impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> Transport<T> {
+    /// 发送 API 请求
+    ///
+    /// # 参数
+    /// - `req`: API 请求对象
+    /// - `config`: 客户端配置
+    /// - `option`: 请求选项（可选）
+    ///
+    /// # 返回
+    /// API 响应结果
     pub async fn request<R: Send>(
         req: ApiRequest<R>,
         config: &Config,
@@ -125,6 +138,7 @@ impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> T
         Ok(resp)
     }
 
+    /// 执行 HTTP 请求
     pub async fn do_send(
         raw_request: RequestBuilder,
         body: Vec<u8>,
