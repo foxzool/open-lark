@@ -68,12 +68,6 @@ impl Default for TestConfigBuilder {
 }
 
 /// 快捷方法：创建默认测试配置
-///
-/// # 示例
-///
-/// ```rust,ignore
-/// let config = test_config();
-/// ```
 pub fn test_config() -> Config {
     TestConfigBuilder::new().build()
 }

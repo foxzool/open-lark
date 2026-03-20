@@ -13,16 +13,24 @@ use std::{collections::HashMap, time::Duration};
 /// HTTP方法枚举
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum HttpMethod {
+    /// HTTP GET 方法
     Get,
+    /// HTTP POST 方法
     Post,
+    /// HTTP PUT 方法
     Put,
+    /// HTTP DELETE 方法
     Delete,
+    /// HTTP PATCH 方法
     Patch,
+    /// HTTP HEAD 方法
     Head,
+    /// HTTP OPTIONS 方法
     Options,
 }
 
 impl HttpMethod {
+    /// 获取 HTTP 方法的字符串表示
     pub fn as_str(self) -> &'static str {
         match self {
             HttpMethod::Get => "GET",
@@ -45,9 +53,13 @@ impl std::fmt::Display for HttpMethod {
 /// 请求数据枚举
 #[derive(Debug, Clone)]
 pub enum RequestData {
+    /// JSON 格式数据
     Json(serde_json::Value),
+    /// 纯文本数据
     Text(String),
+    /// 二进制数据
     Binary(Vec<u8>),
+    /// 表单数据
     Form(std::collections::HashMap<String, String>),
 }
 
@@ -102,6 +114,7 @@ pub struct ApiRequest<R> {
 }
 
 impl<R> ApiRequest<R> {
+    /// 创建 GET 请求
     pub fn get(url: impl Into<String>) -> Self {
         Self {
             method: HttpMethod::Get,
@@ -115,6 +128,7 @@ impl<R> ApiRequest<R> {
         }
     }
 
+    /// 创建 POST 请求
     pub fn post(url: impl Into<String>) -> Self {
         Self {
             method: HttpMethod::Post,
@@ -128,6 +142,7 @@ impl<R> ApiRequest<R> {
         }
     }
 
+    /// 创建 PUT 请求
     pub fn put(url: impl Into<String>) -> Self {
         Self {
             method: HttpMethod::Put,
@@ -141,6 +156,7 @@ impl<R> ApiRequest<R> {
         }
     }
 
+    /// 创建 PATCH 请求
     pub fn patch(url: impl Into<String>) -> Self {
         Self {
             method: HttpMethod::Patch,
@@ -154,6 +170,7 @@ impl<R> ApiRequest<R> {
         }
     }
 
+    /// 创建 DELETE 请求
     pub fn delete(url: impl Into<String>) -> Self {
         Self {
             method: HttpMethod::Delete,
@@ -167,6 +184,7 @@ impl<R> ApiRequest<R> {
         }
     }
 
+    /// 添加单个请求头
     pub fn header<K, V>(mut self, key: K, value: V) -> Self
     where
         K: Into<String>,
@@ -176,6 +194,7 @@ impl<R> ApiRequest<R> {
         self
     }
 
+    /// 添加单个查询参数
     pub fn query<K, V>(mut self, key: K, value: V) -> Self
     where
         K: Into<String>,
@@ -197,6 +216,7 @@ impl<R> ApiRequest<R> {
         self
     }
 
+    /// 设置请求体
     pub fn body(mut self, body: impl Into<RequestData>) -> Self {
         self.body = Some(body.into());
         self
@@ -223,11 +243,13 @@ impl<R> ApiRequest<R> {
         self
     }
 
+    /// 设置请求超时时间
     pub fn timeout(mut self, duration: Duration) -> Self {
         self.timeout = Some(duration);
         self
     }
 
+    /// 构建完整 URL（包含查询参数）
     pub fn build_url(&self) -> String {
         if self.query.is_empty() {
             self.url.clone()
@@ -243,10 +265,12 @@ impl<R> ApiRequest<R> {
     }
 
     // 兼容性字段和方法，用于与现有http.rs代码兼容
+    /// 获取 HTTP 方法
     pub fn method(&self) -> &HttpMethod {
         &self.method
     }
 
+    /// 获取 API 路径（从 URL 中提取）
     pub fn api_path(&self) -> &str {
         // 从URL中提取路径部分
         if let Some(start) = self.url.find(crate::constants::API_PATH_PREFIX) {
@@ -256,6 +280,7 @@ impl<R> ApiRequest<R> {
         }
     }
 
+    /// 获取支持的访问令牌类型
     pub fn supported_access_token_types(&self) -> Vec<crate::constants::AccessTokenType> {
         // 默认返回用户和租户令牌类型
         vec![
@@ -264,6 +289,7 @@ impl<R> ApiRequest<R> {
         ]
     }
 
+    /// 将请求体转换为字节
     pub fn to_bytes(&self) -> Vec<u8> {
         match &self.body {
             Some(RequestData::Json(data)) => serde_json::to_vec(data).unwrap_or_default(),
@@ -289,6 +315,7 @@ impl<R> ApiRequest<R> {
         &mut self.query
     }
 
+    /// 获取文件内容
     pub fn file(&self) -> Vec<u8> {
         self.file.clone().unwrap_or_default()
     }
@@ -342,6 +369,7 @@ impl<R> Default for ApiRequest<R> {
 }
 
 // 类型别名，保持兼容性
+/// API 响应类型别名
 pub type ApiResponse<R> = Response<R>;
 
 // ============================================================================

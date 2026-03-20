@@ -201,6 +201,7 @@ pub enum ErrorCode {
     AccessDenied = 999081,
 
     // 未知错误
+    /// 未知错误
     Unknown = 999999,
 }
 
