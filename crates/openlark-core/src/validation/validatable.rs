@@ -1,4 +1,6 @@
+/// 可验证特质
 pub trait Validatable {
+    /// 检查是否为空或空白
     fn is_empty_trimmed(&self) -> bool;
 }
 

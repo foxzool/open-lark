@@ -19,7 +19,9 @@ pub use self::traits::{ErrorContextTrait, ErrorFormatTrait, ErrorTrait, FullErro
 pub use self::traits::{ErrorSeverity, ErrorType};
 
 // 主要类型别名（推荐使用）
+/// SDK 操作结果类型别名
 pub type SDKResult<T> = Result<T, CoreError>;
+/// 错误唯一标识符类型别名
 pub type ErrorId = Uuid;
 
 // 核心模块

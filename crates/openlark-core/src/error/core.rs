@@ -188,6 +188,7 @@ pub struct ErrorBuilder {
 }
 
 impl ErrorBuilder {
+    /// 创建指定类型的错误构建器
     pub fn new(kind: BuilderKind) -> Self {
         Self {
             kind,
@@ -209,46 +210,55 @@ impl ErrorBuilder {
         }
     }
 
+    /// 设置错误消息
     pub fn message(mut self, msg: impl Into<String>) -> Self {
         self.message = Some(msg.into());
         self
     }
 
+    /// 设置错误码
     pub fn code(mut self, code: ErrorCode) -> Self {
         self.code = Some(code);
         self
     }
 
+    /// 设置 HTTP 状态码
     pub fn status(mut self, status: u16) -> Self {
         self.status = Some(status);
         self
     }
 
+    /// 设置 API 端点
     pub fn endpoint(mut self, endpoint: impl Into<String>) -> Self {
         self.endpoint = Some(endpoint.into());
         self
     }
 
+    /// 设置验证字段名
     pub fn field(mut self, field: impl Into<String>) -> Self {
         self.field = Some(field.into());
         self
     }
 
+    /// 设置源错误
     pub fn source<E: std::error::Error + Send + Sync + 'static>(mut self, err: E) -> Self {
         self.source = Some(Box::new(err));
         self
     }
 
+    /// 设置重试策略
     pub fn policy(mut self, policy: RetryPolicy) -> Self {
         self.policy = Some(policy);
         self
     }
 
+    /// 设置请求 ID
     pub fn request_id(mut self, req: impl Into<String>) -> Self {
         self.ctx.set_request_id(req);
         self
     }
 
+    /// 设置操作名称
     pub fn operation(mut self, op: impl Into<String>) -> Self {
         let op = op.into();
         self.operation = Some(op.clone());
@@ -256,51 +266,61 @@ impl ErrorBuilder {
         self
     }
 
+    /// 设置组件名称
     pub fn component(mut self, comp: impl Into<String>) -> Self {
         self.ctx.set_component(comp);
         self
     }
 
+    /// 设置用户友好的错误消息
     pub fn user_message(mut self, msg: impl Into<String>) -> Self {
         self.ctx.set_user_message(msg);
         self
     }
 
+    /// 添加上下文键值对
     pub fn context(mut self, key: impl Into<String>, val: impl Into<String>) -> Self {
         self.ctx.add_context(key, val);
         self
     }
 
+    /// 设置超时时长
     pub fn duration(mut self, duration: Duration) -> Self {
         self.duration = Some(duration);
         self
     }
 
+    /// 设置限流次数
     pub fn limit(mut self, limit: u32) -> Self {
         self.limit = Some(limit);
         self
     }
 
+    /// 设置限流时间窗口
     pub fn window(mut self, window: Duration) -> Self {
         self.window = Some(window);
         self
     }
 
+    /// 设置限流重置时间
     pub fn reset_after(mut self, reset: Duration) -> Self {
         self.reset_after = Some(reset);
         self
     }
 
+    /// 设置服务名
     pub fn service(mut self, service: impl Into<String>) -> Self {
         self.service = Some(service.into());
         self
     }
 
+    /// 设置重试等待时间
     pub fn retry_after(mut self, retry_after: Duration) -> Self {
         self.retry_after = Some(retry_after);
         self
     }
 
+    /// 构建 CoreError 实例
     pub fn build(self) -> CoreError {
         let msg = self.message.unwrap_or_else(|| "unknown error".to_string());
         match self.kind {
@@ -507,11 +527,16 @@ pub enum CoreError {
     },
 }
 
+/// 网络错误
 #[derive(Debug)]
 pub struct NetworkError {
+    /// 错误消息
     pub message: String,
+    /// 源错误
     pub source: Option<AnyError>,
+    /// 重试策略
     pub policy: RetryPolicy,
+    /// 错误上下文
     pub ctx: Box<ErrorContext>,
 }
 
@@ -521,13 +546,20 @@ impl std::fmt::Display for NetworkError {
     }
 }
 
+/// API 错误
 #[derive(Debug)]
 pub struct ApiError {
+    /// HTTP 状态码
     pub status: u16,
+    /// API 端点
     pub endpoint: Cow<'static, str>,
+    /// 错误消息
     pub message: String,
+    /// 源错误
     pub source: Option<AnyError>,
+    /// 错误码
     pub code: ErrorCode,
+    /// 错误上下文
     pub ctx: Box<ErrorContext>,
 }
 
@@ -639,22 +671,27 @@ impl CoreError {
         ErrorBuilder::new(kind)
     }
 
+    /// 网络错误构建器
     pub fn network_builder() -> ErrorBuilder {
         ErrorBuilder::new(BuilderKind::Network)
     }
 
+    /// API 错误构建器
     pub fn api_builder() -> ErrorBuilder {
         ErrorBuilder::new(BuilderKind::Api)
     }
 
+    /// 验证错误构建器
     pub fn validation_builder() -> ErrorBuilder {
         ErrorBuilder::new(BuilderKind::Validation)
     }
 
+    /// 认证错误构建器
     pub fn authentication_builder() -> ErrorBuilder {
         ErrorBuilder::new(BuilderKind::Authentication)
     }
 
+    /// 业务错误构建器
     pub fn business_builder() -> ErrorBuilder {
         ErrorBuilder::new(BuilderKind::Business)
     }
@@ -705,6 +742,7 @@ impl CoreError {
     }
 
     // === 兼容旧 CoreError 的工厂 ===
+    /// 验证错误
     pub fn validation(field: impl Into<String>, message: impl Into<String>) -> Self {
         let mut ctx = ErrorContext::new();
         let field = field.into();
@@ -717,6 +755,7 @@ impl CoreError {
         }
     }
 
+    /// API 数据错误
     pub fn api_data_error(message: impl Into<String>) -> Self {
         Self::Api(Box::new(ApiError {
             status: 500,
@@ -728,6 +767,7 @@ impl CoreError {
         }))
     }
 
+    /// 获取错误码
     pub fn code(&self) -> ErrorCode {
         match self {
             Self::Network(_) => ErrorCode::NetworkConnectionFailed,
@@ -744,10 +784,12 @@ impl CoreError {
         }
     }
 
+    /// 获取错误严重程度
     pub fn severity(&self) -> ErrorSeverity {
         self.code().severity()
     }
 
+    /// 是否可重试
     pub fn is_retryable(&self) -> bool {
         match self {
             Self::Network(net) => net.policy.is_retryable(),
@@ -760,6 +802,7 @@ impl CoreError {
         }
     }
 
+    /// 获取重试延迟
     pub fn retry_delay(&self, attempt: u32) -> Option<Duration> {
         match self {
             Self::Network(net) => net.policy.retry_delay(attempt),
@@ -772,6 +815,7 @@ impl CoreError {
         }
     }
 
+    /// 获取错误上下文
     pub fn ctx(&self) -> &ErrorContext {
         match self {
             Self::Network(net) => &net.ctx,
@@ -788,6 +832,7 @@ impl CoreError {
         }
     }
 
+    /// 修改错误上下文
     pub fn map_context(self, f: impl FnOnce(&mut ErrorContext)) -> Self {
         match self {
             Self::Network(mut net) => {
@@ -909,6 +954,7 @@ impl CoreError {
         }
     }
 
+    /// 添加上下文键值对
     pub fn with_context_kv(self, key: impl Into<String>, value: impl Into<String>) -> Self {
         let key = key.into();
         let value = value.into();
@@ -917,6 +963,7 @@ impl CoreError {
         })
     }
 
+    /// 添加操作和组件信息
     pub fn with_operation(
         self,
         operation: impl Into<String>,
@@ -948,6 +995,7 @@ impl CoreError {
     }
 
     // === 快速构造器（示例） ===
+    /// 网络错误
     pub fn network<E>(source: E, ctx: ErrorContext) -> Self
     where
         E: std::error::Error + Send + Sync + 'static,
@@ -960,6 +1008,7 @@ impl CoreError {
         }))
     }
 
+    /// API 错误
     pub fn api(
         status: u16,
         endpoint: impl Into<Cow<'static, str>>,
@@ -981,14 +1030,23 @@ impl CoreError {
 #[derive(Debug, Serialize)]
 #[serde_with::skip_serializing_none]
 pub struct ErrorRecord {
+    /// 错误码
     pub code: ErrorCode,
+    /// 严重程度
     pub severity: ErrorSeverity,
+    /// 是否可重试
     pub retryable: bool,
+    /// 重试延迟（毫秒）
     pub retry_delay_ms: Option<u64>,
+    /// 错误消息
     pub message: String,
+    /// 上下文
     pub context: std::collections::HashMap<String, String>,
+    /// 请求 ID
     pub request_id: Option<String>,
+    /// 操作名称
     pub operation: Option<String>,
+    /// 组件名称
     pub component: Option<String>,
 }
 

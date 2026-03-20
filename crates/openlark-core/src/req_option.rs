@@ -1,5 +1,8 @@
 use std::collections::HashMap;
 
+/// 请求选项
+///
+/// 用于配置 API 请求的各种选项，如认证令牌、请求头等
 #[derive(Debug, Clone, Default)]
 pub struct RequestOption {
     pub(crate) tenant_key: Option<String>,
@@ -15,62 +18,76 @@ pub struct RequestOption {
 }
 
 impl RequestOption {
+    /// 创建请求选项构建器
     pub fn builder() -> RequestOptionBuilder {
         RequestOptionBuilder::default()
     }
 }
 
+/// 请求选项构建器
+///
+/// 使用 Builder 模式方便配置请求选项
 #[derive(Default)]
 pub struct RequestOptionBuilder {
     option: RequestOption,
 }
 
 impl RequestOptionBuilder {
+    /// 设置租户键
     pub fn tenant_key(mut self, tenant_key: impl ToString) -> Self {
         self.option.tenant_key = Some(tenant_key.to_string());
         self
     }
 
+    /// 设置用户访问令牌
     pub fn user_access_token(mut self, user_access_token: impl ToString) -> Self {
         self.option.user_access_token = Some(user_access_token.to_string());
         self
     }
 
+    /// 设置应用访问令牌
     pub fn app_access_token(mut self, app_access_token: impl ToString) -> Self {
         self.option.app_access_token = Some(app_access_token.to_string());
         self
     }
 
+    /// 设置租户访问令牌
     pub fn tenant_access_token(mut self, tenant_access_token: impl ToString) -> Self {
         self.option.tenant_access_token = Some(tenant_access_token.to_string());
         self
     }
 
+    /// 设置是否需要帮助台认证
     pub fn need_helpdesk_auth(mut self, need_helpdesk_auth: bool) -> Self {
         self.option.need_helpdesk_auth = need_helpdesk_auth;
         self
     }
 
+    /// 设置请求 ID
     pub fn request_id(mut self, request_id: impl ToString) -> Self {
         self.option.request_id = Some(request_id.to_string());
         self
     }
 
+    /// 设置应用票据
     pub fn app_ticket(mut self, app_ticket: impl ToString) -> Self {
         self.option.app_ticket = Some(app_ticket.to_string());
         self
     }
 
+    /// 设置是否上传文件
     pub fn file_upload(mut self, file_upload: bool) -> Self {
         self.option.file_upload = file_upload;
         self
     }
 
+    /// 设置是否下载文件
     pub fn file_download(mut self, file_download: bool) -> Self {
         self.option.file_download = file_download;
         self
     }
 
+    /// 设置请求头
     pub fn header(mut self, header: HashMap<String, String>) -> Self {
         self.option.header = header;
         self
@@ -84,6 +101,7 @@ impl RequestOptionBuilder {
         self
     }
 
+    /// 构建 RequestOption
     pub fn build(self) -> RequestOption {
         self.option
     }

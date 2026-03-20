@@ -26,12 +26,18 @@ impl Display for AppType {
     }
 }
 
+/// 飞书 API 路径前缀
 pub const API_PATH_PREFIX: &str = "/open-apis/";
+/// 应用凭证内部接口 URL 路径
 pub const APP_ACCESS_TOKEN_INTERNAL_URL_PATH: &str = "/open-apis/auth/v3/app_access_token/internal";
+/// 应用凭证 URL 路径
 pub const APP_ACCESS_TOKEN_URL_PATH: &str = "/open-apis/auth/v3/app_access_token";
+/// 租户凭证内部接口 URL 路径
 pub const TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH: &str =
     "/open-apis/auth/v3/tenant_access_token/internal";
+/// 租户凭证 URL 路径
 pub const TENANT_ACCESS_TOKEN_URL_PATH: &str = "/open-apis/auth/v3/tenant_access_token";
+/// 申请应用票据 URL 路径
 pub const APPLY_APP_TICKET_PATH: &str = "/open-apis/auth/v3/app_ticket/resend";
 
 #[derive(Default, Hash, Eq, PartialEq, Debug, Copy, Clone)]
@@ -39,10 +45,14 @@ pub const APPLY_APP_TICKET_PATH: &str = "/open-apis/auth/v3/app_ticket/resend";
 ///
 /// 定义不同的访问令牌类型，用于API认证
 pub enum AccessTokenType {
+    /// 无访问令牌
     #[default]
     None,
+    /// 应用访问令牌
     App,
+    /// 租户访问令牌
     Tenant,
+    /// 用户访问令牌
     User,
 }
 
@@ -64,31 +74,51 @@ impl Display for AccessTokenType {
     }
 }
 
+/// 项目名称
 pub const PROJECT: &str = "open-lark";
+/// 项目版本号（来自 Cargo.toml）
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Domain
 pub const FEISHU_BASE_URL: &str = "https://open.feishu.cn";
+/// 飞书国际版 Lark 域名
 pub const LARK_BASE_URL: &str = "https://open.larksuite.com";
 
+/// 默认 Content-Type（JSON 编码）
 pub const DEFAULT_CONTENT_TYPE: &str = "application/json; charset=utf-8";
+/// 文件上传 Content-Type
 pub const FILE_CONTENT_TYPE: &str = "multipart/form-data";
+/// User-Agent HTTP 头名称
 pub const USER_AGENT_HEADER: &str = "User-Agent";
 
+/// X-Request-Id HTTP 请求头键名
 pub const HTTP_HEADER_KEY_REQUEST_ID: &str = "X-Request-Id";
+/// Request-Id HTTP 请求头键名
 pub const HTTP_HEADER_REQUEST_ID: &str = "Request-Id";
 
+/// X-Tt-Logid HTTP 请求头键名
 pub const HTTP_HEADER_KEY_LOG_ID: &str = "X-Tt-Logid";
+/// Content-Type HTTP 头名称
 pub const CONTENT_TYPE_HEADER: &str = "Content-Type";
+/// JSON Content-Type 值
 pub const CONTENT_TYPE_JSON: &str = "application/json";
+/// 自定义请求 ID 头名称
 pub const CUSTOM_REQUEST_ID: &str = "Open-Lark-Request-Id";
+/// 应用票据缓存键前缀
 pub const APP_TICKET_KEY_PREFIX: &str = "app_ticket";
+/// 应用访问令牌缓存键前缀
 pub const APP_ACCESS_TOKEN_KEY_PREFIX: &str = "app_access_token";
+/// 租户访问令牌缓存键前缀
 pub const TENANT_ACCESS_TOKEN_KEY_PREFIX: &str = "tenant_access_token";
+/// 令牌过期时间增量（秒），用于提前刷新令牌
 pub const EXPIRY_DELTA: i32 = 60 * 3;
+/// 应用票据无效错误码
 pub const ERR_CODE_APP_TICKET_INVALID: i32 = 10012;
+/// 访问令牌无效错误码
 pub const ERR_CODE_ACCESS_TOKEN_INVALID: i32 = 99991671;
+/// 应用访问令牌无效错误码
 pub const ERR_CODE_APP_ACCESS_TOKEN_INVALID: i32 = 99991664;
+/// 租户访问令牌无效错误码
 pub const ERR_CODE_TENANT_ACCESS_TOKEN_INVALID: i32 = 99991663;
 
 #[cfg(test)]
