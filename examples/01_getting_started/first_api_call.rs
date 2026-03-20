@@ -20,7 +20,7 @@
 //! export OPENLARK_APP_SECRET="your_real_app_secret"
 //! export OPENLARK_RECEIVE_ID="user_open_id_or_chat_id"  # 可选，默认使用测试ID
 //! export OPENLARK_RECEIVE_ID_TYPE="open_id"             # 可选，默认为 open_id
-//! cargo run --example first_api_call --features communication
+//! cargo run --example first_api_call --features "auth,communication"
 //! ```
 
 // 引入依赖
@@ -31,7 +31,7 @@ mod utils;
 use utils::{print_example_footer, print_example_header, print_step, print_success, print_info};
 
 // 引入核心依赖
-use openlark_communication::endpoints::IM_V1_MESSAGES;
+use open_lark::communication::endpoints::IM_V1_MESSAGES;
 use serde_json::json;
 
 #[tokio::main]
@@ -326,8 +326,8 @@ async fn get_access_token(config: &MessageConfig) -> Result<String, Box<dyn std:
     println!("🔐 正在获取应用访问令牌...");
 
     // 使用认证服务获取令牌
-    let auth_config = openlark_auth::models::AuthConfig::new(&config.app_id, &config.app_secret);
-    let auth_services = openlark_auth::AuthServices::new(auth_config);
+    let auth_config = open_lark::auth::models::AuthConfig::new(&config.app_id, &config.app_secret);
+    let auth_services = open_lark::auth::AuthServices::new(auth_config);
 
     // 获取自建应用访问令牌
     let token_response = auth_services

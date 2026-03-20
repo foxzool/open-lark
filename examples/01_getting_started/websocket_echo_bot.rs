@@ -1,8 +1,10 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use openlark_client::ws_client::{EventDispatcherHandler, LarkWsClient};
-use openlark_communication::endpoints::IM_V1_MESSAGES;
+use open_lark::auth::AuthService;
+use open_lark::communication::endpoints::IM_V1_MESSAGES;
+use open_lark::ws_client::{EventDispatcherHandler, LarkWsClient};
+use open_lark::{Config, CoreConfig};
 use serde::Deserialize;
 use serde_json::json;
 use tokio::sync::mpsc;
@@ -15,7 +17,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🚀 启动 WebSocket Echo Bot");
     println!("🌐 API Base URL: {}", runtime_config.base_url);
 
-    let ws_config = openlark_client::Config::builder()
+    let ws_config = Config::builder()
         .app_id(runtime_config.app_id.clone())
         .app_secret(runtime_config.app_secret.clone())
         .base_url(runtime_config.base_url.clone())
@@ -185,13 +187,13 @@ async fn send_echo_message(
 async fn fetch_app_access_token(
     runtime_config: &RuntimeConfig,
 ) -> Result<String, Box<dyn std::error::Error>> {
-    let core_config = openlark_core::config::Config::builder()
+    let core_config = CoreConfig::builder()
         .app_id(runtime_config.app_id.clone())
         .app_secret(runtime_config.app_secret.clone())
         .base_url(runtime_config.base_url.clone())
         .req_timeout(Duration::from_secs(runtime_config.timeout_secs))
         .build();
-    let auth_service = openlark_auth::AuthService::new(core_config);
+    let auth_service = AuthService::new(core_config);
     let token_response = auth_service
         .v3()
         .app_access_token_internal()

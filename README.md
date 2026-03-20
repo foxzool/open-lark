@@ -19,14 +19,19 @@
 
 ```toml
 [dependencies]
-openlark = "0.15"
+openlark = { version = "0.15", features = ["essential"] }
 ```
 
 ### 2. 选择功能组合
 
-**默认配置**（推荐新手）：
+**默认配置**（统一客户端 + 认证能力）：
 ```toml
-openlark = "0.15"  # 包含 IM 消息、文档协作、认证功能
+openlark = "0.15"
+```
+
+**推荐业务开发**：
+```toml
+openlark = { version = "0.15", features = ["essential"] }  # auth + communication + docs
 ```
 
 **按需选择**：
@@ -37,14 +42,14 @@ openlark = { version = "0.15", features = ["communication"] }
 # 自定义机器人（Webhook）
 openlark = { version = "0.15", features = ["webhook"] }
 
-# 企业协作套件（IM + 文档 + 认证 + 工作流）
-openlark = { version = "0.15", features = ["core-services"] }
+# 企业协作套件（IM + 文档 + 认证）
+openlark = { version = "0.15", features = ["essential"] }
 
-# 人力资源套件
-openlark = { version = "0.15", features = ["core-services", "hr"] }
+# 企业级组合（essential + security + hr + workflow）
+openlark = { version = "0.15", features = ["enterprise"] }
 
-# 按需组合更多模块
-openlark = { version = "0.15", features = ["core-services", "hr", "meeting", "ai"] }
+# 全量组合
+openlark = { version = "0.15", features = ["full"] }
 ```
 
 ### 2.1 选择平台 Endpoint
@@ -90,7 +95,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .app_secret("your_app_secret")
         .build()?;
 
-    // 上传文件
+    // 上传文件（需要启用 docs feature，例如 essential）
     let file_data = std::fs::read("document.pdf")?;
     let result = UploadAllRequest::new(
         client.docs.ccm.drive.v1().config().clone(),
@@ -106,7 +111,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("文件上传成功: {}", result.file_token);
 
     // 创建数据表
-    use openlark_docs::base::bitable::v1::app::table::{CreateTableRequest, TableData};
+    use open_lark::docs::base::bitable::v1::app::table::{CreateTableRequest, TableData};
     let table_request = CreateTableRequest::new(
         client.docs.base.bitable().config().clone(),
     )
@@ -117,7 +122,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("表格创建成功: {}", table.table_id);
 
     // 创建记录
-    use openlark_docs::base::bitable::v1::app::table::record::CreateRecordRequest;
+    use open_lark::docs::base::bitable::v1::app::table::record::CreateRecordRequest;
     let fields = serde_json::json!({
         "姓名": "张三",
         "部门": "技术部",
@@ -135,7 +140,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("记录创建成功: {}", record.data.record_id);
 
     // 创建知识空间
-    use openlark_docs::ccm::wiki::v2::space::CreateWikiSpaceRequest;
+    use open_lark::docs::ccm::wiki::v2::space::CreateWikiSpaceRequest;
     let space_request = CreateWikiSpaceRequest::new(
         client.docs.ccm.wiki.v2().config().clone(),
     )

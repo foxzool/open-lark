@@ -10,6 +10,9 @@ homepage.workspace = true
 keywords = ["feishu", "lark", "hr", "sdk", "api"]
 categories = ["api-bindings", "web-programming", "development-tools"]
 
+[lints]
+workspace = true
+
 [features]
 default = ["attendance", "corehr", "compensation", "payroll", "performance", "okr", "hire", "ehr"]
 

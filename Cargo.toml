@@ -58,6 +58,19 @@ description = "飞书开放平台 Rust SDK - 企业级 API 客户端"
 keywords = ["feishu", "lark", "api", "sdk", "rust"]
 categories = ["api-bindings", "web-programming", "development-tools"]
 
+[workspace.lints.rust]
+missing_docs = "warn"
+unused_extern_crates = "warn"
+unused_import_braces = "warn"
+
+[workspace.lints.clippy]
+all = "warn"
+pedantic = "warn"
+nursery = "warn"
+# 允许某些常见的例外
+multiple_crate_versions = "allow"
+module_name_repetitions = "allow"
+
 [workspace.dependencies]
 # === 核心运行时 (Core Runtime) ===
 tokio = { version = "1.38", features = ["rt", "rt-multi-thread", "macros"] }
@@ -108,7 +121,7 @@ walkdir = "2.4"
 # 核心基础设施模块
 openlark-core = { path = "crates/openlark-core", version = "0.15.0-rc.1" }
 openlark-protocol = { path = "crates/openlark-protocol", version = "0.15.0-rc.1" }
-openlark-client = { path = "crates/openlark-client", version = "0.15.0-rc.1" }
+openlark-client = { path = "crates/openlark-client", version = "0.15.0-rc.1", default-features = false }
 
 # 生产就绪服务模块
 openlark-auth = { path = "crates/openlark-auth", version = "0.15.0-rc.1" }
@@ -162,13 +175,15 @@ homepage.workspace = true
 license.workspace = true
 publish = true
 
+[lints]
+workspace = true
+
 [dependencies]
 # 核心基础设施（始终包含）
 openlark-core = { workspace = true }
+openlark-client = { workspace = true, default-features = false }
 
 # 功能模块
-openlark-client = { workspace = true, optional = true }
-openlark-protocol = { workspace = true, optional = true }
 openlark-communication = { workspace = true, optional = true }
 openlark-cardkit = { workspace = true, optional = true }
 openlark-webhook = { workspace = true, optional = true }
@@ -236,56 +251,61 @@ path = "examples/01_getting_started/simple_api_call.rs"
 required-features = ["auth", "communication"]
 
 [features]
-default = ["core-services"]
-
-# === 基础层 (Foundation Layer) ===
-# std = ["openlark-core"]  # openlark-core 是必需依赖，不应作为功能标志
-client = ["openlark-client"]
-protocol = ["openlark-protocol"]
+default = ["auth"]
 
 # === 核心服务模块 (Core Services) ===
 # 认证与安全
-auth = ["client", "openlark-auth"]
-security = ["client", "openlark-security"]
+auth = ["dep:openlark-auth", "openlark-client/auth"]
+security = ["auth", "dep:openlark-security", "openlark-client/security"]
 
 # 通讯与协作
-communication = ["client", "openlark-communication"]
+communication = ["auth", "dep:openlark-communication", "openlark-client/communication"]
 
 # CardKit 卡片能力
-cardkit = ["client", "openlark-cardkit"]
+cardkit = ["auth", "dep:openlark-cardkit", "openlark-client/cardkit"]
 
 # Webhook 自定义机器人
-webhook = ["client", "openlark-webhook"]
+webhook = ["dep:openlark-webhook"]
 
 # 文档管理
-docs = ["client", "openlark-docs"]
+docs = ["auth", "dep:openlark-docs", "openlark-client/docs"]
 
 # 人力资源
-hr = ["client", "openlark-hr"]
-workflow = ["client", "openlark-workflow"]
+hr = ["dep:openlark-hr", "openlark-client/hr"]
+workflow = ["dep:openlark-workflow"]
 
 # === 高级服务模块 (Advanced Services) ===
-ai = ["client", "openlark-ai"]
-meeting = ["client", "openlark-meeting"]
-helpdesk = ["client", "openlark-helpdesk"]
-mail = ["client", "openlark-mail"]
-application = ["client", "openlark-application"]
-platform = ["client", "openlark-platform"]
-analytics = ["client", "openlark-analytics"]
-user = ["client", "openlark-user"]
-base = ["client", "openlark-docs"]
-bitable = ["client", "openlark-docs"]
+ai = ["dep:openlark-ai", "openlark-client/ai"]
+meeting = ["auth", "dep:openlark-meeting", "openlark-client/meeting"]
+helpdesk = ["dep:openlark-helpdesk"]
+mail = ["dep:openlark-mail"]
+application = ["dep:openlark-application"]
+platform = ["dep:openlark-platform"]
+analytics = ["dep:openlark-analytics"]
+user = ["dep:openlark-user"]
 
 # === 推荐功能组合 (Recommended Feature Sets) ===
 # 核心业务功能
-core-services = ["auth", "communication", "docs", "workflow"]
+essential = ["auth", "communication", "docs"]
 
 # 企业级功能
-# enterprise = ["core-services", "security", "hr"]  # 暂时注释，待模块验证完成
+enterprise = ["essential", "security", "hr", "workflow"]
 
-# 全功能（当前可用）
-# full = ["enterprise", "meeting"]  # 暂时注释，待模块验证完成
+# 全功能
+full = [
+    "enterprise",
+    "ai",
+    "meeting",
+    "cardkit",
+    "webhook",
+    "helpdesk",
+    "mail",
+    "application",
+    "platform",
+    "analytics",
+    "user",
+]
 
-# === 开发与调试 (Development & Debugging) ===
-dev-tools = []  # 开发工具
-websocket = ["protocol", "openlark-client/websocket"]  # WebSocket 支持
+# === 技术特性 (Technical Features) ===
+websocket = ["openlark-client/websocket"]  # WebSocket 支持
+otel = ["openlark-core/otel"]  # OpenTelemetry 支持

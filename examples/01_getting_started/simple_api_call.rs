@@ -9,13 +9,12 @@
 //! cargo run --example simple_api_call --features "auth,communication"
 //! ```
 
-use openlark_auth::AuthService;
-use openlark_communication::endpoints::IM_V1_MESSAGES;
-use openlark_core::config::Config;
+use open_lark::communication::endpoints::IM_V1_MESSAGES;
+use open_lark::prelude::*;
 use serde_json::json;
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("openlark SDK 简化示例\n");
 
     // 从环境变量加载配置
@@ -27,15 +26,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("应用ID: {}", &app_id[..8.min(app_id.len())]);
 
-    // 使用子 crate 创建 AuthService
-    let _auth_service = AuthService::new(
-        Config::builder()
-            .app_id(app_id)
-            .app_secret(app_secret)
-            .build(),
-    );
+    let client = Client::builder()
+        .app_id(app_id)
+        .app_secret(app_secret)
+        .build()?;
 
-    println!("✅ AuthService 创建成功");
+    println!("✅ Client 创建成功");
+    println!("认证入口已启用: {}", client.auth.app.config().app_id());
 
     // 访问 communication 模块的常量
     let endpoint = IM_V1_MESSAGES;

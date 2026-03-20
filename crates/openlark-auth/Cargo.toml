@@ -8,6 +8,9 @@ repository.workspace = true
 documentation.workspace = true
 description = "OpenLark 认证模块 - 提供令牌管理、缓存、验证和刷新功能"
 
+[lints]
+workspace = true
+
 [dependencies]
 # 核心基础设施
 openlark-core = { workspace = true }
@@ -62,7 +65,7 @@ features = ["html_reports"]
 optional = true
 
 [features]
-default = ["token-management", "cache", "encryption", "oauth"]
+default = ["token-management", "cache", "oauth"]
 
 # 核心功能模块
 token-management = []
@@ -73,8 +76,3 @@ encryption = ["ring", "sha2", "hmac", "pbkdf2"]
 # 高级功能
 advanced-cache = ["cache", "encryption"]
 monitoring = []
-performance = ["criterion"]
-
-# 开发和测试
-dev = ["token-management", "cache", "oauth", "encryption"]
-benchmarks = ["performance"]

@@ -2,6 +2,10 @@
 
 现代化的 Rust 客户端库，为飞书开放平台提供类型安全的 API 访问。
 
+> 普通用户请优先使用根 crate `openlark`。
+>
+> `openlark-client` 适合已经明确需要统一 `Client` 实现细节、或只想直接复用客户端层的高级用户。
+
 ## 🚀 特性
 
 ### ✨ **架构优势**
@@ -54,6 +58,13 @@ features = ["websocket"]
 
 # 组合功能（P0 推荐）
 features = ["p0-services"]
+```
+
+如果你只是要接入 SDK，而不是直接依赖客户端实现层，推荐改用：
+
+```toml
+[dependencies]
+openlark = { version = "0.15", features = ["essential"] }
 ```
 
 ## 🧩 meta 调用链（按 CSV 映射）

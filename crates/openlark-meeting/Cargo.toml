@@ -10,6 +10,9 @@ homepage.workspace = true
 keywords = ["feishu", "lark", "meeting", "sdk", "api"]
 categories = ["api-bindings", "web-programming", "development-tools"]
 
+[lints]
+workspace = true
+
 [features]
 # 默认配置 - 包含视频会议和日历功能
 default = ["vc", "calendar"]
