@@ -105,6 +105,7 @@ pub enum ResponseFormat {
 
 /// API响应特征
 pub trait ApiResponseTrait: Send + Sync + 'static {
+    /// 获取响应数据格式
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -217,6 +218,7 @@ impl ApiResponseTrait for Vec<u8> {
 impl ApiResponseTrait for () {}
 
 // 类型别名，用于向后兼容
+/// 基础响应类型别名
 pub type BaseResponse<T> = Response<T>;
 
 #[cfg(test)]

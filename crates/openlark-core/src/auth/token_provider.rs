@@ -9,15 +9,19 @@ use std::{future::Future, pin::Pin};
 
 /// Token 获取请求上下文
 ///
-/// 注意：这里不绑定 `Config`，避免 core 持有“获取逻辑”，由具体实现自行决定读取哪些配置或状态。
+/// 注意：这里不绑定 `Config`，避免 core 持有"获取逻辑"，由具体实现自行决定读取哪些配置或状态。
 #[derive(Debug, Clone, Default)]
 pub struct TokenRequest {
+    /// 令牌类型
     pub token_type: AccessTokenType,
+    /// 租户键
     pub tenant_key: Option<String>,
+    /// 应用票据
     pub app_ticket: Option<String>,
 }
 
 impl TokenRequest {
+    /// 创建应用令牌请求
     pub fn app() -> Self {
         Self {
             token_type: AccessTokenType::App,
@@ -25,6 +29,7 @@ impl TokenRequest {
         }
     }
 
+    /// 创建租户令牌请求
     pub fn tenant() -> Self {
         Self {
             token_type: AccessTokenType::Tenant,
@@ -32,6 +37,7 @@ impl TokenRequest {
         }
     }
 
+    /// 创建用户令牌请求
     pub fn user() -> Self {
         Self {
             token_type: AccessTokenType::User,
@@ -39,11 +45,13 @@ impl TokenRequest {
         }
     }
 
+    /// 设置租户键
     pub fn tenant_key(mut self, tenant_key: impl Into<String>) -> Self {
         self.tenant_key = Some(tenant_key.into());
         self
     }
 
+    /// 设置应用票据
     pub fn app_ticket(mut self, app_ticket: impl Into<String>) -> Self {
         self.app_ticket = Some(app_ticket.into());
         self

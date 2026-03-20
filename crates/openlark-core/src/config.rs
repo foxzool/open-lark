@@ -96,6 +96,7 @@ impl Deref for Config {
 }
 
 impl Config {
+    /// 创建配置构建器
     pub fn builder() -> ConfigBuilder {
         ConfigBuilder::default()
     }
@@ -178,6 +179,7 @@ impl Config {
     }
 }
 
+/// 配置构建器
 #[derive(Default, Clone)]
 pub struct ConfigBuilder {
     app_id: Option<String>,
@@ -192,31 +194,37 @@ pub struct ConfigBuilder {
 }
 
 impl ConfigBuilder {
+    /// 设置应用 ID
     pub fn app_id(mut self, app_id: impl Into<String>) -> Self {
         self.app_id = Some(app_id.into());
         self
     }
 
+    /// 设置应用密钥
     pub fn app_secret(mut self, app_secret: impl Into<String>) -> Self {
         self.app_secret = Some(app_secret.into());
         self
     }
 
+    /// 设置基础 URL
     pub fn base_url(mut self, base_url: impl Into<String>) -> Self {
         self.base_url = Some(base_url.into());
         self
     }
 
+    /// 设置是否启用令牌缓存
     pub fn enable_token_cache(mut self, enable: bool) -> Self {
         self.enable_token_cache = Some(enable);
         self
     }
 
+    /// 设置应用类型
     pub fn app_type(mut self, app_type: AppType) -> Self {
         self.app_type = Some(app_type);
         self
     }
 
+    /// 设置 HTTP 客户端
     pub fn http_client(mut self, client: reqwest::Client) -> Self {
         self.http_client = Some(client);
         self

@@ -20,9 +20,13 @@ use thiserror::Error;
 /// 重试策略（供 CoreError 使用）
 #[derive(Debug, Clone)]
 pub struct RetryPolicy {
+    /// 最大重试次数
     pub max_retries: u32,
+    /// 寏次重试基础延迟
     pub base_delay: Duration,
+    /// 退避因子
     pub backoff_factor: f64,
+    /// 最大延迟
     pub max_delay: Option<Duration>,
 }
 
@@ -122,37 +126,64 @@ type AnyError = Box<dyn std::error::Error + Send + Sync>;
 /// 枚举化的构建器目标类型
 #[derive(Debug, Clone, Copy)]
 pub enum BuilderKind {
+    /// 网络错误
     Network,
+    /// 认证错误
     Authentication,
+    /// API 错误
     Api,
+    /// 验证错误
     Validation,
+    /// 配置错误
     Configuration,
+    /// 序列化错误
     Serialization,
+    /// 业务错误
     Business,
+    /// 超时错误
     Timeout,
+    /// 限流错误
     RateLimit,
+    /// 服务不可用错误
     ServiceUnavailable,
+    /// 内部错误
     Internal,
 }
 
 /// 统一的错误构建器，避免直接依赖枚举内部字段
 #[derive(Debug)]
 pub struct ErrorBuilder {
+    /// 构建器目标类型
     kind: BuilderKind,
+    /// 错误消息
     message: Option<String>,
+    /// 错误码
     code: Option<ErrorCode>,
+    /// HTTP 状态码
     status: Option<u16>,
+    /// API 端点
     endpoint: Option<String>,
+    /// 验证字段名
     field: Option<String>,
+    /// 源错误
     source: Option<AnyError>,
+    /// 重试策略
     policy: Option<RetryPolicy>,
+    /// 错误上下文
     ctx: ErrorContext,
+    /// 持续时间
     duration: Option<Duration>,
+    /// 操作名
     operation: Option<String>,
+    /// 限流限制
     limit: Option<u32>,
+    /// 限流窗口
     window: Option<Duration>,
+    /// 重置时间
     reset_after: Option<Duration>,
+    /// 服务名
     service: Option<String>,
+    /// 重试等待时间
     retry_after: Option<Duration>,
 }
 
@@ -354,80 +385,124 @@ impl ErrorBuilder {
 #[non_exhaustive]
 #[derive(Debug, Error)]
 pub enum CoreError {
+    /// 网络错误
     #[error("网络错误: {0}")]
     Network(Box<NetworkError>),
 
+    /// 认证错误
     #[error("认证失败: {message}")]
     Authentication {
+        /// 错误消息
         message: String,
+        /// 错误码
         code: ErrorCode,
+        /// 错误上下文
         ctx: Box<ErrorContext>,
     },
 
+    /// API 错误
     #[error("API错误 {0}")]
     Api(Box<ApiError>),
 
+    /// 验证错误
     #[error("验证错误 {field}: {message}")]
     Validation {
+        /// 字段名
         field: Cow<'static, str>,
+        /// 错误消息
         message: String,
+        /// 错误码
         code: ErrorCode,
+        /// 错误上下文
         ctx: Box<ErrorContext>,
     },
 
+    /// 配置错误
     #[error("配置错误: {message}")]
     Configuration {
+        /// 错误消息
         message: String,
+        /// 错误码
         code: ErrorCode,
+        /// 错误上下文
         ctx: Box<ErrorContext>,
     },
 
+    /// 序列化错误
     #[error("序列化错误: {message}")]
     Serialization {
+        /// 错误消息
         message: String,
+        /// 源错误
         #[source]
         source: Option<AnyError>,
+        /// 错误码
         code: ErrorCode,
+        /// 错误上下文
         ctx: Box<ErrorContext>,
     },
 
+    /// 业务错误
     #[error("业务错误 {code:?}: {message}")]
     Business {
+        /// 错误码
         code: ErrorCode,
+        /// 错误消息
         message: String,
+        /// 错误上下文
         ctx: Box<ErrorContext>,
     },
 
+    /// 超时错误
     #[error("超时 {operation:?} after {duration:?}")]
     Timeout {
+        /// 超时时长
         duration: Duration,
+        /// 操作名
         operation: Option<String>,
+        /// 错误上下文
         ctx: Box<ErrorContext>,
     },
 
+    /// 限流错误
     #[error("限流: {limit} 次/{window:?}")]
     RateLimit {
+        /// 限制次数
         limit: u32,
+        /// 时间窗口
         window: Duration,
+        /// 重置时间
         reset_after: Option<Duration>,
+        /// 错误码
         code: ErrorCode,
+        /// 错误上下文
         ctx: Box<ErrorContext>,
     },
 
+    /// 服务不可用错误
     #[error("服务不可用: {service}")]
     ServiceUnavailable {
+        /// 服务名
         service: Cow<'static, str>,
+        /// 重试等待时间
         retry_after: Option<Duration>,
+        /// 错误码
         code: ErrorCode,
+        /// 错误上下文
         ctx: Box<ErrorContext>,
     },
 
+    /// 内部错误
     #[error("内部错误 {code:?}: {message}")]
     Internal {
+        /// 错误码
         code: ErrorCode,
+        /// 错误消息
         message: String,
+        /// 源错误
         #[source]
         source: Option<AnyError>,
+        /// 错误上下文
         ctx: Box<ErrorContext>,
     },
 }
