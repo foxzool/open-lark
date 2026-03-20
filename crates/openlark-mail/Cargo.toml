@@ -8,6 +8,9 @@ repository.workspace = true
 documentation.workspace = true
 description = "OpenLark 邮件模块 - 提供飞书邮件组 API"
 
+[lints]
+workspace = true
+
 [dependencies]
 openlark-core = { workspace = true }
 serde = { workspace = true }

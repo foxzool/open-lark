@@ -10,6 +10,9 @@ homepage.workspace = true
 keywords = ["feishu", "lark", "api", "sdk", "client"]
 categories = ["api-bindings", "web-programming", "development-tools"]
 
+[lints]
+workspace = true
+
 [dependencies]
 # Core dependencies
 openlark-core = { workspace = true }
@@ -46,46 +49,24 @@ openlark-ai = { workspace = true, optional = true }   # AI服务模块
 # openlark-mail = { workspace = true, optional = true } # 暂时注释，未加入workspace
 
 [features]
-default = ["auth", "communication"]  # 单入口下建议默认启用认证链路
+default = ["auth", "communication"]
 
-# Core client feature
-client = []
+# === 服务功能 ===
+auth = ["dep:openlark-auth"]
+communication = ["auth", "dep:openlark-communication"]
+docs = ["auth", "dep:openlark-docs"]
+cardkit = ["auth", "dep:openlark-cardkit"]
+security = ["auth", "dep:openlark-security"]
+hr = ["dep:openlark-hr"]
+ai = ["dep:openlark-ai"]
+meeting = ["auth", "dep:openlark-meeting"]
 
-auth = ["openlark-auth"]
-# WebSocket support
+# === 技术特性 ===
 websocket = ["tokio-tungstenite", "futures-util", "lark-websocket-protobuf", "url", "prost", "reqwest", "log"]
 
-# P0 阶段 1 业务服务功能
-# auth 现在默认启用，不再需要功能标志
-communication = ["auth", "openlark-communication"]    # 通讯和消息
-docs = ["auth", "openlark-docs"]                    # 文档和知识库
-cardkit = ["auth", "openlark-cardkit"]              # CardKit 卡片能力
-security = ["auth", "openlark-security"]              # 安全认证
-
-# P0.5 Phase 2 business service features
-hr = ["openlark-hr"]                    # 人力资源
-ai = ["openlark-ai"]                     # AI服务
-
-# Additional business services
-
-meeting = ["auth", "openlark-meeting"]         # 会议服务
-# P0 3-layer architecture features
-core-layer = [
-    "communication",  # IM、消息、联系人管理
-    "docs",           # 云文档、表格、知识库
-    "security",       # 安全认证
-]
-
-# Convenience features - P0模块组合
-p0-services = [
-    "communication", "docs", "security"
-]
-
-# Complete client features for easy selection
-client-communication = ["client", "communication"]
-client-docs = ["client", "docs"]
-client-security = ["client", "security"]
-client-p0 = ["client", "p0-services"]
+# === 功能组合 ===
+core-layer = ["communication", "docs", "security"]
+p0-services = ["communication", "docs", "security"]
 
 [dev-dependencies]
 tokio-test = "0.4"

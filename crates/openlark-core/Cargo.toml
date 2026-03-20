@@ -10,6 +10,9 @@ homepage.workspace = true
 keywords = ["feishu", "lark", "api", "sdk", "core"]
 categories = ["api-bindings", "web-programming", "development-tools"]
 
+[lints]
+workspace = true
+
 [lib]
 doctest = false
 

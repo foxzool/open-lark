@@ -10,6 +10,9 @@ homepage.workspace = true
 keywords = ["feishu", "lark", "ai", "sdk", "api"]
 categories = ["api-bindings", "web-programming", "development-tools"]
 
+[lints]
+workspace = true
+
 [dependencies]
 openlark-core = { workspace = true }
 tokio = { workspace = true }
