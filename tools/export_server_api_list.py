@@ -482,8 +482,8 @@ def main() -> int:
     parser.add_argument(
         "--sort",
         choices=("doc", "meta"),
-        default="doc",
-        help="排序方式：doc=按文档默认顺序导出（默认），meta=按 meta.* 字段排序",
+        default="meta",
+        help="排序方式：meta=按 bizTag/meta.* 稳定排序导出（默认），doc=按文档默认顺序导出",
     )
     args = parser.parse_args()
 
@@ -530,7 +530,7 @@ def main() -> int:
     rows = finalize_rows(drafts_in_order)
 
     if args.sort == "meta":
-        # 保持输出稳定：按 bizTag/meta.Project/meta.Version/meta.Resource/meta.Name 排序
+        # 保持输出稳定：按业务路径排序，并追加 id 作为最终兜底，避免同 key 条目相对顺序抖动
         rows.sort(
             key=lambda r: (
                 r.get("bizTag", ""),
@@ -538,6 +538,7 @@ def main() -> int:
                 r.get("meta.Version", ""),
                 r.get("meta.Resource", ""),
                 r.get("meta.Name", ""),
+                r.get("id", ""),
             )
         )
 
