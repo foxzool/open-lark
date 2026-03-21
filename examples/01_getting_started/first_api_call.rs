@@ -293,29 +293,24 @@ fn show_next_steps() {
     println!();
 
     println!("📚 推荐下一步学习：");
-    println!("1. 📖 消息类型探索：");
-    println!("   - 图片消息、富文本消息、卡片消息");
-    println!("   - 运行: cargo run --example send_message --features communication");
+    println!("1. 📖 communication 基础：");
+    println!("   - 查看根 crate 单入口和 communication 模块访问");
+    println!("   - 运行: cargo run --example simple_api_call --features \"auth,communication\"");
     println!();
 
-    println!("2. 👥 用户和群组管理：");
-    println!("   - 获取用户信息、管理群组成员");
-    println!("   - 运行: cargo run --example user_management --features communication");
+    println!("2. 📁 文档 helper：");
+    println!("   - 自动分页遍历、sheet 查找、批量读取范围");
+    println!("   - 运行: cargo run --example docs_helpers --features \"auth,docs-bitable\"");
     println!();
 
-    println!("3. 📁 文档和协作：");
-    println!("   - 创建云文档、管理知识库");
-    println!("   - 运行: cargo run --example document_create --features docs");
+    println!("3. 🔌 长连接能力：");
+    println!("   - 接收消息并回显");
+    println!("   - 运行: cargo run --example websocket_echo_bot --features \"communication,websocket\"");
     println!();
 
-    println!("4. 🔐 高级认证和安全：");
-    println!("   - 令牌管理、权限控制");
-    println!("   - 运行: cargo run --example token_manager --features security");
-    println!();
-
-    println!("5. ⚡ 错误处理和最佳实践：");
-    println!("   - 完整的错误处理示例");
-    println!("   - 运行: cargo run --example error_handling --features communication");
+    println!("4. 🧩 工作流模块：");
+    println!("   - 查看 workflow 模块的调用方式");
+    println!("   - 运行: cargo run --example workflow_api_example --features \"workflow\"");
     println!();
 
     print_info("查看所有示例: cargo run --example --list");

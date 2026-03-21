@@ -4,7 +4,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! openlark = { version = "0.15", features = ["essential"] }
+//! openlark = { version = "0.15.0-rc.2", default-features = false, features = ["auth", "docs-drive", "docs-bitable", "webhook-signature"] }
 //! ```
 //!
 //! - 统一客户端入口：[`Client`]
@@ -16,7 +16,9 @@
 // 允许测试模块中的未使用导入（测试桩代码常见模式）
 #![allow(unused_imports)]
 
+pub use openlark_client;
 pub use openlark_client::{Client, ClientBuilder, Config, Error, Result};
+pub use openlark_core;
 pub use openlark_core as core;
 pub use openlark_core::config::Config as CoreConfig;
 pub use openlark_core::error::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType};
@@ -30,12 +32,43 @@ pub mod ws_client {
 }
 
 #[cfg(feature = "auth")]
+pub use openlark_auth;
+
+#[cfg(feature = "auth")]
 pub use openlark_auth as auth;
+
+#[cfg(feature = "communication")]
+pub use openlark_communication;
 
 #[cfg(feature = "communication")]
 pub use openlark_communication as communication;
 
-#[cfg(feature = "docs")]
+#[cfg(any(
+    feature = "docs",
+    feature = "docs-ccm",
+    feature = "docs-base",
+    feature = "docs-bitable",
+    feature = "docs-drive",
+    feature = "docs-explorer",
+    feature = "docs-sheets",
+    feature = "docs-sheets-v2",
+    feature = "docs-sheets-v3",
+    feature = "docs-full"
+))]
+pub use openlark_docs;
+
+#[cfg(any(
+    feature = "docs",
+    feature = "docs-ccm",
+    feature = "docs-base",
+    feature = "docs-bitable",
+    feature = "docs-drive",
+    feature = "docs-explorer",
+    feature = "docs-sheets",
+    feature = "docs-sheets-v2",
+    feature = "docs-sheets-v3",
+    feature = "docs-full"
+))]
 pub use openlark_docs as docs;
 
 #[cfg(feature = "hr")]
@@ -72,6 +105,9 @@ pub use openlark_analytics as analytics;
 pub use openlark_user as user;
 
 #[cfg(feature = "webhook")]
+pub use openlark_webhook;
+
+#[cfg(feature = "webhook")]
 pub use openlark_webhook as webhook;
 
 #[cfg(feature = "cardkit")]
@@ -80,7 +116,18 @@ pub use openlark_cardkit as cardkit;
 #[cfg(feature = "auth")]
 pub use openlark_client::AuthClient;
 
-#[cfg(feature = "docs")]
+#[cfg(any(
+    feature = "docs",
+    feature = "docs-ccm",
+    feature = "docs-base",
+    feature = "docs-bitable",
+    feature = "docs-drive",
+    feature = "docs-explorer",
+    feature = "docs-sheets",
+    feature = "docs-sheets-v2",
+    feature = "docs-sheets-v3",
+    feature = "docs-full"
+))]
 pub use openlark_client::DocsClient;
 
 #[cfg(feature = "communication")]
@@ -94,8 +141,27 @@ pub use openlark_client::CardkitClient;
 
 /// 面向 `openlark` 用户的统一预导出。
 pub mod prelude {
+    #[cfg(feature = "auth")]
+    pub use crate::AuthClient;
+    #[cfg(feature = "communication")]
+    pub use crate::CommunicationClient;
+    #[cfg(any(
+        feature = "docs",
+        feature = "docs-ccm",
+        feature = "docs-base",
+        feature = "docs-bitable",
+        feature = "docs-drive",
+        feature = "docs-explorer",
+        feature = "docs-sheets",
+        feature = "docs-sheets-v2",
+        feature = "docs-sheets-v3",
+        feature = "docs-full"
+    ))]
+    pub use crate::DocsClient;
+    #[cfg(feature = "meeting")]
+    pub use crate::MeetingClient;
+    pub use crate::SDKResult;
     pub use crate::{Client, ClientBuilder, Config, CoreConfig, Error, Result};
     pub use crate::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType, RequestOption};
-    pub use crate::SDKResult;
     pub use openlark_core::prelude::*;
 }

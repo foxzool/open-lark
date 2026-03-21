@@ -46,7 +46,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.15.0-rc.1"
+version = "0.15.0-rc.2"
 edition = "2021"
 rust-version = "1.75"
 authors = ["ZoOL <zhooul@gmail.com>"]
@@ -119,29 +119,29 @@ walkdir = "2.4"
 
 # === 工作空间内部依赖 (Internal Workspace Dependencies) ===
 # 核心基础设施模块
-openlark-core = { path = "crates/openlark-core", version = "0.15.0-rc.1" }
-openlark-protocol = { path = "crates/openlark-protocol", version = "0.15.0-rc.1" }
-openlark-client = { path = "crates/openlark-client", version = "0.15.0-rc.1", default-features = false }
+openlark-core = { path = "crates/openlark-core", version = "0.15.0-rc.2" }
+openlark-protocol = { path = "crates/openlark-protocol", version = "0.15.0-rc.2" }
+openlark-client = { path = "crates/openlark-client", version = "0.15.0-rc.2", default-features = false }
 
 # 生产就绪服务模块
-openlark-auth = { path = "crates/openlark-auth", version = "0.15.0-rc.1" }
-openlark-security = { path = "crates/openlark-security", version = "0.15.0-rc.1" }
-openlark-communication = { path = "crates/openlark-communication", version = "0.15.0-rc.1" }
-openlark-cardkit = { path = "crates/openlark-cardkit", version = "0.15.0-rc.1" }
-openlark-webhook = { path = "crates/openlark-webhook", version = "0.15.0-rc.1" }
-openlark-docs = { path = "crates/openlark-docs", version = "0.15.0-rc.1" }
-openlark-hr = { path = "crates/openlark-hr", version = "0.15.0-rc.1" }
+openlark-auth = { path = "crates/openlark-auth", version = "0.15.0-rc.2" }
+openlark-security = { path = "crates/openlark-security", version = "0.15.0-rc.2" }
+openlark-communication = { path = "crates/openlark-communication", version = "0.15.0-rc.2" }
+openlark-cardkit = { path = "crates/openlark-cardkit", version = "0.15.0-rc.2" }
+openlark-webhook = { path = "crates/openlark-webhook", version = "0.15.0-rc.2" }
+openlark-docs = { path = "crates/openlark-docs", version = "0.15.0-rc.2" }
+openlark-hr = { path = "crates/openlark-hr", version = "0.15.0-rc.2" }
 
 # 开发中服务模块
-openlark-ai = { path = "crates/openlark-ai", version = "0.15.0-rc.1" }
-openlark-application = { path = "crates/openlark-application", version = "0.15.0-rc.1" }
-openlark-platform = { path = "crates/openlark-platform", version = "0.15.0-rc.1" }
-openlark-helpdesk = { path = "crates/openlark-helpdesk", version = "0.15.0-rc.1" }
-openlark-mail = { path = "crates/openlark-mail", version = "0.15.0-rc.1" }
-openlark-meeting = { path = "crates/openlark-meeting", version = "0.15.0-rc.1" }
-openlark-workflow = { path = "crates/openlark-workflow", version = "0.15.0-rc.1" }
-openlark-analytics = { path = "crates/openlark-analytics", version = "0.15.0-rc.1" }
-openlark-user = { path = "crates/openlark-user", version = "0.15.0-rc.1" }
+openlark-ai = { path = "crates/openlark-ai", version = "0.15.0-rc.2" }
+openlark-application = { path = "crates/openlark-application", version = "0.15.0-rc.2" }
+openlark-platform = { path = "crates/openlark-platform", version = "0.15.0-rc.2" }
+openlark-helpdesk = { path = "crates/openlark-helpdesk", version = "0.15.0-rc.2" }
+openlark-mail = { path = "crates/openlark-mail", version = "0.15.0-rc.2" }
+openlark-meeting = { path = "crates/openlark-meeting", version = "0.15.0-rc.2" }
+openlark-workflow = { path = "crates/openlark-workflow", version = "0.15.0-rc.2" }
+openlark-analytics = { path = "crates/openlark-analytics", version = "0.15.0-rc.2" }
+openlark-user = { path = "crates/openlark-user", version = "0.15.0-rc.2" }
 
 # Test dependencies shared across workspace
 rstest = "0.19"
@@ -250,8 +250,18 @@ name = "simple_api_call"
 path = "examples/01_getting_started/simple_api_call.rs"
 required-features = ["auth", "communication"]
 
+[[example]]
+name = "docs_helpers"
+path = "examples/01_getting_started/docs_helpers.rs"
+required-features = ["auth", "docs-bitable"]
+
 [features]
 default = ["auth"]
+
+# === 兼容别名 (Compatibility Aliases) ===
+# `openlark-client` 始终是根 crate 的基础依赖，保留空 feature 仅用于兼容
+# 旧项目中显式声明的 `features = ["client", ...]` 写法。
+client = []
 
 # === 核心服务模块 (Core Services) ===
 # 认证与安全
@@ -266,9 +276,36 @@ cardkit = ["auth", "dep:openlark-cardkit", "openlark-client/cardkit"]
 
 # Webhook 自定义机器人
 webhook = ["dep:openlark-webhook"]
+webhook-card = ["webhook", "openlark-webhook/card"]
+webhook-signature = ["webhook", "openlark-webhook/signature"]
+webhook-full = ["webhook", "webhook-card", "webhook-signature"]
 
 # 文档管理
-docs = ["auth", "dep:openlark-docs", "openlark-client/docs"]
+docs = ["docs-ccm", "docs-bitable"]
+docs-ccm = [
+    "auth",
+    "dep:openlark-docs",
+    "openlark-client/docs",
+    "openlark-docs/ccm-core",
+    "openlark-docs/v2",
+    "openlark-docs/v3",
+]
+docs-base = ["docs-ccm", "openlark-docs/base"]
+docs-bitable = ["docs-ccm", "openlark-docs/bitable"]
+docs-drive = ["docs-ccm", "openlark-docs/ccm-drive"]
+docs-explorer = ["docs-ccm"]
+docs-sheets = ["docs-ccm"]
+docs-sheets-v2 = ["docs-ccm", "openlark-docs/v2"]
+docs-sheets-v3 = ["docs-ccm", "openlark-docs/v3"]
+docs-full = [
+    "docs-ccm",
+    "docs-base",
+    "docs-bitable",
+    "docs-drive",
+    "openlark-docs/ccm",
+    "openlark-docs/baike",
+    "openlark-docs/minutes",
+]
 
 # 人力资源
 hr = ["dep:openlark-hr", "openlark-client/hr"]
