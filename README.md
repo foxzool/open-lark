@@ -19,37 +19,37 @@
 
 ```toml
 [dependencies]
-openlark = { version = "0.15", features = ["essential"] }
+openlark = { version = "0.15.0-rc.2", default-features = false, features = ["auth"] }
 ```
 
 ### 2. 选择功能组合
 
-**默认配置**（统一客户端 + 认证能力）：
+**默认配置**（仅认证能力）：
 ```toml
-openlark = "0.15"
+openlark = "0.15.0-rc.2"
 ```
 
 **推荐业务开发**：
 ```toml
-openlark = { version = "0.15", features = ["essential"] }  # auth + communication + docs
+openlark = { version = "0.15.0-rc.2", default-features = false, features = ["auth", "communication"] }
 ```
 
 **按需选择**：
 ```toml
-# 纯通讯功能（IM + 联系人 + 群组）
-openlark = { version = "0.15", features = ["communication"] }
+# 文档协作：多维表格 + Sheets helper
+openlark = { version = "0.15.0-rc.2", default-features = false, features = ["auth", "docs-bitable"] }
 
-# 自定义机器人（Webhook）
-openlark = { version = "0.15", features = ["webhook"] }
+# 云盘上传/文件夹遍历
+openlark = { version = "0.15.0-rc.2", default-features = false, features = ["auth", "docs-drive"] }
 
-# 企业协作套件（IM + 文档 + 认证）
-openlark = { version = "0.15", features = ["essential"] }
+# 自定义机器人卡片 + 签名
+openlark = { version = "0.15.0-rc.2", default-features = false, features = ["webhook-card", "webhook-signature"] }
 
-# 企业级组合（essential + security + hr + workflow）
-openlark = { version = "0.15", features = ["enterprise"] }
+# 通讯 + 文档组合
+openlark = { version = "0.15.0-rc.2", default-features = false, features = ["auth", "communication", "docs-bitable"] }
 
-# 全量组合
-openlark = { version = "0.15", features = ["full"] }
+# 文档全量能力
+openlark = { version = "0.15.0-rc.2", default-features = false, features = ["auth", "docs-full"] }
 ```
 
 ### 2.1 选择平台 Endpoint
@@ -95,60 +95,33 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .app_secret("your_app_secret")
         .build()?;
 
-    // 上传文件（需要启用 docs feature，例如 essential）
-    let file_data = std::fs::read("document.pdf")?;
-    let result = UploadAllRequest::new(
-        client.docs.ccm.drive.v1().config().clone(),
-        "document.pdf".to_string(),
-        "folder_token".to_string(),
-        "explorer".to_string(),
-        file_data.len(),
-        file_data,
-    )
-    .execute()
-    .await?;
+    // 自动分页读取文件夹子项
+    let children = client
+        .docs
+        .list_folder_children_all("folder_token", Some("sheet"))
+        .await?;
+    println!("文件夹子项数量: {}", children.len());
 
-    println!("文件上传成功: {}", result.file_token);
+    // 按标题查找工作表并批量读取范围
+    let sheet = client
+        .docs
+        .find_sheet_by_title("spreadsheet_token", "汇总表")
+        .await?;
+    let ranges = client
+        .docs
+        .read_multiple_ranges(
+            "spreadsheet_token",
+            vec![format!("{}!A1:C10", sheet.sheet_id)],
+        )
+        .await?;
+    println!("读取范围数量: {}", ranges.value_ranges.len());
 
-    // 创建数据表
-    use open_lark::docs::base::bitable::v1::app::table::{CreateTableRequest, TableData};
-    let table_request = CreateTableRequest::new(
-        client.docs.base.bitable().config().clone(),
-    )
-    .app_token("app_token".to_string())
-    .table(TableData::new("测试表格"));
-    let table = table_request.execute().await?;
-
-    println!("表格创建成功: {}", table.table_id);
-
-    // 创建记录
-    use open_lark::docs::base::bitable::v1::app::table::record::CreateRecordRequest;
-    let fields = serde_json::json!({
-        "姓名": "张三",
-        "部门": "技术部",
-        "状态": "在职"
-    });
-
-    let record_request = CreateRecordRequest::new(
-        client.docs.base.bitable().config().clone(),
-    )
-    .app_token("app_token".to_string())
-    .table_id("table_id".to_string())
-    .fields(fields);
-    let record = record_request.execute().await?;
-
-    println!("记录创建成功: {}", record.data.record_id);
-
-    // 创建知识空间
-    use open_lark::docs::ccm::wiki::v2::space::CreateWikiSpaceRequest;
-    let space_request = CreateWikiSpaceRequest::new(
-        client.docs.ccm.wiki.v2().config().clone(),
-    )
-    .name("技术文档库".to_string())
-    .description("存储技术文档".to_string());
-    let space = space_request.execute().await?;
-
-    println!("知识空间创建成功: {}", space.space.as_ref().unwrap().space_id);
+    // 多维表格全量读取
+    let records = client
+        .docs
+        .search_bitable_records_all("app_token", "table_id")
+        .await?;
+    println!("记录数量: {}", records.len());
 
     Ok(())
 }
@@ -194,16 +167,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### 新架构特点
 
 ```rust
-// 链式调用体验
-client.docs.ccm.drive.v1().file().upload(...).execute().await?;
-client.docs.base.bitable().record().create(...).execute().await?;
+// 根 crate 单入口
+let client = Client::from_env()?;
 
-// 统一的服务访问
-client.communication.im.v1().message().send(...).execute().await?;
-client.meeting.vc.v1().room().create(...).execute().await?;
+// 文档 helper
+client.docs.list_folder_children_all("folder_token", None).await?;
+client.docs.find_sheet_by_title("spreadsheet_token", "汇总表").await?;
+
+// 通讯模块
+let endpoint = open_lark::communication::endpoints::IM_V1_MESSAGES;
+println!("{}", endpoint);
 ```
 
-- **🔗 链式调用** - 流畅的 API 调用路径：`client.docs.ccm.drive.v1()`
+- **🔗 单入口访问** - 从 `Client` 出发，按 feature 打开需要的能力
 - **🛡️ 类型安全** - 编译时验证所有 API 调用参数
 - **⚡ 按需编译** - 50+ feature flags 支持按需引入功能
 - **🏢 企业级质量** - 零警告构建，严格 clippy 检查

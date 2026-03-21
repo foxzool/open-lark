@@ -129,6 +129,15 @@ impl Client {
         &self.core_config
     }
 
+    /// 🔧 获取可直接传给函数式 API 的认证后配置
+    ///
+    /// 与 [`Self::core_config`] 返回同一份配置，保留这个别名是为了让
+    /// 业务侧更容易理解它的用途：可直接传给 `openlark_docs::*`、
+    /// `openlark_auth::*` 等函数式 API。
+    pub fn api_config(&self) -> &openlark_core::config::Config {
+        &self.core_config
+    }
+
     /// ✅ 检查客户端是否已正确配置
     pub fn is_configured(&self) -> bool {
         !self.config.app_id.is_empty() && !self.config.app_secret.is_empty()
