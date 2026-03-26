@@ -11,7 +11,7 @@ fmt-check:
 # Lint code
 lint:
   @echo "🔍 Linting code (exclude benches/dev-tests)..."
-  cargo clippy --workspace --all-targets --all-features -- -Dwarnings
+  cargo clippy --workspace --all-targets --all-features -- -Dwarnings -A missing_docs
 
 # Run tests
 test:

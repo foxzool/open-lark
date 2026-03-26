@@ -1,8 +1,8 @@
-# OpenLark 0.15.0-rc.1 发布说明草案
+# OpenLark 0.15.0-rc.2 发布说明草案
 
 **发布日期：** 待定  
 **版本类型：** Release Candidate  
-**适用版本：** `0.15.0-rc.1`
+**适用版本：** `0.15.0-rc.2`
 
 ## 概览
 
@@ -24,7 +24,7 @@
 
 ```toml
 [dependencies]
-openlark = "0.15.0-rc.1"
+openlark = "0.15.0-rc.2"
 ```
 
 根 crate 现在直接导出以下高频入口：
@@ -70,10 +70,10 @@ openlark = "0.15.0-rc.1"
 
 ```toml
 [dependencies]
-openlark = "0.15.0-rc.1"                                # 默认: auth
-openlark = { version = "0.15.0-rc.1", features = ["essential"] }
-openlark = { version = "0.15.0-rc.1", features = ["enterprise"] }
-openlark = { version = "0.15.0-rc.1", features = ["full"] }
+openlark = "0.15.0-rc.2"                                # 默认: auth
+openlark = { version = "0.15.0-rc.2", features = ["essential"] }
+openlark = { version = "0.15.0-rc.2", features = ["enterprise"] }
+openlark = { version = "0.15.0-rc.2", features = ["full"] }
 ```
 
 ## 推荐安装方式
@@ -82,7 +82,7 @@ openlark = { version = "0.15.0-rc.1", features = ["full"] }
 
 ```toml
 [dependencies]
-openlark = "0.15.0-rc.1"
+openlark = "0.15.0-rc.2"
 ```
 
 默认提供统一入口和认证能力，适合先完成应用配置、鉴权和最小化接入。
@@ -91,7 +91,7 @@ openlark = "0.15.0-rc.1"
 
 ```toml
 [dependencies]
-openlark = { version = "0.15.0-rc.1", features = ["essential"] }
+openlark = { version = "0.15.0-rc.2", features = ["essential"] }
 ```
 
 `essential` 包含：
@@ -104,7 +104,7 @@ openlark = { version = "0.15.0-rc.1", features = ["essential"] }
 
 ```toml
 [dependencies]
-openlark = { version = "0.15.0-rc.1", features = ["enterprise"] }
+openlark = { version = "0.15.0-rc.2", features = ["enterprise"] }
 ```
 
 `enterprise` 包含：
@@ -118,7 +118,7 @@ openlark = { version = "0.15.0-rc.1", features = ["enterprise"] }
 
 ```toml
 [dependencies]
-openlark = { version = "0.15.0-rc.1", features = ["full"] }
+openlark = { version = "0.15.0-rc.2", features = ["full"] }
 ```
 
 ## 示例入口统一
@@ -157,7 +157,7 @@ let client = Client::builder()
 - `cargo check -p openlark --example simple_api_call --features "auth,communication"`
 - `cargo check --workspace --all-features`
 
-另外，`workspace.lints` 已经真正落到所有成员 crate。当前会看到较多 `missing_docs` 警告，这是存量文档问题被显式暴露，不是本次改造引入的编译失败。
+另外，`workspace.lints` 已经真正落到所有成员 crate。当前仍存在较多 `missing_docs` 存量告警，`lint` 流程已先聚焦功能性与代码质量问题，不将这批历史文档告警作为 `rc.2` 的发布阻塞项。
 
 ## 对用户意味着什么
 

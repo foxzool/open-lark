@@ -30,7 +30,7 @@
 
 ```toml
 [dependencies]
-openlark-client = { version = "0.15.0-rc.1", features = ["docs"] }
+openlark-client = { version = "0.15.0-rc.2", features = ["docs"] }
 ```
 
 ### 功能标志
@@ -64,7 +64,7 @@ features = ["p0-services"]
 
 ```toml
 [dependencies]
-openlark = { version = "0.15", features = ["essential"] }
+openlark = { version = "0.15.0-rc.2", features = ["essential"] }
 ```
 
 ## 🧩 meta 调用链（按 CSV 映射）
