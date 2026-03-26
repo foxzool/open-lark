@@ -2,7 +2,7 @@
 
 **Project**: OpenLark - 飞书开放平台 Rust SDK  
 **Stack**: Rust, Tokio, Reqwest, WebSocket  
-**Version**: 0.15.0-rc.1  
+**Version**: 0.15.0-rc.2  
 **Repository**: https://github.com/foxzool/open-lark
 
 ## OVERVIEW
@@ -108,7 +108,7 @@ just release VERSION  # 发布新版本
 ## NOTES
 
 - **MSRV**: Rust 1.75+
-- **默认 Features**: `core-services`（auth + communication + docs + workflow）
+- **默认 Features**: `auth`
 - **WebSocket**: 需要单独启用 `websocket` feature
 - **测试**: 使用 `.env` 文件管理测试凭证（不要提交到 git）
 - **文档**: 使用 `cargo doc --workspace --all-features` 生成完整文档
