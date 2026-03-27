@@ -38,11 +38,11 @@
 //! // let node = CreateNodeRequest::new(config, ...).execute().await?;
 //! ```
 
-use openlark_core::{
-    config::Config,
-    error::{business_error, CoreError},
-    SDKResult,
-};
+use openlark_core::config::Config;
+#[cfg(any(feature = "ccm-core", feature = "bitable"))]
+use openlark_core::SDKResult;
+#[cfg(feature = "ccm-core")]
+use openlark_core::error::{business_error, CoreError};
 use std::sync::Arc;
 
 /// Docs 链式入口：`docs.ccm.config()` / `docs.base.bitable.config()`（按 feature 裁剪）
