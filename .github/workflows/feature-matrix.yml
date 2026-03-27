@@ -26,7 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         features:
-          # Individual core features (from workspace Cargo.toml)
+          # Individual features (from root Cargo.toml)
           - "auth"
           - "docs"
           - "communication"
@@ -38,12 +38,12 @@ jobs:
           - "workflow"
           - "application"
           - "websocket"
-          - "dev-tools"
+          - "otel"
           - "platform"
           - "analytics"
           - "user"
-          - "base"
-          - "bitable"
+          - "docs-base"
+          - "docs-bitable"
 
           # Important combinations
           - "communication,auth"
@@ -51,10 +51,10 @@ jobs:
           - "communication,docs"
           - "communication,websocket"
           - "hr,communication"
-          - "docs,base,bitable"
+          - "docs,docs-base,docs-bitable"
 
           # Recommended feature sets
-          - "core-services"
+          - "essential"
 
           # Edge cases
           - "" # no features

@@ -68,11 +68,11 @@ jobs:
 
           # 编译性能测试
           echo "🔨 编译性能基准测试..."
-          cargo build --release --features core-services --benches
+          cargo build --release --no-default-features --benches
 
           # 运行基准测试
           echo "🏃 运行基准测试..."
-          cargo bench --features core-services --bench config_performance
+          cargo bench --no-default-features --bench config_performance
 
   service-registry-validation:
     name: ServiceRegistry Validation Report
