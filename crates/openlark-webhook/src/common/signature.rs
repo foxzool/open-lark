@@ -1,10 +1,12 @@
 use hmac::{Hmac, Mac};
 use sha2::Sha256;
 
+/// Webhook HMAC-SHA256 签名计算器。
 type HmacSha256 = Hmac<Sha256>;
 
-/// Generate signature for 飞书 webhook
-/// Algorithm: base64(hmac-sha256(timestamp + "\n" + secret))
+/// 为飞书 webhook 生成签名。
+///
+/// 算法为 `base64(hmac_sha256("{timestamp}\n{secret}"))`。
 pub fn sign(timestamp: i64, secret: &str) -> String {
     use base64::engine::Engine;
     let content = format!("{}\n{}", timestamp, secret);
@@ -14,7 +16,7 @@ pub fn sign(timestamp: i64, secret: &str) -> String {
     base64::engine::general_purpose::STANDARD.encode(mac.finalize().into_bytes())
 }
 
-/// Get current Unix timestamp in seconds
+/// 获取当前 Unix 时间戳，单位为秒。
 pub fn current_timestamp() -> i64 {
     std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
@@ -22,7 +24,7 @@ pub fn current_timestamp() -> i64 {
         .as_secs() as i64
 }
 
-/// Verify 飞书 webhook signature
+/// 校验飞书 webhook 签名是否匹配。
 pub fn verify_signature(timestamp: i64, secret: &str, signature: &str) -> bool {
     let computed = sign(timestamp, secret);
     computed == signature

@@ -40,7 +40,7 @@ impl PreferencesV1 {
     }
 }
 
-/// 获取偏好请求
+/// 获取单个偏好的请求构建器。
 pub struct GetPreferenceRequest {
     #[allow(dead_code)]
     config: Arc<UserConfig>,
@@ -52,20 +52,20 @@ impl GetPreferenceRequest {
         Self { config, key: None }
     }
 
-    /// 设置键
+    /// 设置要查询的偏好键。
     pub fn key(mut self, key: impl Into<String>) -> Self {
         self.key = Some(key.into());
         self
     }
 
-    /// 执行请求
+    /// 执行请求并返回偏好内容。
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"key": "test"}))
     }
 }
 
-/// 更新偏好请求
+/// 更新单个偏好的请求构建器。
 pub struct UpdatePreferenceRequest {
     #[allow(dead_code)]
     config: Arc<UserConfig>,
@@ -84,32 +84,32 @@ impl UpdatePreferenceRequest {
         }
     }
 
-    /// 设置键
+    /// 设置要更新的偏好键。
     pub fn key(mut self, key: impl Into<String>) -> Self {
         self.key = Some(key.into());
         self
     }
 
-    /// 设置值
+    /// 设置新的偏好值。
     pub fn value(mut self, value: impl Into<String>) -> Self {
         self.value = Some(value.into());
         self
     }
 
-    /// 设置类别
+    /// 设置偏好所属类别。
     pub fn category(mut self, category: impl Into<String>) -> Self {
         self.category = Some(category.into());
         self
     }
 
-    /// 执行请求
+    /// 执行请求并返回更新结果。
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"success": true}))
     }
 }
 
-/// 删除偏好请求
+/// 删除单个偏好的请求构建器。
 pub struct DeletePreferenceRequest {
     #[allow(dead_code)]
     config: Arc<UserConfig>,
@@ -121,20 +121,20 @@ impl DeletePreferenceRequest {
         Self { config, key: None }
     }
 
-    /// 设置键
+    /// 设置要删除的偏好键。
     pub fn key(mut self, key: impl Into<String>) -> Self {
         self.key = Some(key.into());
         self
     }
 
-    /// 执行请求
+    /// 执行请求并返回删除结果。
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"success": true}))
     }
 }
 
-/// 获取所有偏好请求
+/// 获取偏好列表的请求构建器。
 pub struct ListPreferencesRequest {
     #[allow(dead_code)]
     config: Arc<UserConfig>,
@@ -149,13 +149,13 @@ impl ListPreferencesRequest {
         }
     }
 
-    /// 设置类别
+    /// 按类别过滤偏好列表。
     pub fn category(mut self, category: impl Into<String>) -> Self {
         self.category = Some(category.into());
         self
     }
 
-    /// 执行请求
+    /// 执行请求并返回偏好列表。
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"success": true}))

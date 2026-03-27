@@ -35,15 +35,26 @@
 //! - `common` - 共享工具（验证、错误处理）
 //! - `prelude` - 常用导入
 
-#![allow(missing_docs)]
+#![warn(clippy::all)]
 
+/// Webhook 通用能力模块。
+///
+/// 包含错误定义、输入校验以及可选的签名辅助函数。
 pub mod common;
+/// Webhook 消息模型模块。
+///
+/// 提供文本、富文本、图片、文件等消息体的序列化结构。
 pub mod models;
 
 #[cfg(feature = "robot")]
+/// 自定义机器人能力模块。
+///
+/// 提供基于 webhook URL 发送消息的客户端与请求构建器。
 pub mod robot;
 
+/// 常用类型预导出模块。
 pub mod prelude;
 
 #[cfg(feature = "robot")]
+/// 自定义机器人客户端类型。
 pub use robot::v1::client::WebhookClient;

@@ -35,7 +35,7 @@ impl SettingsV1 {
     }
 }
 
-/// 获取设置请求
+/// 获取单个设置的请求构建器。
 pub struct GetSettingRequest {
     #[allow(dead_code)]
     config: Arc<UserConfig>,
@@ -47,20 +47,20 @@ impl GetSettingRequest {
         Self { config, key: None }
     }
 
-    /// 设置键
+    /// 设置要查询的配置键。
     pub fn key(mut self, key: impl Into<String>) -> Self {
         self.key = Some(key.into());
         self
     }
 
-    /// 执行请求
+    /// 执行请求并返回设置内容。
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"key": "test"}))
     }
 }
 
-/// 更新设置请求
+/// 更新单个设置的请求构建器。
 pub struct UpdateSettingRequest {
     #[allow(dead_code)]
     config: Arc<UserConfig>,
@@ -77,26 +77,26 @@ impl UpdateSettingRequest {
         }
     }
 
-    /// 设置键
+    /// 设置要更新的配置键。
     pub fn key(mut self, key: impl Into<String>) -> Self {
         self.key = Some(key.into());
         self
     }
 
-    /// 设置值
+    /// 设置新的配置值。
     pub fn value(mut self, value: impl Into<String>) -> Self {
         self.value = Some(value.into());
         self
     }
 
-    /// 执行请求
+    /// 执行请求并返回更新结果。
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"success": true}))
     }
 }
 
-/// 获取所有设置请求
+/// 获取所有设置的请求构建器。
 pub struct ListSettingsRequest {
     #[allow(dead_code)]
     config: Arc<UserConfig>,
@@ -107,7 +107,7 @@ impl ListSettingsRequest {
         Self { config }
     }
 
-    /// 执行请求
+    /// 执行请求并返回设置列表。
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
         // TODO: 实现实际的 API 调用
         Ok(serde_json::json!({"items": []}))

@@ -9,7 +9,8 @@ use crate::common::signature;
 #[cfg(feature = "card")]
 use crate::models::InteractiveContent;
 
-/// 发送 Webhook 消息请求构建器
+/// 发送 Webhook 消息请求构建器。
+#[derive(Debug, Clone)]
 pub struct SendWebhookMessageRequest {
     webhook_url: String,
     msg_type: String,
@@ -37,21 +38,21 @@ impl SendWebhookMessageRequest {
         self
     }
 
-    /// 设置文本消息
+    /// 将请求内容设置为文本消息。
     pub fn text(mut self, text: String) -> Self {
         self.msg_type = "text".to_string();
         self.content = serde_json::to_value(TextContent::new(text)).unwrap_or_else(|_| json!({}));
         self
     }
 
-    /// 设置富文本消息
+    /// 将请求内容设置为富文本消息。
     pub fn post(mut self, post: String) -> Self {
         self.msg_type = "post".to_string();
         self.content = serde_json::to_value(PostContent::new(post)).unwrap_or_else(|_| json!({}));
         self
     }
 
-    /// 设置图片消息
+    /// 将请求内容设置为图片消息。
     pub fn image(mut self, image_key: String) -> Self {
         self.msg_type = "image".to_string();
         self.content =
@@ -59,7 +60,7 @@ impl SendWebhookMessageRequest {
         self
     }
 
-    /// 设置文件消息
+    /// 将请求内容设置为文件消息。
     pub fn file(mut self, file_key: String) -> Self {
         self.msg_type = "file".to_string();
         self.content =
@@ -67,7 +68,9 @@ impl SendWebhookMessageRequest {
         self
     }
 
-    /// 设置卡片消息（需要启用 card feature）
+    /// 将请求内容设置为交互式卡片消息。
+    ///
+    /// 需要启用 `card` feature。
     #[cfg(feature = "card")]
     pub fn card(mut self, card: serde_json::Value) -> Self {
         self.msg_type = "interactive".to_string();
@@ -76,7 +79,7 @@ impl SendWebhookMessageRequest {
         self
     }
 
-    /// 执行发送请求
+    /// 执行发送请求并返回飞书响应。
     pub async fn execute(self) -> Result<SendWebhookMessageResponse> {
         validation::validate_webhook_url(&self.webhook_url)
             .map_err(|e| WebhookError::Http(e.to_string()))?;
