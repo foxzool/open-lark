@@ -39,10 +39,10 @@
 //! ```
 
 use openlark_core::config::Config;
-#[cfg(any(feature = "ccm-core", feature = "bitable"))]
-use openlark_core::SDKResult;
 #[cfg(feature = "ccm-core")]
 use openlark_core::error::{business_error, CoreError};
+#[cfg(any(feature = "ccm-core", feature = "bitable"))]
+use openlark_core::SDKResult;
 use std::sync::Arc;
 
 /// Docs 链式入口：`docs.ccm.config()` / `docs.base.bitable.config()`（按 feature 裁剪）
