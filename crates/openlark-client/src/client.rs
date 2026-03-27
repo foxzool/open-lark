@@ -14,8 +14,11 @@ use std::sync::Arc;
 #[cfg(feature = "auth")]
 #[derive(Debug, Clone)]
 pub struct AuthClient {
+    /// 应用认证服务
     pub app: openlark_auth::AuthService,
+    /// 用户身份认证服务
     pub user: openlark_auth::AuthenService,
+    /// OAuth 授权服务
     pub oauth: openlark_auth::OAuthService,
 }
 

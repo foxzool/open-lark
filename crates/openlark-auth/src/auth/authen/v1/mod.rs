@@ -13,13 +13,17 @@ pub use user_info::{UserInfoBuilder, UserInfoService};
 
 use openlark_core::config::Config;
 
-// AuthenServiceV1结构体
+/// Authen v1 用户身份认证服务
 #[derive(Debug)]
 pub struct AuthenServiceV1 {
     config: Config,
 }
 
 impl AuthenServiceV1 {
+    /// 创建 Authen v1 服务实例
+    ///
+    /// # 参数
+    /// - `config`: SDK 配置信息
     pub fn new(config: Config) -> Self {
         Self { config }
     }

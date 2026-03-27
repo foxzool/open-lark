@@ -157,6 +157,7 @@ pub fn registry_error(err: RegistryError) -> Error {
 // 错误扩展功能
 // ============================================================================
 
+/// 客户端错误扩展特征，提供错误恢复建议和步骤
 pub trait ClientErrorExt {
     /// 获取错误建议
     fn suggestion(&self) -> &'static str;

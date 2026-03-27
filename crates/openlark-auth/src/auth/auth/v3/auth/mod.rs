@@ -25,6 +25,10 @@ pub struct AuthServiceV3 {
 }
 
 impl AuthServiceV3 {
+    /// 创建 Auth v3 API 服务实例
+    ///
+    /// # 参数
+    /// - `config`: SDK 配置信息
     pub fn new(config: Config) -> Self {
         Self { config }
     }

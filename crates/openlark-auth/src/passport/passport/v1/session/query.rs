@@ -25,6 +25,10 @@ pub struct QuerySessionRequest {
 }
 
 impl QuerySessionRequest {
+    /// 创建批量查询会话请求实例
+    ///
+    /// # 参数
+    /// - `config`: SDK 配置信息
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -38,10 +42,12 @@ impl QuerySessionRequest {
         self
     }
 
+    /// 执行批量查询会话请求
     pub async fn execute(self) -> SDKResult<QuerySessionResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 执行批量查询会话请求（带选项）
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -63,6 +69,7 @@ impl QuerySessionRequest {
 /// 批量获取脱敏用户登录信息响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct QuerySessionResponse {
+    /// 会话信息列表
     pub items: Vec<SessionInfo>,
 }
 
@@ -75,7 +82,9 @@ impl ApiResponseTrait for QuerySessionResponse {
 /// 会话信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SessionInfo {
+    /// 用户ID
     pub user_id: String,
+    /// 会话状态
     pub status: String,
 }
 

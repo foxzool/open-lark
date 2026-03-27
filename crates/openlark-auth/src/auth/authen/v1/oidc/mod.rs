@@ -16,6 +16,10 @@ pub struct OidcService {
 }
 
 impl OidcService {
+    /// 创建 OIDC 认证服务实例
+    ///
+    /// # 参数
+    /// - `config`: SDK 配置信息
     pub fn new(config: Config) -> Self {
         Self { config }
     }

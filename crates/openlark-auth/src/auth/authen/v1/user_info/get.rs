@@ -105,6 +105,10 @@ pub struct UserInfoService {
 }
 
 impl UserInfoService {
+    /// 创建用户信息服务实例
+    ///
+    /// # 参数
+    /// - `config`: SDK 配置信息
     pub fn new(config: Config) -> Self {
         Self { config }
     }

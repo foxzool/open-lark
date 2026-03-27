@@ -19,6 +19,10 @@ pub struct LogoutRequest {
 }
 
 impl LogoutRequest {
+    /// 创建退出登录请求实例
+    ///
+    /// # 参数
+    /// - `config`: SDK 配置信息
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -32,10 +36,12 @@ impl LogoutRequest {
         self
     }
 
+    /// 执行退出登录请求
     pub async fn execute(self) -> SDKResult<LogoutResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 执行退出登录请求（带选项）
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<LogoutResponse> {
         let req: ApiRequest<LogoutResponse> = ApiRequest::post(PassportApiV1::SessionLogout.path());
 
@@ -49,6 +55,7 @@ impl LogoutRequest {
 /// 退出登录响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LogoutResponse {
+    /// 退出结果
     pub result: String,
 }
 
