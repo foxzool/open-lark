@@ -27,7 +27,7 @@ pub struct TextContent {
 }
 
 impl TextContent {
-    /// 创建文本内容
+    /// 创建文本消息内容。
     pub fn new(text: String) -> Self {
         Self { text }
     }
@@ -41,7 +41,7 @@ pub struct PostContent {
 }
 
 impl PostContent {
-    /// 创建富文本内容
+    /// 创建富文本消息内容。
     pub fn new(post: String) -> Self {
         Self { post }
     }
@@ -55,7 +55,7 @@ pub struct ImageContent {
 }
 
 impl ImageContent {
-    /// 创建图片内容
+    /// 创建图片消息内容。
     pub fn new(image_key: String) -> Self {
         Self { image_key }
     }
@@ -69,7 +69,7 @@ pub struct FileContent {
 }
 
 impl FileContent {
-    /// 创建文件内容
+    /// 创建文件消息内容。
     pub fn new(file_key: String) -> Self {
         Self { file_key }
     }
@@ -85,7 +85,7 @@ pub struct InteractiveContent {
 
 #[cfg(feature = "card")]
 impl InteractiveContent {
-    /// 创建卡片内容
+    /// 创建交互式卡片消息内容。
     pub fn new(card: serde_json::Value) -> Self {
         Self { card }
     }

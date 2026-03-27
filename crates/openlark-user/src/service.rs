@@ -31,7 +31,7 @@ impl UserService {
         })
     }
 
-    /// 获取客户端配置
+    /// 获取客户端配置。
     pub fn config(&self) -> Arc<UserConfig> {
         self.config.clone()
     }

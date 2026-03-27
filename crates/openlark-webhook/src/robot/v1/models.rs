@@ -1,19 +1,26 @@
 use serde::{Deserialize, Serialize};
 
+/// 文本消息内容模型。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TextMessage {
+    /// 文本内容。
     pub text: String,
 }
 
+/// 卡片消息内容模型。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CardMessage {
+    /// 卡片 JSON 内容。
     pub card: serde_json::Value,
 }
 
+/// 机器人消息内容枚举。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum MessageContent {
+    /// 文本消息。
     Text(TextMessage),
+    /// 卡片消息。
     Card(CardMessage),
 }
 

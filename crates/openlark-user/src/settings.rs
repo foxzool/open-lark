@@ -20,12 +20,12 @@ impl SettingsService {
         Self { config }
     }
 
-    /// 获取客户端配置
+    /// 获取客户端配置。
     pub fn config(&self) -> Arc<UserConfig> {
         self.config.clone()
     }
 
-    /// V1 版本 API
+    /// 获取 V1 版本 API 入口。
     #[cfg(feature = "v1")]
     pub fn v1(&self) -> crate::settings::v1::SettingsV1 {
         crate::settings::v1::SettingsV1::new(self.config.clone())
@@ -33,6 +33,7 @@ impl SettingsService {
 }
 
 #[cfg(feature = "v1")]
+/// 个人设置 v1 API。
 pub mod v1;
 
 #[cfg(test)]

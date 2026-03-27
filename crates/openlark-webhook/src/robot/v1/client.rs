@@ -6,7 +6,8 @@ use serde_json::json;
 #[cfg(feature = "signature")]
 use crate::common::signature;
 
-/// Webhook 客户端
+/// Webhook 客户端。
+#[derive(Debug, Clone)]
 pub struct WebhookClient {
     client: reqwest::Client,
     #[cfg(feature = "signature")]
@@ -52,7 +53,9 @@ impl WebhookClient {
         self
     }
 
-    /// 发送原始 JSON 负载到 Webhook
+    /// 发送原始 JSON 负载到指定 webhook。
+    ///
+    /// `payload` 需要符合飞书自定义机器人消息协议。
     pub async fn send(
         &self,
         webhook_url: &str,
@@ -96,7 +99,7 @@ impl WebhookClient {
         Ok(result)
     }
 
-    /// 发送文本消息
+    /// 发送文本消息。
     pub async fn send_text(
         &self,
         webhook_url: &str,
@@ -111,7 +114,7 @@ impl WebhookClient {
         self.send(webhook_url, payload).await
     }
 
-    /// 发送富文本消息
+    /// 发送富文本消息。
     pub async fn send_post(
         &self,
         webhook_url: &str,
@@ -126,7 +129,7 @@ impl WebhookClient {
         self.send(webhook_url, payload).await
     }
 
-    /// 发送图片消息
+    /// 发送图片消息。
     pub async fn send_image(
         &self,
         webhook_url: &str,
@@ -141,7 +144,7 @@ impl WebhookClient {
         self.send(webhook_url, payload).await
     }
 
-    /// 发送文件消息
+    /// 发送文件消息。
     pub async fn send_file(
         &self,
         webhook_url: &str,
@@ -156,7 +159,9 @@ impl WebhookClient {
         self.send(webhook_url, payload).await
     }
 
-    /// 发送卡片消息（需要启用 card feature）
+    /// 发送交互式卡片消息。
+    ///
+    /// 需要启用 `card` feature。
     #[cfg(feature = "card")]
     pub async fn send_card(
         &self,

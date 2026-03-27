@@ -1,8 +1,8 @@
-//! Validation utilities for webhook module
+//! Webhook 模块输入校验工具。
 
 use openlark_core::SDKResult;
 
-/// Validate webhook URL is not empty
+/// 校验 webhook URL 非空。
 pub fn validate_webhook_url(url: &str) -> SDKResult<()> {
     if url.trim().is_empty() {
         return Err(openlark_core::CoreError::validation_msg(
@@ -12,7 +12,7 @@ pub fn validate_webhook_url(url: &str) -> SDKResult<()> {
     Ok(())
 }
 
-/// Validate message content is not empty
+/// 校验消息内容非空。
 pub fn validate_message_content(content: &str) -> SDKResult<()> {
     if content.trim().is_empty() {
         return Err(openlark_core::CoreError::validation_msg(

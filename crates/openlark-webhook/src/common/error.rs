@@ -1,18 +1,23 @@
-//! Error types for webhook module
+//! Webhook 模块错误类型。
 
 use thiserror::Error;
 
+/// Webhook 调用过程中可能出现的错误。
 #[derive(Debug, Error)]
 pub enum WebhookError {
+    /// HTTP 请求发送或服务端返回失败。
     #[error("HTTP error: {0}")]
     Http(String),
 
+    /// 请求或响应 JSON 序列化失败。
     #[error("Serialization error: {0}")]
     Serialization(#[from] serde_json::Error),
 
+    /// 签名校验失败。
     #[error("Invalid signature")]
     InvalidSignature,
 
+    /// 缺少必填字段。
     #[error("Missing required field: {0}")]
     MissingField(String),
 }
@@ -29,6 +34,7 @@ impl PartialEq for WebhookError {
     }
 }
 
+/// Webhook 模块统一结果类型。
 pub type Result<T> = std::result::Result<T, WebhookError>;
 
 #[cfg(test)]

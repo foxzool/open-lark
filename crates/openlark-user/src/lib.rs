@@ -35,27 +35,31 @@
 //! let preferences_service = user_service.preferences();
 //! ```
 
-#![allow(missing_docs)]
-
 mod service;
 
 // 通用模块
+/// 用户设置与偏好共享模型。
 pub mod common;
 
 // 功能域模块
 #[cfg(feature = "settings")]
+/// 个人设置能力模块。
 pub mod settings;
 
 #[cfg(feature = "preferences")]
+/// 用户偏好能力模块。
 pub mod preferences;
 
 // Prelude 模块
+/// 常用类型预导出模块。
 pub mod prelude;
 
 // 重新导出核心服务
+/// 用户服务统一入口。
 pub use service::UserService;
 
 // 配置类型
+/// `openlark-core` 配置类型的便捷导出。
 pub use openlark_core::config::Config;
 
 /// 用户设置模块版本信息
