@@ -1,6 +1,7 @@
 #![warn(clippy::all)]
 #![allow(clippy::manual_range_contains)]
 #![allow(clippy::needless_borrows_for_generic_args)]
+#![allow(missing_docs)]
 
 //! # OpenLark 文档服务模块
 //!
@@ -44,6 +45,10 @@
 //!     // 获取配置后构建 Request
 //!     let config = client.ccm.config().clone();
 //!     // 使用 openlark_docs::ccm::drive::v1::file::UploadAllRequest
+//!
+//!     // 高频读取场景也可以直接使用 helper
+//!     let _records = client.search_bitable_records_all("app_token", "table_id").await?;
+//!     let _sheet = client.find_sheet_by_title("spreadsheet_token", "2026").await?;
 //!
 //!     Ok(())
 //! }
@@ -123,6 +128,10 @@ pub use common::chain::DocsClient;
 // let config = docs.base.bitable.config().clone();
 // let request = CreateTableRequest::new(config, ...);
 // let table = request.execute().await?;
+//
+// // 高频 helper
+// let records = docs.search_bitable_records_all("app_token", "table_id").await?;
+// let sheet = docs.find_sheet_by_title("spreadsheet_token", "2026").await?;
 // ```
 //
 // === 导出说明 ===
