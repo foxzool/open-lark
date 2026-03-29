@@ -133,6 +133,9 @@ pub use openlark_client::DocsClient;
 #[cfg(feature = "communication")]
 pub use openlark_client::CommunicationClient;
 
+#[cfg(feature = "hr")]
+pub use openlark_client::HrClient;
+
 #[cfg(feature = "meeting")]
 pub use openlark_client::MeetingClient;
 
@@ -158,6 +161,8 @@ pub mod prelude {
         feature = "docs-full"
     ))]
     pub use crate::DocsClient;
+    #[cfg(feature = "hr")]
+    pub use crate::HrClient;
     #[cfg(feature = "meeting")]
     pub use crate::MeetingClient;
     pub use crate::SDKResult;
