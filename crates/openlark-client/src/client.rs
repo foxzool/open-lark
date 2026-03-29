@@ -84,6 +84,10 @@ pub struct Client {
     #[cfg(feature = "communication")]
     pub communication: openlark_communication::CommunicationClient,
 
+    /// HR meta 调用链入口：client.hr.attendance / client.hr.corehr / client.hr.hire ...
+    #[cfg(feature = "hr")]
+    pub hr: openlark_hr::HrClient,
+
     /// Meeting meta 调用链入口：client.meeting.vc.v1.room.create() ...
     #[cfg(feature = "meeting")]
     pub meeting: openlark_meeting::MeetingClient,
@@ -185,6 +189,9 @@ impl Client {
         #[cfg(feature = "communication")]
         let communication = openlark_communication::CommunicationClient::new(core_config.clone());
 
+        #[cfg(feature = "hr")]
+        let hr = openlark_hr::HrClient::new(core_config.clone());
+
         #[cfg(feature = "meeting")]
         let meeting = openlark_meeting::MeetingClient::new(core_config.clone());
 
@@ -200,6 +207,8 @@ impl Client {
             docs,
             #[cfg(feature = "communication")]
             communication,
+            #[cfg(feature = "hr")]
+            hr,
             #[cfg(feature = "meeting")]
             meeting,
         })
