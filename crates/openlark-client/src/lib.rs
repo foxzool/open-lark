@@ -321,6 +321,9 @@ pub use openlark_docs::DocsClient;
 #[cfg(feature = "communication")]
 pub use openlark_communication::CommunicationClient;
 
+#[cfg(feature = "hr")]
+pub use openlark_hr::HrClient;
+
 #[cfg(feature = "meeting")]
 pub use openlark_meeting::MeetingClient;
 
@@ -428,6 +431,9 @@ pub mod prelude {
 
     #[cfg(feature = "communication")]
     pub use openlark_communication::CommunicationClient;
+
+    #[cfg(feature = "hr")]
+    pub use openlark_hr::HrClient;
 
     #[cfg(feature = "meeting")]
     pub use openlark_meeting::MeetingClient;

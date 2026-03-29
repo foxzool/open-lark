@@ -54,10 +54,17 @@ default = ["auth", "communication"]
 # === 服务功能 ===
 auth = ["dep:openlark-auth"]
 communication = ["auth", "dep:openlark-communication"]
-docs = ["auth", "dep:openlark-docs"]
+# `docs` 至少要保证 `client.docs.ccm` 可用；更细粒度能力由上层 crate 再继续展开。
+docs = [
+    "auth",
+    "dep:openlark-docs",
+    "openlark-docs/ccm-core",
+    "openlark-docs/v2",
+    "openlark-docs/v3",
+]
 cardkit = ["auth", "dep:openlark-cardkit"]
 security = ["auth", "dep:openlark-security"]
-hr = ["dep:openlark-hr"]
+hr = ["auth", "dep:openlark-hr"]
 ai = ["dep:openlark-ai"]
 meeting = ["auth", "dep:openlark-meeting"]
 
