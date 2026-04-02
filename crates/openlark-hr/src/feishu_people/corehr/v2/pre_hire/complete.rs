@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -14,6 +14,7 @@ use serde_json::Value;
 #[derive(Debug, Clone)]
 pub struct CompleteRequest {
     config: Config,
+    pre_hire_id: Option<String>,
     request_body: Option<Value>,
 }
 
@@ -21,8 +22,14 @@ impl CompleteRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
+            pre_hire_id: None,
             request_body: None,
         }
+    }
+
+    pub fn pre_hire_id(mut self, pre_hire_id: impl Into<String>) -> Self {
+        self.pre_hire_id = Some(pre_hire_id.into());
+        self
     }
 
     pub fn request_body(mut self, request_body: Value) -> Self {
@@ -39,10 +46,12 @@ impl CompleteRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CompleteResponse> {
-        use crate::common::api_endpoints::FeishuPeopleApiV2;
-
-        let api_endpoint = FeishuPeopleApiV2::PreHireComplete;
-        let mut request = ApiRequest::<CompleteResponse>::post(api_endpoint.to_url());
+        let pre_hire_id = self.pre_hire_id.unwrap_or_default();
+        validate_required!(pre_hire_id.trim(), "pre_hire_id 不能为空");
+        let mut request = ApiRequest::<CompleteResponse>::post(format!(
+            "/open-apis/corehr/v2/pre_hires/{}/complete",
+            pre_hire_id
+        ));
 
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);

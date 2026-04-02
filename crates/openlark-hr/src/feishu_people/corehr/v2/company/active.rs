@@ -68,12 +68,7 @@ impl ActiveRequestBuilder {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ActiveResponse> {
-        use crate::common::api_endpoints::FeishuPeopleApiV2;
-
-        // 构建端点
-        let company_id = "";
-        let api_endpoint = FeishuPeopleApiV2::CompanyActive(company_id.to_string());
-        let request = ApiRequest::<ActiveResponse>::patch(api_endpoint.to_url());
+        let request = ApiRequest::<ActiveResponse>::post("/open-apis/corehr/v2/companies/active");
 
         // 序列化请求体
         let request_body = ActiveRequest::new(self.active);

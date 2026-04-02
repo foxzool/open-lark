@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,6 +17,7 @@ use serde_json::Value;
 pub struct CreateRequest {
     /// 配置信息
     config: Config,
+    location_id: Option<String>,
     /// 请求体（可选）
     body: Option<Value>,
 }
@@ -24,7 +25,16 @@ pub struct CreateRequest {
 impl CreateRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: None }
+        Self {
+            config,
+            location_id: None,
+            body: None,
+        }
+    }
+
+    pub fn location_id(mut self, location_id: impl Into<String>) -> Self {
+        self.location_id = Some(location_id.into());
+        self
     }
 
     /// 设置请求体
@@ -43,8 +53,13 @@ impl CreateRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateResponse> {
-        let mut request =
-            ApiRequest::<CreateResponse>::post("/open-apis/corehr/v2/location_addresses");
+        let location_id = self.location_id.unwrap_or_default();
+        validate_required!(location_id.trim(), "location_id 不能为空");
+
+        let mut request = ApiRequest::<CreateResponse>::post(format!(
+            "/open-apis/corehr/v2/locations/{}/addresses",
+            location_id
+        ));
 
         if let Some(body) = self.body {
             request = request.body(body);

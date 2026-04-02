@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -51,13 +51,9 @@ impl UpdateVersionRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UpdateVersionResponse> {
-        let version_id = self.version_id.unwrap_or_default();
-        validate_required!(version_id.trim(), "version_id 不能为空");
-
-        let mut request = ApiRequest::<UpdateVersionResponse>::patch(format!(
-            "/open-apis/corehr/v2/default_cost_centers/{}",
-            version_id
-        ));
+        let mut request = ApiRequest::<UpdateVersionResponse>::post(
+            "/open-apis/corehr/v2/default_cost_centers/update_version",
+        );
 
         if let Some(body) = self.body {
             request = request.body(body);

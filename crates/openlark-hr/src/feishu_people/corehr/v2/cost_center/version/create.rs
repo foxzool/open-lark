@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,13 +17,23 @@ use serde_json::Value;
 pub struct CreateRequest {
     /// 配置信息
     config: Config,
+    cost_center_id: Option<String>,
     body: Option<Value>,
 }
 
 impl CreateRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: None }
+        Self {
+            config,
+            cost_center_id: None,
+            body: None,
+        }
+    }
+
+    pub fn cost_center_id(mut self, cost_center_id: impl Into<String>) -> Self {
+        self.cost_center_id = Some(cost_center_id.into());
+        self
     }
 
     pub fn body(mut self, body: Value) -> Self {
@@ -41,8 +51,13 @@ impl CreateRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateResponse> {
-        let mut request =
-            ApiRequest::<CreateResponse>::post("/open-apis/corehr/v2/cost_center_versions");
+        let cost_center_id = self.cost_center_id.unwrap_or_default();
+        validate_required!(cost_center_id.trim(), "cost_center_id 不能为空");
+
+        let mut request = ApiRequest::<CreateResponse>::post(format!(
+            "/open-apis/corehr/v2/cost_centers/{}/versions",
+            cost_center_id
+        ));
 
         if let Some(body) = self.body {
             request = request.body(body);
