@@ -51,12 +51,12 @@ impl PublishRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<PublishResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
         validate_required!(self.job_id.trim(), "职位 ID 不能为空");
 
-        let api_endpoint = HireApiV1::AdvertisementPublish(self.job_id);
-        let mut request = ApiRequest::<PublishResponse>::post(api_endpoint.to_url());
+        let mut request = ApiRequest::<PublishResponse>::post(format!(
+            "/open-apis/hire/v1/advertisements/{}/publish",
+            self.job_id
+        ));
 
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);

@@ -44,12 +44,12 @@ impl GetByApplicationRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetByApplicationResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
         validate_required!(self.application_id.trim(), "投递 ID 不能为空");
 
-        let api_endpoint = HireApiV1::ReferralGetByApplication(self.application_id);
-        let request = ApiRequest::<GetByApplicationResponse>::get(api_endpoint.to_url());
+        let request = ApiRequest::<GetByApplicationResponse>::get(
+            "/open-apis/hire/v1/referrals/get_by_application",
+        )
+        .query("application_id", self.application_id);
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

@@ -16,6 +16,7 @@ use serde_json::Value;
 #[allow(dead_code)]
 pub struct GetRequest {
     job_id: String,
+    manager_id: String,
     /// 配置信息
     config: Config,
 }
@@ -23,7 +24,16 @@ pub struct GetRequest {
 impl GetRequest {
     /// 创建请求
     pub fn new(config: Config, job_id: String) -> Self {
-        Self { job_id, config }
+        Self {
+            job_id,
+            manager_id: String::new(),
+            config,
+        }
+    }
+
+    pub fn manager_id(mut self, manager_id: String) -> Self {
+        self.manager_id = manager_id;
+        self
     }
 
     /// 执行请求
@@ -36,12 +46,13 @@ impl GetRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
         validate_required!(self.job_id.trim(), "职位 ID 不能为空");
+        validate_required!(self.manager_id.trim(), "招聘人员 ID 不能为空");
 
-        let api_endpoint = HireApiV1::JobManagerGet(self.job_id);
-        let request = ApiRequest::<GetResponse>::get(api_endpoint.to_url());
+        let request = ApiRequest::<GetResponse>::get(format!(
+            "/open-apis/hire/v1/jobs/{}/managers/{}",
+            self.job_id, self.manager_id
+        ));
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

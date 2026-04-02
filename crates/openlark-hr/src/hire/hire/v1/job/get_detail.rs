@@ -36,12 +36,12 @@ impl GetDetailRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetDetailResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
         validate_required!(self.job_id.trim(), "职位 ID 不能为空");
 
-        let api_endpoint = HireApiV1::JobGetDetail(self.job_id);
-        let request = ApiRequest::<GetDetailResponse>::get(api_endpoint.to_url());
+        let request = ApiRequest::<GetDetailResponse>::get(format!(
+            "/open-apis/hire/v1/jobs/{}/get_detail",
+            self.job_id
+        ));
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

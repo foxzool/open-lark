@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,6 +17,7 @@ use serde_json::Value;
 pub struct UpdateRequest {
     /// 配置信息
     config: Config,
+    offer_custom_field_id: Option<String>,
     request_body: Option<Value>,
 }
 
@@ -25,8 +26,14 @@ impl UpdateRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
+            offer_custom_field_id: None,
             request_body: None,
         }
+    }
+
+    pub fn offer_custom_field_id(mut self, offer_custom_field_id: impl Into<String>) -> Self {
+        self.offer_custom_field_id = Some(offer_custom_field_id.into());
+        self
     }
 
     pub fn request_body(mut self, request_body: Value) -> Self {
@@ -44,10 +51,16 @@ impl UpdateRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UpdateResponse> {
-        use crate::common::api_endpoints::HireApiV1;
+        let offer_custom_field_id = self.offer_custom_field_id.unwrap_or_default();
+        validate_required!(
+            offer_custom_field_id.trim(),
+            "offer_custom_field_id 不能为空"
+        );
 
-        let api_endpoint = HireApiV1::OfferCustomFieldUpdate;
-        let mut request = ApiRequest::<UpdateResponse>::post(api_endpoint.to_url());
+        let mut request = ApiRequest::<UpdateResponse>::put(format!(
+            "/open-apis/hire/v1/offer_custom_fields/{}",
+            offer_custom_field_id
+        ));
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);
         }

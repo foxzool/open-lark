@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,6 +17,7 @@ use serde_json::Value;
 pub struct PatchRequest {
     /// 配置信息
     config: Config,
+    task_id: Option<String>,
     request_body: Option<Value>,
 }
 
@@ -25,8 +26,14 @@ impl PatchRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
+            task_id: None,
             request_body: None,
         }
+    }
+
+    pub fn task_id(mut self, task_id: impl Into<String>) -> Self {
+        self.task_id = Some(task_id.into());
+        self
     }
 
     pub fn request_body(mut self, request_body: Value) -> Self {
@@ -44,10 +51,13 @@ impl PatchRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<PatchResponse> {
-        use crate::common::api_endpoints::HireApiV1;
+        let task_id = self.task_id.unwrap_or_default();
+        validate_required!(task_id.trim(), "task_id 不能为空");
 
-        let api_endpoint = HireApiV1::EhrImportTaskPatch;
-        let mut request = ApiRequest::<PatchResponse>::patch(api_endpoint.to_url());
+        let mut request = ApiRequest::<PatchResponse>::patch(format!(
+            "/open-apis/hire/v1/ehr_import_tasks/{}",
+            task_id
+        ));
 
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);

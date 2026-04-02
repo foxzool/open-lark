@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -51,12 +51,9 @@ impl OperateAgencyAccountRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<OperateAgencyAccountResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
-        validate_required!(self.agency_id.trim(), "猎头供应商 ID 不能为空");
-
-        let api_endpoint = HireApiV1::AgencyOperateAgencyAccount(self.agency_id);
-        let mut request = ApiRequest::<OperateAgencyAccountResponse>::post(api_endpoint.to_url());
+        let mut request = ApiRequest::<OperateAgencyAccountResponse>::post(
+            "/open-apis/hire/v1/agencies/operate_agency_account",
+        );
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);
         }
