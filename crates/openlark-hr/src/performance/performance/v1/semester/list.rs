@@ -68,7 +68,7 @@ impl ListRequest {
 
         // 1. 构建端点
         let api_endpoint = PerformanceApiV1::SemesterList;
-        let mut request = ApiRequest::<ListResponse>::post(api_endpoint.to_url());
+        let mut request = ApiRequest::<ListResponse>::get(api_endpoint.to_url());
 
         // 2. 添加查询参数（可选）
         if let Some(ref name) = self.name {

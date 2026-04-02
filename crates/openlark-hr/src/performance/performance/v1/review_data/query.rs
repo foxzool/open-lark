@@ -67,11 +67,8 @@ impl QueryRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
-        use crate::common::api_endpoints::PerformanceApiV1;
-
-        // 1. 构建端点
-        let api_endpoint = PerformanceApiV1::ReviewDataQuery;
-        let mut request = ApiRequest::<QueryResponse>::post(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<QueryResponse>::post("/open-apis/performance/v1/review_datas/query");
 
         // 2. 添加查询参数（可选）
         request = request.query("cycle_id", &self.cycle_id);

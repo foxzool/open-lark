@@ -1715,54 +1715,54 @@ impl PerformanceApiV1 {
         match self {
             // activity
             PerformanceApiV1::ActivityQuery => {
-                "/open-apis/performance/v1/activities/query".to_string()
+                "/open-apis/performance/v2/activity/query".to_string()
             }
 
             // additional_information
             PerformanceApiV1::AdditionalInformationImport => {
-                "/open-apis/performance/v1/additional_informations/import".to_string()
+                "/open-apis/performance/v2/additional_informations/import".to_string()
             }
             PerformanceApiV1::AdditionalInformationQuery => {
-                "/open-apis/performance/v1/additional_informations/query".to_string()
+                "/open-apis/performance/v2/additional_informations/query".to_string()
             }
             PerformanceApiV1::AdditionalInformationsBatchDelete => {
-                "/open-apis/performance/v1/additional_informations/batch_delete".to_string()
+                "/open-apis/performance/v2/additional_informations/batch".to_string()
             }
 
             // indicator
             PerformanceApiV1::IndicatorQuery => {
-                "/open-apis/performance/v1/indicators/query".to_string()
+                "/open-apis/performance/v2/indicators/query".to_string()
             }
 
             // metric_detail
             PerformanceApiV1::MetricDetailImport => {
-                "/open-apis/performance/v1/metric_details/import".to_string()
+                "/open-apis/performance/v2/metric_details/import".to_string()
             }
             PerformanceApiV1::MetricDetailQuery => {
-                "/open-apis/performance/v1/metric_details/query".to_string()
+                "/open-apis/performance/v2/metric_details/query".to_string()
             }
 
             // metric_field
             PerformanceApiV1::MetricFieldQuery => {
-                "/open-apis/performance/v1/metric_fields/query".to_string()
+                "/open-apis/performance/v2/metric_fields/query".to_string()
             }
 
             // metric_lib
             PerformanceApiV1::MetricLibQuery => {
-                "/open-apis/performance/v1/metric_libs/query".to_string()
+                "/open-apis/performance/v2/metric_libs/query".to_string()
             }
 
             // metric_tag
-            PerformanceApiV1::MetricTagList => "/open-apis/performance/v1/metric_tags".to_string(),
+            PerformanceApiV1::MetricTagList => "/open-apis/performance/v2/metric_tags".to_string(),
 
             // metric_template
             PerformanceApiV1::MetricTemplateQuery => {
-                "/open-apis/performance/v1/metric_templates/query".to_string()
+                "/open-apis/performance/v2/metric_templates/query".to_string()
             }
 
             // question
             PerformanceApiV1::QuestionQuery => {
-                "/open-apis/performance/v1/questions/query".to_string()
+                "/open-apis/performance/v2/questions/query".to_string()
             }
 
             // review
@@ -1770,17 +1770,17 @@ impl PerformanceApiV1 {
 
             // review_data
             PerformanceApiV1::ReviewDataQuery => {
-                "/open-apis/performance/v1/review_data/query".to_string()
+                "/open-apis/performance/v2/review_datas/query".to_string()
             }
 
             // review_template
             PerformanceApiV1::ReviewTemplateQuery => {
-                "/open-apis/performance/v1/review_templates/query".to_string()
+                "/open-apis/performance/v2/review_templates/query".to_string()
             }
 
             // reviewee
             PerformanceApiV1::RevieweeQuery => {
-                "/open-apis/performance/v1/reviewees/query".to_string()
+                "/open-apis/performance/v2/reviewees/query".to_string()
             }
 
             // semester
@@ -1796,12 +1796,12 @@ impl PerformanceApiV1 {
 
             // user_group_user_rel
             PerformanceApiV1::UserGroupUserRelWrite => {
-                "/open-apis/performance/v1/user_group_user_rels/write".to_string()
+                "/open-apis/performance/v2/user_group_user_rels/write".to_string()
             }
 
             // user_info
             PerformanceApiV1::UserInfoQuery => {
-                "/open-apis/performance/v1/user_infos/query".to_string()
+                "/open-apis/performance/v2/user_info/query".to_string()
             }
         }
     }
@@ -3365,7 +3365,7 @@ mod tests {
     #[test]
     fn test_performance_api_urls() {
         let url = PerformanceApiV1::ActivityQuery.to_url();
-        assert_eq!(url, "/open-apis/performance/v1/activities/query");
+        assert_eq!(url, "/open-apis/performance/v2/activity/query");
     }
 
     #[test]
