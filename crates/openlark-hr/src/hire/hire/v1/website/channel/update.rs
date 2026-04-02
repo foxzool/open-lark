@@ -17,6 +17,7 @@ use serde_json::Value;
 pub struct UpdateRequest {
     /// 配置信息
     config: Config,
+    website_id: String,
     channel_id: String,
 }
 
@@ -25,8 +26,14 @@ impl UpdateRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
+            website_id: String::new(),
             channel_id: String::new(),
         }
+    }
+
+    pub fn website_id(mut self, website_id: String) -> Self {
+        self.website_id = website_id;
+        self
     }
 
     pub fn channel_id(mut self, channel_id: String) -> Self {
@@ -44,12 +51,13 @@ impl UpdateRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UpdateResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
+        validate_required!(self.website_id.trim(), "官网 ID 不能为空");
         validate_required!(self.channel_id.trim(), "渠道 ID 不能为空");
 
-        let api_endpoint = HireApiV1::WebsiteChannelUpdate(self.channel_id);
-        let request = ApiRequest::<UpdateResponse>::patch(api_endpoint.to_url());
+        let request = ApiRequest::<UpdateResponse>::put(format!(
+            "/open-apis/hire/v1/websites/{}/channels/{}",
+            self.website_id, self.channel_id
+        ));
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

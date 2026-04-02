@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,7 +17,7 @@ use serde_json::Value;
 pub struct ListRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    website_id: Option<String>,
 }
 
 impl ListRequest {
@@ -25,11 +25,14 @@ impl ListRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            website_id: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn website_id(mut self, website_id: impl Into<String>) -> Self {
+        self.website_id = Some(website_id.into());
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ListResponse> {
@@ -41,10 +44,13 @@ impl ListRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResponse> {
-        use crate::common::api_endpoints::HireApiV1;
+        let website_id = self.website_id.unwrap_or_default();
+        validate_required!(website_id.trim(), "website_id 不能为空");
 
-        let api_endpoint = HireApiV1::WebsiteJobPostList;
-        let request = ApiRequest::<ListResponse>::get(api_endpoint.to_url());
+        let request = ApiRequest::<ListResponse>::get(format!(
+            "/open-apis/hire/v1/websites/{}/job_posts",
+            website_id
+        ));
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {
