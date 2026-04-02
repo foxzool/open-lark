@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,6 +17,8 @@ use serde_json::Value;
 pub struct PatchRequest {
     /// 配置信息
     config: Config,
+    location_id: Option<String>,
+    address_id: Option<String>,
     /// 请求体（可选）
     body: Option<Value>,
 }
@@ -24,7 +26,22 @@ pub struct PatchRequest {
 impl PatchRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: None }
+        Self {
+            config,
+            location_id: None,
+            address_id: None,
+            body: None,
+        }
+    }
+
+    pub fn location_id(mut self, location_id: impl Into<String>) -> Self {
+        self.location_id = Some(location_id.into());
+        self
+    }
+
+    pub fn address_id(mut self, address_id: impl Into<String>) -> Self {
+        self.address_id = Some(address_id.into());
+        self
     }
 
     /// 设置请求体
@@ -43,8 +60,15 @@ impl PatchRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<PatchResponse> {
-        let mut request =
-            ApiRequest::<PatchResponse>::patch("/open-apis/corehr/v2/location_addresses/patch");
+        let location_id = self.location_id.unwrap_or_default();
+        let address_id = self.address_id.unwrap_or_default();
+        validate_required!(location_id.trim(), "location_id 不能为空");
+        validate_required!(address_id.trim(), "address_id 不能为空");
+
+        let mut request = ApiRequest::<PatchResponse>::patch(format!(
+            "/open-apis/corehr/v2/locations/{}/addresses/{}",
+            location_id, address_id
+        ));
 
         if let Some(body) = self.body {
             request = request.body(body);

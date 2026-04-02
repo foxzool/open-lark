@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,6 +17,7 @@ use serde_json::Value;
 pub struct DeleteRequest {
     /// 配置信息
     config: Config,
+    department_id: Option<String>,
     /// 请求体（可选）
     body: Option<Value>,
 }
@@ -24,7 +25,16 @@ pub struct DeleteRequest {
 impl DeleteRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: None }
+        Self {
+            config,
+            department_id: None,
+            body: None,
+        }
+    }
+
+    pub fn department_id(mut self, department_id: impl Into<String>) -> Self {
+        self.department_id = Some(department_id.into());
+        self
     }
 
     /// 设置请求体
@@ -43,8 +53,13 @@ impl DeleteRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteResponse> {
-        let mut request =
-            ApiRequest::<DeleteResponse>::delete("/open-apis/corehr/v2/departments/delete");
+        let department_id = self.department_id.unwrap_or_default();
+        validate_required!(department_id.trim(), "department_id 不能为空");
+
+        let mut request = ApiRequest::<DeleteResponse>::delete(format!(
+            "/open-apis/corehr/v2/departments/{}",
+            department_id
+        ));
 
         if let Some(body) = self.body {
             request = request.body(body);

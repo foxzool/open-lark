@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,13 +17,23 @@ use serde_json::Value;
 pub struct UpdateRequest {
     /// 配置信息
     config: Config,
+    process_revoke_id: Option<String>,
     body: Option<Value>,
 }
 
 impl UpdateRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: None }
+        Self {
+            config,
+            process_revoke_id: None,
+            body: None,
+        }
+    }
+
+    pub fn process_revoke_id(mut self, process_revoke_id: impl Into<String>) -> Self {
+        self.process_revoke_id = Some(process_revoke_id.into());
+        self
     }
 
     pub fn body(mut self, body: Value) -> Self {
@@ -41,8 +51,13 @@ impl UpdateRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UpdateResponse> {
-        let mut request =
-            ApiRequest::<UpdateResponse>::post("/open-apis/corehr/v2/process_revoke/update");
+        let process_revoke_id = self.process_revoke_id.unwrap_or_default();
+        validate_required!(process_revoke_id.trim(), "process_revoke_id 不能为空");
+
+        let mut request = ApiRequest::<UpdateResponse>::put(format!(
+            "/open-apis/corehr/v2/process_revoke/{}",
+            process_revoke_id
+        ));
 
         if let Some(body) = self.body {
             request = request.body(body);

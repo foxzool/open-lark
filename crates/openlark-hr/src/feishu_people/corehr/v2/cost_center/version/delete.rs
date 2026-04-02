@@ -17,6 +17,7 @@ use serde_json::Value;
 pub struct DeleteRequest {
     /// 配置信息
     config: Config,
+    cost_center_id: Option<String>,
     version_id: Option<String>,
 }
 
@@ -25,8 +26,14 @@ impl DeleteRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
+            cost_center_id: None,
             version_id: None,
         }
+    }
+
+    pub fn cost_center_id(mut self, cost_center_id: impl Into<String>) -> Self {
+        self.cost_center_id = Some(cost_center_id.into());
+        self
     }
 
     pub fn version_id(mut self, version_id: String) -> Self {
@@ -44,12 +51,14 @@ impl DeleteRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeleteResponse> {
+        let cost_center_id = self.cost_center_id.unwrap_or_default();
         let version_id = self.version_id.unwrap_or_default();
+        validate_required!(cost_center_id.trim(), "cost_center_id 不能为空");
         validate_required!(version_id.trim(), "version_id 不能为空");
 
         let request = ApiRequest::<DeleteResponse>::delete(format!(
-            "/open-apis/corehr/v2/cost_center_versions/{}",
-            version_id
+            "/open-apis/corehr/v2/cost_centers/{}/versions/{}",
+            cost_center_id, version_id
         ));
 
         let response = Transport::request(request, &self.config, Some(option)).await?;

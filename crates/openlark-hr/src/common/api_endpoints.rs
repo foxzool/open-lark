@@ -3185,7 +3185,7 @@ impl FeishuPeopleApiV2 {
             }
 
             FeishuPeopleApiV2::EmployeesBpBatchGet => {
-                "/open-apis/corehr/v2/employees/bp/batch_get".to_string()
+                "/open-apis/corehr/v2/employees/bps/batch_get".to_string()
             }
 
             FeishuPeopleApiV2::EmployeesInternationalAssignmentCreate => {

@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,13 +17,30 @@ use serde_json::Value;
 pub struct UpdateRequest {
     /// 配置信息
     config: Config,
+    process_id: Option<String>,
+    approver_id: Option<String>,
     body: Option<Value>,
 }
 
 impl UpdateRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: None }
+        Self {
+            config,
+            process_id: None,
+            approver_id: None,
+            body: None,
+        }
+    }
+
+    pub fn process_id(mut self, process_id: impl Into<String>) -> Self {
+        self.process_id = Some(process_id.into());
+        self
+    }
+
+    pub fn approver_id(mut self, approver_id: impl Into<String>) -> Self {
+        self.approver_id = Some(approver_id.into());
+        self
     }
 
     pub fn body(mut self, body: Value) -> Self {
@@ -41,8 +58,15 @@ impl UpdateRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UpdateResponse> {
-        let mut request =
-            ApiRequest::<UpdateResponse>::post("/open-apis/corehr/v2/processes/approver/update");
+        let process_id = self.process_id.unwrap_or_default();
+        let approver_id = self.approver_id.unwrap_or_default();
+        validate_required!(process_id.trim(), "process_id 不能为空");
+        validate_required!(approver_id.trim(), "approver_id 不能为空");
+
+        let mut request = ApiRequest::<UpdateResponse>::put(format!(
+            "/open-apis/corehr/v2/processes/{}/approvers/{}",
+            process_id, approver_id
+        ));
 
         if let Some(body) = self.body {
             request = request.body(body);
