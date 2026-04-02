@@ -3200,7 +3200,7 @@ impl FeishuPeopleApiV2 {
                 )
             }
             FeishuPeopleApiV2::EmployeesInternationalAssignmentList => {
-                "/open-apis/corehr/v2/employees/international_assignments/list".to_string()
+                "/open-apis/corehr/v2/employees/international_assignments".to_string()
             }
             FeishuPeopleApiV2::EmployeesInternationalAssignmentPatch(
                 international_assignment_id,

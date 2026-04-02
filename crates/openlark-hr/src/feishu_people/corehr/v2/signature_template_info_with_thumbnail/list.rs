@@ -41,8 +41,8 @@ impl ListRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResponse> {
-        let mut request = ApiRequest::<ListResponse>::post(
-            "/open-apis/corehr/v2/signature_template_info_with_thumbnails/list",
+        let mut request = ApiRequest::<ListResponse>::get(
+            "/open-apis/corehr/v2/signature_template_info_with_thumbnails",
         );
 
         if let Some(body) = self.body {

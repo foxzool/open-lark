@@ -42,7 +42,7 @@ impl BatchsaveRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchsaveResponse> {
         let mut request = ApiRequest::<BatchsaveResponse>::post(
-            "/open-apis/corehr/v2/workforce_plan_detail_rows/batchSave",
+            "/open-apis/corehr/v2/workforce_plan_detail_row/batchSave",
         );
 
         if let Some(body) = self.body {

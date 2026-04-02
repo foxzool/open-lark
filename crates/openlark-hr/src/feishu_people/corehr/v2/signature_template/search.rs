@@ -42,7 +42,7 @@ impl SearchRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<SearchResponse> {
         let mut request =
-            ApiRequest::<SearchResponse>::post("/open-apis/corehr/v2/signature_templates/search");
+            ApiRequest::<SearchResponse>::get("/open-apis/corehr/v2/signature_templates/search");
 
         if let Some(body) = self.body {
             request = request.body(body);

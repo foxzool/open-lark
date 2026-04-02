@@ -42,7 +42,7 @@ impl BatchdeleteRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchdeleteResponse> {
         let mut request = ApiRequest::<BatchdeleteResponse>::post(
-            "/open-apis/corehr/v2/workforce_plan_detail_rows/batchDelete",
+            "/open-apis/corehr/v2/workforce_plan_detail_row/batchDelete",
         );
 
         if let Some(body) = self.body {
