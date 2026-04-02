@@ -1,4 +1,5 @@
 /// Bitable应用管理模块
+pub mod block_workflow;
 pub mod copy;
 pub mod create;
 pub mod dashboard;
@@ -9,6 +10,7 @@ pub mod table;
 pub mod update;
 pub mod workflow;
 
+pub use block_workflow::{BlockWorkflow, ListBlockWorkflowRequest, ListBlockWorkflowResponse};
 // copy 模块显式导出
 
 pub use copy::{CopyAppRequest, CopyAppResponse};

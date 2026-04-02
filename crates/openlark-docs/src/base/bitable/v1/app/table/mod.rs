@@ -3,6 +3,7 @@ pub mod batch_delete;
 pub mod create;
 pub mod delete;
 pub mod field;
+pub mod field_group;
 pub mod form;
 /// 表格管理模块
 ///
@@ -42,6 +43,10 @@ pub use field::{
     UpdateFieldResponse,
 };
 
+pub use field_group::{
+    CreateFieldGroupItem, CreateFieldGroupRequest, CreateFieldGroupResponse, FieldGroupChild,
+};
+
 pub use record::{
     BatchCreateRecordRequest, BatchCreateRecordResponse, BatchDeleteRecordRequest,
     BatchDeleteRecordResponse, BatchGetRecordRequest, BatchGetRecordResponse,
@@ -57,7 +62,7 @@ pub use form::{
     Form, FormFieldQuestion, GetFormRequest, GetFormResponse, ListFormFieldQuestionRequest,
     ListFormFieldQuestionResponse, PatchFormFieldQuestionBuilder, PatchFormFieldQuestionRequest,
     PatchFormFieldQuestionResponse, PatchFormFieldRequest, PatchFormRequest, PatchFormResponse,
-    PatchedFormFieldQuestion,
+    PatchedFormFieldQuestion, UpgradeFormRequest, UpgradeFormResponse, UpgradedForm,
 };
 
 pub use view::{

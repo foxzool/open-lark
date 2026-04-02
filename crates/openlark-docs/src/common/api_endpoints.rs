@@ -69,6 +69,7 @@ pub enum BitableApiV1 {
     DashboardList(String),
     DashboardCopy(String, String),
     /// 自动化流程
+    BlockWorkflowList(String),
     WorkflowList(String),
     WorkflowUpdate(String, String),
 
@@ -84,6 +85,7 @@ pub enum BitableApiV1 {
 
     /// 字段管理相关
     FieldCreate(String, String),
+    FieldGroupCreate(String, String),
     FieldUpdate(String, String, String),
     FieldDelete(String, String, String),
     FieldList(String, String),
@@ -111,6 +113,7 @@ pub enum BitableApiV1 {
     /// 表单管理相关
     FormGet(String, String, String),
     FormPatch(String, String, String),
+    FormUpgrade(String, String, String),
     FormFieldList(String, String, String),
     FormFieldPatch(String, String, String, String),
 
@@ -149,6 +152,9 @@ impl BitableApiV1 {
                     "/open-apis/bitable/v1/apps/{}/dashboards/{}/copy",
                     app_token, block_id
                 )
+            }
+            BitableApiV1::BlockWorkflowList(app_token) => {
+                format!("/open-apis/bitable/v1/apps/{}/block_workflows", app_token)
             }
             BitableApiV1::WorkflowList(app_token) => {
                 format!("/open-apis/bitable/v1/apps/{}/workflows", app_token)
@@ -208,6 +214,12 @@ impl BitableApiV1 {
             BitableApiV1::FieldCreate(app_token, table_id) => {
                 format!(
                     "/open-apis/bitable/v1/apps/{}/tables/{}/fields",
+                    app_token, table_id
+                )
+            }
+            BitableApiV1::FieldGroupCreate(app_token, table_id) => {
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/field_groups",
                     app_token, table_id
                 )
             }
@@ -340,6 +352,12 @@ impl BitableApiV1 {
             BitableApiV1::FormPatch(app_token, table_id, form_id) => {
                 format!(
                     "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
+                    app_token, table_id, form_id
+                )
+            }
+            BitableApiV1::FormUpgrade(app_token, table_id, form_id) => {
+                format!(
+                    "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/upgrade",
                     app_token, table_id, form_id
                 )
             }
@@ -1047,34 +1065,34 @@ pub enum CcmSheetApiOld {
     /// 创建数据验证规则
     DataValidationCreate(String), // spreadsheet_token
     /// 更新下拉列表设置（PUT）
-    DataValidationUpdate(String, String, String), // spreadsheet_token, sheet_id, data_validation_id
+    DataValidationUpdate(String, String), // spreadsheet_token, sheet_id
     /// 删除下拉列表设置（DELETE，按 range 删除）
     DataValidationDelete(String), // spreadsheet_token
-    /// 读取单个范围 (V3)
-    ReadSingleRange(String), // spreadsheet_token
-    /// 读取多个范围 (V3)
+    /// 读取单个范围
+    ReadSingleRange(String, String), // spreadsheet_token, range
+    /// 读取多个范围
     ReadMultipleRanges(String), // spreadsheet_token
-    /// 写入单个范围 (V3)
+    /// 写入单个范围
     WriteSingleRange(String), // spreadsheet_token
-    /// 批量写入范围 (V3)
+    /// 批量写入范围
     BatchWriteRanges(String), // spreadsheet_token
-    /// 追加数据 (V3)
+    /// 追加数据
     AppendValues(String), // spreadsheet_token
-    /// 插入数据 (V3)
+    /// 插入数据
     InsertValues(String), // spreadsheet_token
-    /// 获取表格信息 (V3)
+    /// 获取电子表格信息
     GetSpreadsheet(String), // spreadsheet_token
-    /// 创建表格 (V3)
+    /// 创建电子表格
     CreateSpreadsheet,
-    /// 更新表格 (V3)
+    /// 修改电子表格属性
     UpdateSpreadsheet(String), // spreadsheet_token
-    /// 添加工作表 (V3)
+    /// 操作工作表
     AddSheet(String), // spreadsheet_token
-    /// 获取工作表信息 (V3)
-    GetSheet(String), // spreadsheet_token
-    /// 更新工作表 (V3)
+    /// 查询工作表
+    GetSheet(String, String), // spreadsheet_token, sheet_id
+    /// 更新工作表
     UpdateSheet(String), // spreadsheet_token
-    /// 删除工作表 (V3)
+    /// 删除工作表
     DeleteSheet(String), // spreadsheet_token
     /// 创建筛选 (V3)
     CreateFilter(String), // spreadsheet_token
@@ -1306,14 +1324,10 @@ impl CcmSheetApiOld {
                     spreadsheet_token
                 )
             }
-            CcmSheetApiOld::DataValidationUpdate(
-                spreadsheet_token,
-                sheet_id,
-                data_validation_id,
-            ) => {
+            CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}/{}",
-                    spreadsheet_token, sheet_id, data_validation_id
+                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}",
+                    spreadsheet_token, sheet_id
                 )
             }
             CcmSheetApiOld::DataValidationDelete(spreadsheet_token) => {
@@ -1322,40 +1336,39 @@ impl CcmSheetApiOld {
                     spreadsheet_token
                 )
             }
-            // V3 APIs
-            CcmSheetApiOld::ReadSingleRange(spreadsheet_token) => {
+            CcmSheetApiOld::ReadSingleRange(spreadsheet_token, range) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/values",
-                    spreadsheet_token
+                    "/open-apis/sheets/v2/spreadsheets/{}/values/{}",
+                    spreadsheet_token, range
                 )
             }
             CcmSheetApiOld::ReadMultipleRanges(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/values/batchGet",
+                    "/open-apis/sheets/v2/spreadsheets/{}/values_batch_get",
                     spreadsheet_token
                 )
             }
             CcmSheetApiOld::WriteSingleRange(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/values",
+                    "/open-apis/sheets/v2/spreadsheets/{}/values",
                     spreadsheet_token
                 )
             }
             CcmSheetApiOld::BatchWriteRanges(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/values/batchUpdate",
+                    "/open-apis/sheets/v2/spreadsheets/{}/values_batch_update",
                     spreadsheet_token
                 )
             }
             CcmSheetApiOld::AppendValues(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/values/append",
+                    "/open-apis/sheets/v2/spreadsheets/{}/values_append",
                     spreadsheet_token
                 )
             }
             CcmSheetApiOld::InsertValues(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/values/insert",
+                    "/open-apis/sheets/v2/spreadsheets/{}/values_prepend",
                     spreadsheet_token
                 )
             }
@@ -1368,25 +1381,25 @@ impl CcmSheetApiOld {
             }
             CcmSheetApiOld::AddSheet(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets",
+                    "/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
                     spreadsheet_token
                 )
             }
-            CcmSheetApiOld::GetSheet(spreadsheet_token) => {
+            CcmSheetApiOld::GetSheet(spreadsheet_token, sheet_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/query",
-                    spreadsheet_token
+                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}",
+                    spreadsheet_token, sheet_id
                 )
             }
             CcmSheetApiOld::UpdateSheet(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets",
+                    "/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
                     spreadsheet_token
                 )
             }
             CcmSheetApiOld::DeleteSheet(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets",
+                    "/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
                     spreadsheet_token
                 )
             }
@@ -2466,6 +2479,38 @@ mod tests {
         assert_eq!(
             endpoint.to_url(),
             "/open-apis/bitable/v1/apps/app_token_123/tables/table_id_456/fields"
+        );
+    }
+
+    #[test]
+    fn test_bitable_api_v1_block_workflow_list() {
+        let endpoint = BitableApiV1::BlockWorkflowList("app_token_123".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/bitable/v1/apps/app_token_123/block_workflows"
+        );
+    }
+
+    #[test]
+    fn test_bitable_api_v1_field_group_create() {
+        let endpoint =
+            BitableApiV1::FieldGroupCreate("app_token_123".to_string(), "table_id_456".to_string());
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/bitable/v1/apps/app_token_123/tables/table_id_456/field_groups"
+        );
+    }
+
+    #[test]
+    fn test_bitable_api_v1_form_upgrade() {
+        let endpoint = BitableApiV1::FormUpgrade(
+            "app_token_123".to_string(),
+            "table_id_456".to_string(),
+            "form_id_789".to_string(),
+        );
+        assert_eq!(
+            endpoint.to_url(),
+            "/open-apis/bitable/v1/apps/app_token_123/tables/table_id_456/forms/form_id_789/upgrade"
         );
     }
 
