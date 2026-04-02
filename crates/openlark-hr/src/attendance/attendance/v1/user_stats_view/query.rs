@@ -49,7 +49,7 @@ impl QueryRequest {
 
         // 1. 构建端点
         let api_endpoint = AttendanceApiV1::UserStatsViewQuery;
-        let mut request = ApiRequest::<QueryResponse>::get(api_endpoint.to_url());
+        let mut request = ApiRequest::<QueryResponse>::post(api_endpoint.to_url());
 
         // 2. 添加查询参数（可选）
         if let Some(ref group_id) = self.group_id {

@@ -44,7 +44,7 @@ impl ActiveRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ActiveResponse> {
         let mut request =
-            ApiRequest::<ActiveResponse>::patch("/open-apis/corehr/v2/locations/active");
+            ApiRequest::<ActiveResponse>::post("/open-apis/corehr/v2/locations/active");
 
         if let Some(body) = self.body {
             request = request.body(body);

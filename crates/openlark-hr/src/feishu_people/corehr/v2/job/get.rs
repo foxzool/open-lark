@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,6 +17,8 @@ use serde_json::Value;
 pub struct GetRequest {
     /// 配置信息
     config: Config,
+    /// 职务 ID
+    job_id: Option<String>,
     /// 请求体（可选）
     body: Option<Value>,
 }
@@ -24,7 +26,17 @@ pub struct GetRequest {
 impl GetRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: None }
+        Self {
+            config,
+            job_id: None,
+            body: None,
+        }
+    }
+
+    /// 设置职务 ID
+    pub fn job_id(mut self, job_id: impl Into<String>) -> Self {
+        self.job_id = Some(job_id.into());
+        self
     }
 
     /// 设置请求体
@@ -43,7 +55,11 @@ impl GetRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
-        let mut request = ApiRequest::<GetResponse>::get("/open-apis/corehr/v2/jobs/get");
+        let job_id = self.job_id.unwrap_or_default();
+        validate_required!(job_id.trim(), "job_id 不能为空");
+
+        let mut request =
+            ApiRequest::<GetResponse>::get(format!("/open-apis/corehr/v2/jobs/{}", job_id));
 
         if let Some(body) = self.body {
             request = request.body(body);

@@ -43,7 +43,8 @@ impl QueryUserAllowedRemedysRequest {
 
         // 2. 构建端点
         let api_endpoint = AttendanceApiV1::UserTaskRemedyQueryUserAllowedRemedys;
-        let mut request = ApiRequest::<QueryUserAllowedRemedysResponse>::get(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<QueryUserAllowedRemedysResponse>::post(api_endpoint.to_url());
 
         // 3. 添加查询参数
         request = request.query("user_id", &self.user_id);

@@ -100,7 +100,7 @@ impl CalendarByScopeRequest {
 
         // 2. 构建端点
         let api_endpoint = FeishuPeopleApiV1::LeaveCalendarByScope;
-        let request = ApiRequest::<CalendarByScopeResponse>::post(api_endpoint.to_url());
+        let request = ApiRequest::<CalendarByScopeResponse>::get(api_endpoint.to_url());
 
         // 3. 序列化请求体
         let request_body = CalendarByScopeRequestBody {

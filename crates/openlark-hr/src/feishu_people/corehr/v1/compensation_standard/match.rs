@@ -54,7 +54,7 @@ impl MatchRequest {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
         let api_endpoint = FeishuPeopleApiV1::CompensationStandardMatch;
-        let mut request = ApiRequest::<MatchResponse>::post(api_endpoint.to_url());
+        let mut request = ApiRequest::<MatchResponse>::get(api_endpoint.to_url());
         for (key, value) in self.query_params {
             request = request.query(&key, value);
         }

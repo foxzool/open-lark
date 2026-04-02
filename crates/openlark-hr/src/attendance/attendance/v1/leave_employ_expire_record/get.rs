@@ -63,8 +63,11 @@ impl GetRequest {
         use crate::common::api_endpoints::AttendanceApiV1;
 
         // 1. 构建端点
-        let api_endpoint = AttendanceApiV1::LeaveEmployExpireRecordGet;
-        let mut request = ApiRequest::<GetResponse>::get(api_endpoint.to_url());
+        let record_key = format!("{}-{}", self.expire_time_start, self.expire_time_end);
+        let api_endpoint = AttendanceApiV1::LeaveEmployExpireRecordGet
+            .to_url()
+            .replace("{}", &record_key);
+        let mut request = ApiRequest::<GetResponse>::get(&api_endpoint);
 
         // 2. 添加查询参数
         request = request.query("expire_time_start", self.expire_time_start.to_string());

@@ -41,7 +41,7 @@ impl QueryRecentChangeRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryRecentChangeResponse> {
-        let mut request = ApiRequest::<QueryRecentChangeResponse>::post(
+        let mut request = ApiRequest::<QueryRecentChangeResponse>::get(
             "/open-apis/corehr/v2/companies/query_recent_change",
         );
 

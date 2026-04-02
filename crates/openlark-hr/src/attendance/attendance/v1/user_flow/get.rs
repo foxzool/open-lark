@@ -9,7 +9,7 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 
-use super::models::{GetUserFlowRequestBody, GetUserFlowResponse};
+use super::models::GetUserFlowResponse;
 
 /// 获取打卡流水请求
 #[derive(Debug, Clone)]
@@ -61,30 +61,20 @@ impl GetUserFlowRequest {
         validate_required!(self.user_flow_id.trim(), "打卡流水 ID 不能为空");
 
         // 2. 构建端点
-        let api_endpoint = AttendanceApiV1::UserFlowGet;
-        let mut request = ApiRequest::<GetUserFlowResponse>::post(api_endpoint.to_url());
+        let api_endpoint = AttendanceApiV1::UserFlowGet
+            .to_url()
+            .replace("{}", &self.user_flow_id);
+        let mut request = ApiRequest::<GetUserFlowResponse>::get(&api_endpoint);
 
         // 3. 添加查询参数（可选）
         if let Some(ref user_id_type) = self.user_id_type {
             request = request.query("user_id_type", user_id_type);
         }
 
-        // 4. 序列化请求体
-        let request_body = GetUserFlowRequestBody {
-            user_flow_id: self.user_flow_id,
-            user_id_type: self.user_id_type,
-        };
-        request = request.body(serde_json::to_value(&request_body).map_err(|e| {
-            openlark_core::error::validation_error(
-                "请求体序列化失败",
-                format!("无法序列化请求参数: {}", e),
-            )
-        })?);
-
-        // 5. 发送请求
+        // 4. 发送请求
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
-        // 6. 提取响应数据
+        // 5. 提取响应数据
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error(
                 "获取打卡流水响应数据为空",

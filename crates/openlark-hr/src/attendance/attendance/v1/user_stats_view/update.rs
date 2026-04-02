@@ -62,8 +62,10 @@ impl UpdateRequest {
         validate_required!(self.field_ids, "field_ids");
 
         // 2. 构建端点
-        let api_endpoint = AttendanceApiV1::UserStatsViewUpdate;
-        let request = ApiRequest::<UpdateResponse>::post(api_endpoint.to_url());
+        let api_endpoint = AttendanceApiV1::UserStatsViewUpdate
+            .to_url()
+            .replace("{}", &self.view_id);
+        let request = ApiRequest::<UpdateResponse>::put(&api_endpoint);
 
         // 3. 构建请求体
         let request_body = UpdateRequestBody {

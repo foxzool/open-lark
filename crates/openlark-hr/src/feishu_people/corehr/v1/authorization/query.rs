@@ -57,7 +57,7 @@ impl QueryRequest {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
         let api_endpoint = FeishuPeopleApiV1::AuthorizationQuery;
-        let request = ApiRequest::<QueryResponse>::post(api_endpoint.to_url()).body(self.body);
+        let request = ApiRequest::<QueryResponse>::get(api_endpoint.to_url()).body(self.body);
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,13 +17,24 @@ use serde_json::Value;
 pub struct GetRequest {
     /// 配置信息
     config: Config,
+    /// 流程 ID
+    process_id: Option<String>,
     body: Option<Value>,
 }
 
 impl GetRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: None }
+        Self {
+            config,
+            process_id: None,
+            body: None,
+        }
+    }
+
+    pub fn process_id(mut self, process_id: impl Into<String>) -> Self {
+        self.process_id = Some(process_id.into());
+        self
     }
 
     pub fn body(mut self, body: Value) -> Self {
@@ -41,7 +52,13 @@ impl GetRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
-        let mut request = ApiRequest::<GetResponse>::get("/open-apis/corehr/v2/processes/get");
+        let process_id = self.process_id.unwrap_or_default();
+        validate_required!(process_id.trim(), "process_id 不能为空");
+
+        let mut request = ApiRequest::<GetResponse>::get(format!(
+            "/open-apis/corehr/v2/processes/{}",
+            process_id
+        ));
 
         if let Some(body) = self.body {
             request = request.body(body);

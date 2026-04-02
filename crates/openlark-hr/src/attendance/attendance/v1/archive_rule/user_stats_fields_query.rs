@@ -49,7 +49,7 @@ impl UserStatsFieldsQueryRequest {
 
         // 1. 构建端点
         let api_endpoint = AttendanceApiV1::ArchiveRuleUserStatsFieldsQuery;
-        let mut request = ApiRequest::<UserStatsFieldsQueryResponse>::get(api_endpoint.to_url());
+        let mut request = ApiRequest::<UserStatsFieldsQueryResponse>::post(api_endpoint.to_url());
 
         // 2. 添加查询参数（可选）
         if let Some(ref archive_rule_id) = self.archive_rule_id {

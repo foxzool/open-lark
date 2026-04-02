@@ -53,7 +53,7 @@ impl LeaveRequestHistoryRequest {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
         let api_endpoint = FeishuPeopleApiV1::LeaveLeaveRequestHistory;
-        let mut request = ApiRequest::<LeaveRequestHistoryResponse>::post(api_endpoint.to_url());
+        let mut request = ApiRequest::<LeaveRequestHistoryResponse>::get(api_endpoint.to_url());
         for (key, value) in self.query_params {
             request = request.query(&key, value);
         }

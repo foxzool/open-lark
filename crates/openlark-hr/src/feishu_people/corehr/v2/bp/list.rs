@@ -41,7 +41,7 @@ impl ListRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResponse> {
-        let mut request = ApiRequest::<ListResponse>::post("/open-apis/corehr/v2/bps/list");
+        let mut request = ApiRequest::<ListResponse>::get("/open-apis/corehr/v2/bps");
 
         if let Some(body) = self.body {
             request = request.body(body);
