@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,6 +17,8 @@ use serde_json::Value;
 pub struct RevokeRequest {
     /// 配置信息
     config: Config,
+    /// 异动 ID
+    job_change_id: Option<String>,
     /// 请求体（可选）
     body: Option<Value>,
 }
@@ -24,7 +26,17 @@ pub struct RevokeRequest {
 impl RevokeRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: None }
+        Self {
+            config,
+            job_change_id: None,
+            body: None,
+        }
+    }
+
+    /// 设置异动 ID
+    pub fn job_change_id(mut self, job_change_id: impl Into<String>) -> Self {
+        self.job_change_id = Some(job_change_id.into());
+        self
     }
 
     /// 设置请求体
@@ -43,8 +55,13 @@ impl RevokeRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<RevokeResponse> {
-        let mut request =
-            ApiRequest::<RevokeResponse>::post("/open-apis/corehr/v2/job_changes/revoke");
+        let job_change_id = self.job_change_id.unwrap_or_default();
+        validate_required!(job_change_id.trim(), "job_change_id 不能为空");
+
+        let mut request = ApiRequest::<RevokeResponse>::post(format!(
+            "/open-apis/corehr/v2/job_changes/{}/revoke",
+            job_change_id
+        ));
 
         if let Some(body) = self.body {
             request = request.body(body);

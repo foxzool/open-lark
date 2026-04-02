@@ -166,13 +166,13 @@ impl AttendanceApiV1 {
                 "/open-apis/attendance/v1/user_tasks/query".to_string()
             }
             AttendanceApiV1::UserTaskRemedyCreate => {
-                "/open-apis/attendance/v1/user_task_remedies".to_string()
+                "/open-apis/attendance/v1/user_task_remedys".to_string()
             }
             AttendanceApiV1::UserTaskRemedyQuery => {
-                "/open-apis/attendance/v1/user_task_remedies/query".to_string()
+                "/open-apis/attendance/v1/user_task_remedys/query".to_string()
             }
             AttendanceApiV1::UserTaskRemedyQueryUserAllowedRemedys => {
-                "/open-apis/attendance/v1/user_task_remedies/query_user_allowed_remedys".to_string()
+                "/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys".to_string()
             }
 
             // group
@@ -185,7 +185,7 @@ impl AttendanceApiV1 {
             }
             AttendanceApiV1::GroupList => "/open-apis/attendance/v1/groups".to_string(),
             AttendanceApiV1::GroupListUser(group_id) => {
-                format!("/open-apis/attendance/v1/groups/{}/users", group_id)
+                format!("/open-apis/attendance/v1/groups/{}/list_user", group_id)
             }
             AttendanceApiV1::GroupSearch => "/open-apis/attendance/v1/groups/search".to_string(),
 
@@ -207,7 +207,7 @@ impl AttendanceApiV1 {
             AttendanceApiV1::UserFlowBatchDel => {
                 "/open-apis/attendance/v1/user_flows/batch_del".to_string()
             }
-            AttendanceApiV1::UserFlowGet => "/open-apis/attendance/v1/user_flows/get".to_string(),
+            AttendanceApiV1::UserFlowGet => "/open-apis/attendance/v1/user_flows/{}".to_string(),
             AttendanceApiV1::UserFlowQuery => {
                 "/open-apis/attendance/v1/user_flows/query".to_string()
             }
@@ -241,35 +241,35 @@ impl AttendanceApiV1 {
 
             // file
             AttendanceApiV1::FileUpload => "/open-apis/attendance/v1/files/upload".to_string(),
-            AttendanceApiV1::FileDownload => "/open-apis/attendance/v1/files/download".to_string(),
+            AttendanceApiV1::FileDownload => {
+                "/open-apis/attendance/v1/files/{}/download".to_string()
+            }
 
             // archive_rule
-            AttendanceApiV1::ArchiveRuleList => {
-                "/open-apis/attendance/v1/archive_rules".to_string()
-            }
+            AttendanceApiV1::ArchiveRuleList => "/open-apis/attendance/v1/archive_rule".to_string(),
             AttendanceApiV1::ArchiveRuleUserStatsFieldsQuery => {
-                "/open-apis/attendance/v1/archive_rules/user_stats_fields_query".to_string()
+                "/open-apis/attendance/v1/archive_rule/user_stats_fields_query".to_string()
             }
             AttendanceApiV1::ArchiveRuleDelReport => {
-                "/open-apis/attendance/v1/archive_rules/del_report".to_string()
+                "/open-apis/attendance/v1/archive_rule/del_report".to_string()
             }
             AttendanceApiV1::ArchiveRuleUploadReport => {
-                "/open-apis/attendance/v1/archive_rules/upload_report".to_string()
+                "/open-apis/attendance/v1/archive_rule/upload_report".to_string()
             }
 
             // leave_accrual_record
             AttendanceApiV1::LeaveAccrualRecordPatch => {
-                "/open-apis/attendance/v1/leave_accrual_records/patch".to_string()
+                "/open-apis/attendance/v1/leave_accrual_record/{}".to_string()
             }
 
             // leave_employ_expire_record
             AttendanceApiV1::LeaveEmployExpireRecordGet => {
-                "/open-apis/attendance/v1/leave_employ_expire_records/get".to_string()
+                "/open-apis/attendance/v1/leave_employ_expire_records/{}".to_string()
             }
 
             // user_stats_data
             AttendanceApiV1::UserStatsDataQuery => {
-                "/open-apis/attendance/v1/user_stats_data/query".to_string()
+                "/open-apis/attendance/v1/user_stats_datas/query".to_string()
             }
 
             // user_stats_field
@@ -282,7 +282,7 @@ impl AttendanceApiV1 {
                 "/open-apis/attendance/v1/user_stats_views/query".to_string()
             }
             AttendanceApiV1::UserStatsViewUpdate => {
-                "/open-apis/attendance/v1/user_stats_views/update".to_string()
+                "/open-apis/attendance/v1/user_stats_views/{}".to_string()
             }
 
             // approval_info
@@ -1567,19 +1567,19 @@ impl CompensationApiV1 {
 
             // lump_sum_payment
             CompensationApiV1::LumpSumPaymentBatchCreate => {
-                "/open-apis/compensation/v1/lump_sum_payments/batch_create".to_string()
+                "/open-apis/compensation/v1/lump_sum_payment/batch_create".to_string()
             }
             CompensationApiV1::LumpSumPaymentBatchRemove => {
-                "/open-apis/compensation/v1/lump_sum_payments/batch_remove".to_string()
+                "/open-apis/compensation/v1/lump_sum_payment/batch_remove".to_string()
             }
             CompensationApiV1::LumpSumPaymentBatchUpdate => {
-                "/open-apis/compensation/v1/lump_sum_payments/batch_update".to_string()
+                "/open-apis/compensation/v1/lump_sum_payment/batch_update".to_string()
             }
             CompensationApiV1::LumpSumPaymentQuery => {
-                "/open-apis/compensation/v1/lump_sum_payments/query".to_string()
+                "/open-apis/compensation/v1/lump_sum_payment/query".to_string()
             }
             CompensationApiV1::LumpSumPaymentQueryDetail => {
-                "/open-apis/compensation/v1/lump_sum_payments/query_detail".to_string()
+                "/open-apis/compensation/v1/lump_sum_payment/query_detail".to_string()
             }
 
             // plan
@@ -1587,26 +1587,26 @@ impl CompensationApiV1 {
 
             // recurring_payment
             CompensationApiV1::RecurringPaymentBatchCreate => {
-                "/open-apis/compensation/v1/recurring_payments/batch_create".to_string()
+                "/open-apis/compensation/v1/recurring_payment/batch_create".to_string()
             }
             CompensationApiV1::RecurringPaymentBatchRemove => {
-                "/open-apis/compensation/v1/recurring_payments/batch_remove".to_string()
+                "/open-apis/compensation/v1/recurring_payment/batch_remove".to_string()
             }
             CompensationApiV1::RecurringPaymentBatchUpdate => {
-                "/open-apis/compensation/v1/recurring_payments/batch_update".to_string()
+                "/open-apis/compensation/v1/recurring_payment/batch_update".to_string()
             }
             CompensationApiV1::RecurringPaymentQuery => {
-                "/open-apis/compensation/v1/recurring_payments/query".to_string()
+                "/open-apis/compensation/v1/recurring_payment/query".to_string()
             }
 
             // social_archive
             CompensationApiV1::SocialArchiveQuery => {
-                "/open-apis/compensation/v1/social_archives/query".to_string()
+                "/open-apis/compensation/v1/social_archive/query".to_string()
             }
 
             // social_archive_adjust_record
             CompensationApiV1::SocialArchiveAdjustRecordQuery => {
-                "/open-apis/compensation/v1/social_archive_adjust_records/query".to_string()
+                "/open-apis/compensation/v1/social_archive_adjust_record/query".to_string()
             }
 
             // social_insurance
@@ -1616,7 +1616,7 @@ impl CompensationApiV1 {
 
             // social_plan
             CompensationApiV1::SocialPlanList => {
-                "/open-apis/compensation/v1/social_plans/list".to_string()
+                "/open-apis/compensation/v1/social_plans".to_string()
             }
             CompensationApiV1::SocialPlanQuery => {
                 "/open-apis/compensation/v1/social_plans/query".to_string()
@@ -2498,7 +2498,7 @@ impl FeishuPeopleApiV1 {
             }
 
             FeishuPeopleApiV1::SecurityGroupList => {
-                "/open-apis/corehr/v1/security_groups/list".to_string()
+                "/open-apis/corehr/v1/security_groups".to_string()
             }
             FeishuPeopleApiV1::SecurityGroupQuery => {
                 "/open-apis/corehr/v1/security_groups/query".to_string()

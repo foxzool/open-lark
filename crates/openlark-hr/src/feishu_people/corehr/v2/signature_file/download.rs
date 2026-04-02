@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,13 +17,24 @@ use serde_json::Value;
 pub struct DownloadRequest {
     /// 配置信息
     config: Config,
+    /// 电子签文件 ID
+    signature_file_id: Option<String>,
     body: Option<Value>,
 }
 
 impl DownloadRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: None }
+        Self {
+            config,
+            signature_file_id: None,
+            body: None,
+        }
+    }
+
+    pub fn signature_file_id(mut self, signature_file_id: impl Into<String>) -> Self {
+        self.signature_file_id = Some(signature_file_id.into());
+        self
     }
 
     pub fn body(mut self, body: Value) -> Self {
@@ -41,8 +52,13 @@ impl DownloadRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DownloadResponse> {
-        let mut request =
-            ApiRequest::<DownloadResponse>::post("/open-apis/corehr/v2/signature_files/download");
+        let signature_file_id = self.signature_file_id.unwrap_or_default();
+        validate_required!(signature_file_id.trim(), "signature_file_id 不能为空");
+
+        let mut request = ApiRequest::<DownloadResponse>::post(format!(
+            "/open-apis/corehr/v2/signature_files/{}/download",
+            signature_file_id
+        ));
 
         if let Some(body) = self.body {
             request = request.body(body);

@@ -58,7 +58,7 @@ impl QueryRequest {
         use crate::common::api_endpoints::CompensationApiV1;
 
         let api_endpoint = CompensationApiV1::ArchiveQuery;
-        let mut request = ApiRequest::<QueryResponse>::get(api_endpoint.to_url());
+        let mut request = ApiRequest::<QueryResponse>::post(api_endpoint.to_url());
 
         if let Some(page_size) = self.page_size {
             request = request.query("page_size", page_size.to_string());

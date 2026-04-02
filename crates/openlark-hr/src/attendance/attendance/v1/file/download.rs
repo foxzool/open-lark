@@ -42,16 +42,14 @@ impl DownloadRequest {
         validate_required!(self.photo_id.trim(), "photo_id");
 
         // 2. 构建端点
-        let api_endpoint = AttendanceApiV1::FileDownload;
-        let mut request = ApiRequest::<DownloadResponse>::get(api_endpoint.to_url());
-
-        // 3. 添加查询参数
-        request = request.query("photo_id", &self.photo_id);
-
-        // 4. 发送请求
+        let api_endpoint = AttendanceApiV1::FileDownload
+            .to_url()
+            .replace("{}", &self.photo_id);
+        let request = ApiRequest::<DownloadResponse>::get(&api_endpoint);
+        // 3. 发送请求
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
-        // 5. 提取响应数据
+        // 4. 提取响应数据
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error(
                 "下载用户人脸识别照片响应数据为空",

@@ -41,7 +41,7 @@ impl ListByFileIdRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListByFileIdResponse> {
-        let mut request = ApiRequest::<ListByFileIdResponse>::post(
+        let mut request = ApiRequest::<ListByFileIdResponse>::get(
             "/open-apis/corehr/v2/signature_nodes/list_by_file_id",
         );
 

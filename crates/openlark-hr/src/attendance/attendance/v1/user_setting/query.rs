@@ -43,7 +43,7 @@ impl QueryRequest {
 
         // 2. 构建端点
         let api_endpoint = AttendanceApiV1::UserSettingQuery;
-        let request = ApiRequest::<QueryResponse>::post(api_endpoint.to_url());
+        let request = ApiRequest::<QueryResponse>::get(api_endpoint.to_url());
 
         // 3. 构建请求体
         let request_body = QueryRequestBody {

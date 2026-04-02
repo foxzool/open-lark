@@ -42,7 +42,7 @@ impl ListRequest {
         use crate::common::api_endpoints::FeishuPeopleApiV2;
 
         let api_endpoint = FeishuPeopleApiV2::EmployeesInternationalAssignmentList;
-        let mut request = ApiRequest::<ListResponse>::post(api_endpoint.to_url());
+        let mut request = ApiRequest::<ListResponse>::get(api_endpoint.to_url());
 
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);
