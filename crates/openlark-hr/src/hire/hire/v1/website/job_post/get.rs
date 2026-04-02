@@ -17,6 +17,7 @@ use serde_json::Value;
 pub struct GetRequest {
     /// 配置信息
     config: Config,
+    website_id: String,
     job_post_id: String,
 }
 
@@ -25,8 +26,14 @@ impl GetRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
+            website_id: String::new(),
             job_post_id: String::new(),
         }
+    }
+
+    pub fn website_id(mut self, website_id: String) -> Self {
+        self.website_id = website_id;
+        self
     }
 
     pub fn job_post_id(mut self, job_post_id: String) -> Self {
@@ -44,12 +51,13 @@ impl GetRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
+        validate_required!(self.website_id.trim(), "官网 ID 不能为空");
         validate_required!(self.job_post_id.trim(), "职位广告 ID 不能为空");
 
-        let api_endpoint = HireApiV1::WebsiteJobPostGet(self.job_post_id);
-        let request = ApiRequest::<GetResponse>::get(api_endpoint.to_url());
+        let request = ApiRequest::<GetResponse>::get(format!(
+            "/open-apis/hire/v1/websites/{}/job_posts/{}",
+            self.website_id, self.job_post_id
+        ));
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

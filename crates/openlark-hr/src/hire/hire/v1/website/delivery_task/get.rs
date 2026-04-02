@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,7 +17,8 @@ use serde_json::Value;
 pub struct GetRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    website_id: Option<String>,
+    delivery_task_id: Option<String>,
 }
 
 impl GetRequest {
@@ -25,11 +26,20 @@ impl GetRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            website_id: None,
+            delivery_task_id: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn website_id(mut self, website_id: impl Into<String>) -> Self {
+        self.website_id = Some(website_id.into());
+        self
+    }
+
+    pub fn delivery_task_id(mut self, delivery_task_id: impl Into<String>) -> Self {
+        self.delivery_task_id = Some(delivery_task_id.into());
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<GetResponse> {
@@ -41,10 +51,15 @@ impl GetRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
-        use crate::common::api_endpoints::HireApiV1;
+        let website_id = self.website_id.unwrap_or_default();
+        let delivery_task_id = self.delivery_task_id.unwrap_or_default();
+        validate_required!(website_id.trim(), "website_id 不能为空");
+        validate_required!(delivery_task_id.trim(), "delivery_task_id 不能为空");
 
-        let api_endpoint = HireApiV1::WebsiteDeliveryTaskGet;
-        let request = ApiRequest::<GetResponse>::get(api_endpoint.to_url());
+        let request = ApiRequest::<GetResponse>::get(format!(
+            "/open-apis/hire/v1/websites/{}/delivery_tasks/{}",
+            website_id, delivery_task_id
+        ));
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {
