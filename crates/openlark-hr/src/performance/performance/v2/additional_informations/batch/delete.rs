@@ -56,7 +56,7 @@ impl DeleteRequest {
 
         // 2. 构建端点
         let api_endpoint = PerformanceApiV1::AdditionalInformationsBatchDelete;
-        let request = ApiRequest::<DeleteResponse>::post(api_endpoint.to_url());
+        let request = ApiRequest::<DeleteResponse>::delete(api_endpoint.to_url());
 
         // 3. 构建请求体
         let request_body = DeleteRequestBody {
