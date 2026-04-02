@@ -11,7 +11,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::{extract_response_data, validate_required_field};
 
 /// 更新预约请求
@@ -70,9 +69,9 @@ impl UpdateReserveRequest {
     ) -> SDKResult<UpdateReserveResponse> {
         validate_required_field("reserve_id", Some(&self.reserve_id), "预约 ID 不能为空")?;
 
-        let api_endpoint = VcApiV1::ReservePatch(self.reserve_id.clone());
+        let api_endpoint = format!("/open-apis/vc/v1/reserves/{}", self.reserve_id);
         let api_request: ApiRequest<UpdateReserveResponse> =
-            ApiRequest::patch(api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
+            ApiRequest::put(&api_endpoint).body(serde_json::to_vec(&body)?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "更新预约")

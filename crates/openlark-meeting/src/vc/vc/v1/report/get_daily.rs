@@ -11,7 +11,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
 
 /// 获取会议报告请求
@@ -60,8 +59,8 @@ impl GetDailyReportRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<GetDailyReportResponse> {
-        let api_endpoint = VcApiV1::ReportDailyGet;
-        let mut req: ApiRequest<GetDailyReportResponse> = ApiRequest::get(api_endpoint.to_url());
+        let mut req: ApiRequest<GetDailyReportResponse> =
+            ApiRequest::get("/open-apis/vc/v1/reports/get_daily");
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }

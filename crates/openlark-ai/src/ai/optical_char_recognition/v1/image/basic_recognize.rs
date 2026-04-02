@@ -10,7 +10,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use crate::common::api_utils::{extract_response_data, serialize_params};
-use crate::endpoints::OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE;
+use crate::endpoints::OPTICAL_CHAR_RECOGNITION_V1_IMAGE_BASIC_RECOGNIZE;
 
 /// OCR 基础识别请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -122,7 +122,7 @@ impl BasicRecognizeRequest {
             .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
 
         let req: ApiRequest<BasicRecognizeResponse> =
-            ApiRequest::post(OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE)
+            ApiRequest::post(OPTICAL_CHAR_RECOGNITION_V1_IMAGE_BASIC_RECOGNIZE)
                 .body(serialize_params(&body, "OCR 基础识别")?);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
@@ -204,7 +204,7 @@ pub async fn basic_recognize_with_options(
         .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
 
     let req: ApiRequest<BasicRecognizeResponse> =
-        ApiRequest::post(OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE)
+        ApiRequest::post(OPTICAL_CHAR_RECOGNITION_V1_IMAGE_BASIC_RECOGNIZE)
             .body(serialize_params(&body, "OCR 基础识别")?);
 
     let resp = Transport::request(req, config, Some(option)).await?;

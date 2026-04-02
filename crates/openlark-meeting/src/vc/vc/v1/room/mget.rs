@@ -11,7 +11,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
 
 /// 批量查询会议室详情请求
@@ -66,9 +65,8 @@ impl MgetRoomRequest {
         body: serde_json::Value,
         option: RequestOption,
     ) -> SDKResult<MgetRoomResponse> {
-        let api_endpoint = VcApiV1::RoomBatchGet;
         let api_request: ApiRequest<MgetRoomResponse> =
-            ApiRequest::post(api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
+            ApiRequest::post("/open-apis/vc/v1/rooms/mget").body(serde_json::to_vec(&body)?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "批量查询会议室")
