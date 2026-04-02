@@ -43,8 +43,11 @@ impl GetApplicationUsageOverviewRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<GetApplicationUsageOverviewResponse> {
-        let path = format!("/open-apis/application/v6/applications/{}/app_usage/overview", self.app_id);
-        let req: ApiRequest<GetApplicationUsageOverviewResponse> = ApiRequest::get(&path);
+        let path = format!(
+            "/open-apis/application/v6/applications/{}/app_usage/overview",
+            self.app_id
+        );
+        let req: ApiRequest<GetApplicationUsageOverviewResponse> = ApiRequest::post(&path);
 
         let _resp: openlark_core::api::Response<GetApplicationUsageOverviewResponse> =
             Transport::request(req, &self.config, Some(option)).await?;

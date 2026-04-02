@@ -82,7 +82,7 @@ impl PatchCalendarRequest {
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<PatchCalendarResponse> {
         validate_required_field("calendar_id", Some(&self.calendar_id), "日历 ID 不能为空")?;
 
-        let url = CALENDAR_V4_CALENDARS.to_string();
+        let url = format!("{}/{}", CALENDAR_V4_CALENDARS, self.calendar_id);
         let api_request: ApiRequest<PatchCalendarResponse> = ApiRequest::patch(&url).body(body);
 
         let response = Transport::request(api_request, &self.config, None).await?;

@@ -34,7 +34,7 @@ pub const AILY_V1_DATA_ASSET_TAGS: &str = "/open-apis/aily/v1/apps/{app_id}/data
 pub const AILY_V1_UPLOAD_FILE: &str = "/open-apis/aily/v1/apps/{app_id}/data_assets/upload_file";
 
 /// AILY 知识问答 v1
-pub const AILY_V1_KNOWLEDGE_ASK: &str = "/open-apis/aily/v1/apps/{app_id}/knowledge/ask";
+pub const AILY_V1_KNOWLEDGE_ASK: &str = "/open-apis/aily/v1/apps/{app_id}/knowledges/ask";
 
 /// AILY 技能管理 v1
 pub const AILY_V1_SKILLS: &str = "/open-apis/aily/v1/apps/{app_id}/skills";

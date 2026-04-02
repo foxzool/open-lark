@@ -11,7 +11,6 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
 
 /// 预约会议请求
@@ -59,9 +58,8 @@ impl ApplyReserveRequest {
         body: serde_json::Value,
         option: RequestOption,
     ) -> SDKResult<ApplyReserveResponse> {
-        let api_endpoint = VcApiV1::ReserveCreate;
         let api_request: ApiRequest<ApplyReserveResponse> =
-            ApiRequest::post(api_endpoint.to_url()).body(serde_json::to_vec(&body)?);
+            ApiRequest::post("/open-apis/vc/v1/reserves/apply").body(serde_json::to_vec(&body)?);
 
         let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "预约会议")

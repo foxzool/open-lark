@@ -40,90 +40,90 @@
 
 /// Document AI - 简历解析
 /// 智能解析简历文档，提取关键信息
-pub const DOCUMENT_AI_RESUME_PARSE: &str = "/open-apis/document_ai/v1/resume_parse";
+pub const DOCUMENT_AI_RESUME_PARSE: &str = "/open-apis/document_ai/v1/resume/parse";
 
 /// Document AI - 身份证识别
 /// 识别身份证中的关键信息
-pub const DOCUMENT_AI_ID_CARD_RECOGNIZE: &str = "/open-apis/document_ai/v1/id_card_recognize";
+pub const DOCUMENT_AI_ID_CARD_RECOGNIZE: &str = "/open-apis/document_ai/v1/id_card/recognize";
 
 /// Document AI - 驾驶证识别
 /// 识别驾驶证中的关键信息
 pub const DOCUMENT_AI_DRIVING_LICENSE_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/driving_license_recognize";
+    "/open-apis/document_ai/v1/driving_license/recognize";
 
 /// Document AI - 银行卡识别
 /// 识别银行卡中的关键信息
-pub const DOCUMENT_AI_BANK_CARD_RECOGNIZE: &str = "/open-apis/document_ai/v1/bank_card_recognize";
+pub const DOCUMENT_AI_BANK_CARD_RECOGNIZE: &str = "/open-apis/document_ai/v1/bank_card/recognize";
 
 /// Document AI - 名片识别
 /// 智能识别名片中的联系信息
 pub const DOCUMENT_AI_BUSINESS_CARD_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/business_card_recognize";
+    "/open-apis/document_ai/v1/business_card/recognize";
 
 /// Document AI - 营业执照识别
 /// 识别营业执照中的企业信息
 pub const DOCUMENT_AI_BUSINESS_LICENSE_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/business_license_recognize";
+    "/open-apis/document_ai/v1/business_license/recognize";
 
 /// Document AI - 中国护照识别
 /// 识别中国护照中的关键信息
 pub const DOCUMENT_AI_CHINESE_PASSPORT_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/chinese_passport_recognize";
+    "/open-apis/document_ai/v1/chinese_passport/recognize";
 
 /// Document AI - 合同字段提取
 /// 智能提取合同中的关键字段
 pub const DOCUMENT_AI_CONTRACT_FIELD_EXTRACTION: &str =
-    "/open-apis/document_ai/v1/contract_field_extraction";
+    "/open-apis/document_ai/v1/contract/field_extraction";
 
 /// Document AI - 食品经营许可证识别
 /// 识别食品经营许可证信息
 pub const DOCUMENT_AI_FOOD_MANAGE_LICENSE_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/food_manage_license_recognize";
+    "/open-apis/document_ai/v1/food_manage_license/recognize";
 
 /// Document AI - 食品生产许可证识别
 /// 识别食品生产许可证信息
 pub const DOCUMENT_AI_FOOD_PRODUCE_LICENSE_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/food_produce_license_recognize";
+    "/open-apis/document_ai/v1/food_produce_license/recognize";
 
 /// Document AI - 健康证识别
 /// 识别健康证信息
 pub const DOCUMENT_AI_HEALTH_CERTIFICATE_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/health_certificate_recognize";
+    "/open-apis/document_ai/v1/health_certificate/recognize";
 
 /// Document AI - 港澳通行证识别
 /// 识别港澳通行证信息
 pub const DOCUMENT_AI_HKM_MAINLAND_TRAVEL_PERMIT_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/hkm_mainland_travel_permit_recognize";
+    "/open-apis/document_ai/v1/hkm_mainland_travel_permit/recognize";
 
 /// Document AI - 出租车发票识别
 /// 识别出租车发票信息
 pub const DOCUMENT_AI_TAXI_INVOICE_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/taxi_invoice_recognize";
+    "/open-apis/document_ai/v1/taxi_invoice/recognize";
 
 /// Document AI - 火车票识别
 /// 识别火车票信息
 pub const DOCUMENT_AI_TRAIN_INVOICE_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/train_invoice_recognize";
+    "/open-apis/document_ai/v1/train_invoice/recognize";
 
 /// Document AI - 台湾通行证识别
 /// 识别台湾通行证信息
 pub const DOCUMENT_AI_TW_MAINLAND_TRAVEL_PERMIT_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/tw_mainland_travel_permit_recognize";
+    "/open-apis/document_ai/v1/tw_mainland_travel_permit/recognize";
 
 /// Document AI - 增值税发票识别
 /// 识别增值税发票信息
 pub const DOCUMENT_AI_VAT_INVOICE_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/vat_invoice_recognize";
+    "/open-apis/document_ai/v1/vat_invoice/recognize";
 
 /// Document AI - 机动车发票识别
 /// 识别机动车发票信息
 pub const DOCUMENT_AI_VEHICLE_INVOICE_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/vehicle_invoice_recognize";
+    "/open-apis/document_ai/v1/vehicle_invoice/recognize";
 
 /// Document AI - 行驶证识别
 /// 识别行驶证信息
 pub const DOCUMENT_AI_VEHICLE_LICENSE_RECOGNIZE: &str =
-    "/open-apis/document_ai/v1/vehicle_license_recognize";
+    "/open-apis/document_ai/v1/vehicle_license/recognize";
 
 // ==================== OCR (光学字符识别) ====================
 // 光学字符识别服务 - 将图片中的文字转换为可编辑文本

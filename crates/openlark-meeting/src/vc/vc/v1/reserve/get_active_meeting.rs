@@ -7,7 +7,6 @@ use openlark_core::{
     SDKResult,
 };
 
-use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
 
 /// 获取活跃会议请求
@@ -49,9 +48,12 @@ impl GetActiveMeetingRequest {
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         validate_required!(self.reserve_id, "reserve_id 不能为空");
 
-        // url: GET:/open-apis/vc/v1/reserves/:reserve_id/active_meeting
-        let api_endpoint = VcApiV1::ReserveGetActiveMeeting(self.reserve_id);
-        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
+        // url: GET:/open-apis/vc/v1/reserves/:reserve_id/get_active_meeting
+        let api_endpoint = format!(
+            "/open-apis/vc/v1/reserves/{}/get_active_meeting",
+            self.reserve_id
+        );
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(&api_endpoint);
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }
