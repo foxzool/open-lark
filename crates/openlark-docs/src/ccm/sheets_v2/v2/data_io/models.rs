@@ -112,10 +112,80 @@ pub struct ReadMultipleRangesParams {
 }
 
 /// 读取多个范围响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Default)]
 pub struct ReadMultipleRangesResponse {
     /// 范围数据列表
     pub data: Option<MultipleRangeData>,
+}
+
+impl<'de> Deserialize<'de> for ReadMultipleRangesResponse {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let raw = Value::deserialize(deserializer)?;
+
+        // 兼容两种形状：
+        // 1) { data: { ... } }
+        // 2) { spreadsheetToken, valueRanges: [...] }
+        if let Some(inner) = raw.get("data") {
+            let data: MultipleRangeData =
+                serde_json::from_value(inner.clone()).map_err(serde::de::Error::custom)?;
+            return Ok(Self { data: Some(data) });
+        }
+
+        let spreadsheet_token = raw
+            .get("spreadsheet_token")
+            .or_else(|| raw.get("spreadsheetToken"))
+            .and_then(Value::as_str)
+            .unwrap_or_default()
+            .to_string();
+
+        let value_ranges = raw
+            .get("value_ranges")
+            .or_else(|| raw.get("valueRanges"))
+            .and_then(Value::as_array)
+            .map(|ranges| {
+                ranges
+                    .iter()
+                    .map(|range| RangeData {
+                        spreadsheet_token: spreadsheet_token.clone(),
+                        value_range: range
+                            .get("range")
+                            .and_then(Value::as_str)
+                            .unwrap_or_default()
+                            .to_string(),
+                        major_dimension: range
+                            .get("major_dimension")
+                            .or_else(|| range.get("majorDimension"))
+                            .and_then(Value::as_str)
+                            .unwrap_or("ROWS")
+                            .to_string(),
+                        values: range
+                            .get("values")
+                            .and_then(Value::as_array)
+                            .map(|rows| {
+                                rows.iter()
+                                    .map(|row| row.as_array().cloned().unwrap_or_default())
+                                    .collect::<Vec<Vec<Value>>>()
+                            })
+                            .unwrap_or_default(),
+                    })
+                    .collect::<Vec<RangeData>>()
+            })
+            .unwrap_or_default();
+
+        if value_ranges.is_empty() {
+            return Ok(Self { data: None });
+        }
+
+        Ok(Self {
+            data: Some(MultipleRangeData {
+                spreadsheet_token,
+                value_ranges,
+            }),
+        })
+    }
 }
 
 /// 多个范围数据

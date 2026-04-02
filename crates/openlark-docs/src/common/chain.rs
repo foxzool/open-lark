@@ -209,24 +209,42 @@ impl DocsClient {
         &self,
         spreadsheet_token: &str,
     ) -> SDKResult<Vec<crate::ccm::sheets_v2::v2::spreadsheet::models::SpreadsheetSheetInfo>> {
-        use crate::ccm::sheets_v2::v2::spreadsheet::{get_spreadsheet, GetSpreadsheetParams};
+        use crate::ccm::sheets::v3::spreadsheet::sheet::query::query_sheets;
+        use crate::ccm::sheets_v2::v2::spreadsheet::models::SpreadsheetSheetInfo;
 
-        let response = get_spreadsheet(
-            self.config(),
-            spreadsheet_token,
-            GetSpreadsheetParams {
-                include_sheet: Some(true),
-            },
-        )
-        .await?;
+        log::info!(
+            "[OPENLARK DEBUG] list_sheet_infos called with token: {}",
+            spreadsheet_token
+        );
 
-        let spreadsheet = response
-            .data
-            .ok_or_else(|| CoreError::api_data_error("获取表格信息"))?;
+        let response = query_sheets(self.config(), spreadsheet_token).await?;
 
-        spreadsheet
-            .sheets
-            .ok_or_else(|| CoreError::api_data_error("获取工作表列表"))
+        log::info!(
+            "[OPENLARK DEBUG] query_sheets response count: {}",
+            response.sheets.len()
+        );
+
+        let sheets: Vec<SpreadsheetSheetInfo> =
+            response.sheets.into_iter().map(map_v3_sheet_info).collect();
+
+        if sheets.is_empty() {
+            return Err(CoreError::api_data_error("获取工作表列表"));
+        }
+
+        Ok(sheets)
+    }
+}
+
+#[cfg(feature = "ccm-core")]
+fn map_v3_sheet_info(
+    sheet: crate::ccm::sheets::v3::spreadsheet::Sheet,
+) -> crate::ccm::sheets_v2::v2::spreadsheet::models::SpreadsheetSheetInfo {
+    crate::ccm::sheets_v2::v2::spreadsheet::models::SpreadsheetSheetInfo {
+        sheet_id: sheet.sheet_id,
+        title: sheet.title,
+        sheet_type: sheet.resource_type,
+        row_count: sheet.grid_properties.row_count,
+        column_count: sheet.grid_properties.column_count,
     }
 }
 
