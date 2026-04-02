@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -15,6 +15,7 @@ use serde_json::Value;
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct BatchUpdateRequest {
+    job_id: Option<String>,
     request_body: BatchUpdateRequestBody,
     /// 配置信息
     config: Config,
@@ -24,9 +25,15 @@ impl BatchUpdateRequest {
     /// 创建请求
     pub fn new(config: Config, request_body: BatchUpdateRequestBody) -> Self {
         Self {
+            job_id: None,
             request_body,
             config,
         }
+    }
+
+    pub fn job_id(mut self, job_id: impl Into<String>) -> Self {
+        self.job_id = Some(job_id.into());
+        self
     }
 
     pub fn request_body(mut self, request_body: BatchUpdateRequestBody) -> Self {
@@ -44,12 +51,14 @@ impl BatchUpdateRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchUpdateResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
         self.request_body.validate()?;
+        let job_id = self.job_id.unwrap_or_default();
+        validate_required!(job_id.trim(), "job_id 不能为空");
 
-        let api_endpoint = HireApiV1::JobManagerBatchUpdate;
-        let request = ApiRequest::<BatchUpdateResponse>::post(api_endpoint.to_url());
+        let request = ApiRequest::<BatchUpdateResponse>::post(format!(
+            "/open-apis/hire/v1/jobs/{}/managers/batch_update",
+            job_id
+        ));
         let request = request.body(serde_json::to_value(&self.request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",

@@ -44,10 +44,7 @@ impl QueryRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
-        let api_endpoint = HireApiV1::AgencyQuery;
-        let mut request = ApiRequest::<QueryResponse>::post(api_endpoint.to_url());
+        let mut request = ApiRequest::<QueryResponse>::get("/open-apis/hire/v1/agencies/query");
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);
         }

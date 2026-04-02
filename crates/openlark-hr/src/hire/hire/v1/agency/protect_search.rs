@@ -44,10 +44,9 @@ impl ProtectSearchRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ProtectSearchResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
-        let api_endpoint = HireApiV1::AgencyProtectSearch;
-        let mut request = ApiRequest::<ProtectSearchResponse>::post(api_endpoint.to_url());
+        let mut request = ApiRequest::<ProtectSearchResponse>::post(
+            "/open-apis/hire/v1/agencies/protection_period/search",
+        );
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);
         }
