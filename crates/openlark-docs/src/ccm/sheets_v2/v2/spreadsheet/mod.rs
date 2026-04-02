@@ -62,7 +62,7 @@ impl ApiResponseTrait for UpdateSpreadsheetResponse {
 /// 获取表格信息
 ///
 /// 根据 spreadsheetToken 获取表格的详细信息，包括工作表信息。
-/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/get-spreadsheet
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/get
 pub async fn get_spreadsheet(
     config: &Config,
     spreadsheet_token: &str,
@@ -74,7 +74,7 @@ pub async fn get_spreadsheet(
 /// 获取表格信息（带选项）
 ///
 /// 根据 spreadsheetToken 获取表格的详细信息，包括工作表信息。
-/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/get-spreadsheet
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/get
 pub async fn get_spreadsheet_with_options(
     config: &Config,
     spreadsheet_token: &str,
@@ -87,7 +87,7 @@ pub async fn get_spreadsheet_with_options(
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::GetSpreadsheet(spreadsheet_token.to_string());
 
-    // 创建API请求（飞书接口为 GET /sheets/v3/spreadsheets/{token}）
+    // 创建API请求（按 csv 对齐为 GET /open-apis/sheets/v3/spreadsheets/{token}）
     let api_request: ApiRequest<GetSpreadsheetResponse> = ApiRequest::get(&api_endpoint.to_url())
         .query_opt("include_sheet", params.include_sheet.map(|v| v.to_string()));
 
@@ -99,7 +99,7 @@ pub async fn get_spreadsheet_with_options(
 /// 创建表格
 ///
 /// 创建新的电子表格，支持指定标题和文件夹位置。
-/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/create-spreadsheet
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/create
 pub async fn create_spreadsheet(
     config: &Config,
     params: CreateSpreadsheetParams,
@@ -110,7 +110,7 @@ pub async fn create_spreadsheet(
 /// 创建表格（带选项）
 ///
 /// 创建新的电子表格，支持指定标题和文件夹位置。
-/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/create-spreadsheet
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/create
 pub async fn create_spreadsheet_with_options(
     config: &Config,
     params: CreateSpreadsheetParams,
@@ -134,7 +134,7 @@ pub async fn create_spreadsheet_with_options(
 /// 更新表格
 ///
 /// 根据 spreadsheetToken 更新表格的基本信息，如标题。
-/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/update-spreadsheet
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/patch
 pub async fn update_spreadsheet(
     config: &Config,
     spreadsheet_token: &str,
@@ -147,7 +147,7 @@ pub async fn update_spreadsheet(
 /// 更新表格（带选项）
 ///
 /// 根据 spreadsheetToken 更新表格的基本信息，如标题。
-/// docPath: /document/server-docs/docs/sheets-v3/spreadsheet/update-spreadsheet
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/patch
 pub async fn update_spreadsheet_with_options(
     config: &Config,
     spreadsheet_token: &str,
@@ -162,7 +162,7 @@ pub async fn update_spreadsheet_with_options(
 
     // 创建API请求
     let api_request: ApiRequest<UpdateSpreadsheetResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "更新表格")?);
+        ApiRequest::patch(&api_endpoint.to_url()).body(serialize_params(&params, "更新表格")?);
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, Some(option)).await?;

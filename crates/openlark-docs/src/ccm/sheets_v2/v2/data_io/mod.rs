@@ -118,15 +118,12 @@ pub async fn read_single_range_with_options(
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
     validate_required!(params.value_range, "数据范围不能为空");
 
-    // 兼容旧版稳定链路：使用 sheets v2 values 路径
-    // 参考旧实现：/open-apis/sheets/v2/spreadsheets/{token}/values/{range}
-    let api_path = format!(
-        "/open-apis/sheets/v2/spreadsheets/{}/values/{}",
-        spreadsheet_token, params.value_range
-    );
+    // 使用 csv 对齐后的旧版稳定链路：/open-apis/sheets/v2/spreadsheets/{token}/values/{range}
+    let api_endpoint =
+        CcmSheetApiOld::ReadSingleRange(spreadsheet_token.to_string(), params.value_range.clone());
 
     // 创建API请求
-    let api_request: ApiRequest<ReadSingleRangeResponse> = ApiRequest::get(&api_path)
+    let api_request: ApiRequest<ReadSingleRangeResponse> = ApiRequest::get(&api_endpoint.to_url())
         .query_opt("valueRenderOption", params.value_render_option.as_ref())
         .query_opt("dateTimeRenderOption", params.date_render_option.as_ref());
 

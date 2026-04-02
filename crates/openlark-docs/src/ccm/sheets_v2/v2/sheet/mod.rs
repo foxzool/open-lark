@@ -13,7 +13,10 @@ use openlark_core::{
     validate_required, SDKResult,
 };
 
-use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};
+use crate::common::{
+    api_endpoints::{CcmSheetApiOld, SheetsApiV3},
+    api_utils::*,
+};
 
 /// 工作表API结构体
 #[derive(Debug, Clone)]
@@ -69,7 +72,7 @@ impl ApiResponseTrait for DeleteSheetResponse {
 /// 添加工作表
 ///
 /// 根据 spreadsheetToken 在电子表格中添加新的工作表。
-/// docPath: /document/server-docs/docs/sheets-v3/sheet/add-sheet
+/// docPath: /document/ukTMukTMukTM/uYTMzUjL2EzM14iNxMTN
 pub async fn add_sheet(
     config: &Config,
     spreadsheet_token: &str,
@@ -81,7 +84,7 @@ pub async fn add_sheet(
 /// 添加工作表（带请求选项）
 ///
 /// 根据 spreadsheetToken 在电子表格中添加新的工作表。
-/// docPath: /document/server-docs/docs/sheets-v3/sheet/add-sheet
+/// docPath: /document/ukTMukTMukTM/uYTMzUjL2EzM14iNxMTN
 pub async fn add_sheet_with_options(
     config: &Config,
     spreadsheet_token: &str,
@@ -107,7 +110,7 @@ pub async fn add_sheet_with_options(
 /// 获取工作表信息
 ///
 /// 根据 spreadsheetToken 和 sheet_id 获取工作表的详细信息。
-/// docPath: /document/server-docs/docs/sheets-v3/sheet/get-sheet
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/get
 pub async fn get_sheet(
     config: &Config,
     spreadsheet_token: &str,
@@ -119,7 +122,7 @@ pub async fn get_sheet(
 /// 获取工作表信息（带请求选项）
 ///
 /// 根据 spreadsheetToken 和 sheet_id 获取工作表的详细信息。
-/// docPath: /document/server-docs/docs/sheets-v3/sheet/get-sheet
+/// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/get
 pub async fn get_sheet_with_options(
     config: &Config,
     spreadsheet_token: &str,
@@ -130,12 +133,12 @@ pub async fn get_sheet_with_options(
     validate_required!(spreadsheet_token.trim(), "表格Token不能为空");
     validate_required!(params.sheet_id.trim(), "工作表ID不能为空");
 
-    // 使用enum+builder系统生成API端点
-    let api_endpoint = CcmSheetApiOld::GetSheet(spreadsheet_token.to_string());
+    // 按 csv 定义使用 v3 查询单个工作表接口
+    let api_endpoint =
+        SheetsApiV3::GetSheet(spreadsheet_token.to_string(), params.sheet_id.to_string());
 
     // 创建API请求
-    let api_request: ApiRequest<GetSheetResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "获取工作表信息")?);
+    let api_request: ApiRequest<GetSheetResponse> = ApiRequest::get(&api_endpoint.to_url());
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, Some(option)).await?;
@@ -145,7 +148,7 @@ pub async fn get_sheet_with_options(
 /// 更新工作表
 ///
 /// 根据 spreadsheetToken 和 sheet_id 更新工作表的基本信息，如标题或位置。
-/// docPath: /document/server-docs/docs/sheets-v3/sheet/update-sheet
+/// docPath: /document/ukTMukTMukTM/ugjMzUjL4IzM14COyMTN
 pub async fn update_sheet(
     config: &Config,
     spreadsheet_token: &str,
@@ -157,7 +160,7 @@ pub async fn update_sheet(
 /// 更新工作表（带请求选项）
 ///
 /// 根据 spreadsheetToken 和 sheet_id 更新工作表的基本信息，如标题或位置。
-/// docPath: /document/server-docs/docs/sheets-v3/sheet/update-sheet
+/// docPath: /document/ukTMukTMukTM/ugjMzUjL4IzM14COyMTN
 pub async fn update_sheet_with_options(
     config: &Config,
     spreadsheet_token: &str,
@@ -183,7 +186,7 @@ pub async fn update_sheet_with_options(
 /// 删除工作表
 ///
 /// 根据 spreadsheetToken 和 sheet_id 删除指定的工作表。
-/// docPath: /document/server-docs/docs/sheets-v3/sheet/delete-sheet
+/// docPath: /document/ukTMukTMukTM/uYTMzUjL2EzM14iNxMTN
 pub async fn delete_sheet(
     config: &Config,
     spreadsheet_token: &str,
@@ -195,7 +198,7 @@ pub async fn delete_sheet(
 /// 删除工作表（带请求选项）
 ///
 /// 根据 spreadsheetToken 和 sheet_id 删除指定的工作表。
-/// docPath: /document/server-docs/docs/sheets-v3/sheet/delete-sheet
+/// docPath: /document/ukTMukTMukTM/uYTMzUjL2EzM14iNxMTN
 pub async fn delete_sheet_with_options(
     config: &Config,
     spreadsheet_token: &str,
