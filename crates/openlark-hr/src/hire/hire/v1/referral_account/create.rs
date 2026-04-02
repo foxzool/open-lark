@@ -41,10 +41,7 @@ impl CreateRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
-        let api_endpoint = HireApiV1::ReferralAccountCreate;
-        let request = ApiRequest::<CreateResponse>::post(api_endpoint.to_url());
+        let request = ApiRequest::<CreateResponse>::post("/open-apis/hire/v1/referral_account");
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

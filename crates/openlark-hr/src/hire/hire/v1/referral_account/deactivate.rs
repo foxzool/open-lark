@@ -44,12 +44,12 @@ impl DeactivateRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<DeactivateResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
         validate_required!(self.account_id.trim(), "内推账户 ID 不能为空");
 
-        let api_endpoint = HireApiV1::ReferralAccountDeactivate(self.account_id);
-        let request = ApiRequest::<DeactivateResponse>::post(api_endpoint.to_url());
+        let request = ApiRequest::<DeactivateResponse>::post(format!(
+            "/open-apis/hire/v1/referral_account/{}/deactivate",
+            self.account_id
+        ));
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

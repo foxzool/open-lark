@@ -41,10 +41,9 @@ impl ReconciliationRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ReconciliationResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
-        let api_endpoint = HireApiV1::ReferralAccountReconciliation;
-        let request = ApiRequest::<ReconciliationResponse>::get(api_endpoint.to_url());
+        let request = ApiRequest::<ReconciliationResponse>::post(
+            "/open-apis/hire/v1/referral_account/reconciliation",
+        );
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

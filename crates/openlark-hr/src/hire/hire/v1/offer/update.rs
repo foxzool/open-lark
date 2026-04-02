@@ -56,7 +56,7 @@ impl UpdateRequest {
         validate_required!(self.offer_id.trim(), "Offer ID 不能为空");
 
         let api_endpoint = HireApiV1::OfferUpdate(self.offer_id);
-        let mut request = ApiRequest::<UpdateResponse>::patch(api_endpoint.to_url());
+        let mut request = ApiRequest::<UpdateResponse>::put(api_endpoint.to_url());
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);
         }

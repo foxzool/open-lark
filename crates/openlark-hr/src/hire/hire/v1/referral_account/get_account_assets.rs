@@ -44,12 +44,11 @@ impl GetAccountAssetsRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetAccountAssetsResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
         validate_required!(self.account_id.trim(), "内推账户 ID 不能为空");
 
-        let api_endpoint = HireApiV1::ReferralAccountGetAccountAssets(self.account_id);
-        let request = ApiRequest::<GetAccountAssetsResponse>::get(api_endpoint.to_url());
+        let request = ApiRequest::<GetAccountAssetsResponse>::get(
+            "/open-apis/hire/v1/referral_account/get_account_assets",
+        );
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

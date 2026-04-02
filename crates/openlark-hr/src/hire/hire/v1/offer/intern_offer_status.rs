@@ -56,7 +56,7 @@ impl InternOfferStatusRequest {
         validate_required!(self.offer_id.trim(), "Offer ID 不能为空");
 
         let api_endpoint = HireApiV1::OfferInternOfferStatus(self.offer_id);
-        let mut request = ApiRequest::<InternOfferStatusResponse>::patch(api_endpoint.to_url());
+        let mut request = ApiRequest::<InternOfferStatusResponse>::post(api_endpoint.to_url());
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);
         }

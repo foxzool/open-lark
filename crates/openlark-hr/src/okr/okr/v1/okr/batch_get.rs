@@ -43,7 +43,7 @@ impl BatchGetRequest {
 
         // 2. 构建端点
         let api_endpoint = OkrApiV1::OkrBatchGet;
-        let request = ApiRequest::<BatchGetResponse>::post(api_endpoint.to_url());
+        let request = ApiRequest::<BatchGetResponse>::get(api_endpoint.to_url());
 
         // 3. 序列化请求体
         let request_body = BatchGetRequestBody {
