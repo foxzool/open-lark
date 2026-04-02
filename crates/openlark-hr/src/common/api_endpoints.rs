@@ -1896,14 +1896,11 @@ impl PayrollApiV1 {
             PayrollApiV1::PaygroupList => "/open-apis/payroll/v1/paygroups".to_string(),
 
             // payment_activity
-            PayrollApiV1::PaymentActivityArchive(activity_id) => {
-                format!(
-                    "/open-apis/payroll/v1/payment_activities/{}/archive",
-                    activity_id
-                )
+            PayrollApiV1::PaymentActivityArchive(_) => {
+                "/open-apis/payroll/v1/payment_activitys/archive".to_string()
             }
             PayrollApiV1::PaymentActivityList => {
-                "/open-apis/payroll/v1/payment_activities".to_string()
+                "/open-apis/payroll/v1/payment_activitys".to_string()
             }
 
             // payment_activity_detail
@@ -1913,7 +1910,7 @@ impl PayrollApiV1 {
 
             // payment_detail
             PayrollApiV1::PaymentDetailQuery => {
-                "/open-apis/payroll/v1/payment_details/query".to_string()
+                "/open-apis/payroll/v1/payment_detail/query".to_string()
             }
         }
     }

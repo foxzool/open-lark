@@ -44,12 +44,10 @@ impl EnableRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<EnableResponse> {
-        use crate::common::api_endpoints::HireApiV1;
-
         validate_required!(self.account_id.trim(), "内推账户 ID 不能为空");
 
-        let api_endpoint = HireApiV1::ReferralAccountEnable(self.account_id);
-        let request = ApiRequest::<EnableResponse>::post(api_endpoint.to_url());
+        let request =
+            ApiRequest::<EnableResponse>::post("/open-apis/hire/v1/referral_account/enable");
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

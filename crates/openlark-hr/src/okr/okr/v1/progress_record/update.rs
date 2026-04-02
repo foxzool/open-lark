@@ -62,7 +62,7 @@ impl UpdateRequest {
 
         // 2. 构建端点
         let api_endpoint = OkrApiV1::ProgressRecordUpdate(self.progress_id.clone());
-        let request = ApiRequest::<UpdateResponse>::patch(api_endpoint.to_url());
+        let request = ApiRequest::<UpdateResponse>::put(api_endpoint.to_url());
 
         // 3. 序列化请求体
         let request_body = UpdateRequestBody {

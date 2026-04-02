@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,7 +17,7 @@ use serde_json::Value;
 pub struct WithdrawRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    account_id: Option<String>,
 }
 
 impl WithdrawRequest {
@@ -25,11 +25,14 @@ impl WithdrawRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            account_id: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn account_id(mut self, account_id: impl Into<String>) -> Self {
+        self.account_id = Some(account_id.into());
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<WithdrawResponse> {
@@ -41,10 +44,13 @@ impl WithdrawRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<WithdrawResponse> {
-        use crate::common::api_endpoints::HireApiV1;
+        let account_id = self.account_id.unwrap_or_default();
+        validate_required!(account_id.trim(), "内推账户 ID 不能为空");
 
-        let api_endpoint = HireApiV1::ReferralAccountWithdraw;
-        let request = ApiRequest::<WithdrawResponse>::post(api_endpoint.to_url());
+        let request = ApiRequest::<WithdrawResponse>::post(format!(
+            "/open-apis/hire/v1/referral_account/{}/withdraw",
+            account_id
+        ));
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {

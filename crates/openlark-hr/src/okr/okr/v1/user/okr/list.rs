@@ -66,14 +66,12 @@ impl ListRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResponse> {
-        use crate::common::api_endpoints::OkrApiV1;
-
-        // 1. 构建端点
-        let api_endpoint = OkrApiV1::UserOkrList;
-        let mut request = ApiRequest::<ListResponse>::get(api_endpoint.to_url());
+        let mut request = ApiRequest::<ListResponse>::get(format!(
+            "/open-apis/okr/v1/users/{}/okrs",
+            self.user_id
+        ));
 
         // 2. 添加查询参数
-        request = request.query("user_id", &self.user_id);
         if let Some(ref period_id) = self.period_id {
             request = request.query("period_id", period_id);
         }
