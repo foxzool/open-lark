@@ -167,16 +167,14 @@ pub async fn read_multiple_ranges_with_options(
 
     // 使用enum+builder系统生成API端点
     let api_endpoint = CcmSheetApiOld::ReadMultipleRanges(spreadsheet_token.to_string());
+    let ranges = params.ranges.join(",");
 
     // 创建API请求
     let api_request: ApiRequest<ReadMultipleRangesResponse> =
         ApiRequest::get(&api_endpoint.to_url())
-            .query(
-                "ranges",
-                &serde_json::to_string(&params.ranges).expect("Failed to serialize ranges to JSON"),
-            )
-            .query_opt("value_render_option", params.value_render_option.as_ref())
-            .query_opt("date_render_option", params.date_render_option.as_ref());
+            .query("ranges", ranges)
+            .query_opt("valueRenderOption", params.value_render_option.as_ref())
+            .query_opt("dateTimeRenderOption", params.date_render_option.as_ref());
 
     // 发送请求并提取响应数据
     let response = Transport::request(api_request, config, Some(option)).await?;
