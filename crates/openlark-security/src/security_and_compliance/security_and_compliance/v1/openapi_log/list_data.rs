@@ -1,7 +1,51 @@
 //! 获取OpenAPI审计日志数据
 
-pub struct ListOpenapiLogDataRequest;
-pub struct ListOpenapiLogDataResponse;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct ListOpenapiLogDataRequest {
+    config: Arc<Config>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListOpenapiLogDataResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for ListOpenapiLogDataResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ListOpenapiLogDataRequest {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+
+    pub async fn execute(self) -> SDKResult<ListOpenapiLogDataResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListOpenapiLogDataResponse> {
+        let req: ApiRequest<ListOpenapiLogDataResponse> =
+            ApiRequest::post("/open-apis/security_and_compliance/v1/openapi_logs/list_data");
+        let _resp: openlark_core::api::Response<ListOpenapiLogDataResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(ListOpenapiLogDataResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 mod tests {

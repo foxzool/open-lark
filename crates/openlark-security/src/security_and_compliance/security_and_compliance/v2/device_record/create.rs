@@ -1,7 +1,51 @@
 //! 新增设备
 
-pub struct CreateDeviceRecordRequest;
-pub struct CreateDeviceRecordResponse;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct CreateDeviceRecordRequest {
+    config: Arc<Config>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateDeviceRecordResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for CreateDeviceRecordResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl CreateDeviceRecordRequest {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+
+    pub async fn execute(self) -> SDKResult<CreateDeviceRecordResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<CreateDeviceRecordResponse> {
+        let req: ApiRequest<CreateDeviceRecordResponse> =
+            ApiRequest::post("/open-apis/security_and_compliance/v2/device_records");
+        let _resp: openlark_core::api::Response<CreateDeviceRecordResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(CreateDeviceRecordResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 mod tests {

@@ -1,7 +1,60 @@
 //! 删除设备
 
-pub struct DeleteDeviceRecordRequest;
-pub struct DeleteDeviceRecordResponse;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    validate_required, SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct DeleteDeviceRecordRequest {
+    config: Arc<Config>,
+    device_record_id: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteDeviceRecordResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for DeleteDeviceRecordResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl DeleteDeviceRecordRequest {
+    pub fn new(config: Arc<Config>, device_record_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            device_record_id: device_record_id.into(),
+        }
+    }
+
+    pub async fn execute(self) -> SDKResult<DeleteDeviceRecordResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<DeleteDeviceRecordResponse> {
+        validate_required!(self.device_record_id.trim(), "device_record_id 不能为空");
+
+        let path = format!(
+            "/open-apis/security_and_compliance/v2/device_records/{}",
+            self.device_record_id
+        );
+        let req: ApiRequest<DeleteDeviceRecordResponse> = ApiRequest::delete(&path);
+        let _resp: openlark_core::api::Response<DeleteDeviceRecordResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(DeleteDeviceRecordResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 mod tests {

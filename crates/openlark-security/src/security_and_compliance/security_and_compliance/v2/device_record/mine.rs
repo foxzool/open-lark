@@ -1,7 +1,51 @@
 //! 获取客户端设备认证信息
 
-pub struct GetMyDeviceRecordRequest;
-pub struct GetMyDeviceRecordResponse;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct GetMyDeviceRecordRequest {
+    config: Arc<Config>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetMyDeviceRecordResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for GetMyDeviceRecordResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl GetMyDeviceRecordRequest {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+
+    pub async fn execute(self) -> SDKResult<GetMyDeviceRecordResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<GetMyDeviceRecordResponse> {
+        let req: ApiRequest<GetMyDeviceRecordResponse> =
+            ApiRequest::get("/open-apis/security_and_compliance/v2/device_records/mine");
+        let _resp: openlark_core::api::Response<GetMyDeviceRecordResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(GetMyDeviceRecordResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 mod tests {
