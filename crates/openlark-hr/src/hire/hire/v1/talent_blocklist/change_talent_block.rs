@@ -3,8 +3,9 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/talent_blocklist/change_talent_block
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -16,7 +17,7 @@ use serde_json::Value;
 pub struct ChangeTalentBlockRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    request_body: Option<Value>,
 }
 
 impl ChangeTalentBlockRequest {
@@ -24,11 +25,14 @@ impl ChangeTalentBlockRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            request_body: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn request_body(mut self, request_body: Value) -> Self {
+        self.request_body = Some(request_body);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ChangeTalentBlockResponse> {
@@ -38,10 +42,22 @@ impl ChangeTalentBlockRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ChangeTalentBlockResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 加入/移除屏蔽名单 API 调用")
+        let mut request = ApiRequest::<ChangeTalentBlockResponse>::post(
+            "/open-apis/hire/v1/talent_blocklist/change_talent_block",
+        );
+        if let Some(request_body) = self.request_body {
+            request = request.body(request_body);
+        }
+
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "加入/移除屏蔽名单响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 

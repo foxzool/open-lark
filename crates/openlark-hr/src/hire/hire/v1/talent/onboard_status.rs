@@ -3,9 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/talent/onboard_status
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    SDKResult,
+    http::Transport,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -16,7 +17,8 @@ use serde_json::Value;
 pub struct OnboardStatusRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    talent_id: String,
+    request_body: Option<Value>,
 }
 
 impl OnboardStatusRequest {
@@ -24,11 +26,20 @@ impl OnboardStatusRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            talent_id: String::new(),
+            request_body: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn talent_id(mut self, talent_id: impl Into<String>) -> Self {
+        self.talent_id = talent_id.into();
+        self
+    }
+
+    pub fn request_body(mut self, request_body: Value) -> Self {
+        self.request_body = Some(request_body);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<OnboardStatusResponse> {
@@ -38,10 +49,25 @@ impl OnboardStatusRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<OnboardStatusResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 更新人才在职状态 API 调用")
+        validate_required!(self.talent_id.trim(), "talent_id 不能为空");
+
+        let mut request = ApiRequest::<OnboardStatusResponse>::post(format!(
+            "/open-apis/hire/v1/talents/{}/onboard_status",
+            self.talent_id
+        ));
+        if let Some(request_body) = self.request_body {
+            request = request.body(request_body);
+        }
+
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "更新人才在职状态响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
