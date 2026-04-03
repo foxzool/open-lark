@@ -3,9 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/talent_pool/batch_change_talent_pool
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    SDKResult,
+    http::Transport,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -16,7 +17,8 @@ use serde_json::Value;
 pub struct BatchChangeTalentPoolRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    talent_pool_id: String,
+    request_body: Option<Value>,
 }
 
 impl BatchChangeTalentPoolRequest {
@@ -24,11 +26,20 @@ impl BatchChangeTalentPoolRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            talent_pool_id: String::new(),
+            request_body: None,
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    pub fn talent_pool_id(mut self, talent_pool_id: impl Into<String>) -> Self {
+        self.talent_pool_id = talent_pool_id.into();
+        self
+    }
+
+    pub fn request_body(mut self, request_body: Value) -> Self {
+        self.request_body = Some(request_body);
+        self
+    }
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<BatchChangeTalentPoolResponse> {
@@ -38,10 +49,25 @@ impl BatchChangeTalentPoolRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<BatchChangeTalentPoolResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 批量加入/移除人才库中人才 API 调用")
+        validate_required!(self.talent_pool_id.trim(), "talent_pool_id 不能为空");
+
+        let mut request = ApiRequest::<BatchChangeTalentPoolResponse>::post(format!(
+            "/open-apis/hire/v1/talent_pools/{}/batch_change_talent_pool",
+            self.talent_pool_id
+        ));
+        if let Some(request_body) = self.request_body {
+            request = request.body(request_body);
+        }
+
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "批量加入/移除人才库中人才响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 

@@ -3,8 +3,9 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/talent_object/query
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -38,10 +39,16 @@ impl QueryRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 获取人才字段 API 调用")
+        let request = ApiRequest::<QueryResponse>::get("/open-apis/hire/v1/talent_objects/query");
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取人才字段响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
