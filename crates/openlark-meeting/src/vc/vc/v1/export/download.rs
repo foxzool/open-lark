@@ -12,7 +12,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 
 use crate::common::api_utils::extract_response_data;
-use crate::endpoints::VC_V1_EXPORT_GET;
 
 /// 下载导出文件请求
 
@@ -64,8 +63,8 @@ impl DownloadExportRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<DownloadExportResponse> {
-        let url = VC_V1_EXPORT_GET.replace("{export_id}", "download");
-        let mut api_request: ApiRequest<DownloadExportResponse> = ApiRequest::get(&url);
+        let mut api_request: ApiRequest<DownloadExportResponse> =
+            ApiRequest::get("/open-apis/vc/v1/exports/download");
 
         for (key, value) in self.query_params {
             api_request = api_request.query(key, value);

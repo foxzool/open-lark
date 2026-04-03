@@ -127,7 +127,7 @@ mod tests {
         );
         assert_eq!(
             endpoint.to_url(),
-            "/open-apis/board/v1/whiteboards/test_board_id/nodes/create_plantuml"
+            "/open-apis/board/v1/whiteboards/test_board_id/nodes/plantuml"
         );
     }
 }

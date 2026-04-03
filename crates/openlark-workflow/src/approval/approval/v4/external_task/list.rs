@@ -86,7 +86,7 @@ impl ListExternalTaskRequestV4 {
         );
 
         let api_endpoint = crate::common::api_endpoints::ApprovalApiV4::ExternalTaskList;
-        let mut request = ApiRequest::<ListExternalTaskResponseV4>::post(api_endpoint.to_url());
+        let mut request = ApiRequest::<ListExternalTaskResponseV4>::get(api_endpoint.to_url());
 
         let body_json = serde_json::to_value(&self.body).map_err(|e| {
             openlark_core::error::validation_error("序列化请求体失败", e.to_string().as_str())
@@ -111,14 +111,10 @@ impl ApiResponseTrait for ListExternalTaskResponseV4 {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-    
 
     #[test]
     fn test_external_task_list_v4_url() {
         let endpoint = crate::common::api_endpoints::ApprovalApiV4::ExternalTaskList;
-        assert_eq!(
-            endpoint.to_url(),
-            "/open-apis/approval/v4/external_tasks"
-        );
+        assert_eq!(endpoint.to_url(), "/open-apis/approval/v4/external_tasks");
     }
 }

@@ -653,11 +653,8 @@ impl ApprovalApiV4 {
             ApprovalApiV4::InstanceSearchCc => {
                 "/open-apis/approval/v4/instances/search_cc".to_string()
             }
-            ApprovalApiV4::InstanceSpecifiedRollback(instance_id) => {
-                format!(
-                    "/open-apis/approval/v4/instances/{}/specified_rollback",
-                    instance_id
-                )
+            ApprovalApiV4::InstanceSpecifiedRollback(_) => {
+                "/open-apis/approval/v4/instances/specified_rollback".to_string()
             }
 
             // 审批实例评论相关
@@ -713,17 +710,20 @@ impl BoardApiV1 {
                 format!("/open-apis/board/v1/whiteboards/{}/nodes", board_id)
             }
             BoardApiV1::WhiteboardUpdateTheme(board_id) => {
-                format!("/open-apis/board/v1/whiteboards/{}/theme", board_id)
+                format!("/open-apis/board/v1/whiteboards/{}/update_theme", board_id)
             }
             BoardApiV1::WhiteboardTheme(board_id) => {
                 format!("/open-apis/board/v1/whiteboards/{}/theme", board_id)
             }
             BoardApiV1::WhiteboardDownloadAsImage(board_id) => {
-                format!("/open-apis/board/v1/whiteboards/{}/image", board_id)
+                format!(
+                    "/open-apis/board/v1/whiteboards/{}/download_as_image",
+                    board_id
+                )
             }
             BoardApiV1::WhiteboardNodeCreatePlantuml(board_id) => {
                 format!(
-                    "/open-apis/board/v1/whiteboards/{}/nodes/create_plantuml",
+                    "/open-apis/board/v1/whiteboards/{}/nodes/plantuml",
                     board_id
                 )
             }
@@ -1139,7 +1139,7 @@ mod tests {
             ),
             (
                 ApprovalApiV4::InstanceSpecifiedRollback("ins1".to_string()),
-                "/open-apis/approval/v4/instances/ins1/specified_rollback".to_string(),
+                "/open-apis/approval/v4/instances/specified_rollback".to_string(),
             ),
             (
                 ApprovalApiV4::InstanceCommentCreate("ins1".to_string()),
@@ -1197,7 +1197,7 @@ mod tests {
             ),
             (
                 BoardApiV1::WhiteboardUpdateTheme("b1".to_string()),
-                "/open-apis/board/v1/whiteboards/b1/theme".to_string(),
+                "/open-apis/board/v1/whiteboards/b1/update_theme".to_string(),
             ),
             (
                 BoardApiV1::WhiteboardTheme("b1".to_string()),
@@ -1205,11 +1205,11 @@ mod tests {
             ),
             (
                 BoardApiV1::WhiteboardDownloadAsImage("b1".to_string()),
-                "/open-apis/board/v1/whiteboards/b1/image".to_string(),
+                "/open-apis/board/v1/whiteboards/b1/download_as_image".to_string(),
             ),
             (
                 BoardApiV1::WhiteboardNodeCreatePlantuml("b1".to_string()),
-                "/open-apis/board/v1/whiteboards/b1/nodes/create_plantuml".to_string(),
+                "/open-apis/board/v1/whiteboards/b1/nodes/plantuml".to_string(),
             ),
         ];
 

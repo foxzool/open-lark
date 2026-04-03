@@ -70,7 +70,8 @@ impl UpdateWhiteboardThemeRequestV1 {
 
         let api_endpoint =
             crate::common::api_endpoints::BoardApiV1::WhiteboardUpdateTheme(self.board_id);
-        let mut request = ApiRequest::<UpdateWhiteboardThemeResponseV1>::put(api_endpoint.to_url());
+        let mut request =
+            ApiRequest::<UpdateWhiteboardThemeResponseV1>::post(api_endpoint.to_url());
 
         let body_json = serde_json::to_value(&self.body).map_err(|e| {
             openlark_core::error::validation_error("序列化请求体失败", e.to_string().as_str())
@@ -103,7 +104,7 @@ mod tests {
         );
         assert_eq!(
             endpoint.to_url(),
-            "/open-apis/board/v1/whiteboards/test_board_id/theme"
+            "/open-apis/board/v1/whiteboards/test_board_id/update_theme"
         );
     }
 }

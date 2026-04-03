@@ -130,6 +130,10 @@ class ExprResolver:
         if format_value:
             return format_value
 
+        replace_value = self._resolve_replace_chain(expr, compact)
+        if replace_value:
+            return replace_value
+
         # "a" + "b" + var
         concat_value = self._resolve_concat_expr(expr, compact)
         if concat_value:
@@ -162,7 +166,7 @@ class ExprResolver:
     def _strip_wrappers(self, expr: str) -> str:
         while True:
             original = expr
-            expr = expr.strip()
+            expr = expr.strip().rstrip(",").strip()
             if expr.startswith("&"):
                 expr = expr[1:].strip()
             if expr.endswith(".to_string()"):
@@ -211,6 +215,26 @@ class ExprResolver:
 
         return None
 
+    def _resolve_replace_chain(self, expr: str, compact: str) -> Optional[str]:
+        if ".replace" not in expr:
+            return None
+
+        match = re.match(r"(.+?)(\s*(?:\.\s*replace\([^)]*\)\s*)+)$", expr)
+        if not match:
+            return None
+
+        base_expr = match.group(1).strip()
+        suffix = match.group(2)
+        base_value = self.resolve(base_expr, compact)
+        if not base_value:
+            return None
+
+        value = base_value
+        for old, new in re.findall(r'\.\s*replace\(\s*"([^"]+)"\s*,\s*([^)]+)\)', suffix):
+            replacement = self._resolve_replace_arg(new.strip(), compact)
+            value = value.replace(old, replacement)
+        return self._normalize_template(value)
+
     def _resolve_concat_expr(self, expr: str, compact: str) -> Optional[str]:
         if "+" not in expr:
             return None
@@ -250,6 +274,10 @@ class ExprResolver:
 
             key = target.split("(", 1)[0].strip()
             route = self.endpoint_index.enum_routes.get(key)
+            if route is None and "::" in key:
+                parts = [part for part in key.split("::") if part]
+                if len(parts) >= 2:
+                    route = self.endpoint_index.enum_routes.get("::".join(parts[-2:]))
             if route:
                 return self._normalize_template(route)
 
@@ -261,14 +289,14 @@ class ExprResolver:
             return match.group(1)
 
         # 常量.replace(...).replace(...)
-        replace_match = re.match(r"([A-Z0-9_]+)(\..+)?$", expr)
+        replace_match = re.match(r"([A-Z0-9_]+)\s*(.*)?$", expr)
         if replace_match:
             const_name = replace_match.group(1)
             suffix = replace_match.group(2) or ""
             base = self.endpoint_index.consts.get(const_name)
             if base:
                 value = base
-                for old, new in re.findall(r'\.replace\(\s*"([^"]+)"\s*,\s*([^)]+)\)', suffix):
+                for old, new in re.findall(r'\.\s*replace\(\s*"([^"]+)"\s*,\s*([^)]+)\)', suffix):
                     replacement = self._resolve_replace_arg(new.strip(), expr)
                     value = value.replace(old, replacement)
                 return value
@@ -383,7 +411,7 @@ def parse_args():
 
 def find_request(text: str) -> Tuple[Optional[str], Optional[str], str]:
     compact = re.sub(r"\s+", " ", text)
-    match = re.search(r"ApiRequest(?:::<[^>]+>)?::(get|post|put|patch|delete)\(", compact)
+    match = re.search(r"ApiRequest(?:::<.+?>)?::(get|post|put|patch|delete)\(", compact)
     if not match:
         return None, None, compact
     method = match.group(1).upper()

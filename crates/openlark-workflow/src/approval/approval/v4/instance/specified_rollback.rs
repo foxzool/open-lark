@@ -71,15 +71,19 @@ impl SpecifiedRollbackRequestV4 {
         validate_required!(self.instance_id.trim(), "审批实例 ID 不能为空");
         validate_required!(self.body.node_id.trim(), "回退节点 ID 不能为空");
 
-        let api_endpoint = crate::common::api_endpoints::ApprovalApiV4::InstanceSpecifiedRollback(
-            self.instance_id,
+        let mut request = ApiRequest::<SpecifiedRollbackResponseV4>::post(
+            "/open-apis/approval/v4/instances/specified_rollback",
         );
-        let mut request =
-            ApiRequest::<SpecifiedRollbackResponseV4>::post(api_endpoint.to_url());
 
-        let body_json = serde_json::to_value(&self.body).map_err(|e| {
+        let mut body_json = serde_json::to_value(&self.body).map_err(|e| {
             openlark_core::error::validation_error("序列化请求体失败", e.to_string().as_str())
         })?;
+        if let Some(body) = body_json.as_object_mut() {
+            body.insert(
+                "instance_id".to_string(),
+                serde_json::Value::String(self.instance_id),
+            );
+        }
 
         request = request.body(body_json);
 
@@ -100,7 +104,6 @@ impl ApiResponseTrait for SpecifiedRollbackResponseV4 {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-    
 
     #[test]
     fn test_instance_specified_rollback_v4_url() {
@@ -109,7 +112,7 @@ mod tests {
         );
         assert_eq!(
             endpoint.to_url(),
-            "/open-apis/approval/v4/instances/test_instance_id/specified_rollback"
+            "/open-apis/approval/v4/instances/specified_rollback"
         );
     }
 }
