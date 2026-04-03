@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -16,11 +16,20 @@ use serde_json::Value;
 #[allow(dead_code)]
 pub struct GetRequest {
     config: Config,
+    process_id: String,
 }
 
 impl GetRequest {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config,
+            process_id: String::new(),
+        }
+    }
+
+    pub fn process_id(mut self, process_id: impl Into<String>) -> Self {
+        self.process_id = process_id.into();
+        self
     }
 
     pub async fn execute(self) -> SDKResult<GetResponse> {
@@ -34,8 +43,11 @@ impl GetRequest {
     ) -> SDKResult<GetResponse> {
         use crate::common::api_endpoints::CorehrApiV1;
 
+        validate_required!(self.process_id.trim(), "process_id 不能为空");
+
         let api_endpoint = CorehrApiV1::ProcessFormVariableDataGet;
-        let request = ApiRequest::<GetResponse>::get(api_endpoint.to_url());
+        let request =
+            ApiRequest::<GetResponse>::get(api_endpoint.to_url().replace("{}", &self.process_id));
         let response = Transport::request(request, &self.config, Some(_option)).await?;
 
         response.data.ok_or_else(|| {

@@ -1,7 +1,52 @@
 //! 获取用户自定义常用的应用
 
-pub struct GetFavouriteAppsRequest;
-pub struct GetFavouriteAppsResponse;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct GetFavouriteAppsRequest {
+    config: Arc<Config>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetFavouriteAppsResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for GetFavouriteAppsResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl GetFavouriteAppsRequest {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+
+    pub async fn execute(self) -> SDKResult<GetFavouriteAppsResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<GetFavouriteAppsResponse> {
+        let req: ApiRequest<GetFavouriteAppsResponse> =
+            ApiRequest::get("/open-apis/application/v5/applications/favourite");
+
+        let _resp: openlark_core::api::Response<GetFavouriteAppsResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(GetFavouriteAppsResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 #[allow(unused_imports)]

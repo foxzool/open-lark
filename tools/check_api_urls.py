@@ -46,15 +46,23 @@ class EndpointIndex:
         self.root = root
         self.consts: Dict[str, str] = {}
         self.enum_routes: Dict[str, str] = {}
+        self.enum_aliases: Dict[str, str] = {}
 
     def build(self) -> None:
         endpoint_files = set(self.root.glob("crates/openlark-*/src/**/api_endpoints.rs"))
         endpoint_files.update(self.root.glob("crates/openlark-*/src/endpoints/*.rs"))
         endpoint_files.update(self.root.glob("crates/openlark-*/src/endpoints/**/*.rs"))
+        endpoint_files.update(self.root.glob("crates/openlark-core/src/constants.rs"))
 
-        for path in sorted(endpoint_files):
+        endpoint_files = sorted(endpoint_files)
+
+        for path in endpoint_files:
             text = path.read_text(encoding="utf-8")
             self._load_consts(text)
+            self._load_enum_aliases(text)
+
+        for path in endpoint_files:
+            text = path.read_text(encoding="utf-8")
             self._load_enum_routes(text)
 
         for _ in range(8):
@@ -74,6 +82,10 @@ class EndpointIndex:
         for name, alias in alias_pat.findall(text):
             self.consts.setdefault(name, alias)
 
+    def _load_enum_aliases(self, text: str) -> None:
+        for alias, target in re.findall(r"pub type\s+([A-Za-z0-9_]+)\s*=\s*([A-Za-z0-9_]+)\s*;", text):
+            self.enum_aliases[alias] = target
+
     def _load_enum_routes(self, text: str) -> None:
         arm_pattern = re.compile(
             r"([A-Za-z0-9_]+::[A-Za-z0-9_]+)(?:\([^)]*\))?\s*=>\s*(?:\{\s*)?(?:format!\(\s*\"([^\"]+)\"|\"([^\"]+)\")",
@@ -82,6 +94,26 @@ class EndpointIndex:
         for key, fmt_literal, literal in arm_pattern.findall(text):
             route = fmt_literal or literal
             if route.startswith("/open-apis/"):
+                self.enum_routes[key] = route
+
+        const_arm_pattern = re.compile(
+            r"([A-Za-z0-9_]+::[A-Za-z0-9_]+)(?:\([^)]*\))?\s*=>\s*([A-Z0-9_]+)",
+            re.S,
+        )
+        for key, const_name in const_arm_pattern.findall(text):
+            route = self.consts.get(const_name)
+            if route and route.startswith("/open-apis/"):
+                self.enum_routes[key] = route
+
+        grouped_arm_pattern = re.compile(
+            r"((?:[A-Za-z0-9_]+::[A-Za-z0-9_]+(?:\([^)]*\))?\s*\|\s*)+[A-Za-z0-9_]+::[A-Za-z0-9_]+(?:\([^)]*\))?)\s*=>\s*(?:\{\s*)?(?:format!\(\s*\"([^\"]+)\"|\"([^\"]+)\")",
+            re.S,
+        )
+        for variants_expr, fmt_literal, literal in grouped_arm_pattern.findall(text):
+            route = fmt_literal or literal
+            if not route.startswith("/open-apis/"):
+                continue
+            for key in re.findall(r"([A-Za-z0-9_]+::[A-Za-z0-9_]+)(?:\([^)]*\))?", variants_expr):
                 self.enum_routes[key] = route
 
         match_blocks = re.findall(
@@ -109,6 +141,11 @@ class EndpointIndex:
         format_match = re.search(r'format!\(\s*"([^"]+)"', expr)
         if format_match:
             return format_match.group(1)
+        const_match = re.fullmatch(r"[A-Z0-9_]+", expr)
+        if const_match:
+            value = self.consts.get(expr)
+            if value and value.startswith("/open-apis/"):
+                return value
         return None
 
 
@@ -278,6 +315,12 @@ class ExprResolver:
                 parts = [part for part in key.split("::") if part]
                 if len(parts) >= 2:
                     route = self.endpoint_index.enum_routes.get("::".join(parts[-2:]))
+                if route is None:
+                    enum_name = parts[-2] if len(parts) >= 2 else None
+                    variant = parts[-1] if parts else None
+                    target_enum = self.endpoint_index.enum_aliases.get(enum_name or "")
+                    if target_enum and variant:
+                        route = self.endpoint_index.enum_routes.get(f"{target_enum}::{variant}")
             if route:
                 return self._normalize_template(route)
 

@@ -35,7 +35,7 @@ impl QueryRequest {
         use crate::common::api_endpoints::CorehrApiV1;
 
         let api_endpoint = CorehrApiV1::TransferReasonQuery;
-        let request = ApiRequest::<QueryResponse>::post(api_endpoint.to_url());
+        let request = ApiRequest::<QueryResponse>::get(api_endpoint.to_url());
         let response = Transport::request(request, &self.config, Some(_option)).await?;
 
         response.data.ok_or_else(|| {
