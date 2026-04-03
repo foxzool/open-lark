@@ -1,7 +1,51 @@
 //! 查询设备信息
 
-pub struct ListDeviceRecordsRequest;
-pub struct ListDeviceRecordsResponse;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct ListDeviceRecordsRequest {
+    config: Arc<Config>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListDeviceRecordsResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for ListDeviceRecordsResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ListDeviceRecordsRequest {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+
+    pub async fn execute(self) -> SDKResult<ListDeviceRecordsResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListDeviceRecordsResponse> {
+        let req: ApiRequest<ListDeviceRecordsResponse> =
+            ApiRequest::get("/open-apis/security_and_compliance/v2/device_records");
+        let _resp: openlark_core::api::Response<ListDeviceRecordsResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(ListDeviceRecordsResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 mod tests {

@@ -1,7 +1,47 @@
-//! list
+//! 获取门禁用户列表
 
-pub struct ulistRequest;
-pub struct ulistResponse;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct ListUserRequest {
+    config: Arc<Config>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListUserResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for ListUserResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ListUserRequest {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+
+    pub async fn execute(self) -> SDKResult<ListUserResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListUserResponse> {
+        let req: ApiRequest<ListUserResponse> = ApiRequest::get("/open-apis/acs/v1/users");
+        let _resp: openlark_core::api::Response<ListUserResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(ListUserResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 mod tests {

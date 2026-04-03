@@ -1,7 +1,57 @@
 //! 删除访客
 
-pub struct DeleteVisitorRequest;
-pub struct DeleteVisitorResponse;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    validate_required, SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct DeleteVisitorRequest {
+    config: Arc<Config>,
+    visitor_id: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeleteVisitorResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for DeleteVisitorResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl DeleteVisitorRequest {
+    pub fn new(config: Arc<Config>, visitor_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            visitor_id: visitor_id.into(),
+        }
+    }
+
+    pub async fn execute(self) -> SDKResult<DeleteVisitorResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<DeleteVisitorResponse> {
+        validate_required!(self.visitor_id.trim(), "visitor_id 不能为空");
+
+        let path = format!("/open-apis/acs/v1/visitors/{}", self.visitor_id);
+        let req: ApiRequest<DeleteVisitorResponse> = ApiRequest::delete(&path);
+        let _resp: openlark_core::api::Response<DeleteVisitorResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(DeleteVisitorResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 mod tests {

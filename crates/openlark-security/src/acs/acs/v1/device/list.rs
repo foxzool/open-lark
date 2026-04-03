@@ -1,7 +1,50 @@
-//! API placeholder
+//! 获取门禁设备列表
 
-pub struct Request;
-pub struct Response;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct ListDeviceRequest {
+    config: Arc<Config>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListDeviceResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for ListDeviceResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ListDeviceRequest {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+
+    pub async fn execute(self) -> SDKResult<ListDeviceResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListDeviceResponse> {
+        let req: ApiRequest<ListDeviceResponse> = ApiRequest::get("/open-apis/acs/v1/devices");
+        let _resp: openlark_core::api::Response<ListDeviceResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(ListDeviceResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 mod tests {
