@@ -891,8 +891,8 @@ impl HireApiV1 {
             }
 
             // interview
-            HireApiV1::InterviewGetByTalent(talent_id) => {
-                format!("/open-apis/hire/v1/talents/{}/interviews", talent_id)
+            HireApiV1::InterviewGetByTalent(_) => {
+                "/open-apis/hire/v1/interviews/get_by_talent".to_string()
             }
             HireApiV1::InterviewList => "/open-apis/hire/v1/interviews".to_string(),
             HireApiV1::InterviewTaskList => "/open-apis/hire/v1/interview_tasks".to_string(),
@@ -937,11 +937,8 @@ impl HireApiV1 {
             HireApiV1::EmployeeGet(employee_id) => {
                 format!("/open-apis/hire/v1/employees/{}", employee_id)
             }
-            HireApiV1::EmployeeGetByApplication(application_id) => {
-                format!(
-                    "/open-apis/hire/v1/applications/{}/employee",
-                    application_id
-                )
+            HireApiV1::EmployeeGetByApplication(_) => {
+                "/open-apis/hire/v1/employees/get_by_application".to_string()
             }
             HireApiV1::EmployeePatch(employee_id) => {
                 format!("/open-apis/hire/v1/employees/{}", employee_id)
@@ -986,7 +983,7 @@ impl HireApiV1 {
             HireApiV1::JobRequirementCreate => "/open-apis/hire/v1/job_requirements".to_string(),
             HireApiV1::JobRequirementList => "/open-apis/hire/v1/job_requirements".to_string(),
             HireApiV1::JobRequirementListById => {
-                "/open-apis/hire/v1/job_requirements/list_by_id".to_string()
+                "/open-apis/hire/v1/job_requirements/search".to_string()
             }
             HireApiV1::JobRequirementUpdate => {
                 "/open-apis/hire/v1/job_requirements/update".to_string()
@@ -1393,7 +1390,7 @@ impl HireApiV1 {
 
             // diversity_inclusion
             HireApiV1::DiversityInclusionSearch => {
-                "/open-apis/hire/v1/diversity_inclusions/search".to_string()
+                "/open-apis/hire/v1/applications/diversity_inclusions/search".to_string()
             }
 
             // job.recruiter
@@ -3140,8 +3137,8 @@ impl FeishuPeopleApiV2 {
             FeishuPeopleApiV2::DepartmentQueryOperationLogs => {
                 "/open-apis/corehr/v2/departments/query_operation_logs".to_string()
             }
-            FeishuPeopleApiV2::DepartmentParents(department_id) => {
-                format!("/open-apis/corehr/v2/departments/{}/parents", department_id)
+            FeishuPeopleApiV2::DepartmentParents(_) => {
+                "/open-apis/corehr/v2/departments/parents".to_string()
             }
             FeishuPeopleApiV2::DepartmentSearch => {
                 "/open-apis/corehr/v2/departments/search".to_string()

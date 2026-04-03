@@ -29,12 +29,15 @@ impl ApiResponseTrait for UpdateMailboxRuleResponse {
 }
 
 impl UpdateMailboxRuleRequest {
-    pub fn new(config: Arc<Config>, user_mailbox_id: impl Into<String>, rule_id: impl Into<String>) -> Self {
+    pub fn new(
+        config: Arc<Config>,
+        user_mailbox_id: impl Into<String>,
+        rule_id: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             user_mailbox_id: user_mailbox_id.into(),
             rule_id: rule_id.into(),
-            
         }
     }
 
@@ -46,13 +49,15 @@ impl UpdateMailboxRuleRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<UpdateMailboxRuleResponse> {
-        let path = format!("/open-apis/mail/v1/user_mailboxes/{{}}/rules/{{}}", self.user_mailbox_id, self.rule_id);
+        let path = format!(
+            "/open-apis/mail/v1/user_mailboxes/{}/rules/{}",
+            self.user_mailbox_id, self.rule_id
+        );
         let req: ApiRequest<UpdateMailboxRuleResponse> = ApiRequest::put(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("更新收信规则", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("更新收信规则", "响应数据为空"))
     }
 }
 

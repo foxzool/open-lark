@@ -39,11 +39,8 @@ impl SystemStatusCreateRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<SystemStatusCreateResponse> {
-        let path = "/open-apis/personal-settings/personal-settings/v1/system-status/create"
-            .replace("application", "application")
-            .replace("security", "acs")
-            .replace("personal_settings", "personal_settings");
-        let req: ApiRequest<SystemStatusCreateResponse> = ApiRequest::get(&path);
+        let req: ApiRequest<SystemStatusCreateResponse> =
+            ApiRequest::post("/open-apis/personal_settings/v1/system_statuses");
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data.ok_or_else(|| {

@@ -39,13 +39,12 @@ impl SearchMessageRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<SearchMessageResponse> {
-        let path = "/open-apis/search/v2/message/create".to_string();
+        let path = "/open-apis/search/v2/message".to_string();
         let req: ApiRequest<SearchMessageResponse> = ApiRequest::post(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("搜索消息", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("搜索消息", "响应数据为空"))
     }
 }
 

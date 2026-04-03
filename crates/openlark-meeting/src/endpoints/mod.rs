@@ -193,7 +193,7 @@ pub const VC_V1_RESERVE_CONFIG_FORM_PATCH: &str =
 
 /// 获取预约配置范围
 pub const VC_V1_RESERVE_CONFIG_RESERVE_SCOPE: &str =
-    "/open-apis/vc/v1/reserve_configs/{reserve_config_id}/reserve_scope";
+    "/open-apis/vc/v1/reserve_configs/reserve_scope";
 
 /// 禁用通知
 pub const VC_V1_RESERVE_CONFIG_DISABLE_INFORM_GET: &str =

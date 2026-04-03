@@ -68,7 +68,7 @@ impl GetMessageRequest {
         validate_required!(self.aily_session_id, "aily_session_id 不能为空");
         validate_required!(self.aily_message_id, "aily_message_id 不能为空");
 
-        let url = AILY_V1_MESSAGES.replace("{aily_session_id}", &self.aily_session_id)
+        let url = AILY_V1_MESSAGES.replace("{session_id}", &self.aily_session_id)
             + "/"
             + &self.aily_message_id;
         let req: ApiRequest<serde_json::Value> = ApiRequest::get(&url);

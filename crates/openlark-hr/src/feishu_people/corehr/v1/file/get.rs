@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -17,13 +17,23 @@ use serde_json::Value;
 pub struct GetRequest {
     /// 配置信息
     config: Config,
+    file_id: Option<String>,
     body: Option<Value>,
 }
 
 impl GetRequest {
     /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self { config, body: None }
+        Self {
+            config,
+            file_id: None,
+            body: None,
+        }
+    }
+
+    pub fn file_id(mut self, file_id: impl Into<String>) -> Self {
+        self.file_id = Some(file_id.into());
+        self
     }
 
     pub fn body(mut self, body: Value) -> Self {
@@ -41,7 +51,11 @@ impl GetRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
-        let mut request = ApiRequest::<GetResponse>::post("/open-apis/corehr/v1/files/get");
+        let file_id = self.file_id.unwrap_or_default();
+        validate_required!(file_id.trim(), "file_id 不能为空");
+
+        let mut request =
+            ApiRequest::<GetResponse>::get(format!("/open-apis/corehr/v1/files/{}", file_id));
 
         if let Some(body) = self.body {
             request = request.body(body);

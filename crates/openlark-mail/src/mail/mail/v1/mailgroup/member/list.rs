@@ -32,7 +32,6 @@ impl ListMailGroupMemberRequest {
         Self {
             config,
             mailgroup_id: mailgroup_id.into(),
-            
         }
     }
 
@@ -44,7 +43,10 @@ impl ListMailGroupMemberRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<ListMailGroupMemberResponse> {
-        let path = format!("/open-apis/mail/v1/mailgroups/{{}}/members", self.mailgroup_id);
+        let path = format!(
+            "/open-apis/mail/v1/mailgroups/{}/members",
+            self.mailgroup_id
+        );
         let req: ApiRequest<ListMailGroupMemberResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
@@ -58,13 +60,21 @@ impl ListMailGroupMemberRequest {
 #[allow(unused_imports)]
 mod tests {
     use super::*;
-    use std::sync::Arc;
     use serde_json::json;
+    use std::sync::Arc;
 
     #[test]
     fn test_builder_basic() {
-        let arc_config = Arc::new(openlark_core::config::Config::builder().app_id("test_app").app_secret("test_secret").build());
-        let config = openlark_core::config::Config::builder().app_id("test_app").app_secret("test_secret").build();
+        let arc_config = Arc::new(
+            openlark_core::config::Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        );
+        let config = openlark_core::config::Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
         let request = ListMailGroupMemberRequest::new(arc_config.clone(), "test".to_string());
         let _ = request;
     }

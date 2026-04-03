@@ -39,8 +39,8 @@ impl ListByNoMeetingRequest {
     /// 执行请求（带选项）
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/vc/v1/meetings/list_by_no
-        let api_endpoint = VcApiV1::MeetingListList;
-        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
+        let mut req: ApiRequest<serde_json::Value> =
+            ApiRequest::get("/open-apis/vc/v1/meetings/list_by_no");
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }

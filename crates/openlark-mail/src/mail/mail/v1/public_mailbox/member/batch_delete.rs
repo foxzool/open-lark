@@ -32,7 +32,6 @@ impl BatchDeletePublicMailboxMemberRequest {
         Self {
             config,
             public_mailbox_id: public_mailbox_id.into(),
-            
         }
     }
 
@@ -44,7 +43,10 @@ impl BatchDeletePublicMailboxMemberRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<BatchDeletePublicMailboxMemberResponse> {
-        let path = format!("/open-apis/mail/v1/public_mailboxes/{{}}/members/batch_delete", self.public_mailbox_id);
+        let path = format!(
+            "/open-apis/mail/v1/public_mailboxes/{}/members/batch_delete",
+            self.public_mailbox_id
+        );
         let req: ApiRequest<BatchDeletePublicMailboxMemberResponse> = ApiRequest::delete(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;

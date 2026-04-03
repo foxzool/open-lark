@@ -5,7 +5,7 @@ use openlark_core::{
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -13,6 +13,7 @@ use std::sync::Arc;
 #[derive(Debug, Clone)]
 pub struct SystemStatusPatchRequest {
     config: Arc<Config>,
+    status_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -28,7 +29,15 @@ impl ApiResponseTrait for SystemStatusPatchResponse {
 
 impl SystemStatusPatchRequest {
     pub fn new(config: Arc<Config>) -> Self {
-        Self { config }
+        Self {
+            config,
+            status_id: String::new(),
+        }
+    }
+
+    pub fn status_id(mut self, status_id: impl Into<String>) -> Self {
+        self.status_id = status_id.into();
+        self
     }
 
     pub async fn execute(self) -> SDKResult<SystemStatusPatchResponse> {
@@ -39,11 +48,12 @@ impl SystemStatusPatchRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<SystemStatusPatchResponse> {
-        let path = "/open-apis/personal-settings/personal-settings/v1/system-status/patch"
-            .replace("application", "application")
-            .replace("security", "acs")
-            .replace("personal_settings", "personal_settings");
-        let req: ApiRequest<SystemStatusPatchResponse> = ApiRequest::get(&path);
+        validate_required!(self.status_id.trim(), "status_id 不能为空");
+        let path = format!(
+            "/open-apis/personal_settings/v1/system_statuses/{}",
+            self.status_id
+        );
+        let req: ApiRequest<SystemStatusPatchResponse> = ApiRequest::patch(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data.ok_or_else(|| {

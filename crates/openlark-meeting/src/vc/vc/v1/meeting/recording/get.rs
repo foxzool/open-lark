@@ -7,7 +7,6 @@ use openlark_core::{
     SDKResult,
 };
 
-use crate::common::api_endpoints::VcApiV1;
 use crate::common::api_utils::extract_response_data;
 
 /// 获取录制文件请求
@@ -50,8 +49,8 @@ impl GetRecordingRequest {
         validate_required!(self.meeting_id, "meeting_id 不能为空");
 
         // url: GET:/open-apis/vc/v1/meetings/:meeting_id/recording
-        let api_endpoint = VcApiV1::MeetingRecordingList(self.meeting_id);
-        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
+        let url = format!("/open-apis/vc/v1/meetings/{}/recording", self.meeting_id);
+        let mut req: ApiRequest<serde_json::Value> = ApiRequest::get(&url);
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }

@@ -32,7 +32,6 @@ impl GetMailboxEventSubscriptionRequest {
         Self {
             config,
             user_mailbox_id: user_mailbox_id.into(),
-            
         }
     }
 
@@ -44,13 +43,15 @@ impl GetMailboxEventSubscriptionRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<GetMailboxEventSubscriptionResponse> {
-        let path = format!("/open-apis/mail/v1/user_mailboxes/{{}}/event/subscription", self.user_mailbox_id);
+        let path = format!(
+            "/open-apis/mail/v1/user_mailboxes/{}/event/subscription",
+            self.user_mailbox_id
+        );
         let req: ApiRequest<GetMailboxEventSubscriptionResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("获取订阅状态", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("获取订阅状态", "响应数据为空"))
     }
 }
 

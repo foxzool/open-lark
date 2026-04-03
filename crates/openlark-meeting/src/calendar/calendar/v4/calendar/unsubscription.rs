@@ -36,10 +36,9 @@ impl UnsubscriptionCalendarRequest {
         body: serde_json::Value,
     ) -> SDKResult<serde_json::Value> {
         // url: POST:/open-apis/calendar/v4/calendars/unsubscription
-        let api_endpoint = CalendarApiV4::CalendarSubscription;
-        let url = format!("{}/unsubscription", api_endpoint.to_url());
         let req: ApiRequest<serde_json::Value> =
-            ApiRequest::post(url).body(serialize_params(&body, "取消订阅日历变更事件")?);
+            ApiRequest::post("/open-apis/calendar/v4/calendars/unsubscription")
+                .body(serialize_params(&body, "取消订阅日历变更事件")?);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "取消订阅日历变更事件")

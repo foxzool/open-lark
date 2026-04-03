@@ -122,10 +122,8 @@ class ExprResolver:
 
         expr = self._strip_wrappers(expr.strip())
 
-        # 直接字面量
-        literal = self._extract_first_open_api_literal(expr)
-        if literal:
-            return self._normalize_template(literal)
+        if expr.startswith("self."):
+            return ":{}"
 
         # format!("/open-apis/...", ...)
         format_value = self._resolve_format_expr(expr, compact)
@@ -141,6 +139,11 @@ class ExprResolver:
         route_value = self._resolve_route_call(expr, compact)
         if route_value:
             return route_value
+
+        # 直接字面量
+        literal = self._extract_first_open_api_literal(expr)
+        if literal:
+            return self._normalize_template(literal)
 
         # 常量
         if re.fullmatch(r"[A-Z0-9_]+", expr):
@@ -290,9 +293,10 @@ class ExprResolver:
         path = re.sub(r"\{[^}]+\}", ":{}", path)
         path = path.replace("{}", ":{}")
         path = re.sub(r":[A-Za-z0-9_]+", ":{}", path)
-        path = path.replace("::{}", ":{}")
+        path = re.sub(r":+\{\}", ":{}", path)
         path = path.replace(":{}}", ":{}")
         path = path.replace(":{}}}", ":{}")
+        path = re.sub(r"/:+", "/:", path)
         path = path.replace("//", "/")
         return path
 
@@ -458,13 +462,14 @@ def compare(records: Iterable[ImplRecord], resolver: ExprResolver) -> Dict[str, 
 
     for record in records:
         text = record.file_path.read_text(encoding="utf-8")
-        comment_match = re.search(r"url:\s*(GET|POST|PUT|PATCH|DELETE):([^\s]+)", text)
-        if comment_match:
-            actual_method = comment_match.group(1)
-            actual_path = resolver._normalize_template(comment_match.group(2))
-        else:
-            actual_method, arg, compact = find_request(text)
-            actual_path = resolver.resolve(arg, compact) if arg else None
+        actual_method, arg, compact = find_request(text)
+        actual_path = resolver.resolve(arg, compact) if arg else None
+
+        if not actual_method or not actual_path:
+            comment_match = re.search(r"url:\s*(GET|POST|PUT|PATCH|DELETE):([^\s]+)", text)
+            if comment_match:
+                actual_method = comment_match.group(1)
+                actual_path = resolver._normalize_template(comment_match.group(2))
 
         expected_method, expected_path = record.api.url.split(":", 1)
         item = {

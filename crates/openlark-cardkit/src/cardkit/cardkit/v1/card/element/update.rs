@@ -76,9 +76,9 @@ impl UpdateCardElementRequest {
         validate_card_id(&body.card_id)?;
         validate_element_id(&body.element_id)?;
 
-        // url: PATCH:/open-apis/cardkit/v1/cards/:card_id/elements/:element_id
+        // url: PUT:/open-apis/cardkit/v1/cards/:card_id/elements/:element_id
         let req: ApiRequest<UpdateCardElementResponse> =
-            ApiRequest::patch(cardkit_v1_card_element(&body.card_id, &body.element_id))
+            ApiRequest::put(cardkit_v1_card_element(&body.card_id, &body.element_id))
                 .body(serialize_params(&body, "更新组件属性")?);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
