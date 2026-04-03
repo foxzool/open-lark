@@ -3,8 +3,9 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/interview_record.attachment/get
 
 use openlark_core::{
-    api::{ApiResponseTrait, ResponseFormat},
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -38,10 +39,17 @@ impl GetRequest {
 
     pub async fn execute_with_options(
         self,
-        _option: openlark_core::req_option::RequestOption,
+        option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
-        // TODO: 实现 API 调用逻辑
-        todo!("实现 获取面试记录附件 API 调用")
+        let request =
+            ApiRequest::<GetResponse>::get("/open-apis/hire/v1/interview_records/attachments");
+        let response = Transport::request(request, &self.config, Some(option)).await?;
+        response.data.ok_or_else(|| {
+            openlark_core::error::validation_error(
+                "获取面试记录附件响应数据为空",
+                "服务器没有返回有效的数据",
+            )
+        })
     }
 }
 
