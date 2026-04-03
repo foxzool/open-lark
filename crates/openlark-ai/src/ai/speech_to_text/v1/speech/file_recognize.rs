@@ -1,11 +1,50 @@
 //! 识别语音文件
 
-use openlark_core::config::Config;
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
+use serde::{Deserialize, Serialize};
+
+use crate::common::api_utils::{extract_response_data, serialize_params};
+use crate::endpoints::SPEECH_TO_TEXT_V1_SPEECH_FILE_RECOGNIZE;
+
+/// 识别语音文件请求体
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FileRecognizeBody {
+    /// 用户的 file_id，通过上传文件接口获取
+    pub file_token: String,
+    /// 是否异步识别
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_async: Option<bool>,
+    /// 语言类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
+    /// 识别格式
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub format: Option<String>,
+}
+
+impl FileRecognizeBody {
+    pub fn validate(&self) -> Result<(), String> {
+        if self.file_token.trim().is_empty() {
+            return Err("file_token 不能为空".to_string());
+        }
+        Ok(())
+    }
+}
+
+/// 识别语音文件响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FileRecognizeResponse {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<serde_json::Value>,
+}
+
+impl openlark_core::api::ApiResponseTrait for FileRecognizeResponse {}
 
 /// 识别语音文件请求
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRecognizeRequest {
-    #[allow(dead_code)]
     config: Config,
 }
 
@@ -14,12 +53,34 @@ impl FileRecognizeRequest {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
+
+    /// 执行请求
+    pub async fn execute(self, body: FileRecognizeBody) -> SDKResult<FileRecognizeResponse> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
+    }
+
+    /// 执行请求（支持自定义选项）
+    pub async fn execute_with_options(
+        self,
+        body: FileRecognizeBody,
+        option: RequestOption,
+    ) -> SDKResult<FileRecognizeResponse> {
+        body.validate()
+            .map_err(|reason| openlark_core::error::validation_error("请求参数非法", reason))?;
+
+        let req: ApiRequest<FileRecognizeResponse> =
+            ApiRequest::post(SPEECH_TO_TEXT_V1_SPEECH_FILE_RECOGNIZE)
+                .body(serialize_params(&body, "识别语音文件")?);
+
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
+        extract_response_data(resp, "识别语音文件")
+    }
 }
 
 #[cfg(test)]
 mod tests {
-
-    use serde_json;
+    use super::*;
 
     #[test]
     fn test_serialization_roundtrip() {
@@ -34,5 +95,17 @@ mod tests {
         let json = r#"{"field": "data"}"#;
         let value: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(value["field"], "data");
+    }
+
+    #[test]
+    fn test_validate_requires_file_token() {
+        let body = FileRecognizeBody {
+            file_token: String::new(),
+            is_async: None,
+            language: None,
+            format: None,
+        };
+
+        assert!(body.validate().is_err());
     }
 }

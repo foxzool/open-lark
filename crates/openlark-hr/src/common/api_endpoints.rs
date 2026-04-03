@@ -2458,15 +2458,15 @@ impl FeishuPeopleApiV1 {
         match self {
             // common_data.id
             FeishuPeopleApiV1::CommonDataIdConvert => {
-                "/open-apis/corehr/v1/common_data.id/convert".to_string()
+                "/open-apis/corehr/v1/common_data/id/convert".to_string()
             }
 
             // common_data.meta_data
             FeishuPeopleApiV1::CommonDataMetaDataAddEnumOption => {
-                "/open-apis/corehr/v1/common_data.meta_data/add_enum_option".to_string()
+                "/open-apis/corehr/v1/common_data/meta_data/add_enum_option".to_string()
             }
             FeishuPeopleApiV1::CommonDataMetaDataEditEnumOption => {
-                "/open-apis/corehr/v1/common_data.meta_data/edit_enum_option".to_string()
+                "/open-apis/corehr/v1/common_data/meta_data/edit_enum_option".to_string()
             }
 
             // authorization
@@ -2994,7 +2994,7 @@ impl FeishuPeopleApiV1 {
                 format!("/open-apis/corehr/v1/pre_hires/{}", pre_hire_id)
             }
             FeishuPeopleApiV1::ProcessFormVariableDataGet => {
-                "/open-apis/corehr/v1/processes/form_variable_data".to_string()
+                "/open-apis/corehr/v1/processes/{}/form_variable_data".to_string()
             }
             FeishuPeopleApiV1::TransferReasonQuery => {
                 "/open-apis/corehr/v1/transfer_reasons/query".to_string()
@@ -3251,7 +3251,7 @@ impl FeishuPeopleApiV2 {
                 "/open-apis/corehr/v2/basic_info/banks/search".to_string()
             }
             FeishuPeopleApiV2::BasicInfoBankBranchSearch => {
-                "/open-apis/corehr/v2/basic_info/bank_branches/search".to_string()
+                "/open-apis/corehr/v2/basic_info/bank_branchs/search".to_string()
             }
             FeishuPeopleApiV2::BasicInfoCitySearch => {
                 "/open-apis/corehr/v2/basic_info/cities/search".to_string()

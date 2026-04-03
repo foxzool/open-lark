@@ -1,7 +1,52 @@
 //! 获取当前设置的推荐规则列表
 
-pub struct ListAppRecommendRuleRequest;
-pub struct ListAppRecommendRuleResponse;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct ListAppRecommendRuleRequest {
+    config: Arc<Config>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListAppRecommendRuleResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for ListAppRecommendRuleResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ListAppRecommendRuleRequest {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+
+    pub async fn execute(self) -> SDKResult<ListAppRecommendRuleResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListAppRecommendRuleResponse> {
+        let req: ApiRequest<ListAppRecommendRuleResponse> =
+            ApiRequest::get("/open-apis/application/v6/app_recommend_rules");
+
+        let _resp: openlark_core::api::Response<ListAppRecommendRuleResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(ListAppRecommendRuleResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 #[allow(unused_imports)]

@@ -150,6 +150,16 @@ pub const SPEECH_TO_TEXT_V1_FILE_RECOGNIZE: &str = "/open-apis/speech_to_text/v1
 pub const SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE: &str =
     "/open-apis/speech_to_text/v1/stream/recognize";
 
+/// 语音转文字 - 语音文件识别
+/// 识别整段语音文件中的语音内容
+pub const SPEECH_TO_TEXT_V1_SPEECH_FILE_RECOGNIZE: &str =
+    "/open-apis/speech_to_text/v1/speech/file_recognize";
+
+/// 语音转文字 - 流式语音识别
+/// 识别流式传入的语音内容
+pub const SPEECH_TO_TEXT_V1_SPEECH_STREAM_RECOGNIZE: &str =
+    "/open-apis/speech_to_text/v1/speech/stream_recognize";
+
 /// 语音转文字 - 语音识别
 /// 通用语音识别服务
 pub const SPEECH_TO_TEXT_V1_SPEECH_RECOGNIZE: &str =
@@ -218,6 +228,8 @@ mod tests {
         assert!(SPEECH_TO_TEXT_V1_FILE_RECOGNIZE.starts_with("/open-apis/speech_to_text/"));
         assert!(SPEECH_TO_TEXT_V1_FILE_RECOGNIZE.contains("file"));
         assert!(SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE.contains("stream"));
+        assert!(SPEECH_TO_TEXT_V1_SPEECH_FILE_RECOGNIZE.contains("speech/file_recognize"));
+        assert!(SPEECH_TO_TEXT_V1_SPEECH_STREAM_RECOGNIZE.contains("speech/stream_recognize"));
         assert!(SPEECH_TO_TEXT_V1_SPEECH_RECOGNIZE.contains("speech"));
     }
 
@@ -260,6 +272,8 @@ mod tests {
         let speech_endpoints = [
             SPEECH_TO_TEXT_V1_FILE_RECOGNIZE,
             SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE,
+            SPEECH_TO_TEXT_V1_SPEECH_FILE_RECOGNIZE,
+            SPEECH_TO_TEXT_V1_SPEECH_STREAM_RECOGNIZE,
             SPEECH_TO_TEXT_V1_SPEECH_RECOGNIZE,
         ];
         for endpoint in speech_endpoints {

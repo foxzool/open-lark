@@ -1,7 +1,59 @@
 //! 转移应用所有者
 
-pub struct UpdateAppOwnerRequest;
-pub struct UpdateAppOwnerResponse;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct UpdateAppOwnerRequest {
+    config: Arc<Config>,
+    app_id: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateAppOwnerResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for UpdateAppOwnerResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl UpdateAppOwnerRequest {
+    pub fn new(config: Arc<Config>, app_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            app_id: app_id.into(),
+        }
+    }
+
+    pub async fn execute(self) -> SDKResult<UpdateAppOwnerResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<UpdateAppOwnerResponse> {
+        let path = format!(
+            "/open-apis/application/v6/applications/{}/owner",
+            self.app_id
+        );
+        let req: ApiRequest<UpdateAppOwnerResponse> = ApiRequest::put(&path);
+
+        let _resp: openlark_core::api::Response<UpdateAppOwnerResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(UpdateAppOwnerResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 #[allow(unused_imports)]
