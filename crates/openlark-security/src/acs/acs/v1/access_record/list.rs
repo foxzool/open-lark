@@ -1,7 +1,51 @@
-//! API placeholder
+//! 获取门禁通行记录列表
 
-pub struct Request;
-pub struct Response;
+use openlark_core::{
+    api::{ApiRequest, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+#[derive(Debug, Clone)]
+pub struct ListAccessRecordRequest {
+    config: Arc<Config>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListAccessRecordResponse {
+    pub data: Option<serde_json::Value>,
+}
+
+impl ApiResponseTrait for ListAccessRecordResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ListAccessRecordRequest {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+
+    pub async fn execute(self) -> SDKResult<ListAccessRecordResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<ListAccessRecordResponse> {
+        let req: ApiRequest<ListAccessRecordResponse> =
+            ApiRequest::get("/open-apis/acs/v1/access_records");
+        let _resp: openlark_core::api::Response<ListAccessRecordResponse> =
+            Transport::request(req, &self.config, Some(option)).await?;
+        Ok(ListAccessRecordResponse { data: None })
+    }
+}
 
 #[cfg(test)]
 mod tests {
