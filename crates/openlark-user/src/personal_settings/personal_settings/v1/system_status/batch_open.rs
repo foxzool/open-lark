@@ -13,6 +13,7 @@ use std::sync::Arc;
 #[derive(Debug, Clone)]
 pub struct SystemStatusBatch_openRequest {
     config: Arc<Config>,
+    status_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -27,8 +28,11 @@ impl ApiResponseTrait for SystemStatusBatch_openResponse {
 }
 
 impl SystemStatusBatch_openRequest {
-    pub fn new(config: Arc<Config>) -> Self {
-        Self { config }
+    pub fn new(config: Arc<Config>, status_id: impl Into<String>) -> Self {
+        Self {
+            config,
+            status_id: status_id.into(),
+        }
     }
 
     pub async fn execute(self) -> SDKResult<SystemStatusBatch_openResponse> {
@@ -39,11 +43,11 @@ impl SystemStatusBatch_openRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<SystemStatusBatch_openResponse> {
-        let path = "/open-apis/personal-settings/personal-settings/v1/system-status/batch-open"
-            .replace("application", "application")
-            .replace("security", "acs")
-            .replace("personal_settings", "personal_settings");
-        let req: ApiRequest<SystemStatusBatch_openResponse> = ApiRequest::get(&path);
+        let path = format!(
+            "/open-apis/personal_settings/v1/system_statuses/{}/batch_open",
+            self.status_id
+        );
+        let req: ApiRequest<SystemStatusBatch_openResponse> = ApiRequest::post(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data.ok_or_else(|| {

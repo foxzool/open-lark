@@ -53,15 +53,14 @@ impl RemoveVersionRequest {
     ) -> SDKResult<RemoveVersionResponse> {
         let version_id = self.version_id.unwrap_or_default();
         validate_required!(version_id.trim(), "version_id 不能为空");
-
-        let mut request = ApiRequest::<RemoveVersionResponse>::delete(format!(
-            "/open-apis/corehr/v2/cost_allocations/{}",
-            version_id
-        ));
-
-        if let Some(body) = self.body {
-            request = request.body(body);
+        let mut payload = self.body.unwrap_or_else(|| serde_json::json!({}));
+        if let Some(body) = payload.as_object_mut() {
+            body.insert("version_id".to_string(), Value::String(version_id));
         }
+        let request = ApiRequest::<RemoveVersionResponse>::post(
+            "/open-apis/corehr/v2/cost_allocations/remove_version",
+        )
+        .body(payload);
 
         let response = Transport::request(request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {

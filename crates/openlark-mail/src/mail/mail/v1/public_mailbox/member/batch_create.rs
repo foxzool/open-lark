@@ -32,7 +32,6 @@ impl BatchCreatePublicMailboxMemberRequest {
         Self {
             config,
             public_mailbox_id: public_mailbox_id.into(),
-            
         }
     }
 
@@ -44,7 +43,10 @@ impl BatchCreatePublicMailboxMemberRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<BatchCreatePublicMailboxMemberResponse> {
-        let path = format!("/open-apis/mail/v1/public_mailboxes/{{}}/members/batch_create", self.public_mailbox_id);
+        let path = format!(
+            "/open-apis/mail/v1/public_mailboxes/{}/members/batch_create",
+            self.public_mailbox_id
+        );
         let req: ApiRequest<BatchCreatePublicMailboxMemberResponse> = ApiRequest::post(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;

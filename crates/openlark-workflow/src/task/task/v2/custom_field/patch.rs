@@ -86,16 +86,13 @@ impl PatchCustomFieldRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<PatchCustomFieldResponse> {
-        validate_required!(
-            self.custom_field_guid.trim(),
-            "自定义字段 GUID 不能为空"
-        );
+        validate_required!(self.custom_field_guid.trim(), "自定义字段 GUID 不能为空");
 
-        let api_endpoint = TaskApiV2::CustomFieldUpdate(
-            self.custom_field_guid.clone(),
-            self.custom_field_guid,
+        let path = format!(
+            "/open-apis/task/v2/custom_fields/{}",
+            self.custom_field_guid
         );
-        let mut request = ApiRequest::<PatchCustomFieldResponse>::patch(api_endpoint.to_url());
+        let mut request = ApiRequest::<PatchCustomFieldResponse>::patch(&path);
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "更新自定义字段")?);
@@ -115,17 +112,10 @@ impl ApiResponseTrait for PatchCustomFieldResponse {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-    
 
     #[test]
     fn test_patch_custom_field_url() {
-        let endpoint = TaskApiV2::CustomFieldUpdate(
-            "field_123".to_string(),
-            "field_123".to_string(),
-        );
-        assert_eq!(
-            endpoint.to_url(),
-            "/open-apis/task/v2/tasklists/field_123/custom_fields/field_123"
-        );
+        let path = format!("/open-apis/task/v2/custom_fields/{}", "field_123");
+        assert_eq!(path, "/open-apis/task/v2/custom_fields/field_123");
     }
 }

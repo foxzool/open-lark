@@ -29,12 +29,15 @@ impl ApiResponseTrait for GetMailGroupMemberResponse {
 }
 
 impl GetMailGroupMemberRequest {
-    pub fn new(config: Arc<Config>, mailgroup_id: impl Into<String>, member_id: impl Into<String>) -> Self {
+    pub fn new(
+        config: Arc<Config>,
+        mailgroup_id: impl Into<String>,
+        member_id: impl Into<String>,
+    ) -> Self {
         Self {
             config,
             mailgroup_id: mailgroup_id.into(),
             member_id: member_id.into(),
-            
         }
     }
 
@@ -46,7 +49,10 @@ impl GetMailGroupMemberRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<GetMailGroupMemberResponse> {
-        let path = format!("/open-apis/mail/v1/mailgroups/{{}}/members/{{}}", self.mailgroup_id, self.member_id);
+        let path = format!(
+            "/open-apis/mail/v1/mailgroups/{}/members/{}",
+            self.mailgroup_id, self.member_id
+        );
         let req: ApiRequest<GetMailGroupMemberResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;

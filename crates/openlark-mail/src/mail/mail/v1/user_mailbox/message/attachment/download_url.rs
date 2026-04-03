@@ -59,10 +59,11 @@ impl GetAttachmentDownloadUrlRequest {
         option: RequestOption,
     ) -> SDKResult<GetAttachmentDownloadUrlResponse> {
         let path = format!(
-            "/open-apis/mail/v1/user_mailboxes/{}/messages/{}/attachments/{}/download_url",
-            self.user_mailbox_id, self.message_id, self.attachment_id
+            "/open-apis/mail/v1/user_mailboxes/{}/messages/{}/attachments/download_url",
+            self.user_mailbox_id, self.message_id
         );
-        let req: ApiRequest<GetAttachmentDownloadUrlResponse> = ApiRequest::get(&path);
+        let req: ApiRequest<GetAttachmentDownloadUrlResponse> =
+            ApiRequest::get(&path).query("attachment_id", self.attachment_id);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data.ok_or_else(|| {

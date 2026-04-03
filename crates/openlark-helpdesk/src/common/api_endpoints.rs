@@ -119,7 +119,9 @@ impl HelpdeskApiV1 {
             HelpdeskApiV1::FaqPatch(id) => format!("/open-apis/helpdesk/v1/faqs/{}", id),
             HelpdeskApiV1::FaqDelete(id) => format!("/open-apis/helpdesk/v1/faqs/{}", id),
             HelpdeskApiV1::FaqSearch => "/open-apis/helpdesk/v1/faqs/search".to_string(),
-            HelpdeskApiV1::FaqImage(id, _) => format!("/open-apis/helpdesk/v1/faqs/{}/image", id),
+            HelpdeskApiV1::FaqImage(id, image_key) => {
+                format!("/open-apis/helpdesk/v1/faqs/{}/image/{}", id, image_key)
+            }
             // Notification APIs
             HelpdeskApiV1::NotificationList => "/open-apis/helpdesk/v1/notifications".to_string(),
             HelpdeskApiV1::NotificationGet(id) => {

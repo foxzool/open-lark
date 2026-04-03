@@ -29,7 +29,7 @@ impl PrimaryCalendarRequest {
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         // url: POST:/open-apis/calendar/v4/calendars/primary
         let api_endpoint = CalendarApiV4::CalendarPrimaryGet;
-        let req: ApiRequest<serde_json::Value> = ApiRequest::get(api_endpoint.to_url());
+        let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url());
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "查询主日历信息")

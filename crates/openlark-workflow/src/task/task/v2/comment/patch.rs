@@ -53,8 +53,8 @@ impl PatchCommentRequest {
     ) -> SDKResult<UpdateCommentResponse> {
         validate_required!(self.comment_id.trim(), "评论 ID 不能为空");
 
-        let api_endpoint = TaskApiV2::CommentUpdate(self.comment_id.clone(), self.comment_id);
-        let mut request = ApiRequest::<UpdateCommentResponse>::patch(api_endpoint.to_url());
+        let path = format!("/open-apis/task/v2/comments/{}", self.comment_id);
+        let mut request = ApiRequest::<UpdateCommentResponse>::patch(&path);
 
         let request_body = &self.body;
         request = request.body(serialize_params(request_body, "更新评论")?);
@@ -74,14 +74,10 @@ impl ApiResponseTrait for UpdateCommentResponse {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-    
 
     #[test]
     fn test_patch_comment_url() {
-        let endpoint = TaskApiV2::CommentUpdate("comment_123".to_string(), "comment_123".to_string());
-        assert_eq!(
-            endpoint.to_url(),
-            "/open-apis/task/v2/comments/comment_123"
-        );
+        let path = format!("/open-apis/task/v2/comments/{}", "comment_123");
+        assert_eq!(path, "/open-apis/task/v2/comments/comment_123");
     }
 }

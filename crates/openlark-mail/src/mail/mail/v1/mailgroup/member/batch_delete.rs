@@ -32,7 +32,6 @@ impl BatchDeleteMailGroupMemberRequest {
         Self {
             config,
             mailgroup_id: mailgroup_id.into(),
-            
         }
     }
 
@@ -44,8 +43,11 @@ impl BatchDeleteMailGroupMemberRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<BatchDeleteMailGroupMemberResponse> {
-        let path = format!("/open-apis/mail/v1/mailgroups/{{}}/members/batch_delete", self.mailgroup_id);
-        let req: ApiRequest<BatchDeleteMailGroupMemberResponse> = ApiRequest::post(&path);
+        let path = format!(
+            "/open-apis/mail/v1/mailgroups/{}/members/batch_delete",
+            self.mailgroup_id
+        );
+        let req: ApiRequest<BatchDeleteMailGroupMemberResponse> = ApiRequest::delete(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data.ok_or_else(|| {

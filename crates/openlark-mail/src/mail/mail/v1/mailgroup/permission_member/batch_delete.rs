@@ -61,7 +61,7 @@ impl BatchDeleteMailGroupPermissionMemberRequest {
             self.mailgroup_id
         );
         let req: ApiRequest<BatchDeleteMailGroupPermissionMemberResponse> =
-            ApiRequest::post(&path).body(serialize_params(&self.body, "批量删除邮件组权限成员")?);
+            ApiRequest::delete(&path).body(serialize_params(&self.body, "批量删除邮件组权限成员")?);
 
         let _resp: openlark_core::api::Response<BatchDeleteMailGroupPermissionMemberResponse> =
             Transport::request(req, &self.config, Some(option)).await?;

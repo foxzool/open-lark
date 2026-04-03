@@ -91,7 +91,14 @@ impl ParentsRequestBuilder {
 
         // 构建端点
         let api_endpoint = FeishuPeopleApiV2::DepartmentParents(self.department_id.clone());
-        let request = ApiRequest::<ParentsResponse>::get(api_endpoint.to_url());
+        let request = ApiRequest::<ParentsResponse>::post(api_endpoint.to_url()).body(
+            serde_json::to_value(ParentsRequest::new(self.department_id)).map_err(|e| {
+                openlark_core::error::validation_error(
+                    "获取父部门信息请求序列化失败",
+                    e.to_string(),
+                )
+            })?,
+        );
 
         // 发送请求
         let response = Transport::request(request, &self.config, Some(option)).await?;

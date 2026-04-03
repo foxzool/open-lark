@@ -43,7 +43,7 @@ impl RollbackPointsBuilder {
             self.task_id
         );
 
-        let req: ApiRequest<RollbackPointsResponse> = ApiRequest::get(&url);
+        let req: ApiRequest<RollbackPointsResponse> = ApiRequest::post(&url);
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data
             .ok_or_else(|| openlark_core::error::validation_error("Operation", "响应数据为空"))

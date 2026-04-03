@@ -10,6 +10,8 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+use crate::common::api_endpoints::HelpdeskApiV1;
+
 #[derive(Debug, Clone)]
 pub struct GetTicketImageRequest {
     config: Arc<Config>,
@@ -54,11 +56,10 @@ impl GetTicketImageRequest {
         self,
         option: RequestOption,
     ) -> SDKResult<GetTicketImageResponse> {
-        let path = format!(
-            "{}/{}/images/{}",
-            "/open-apis/helpdesk/v1/tickets", self.ticket_id, self.image_key
-        );
-        let req: ApiRequest<GetTicketImageResponse> = ApiRequest::get(&path);
+        let req: ApiRequest<GetTicketImageResponse> =
+            ApiRequest::get(HelpdeskApiV1::TicketImage.to_url())
+                .query("ticket_id", self.ticket_id)
+                .query("image_key", self.image_key);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
         resp.data
