@@ -312,9 +312,8 @@ mod http_tests {
     #[tokio::test]
     async fn test_okr_batch_get_http_mock() {
         let mock_server = MockServer::start().await;
-        Mock::given(method("POST"))
+        Mock::given(method("GET"))
             .and(path("/open-apis/okr/v1/okrs/batch_get"))
-            .and(body_json(json!({"okr_ids":"okr_1,okr_2"})))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"success",

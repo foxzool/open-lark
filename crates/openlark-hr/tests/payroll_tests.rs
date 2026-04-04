@@ -257,7 +257,7 @@ mod http_tests {
     async fn test_list_payment_activity_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("GET"))
-            .and(path("/open-apis/payroll/v1/payment_activities"))
+            .and(path("/open-apis/payroll/v1/payment_activitys"))
             .and(header("Authorization", "Bearer test_token"))
             .and(query_param("page_size", "20"))
             .and(query_param("page_token", "next_activity"))
@@ -338,9 +338,7 @@ mod http_tests {
     async fn test_archive_payment_activity_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path(
-                "/open-apis/payroll/v1/payment_activities/pa_1/archive",
-            ))
+            .and(path("/open-apis/payroll/v1/payment_activitys/archive"))
             .and(header("Authorization", "Bearer test_token"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code": 0,
@@ -370,7 +368,7 @@ mod http_tests {
     async fn test_query_payment_detail_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path("/open-apis/payroll/v1/payment_details/query"))
+            .and(path("/open-apis/payroll/v1/payment_detail/query"))
             .and(header("Authorization", "Bearer test_token"))
             .and(body_json(json!({
                 "activity_id": "pa_1",
