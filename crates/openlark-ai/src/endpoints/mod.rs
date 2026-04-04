@@ -207,10 +207,10 @@ mod tests {
     fn test_document_ai_endpoints() {
         // 验证Document AI端点
         assert!(DOCUMENT_AI_RESUME_PARSE.starts_with("/open-apis/document_ai/"));
-        assert!(DOCUMENT_AI_RESUME_PARSE.contains("resume_parse"));
-        assert!(DOCUMENT_AI_ID_CARD_RECOGNIZE.contains("id_card_recognize"));
-        assert!(DOCUMENT_AI_BANK_CARD_RECOGNIZE.contains("bank_card_recognize"));
-        assert!(DOCUMENT_AI_BUSINESS_CARD_RECOGNIZE.contains("business_card_recognize"));
+        assert!(DOCUMENT_AI_RESUME_PARSE.contains("resume/parse"));
+        assert!(DOCUMENT_AI_ID_CARD_RECOGNIZE.contains("id_card/recognize"));
+        assert!(DOCUMENT_AI_BANK_CARD_RECOGNIZE.contains("bank_card/recognize"));
+        assert!(DOCUMENT_AI_BUSINESS_CARD_RECOGNIZE.contains("business_card/recognize"));
     }
 
     #[test]
