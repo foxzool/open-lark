@@ -188,7 +188,7 @@ mod validation_tests {
     #[tokio::test]
     async fn test_archive_query_data_missing_validation() {
         let mock_server = MockServer::start().await;
-        Mock::given(method("GET"))
+        Mock::given(method("POST"))
             .and(path("/open-apis/compensation/v1/archives/query"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({"code":0,"msg":"ok"})))
             .mount(&mock_server)
@@ -207,7 +207,7 @@ mod validation_tests {
     async fn test_social_plan_list_data_missing_validation() {
         let mock_server = MockServer::start().await;
         Mock::given(method("GET"))
-            .and(path("/open-apis/compensation/v1/social_plans/list"))
+            .and(path("/open-apis/compensation/v1/social_plans"))
             .and(query_param("effective_date", "1735689600"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({"code":0,"msg":"ok"})))
             .mount(&mock_server)
@@ -272,7 +272,7 @@ mod http_tests {
     #[tokio::test]
     async fn test_archive_query_http_mock() {
         let mock_server = MockServer::start().await;
-        Mock::given(method("GET"))
+        Mock::given(method("POST"))
             .and(path("/open-apis/compensation/v1/archives/query"))
             .and(query_param("page_size", "20"))
             .and(query_param("page_token", "next_archive"))
@@ -385,9 +385,7 @@ mod http_tests {
     async fn test_lump_sum_batch_create_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path(
-                "/open-apis/compensation/v1/lump_sum_payments/batch_create",
-            ))
+            .and(path("/open-apis/compensation/v1/lump_sum_payment/batch_create"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -409,9 +407,7 @@ mod http_tests {
     async fn test_lump_sum_batch_remove_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path(
-                "/open-apis/compensation/v1/lump_sum_payments/batch_remove",
-            ))
+            .and(path("/open-apis/compensation/v1/lump_sum_payment/batch_remove"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -433,9 +429,7 @@ mod http_tests {
     async fn test_lump_sum_batch_update_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path(
-                "/open-apis/compensation/v1/lump_sum_payments/batch_update",
-            ))
+            .and(path("/open-apis/compensation/v1/lump_sum_payment/batch_update"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -456,8 +450,8 @@ mod http_tests {
     #[tokio::test]
     async fn test_lump_sum_query_http_mock() {
         let mock_server = MockServer::start().await;
-        Mock::given(method("GET"))
-            .and(path("/open-apis/compensation/v1/lump_sum_payments/query"))
+        Mock::given(method("POST"))
+            .and(path("/open-apis/compensation/v1/lump_sum_payment/query"))
             .and(query_param("page_size", "20"))
             .and(query_param("page_token", "next_lump"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
@@ -480,10 +474,8 @@ mod http_tests {
     #[tokio::test]
     async fn test_lump_sum_query_detail_http_mock() {
         let mock_server = MockServer::start().await;
-        Mock::given(method("GET"))
-            .and(path(
-                "/open-apis/compensation/v1/lump_sum_payments/query_detail",
-            ))
+        Mock::given(method("POST"))
+            .and(path("/open-apis/compensation/v1/lump_sum_payment/query_detail"))
             .and(query_param("page_size", "20"))
             .and(query_param("page_token", "next_lump_detail"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
@@ -533,9 +525,7 @@ mod http_tests {
     async fn test_recurring_batch_create_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path(
-                "/open-apis/compensation/v1/recurring_payments/batch_create",
-            ))
+            .and(path("/open-apis/compensation/v1/recurring_payment/batch_create"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -557,9 +547,7 @@ mod http_tests {
     async fn test_recurring_batch_remove_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path(
-                "/open-apis/compensation/v1/recurring_payments/batch_remove",
-            ))
+            .and(path("/open-apis/compensation/v1/recurring_payment/batch_remove"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -581,9 +569,7 @@ mod http_tests {
     async fn test_recurring_batch_update_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path(
-                "/open-apis/compensation/v1/recurring_payments/batch_update",
-            ))
+            .and(path("/open-apis/compensation/v1/recurring_payment/batch_update"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -604,8 +590,8 @@ mod http_tests {
     #[tokio::test]
     async fn test_recurring_query_http_mock() {
         let mock_server = MockServer::start().await;
-        Mock::given(method("GET"))
-            .and(path("/open-apis/compensation/v1/recurring_payments/query"))
+        Mock::given(method("POST"))
+            .and(path("/open-apis/compensation/v1/recurring_payment/query"))
             .and(query_param("page_size", "20"))
             .and(query_param("page_token", "next_recurring"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
@@ -628,8 +614,8 @@ mod http_tests {
     #[tokio::test]
     async fn test_social_archive_query_http_mock() {
         let mock_server = MockServer::start().await;
-        Mock::given(method("GET"))
-            .and(path("/open-apis/compensation/v1/social_archives/query"))
+        Mock::given(method("POST"))
+            .and(path("/open-apis/compensation/v1/social_archive/query"))
             .and(query_param("page_size", "20"))
             .and(query_param("page_token", "next_social_archive"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
@@ -652,10 +638,8 @@ mod http_tests {
     #[tokio::test]
     async fn test_social_archive_adjust_record_query_http_mock() {
         let mock_server = MockServer::start().await;
-        Mock::given(method("GET"))
-            .and(path(
-                "/open-apis/compensation/v1/social_archive_adjust_records/query",
-            ))
+        Mock::given(method("POST"))
+            .and(path("/open-apis/compensation/v1/social_archive_adjust_record/query"))
             .and(query_param("page_size", "20"))
             .and(query_param("page_token", "next_adjust_record"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
@@ -700,7 +684,7 @@ mod http_tests {
     async fn test_social_plan_list_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("GET"))
-            .and(path("/open-apis/compensation/v1/social_plans/list"))
+            .and(path("/open-apis/compensation/v1/social_plans"))
             .and(query_param("effective_date", "1735689600"))
             .and(query_param("page_size", "20"))
             .and(query_param("page_token", "next_social_plan"))
