@@ -385,7 +385,9 @@ mod http_tests {
     async fn test_lump_sum_batch_create_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path("/open-apis/compensation/v1/lump_sum_payment/batch_create"))
+            .and(path(
+                "/open-apis/compensation/v1/lump_sum_payment/batch_create",
+            ))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -407,7 +409,9 @@ mod http_tests {
     async fn test_lump_sum_batch_remove_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path("/open-apis/compensation/v1/lump_sum_payment/batch_remove"))
+            .and(path(
+                "/open-apis/compensation/v1/lump_sum_payment/batch_remove",
+            ))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -429,7 +433,9 @@ mod http_tests {
     async fn test_lump_sum_batch_update_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path("/open-apis/compensation/v1/lump_sum_payment/batch_update"))
+            .and(path(
+                "/open-apis/compensation/v1/lump_sum_payment/batch_update",
+            ))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -525,7 +531,9 @@ mod http_tests {
     async fn test_recurring_batch_create_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path("/open-apis/compensation/v1/recurring_payment/batch_create"))
+            .and(path(
+                "/open-apis/compensation/v1/recurring_payment/batch_create",
+            ))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -547,7 +555,9 @@ mod http_tests {
     async fn test_recurring_batch_remove_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path("/open-apis/compensation/v1/recurring_payment/batch_remove"))
+            .and(path(
+                "/open-apis/compensation/v1/recurring_payment/batch_remove",
+            ))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
@@ -569,7 +579,9 @@ mod http_tests {
     async fn test_recurring_batch_update_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path("/open-apis/compensation/v1/recurring_payment/batch_update"))
+            .and(path(
+                "/open-apis/compensation/v1/recurring_payment/batch_update",
+            ))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"ok",
