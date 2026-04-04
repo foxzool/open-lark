@@ -276,7 +276,7 @@ mod http_tests {
     async fn test_activity_query_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
-            .and(path("/open-apis/performance/v1/activities/query"))
+            .and(path("/open-apis/performance/v2/activity/query"))
             .and(header("Authorization", "Bearer test_token"))
             .and(query_param("name", "项目A"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
@@ -301,7 +301,7 @@ mod http_tests {
         let mock_server = MockServer::start().await;
         Mock::given(method("POST"))
             .and(path(
-                "/open-apis/performance/v1/additional_informations/import",
+                "/open-apis/performance/v2/additional_informations/import",
             ))
             .and(header("Authorization", "Bearer test_token"))
             .and(body_json(json!({
@@ -332,7 +332,7 @@ mod http_tests {
     async fn test_metric_tag_list_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("GET"))
-            .and(path("/open-apis/performance/v1/metric_tags"))
+            .and(path("/open-apis/performance/v2/metric_tags"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,
                 "msg":"success",
