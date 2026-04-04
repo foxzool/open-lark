@@ -402,7 +402,7 @@ mod http_tests {
     #[tokio::test]
     async fn test_search_group_http_mock() {
         let mock_server = MockServer::start().await;
-        Mock::given(method("GET"))
+        Mock::given(method("POST"))
             .and(path("/open-apis/attendance/v1/groups/search"))
             .and(query_param("group_name", "技术部"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
@@ -423,7 +423,7 @@ mod http_tests {
     async fn test_list_user_group_http_mock() {
         let mock_server = MockServer::start().await;
         Mock::given(method("GET"))
-            .and(path("/open-apis/attendance/v1/groups/g_1/users"))
+            .and(path("/open-apis/attendance/v1/groups/g_1/list_user"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "code":0,"msg":"success","data":{"items":[{"user_id":"ou_1","join_time":1735689600}],"has_more":false}
             })))
@@ -531,7 +531,7 @@ mod http_tests {
     #[tokio::test]
     async fn test_query_shift_http_mock() {
         let mock_server = MockServer::start().await;
-        Mock::given(method("GET"))
+        Mock::given(method("POST"))
             .and(path("/open-apis/attendance/v1/shifts/query"))
             .and(query_param("shift_name", "标准班次"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
