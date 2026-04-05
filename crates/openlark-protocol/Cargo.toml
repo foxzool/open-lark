@@ -7,8 +7,8 @@ license.workspace = true
 description = "Lark/Feishu websocket client protobuf definitions."
 keywords = ["sdk", "feishu", "lark", "websocket"]
 categories = ["api-bindings"]
-documentation = "https://docs.rs/open-lark"
-repository = "https://github.com/foxzool/open-lark"
+documentation = "https://docs.rs/openlark-protocol"
+repository = "https://github.com/foxzool/openlark"
 
 [lints]
 workspace = true

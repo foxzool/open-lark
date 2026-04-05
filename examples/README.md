@@ -6,6 +6,7 @@
 
 | 示例 | 功能 | 需要的 feature |
 |------|------|----------------|
+| `readme_quick_start` | 对齐根 README 的快速开始与 docs helper 示例 | `auth,docs-bitable` |
 | `simple_api_call` | 创建 `Client` 并访问 communication 常量 | `auth,communication` |
 | `docs_helpers` | 演示 docs helper：分页遍历、查找 sheet、批量读范围、多维表格全量读取 | `auth,docs-bitable` |
 | `websocket_echo_bot` | 长连接接收并回显文本消息 | `communication,websocket` |
@@ -14,7 +15,7 @@
 ## 环境准备
 
 ```bash
-cp examples/.env.example .env
+cp examples/01_getting_started/.env.example .env
 ```
 
 至少需要：
@@ -33,6 +34,7 @@ export OPENLARK_BASE_URL="https://open.larksuite.com"
 ## 运行方式
 
 ```bash
+cargo run --example readme_quick_start --features "auth,docs-bitable"
 cargo run --example simple_api_call --features "auth,communication"
 cargo run --example docs_helpers --features "auth,docs-bitable"
 cargo run --example websocket_echo_bot --features "communication,websocket"
