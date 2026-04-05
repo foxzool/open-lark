@@ -25,7 +25,7 @@ openlark-webhook = "0.15"
 
 ```toml
 [dependencies]
-open-lark = { version = "0.15", features = ["webhook"] }
+openlark = { version = "0.15", features = ["webhook"] }
 ```
 
 ## 快速开始

@@ -305,7 +305,7 @@ pub use traits::{LarkClient, ServiceLifecycle};
 
 // 注意：legacy_client 已在 v0.15.0 中移除
 // 请使用 `Client` 与 `ClientBuilder`
-// 迁移指南：https://github.com/foxzool/open-lark/blob/main/docs/migration-guide.md
+// 迁移指南：https://github.com/foxzool/openlark/blob/main/docs/migration-guide.md
 
 // CardKit meta 调用链
 #[cfg(feature = "cardkit")]
