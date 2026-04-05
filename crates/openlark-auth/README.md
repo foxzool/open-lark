@@ -500,8 +500,8 @@ cargo llvm-cov --lib -p openlark-auth --html
 
 ```bash
 # 克隆项目
-git clone https://github.com/foxzool/open-lark.git
-cd open-lark
+git clone https://github.com/foxzool/openlark.git
+cd openlark
 
 # 进入模块目录
 cd crates/openlark-auth
@@ -534,6 +534,6 @@ cargo clippy -- -D warnings
 
 ## 联系方式
 
-- **项目地址**: https://github.com/foxzool/open-lark
+- **项目地址**: https://github.com/foxzool/openlark
 - **文档地址**: https://docs.rs/openlark-auth
-- **问题反馈**: https://github.com/foxzool/open-lark/issues
+- **问题反馈**: https://github.com/foxzool/openlark/issues

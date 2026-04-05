@@ -63,6 +63,18 @@ jobs:
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
           echo "Extracted version: ${VERSION}"
 
+      - name: Detect prerelease flag
+        id: release_kind
+        run: |
+          VERSION="${{ steps.extract_version.outputs.VERSION }}"
+          if [[ "${VERSION}" == *-* ]]; then
+            echo "PRERELEASE=true" >> $GITHUB_OUTPUT
+            echo "Detected prerelease tag: ${VERSION}"
+          else
+            echo "PRERELEASE=false" >> $GITHUB_OUTPUT
+            echo "Detected stable tag: ${VERSION}"
+          fi
+
       - name: Extract changelog entry
         id: changelog
         run: |
@@ -85,7 +97,7 @@ jobs:
           name: Release v${{ steps.extract_version.outputs.VERSION }}
           body_path: release_notes.md
           draft: false
-          prerelease: false
+          prerelease: ${{ steps.release_kind.outputs.PRERELEASE }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
   # 发布到 crates.io

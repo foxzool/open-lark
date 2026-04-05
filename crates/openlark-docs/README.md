@@ -29,7 +29,7 @@
 
 ```toml
 [dependencies]
-open-lark = { version = "0.15", features = ["your-features"] }
+openlark = { version = "0.15", features = ["your-features"] }
 ```
 
 ### 可用功能（Features）
@@ -142,7 +142,7 @@ async fn main() -> SDKResult<()> {
 ```toml
 # Cargo.toml
 [dependencies]
-open-lark = { version = "0.15", features = ["bitable"] }
+openlark = { version = "0.15", features = ["bitable"] }
 ```
 
 ```rust
@@ -163,7 +163,7 @@ let app = CreateAppRequest::new(client.docs.base.bitable().config().clone(), ...
 ```toml
 # Cargo.toml
 [dependencies]
-open-lark = { version = "0.15", features = ["ccm"] }
+openlark = { version = "0.15", features = ["ccm"] }
 ```
 
 ```rust
@@ -185,7 +185,7 @@ let file = DownloadFileRequest::new(client.docs.ccm.drive.config().clone(), "fil
 ```toml
 # Cargo.toml
 [dependencies]
-open-lark = { version = "0.15", features = ["baike"] }
+openlark = { version = "0.15", features = ["baike"] }
 ```
 
 ```rust
@@ -209,10 +209,10 @@ let entity = CreateEntityRequest::new(client.docs.baike.service().config().clone
 
 ```toml
 # ❌ 不推荐：启用所有功能
-open-lark = { version = "0.15", features = ["full"] }
+openlark = { version = "0.15", features = ["full"] }
 
 # ✅ 推荐：仅启用所需功能
-open-lark = { version = "0.15", features = ["bitable"] }  # 仅多维表格
+openlark = { version = "0.15", features = ["bitable"] }  # 仅多维表格
 ```
 
 ### 2. 编译优化
@@ -243,7 +243,7 @@ request = request.folder_token("folder_token");
 
 - [飞书开放平台文档](https://open.feishu.cn/document/home/)
 - [API 文档](https://open.feishu.cn/document/server-docs/)
-- [SDK 源码](https://github.com/your-org/open-lark)
+- [SDK 源码](https://github.com/foxzool/openlark)
 
 ## 许可证
 
@@ -255,5 +255,5 @@ request = request.folder_token("folder_token");
 
 ## 支持与反馈
 
-- 问题反馈：[GitHub Issues](https://github.com/your-org/open-lark/issues)
-- 功能请求：[GitHub Discussions](https://github.com/your-org/open-lark/discussions)
+- 问题反馈：[GitHub Issues](https://github.com/foxzool/openlark/issues)
+- 功能请求：[GitHub Discussions](https://github.com/foxzool/openlark/discussions)
