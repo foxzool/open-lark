@@ -1,6 +1,6 @@
 //! 文档 helper 示例
 //!
-//! 演示 `openlark` 根 crate 在 `rc.2` 中提供的通用 docs helper：
+//! 演示 `openlark` 根 crate 在 `0.15.0` 中提供的通用 docs helper：
 //! - 文件夹自动分页遍历
 //! - 按标题查找工作表
 //! - 读取多个单元格范围

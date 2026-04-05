@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-04-05
+
+### 🔄 变更
+
+- **release(root)**: 将工作区版本与根 crate 文案切换到 `0.15.0`
+- **docs(release)**: 新增 `0.15` 迁移指南、public API 稳定性策略与正式版发布清障清单
+- **ci(examples)**: 为根 README 对齐示例与主推 examples 增加编译校验入口
+- **build(metadata)**: 修正 crates.io 元数据中的仓库与文档链接
+
+### 🐛 修复
+
+- **fix(release)**: 修复 GitHub Release 对 RC tag 一律标为正式版的问题
+- **fix(docs)**: 修复多个 crate README 中错误的 crate 名、仓库链接和过期版本示例
+
 ## [0.15.0-rc.2] - 2026-03-26
 
 ### 🔄 变更

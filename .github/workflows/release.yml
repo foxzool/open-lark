@@ -41,6 +41,9 @@ jobs:
       - name: Run tests
         run: cargo test --lib --all-features
 
+      - name: Validate public examples
+        run: bash scripts/check-public-examples.sh
+
       - name: Run cargo doc
         run: cargo doc --no-deps --all-features --lib
         env:
