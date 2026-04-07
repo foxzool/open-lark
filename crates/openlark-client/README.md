@@ -5,6 +5,8 @@
 > 普通用户请优先使用根 crate `openlark`。
 >
 > `openlark-client` 适合已经明确需要统一 `Client` 实现细节、或只想直接复用客户端层的高级用户。
+>
+> Canonical 公开入口规则见 [`../../docs/PUBLIC_REEXPORT_POLICY.md`](../../docs/PUBLIC_REEXPORT_POLICY.md)。
 
 ## 🚀 特性
 
@@ -66,6 +68,13 @@ features = ["p0-services"]
 [dependencies]
 openlark = { version = "0.15.0", features = ["essential"] }
 ```
+
+## 入口定位
+
+- canonical 高级入口：`openlark_client::Client` / `ClientBuilder`
+- canonical 调用方式：`client.auth`、`client.communication`、`client.docs`、`client.hr`
+- 保留在本 crate 的高级能力：`ServiceRegistry`、`FeatureLoader`、traits
+- 非默认推荐场景：普通业务应用直接把 `openlark-client` 当作根入口
 
 ## 🧩 meta 调用链（按 CSV 映射）
 
