@@ -13,6 +13,14 @@
 
 ## 🚀 快速开始
 
+Canonical public API 入口已经冻结：
+
+- 普通用户默认使用根 crate `openlark`，从 `use open_lark::prelude::*;` 和 `Client` 开始
+- 高级用户才直接使用 `openlark-client`
+- 单业务域场景直接使用对应 `openlark-{domain}` crate
+
+详细规则见 [`docs/PUBLIC_REEXPORT_POLICY.md`](docs/PUBLIC_REEXPORT_POLICY.md)。
+
 ### 1. 添加依赖
 
 在您的 `Cargo.toml` 中添加：
