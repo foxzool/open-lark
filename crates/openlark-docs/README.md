@@ -171,7 +171,7 @@ let docs = DocsClient::new(config);
 
 // 访问多维表格（使用 Request 对象方式）
 // 具体请参考 openlark_docs::base::bitable::v1::app 模块
-let app = CreateAppRequest::new(docs.base.bitable.config().clone(), ...).execute().await?;
+let app = CreateAppRequest::new(docs.base.bitable().config().clone(), ...).execute().await?;
 ```
 
 ### 云文档协同使用
