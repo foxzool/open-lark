@@ -21,6 +21,15 @@
 - ✅ **统一入口**: `DocsClient` 作为唯一公开入口
 - ✅ **按需编译**: 细粒度 feature，减少编译时间和二进制体积
 
+## 入口定位
+
+- 单业务域 canonical 入口：`openlark_docs::DocsClient`
+- 配置入口：`openlark_core::config::Config`
+- 业务调用方式：`docs.ccm`、`docs.base`、`docs.baike`、`docs.minutes`
+- 如果你需要跨业务域统一客户端，再改用根 crate `openlark` 或高级入口 `openlark-client`
+
+Canonical 公开入口规则见 [`../../docs/PUBLIC_REEXPORT_POLICY.md`](../../docs/PUBLIC_REEXPORT_POLICY.md)。
+
 ## 功能选择（Feature Selection）
 
 ### 使用方式
@@ -29,7 +38,8 @@
 
 ```toml
 [dependencies]
-openlark = { version = "0.15", features = ["your-features"] }
+openlark-core = "0.15"
+openlark-docs = { version = "0.15", features = ["your-features"] }
 ```
 
 ### 可用功能（Features）
@@ -107,6 +117,8 @@ openlark = { version = "0.15", features = ["your-features"] }
 
 #### 向后兼容别名
 
+以下 feature alias 仅保留兼容职责，不再视为新的 canonical 入口：
+
 | Feature | 说明 |
 |---------|------|
 | `cloud-docs` | 云文档协同（别名） |
@@ -117,20 +129,21 @@ openlark = { version = "0.15", features = ["your-features"] }
 ### 基础使用
 
 ```rust
-use openlark_client::prelude::*;
+use openlark_core::{config::Config, SDKResult};
+use openlark_docs::DocsClient;
 use openlark_docs::ccm::docs::v1::{GetDocsContentRequest, get_docs_content};
 
 #[tokio::main]
 async fn main() -> SDKResult<()> {
-    // 1. 创建客户端（或使用 Client::from_env() 从环境变量读取）
-    let client = Client::builder()
+    let config = Config::builder()
         .app_id("app_id")
         .app_secret("app_secret")
-        .build()?;
+        .build();
+    let docs = DocsClient::new(config);
 
-    // 2. 使用 docs 字段获取配置，然后调用云文档 API
+    // 通过 DocsClient 获取业务域配置，再构建 Request
     let request = GetDocsContentRequest::new("doc_token", "docx", "markdown");
-    let doc = get_docs_content(request, client.docs.ccm.docs.config(), None).await?;
+    let doc = get_docs_content(request, docs.ccm.docs.config(), None).await?;
     println!("Document: {:?}", doc);
 
     Ok(())
@@ -142,20 +155,23 @@ async fn main() -> SDKResult<()> {
 ```toml
 # Cargo.toml
 [dependencies]
-openlark = { version = "0.15", features = ["bitable"] }
+openlark-core = "0.15"
+openlark-docs = { version = "0.15", features = ["bitable"] }
 ```
 
 ```rust
-use openlark_client::prelude::*;
+use openlark_core::config::Config;
+use openlark_docs::DocsClient;
 
-let client = Client::builder()
+let config = Config::builder()
     .app_id("app_id")
     .app_secret("app_secret")
-    .build()?;
+    .build();
+let docs = DocsClient::new(config);
 
 // 访问多维表格（使用 Request 对象方式）
 // 具体请参考 openlark_docs::base::bitable::v1::app 模块
-let app = CreateAppRequest::new(client.docs.base.bitable().config().clone(), ...).execute().await?;
+let app = CreateAppRequest::new(docs.base.bitable().config().clone(), ...).execute().await?;
 ```
 
 ### 云文档协同使用
@@ -163,20 +179,23 @@ let app = CreateAppRequest::new(client.docs.base.bitable().config().clone(), ...
 ```toml
 # Cargo.toml
 [dependencies]
-openlark = { version = "0.15", features = ["ccm"] }
+openlark-core = "0.15"
+openlark-docs = { version = "0.15", features = ["ccm"] }
 ```
 
 ```rust
-use openlark_client::prelude::*;
+use openlark_core::config::Config;
+use openlark_docs::DocsClient;
 use openlark_docs::ccm::drive::v1::file::DownloadFileRequest;
 
-let client = Client::builder()
+let config = Config::builder()
     .app_id("app_id")
     .app_secret("app_secret")
-    .build()?;
+    .build();
+let docs = DocsClient::new(config);
 
 // 访问云文档协同
-let file = DownloadFileRequest::new(client.docs.ccm.drive.config().clone(), "file_token").execute().await?;
+let file = DownloadFileRequest::new(docs.ccm.drive.config().clone(), "file_token").execute().await?;
 // 表格操作请参考 openlark_docs::ccm::sheets 模块
 ```
 
@@ -185,20 +204,23 @@ let file = DownloadFileRequest::new(client.docs.ccm.drive.config().clone(), "fil
 ```toml
 # Cargo.toml
 [dependencies]
-openlark = { version = "0.15", features = ["baike"] }
+openlark-core = "0.15"
+openlark-docs = { version = "0.15", features = ["baike"] }
 ```
 
 ```rust
-use openlark_client::prelude::*;
+use openlark_core::config::Config;
+use openlark_docs::DocsClient;
 
-let client = Client::builder()
+let config = Config::builder()
     .app_id("app_id")
     .app_secret("app_secret")
-    .build()?;
+    .build();
+let docs = DocsClient::new(config);
 
 // 访问知识库（使用 Request 对象方式）
 // 具体请参考 openlark_docs::baike::v1 模块
-let entity = CreateEntityRequest::new(client.docs.baike.service().config().clone(), ...).execute().await?;
+let entity = CreateEntityRequest::new(docs.baike.config().clone(), ...).execute().await?;
 ```
 
 ## 性能优化建议
@@ -209,10 +231,10 @@ let entity = CreateEntityRequest::new(client.docs.baike.service().config().clone
 
 ```toml
 # ❌ 不推荐：启用所有功能
-openlark = { version = "0.15", features = ["full"] }
+openlark-docs = { version = "0.15", features = ["full"] }
 
 # ✅ 推荐：仅启用所需功能
-openlark = { version = "0.15", features = ["bitable"] }  # 仅多维表格
+openlark-docs = { version = "0.15", features = ["bitable"] }  # 仅多维表格
 ```
 
 ### 2. 编译优化

@@ -7,6 +7,15 @@
 //! >
 //! > `openlark-client` 保留为高级入口：适合只想复用统一客户端层，或明确需要直接控制客户端 feature 组合的场景。
 //!
+//! Canonical 公开入口约定：
+//!
+//! - 运行时入口优先使用 [`Client`] / [`ClientBuilder`]
+//! - 导入优先使用 `openlark_client::prelude::*`
+//! - 业务调用优先从 `client.<domain>` 字段链开始
+//! - `ServiceRegistry`、`FeatureLoader`、traits 等顶层导出属于高级客户端层能力，不是普通用户默认入口
+//!
+//! 也就是说：如果你不需要这些高级能力，优先回到根 crate `openlark`。
+//!
 //! ## 核心特性
 //!
 //! - **🎯 Feature-driven**: 基于编译时功能标志的模块化设计
@@ -311,7 +320,8 @@ pub use traits::{LarkClient, ServiceLifecycle};
 #[cfg(feature = "cardkit")]
 pub use openlark_cardkit::CardkitClient;
 
-// Docs / Communication / Meeting meta 调用链入口（字段链式）
+// 顶层 meta client 类型保留在 `openlark-client` 作为高级入口；
+// 普通 SDK 使用者若只是接入业务能力，优先依赖根 crate `openlark`。
 #[cfg(feature = "auth")]
 pub use client::AuthClient;
 
@@ -361,6 +371,10 @@ pub type SDKResult<T> = openlark_core::SDKResult<T>;
 ///     Ok(())
 /// }
 /// ```
+///
+/// 说明：
+/// - `openlark_client::prelude` 面向直接依赖客户端层的高级调用方
+/// - 根 crate `open_lark::prelude` 则保持更小、更稳定的入口面
 pub mod prelude {
     // ============================================================================
     // 核心客户端类型
@@ -408,15 +422,18 @@ pub mod prelude {
     // ============================================================================
 
     // 服务特征
+    #[doc(hidden)]
     pub use crate::traits::{LarkClient, ServiceLifecycle, ServiceTrait};
 
     // 服务注册
+    #[doc(hidden)]
     pub use crate::ServiceRegistry;
 
     // ============================================================================
     // 功能管理
     // ============================================================================
 
+    #[doc(hidden)]
     pub use crate::FeatureLoader;
 
     // meta 风格链式入口（字段链式）
