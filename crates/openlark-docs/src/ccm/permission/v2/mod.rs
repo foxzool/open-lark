@@ -8,6 +8,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 
@@ -34,6 +35,102 @@ impl ApiResponseTrait for GetPublicPermissionResponse {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct CheckMemberPermissionRequest {
+    config: Config,
+    params: CheckMemberPermissionParams,
+}
+
+impl CheckMemberPermissionRequest {
+    pub fn new(config: Config, params: CheckMemberPermissionParams) -> Self {
+        Self { config, params }
+    }
+
+    pub async fn execute(self) -> SDKResult<CheckMemberPermissionResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<CheckMemberPermissionResponse> {
+        validate_required!(self.params.obj_token.trim(), "文件Token不能为空");
+        validate_required!(self.params.permission.trim(), "权限类型不能为空");
+
+        let api_endpoint = PermissionApiOld::MemberPermitted;
+        let api_request: ApiRequest<CheckMemberPermissionResponse> =
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(serialize_params(&self.params, "检查成员权限")?);
+
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "检查成员权限")
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct TransferOwnerRequest {
+    config: Config,
+    params: TransferOwnerParams,
+}
+
+impl TransferOwnerRequest {
+    pub fn new(config: Config, params: TransferOwnerParams) -> Self {
+        Self { config, params }
+    }
+
+    pub async fn execute(self) -> SDKResult<TransferOwnerResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<TransferOwnerResponse> {
+        validate_required!(self.params.obj_token.trim(), "文件Token不能为空");
+        validate_required!(self.params.member_id.trim(), "新拥有者用户ID不能为空");
+        validate_required!(self.params.member_id_type.trim(), "用户ID类型不能为空");
+
+        let api_endpoint = PermissionApiOld::MemberTransfer;
+        let api_request: ApiRequest<TransferOwnerResponse> =
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(serialize_params(&self.params, "转移拥有者")?);
+
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "转移拥有者")
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct GetPublicPermissionRequest {
+    config: Config,
+    params: GetPublicPermissionParams,
+}
+
+impl GetPublicPermissionRequest {
+    pub fn new(config: Config, params: GetPublicPermissionParams) -> Self {
+        Self { config, params }
+    }
+
+    pub async fn execute(self) -> SDKResult<GetPublicPermissionResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        option: RequestOption,
+    ) -> SDKResult<GetPublicPermissionResponse> {
+        validate_required!(self.params.obj_token.trim(), "文件Token不能为空");
+
+        let api_endpoint = PermissionApiOld::Public;
+        let api_request: ApiRequest<GetPublicPermissionResponse> =
+            ApiRequest::post(&api_endpoint.to_url())
+                .body(serialize_params(&self.params, "获取公开权限设置")?);
+
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
+        extract_response_data(response, "获取公开权限设置")
+    }
+}
+
 /// 判断协作者是否有某权限
 ///
 /// 根据filetoken判断当前登录用户是否具有某权限。
@@ -43,20 +140,9 @@ pub async fn check_member_permission(
     config: &Config,
     params: CheckMemberPermissionParams,
 ) -> SDKResult<CheckMemberPermissionResponse> {
-    // 验证必填字段
-    validate_required!(params.obj_token.trim(), "文件Token不能为空");
-    validate_required!(params.permission, "权限类型不能为空");
-
-    // 使用enum+builder系统生成API端点
-    let api_endpoint = PermissionApiOld::MemberPermitted;
-
-    // 创建API请求
-    let api_request: ApiRequest<CheckMemberPermissionResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "检查成员权限")?);
-
-    // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
-    extract_response_data(response, "检查成员权限")
+    CheckMemberPermissionRequest::new(config.clone(), params)
+        .execute()
+        .await
 }
 
 /// 转移拥有者
@@ -68,21 +154,9 @@ pub async fn transfer_owner(
     config: &Config,
     params: TransferOwnerParams,
 ) -> SDKResult<TransferOwnerResponse> {
-    // 验证必填字段
-    validate_required!(params.obj_token.trim(), "文件Token不能为空");
-    validate_required!(params.member_id.trim(), "新拥有者用户ID不能为空");
-    validate_required!(params.member_id_type.trim(), "用户ID类型不能为空");
-
-    // 使用enum+builder系统生成API端点
-    let api_endpoint = PermissionApiOld::MemberTransfer;
-
-    // 创建API请求
-    let api_request: ApiRequest<TransferOwnerResponse> =
-        ApiRequest::post(&api_endpoint.to_url()).body(serialize_params(&params, "转移拥有者")?);
-
-    // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
-    extract_response_data(response, "转移拥有者")
+    TransferOwnerRequest::new(config.clone(), params)
+        .execute()
+        .await
 }
 
 /// 获取云文档权限设置V2
@@ -94,20 +168,9 @@ pub async fn get_public_permission(
     config: &Config,
     params: GetPublicPermissionParams,
 ) -> SDKResult<GetPublicPermissionResponse> {
-    // 验证必填字段
-    validate_required!(params.obj_token.trim(), "文件Token不能为空");
-
-    // 使用enum+builder系统生成API端点
-    let api_endpoint = PermissionApiOld::Public;
-
-    // 创建API请求
-    let api_request: ApiRequest<GetPublicPermissionResponse> =
-        ApiRequest::post(&api_endpoint.to_url())
-            .body(serialize_params(&params, "获取公开权限设置")?);
-
-    // 发送请求并提取响应数据
-    let response = Transport::request(api_request, config, None).await?;
-    extract_response_data(response, "获取公开权限设置")
+    GetPublicPermissionRequest::new(config.clone(), params)
+        .execute()
+        .await
 }
 
 // API函数已经在模块中定义，不需要重复导出
