@@ -184,7 +184,7 @@ release VERSION:
   @echo "  2. Create a GitHub release"
   @echo "  3. Publish to crates.io"
   @echo ""
-  @echo "ℹ️  Monitor progress at: https://github.com/foxzool/open-lark/actions"
+  @echo "ℹ️  Monitor progress at: https://github.com/foxzool/openlark/actions"
   @echo ""
   @echo "🚀 Release process initiated successfully!"
 
