@@ -1,5 +1,17 @@
 # Open-Lark 架构设计文档
 
+> ⚠️ **免责声明：架构设计文档状态说明"
+> 
+> 本文档包含两部分内容：
+> - **✅ 当前已实现架构**：核心业务模块、API调用模式、错误处理系统、服务生命周期管理等已落地的实现
+> - **🚧 规划中的高级设计**：熔断器、部分可观测性组件、智能重试中间件等高级特性（标记为「规划中」）
+> 
+> **重要提示**：
+> - 规划中描述的设计模式**尚未在代码库中完全实现**
+> - 断路器(CircuitBreaker)、ApiEndpoint trait 等组件目前为设计概念
+> - 实际开发时请以各 crate 的最新源码和 API 文档为准
+> - 功能实现状态详见下文「📋 重要说明」章节
+
 ## 项目概览
 
 **Open-Lark** 是为飞书开放平台构建的高覆盖率 Rust SDK，提供对 1,688+ 个 API 的类型安全访问。本文档描述了重构后的模块化架构设计。
@@ -16,11 +28,41 @@
 
 ### 📋 重要说明
 
-**本文档中的代码示例性质**：
-- 文档中所有代码示例均基于当前架构设计的**概念性实现**
-- 部分API调用方法可能需要根据实际开发进度进行调整
-- 示例代码主要用于说明架构设计模式和最佳实践
-- 实际使用时请参考对应模块的最新API文档和实现
+#### 文档内容分级
+
+本文档中的设计和代码示例分为三个级别：
+
+**🟢 当前已实现（生产可用）**
+- ✅ 模块化架构：18个业务 crate，1,560+ API 实现
+- ✅ Builder 模式 API 调用
+- ✅ CoreError 企业级错误处理系统
+- ✅ 基于 thiserror 的类型安全错误体系
+- ✅ 功能标志(Feature flags)按需编译
+- ✅ HTTP 客户端和基础认证管理
+- ✅ 请求/响应序列化和基础验证
+- ✅ ServiceLifecycle trait（服务生命周期管理：`crates/openlark-client/src/traits/service.rs`）
+- ✅ RetryPolicy（重试策略配置：`crates/openlark-core/src/error/core.rs`）
+- ✅ 基础可观测性（OperationTracker/HttpTracker：`crates/openlark-core/src/observability.rs`）
+
+**🟡 部分实现/命名差异**
+- 🔄 智能重试：文档描述的 RetryMiddleware（中间件模式）→ 实际实现为 RetryPolicy（策略配置模式）
+- 🔄 可观测性栈：文档描述的 ErrorMonitor/MetricsCollector/AlertManager → 实际实现为基础 Tracker 组件（OperationTracker/HttpTracker/ResponseTracker）
+- 🔄 中间件系统：基础结构存在，完整的中间件链系统待完善
+
+**🚧 规划中/设计概念（尚未实现）**
+- 🚧 CircuitBreaker / CircuitBreakerState（熔断器模式）
+- 🚧 ApiEndpoint trait（Enum+Builder API Endpoint 系统）
+- 🚧 GracefulShutdownManager（优雅关闭管理）
+- 🚧 TokenBucketRateLimiter（令牌桶限流器）
+- 🚧 动态服务发现和热加载机制
+- 🚧 完整的指标收集和告警系统（MetricsCollector/AlertManager）
+- 🚧 性能剖析系统
+#### 代码示例说明
+
+- 文档中所有代码示例均基于**当前架构设计的目标形态**
+- 部分 API 调用方法可能需要根据实际开发进度进行调整
+- 示例代码主要用于说明**架构设计模式**和**最佳实践**
+- 实际使用时请参考对应模块的最新 API 文档和实现
 - 建议结合实际代码库中的示例和测试用例进行开发
 
 ### 架构目标
