@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 
 use super::models::{CalendarByScopeRequestBody, CalendarByScopeResponse};
@@ -84,12 +84,28 @@ impl CalendarByScopeRequest {
     ) -> SDKResult<CalendarByScopeResponse> {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
-        // 1. 验证必填字段（至少提供一个查询条件）
-        let has_condition = self.employee_ids.is_some()
-            || self.department_id.is_some()
-            || self.user_ids.is_some()
-            || self.start_date.is_some()
-            || self.end_date.is_some();
+        let mut has_condition = false;
+
+        if let Some(employee_ids) = self.employee_ids.as_ref() {
+            validate_required!(employee_ids, "employee_ids");
+            has_condition = true;
+        }
+        if let Some(department_id) = self.department_id.as_ref() {
+            validate_required!(department_id.trim(), "department_id");
+            has_condition = true;
+        }
+        if let Some(user_ids) = self.user_ids.as_ref() {
+            validate_required!(user_ids, "user_ids");
+            has_condition = true;
+        }
+        if let Some(start_date) = self.start_date.as_ref() {
+            validate_required!(start_date.trim(), "start_date");
+            has_condition = true;
+        }
+        if let Some(end_date) = self.end_date.as_ref() {
+            validate_required!(end_date.trim(), "end_date");
+            has_condition = true;
+        }
 
         if !has_condition {
             return Err(openlark_core::error::validation_error(

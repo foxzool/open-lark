@@ -47,6 +47,16 @@ impl ListRequest {
         self
     }
 
+    fn validate(&self) -> SDKResult<()> {
+        if self.effective_date <= 0 {
+            return Err(openlark_core::error::validation_error(
+                "effective_date 无效",
+                "effective_date 必须为正整数时间戳",
+            ));
+        }
+        Ok(())
+    }
+
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ListResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
@@ -60,11 +70,13 @@ impl ListRequest {
     ) -> SDKResult<ListResponse> {
         use crate::common::api_endpoints::CompensationApiV1;
 
-        // 1. 构建端点
+        self.validate()?;
+
+        // 2. 构建端点
         let api_endpoint = CompensationApiV1::SocialPlanList;
         let mut request = ApiRequest::<ListResponse>::get(api_endpoint.to_url());
 
-        // 2. 添加查询参数
+        // 3. 添加查询参数
         request = request.query("effective_date", self.effective_date.to_string());
         if let Some(page_size) = self.page_size {
             request = request.query("page_size", page_size.to_string());
@@ -73,10 +85,10 @@ impl ListRequest {
             request = request.query("page_token", page_token);
         }
 
-        // 3. 发送请求
+        // 4. 发送请求
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
-        // 4. 提取响应数据
+        // 5. 提取响应数据
         response.data.ok_or_else(|| {
             openlark_core::error::validation_error(
                 "查询参保方案响应数据为空",

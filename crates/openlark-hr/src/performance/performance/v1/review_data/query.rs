@@ -2,6 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/performance-v1/review_data/query
 
+use openlark_core::validate_required;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -67,6 +68,8 @@ impl QueryRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
+        validate_required!(self.cycle_id.trim(), "cycle_id");
+
         let mut request =
             ApiRequest::<QueryResponse>::post("/open-apis/performance/v1/review_datas/query");
 

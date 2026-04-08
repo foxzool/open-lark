@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -48,6 +48,15 @@ impl UploadRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<UploadResponse> {
         use crate::common::api_endpoints::OkrApiV1;
+
+        if !(1..=2).contains(&self.image_type) {
+            return Err(openlark_core::error::validation_error(
+                "image_type 无效",
+                "image_type 必须为 1 或 2",
+            ));
+        }
+        validate_required!(self.image_name.trim(), "image_name");
+        validate_required!(self.image_content.trim(), "image_content");
 
         // 1. 构建端点
         let api_endpoint = OkrApiV1::ImageUpload;

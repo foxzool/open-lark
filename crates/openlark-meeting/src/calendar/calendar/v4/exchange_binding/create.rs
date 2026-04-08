@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/exchange_binding/create
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+};
 
 use crate::{
     common::api_endpoints::CalendarApiV4,
@@ -25,11 +27,20 @@ impl CreateExchangeBindingRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/exchange_binding/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, RequestOption::default())
+            .await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         let api_endpoint = CalendarApiV4::ExchangeBindingCreate;
         let req: ApiRequest<serde_json::Value> = ApiRequest::post(api_endpoint.to_url())
             .body(serialize_params(&body, "将 Exchange 账户绑定到飞书账户")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "将 Exchange 账户绑定到飞书账户")
     }
 }
