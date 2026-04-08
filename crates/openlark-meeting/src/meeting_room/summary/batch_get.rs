@@ -25,7 +25,8 @@ impl BatchGetSummaryRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/meeting-room-event/
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
-        self.execute_with_options(body, RequestOption::default()).await
+        self.execute_with_options(body, RequestOption::default())
+            .await
     }
 
     pub async fn execute_with_options(
