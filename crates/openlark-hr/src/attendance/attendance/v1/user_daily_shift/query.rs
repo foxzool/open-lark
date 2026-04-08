@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -70,6 +70,28 @@ impl QueryRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
         use crate::common::api_endpoints::AttendanceApiV1;
+
+        if self.start_date <= 0 {
+            return Err(openlark_core::error::validation_error(
+                "start_date 无效",
+                "start_date 必须为正整数时间戳",
+            ));
+        }
+        if self.end_date <= 0 {
+            return Err(openlark_core::error::validation_error(
+                "end_date 无效",
+                "end_date 必须为正整数时间戳",
+            ));
+        }
+        if self.end_date < self.start_date {
+            return Err(openlark_core::error::validation_error(
+                "时间范围无效",
+                "end_date 不能早于 start_date",
+            ));
+        }
+        if let Some(user_ids) = self.user_ids.as_ref() {
+            validate_required!(user_ids, "user_ids");
+        }
 
         // 1. 构建端点
         let api_endpoint = AttendanceApiV1::UserDailyShiftQuery;

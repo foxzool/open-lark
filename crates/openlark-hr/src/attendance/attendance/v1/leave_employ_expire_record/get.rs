@@ -49,6 +49,28 @@ impl GetRequest {
         self
     }
 
+    fn validate(&self) -> SDKResult<()> {
+        if self.expire_time_start <= 0 {
+            return Err(openlark_core::error::validation_error(
+                "expire_time_start 无效",
+                "expire_time_start 必须为正整数时间戳",
+            ));
+        }
+        if self.expire_time_end <= 0 {
+            return Err(openlark_core::error::validation_error(
+                "expire_time_end 无效",
+                "expire_time_end 必须为正整数时间戳",
+            ));
+        }
+        if self.expire_time_end < self.expire_time_start {
+            return Err(openlark_core::error::validation_error(
+                "时间范围无效",
+                "expire_time_end 不能早于 expire_time_start",
+            ));
+        }
+        Ok(())
+    }
+
     /// 执行请求
     pub async fn execute(self) -> SDKResult<GetResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
@@ -61,6 +83,8 @@ impl GetRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
         use crate::common::api_endpoints::AttendanceApiV1;
+
+        self.validate()?;
 
         // 1. 构建端点
         let record_key = format!("{}-{}", self.expire_time_start, self.expire_time_end);
