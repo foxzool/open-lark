@@ -431,4 +431,4 @@ cargo test -- --list
 
 ---
 
-**问题反馈**：如果遇到问题，请在 [GitHub Issues](https://github.com/foxzool/open-lark/issues) 提交。
+**问题反馈**：如果遇到问题，请在 [GitHub Issues](https://github.com/foxzool/openlark/issues) 提交。
