@@ -33,6 +33,14 @@ impl SubscriptionCalendarEventRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/subscription
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<serde_json::Value> {
+        self.execute_with_options(body, RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
         validate_required!(self.calendar_id, "calendar_id 不能为空");
 
         // url: POST:/open-apis/calendar/v4/calendars/:calendar_id/events/subscription
@@ -42,7 +50,7 @@ impl SubscriptionCalendarEventRequest {
         ))
         .body(serialize_params(&body, "订阅日程变更事件")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "订阅日程变更事件")
     }
 }
