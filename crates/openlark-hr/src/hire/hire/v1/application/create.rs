@@ -36,7 +36,10 @@ impl CreateRequest {
 
     fn validate(&self) -> SDKResult<()> {
         if self.request_body.is_null()
-            || self.request_body.as_object().is_some_and(|obj| obj.is_empty())
+            || self
+                .request_body
+                .as_object()
+                .is_some_and(|obj| obj.is_empty())
         {
             return Err(openlark_core::error::validation_error(
                 "请求体不能为空",
