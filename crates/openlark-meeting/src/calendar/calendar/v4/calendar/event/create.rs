@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -53,13 +54,21 @@ impl CreateCalendarEventRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/create
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<CreateCalendarEventResponse> {
+        self.execute_with_options(body, RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(
+        self,
+        body: serde_json::Value,
+        option: RequestOption,
+    ) -> SDKResult<CreateCalendarEventResponse> {
         validate_required!(self.calendar_id, "calendar_id 不能为空");
 
         let url = CALENDAR_V4_EVENT_CREATE.replace("{calendar_id}", &self.calendar_id);
         let req: ApiRequest<CreateCalendarEventResponse> =
             ApiRequest::post(&url).body(serialize_params(&body, "创建日程")?);
 
-        let resp = Transport::request(req, &self.config, None).await?;
+        let resp = Transport::request(req, &self.config, Some(option)).await?;
         extract_response_data(resp, "创建日程")
     }
 }
