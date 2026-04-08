@@ -34,6 +34,18 @@ impl CreateRequest {
         self
     }
 
+    fn validate(&self) -> SDKResult<()> {
+        if self.request_body.is_null()
+            || self.request_body.as_object().is_some_and(|obj| obj.is_empty())
+        {
+            return Err(openlark_core::error::validation_error(
+                "请求体不能为空",
+                "创建投递时 request_body 为必填参数",
+            ));
+        }
+        Ok(())
+    }
+
     /// 执行请求
     pub async fn execute(self) -> SDKResult<CreateResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
@@ -46,12 +58,7 @@ impl CreateRequest {
     ) -> SDKResult<CreateResponse> {
         use crate::common::api_endpoints::HireApiV1;
 
-        if self.request_body.is_null() {
-            return Err(openlark_core::error::validation_error(
-                "请求体不能为空",
-                "创建投递时 request_body 为必填参数",
-            ));
-        }
+        self.validate()?;
 
         let api_endpoint = HireApiV1::ApplicationCreate;
         let request =
