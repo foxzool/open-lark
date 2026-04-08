@@ -8,6 +8,7 @@ use openlark_core::{
     http::Transport,
     SDKResult,
 };
+use openlark_core::validate_required;
 use serde::{Deserialize, Serialize};
 
 /// 获取绩效详情数据请求
@@ -68,6 +69,8 @@ impl QueryRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
         use crate::common::api_endpoints::PerformanceApiV1;
+
+        validate_required!(self.cycle_id.trim(), "cycle_id");
 
         // 1. 构建端点
         let api_endpoint = PerformanceApiV1::ReviewDataQuery;

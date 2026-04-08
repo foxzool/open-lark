@@ -8,6 +8,7 @@ use openlark_core::{
     http::Transport,
     SDKResult,
 };
+use openlark_core::validate_required;
 use serde::{Deserialize, Serialize};
 
 /// 批量查询补充信息请求
@@ -50,6 +51,9 @@ impl QueryRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
         use crate::common::api_endpoints::PerformanceApiV1;
+
+        validate_required!(self.cycle_id.trim(), "cycle_id");
+        validate_required!(self.user_ids, "user_ids");
 
         // 1. 构建端点
         let api_endpoint = PerformanceApiV1::AdditionalInformationQuery;
