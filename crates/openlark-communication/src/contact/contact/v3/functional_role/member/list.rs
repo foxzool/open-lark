@@ -2,7 +2,9 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/functional_role-member/list
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{
+    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+};
 
 use crate::{
     common::api_utils::extract_response_data,
@@ -86,6 +88,8 @@ impl ListRoleMembersRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListMembersResponse> {
+        validate_required!(self.role_id.trim(), "role_id 不能为空");
+
         let mut req: ApiRequest<ListMembersResponse> = ApiRequest::get(format!(
             "{}/{}/members",
             CONTACT_V3_FUNCTIONAL_ROLES, self.role_id
