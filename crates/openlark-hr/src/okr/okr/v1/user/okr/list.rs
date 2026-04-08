@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -66,6 +66,8 @@ impl ListRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResponse> {
+        validate_required!(self.user_id.trim(), "user_id");
+
         let mut request = ApiRequest::<ListResponse>::get(format!(
             "/open-apis/okr/v1/users/{}/okrs",
             self.user_id
