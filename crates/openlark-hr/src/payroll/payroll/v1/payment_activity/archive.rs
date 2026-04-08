@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -40,6 +40,8 @@ impl ArchiveRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ArchiveResponse> {
         use crate::common::api_endpoints::PayrollApiV1;
+
+        validate_required!(self.activity_id.trim(), "activity_id");
 
         // 1. 构建端点
         let api_endpoint = PayrollApiV1::PaymentActivityArchive(self.activity_id.clone());
