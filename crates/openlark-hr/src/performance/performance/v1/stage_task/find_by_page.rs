@@ -8,6 +8,7 @@ use openlark_core::{
     http::Transport,
     SDKResult,
 };
+use openlark_core::validate_required;
 use serde::{Deserialize, Serialize};
 
 /// 获取周期任务（全部用户）请求
@@ -59,6 +60,8 @@ impl FindByPageRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<FindByPageResponse> {
         use crate::common::api_endpoints::PerformanceApiV1;
+
+        validate_required!(self.cycle_id.trim(), "cycle_id");
 
         // 1. 构建端点
         let api_endpoint = PerformanceApiV1::StageTaskFindByPage;

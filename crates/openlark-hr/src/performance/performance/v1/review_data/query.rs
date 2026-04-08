@@ -8,6 +8,7 @@ use openlark_core::{
     http::Transport,
     SDKResult,
 };
+use openlark_core::validate_required;
 use serde::{Deserialize, Serialize};
 
 /// 获取绩效结果请求
@@ -67,6 +68,8 @@ impl QueryRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
+        validate_required!(self.cycle_id.trim(), "cycle_id");
+
         let mut request =
             ApiRequest::<QueryResponse>::post("/open-apis/performance/v1/review_datas/query");
 
