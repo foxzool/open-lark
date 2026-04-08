@@ -2,6 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/performance-v1/stage_task/find_by_page
 
+use openlark_core::validate_required;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -59,6 +60,8 @@ impl FindByPageRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<FindByPageResponse> {
         use crate::common::api_endpoints::PerformanceApiV1;
+
+        validate_required!(self.cycle_id.trim(), "cycle_id");
 
         // 1. 构建端点
         let api_endpoint = PerformanceApiV1::StageTaskFindByPage;

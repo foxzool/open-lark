@@ -2,6 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/performance-v1/stage_task/find_by_user_list
 
+use openlark_core::validate_required;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -50,6 +51,9 @@ impl FindByUserListRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<FindByUserListResponse> {
         use crate::common::api_endpoints::PerformanceApiV1;
+
+        validate_required!(self.cycle_id.trim(), "cycle_id");
+        validate_required!(self.user_ids, "user_ids");
 
         // 1. 构建端点
         let api_endpoint = PerformanceApiV1::StageTaskFindByUserList;

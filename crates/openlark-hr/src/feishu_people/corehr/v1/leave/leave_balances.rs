@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 
 use super::models::{LeaveBalancesRequestBody, LeaveBalancesResponse};
@@ -84,8 +84,15 @@ impl LeaveBalancesRequest {
     ) -> SDKResult<LeaveBalancesResponse> {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
-        // 1. 验证必填字段（至少提供一个查询条件）
-        let has_condition = self.employee_ids.is_some() || self.department_id.is_some();
+        let mut has_condition = false;
+        if let Some(employee_ids) = self.employee_ids.as_ref() {
+            validate_required!(employee_ids, "employee_ids");
+            has_condition = true;
+        }
+        if let Some(department_id) = self.department_id.as_ref() {
+            validate_required!(department_id.trim(), "department_id");
+            has_condition = true;
+        }
         if !has_condition {
             return Err(openlark_core::error::validation_error(
                 "查询条件不能为空",

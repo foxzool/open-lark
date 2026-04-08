@@ -6,7 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
+    validate_required, SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -46,6 +46,14 @@ impl PatchRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<PatchResponse> {
         use crate::common::api_endpoints::OkrApiV1;
+
+        validate_required!(self.period_id.trim(), "period_id");
+        if !(1..=3).contains(&self.status) {
+            return Err(openlark_core::error::validation_error(
+                "status 无效",
+                "status 必须为 1、2 或 3",
+            ));
+        }
 
         // 1. 构建端点
         let api_endpoint = OkrApiV1::PeriodPatch(self.period_id.clone());

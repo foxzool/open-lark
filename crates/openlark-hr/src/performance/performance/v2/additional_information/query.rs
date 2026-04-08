@@ -2,6 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/performance-v2/additional_information/query
 
+use openlark_core::validate_required;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -50,6 +51,9 @@ impl QueryRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<QueryResponse> {
         use crate::common::api_endpoints::PerformanceApiV1;
+
+        validate_required!(self.cycle_id.trim(), "cycle_id");
+        validate_required!(self.user_ids, "user_ids");
 
         // 1. 构建端点
         let api_endpoint = PerformanceApiV1::AdditionalInformationQuery;

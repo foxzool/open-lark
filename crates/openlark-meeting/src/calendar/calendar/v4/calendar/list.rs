@@ -6,6 +6,7 @@ use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
+    req_option::RequestOption,
     SDKResult,
 };
 
@@ -83,6 +84,10 @@ impl ListCalendarRequest {
     ///
     /// docPath: https://open.feishu.cn/document/server-docs/calendar-v4/calendar/list-2
     pub async fn execute(self) -> SDKResult<ListCalendarResponse> {
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListCalendarResponse> {
         let mut api_request: ApiRequest<ListCalendarResponse> =
             ApiRequest::get(CALENDAR_V4_CALENDARS);
 
@@ -90,7 +95,7 @@ impl ListCalendarRequest {
             api_request = api_request.query(key, value);
         }
 
-        let response = Transport::request(api_request, &self.config, None).await?;
+        let response = Transport::request(api_request, &self.config, Some(option)).await?;
         extract_response_data(response, "查询日历列表")
     }
 }

@@ -84,6 +84,14 @@ impl CreateRequest {
         self.hire_date = Some(hire_date);
         self
     }
+
+    fn validate(&self) -> SDKResult<()> {
+        validate_required!(
+            self.name.as_deref().unwrap_or_default().trim(),
+            "员工姓名不能为空"
+        );
+        Ok(())
+    }
 }
 
 /// 添加人员响应
@@ -183,8 +191,7 @@ impl CreateRequestBuilder {
         use crate::common::api_endpoints::FeishuPeopleApiV2;
 
         // 验证必填字段
-        let name = self.request.name.clone().unwrap_or_default();
-        validate_required!(name.trim(), "员工姓名不能为空");
+        self.request.validate()?;
 
         // 构建端点
         let api_endpoint = FeishuPeopleApiV2::EmployeeCreate;
