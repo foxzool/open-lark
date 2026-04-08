@@ -2,13 +2,13 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/performance-v2/metric_detail/query
 
+use openlark_core::validate_required;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-use openlark_core::validate_required;
 use serde::{Deserialize, Serialize};
 
 /// 获取被评估人关键指标结果请求
