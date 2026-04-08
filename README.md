@@ -21,6 +21,8 @@ Canonical public API 入口已经冻结：
 
 详细规则见 [`docs/PUBLIC_REEXPORT_POLICY.md`](docs/PUBLIC_REEXPORT_POLICY.md)。
 
+Request / Builder / execute 统一规范见 [`docs/REQUEST_BUILDER_EXECUTE_STANDARD.md`](docs/REQUEST_BUILDER_EXECUTE_STANDARD.md)。
+
 ### 1. 添加依赖
 
 在您的 `Cargo.toml` 中添加：
