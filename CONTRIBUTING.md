@@ -31,7 +31,7 @@
 ### 1. 环境准备
 ```bash
 # 克隆项目
-git clone https://github.com/foxzool/open-lark.git
+git clone https://github.com/foxzool/openlark.git
 cd open-lark
 
 # 安装依赖
@@ -376,8 +376,8 @@ pub fn your_function() {}
 ## 📞 获取帮助
 
 ### 🔗 联系方式
-- **GitHub Issues**: [提出问题](https://github.com/foxzool/open-lark/issues)
-- **GitHub Discussions**: [社区讨论](https://github.com/foxzool/open-lark/discussions)
+- **GitHub Issues**: [提出问题](https://github.com/foxzool/openlark/issues)
+- **GitHub Discussions**: [社区讨论](https://github.com/foxzool/openlark/discussions)
 - **Discord社区**: [实时交流](#)
 - **邮件联系**: 重要事项可发送邮件
 
