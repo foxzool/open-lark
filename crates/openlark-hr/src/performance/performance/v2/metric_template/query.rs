@@ -2,13 +2,13 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/performance-v2/metric_template/query
 
+use openlark_core::validate_required;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     SDKResult,
 };
-use openlark_core::validate_required;
 use serde::{Deserialize, Serialize};
 
 /// 获取指标模板列表请求
