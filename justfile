@@ -23,6 +23,11 @@ build:
   @echo "🔨 Building project..."
   cargo build --workspace --all-features
 
+# Issue #41 guardrail
+issue41-guardrail:
+  @echo "🛡️ Running issue #41 guardrail..."
+  python3 tools/issue41_guardrail.py
+
 # Build release
 build-release:
   @echo "🚀 Building release..."
