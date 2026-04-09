@@ -311,19 +311,18 @@ docs-full = [
 ]
 
 # 人力资源
-hr = ["dep:openlark-hr", "openlark-client/hr"]
-workflow = ["dep:openlark-workflow"]
+hr = ["auth", "dep:openlark-hr", "openlark-client/hr"]
+workflow = ["auth", "dep:openlark-workflow", "openlark-client/workflow"]
+platform = ["auth", "dep:openlark-platform", "openlark-client/platform"]
+application = ["auth", "dep:openlark-application", "openlark-client/application"]
+helpdesk = ["auth", "dep:openlark-helpdesk", "openlark-client/helpdesk"]
+mail = ["auth", "dep:openlark-mail", "openlark-client/mail"]
+analytics = ["auth", "dep:openlark-analytics", "openlark-client/analytics"]
+user = ["auth", "dep:openlark-user", "openlark-client/user"]
 
 # === 高级服务模块 (Advanced Services) ===
-ai = ["dep:openlark-ai", "openlark-client/ai"]
+ai = ["auth", "dep:openlark-ai", "openlark-client/ai"]
 meeting = ["auth", "dep:openlark-meeting", "openlark-client/meeting"]
-helpdesk = ["dep:openlark-helpdesk"]
-mail = ["dep:openlark-mail"]
-application = ["dep:openlark-application"]
-platform = ["dep:openlark-platform"]
-analytics = ["dep:openlark-analytics"]
-user = ["dep:openlark-user"]
-
 # === 推荐功能组合 (Recommended Feature Sets) ===
 # 核心业务功能
 essential = ["auth", "communication", "docs"]
