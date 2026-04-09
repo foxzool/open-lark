@@ -13,7 +13,14 @@
     feature = "meeting",
     feature = "security",
     feature = "hr",
-    feature = "ai"
+    feature = "ai",
+    feature = "workflow",
+    feature = "platform",
+    feature = "application",
+    feature = "helpdesk",
+    feature = "mail",
+    feature = "analytics",
+    feature = "user"
 ))]
 use super::ServiceStatus;
 use super::{DefaultServiceRegistry, ServiceMetadata, ServiceRegistry};
@@ -44,6 +51,27 @@ pub(crate) fn register_compiled_services(registry: &mut DefaultServiceRegistry) 
 
     #[cfg(feature = "ai")]
     register_ai(registry)?;
+
+    #[cfg(feature = "workflow")]
+    register_workflow(registry)?;
+
+    #[cfg(feature = "platform")]
+    register_platform(registry)?;
+
+    #[cfg(feature = "application")]
+    register_application(registry)?;
+
+    #[cfg(feature = "helpdesk")]
+    register_helpdesk(registry)?;
+
+    #[cfg(feature = "mail")]
+    register_mail(registry)?;
+
+    #[cfg(feature = "analytics")]
+    register_analytics(registry)?;
+
+    #[cfg(feature = "user")]
+    register_user(registry)?;
 
     Ok(())
 }
@@ -169,6 +197,116 @@ fn register_hr(registry: &mut DefaultServiceRegistry) -> Result<()> {
 }
 
 #[cfg(feature = "ai")]
+fn register_ai(registry: &mut DefaultServiceRegistry) -> Result<()> {
+    let metadata = ServiceMetadata {
+        name: "ai".to_string(),
+        version: "1.0.0".to_string(),
+        description: Some("飞书AI服务，提供智能助手、AI分析等功能".to_string()),
+        dependencies: vec!["auth".to_string(), "communication".to_string()],
+        provides: vec!["chatbot".to_string(), "smart-analysis".to_string()],
+        status: ServiceStatus::Uninitialized,
+        priority: 4,
+    };
+    register(registry, metadata)
+}
+
+#[cfg(feature = "workflow")]
+fn register_workflow(registry: &mut DefaultServiceRegistry) -> Result<()> {
+    let metadata = ServiceMetadata {
+        name: "workflow".to_string(),
+        version: "1.0.0".to_string(),
+        description: Some("飞书工作流服务，提供审批、任务、看板等功能".to_string()),
+        dependencies: vec!["auth".to_string()],
+        provides: vec!["approval".to_string(), "task".to_string(), "board".to_string()],
+        status: ServiceStatus::Uninitialized,
+        priority: 4,
+    };
+    register(registry, metadata)
+}
+
+#[cfg(feature = "platform")]
+fn register_platform(registry: &mut DefaultServiceRegistry) -> Result<()> {
+    let metadata = ServiceMetadata {
+        name: "platform".to_string(),
+        version: "1.0.0".to_string(),
+        description: Some("飞书平台服务，提供应用平台相关功能".to_string()),
+        dependencies: vec!["auth".to_string()],
+        provides: vec!["app-platform".to_string()],
+        status: ServiceStatus::Uninitialized,
+        priority: 4,
+    };
+    register(registry, metadata)
+}
+
+#[cfg(feature = "application")]
+fn register_application(registry: &mut DefaultServiceRegistry) -> Result<()> {
+    let metadata = ServiceMetadata {
+        name: "application".to_string(),
+        version: "1.0.0".to_string(),
+        description: Some("飞书应用服务，提供应用管理相关功能".to_string()),
+        dependencies: vec!["auth".to_string()],
+        provides: vec!["app-management".to_string()],
+        status: ServiceStatus::Uninitialized,
+        priority: 4,
+    };
+    register(registry, metadata)
+}
+
+#[cfg(feature = "helpdesk")]
+fn register_helpdesk(registry: &mut DefaultServiceRegistry) -> Result<()> {
+    let metadata = ServiceMetadata {
+        name: "helpdesk".to_string(),
+        version: "1.0.0".to_string(),
+        description: Some("飞书帮助台服务，提供工单管理相关功能".to_string()),
+        dependencies: vec!["auth".to_string()],
+        provides: vec!["ticket".to_string()],
+        status: ServiceStatus::Uninitialized,
+        priority: 4,
+    };
+    register(registry, metadata)
+}
+
+#[cfg(feature = "mail")]
+fn register_mail(registry: &mut DefaultServiceRegistry) -> Result<()> {
+    let metadata = ServiceMetadata {
+        name: "mail".to_string(),
+        version: "1.0.0".to_string(),
+        description: Some("飞书邮件服务，提供邮件相关功能".to_string()),
+        dependencies: vec!["auth".to_string()],
+        provides: vec!["email".to_string()],
+        status: ServiceStatus::Uninitialized,
+        priority: 4,
+    };
+    register(registry, metadata)
+}
+
+#[cfg(feature = "analytics")]
+fn register_analytics(registry: &mut DefaultServiceRegistry) -> Result<()> {
+    let metadata = ServiceMetadata {
+        name: "analytics".to_string(),
+        version: "1.0.0".to_string(),
+        description: Some("飞书分析服务，提供数据分析相关功能".to_string()),
+        dependencies: vec!["auth".to_string()],
+        provides: vec!["report".to_string()],
+        status: ServiceStatus::Uninitialized,
+        priority: 4,
+    };
+    register(registry, metadata)
+}
+
+#[cfg(feature = "user")]
+fn register_user(registry: &mut DefaultServiceRegistry) -> Result<()> {
+    let metadata = ServiceMetadata {
+        name: "user".to_string(),
+        version: "1.0.0".to_string(),
+        description: Some("飞书用户服务，提供用户设置相关功能".to_string()),
+        dependencies: vec!["auth".to_string()],
+        provides: vec!["settings".to_string()],
+        status: ServiceStatus::Uninitialized,
+        priority: 4,
+    };
+    register(registry, metadata)
+}
 fn register_ai(registry: &mut DefaultServiceRegistry) -> Result<()> {
     let metadata = ServiceMetadata {
         name: "ai".to_string(),

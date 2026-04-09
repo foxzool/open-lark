@@ -91,6 +91,42 @@ pub struct Client {
     /// Meeting meta 调用链入口：client.meeting.vc.v1.room.create() ...
     #[cfg(feature = "meeting")]
     pub meeting: openlark_meeting::MeetingClient,
+
+    /// AI meta 调用链入口：client.ai.chat.create() ...
+    #[cfg(feature = "ai")]
+    pub ai: openlark_ai::AiClient,
+
+    /// Workflow meta 调用链入口：client.workflow.task.create() ...
+    #[cfg(feature = "workflow")]
+    pub workflow: crate::WorkflowClient,
+
+    /// Platform meta 调用链入口：client.platform.app_engine... ...
+    #[cfg(feature = "platform")]
+    pub platform: crate::PlatformClient,
+
+    /// Application meta 调用链入口：client.application.applet... ...
+    #[cfg(feature = "application")]
+    pub application: crate::ApplicationClient,
+
+    /// Helpdesk meta 调用链入口：client.helpdesk.ticket... ...
+    #[cfg(feature = "helpdesk")]
+    pub helpdesk: crate::HelpdeskClient,
+
+    /// Mail meta 调用链入口：client.mail.group... ...
+    #[cfg(feature = "mail")]
+    pub mail: crate::MailClient,
+
+    /// Analytics meta 调用链入口：client.analytics.report... ...
+    #[cfg(feature = "analytics")]
+    pub analytics: crate::AnalyticsClient,
+
+    /// User meta 调用链入口：client.user.setting... ...
+    #[cfg(feature = "user")]
+    pub user: crate::UserClient,
+
+    /// Security meta 调用链入口：client.security.acs... ...
+    #[cfg(feature = "security")]
+    pub security: openlark_security::SecurityClient,
 }
 
 impl Client {
@@ -102,6 +138,7 @@ impl Client {
     /// export OPENLARK_APP_SECRET=your_app_secret
     /// export OPENLARK_BASE_URL=https://open.feishu.cn  # 可选
     /// ```
+    ///
     ///
     /// # 返回值
     /// 返回配置好的客户端实例或错误
@@ -195,6 +232,33 @@ impl Client {
         #[cfg(feature = "meeting")]
         let meeting = openlark_meeting::MeetingClient::new(core_config.clone());
 
+        #[cfg(feature = "ai")]
+        let ai = openlark_ai::AiClient::new(core_config.clone());
+
+        #[cfg(feature = "workflow")]
+        let workflow = crate::WorkflowClient::new(core_config.clone());
+
+        #[cfg(feature = "platform")]
+        let platform = crate::PlatformClient::new(core_config.clone());
+
+        #[cfg(feature = "application")]
+        let application = crate::ApplicationClient::new(core_config.clone());
+
+        #[cfg(feature = "helpdesk")]
+        let helpdesk = crate::HelpdeskClient::new(core_config.clone());
+
+        #[cfg(feature = "mail")]
+        let mail = crate::MailClient::new(core_config.clone());
+
+        #[cfg(feature = "analytics")]
+        let analytics = crate::AnalyticsClient::new(core_config.clone());
+
+        #[cfg(feature = "user")]
+        let user = crate::UserClient::new(core_config.clone());
+
+        #[cfg(feature = "security")]
+        let security = openlark_security::SecurityClient::new(core_config.clone());
+
         Ok(Client {
             config,
             registry,
@@ -211,6 +275,24 @@ impl Client {
             hr,
             #[cfg(feature = "meeting")]
             meeting,
+            #[cfg(feature = "ai")]
+            ai,
+            #[cfg(feature = "workflow")]
+            workflow,
+            #[cfg(feature = "platform")]
+            platform,
+            #[cfg(feature = "application")]
+            application,
+            #[cfg(feature = "helpdesk")]
+            helpdesk,
+            #[cfg(feature = "mail")]
+            mail,
+            #[cfg(feature = "analytics")]
+            analytics,
+            #[cfg(feature = "user")]
+            user,
+            #[cfg(feature = "security")]
+            security,
         })
     }
 

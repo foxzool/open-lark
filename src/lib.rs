@@ -179,6 +179,42 @@ pub use openlark_client::MeetingClient;
 #[doc(hidden)]
 pub use openlark_client::CardkitClient;
 
+#[cfg(feature = "ai")]
+#[doc(hidden)]
+pub use openlark_client::AiClient;
+
+#[cfg(feature = "workflow")]
+#[doc(hidden)]
+pub use openlark_client::WorkflowClient;
+
+#[cfg(feature = "platform")]
+#[doc(hidden)]
+pub use openlark_client::PlatformClient;
+
+#[cfg(feature = "application")]
+#[doc(hidden)]
+pub use openlark_client::ApplicationClient;
+
+#[cfg(feature = "helpdesk")]
+#[doc(hidden)]
+pub use openlark_client::HelpdeskClient;
+
+#[cfg(feature = "mail")]
+#[doc(hidden)]
+pub use openlark_client::MailClient;
+
+#[cfg(feature = "analytics")]
+#[doc(hidden)]
+pub use openlark_client::AnalyticsClient;
+
+#[cfg(feature = "user")]
+#[doc(hidden)]
+pub use openlark_client::UserClient;
+
+#[cfg(feature = "security")]
+#[doc(hidden)]
+pub use openlark_client::SecurityClient;
+
 /// 面向 `openlark` 用户的统一预导出。
 ///
 /// 该模块只导出“创建客户端 + 顶层业务入口”所需的稳定公共类型。
@@ -210,6 +246,33 @@ pub mod prelude {
     #[cfg(feature = "meeting")]
     #[doc(hidden)]
     pub use crate::MeetingClient;
+    #[cfg(feature = "ai")]
+    #[doc(hidden)]
+    pub use crate::AiClient;
+    #[cfg(feature = "workflow")]
+    #[doc(hidden)]
+    pub use crate::WorkflowClient;
+    #[cfg(feature = "platform")]
+    #[doc(hidden)]
+    pub use crate::PlatformClient;
+    #[cfg(feature = "application")]
+    #[doc(hidden)]
+    pub use crate::ApplicationClient;
+    #[cfg(feature = "helpdesk")]
+    #[doc(hidden)]
+    pub use crate::HelpdeskClient;
+    #[cfg(feature = "mail")]
+    #[doc(hidden)]
+    pub use crate::MailClient;
+    #[cfg(feature = "analytics")]
+    #[doc(hidden)]
+    pub use crate::AnalyticsClient;
+    #[cfg(feature = "user")]
+    #[doc(hidden)]
+    pub use crate::UserClient;
+    #[cfg(feature = "security")]
+    #[doc(hidden)]
+    pub use crate::SecurityClient;
     pub use crate::SDKResult;
     pub use crate::{Client, ClientBuilder, Config, CoreConfig, Error, Result};
     pub use crate::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType, RequestOption};
