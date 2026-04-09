@@ -126,7 +126,7 @@ pub struct Client {
 
     /// Security meta 调用链入口：client.security.acs... ...
     #[cfg(feature = "security")]
-    pub security: openlark_security::SecurityServices,
+    pub security: crate::SecurityClient,
 }
 
 impl std::fmt::Debug for Client {
@@ -282,7 +282,14 @@ impl Client {
         let user = crate::UserClient::new(core_config.clone())?;
 
         #[cfg(feature = "security")]
-        let security = openlark_security::SecurityServices::new(core_config.clone());
+        let security = {
+            let security_config = openlark_security::models::SecurityConfig::new(
+                config.app_id.clone(),
+                config.app_secret.clone(),
+            )
+            .with_base_url(&config.base_url);
+            std::sync::Arc::new(openlark_security::SecurityServices::new(security_config))
+        };
 
         Ok(Client {
             config,

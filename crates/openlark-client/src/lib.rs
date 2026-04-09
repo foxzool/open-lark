@@ -366,7 +366,8 @@ pub type AnalyticsClient = openlark_analytics::AnalyticsService;
 pub type UserClient = openlark_user::UserService;
 
 #[cfg(feature = "security")]
-pub use openlark_security::SecurityClient;
+/// Security 服务客户端别名（Arc 包装以支持 Client 克隆）
+pub type SecurityClient = std::sync::Arc<openlark_security::SecurityServices>;
 //（历史上曾尝试在 openlark-client 内重复实现业务服务包装层，但现已收敛为 meta 单入口。）
 
 // ============================================================================
@@ -512,7 +513,7 @@ pub mod prelude {
     pub use crate::UserClient;
 
     #[cfg(feature = "security")]
-    pub use openlark_security::SecurityClient;
+    pub use crate::SecurityClient;
 
     // ============================================================================
     // 便利类型别名
