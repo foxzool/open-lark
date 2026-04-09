@@ -76,3 +76,106 @@ jobs:
         run: cargo clippy --workspace --lib --all-features -- -D warnings
       - name: Run clippy (no default features)
         run: cargo clippy --workspace --lib --no-default-features -- -D warnings
+
+  # Feature combination testing for issue #47
+  feature-combinations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        features:
+          # === 基础组合 (Basic Combinations) ===
+          - ""  # no-default-features (minimal build)
+          - "auth"  # default features
+          - "auth,communication"
+          - "auth,docs"
+          - "auth,hr"
+          - "auth,workflow"
+          - "auth,meeting"
+          - "auth,ai"
+          - "auth,security"
+          - "auth,platform"
+          - "auth,application"
+          - "auth,mail"
+          - "auth,helpdesk"
+          - "auth,analytics"
+          - "auth,user"
+          - "auth,cardkit"
+          
+          # === 文档细分组合 (Docs Sub-features) ===
+          - "auth,docs-base"
+          - "auth,docs-bitable"
+          - "auth,docs-drive"
+          - "auth,docs-full"
+          
+          # === Webhook 组合 (Webhook Features) ===
+          - "webhook"
+          - "webhook-card"
+          - "webhook-signature"
+          - "webhook-full"
+          
+          # === 推荐业务组合 (Recommended Business Combinations) ===
+          - "essential"  # auth + communication + docs
+          - "enterprise"  # essential + security + hr + workflow
+          - "communication,docs,auth"
+          - "communication,hr,auth"
+          - "docs,hr,auth"
+          - "hr,workflow,auth"
+          - "communication,docs,hr,auth"
+          
+          # === 高价值组合 (High-Value Combinations) ===
+          - "auth,communication,webhook"
+          - "auth,docs,webhook-full"
+          - "auth,communication,cardkit"
+          - "essential,webhook-full"
+          - "enterprise,ai"
+          - "enterprise,meeting"
+          
+          # === Edge Cases ===
+          - "full"  # all enterprise features
+    steps:
+      - uses: actions/checkout@v4
+        
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+
+      - name: Cache Cargo build files
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          version: 23.4
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build with feature combination
+        run: |
+          echo "Testing feature combination: ${{ matrix.features }}"
+          if [ -z "${{ matrix.features }}" ]; then
+            echo "Building with no features (minimal build)"
+            timeout 20m cargo build --no-default-features
+          else
+            echo "Building with features: ${{ matrix.features }}"
+            timeout 20m cargo build --no-default-features --features "${{ matrix.features }}"
+          fi
+
+      - name: Test with feature combination
+        run: |
+          if [ -z "${{ matrix.features }}" ]; then
+            echo "Testing with no features"
+            timeout 15m cargo test --no-default-features --lib
+          else
+            echo "Testing with features: ${{ matrix.features }}"
+            timeout 15m cargo test --no-default-features --features "${{ matrix.features }}" --lib
+          fi
+
+      - name: Run clippy with feature combination
+        run: |
+          if [ -z "${{ matrix.features }}" ]; then
+            cargo clippy --no-default-features --lib -- -D warnings
+          else
+            cargo clippy --no-default-features --features "${{ matrix.features }}" --lib -- -D warnings
+          fi
