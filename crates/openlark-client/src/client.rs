@@ -59,7 +59,7 @@ impl AuthClient {
 ///     Ok(())
 /// }
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Client {
     /// 客户端配置
     config: Arc<Config>,
@@ -126,7 +126,32 @@ pub struct Client {
 
     /// Security meta 调用链入口：client.security.acs... ...
     #[cfg(feature = "security")]
-    pub security: openlark_security::SecurityClient,
+    pub security: openlark_security::SecurityServices,
+}
+
+impl std::fmt::Debug for Client {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Client")
+            .field("config", &"<Config>")
+            .field("registry", &"<Registry>")
+            .field("core_config", &"<CoreConfig>")
+            .field("cardkit", &cfg!(feature = "cardkit"))
+            .field("auth", &cfg!(feature = "auth"))
+            .field("docs", &cfg!(feature = "docs"))
+            .field("communication", &cfg!(feature = "communication"))
+            .field("hr", &cfg!(feature = "hr"))
+            .field("meeting", &cfg!(feature = "meeting"))
+            .field("ai", &cfg!(feature = "ai"))
+            .field("workflow", &cfg!(feature = "workflow"))
+            .field("platform", &cfg!(feature = "platform"))
+            .field("application", &cfg!(feature = "application"))
+            .field("helpdesk", &cfg!(feature = "helpdesk"))
+            .field("mail", &cfg!(feature = "mail"))
+            .field("analytics", &cfg!(feature = "analytics"))
+            .field("user", &cfg!(feature = "user"))
+            .field("security", &cfg!(feature = "security"))
+            .finish()
+    }
 }
 
 impl Client {
@@ -239,7 +264,7 @@ impl Client {
         let workflow = crate::WorkflowClient::new(core_config.clone());
 
         #[cfg(feature = "platform")]
-        let platform = crate::PlatformClient::new(core_config.clone());
+        let platform = crate::PlatformClient::new(core_config.clone())?;
 
         #[cfg(feature = "application")]
         let application = crate::ApplicationClient::new(core_config.clone());
@@ -251,13 +276,13 @@ impl Client {
         let mail = crate::MailClient::new(core_config.clone());
 
         #[cfg(feature = "analytics")]
-        let analytics = crate::AnalyticsClient::new(core_config.clone());
+        let analytics = crate::AnalyticsClient::new(core_config.clone())?;
 
         #[cfg(feature = "user")]
-        let user = crate::UserClient::new(core_config.clone());
+        let user = crate::UserClient::new(core_config.clone())?;
 
         #[cfg(feature = "security")]
-        let security = openlark_security::SecurityClient::new(core_config.clone());
+        let security = openlark_security::SecurityServices::new(core_config.clone());
 
         Ok(Client {
             config,
