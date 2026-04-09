@@ -213,7 +213,7 @@ pub use openlark_client::UserClient;
 
 #[cfg(feature = "security")]
 #[doc(hidden)]
-pub use openlark_client::SecurityClient;
+pub use openlark_client::SecurityServices;
 
 /// 面向 `openlark` 用户的统一预导出。
 ///
@@ -272,7 +272,7 @@ pub mod prelude {
     pub use crate::UserClient;
     #[cfg(feature = "security")]
     #[doc(hidden)]
-    pub use crate::SecurityClient;
+    pub use crate::SecurityServices;
     pub use crate::SDKResult;
     pub use crate::{Client, ClientBuilder, Config, CoreConfig, Error, Result};
     pub use crate::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType, RequestOption};

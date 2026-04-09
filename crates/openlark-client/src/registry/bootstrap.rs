@@ -307,18 +307,6 @@ fn register_user(registry: &mut DefaultServiceRegistry) -> Result<()> {
     };
     register(registry, metadata)
 }
-fn register_ai(registry: &mut DefaultServiceRegistry) -> Result<()> {
-    let metadata = ServiceMetadata {
-        name: "ai".to_string(),
-        version: "1.0.0".to_string(),
-        description: Some("飞书AI服务，提供智能助手、AI分析等功能".to_string()),
-        dependencies: vec!["auth".to_string(), "communication".to_string()],
-        provides: vec!["chatbot".to_string(), "smart-analysis".to_string()],
-        status: ServiceStatus::Uninitialized,
-        priority: 4,
-    };
-    register(registry, metadata)
-}
 
 #[cfg(test)]
 #[allow(unused_imports)]
