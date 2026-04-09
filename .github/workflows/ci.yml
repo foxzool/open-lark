@@ -141,6 +141,7 @@ jobs:
         uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
+          components: clippy
 
       - name: Cache Cargo build files
         uses: Swatinem/rust-cache@v2
