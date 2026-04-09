@@ -340,6 +340,36 @@ pub use openlark_meeting::MeetingClient;
 // 其他服务（当前未启用但已规划）
 //（历史上曾尝试在 openlark-client 内重复实现业务服务包装层，但现已收敛为 meta 单入口。）
 
+// 为没有 Client 类型的子 crate 创建类型别名
+#[cfg(feature = "ai")]
+pub use openlark_ai::AiClient;
+
+#[cfg(feature = "workflow")]
+pub type WorkflowClient = openlark_workflow::WorkflowService;
+
+#[cfg(feature = "platform")]
+pub type PlatformClient = openlark_platform::PlatformService;
+
+#[cfg(feature = "application")]
+pub type ApplicationClient = openlark_application::ApplicationService;
+
+#[cfg(feature = "helpdesk")]
+pub type HelpdeskClient = openlark_helpdesk::HelpdeskService;
+
+#[cfg(feature = "mail")]
+pub type MailClient = openlark_mail::MailService;
+
+#[cfg(feature = "analytics")]
+pub type AnalyticsClient = openlark_analytics::AnalyticsService;
+
+#[cfg(feature = "user")]
+pub type UserClient = openlark_user::UserService;
+
+#[cfg(feature = "security")]
+/// Security 服务客户端别名（Arc 包装以支持 Client 克隆）
+pub type SecurityClient = std::sync::Arc<openlark_security::SecurityServices>;
+//（历史上曾尝试在 openlark-client 内重复实现业务服务包装层，但现已收敛为 meta 单入口。）
+
 // ============================================================================
 // Core 系统类型重新导出
 // ============================================================================
@@ -456,6 +486,38 @@ pub mod prelude {
     pub use openlark_meeting::MeetingClient;
 
     // 其他服务（当前未启用但已规划）
+    //（历史上曾尝试在 openlark-client 内重复实现业务服务包装层，但现已收敛为 meta 单入口。）
+
+    #[cfg(feature = "ai")]
+    pub use openlark_ai::AiClient;
+
+    #[cfg(feature = "workflow")]
+    pub use crate::WorkflowClient;
+
+    #[cfg(feature = "platform")]
+    pub use crate::PlatformClient;
+
+    #[cfg(feature = "application")]
+    pub use crate::ApplicationClient;
+
+    #[cfg(feature = "helpdesk")]
+    pub use crate::HelpdeskClient;
+
+    #[cfg(feature = "mail")]
+    pub use crate::MailClient;
+
+    #[cfg(feature = "analytics")]
+    pub use crate::AnalyticsClient;
+
+    #[cfg(feature = "user")]
+    pub use crate::UserClient;
+
+    #[cfg(feature = "security")]
+    pub use crate::SecurityClient;
+
+    // ============================================================================
+    // 便利类型别名
+    // ============================================================================
     //（历史上曾尝试在 openlark-client 内重复实现业务服务包装层，但现已收敛为 meta 单入口。）
 
     // ============================================================================
