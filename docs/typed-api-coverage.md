@@ -7,6 +7,7 @@
 - 数据源：仓库根目录 `api_list_export.csv`。
 - 实现源：`tools/api_coverage.toml` 中配置的 crate 源码目录与 bizTag 映射。
 - 默认排除 `meta.Version=old`（脚本默认开启 `--skip-old`）。
+- 报告默认不写入时间戳，确保同输入下可稳定复现（可通过 `--with-timestamp` 打开时间戳）。
 - 覆盖率定义：`已实现 / API 总数 * 100%`。
 
 ## 2. 报告产物

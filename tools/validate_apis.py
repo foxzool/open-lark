@@ -43,11 +43,19 @@ class APIInfo:
 class APIValidator:
     """API 验证器"""
 
-    def __init__(self, csv_path: str, src_path: str, filter_tags: List[str] = None, skip_old_versions: bool = True):
+    def __init__(
+        self,
+        csv_path: str,
+        src_path: str,
+        filter_tags: List[str] = None,
+        skip_old_versions: bool = True,
+        with_timestamp: bool = False,
+    ):
         self.csv_path = csv_path
         self.src_path = Path(src_path)
         self.filter_tags = filter_tags
         self.skip_old_versions = skip_old_versions
+        self.with_timestamp = with_timestamp
         self.apis: List[APIInfo] = []
         self.implemented_files: Set[str] = set()
         self.missing_apis: List[APIInfo] = []
@@ -239,7 +247,8 @@ class APIValidator:
         with open(output_path, 'w', encoding='utf-8') as f:
             # 标题
             f.write("# API 验证报告\n\n")
-            f.write(f"**生成时间**: {self._get_timestamp()}\n")
+            if self.with_timestamp:
+                f.write(f"**生成时间**: {self._get_timestamp()}\n")
             f.write(f"**CSV 文件**: {self.csv_path}\n")
             f.write(f"**源码目录**: {self.src_path}\n")
             f.write(f"**命名规范**: `src/bizTag/meta.project/meta.version/meta.resource/meta.name.rs`\n\n")
@@ -393,6 +402,8 @@ def main():
                         help='跳过旧版本 API (version=old，默认启用)')
     parser.add_argument('--include-old', dest='skip_old', action='store_false',
                         help='包含旧版本 API (version=old)')
+    parser.add_argument('--with-timestamp', action='store_true',
+                        help='在报告中写入生成时间（默认关闭，以支持稳定复现）')
 
     args = parser.parse_args()
 
@@ -427,8 +438,14 @@ def main():
             print(f"- {crate_name}: src={src} biz_tags=[{tags_text}]")
         return 0
 
-    def _run_validator(csv_path: str, src_path: str, filter_tags: Optional[List[str]], skip_old: bool) -> APIValidator:
-        validator = APIValidator(csv_path, src_path, filter_tags, skip_old)
+    def _run_validator(
+        csv_path: str,
+        src_path: str,
+        filter_tags: Optional[List[str]],
+        skip_old: bool,
+        with_timestamp: bool,
+    ) -> APIValidator:
+        validator = APIValidator(csv_path, src_path, filter_tags, skip_old, with_timestamp)
         validator.parse_csv()
         validator.scan_implementations()
         validator.compare()
@@ -488,6 +505,9 @@ def main():
         )
 
     if args.all_crates:
+        if not os.path.exists(args.csv):
+            print(f"❌ 错误: CSV 文件不存在: {args.csv}")
+            return 1
         crates = _load_mapping(args.mapping)
         report_dir = Path(args.report_dir)
         crate_dir = report_dir / "crates"
@@ -504,7 +524,7 @@ def main():
             report_path = crate_dir / f"{crate_name}.md"
             print()
             print(f"📦 处理 {crate_name}")
-            validator = _run_validator(args.csv, src, tags, args.skip_old)
+            validator = _run_validator(args.csv, src, tags, args.skip_old, args.with_timestamp)
             report_path.parent.mkdir(parents=True, exist_ok=True)
             validator.generate_report(str(report_path))
             stats = validator.calculate_summary()
@@ -586,7 +606,7 @@ def main():
         return 1
 
     # 执行验证
-    validator = _run_validator(args.csv, args.src, args.filter, args.skip_old)
+    validator = _run_validator(args.csv, args.src, args.filter, args.skip_old, args.with_timestamp)
 
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
     validator.generate_report(args.output)
