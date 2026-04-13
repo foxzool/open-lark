@@ -197,6 +197,7 @@ println!("{}", endpoint);
 ## 📖 文档和资源
 
 - **[openlark-docs AGENTS.md](crates/openlark-docs/AGENTS.md)** - 文档服务模块知识库
+- **[Typed API 覆盖率说明](docs/typed-api-coverage.md)** - 覆盖率口径、批量报告与规划输入规范
 - **[快速启动示例](examples/)** - 完整功能演示示例集
 
 ## ​​📊 项目状态

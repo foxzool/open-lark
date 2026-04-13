@@ -14,7 +14,7 @@ import csv
 import os
 import re
 from pathlib import Path
-from typing import Dict, List, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 from dataclasses import dataclass
 from collections import defaultdict
 
@@ -43,11 +43,19 @@ class APIInfo:
 class APIValidator:
     """API 验证器"""
 
-    def __init__(self, csv_path: str, src_path: str, filter_tags: List[str] = None, skip_old_versions: bool = True):
+    def __init__(
+        self,
+        csv_path: str,
+        src_path: str,
+        filter_tags: List[str] = None,
+        skip_old_versions: bool = True,
+        with_timestamp: bool = False,
+    ):
         self.csv_path = csv_path
         self.src_path = Path(src_path)
         self.filter_tags = filter_tags
         self.skip_old_versions = skip_old_versions
+        self.with_timestamp = with_timestamp
         self.apis: List[APIInfo] = []
         self.implemented_files: Set[str] = set()
         self.missing_apis: List[APIInfo] = []
@@ -239,7 +247,8 @@ class APIValidator:
         with open(output_path, 'w', encoding='utf-8') as f:
             # 标题
             f.write("# API 验证报告\n\n")
-            f.write(f"**生成时间**: {self._get_timestamp()}\n")
+            if self.with_timestamp:
+                f.write(f"**生成时间**: {self._get_timestamp()}\n")
             f.write(f"**CSV 文件**: {self.csv_path}\n")
             f.write(f"**源码目录**: {self.src_path}\n")
             f.write(f"**命名规范**: `src/bizTag/meta.project/meta.version/meta.resource/meta.name.rs`\n\n")
@@ -322,6 +331,23 @@ class APIValidator:
 
             print(f"✅ 报告生成完成")
 
+    def calculate_summary(self) -> Dict[str, Any]:
+        """生成可序列化的统计摘要。"""
+        total_apis = len(self.apis)
+        implemented = len([a for a in self.apis if a.is_implemented])
+        missing = len(self.missing_apis)
+        completion_rate = (implemented / total_apis * 100) if total_apis > 0 else 0.0
+
+        return {
+            "total_apis": total_apis,
+            "implemented": implemented,
+            "missing": missing,
+            "completion_rate": round(completion_rate, 1),
+            "extra_files": len(self.extra_files),
+            "skipped_old_versions": self.skipped_old_count if self.skip_old_versions else 0,
+            "module_stats": self._calculate_module_stats(),
+        }
+
     def _calculate_module_stats(self) -> Dict[str, Dict]:
         """计算各模块的统计数据"""
         module_stats = defaultdict(lambda: {'total': 0, 'implemented': 0, 'missing': 0, 'rate': 0.0})
@@ -368,10 +394,16 @@ def main():
                         help='crate→bizTag 映射文件路径 (默认: tools/api_coverage.toml)')
     parser.add_argument('--list-crates', action='store_true',
                         help='列出映射文件中的 crate 与 bizTag，然后退出')
+    parser.add_argument('--all-crates', action='store_true',
+                        help='按映射文件批量验证所有 crate，并生成汇总报告')
+    parser.add_argument('--report-dir', default='reports/api_validation',
+                        help='批量模式报告目录 (默认: reports/api_validation)')
     parser.add_argument('--skip-old', dest='skip_old', action='store_true', default=True,
                         help='跳过旧版本 API (version=old，默认启用)')
     parser.add_argument('--include-old', dest='skip_old', action='store_false',
                         help='包含旧版本 API (version=old)')
+    parser.add_argument('--with-timestamp', action='store_true',
+                        help='在报告中写入生成时间（默认关闭，以支持稳定复现）')
 
     args = parser.parse_args()
 
@@ -404,6 +436,146 @@ def main():
             tags = cfg.get("biz_tags", [])
             tags_text = ", ".join(tags) if isinstance(tags, list) else str(tags)
             print(f"- {crate_name}: src={src} biz_tags=[{tags_text}]")
+        return 0
+
+    def _run_validator(
+        csv_path: str,
+        src_path: str,
+        filter_tags: Optional[List[str]],
+        skip_old: bool,
+        with_timestamp: bool,
+    ) -> APIValidator:
+        validator = APIValidator(csv_path, src_path, filter_tags, skip_old, with_timestamp)
+        validator.parse_csv()
+        validator.scan_implementations()
+        validator.compare()
+        return validator
+
+    def _write_summary_markdown(
+        output_path: Path,
+        crate_rows: List[Tuple[str, Dict[str, Any], str, List[str]]],
+        skip_old: bool,
+    ) -> None:
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with output_path.open("w", encoding="utf-8") as f:
+            f.write("# Typed API 覆盖率汇总报告（按 crate）\n\n")
+            f.write("## 统计口径\n\n")
+            if skip_old:
+                f.write("- 默认排除 `meta.Version=old`。\n")
+            else:
+                f.write("- 包含 `meta.Version=old`。\n")
+            f.write("- 数据来源：`api_list_export.csv` 对比 crate 源码目录。\n\n")
+
+            total_apis = sum(row[1]["total_apis"] for row in crate_rows)
+            total_impl = sum(row[1]["implemented"] for row in crate_rows)
+            total_missing = sum(row[1]["missing"] for row in crate_rows)
+            total_extra = sum(row[1]["extra_files"] for row in crate_rows)
+            total_rate = (total_impl / total_apis * 100) if total_apis > 0 else 0.0
+
+            f.write("## 总览\n\n")
+            f.write("| 指标 | 数量 |\n")
+            f.write("|------|------|\n")
+            f.write(f"| crate 数量 | {len(crate_rows)} |\n")
+            f.write(f"| API 总数 | {total_apis} |\n")
+            f.write(f"| 已实现 | {total_impl} |\n")
+            f.write(f"| 未实现 | {total_missing} |\n")
+            f.write(f"| 完成率 | {total_rate:.1f}% |\n")
+            f.write(f"| 额外文件 | {total_extra} |\n\n")
+
+            f.write("## 各 crate 覆盖率\n\n")
+            f.write("| crate | bizTag | 总数 | 已实现 | 未实现 | 完成率 | 额外文件 | 报告 |\n")
+            f.write("|-------|--------|------|--------|--------|--------|----------|------|\n")
+            for crate_name, stats, report_rel, tags in sorted(crate_rows, key=lambda x: x[0]):
+                tags_text = ", ".join(tags)
+                f.write(
+                    f"| {crate_name} | `{tags_text}` | {stats['total_apis']} | "
+                    f"{stats['implemented']} | {stats['missing']} | {stats['completion_rate']:.1f}% | "
+                    f"{stats['extra_files']} | [{crate_name}]({report_rel}) |\n"
+                )
+
+            f.write("\n")
+
+    def _write_summary_json(output_path: Path, payload: Dict[str, Any]) -> None:
+        import json
+
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+
+    if args.all_crates:
+        if not os.path.exists(args.csv):
+            print(f"❌ 错误: CSV 文件不存在: {args.csv}")
+            return 1
+        crates = _load_mapping(args.mapping)
+        invalid_crates: List[Tuple[str, Any]] = []
+        for crate_name, cfg in sorted(crates.items()):
+            src = cfg.get("src")
+            if not src or not os.path.exists(src):
+                invalid_crates.append((crate_name, src))
+        if invalid_crates:
+            print("❌ 错误: 发现映射中的 crate 源码目录不存在，批量验证终止。")
+            for crate_name, src in invalid_crates:
+                print(f"   - {crate_name}: {src}")
+            return 1
+
+        report_dir = Path(args.report_dir)
+        crate_dir = report_dir / "crates"
+        crate_rows: List[Tuple[str, Dict[str, Any], str, List[str]]] = []
+        crate_summaries: Dict[str, Any] = {}
+
+        for crate_name in sorted(crates.keys()):
+            cfg = crates[crate_name]
+            src = cfg.get("src")
+            tags = cfg.get("biz_tags", [])
+            report_path = crate_dir / f"{crate_name}.md"
+            print()
+            print(f"📦 处理 {crate_name}")
+            validator = _run_validator(args.csv, src, tags, args.skip_old, args.with_timestamp)
+            report_path.parent.mkdir(parents=True, exist_ok=True)
+            validator.generate_report(str(report_path))
+            stats = validator.calculate_summary()
+            report_rel = report_path.relative_to(report_dir).as_posix()
+            crate_rows.append((crate_name, stats, report_rel, tags))
+            crate_summaries[crate_name] = {
+                "source_dir": src,
+                "biz_tags": tags,
+                "report": report_rel,
+                **stats,
+            }
+
+        summary_md = report_dir / "summary.md"
+        summary_json = report_dir / "summary.json"
+        _write_summary_markdown(summary_md, crate_rows, args.skip_old)
+
+        total_apis = sum(item["total_apis"] for item in crate_summaries.values())
+        total_impl = sum(item["implemented"] for item in crate_summaries.values())
+        total_missing = sum(item["missing"] for item in crate_summaries.values())
+        total_extra = sum(item["extra_files"] for item in crate_summaries.values())
+        total_rate = (total_impl / total_apis * 100) if total_apis > 0 else 0.0
+
+        summary_payload = {
+            "csv_path": args.csv,
+            "mapping_path": args.mapping,
+            "skip_old_versions": args.skip_old,
+            "crates_total": len(crate_summaries),
+            "total_apis": total_apis,
+            "implemented": total_impl,
+            "missing": total_missing,
+            "completion_rate": round(total_rate, 1),
+            "extra_files": total_extra,
+            "crates": crate_summaries,
+        }
+        _write_summary_json(summary_json, summary_payload)
+
+        print()
+        print("=" * 60)
+        print("✅ 批量验证完成！")
+        print(f"📄 汇总报告: {summary_md}")
+        print(f"📄 机器可读: {summary_json}")
+        print(f"📁 各 crate 报告目录: {crate_dir}")
+        print("=" * 60)
         return 0
 
     # 当指定 --crate 时，自动补齐 src/filter（显式参数优先）
@@ -442,11 +614,7 @@ def main():
         return 1
 
     # 执行验证
-    validator = APIValidator(args.csv, args.src, args.filter, args.skip_old)
-
-    validator.parse_csv()
-    validator.scan_implementations()
-    validator.compare()
+    validator = _run_validator(args.csv, args.src, args.filter, args.skip_old, args.with_timestamp)
 
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
     validator.generate_report(args.output)

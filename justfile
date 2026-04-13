@@ -28,6 +28,12 @@ issue41-guardrail:
   @echo "🛡️ Running issue #41 guardrail..."
   python3 tools/issue41_guardrail.py
 
+# Generate typed API coverage reports per crate and summary dashboard
+api-coverage:
+  @echo "📊 Generating typed API coverage reports..."
+  python3 tools/validate_apis.py --all-crates
+  @echo "✅ Coverage reports generated in reports/api_validation/"
+
 # Build release
 build-release:
   @echo "🚀 Building release..."
@@ -204,6 +210,7 @@ help:
   @echo "  coverage     - Run coverage analysis"
   @echo "  coverage-check - Run coverage with threshold check"
   @echo "  audit        - Run security audit"
+  @echo "  api-coverage - Generate typed API coverage reports (per crate + summary)"
   @echo "  update-audit-db - Update security advisory database"
   @echo "  install-dev-tools - Install development tools"
   @echo "  check-all    - Run all pre-release checks (includes coverage & security)"
