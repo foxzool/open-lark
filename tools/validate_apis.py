@@ -509,6 +509,17 @@ def main():
             print(f"❌ 错误: CSV 文件不存在: {args.csv}")
             return 1
         crates = _load_mapping(args.mapping)
+        invalid_crates: List[Tuple[str, Any]] = []
+        for crate_name, cfg in sorted(crates.items()):
+            src = cfg.get("src")
+            if not src or not os.path.exists(src):
+                invalid_crates.append((crate_name, src))
+        if invalid_crates:
+            print("❌ 错误: 发现映射中的 crate 源码目录不存在，批量验证终止。")
+            for crate_name, src in invalid_crates:
+                print(f"   - {crate_name}: {src}")
+            return 1
+
         report_dir = Path(args.report_dir)
         crate_dir = report_dir / "crates"
         crate_rows: List[Tuple[str, Dict[str, Any], str, List[str]]] = []
@@ -518,9 +529,6 @@ def main():
             cfg = crates[crate_name]
             src = cfg.get("src")
             tags = cfg.get("biz_tags", [])
-            if not src or not os.path.exists(src):
-                print(f"⚠️ 跳过 {crate_name}: 源码目录不存在 ({src})")
-                continue
             report_path = crate_dir / f"{crate_name}.md"
             print()
             print(f"📦 处理 {crate_name}")
