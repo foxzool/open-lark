@@ -13,7 +13,7 @@
 //! ## 使用示例
 //!
 //! ```rust,no_run
-//! use openlark_workflow::WorkflowService;
+//! use openlark_workflow::{WorkflowService, WorkflowTaskListQuery, WorkflowTaskMutation};
 //! use openlark_core::config::Config;
 //!
 //! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
@@ -24,13 +24,19 @@
 //!
 //! let workflow_service = WorkflowService::new(config);
 //!
-//! // 创建任务
+//! // 列取任务清单中的任务
+//! let tasks = workflow_service
+//!     .list_tasks_all(WorkflowTaskListQuery::for_tasklist("tasklist_guid"))
+//!     .await?;
+//!
+//! // 更新任务
 //! let result = workflow_service
-//!     .v2()
-//!     .task()
-//!     .create()
-//!     .summary("完成项目文档")
-//!     .execute()
+//!     .mutate_task(
+//!         "task_guid",
+//!         WorkflowTaskMutation::new()
+//!             .summary("完成项目文档")
+//!             .priority(3),
+//!     )
 //!     .await?;
 //! # Ok(())
 //! # }
@@ -58,7 +64,7 @@ pub mod board;
 pub mod prelude;
 
 // 重新导出核心服务
-pub use service::WorkflowService;
+pub use service::{WorkflowService, WorkflowTaskListQuery, WorkflowTaskMutation};
 
 /// 工作流模块版本信息
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

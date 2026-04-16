@@ -2,4 +2,5 @@
 //!
 //! 这个模块重新导出了使用任务 API 时最常需要的类型。
 
+pub use crate::{WorkflowService, WorkflowTaskListQuery, WorkflowTaskMutation};
 pub use openlark_core::{config::Config, SDKResult};
