@@ -1,5 +1,13 @@
-use openlark_core::config::Config;
-use openlark_core::SDKResult;
+#[path = "approval/approval/v4/task/approve.rs"]
+mod approval_task_approve;
+#[path = "approval/approval/v4/task/query.rs"]
+mod approval_task_query;
+#[path = "approval/approval/v4/task/reject.rs"]
+mod approval_task_reject;
+#[path = "approval/approval/v4/task/resubmit.rs"]
+mod approval_task_resubmit;
+
+use openlark_core::{config::Config, SDKResult};
 use std::sync::Arc;
 
 use crate::common::constants::MAX_PAGE_SIZE;
@@ -98,6 +106,105 @@ impl WorkflowTaskMutation {
         self.status = Some(status.into());
         self
     }
+}
+
+/// 审批任务查询 helper。
+///
+/// 用于封装审批待办的常见筛选条件。
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct ApprovalTaskQuery {
+    pub user_id: String,
+    pub topic: String,
+    pub user_id_type: Option<String>,
+    pub status: Option<String>,
+    pub instance_code: Option<String>,
+    pub page_size: Option<i32>,
+}
+
+impl ApprovalTaskQuery {
+    pub fn new(user_id: impl Into<String>, topic: impl Into<String>) -> Self {
+        Self {
+            user_id: user_id.into(),
+            topic: topic.into(),
+            ..Self::default()
+        }
+    }
+
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    pub fn status(mut self, status: impl Into<String>) -> Self {
+        self.status = Some(status.into());
+        self
+    }
+
+    pub fn instance_code(mut self, instance_code: impl Into<String>) -> Self {
+        self.instance_code = Some(instance_code.into());
+        self
+    }
+
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+}
+
+/// 审批任务操作 helper。
+///
+/// 统一高频审批动作的 `task_id + comment` 组合。
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct ApprovalTaskAction {
+    pub approval_code: String,
+    pub instance_code: String,
+    pub user_id: String,
+    pub task_id: String,
+    pub user_id_type: Option<String>,
+    pub comment: Option<String>,
+    pub form: Option<String>,
+}
+
+impl ApprovalTaskAction {
+    pub fn new(
+        approval_code: impl Into<String>,
+        instance_code: impl Into<String>,
+        user_id: impl Into<String>,
+        task_id: impl Into<String>,
+    ) -> Self {
+        Self {
+            approval_code: approval_code.into(),
+            instance_code: instance_code.into(),
+            user_id: user_id.into(),
+            task_id: task_id.into(),
+            user_id_type: None,
+            comment: None,
+            form: None,
+        }
+    }
+
+    pub fn comment(mut self, comment: impl Into<String>) -> Self {
+        self.comment = Some(comment.into());
+        self
+    }
+
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    pub fn form(mut self, form: impl Into<String>) -> Self {
+        self.form = Some(form.into());
+        self
+    }
+}
+
+pub type ApprovalTaskItem = approval_task_query::TaskItemV4;
+
+/// 审批任务动作结果 helper。
+#[derive(Debug, Clone, PartialEq)]
+pub struct ApprovalTaskActionResult {
+    pub success: bool,
 }
 
 /// WorkflowService：工作流服务的统一入口
@@ -239,6 +346,121 @@ impl WorkflowService {
             .execute()
             .await
     }
+
+    /// 查询审批任务，并支持按状态/实例做本地筛选。
+    pub async fn query_approval_tasks(
+        &self,
+        query: ApprovalTaskQuery,
+    ) -> SDKResult<Vec<ApprovalTaskItem>> {
+        let mut items = Vec::new();
+        let mut page_token: Option<String> = None;
+
+        loop {
+            let mut request = approval_task_query::QueryTaskRequestV4::new(self.config.clone())
+                .user_id(query.user_id.clone())
+                .topic(query.topic.clone())
+                .page_size(query.page_size.unwrap_or(MAX_PAGE_SIZE));
+
+            if let Some(user_id_type) = &query.user_id_type {
+                request = request.user_id_type(user_id_type.clone());
+            }
+            if let Some(token) = &page_token {
+                request = request.page_token(token.clone());
+            }
+
+            let response = request.execute().await?;
+            items.extend(response.tasks);
+
+            if !response.has_more.unwrap_or(false) {
+                break;
+            }
+            page_token = response.page_token;
+        }
+
+        if let Some(status) = &query.status {
+            items.retain(|item| item.status == *status);
+        }
+        if let Some(instance_code) = &query.instance_code {
+            items.retain(|item| item.instance_code == *instance_code);
+        }
+
+        Ok(items)
+    }
+
+    /// 同意审批任务 helper。
+    pub async fn approve_task(
+        &self,
+        action: ApprovalTaskAction,
+    ) -> SDKResult<ApprovalTaskActionResult> {
+        let mut request = approval_task_approve::ApproveTaskRequestV4::new(self.config.clone())
+            .approval_code(action.approval_code)
+            .instance_code(action.instance_code)
+            .user_id(action.user_id)
+            .task_id(action.task_id);
+        if let Some(user_id_type) = action.user_id_type {
+            request = request.user_id_type(user_id_type);
+        }
+        if let Some(comment) = action.comment {
+            request = request.comment(comment);
+        }
+        if let Some(form) = action.form {
+            request = request.form(form);
+        }
+        let response = request.execute().await?;
+        Ok(ApprovalTaskActionResult {
+            success: response.success,
+        })
+    }
+
+    /// 拒绝审批任务 helper。
+    pub async fn reject_task(
+        &self,
+        action: ApprovalTaskAction,
+    ) -> SDKResult<ApprovalTaskActionResult> {
+        let mut request = approval_task_reject::RejectTaskRequestV4::new(self.config.clone())
+            .approval_code(action.approval_code)
+            .instance_code(action.instance_code)
+            .user_id(action.user_id)
+            .task_id(action.task_id);
+        if let Some(user_id_type) = action.user_id_type {
+            request = request.user_id_type(user_id_type);
+        }
+        if let Some(comment) = action.comment {
+            request = request.comment(comment);
+        }
+        if let Some(form) = action.form {
+            request = request.form(form);
+        }
+        let response = request.execute().await?;
+        Ok(ApprovalTaskActionResult {
+            success: response.success,
+        })
+    }
+
+    /// 重新提交审批任务 helper。
+    pub async fn resubmit_task(
+        &self,
+        action: ApprovalTaskAction,
+    ) -> SDKResult<ApprovalTaskActionResult> {
+        let mut request = approval_task_resubmit::ResubmitTaskRequestV4::new(self.config.clone())
+            .approval_code(action.approval_code)
+            .instance_code(action.instance_code)
+            .user_id(action.user_id)
+            .task_id(action.task_id);
+        if let Some(user_id_type) = action.user_id_type {
+            request = request.user_id_type(user_id_type);
+        }
+        if let Some(comment) = action.comment {
+            request = request.comment(comment);
+        }
+        if let Some(form) = action.form {
+            request = request.form(form);
+        }
+        let response = request.execute().await?;
+        Ok(ApprovalTaskActionResult {
+            success: response.success,
+        })
+    }
 }
 
 #[cfg(test)]
@@ -297,5 +519,38 @@ mod tests {
         assert_eq!(mutation.priority, Some(3));
         assert_eq!(mutation.assignee.as_deref(), Some("ou_xxx"));
         assert_eq!(mutation.status.as_deref(), Some("in_progress"));
+    }
+
+    #[test]
+    fn test_approval_task_query_builder() {
+        let query = ApprovalTaskQuery::new("ou_xxx", "1")
+            .user_id_type("open_id")
+            .status("PENDING")
+            .instance_code("instance_123")
+            .page_size(100);
+
+        assert_eq!(query.user_id, "ou_xxx");
+        assert_eq!(query.topic, "1");
+        assert_eq!(query.user_id_type.as_deref(), Some("open_id"));
+        assert_eq!(query.status.as_deref(), Some("PENDING"));
+        assert_eq!(query.instance_code.as_deref(), Some("instance_123"));
+        assert_eq!(query.page_size, Some(100));
+    }
+
+    #[test]
+    fn test_approval_task_action_builder() {
+        let action =
+            ApprovalTaskAction::new("approval_code", "instance_code", "ou_xxx", "task_123")
+                .user_id_type("open_id")
+                .comment("已确认")
+                .form("[{}]");
+
+        assert_eq!(action.approval_code, "approval_code");
+        assert_eq!(action.instance_code, "instance_code");
+        assert_eq!(action.user_id, "ou_xxx");
+        assert_eq!(action.task_id, "task_123");
+        assert_eq!(action.user_id_type.as_deref(), Some("open_id"));
+        assert_eq!(action.comment.as_deref(), Some("已确认"));
+        assert_eq!(action.form.as_deref(), Some("[{}]"));
     }
 }

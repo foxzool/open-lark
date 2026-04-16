@@ -13,11 +13,19 @@ use std::sync::Arc;
 /// 重新提交审批任务请求体（v4）
 #[derive(Debug, Clone, Serialize, Default)]
 pub struct ResubmitTaskBodyV4 {
+    /// 审批定义 Code
+    pub approval_code: String,
+    /// 审批实例 Code
+    pub instance_code: String,
+    /// 操作人用户 ID
+    pub user_id: String,
     /// 审批任务 ID
     pub task_id: String,
     /// 重新提交意见
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
+    /// 审批表单控件值
+    pub form: String,
 }
 
 /// 重新提交审批任务响应（v4）
@@ -32,6 +40,7 @@ pub struct ResubmitTaskResponseV4 {
 pub struct ResubmitTaskRequestV4 {
     config: Arc<Config>,
     body: ResubmitTaskBodyV4,
+    user_id_type: Option<String>,
 }
 
 impl ResubmitTaskRequestV4 {
@@ -39,7 +48,26 @@ impl ResubmitTaskRequestV4 {
         Self {
             config,
             body: ResubmitTaskBodyV4::default(),
+            user_id_type: None,
         }
+    }
+
+    /// 设置审批定义 Code
+    pub fn approval_code(mut self, approval_code: impl Into<String>) -> Self {
+        self.body.approval_code = approval_code.into();
+        self
+    }
+
+    /// 设置审批实例 Code
+    pub fn instance_code(mut self, instance_code: impl Into<String>) -> Self {
+        self.body.instance_code = instance_code.into();
+        self
+    }
+
+    /// 设置操作人用户 ID
+    pub fn user_id(mut self, user_id: impl Into<String>) -> Self {
+        self.body.user_id = user_id.into();
+        self
     }
 
     /// 设置审批任务 ID
@@ -54,6 +82,18 @@ impl ResubmitTaskRequestV4 {
         self
     }
 
+    /// 设置审批表单值
+    pub fn form(mut self, form: impl Into<String>) -> Self {
+        self.body.form = form.into();
+        self
+    }
+
+    /// 设置用户 ID 类型
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ResubmitTaskResponseV4> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
@@ -65,10 +105,18 @@ impl ResubmitTaskRequestV4 {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ResubmitTaskResponseV4> {
+        validate_required!(self.body.approval_code.trim(), "审批定义 Code 不能为空");
+        validate_required!(self.body.instance_code.trim(), "审批实例 Code 不能为空");
+        validate_required!(self.body.user_id.trim(), "操作人用户 ID 不能为空");
         validate_required!(self.body.task_id.trim(), "审批任务 ID 不能为空");
+        validate_required!(self.body.form.trim(), "审批表单控件值不能为空");
 
         let api_endpoint = crate::common::api_endpoints::ApprovalApiV4::TaskResubmit;
         let mut request = ApiRequest::<ResubmitTaskResponseV4>::post(api_endpoint.to_url());
+
+        if let Some(user_id_type) = self.user_id_type {
+            request = request.query("user_id_type", user_id_type);
+        }
 
         let body_json = serde_json::to_value(&self.body).map_err(|e| {
             openlark_core::error::validation_error("序列化请求体失败", e.to_string().as_str())
@@ -93,11 +141,36 @@ impl ApiResponseTrait for ResubmitTaskResponseV4 {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-    
+    use super::*;
 
     #[test]
     fn test_task_resubmit_v4_url() {
         let endpoint = crate::common::api_endpoints::ApprovalApiV4::TaskResubmit;
         assert_eq!(endpoint.to_url(), "/open-apis/approval/v4/tasks/resubmit");
+    }
+
+    #[test]
+    fn test_resubmit_task_request_builder() {
+        let config = Arc::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        );
+        let request = ResubmitTaskRequestV4::new(config)
+            .approval_code("approval_code")
+            .instance_code("instance_code")
+            .user_id("ou_xxx")
+            .task_id("task_123")
+            .comment("重新提交")
+            .form("[{}]")
+            .user_id_type("open_id");
+
+        assert_eq!(request.body.approval_code, "approval_code");
+        assert_eq!(request.body.instance_code, "instance_code");
+        assert_eq!(request.body.user_id, "ou_xxx");
+        assert_eq!(request.body.task_id, "task_123");
+        assert_eq!(request.body.form, "[{}]");
+        assert_eq!(request.user_id_type.as_deref(), Some("open_id"));
     }
 }

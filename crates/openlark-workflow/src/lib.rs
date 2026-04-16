@@ -5,15 +5,18 @@
 //! ## 功能特性
 //!
 //! - **任务管理**: 创建、更新、删除、查询待办事项
-//! - **审批流程**: 审批定义、审批实例管理
+//! - **审批流程**: 审批定义、审批实例管理，以及高频审批任务 helper
 //! - **看板管理**: 看板创建、任务卡片管理
 //! - **协作支持**: 添加执行者、关注者、提醒
-//! - **版本支持**: 支持 v1 和 v2 两种 API 版本
+//! - **版本支持**: 支持 task v1/v2，以及 approval v4 helper 场景
 //!
 //! ## 使用示例
 //!
 //! ```rust,no_run
-//! use openlark_workflow::{WorkflowService, WorkflowTaskListQuery, WorkflowTaskMutation};
+//! use openlark_workflow::{
+//!     ApprovalTaskAction, ApprovalTaskQuery, WorkflowService, WorkflowTaskListQuery,
+//!     WorkflowTaskMutation,
+//! };
 //! use openlark_core::config::Config;
 //!
 //! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
@@ -38,6 +41,29 @@
 //!             .priority(3),
 //!     )
 //!     .await?;
+//!
+//! // 处理待审批任务
+//! let approval_tasks = workflow_service
+//!     .query_approval_tasks(
+//!         ApprovalTaskQuery::new("ou_example_user", "1")
+//!             .user_id_type("open_id")
+//!             .status("Todo"),
+//!     )
+//!     .await?;
+//! if let Some(task) = approval_tasks.first() {
+//!     let _ = workflow_service
+//!         .approve_task(
+//!             ApprovalTaskAction::new(
+//!                 "approval_code",
+//!                 task.instance_code.clone(),
+//!                 "ou_example_user",
+//!                 task.task_id.clone(),
+//!             )
+//!             .user_id_type("open_id")
+//!             .comment("同意"),
+//!         )
+//!         .await?;
+//! }
 //! # Ok(())
 //! # }
 //! ```
@@ -64,7 +90,10 @@ pub mod board;
 pub mod prelude;
 
 // 重新导出核心服务
-pub use service::{WorkflowService, WorkflowTaskListQuery, WorkflowTaskMutation};
+pub use service::{
+    ApprovalTaskAction, ApprovalTaskQuery, WorkflowService, WorkflowTaskListQuery,
+    WorkflowTaskMutation,
+};
 
 /// 工作流模块版本信息
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
