@@ -342,6 +342,105 @@ impl From<SheetWriteRange> for crate::ccm::sheets_v2::v2::data_io::models::Batch
     }
 }
 
+/// Drive 下载范围 helper。
+///
+/// 用于避免业务侧手工拼接 `bytes=0-1023` 这类 Range 头。
+#[cfg(feature = "ccm-core")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DriveDownloadRange {
+    /// 起始字节位置。
+    pub start: u64,
+    /// 结束字节位置；为空表示读取到文件尾部。
+    pub end: Option<u64>,
+}
+
+#[cfg(feature = "ccm-core")]
+impl DriveDownloadRange {
+    /// 创建从 `start` 开始的下载范围。
+    pub fn from_start(start: u64) -> Self {
+        Self { start, end: None }
+    }
+
+    /// 指定结束位置。
+    pub fn with_end(mut self, end: u64) -> Self {
+        self.end = Some(end);
+        self
+    }
+
+    /// 生成 HTTP Range 头。
+    pub fn to_header_value(&self) -> String {
+        match self.end {
+            Some(end) => format!("bytes={}-{}", self.start, end),
+            None => format!("bytes={}-", self.start),
+        }
+    }
+}
+
+#[cfg(feature = "ccm-core")]
+impl std::fmt::Display for DriveDownloadRange {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&self.to_header_value())
+    }
+}
+
+/// Drive 上传文件 helper。
+///
+/// 统一封装文件名、字节内容与可选 checksum，并在 helper 层自动补全
+/// `parent_type=explorer` 与 `size=file.len()` 等默认策略。
+#[cfg(feature = "ccm-core")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DriveUploadFile {
+    /// 文件名。
+    pub file_name: String,
+    /// 文件内容。
+    pub content: Vec<u8>,
+    /// 可选的 Adler-32 checksum。
+    pub checksum: Option<String>,
+}
+
+#[cfg(feature = "ccm-core")]
+impl DriveUploadFile {
+    /// 创建上传文件。
+    pub fn new(file_name: impl Into<String>, content: Vec<u8>) -> Self {
+        Self {
+            file_name: file_name.into(),
+            content,
+            checksum: None,
+        }
+    }
+
+    /// 设置校验和。
+    pub fn checksum(mut self, checksum: impl Into<String>) -> Self {
+        self.checksum = Some(checksum.into());
+        self
+    }
+
+    /// 计算文件大小。
+    pub fn size(&self) -> usize {
+        self.content.len()
+    }
+
+    /// 构建底层上传请求。
+    pub fn into_request(
+        self,
+        config: Config,
+        folder_token: impl Into<String>,
+    ) -> crate::ccm::drive::v1::file::UploadAllRequest {
+        let mut request = crate::ccm::drive::v1::file::UploadAllRequest::new(
+            config,
+            self.file_name,
+            folder_token,
+            "explorer",
+            self.content.len(),
+            self.content,
+        );
+        if let Some(checksum) = self.checksum {
+            request = request.checksum(checksum);
+        }
+        request
+    }
+}
+
 #[cfg(feature = "ccm-core")]
 impl From<crate::ccm::explorer::v2::models::FolderChildrenData>
     for TypedPage<crate::ccm::explorer::v2::models::FileItem>
@@ -661,6 +760,45 @@ impl DocsClient {
             .ok_or_else(|| CoreError::api_data_error("追加工作表范围"))
     }
 
+    /// 使用默认的 `parent_type=explorer` 与自动 size 推断上传 Drive 文件。
+    #[cfg(feature = "ccm-core")]
+    pub async fn upload_drive_file(
+        &self,
+        folder_token: &str,
+        file: DriveUploadFile,
+    ) -> SDKResult<crate::ccm::drive::v1::file::UploadAllResponse> {
+        file.into_request(self.config().clone(), folder_token)
+            .execute()
+            .await
+    }
+
+    /// 下载完整 Drive 文件内容。
+    #[cfg(feature = "ccm-core")]
+    pub async fn download_drive_file(&self, file_token: &str) -> SDKResult<Vec<u8>> {
+        use crate::ccm::drive::v1::file::DownloadFileRequest;
+
+        DownloadFileRequest::new(self.config().clone(), file_token)
+            .execute()
+            .await?
+            .into_result()
+    }
+
+    /// 按范围下载 Drive 文件内容。
+    #[cfg(feature = "ccm-core")]
+    pub async fn download_drive_file_range(
+        &self,
+        file_token: &str,
+        range: DriveDownloadRange,
+    ) -> SDKResult<Vec<u8>> {
+        use crate::ccm::drive::v1::file::DownloadFileRequest;
+
+        DownloadFileRequest::new(self.config().clone(), file_token)
+            .range(range.to_string())
+            .execute()
+            .await?
+            .into_result()
+    }
+
     /// 根据工作表标题查找工作表。
     #[cfg(feature = "ccm-core")]
     pub async fn find_sheet_by_title(
@@ -867,6 +1005,36 @@ mod tests {
         let page = TypedPage::new(vec![1, 2], false, None);
         assert!(page.is_last_page());
         assert_eq!(page.into_items(), vec![1, 2]);
+    }
+
+    #[cfg(feature = "ccm-core")]
+    #[test]
+    fn test_drive_download_range_formats_header() {
+        let full = DriveDownloadRange::from_start(0).with_end(1023);
+        let tail = DriveDownloadRange::from_start(2048);
+
+        assert_eq!(full.to_string(), "bytes=0-1023");
+        assert_eq!(tail.to_string(), "bytes=2048-");
+    }
+
+    #[cfg(feature = "ccm-core")]
+    #[test]
+    fn test_drive_upload_file_builds_default_request() {
+        let upload = DriveUploadFile::new("report.csv", vec![1, 2, 3]).checksum("abc123");
+        let request = upload.into_request(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+            "folder_token",
+        );
+
+        assert_eq!(request.file_name, "report.csv");
+        assert_eq!(request.parent_node, "folder_token");
+        assert_eq!(request.parent_type, "explorer");
+        assert_eq!(request.size, 3);
+        assert_eq!(request.checksum.as_deref(), Some("abc123"));
+        assert_eq!(request.file, vec![1, 2, 3]);
     }
 
     #[cfg(feature = "bitable")]

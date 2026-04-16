@@ -3,6 +3,7 @@
 //! 演示 `openlark` 根 crate 在 `0.15.0` 中提供的通用 docs helper：
 //! - 文件夹自动分页遍历
 //! - 文件夹 typed pagination helper
+//! - Drive 文件上传/下载 helper
 //! - 按标题查找工作表
 //! - 读取多个单元格范围
 //! - 按条件筛选 bitable 记录
@@ -43,8 +44,47 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
             .list_folder_children_all(&folder_token, None)
             .await?;
         println!("文件夹子项数量: {}", items.len());
+
+        if let Ok(upload_path) = std::env::var("OPENLARK_UPLOAD_FILE_PATH") {
+            let file_name = std::path::Path::new(&upload_path)
+                .file_name()
+                .and_then(|name| name.to_str())
+                .unwrap_or("upload.bin")
+                .to_string();
+            let content = std::fs::read(&upload_path)?;
+            let uploaded = client
+                .docs
+                .upload_drive_file(
+                    &folder_token,
+                    open_lark::docs::DriveUploadFile::new(file_name, content),
+                )
+                .await?;
+            println!("上传文件 token: {}", uploaded.file_token);
+        }
     } else {
         println!("未设置 OPENLARK_FOLDER_TOKEN，跳过文件夹遍历示例");
+    }
+
+    if let Ok(file_token) = std::env::var("OPENLARK_DOWNLOAD_FILE_TOKEN") {
+        let bytes = client.docs.download_drive_file(&file_token).await?;
+        println!("下载文件字节数: {}", bytes.len());
+
+        if std::env::var("OPENLARK_DOWNLOAD_RANGE_DEMO")
+            .ok()
+            .as_deref()
+            == Some("1")
+        {
+            let partial = client
+                .docs
+                .download_drive_file_range(
+                    &file_token,
+                    open_lark::docs::DriveDownloadRange::from_start(0).with_end(1023),
+                )
+                .await?;
+            println!("分片下载字节数: {}", partial.len());
+        }
+    } else {
+        println!("未设置 OPENLARK_DOWNLOAD_FILE_TOKEN，跳过文件下载示例");
     }
 
     if let (Ok(spreadsheet_token), Ok(sheet_title)) = (

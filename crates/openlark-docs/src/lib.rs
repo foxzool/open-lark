@@ -55,6 +55,7 @@
 //!     let _ranges = client
 //!         .read_sheet_ranges("spreadsheet_token", vec![_range.clone()])
 //!         .await?;
+//!     let _bytes = client.download_drive_file("file_token").await?;
 //!     let _records = client
 //!         .query_bitable_records(
 //!             openlark_docs::BitableRecordQuery::new("app_token", "table_id")
@@ -112,6 +113,8 @@ pub mod prelude;
 pub use common::chain::BitableRecordQuery;
 pub use common::chain::DocsClient;
 pub use common::chain::TypedPage;
+#[cfg(feature = "ccm-core")]
+pub use common::chain::{DriveDownloadRange, DriveUploadFile};
 #[cfg(feature = "ccm-core")]
 pub use common::chain::{FolderChildrenPage, FolderChildrenPager, SheetRange, SheetWriteRange};
 
