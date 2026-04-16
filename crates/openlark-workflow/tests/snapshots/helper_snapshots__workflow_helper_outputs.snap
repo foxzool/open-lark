@@ -1,0 +1,44 @@
+---
+source: crates/openlark-workflow/tests/helper_snapshots.rs
+expression: "json!({\n    \"workflow_task_list_query\":\n    {\n        \"tasklist_guid\": list_query.tasklist_guid, \"section_guid\":\n        list_query.section_guid, \"filter\": list_query.filter, \"sort\":\n        list_query.sort, \"user_type\": list_query.user_type, \"page_size\":\n        list_query.page_size,\n    }, \"workflow_task_mutation\":\n    {\n        \"summary\": mutation.summary, \"description\": mutation.description,\n        \"due\": mutation.due, \"priority\": mutation.priority, \"assignee\":\n        mutation.assignee, \"status\": mutation.status,\n    }, \"approval_task_query\":\n    {\n        \"user_id\": approval_query.user_id, \"topic\": approval_query.topic,\n        \"user_id_type\": approval_query.user_id_type, \"status\":\n        approval_query.status, \"instance_code\": approval_query.instance_code,\n        \"page_size\": approval_query.page_size,\n    }, \"approval_task_action\":\n    {\n        \"approval_code\": approval_action.approval_code, \"instance_code\":\n        approval_action.instance_code, \"user_id\": approval_action.user_id,\n        \"task_id\": approval_action.task_id, \"user_id_type\":\n        approval_action.user_id_type, \"comment\": approval_action.comment,\n        \"form\": approval_action.form,\n    }\n})"
+---
+{
+  "approval_task_action": {
+    "approval_code": "approval_code",
+    "comment": "同意",
+    "form": "[{\"field\":\"result\",\"value\":\"approved\"}]",
+    "instance_code": "instance_code",
+    "task_id": "task_123",
+    "user_id": "ou_xxx",
+    "user_id_type": "open_id"
+  },
+  "approval_task_query": {
+    "instance_code": "instance_123",
+    "page_size": 100,
+    "status": "Todo",
+    "topic": "1",
+    "user_id": "ou_xxx",
+    "user_id_type": "open_id"
+  },
+  "workflow_task_list_query": {
+    "filter": "{\"status\":\"Todo\"}",
+    "page_size": 50,
+    "section_guid": "section_456",
+    "sort": [
+      {
+        "field": "updated_at",
+        "order": "desc"
+      }
+    ],
+    "tasklist_guid": "tasklist_123",
+    "user_type": "open_id"
+  },
+  "workflow_task_mutation": {
+    "assignee": "ou_assignee",
+    "description": "补齐 helper 快照测试",
+    "due": "2026-12-31T23:59:59Z",
+    "priority": 3,
+    "status": "InProgress",
+    "summary": "完成项目文档"
+  }
+}

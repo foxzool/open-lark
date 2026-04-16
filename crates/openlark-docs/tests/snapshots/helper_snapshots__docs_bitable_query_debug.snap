@@ -1,0 +1,37 @@
+---
+source: crates/openlark-docs/tests/helper_snapshots.rs
+expression: "format!(\"{query:#?}\")"
+---
+BitableRecordQuery {
+    app_token: "app_token",
+    table_id: "table_id",
+    conjunction: "or",
+    filters: [
+        FilterCondition {
+            field_name: "状态",
+            operator: "is",
+            value: Some(
+                [
+                    "进行中",
+                ],
+            ),
+        },
+        FilterCondition {
+            field_name: "负责人",
+            operator: "isAnyOf",
+            value: Some(
+                [
+                    "ou_a",
+                    "ou_b",
+                ],
+            ),
+        },
+    ],
+    field_names: Some(
+        [
+            "状态",
+            "负责人",
+        ],
+    ),
+    automatic_fields: true,
+}

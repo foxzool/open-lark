@@ -1,0 +1,43 @@
+---
+source: crates/openlark-docs/tests/helper_snapshots.rs
+expression: "json!({\n    \"sheet_range\":\n    {\n        \"a1_notation\": range.to_a1_notation(), \"range_expr\":\n        range.range_expr(),\n    }, \"sheet_write_range\":\n    {\n        \"range\": write_range.range.to_string(), \"major_dimension\":\n        write_range.major_dimension, \"values\": write_range.values,\n    }, \"drive_download_range\": download.to_header_value(),\n    \"drive_upload_file\":\n    {\n        \"file_name\": upload.file_name, \"size\": upload.size(), \"checksum\":\n        upload.checksum,\n    }, \"wiki_path\": wiki_path.to_string(), \"typed_page\":\n    {\n        \"items\": page.items, \"has_more\": page.has_more, \"next_page_token\":\n        page.next_page_token,\n    }\n})"
+---
+{
+  "drive_download_range": "bytes=0-1023",
+  "drive_upload_file": {
+    "checksum": "adler32-demo",
+    "file_name": "report.csv",
+    "size": 28
+  },
+  "sheet_range": {
+    "a1_notation": "sheet_001!A1:C5",
+    "range_expr": "A1:C5"
+  },
+  "sheet_write_range": {
+    "major_dimension": "ROWS",
+    "range": "sheet_001!A1:C5",
+    "values": [
+      [
+        "状态",
+        "进行中"
+      ],
+      [
+        "负责人",
+        "张三"
+      ]
+    ]
+  },
+  "typed_page": {
+    "has_more": true,
+    "items": [
+      {
+        "title": "汇总表"
+      },
+      {
+        "title": "排期表"
+      }
+    ],
+    "next_page_token": "next_page_token"
+  },
+  "wiki_path": "产品文档/发布计划"
+}

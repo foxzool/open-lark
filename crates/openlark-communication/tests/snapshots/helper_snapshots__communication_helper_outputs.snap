@@ -1,0 +1,49 @@
+---
+source: crates/openlark-communication/tests/helper_snapshots.rs
+expression: "json!({\n    \"message_recipient\":\n    {\n        \"receive_id\": recipient.receive_id, \"receive_id_type\":\n        recipient.receive_id_type.as_str(),\n    }, \"post_message\":\n    { \"locale\": post.locale, \"title\": post.title, \"text\": post.text, },\n    \"reply_target\":\n    {\n        \"message_id\": reply_target.message_id, \"reply_in_thread\":\n        reply_target.reply_in_thread,\n    }, \"media_image_upload\":\n    {\n        \"image_type\": image_upload.image_type.as_str(), \"file_name\":\n        image_upload.file_name, \"bytes_len\": image_upload.bytes.len(),\n    }, \"media_file_upload\":\n    {\n        \"file_name\": file_upload.file_name, \"file_type\":\n        file_upload.file_type, \"duration\": file_upload.duration, \"bytes_len\":\n        file_upload.bytes.len(),\n    }, \"user_lookup_item\":\n    {\n        \"name\": user.name, \"open_id\": user.open_id, \"user_id\": user.user_id,\n        \"department_ids\": user.department_ids,\n    }, \"chat_lookup_item\":\n    {\n        \"chat_id\": chat.chat_id, \"name\": chat.name, \"description\":\n        chat.description, \"owner_id\": chat.owner_id, \"owner_id_type\":\n        chat.owner_id_type, \"external\": chat.external, \"tenant_key\":\n        chat.tenant_key, \"chat_status\": chat.chat_status,\n    },\n})"
+---
+{
+  "chat_lookup_item": {
+    "chat_id": "oc_chat",
+    "chat_status": "normal",
+    "description": "核心项目协作群",
+    "external": false,
+    "name": "项目群",
+    "owner_id": "ou_owner",
+    "owner_id_type": "open_id",
+    "tenant_key": "tenant_key"
+  },
+  "media_file_upload": {
+    "bytes_len": 3,
+    "duration": 15,
+    "file_name": "report.pdf",
+    "file_type": "pdf"
+  },
+  "media_image_upload": {
+    "bytes_len": 3,
+    "file_name": "avatar.png",
+    "image_type": "avatar"
+  },
+  "message_recipient": {
+    "receive_id": "ou_xxx",
+    "receive_id_type": "open_id"
+  },
+  "post_message": {
+    "locale": "zh_cn",
+    "text": "今天完成发布",
+    "title": "项目播报"
+  },
+  "reply_target": {
+    "message_id": "om_xxx",
+    "reply_in_thread": true
+  },
+  "user_lookup_item": {
+    "department_ids": [
+      "od_1",
+      "od_2"
+    ],
+    "name": "zhangsan",
+    "open_id": "ou_lookup",
+    "user_id": "u_lookup"
+  }
+}
