@@ -86,6 +86,10 @@ helper 的以下部分默认受兼容性约束：
   - 新增更细粒度的可选参数
   - 强化输入校验但不改变合法输入的行为
 
+helper / convenience method 的详细 semver 判定矩阵见：
+
+- `docs/HELPER_SEMVER_RULES.md`
+
 ### 4. Re-exports
 
 公开 re-export 一旦被文档或示例主推，应按 stable import path 处理。
@@ -193,6 +197,7 @@ helper 的以下部分默认受兼容性约束：
 
 - `docs/api-compatibility-note-template.md`
 - `docs/TYPED_API_SEMVER_RULES.md`
+- `docs/HELPER_SEMVER_RULES.md`
 
 ## 例外原则
 
