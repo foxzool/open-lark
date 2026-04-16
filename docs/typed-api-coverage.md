@@ -1,6 +1,6 @@
 # Typed API 覆盖率报告说明
 
-本文档定义 `tools/validate_apis.py` 的覆盖率统计口径与生成流程，用于支持按 crate 的缺口跟踪、里程碑规划与发布节奏管理。
+本文档定义 `tools/validate_apis.py` 的覆盖率统计口径与缺失 API 优先级模型，用于支持按 crate 的缺口跟踪、里程碑规划与发布节奏管理。
 
 ## 1. 统计口径
 
@@ -10,13 +10,46 @@
 - 报告默认不写入时间戳，确保同输入下可稳定复现（可通过 `--with-timestamp` 打开时间戳）。
 - 覆盖率定义：`已实现 / API 总数 * 100%`。
 
-## 2. 报告产物
+## 2. 缺失 API 优先级模型
+
+缺失 API 不再只按 raw count 推进，而是同时参考以下三个维度：
+
+- `business_value`：对企业级集成闭环的业务价值，1-5 分。
+- `usage_frequency`：在高频使用场景中的出现概率，1-5 分。
+- `implementation_effort`：实现复杂度，1-5 分；分数越高表示越难。
+
+综合分公式如下：
+
+```text
+business_value × 0.50
++ usage_frequency × 0.30
++ (6 - implementation_effort) × 0.20
+```
+
+说明：
+
+- 实现复杂度在综合分中是反向计入，意味着“价值高且更容易落地”的缺口会更靠前。
+- 优先级规则定义在 `tools/api_priority.toml`。
+- 规则按声明顺序匹配，后面的更具体规则可以覆盖前面的通用规则。
+
+### 2.1 当前优先级关注点
+
+`tools/api_priority.toml` 当前已覆盖以下高价值缺口类型：
+
+- Task v2 的任务、清单、评论、自定义字段、分组和附件能力
+- 联系人基础查询类入口
+- 企业信息、席位信息、跨组织可见范围
+- CoreHR 流程发起、流程模板、时间轴查询
+- 安全合规迁移、多地域查询
+- 只读查询类接口的低复杂度倾斜
+
+## 3. 报告产物
 
 执行批量模式后，会生成以下文件：
 
-- `reports/api_validation/summary.md`：面向人读的汇总看板（总览 + 各 crate 指标）。
+- `reports/api_validation/summary.md`：面向人读的汇总看板（总览 + 各 crate 指标 + 高价值缺失 API backlog）。
 - `reports/api_validation/summary.json`：机器可读汇总（便于 CI/看板系统消费）。
-- `reports/api_validation/crates/<crate>.md`：每个 crate 的详细报告（含未实现清单）。
+- `reports/api_validation/crates/<crate>.md`：每个 crate 的详细报告（含缺失 API 排序清单和按模块展开详情）。
 
 每个 crate 的报告至少包含：
 
@@ -24,10 +57,11 @@
 - 已实现数量
 - 未实现数量
 - 完成率
+- 缺失 API 的优先级表（含维度分数、综合分、判定规则）
 
-## 3. 使用方式
+## 4. 使用方式
 
-### 3.1 生成全量覆盖率（推荐）
+### 4.1 生成全量覆盖率与优先级 backlog（推荐）
 
 ```bash
 just api-coverage
@@ -39,20 +73,29 @@ just api-coverage
 python3 tools/validate_apis.py --all-crates
 ```
 
-### 3.2 单 crate 验证
+### 4.2 单 crate 验证
 
 ```bash
-python3 tools/validate_apis.py --crate openlark-docs
+python3 tools/validate_apis.py --crate openlark-workflow
 ```
 
-### 3.3 包含 old 版本 API
+### 4.3 包含 old 版本 API
 
 ```bash
 python3 tools/validate_apis.py --all-crates --include-old
 ```
 
-## 4. 规划建议
+### 4.4 指定自定义优先级模型
 
-- 以 `summary.md` 的 `未实现` 列作为季度缺口清单输入。
-- 以 `completion_rate` 追踪里程碑完成趋势。
-- 优先处理高流量核心 crate 的高缺口模块，再补尾部模块。
+```bash
+python3 tools/validate_apis.py \
+  --all-crates \
+  --priority-config tools/api_priority.toml
+```
+
+## 5. 规划建议
+
+- 以 `summary.md` 中的 `高价值缺失 API Backlog` 作为季度实现清单入口，而不是只看 `未实现` 总数。
+- 先处理 `P0/P1` 缺口，再回到尾部模块做补齐。
+- 当某个业务域出现大批量缺口时，优先补其只读查询与主闭环写操作，避免只做边角接口。
+- 每次调整优先级规则后重新生成报告，保证计划依据与仓库现状同步。

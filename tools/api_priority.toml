@@ -1,0 +1,152 @@
+# Typed API 缺失 API 业务优先级模型
+#
+# 目标：
+# - 将“缺失 API”从按数量统计，升级为按业务价值排序
+# - 让季度规划、里程碑拆解、补齐顺序有稳定依据
+#
+# 评分说明（均为 1-5）：
+# - business_value：对企业级集成闭环的价值，越高越重要
+# - usage_frequency：在高频使用场景中的出现概率，越高越常用
+# - implementation_effort：实现复杂度，越高越难；综合分里会反向计入
+#
+# 规则说明：
+# - 按文件中的声明顺序匹配
+# - 后面的更具体规则可以覆盖前面的通用规则
+
+[defaults]
+business_value = 3
+usage_frequency = 3
+implementation_effort = 3
+
+[weights]
+business_value = 0.5
+usage_frequency = 0.3
+implementation_effort = 0.2
+
+[[priority_tiers]]
+name = "P0"
+min_score = 4.4
+description = "核心业务闭环，优先补齐"
+
+[[priority_tiers]]
+name = "P1"
+min_score = 3.7
+description = "高价值能力，纳入近期实现"
+
+[[priority_tiers]]
+name = "P2"
+min_score = 3.0
+description = "中价值缺口，按容量推进"
+
+[[priority_tiers]]
+name = "P3"
+min_score = 0.0
+description = "低频或高成本能力，排在尾部"
+
+[[rules]]
+name = "核心协作域基线"
+note = "任务、审批、消息、通讯录、云文档等协作域优先级高于纯后台配置域。"
+biz_tags = ["task", "approval", "im", "contact", "ccm", "base", "calendar"]
+business_value = 4
+usage_frequency = 4
+
+[[rules]]
+name = "Task v2 核心闭环"
+note = "任务中心当前缺口最多，且覆盖创建、查询、评论、清单、自定义字段等高频协作闭环。"
+expected_file_prefixes = [
+  "task/task/v2/task/",
+  "task/task/v2/tasklist/",
+  "task/task/v2/comment/",
+  "task/task/v2/custom_field/",
+  "task/task/v2/section/",
+  "task/task/v2/attachment/",
+  "task/task/v2/task/subtask/",
+]
+business_value = 5
+usage_frequency = 5
+
+[[rules]]
+name = "Task v1 兼容能力"
+note = "v1 仍有历史集成价值，但优先级低于 v2 主路径。"
+expected_file_prefixes = ["task/task/v1/"]
+business_value = 4
+usage_frequency = 4
+
+[[rules]]
+name = "联系人基础查询"
+note = "用户基础信息查询是目录集成里的高频入口。"
+expected_file_prefixes = ["contact/contact/v3/user/basic_batch.rs"]
+business_value = 5
+usage_frequency = 5
+
+[[rules]]
+name = "租户与跨组织视图"
+note = "企业信息、席位信息、关联组织可见范围属于企业管理和多组织集成的关键入口。"
+expected_file_prefixes = [
+  "tenant/tenant/v2/tenant/",
+  "trust_party/trust_party/v1/collaboration_tenant/",
+  "directory/directory/v1/collboration_share_entity/",
+]
+business_value = 4
+usage_frequency = 4
+
+[[rules]]
+name = "CoreHR 流程与时间轴"
+note = "CoreHR 的流程发起和时间轴查询属于高价值 HR 场景。"
+expected_file_prefixes = [
+  "feishu_people/corehr/v2/process_start/",
+  "feishu_people/corehr/v2/process/query_flow_data_template/",
+  "feishu_people/corehr/v2/company/query_multi_timeline.rs",
+  "feishu_people/corehr/v2/location/query_multi_timeline.rs",
+  "feishu_people/corehr/v2/probation/edit.rs",
+]
+business_value = 4
+usage_frequency = 3
+
+[[rules]]
+name = "安全合规迁移"
+note = "安全合规场景单次价值高，但使用频次通常低于协作域。"
+expected_file_prefixes = [
+  "security_and_compliance/security_and_compliance/v1/user_migration/",
+  "security_and_compliance/security_and_compliance/v1/multi_geo_entity/tenant/get.rs",
+]
+business_value = 4
+usage_frequency = 2
+
+[[rules]]
+name = "主数据治理"
+note = "MDM 更偏后台治理能力，价值稳定但通常不是最高频集成入口。"
+expected_file_prefixes = ["mdm/mdm/"]
+business_value = 3
+usage_frequency = 2
+
+[[rules]]
+name = "实名认证录入"
+note = "实名认证对特定合规场景重要，但默认频次低于协作与目录域。"
+expected_file_prefixes = ["human_authentication/human_authentication/v1/identity/create.rs"]
+business_value = 4
+usage_frequency = 2
+
+[[rules]]
+name = "只读查询默认较易落地"
+note = "GET 型只读接口通常更适合作为缺口治理的优先补齐项。"
+methods = ["GET"]
+implementation_effort = 2
+
+[[rules]]
+name = "搜索与查询接口默认较易落地"
+note = "search/query/list 类接口通常复用响应模型，落地成本低于写操作。"
+name_prefixes = ["list", "get", "query", "search", "tasklists", "tasks", "basic_batch"]
+implementation_effort = 2
+
+[[rules]]
+name = "复杂写操作"
+note = "流程发起、迁移、上传、可见组织树等接口通常包含更复杂的请求体或语义约束。"
+expected_file_prefixes = [
+  "task/task/v2/attachment/upload.rs",
+  "feishu_people/corehr/v2/process_start/create.rs",
+  "feishu_people/corehr/v2/process/query_flow_data_template/create.rs",
+  "security_and_compliance/security_and_compliance/v1/user_migration/",
+  "trust_party/trust_party/v1/collaboration_tenant/visible_organization.rs",
+]
+implementation_effort = 4
