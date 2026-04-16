@@ -50,3 +50,4 @@ cargo run --example workflow_api_example --features "workflow"
 详细环境变量说明见 [docs/configuration.md](docs/configuration.md)。
 
 Docs helper 设计与命名规范见 [`../docs/docs-helper-guidelines.md`](../docs/docs-helper-guidelines.md)。
+Communication / Workflow helper 分层边界见 [`../docs/communication-workflow-helper-boundaries.md`](../docs/communication-workflow-helper-boundaries.md)。

@@ -1,6 +1,7 @@
 //! # OpenLark 工作流模块
 //!
 //! OpenLark SDK 的工作流模块，提供飞书任务、审批和看板 API 的完整访问。
+//! Communication / Workflow helper 分层边界见 `docs/communication-workflow-helper-boundaries.md`。
 //!
 //! ## 功能特性
 //!

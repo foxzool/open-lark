@@ -1,6 +1,7 @@
 //! Open-Lark Communication Module
 //!
 //! 飞书通讯协作服务模块，提供完整的沟通和协作功能。
+//! Communication / Workflow helper 分层边界见 `docs/communication-workflow-helper-boundaries.md`。
 //!
 //! ## 主要功能
 //!
