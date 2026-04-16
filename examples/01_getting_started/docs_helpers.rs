@@ -2,6 +2,7 @@
 //!
 //! 演示 `openlark` 根 crate 在 `0.15.0` 中提供的通用 docs helper：
 //! - 文件夹自动分页遍历
+//! - 文件夹 typed pagination helper
 //! - 按标题查找工作表
 //! - 读取多个单元格范围
 //! - 多维表格全量读取
@@ -25,6 +26,17 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("当前 app_id: {}", client.config().app_id);
 
     if let Ok(folder_token) = std::env::var("OPENLARK_FOLDER_TOKEN") {
+        let mut pager = client
+            .docs
+            .folder_children_pager(&folder_token)
+            .page_size(50);
+        let first_page = pager.fetch_next_page().await?;
+        println!("第一页子项数量: {}", first_page.items.len());
+        println!("第一页是否还有更多: {}", first_page.has_more);
+        if let Some(next_page_token) = &first_page.next_page_token {
+            println!("下一页 token: {}", next_page_token);
+        }
+
         let items = client
             .docs
             .list_folder_children_all(&folder_token, None)

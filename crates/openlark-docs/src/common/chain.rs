@@ -45,6 +45,156 @@ use openlark_core::error::{business_error, CoreError};
 use openlark_core::SDKResult;
 use std::sync::Arc;
 
+/// 统一的 typed pagination 返回页。
+///
+/// 相比直接暴露各 API 的原始分页字段，该结构统一使用 `next_page_token` 命名，
+/// 方便后续在 Drive / Docs helper 中复用同一套分页范式。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TypedPage<T> {
+    /// 当前页结果项。
+    pub items: Vec<T>,
+    /// 是否还有下一页。
+    pub has_more: bool,
+    /// 下一页分页标记。
+    pub next_page_token: Option<String>,
+}
+
+impl<T> TypedPage<T> {
+    pub fn new(items: Vec<T>, has_more: bool, next_page_token: Option<String>) -> Self {
+        Self {
+            items,
+            has_more,
+            next_page_token,
+        }
+    }
+
+    pub fn empty() -> Self {
+        Self::new(Vec::new(), false, None)
+    }
+
+    pub fn is_last_page(&self) -> bool {
+        !self.has_more
+    }
+
+    pub fn into_items(self) -> Vec<T> {
+        self.items
+    }
+}
+
+#[cfg(feature = "ccm-core")]
+pub type FolderChildrenPage = TypedPage<crate::ccm::explorer::v2::models::FileItem>;
+
+#[cfg(feature = "ccm-core")]
+impl From<crate::ccm::explorer::v2::models::FolderChildrenData>
+    for TypedPage<crate::ccm::explorer::v2::models::FileItem>
+{
+    fn from(data: crate::ccm::explorer::v2::models::FolderChildrenData) -> Self {
+        Self::new(data.items, data.has_more, data.page_token)
+    }
+}
+
+/// 文件夹子项分页 helper。
+///
+/// 用于按页读取 Drive Explorer 文件夹内容，并统一分页返回形态。
+#[cfg(feature = "ccm-core")]
+#[derive(Debug, Clone)]
+pub struct FolderChildrenPager {
+    config: Arc<Config>,
+    folder_token: String,
+    doc_type: Option<String>,
+    page_size: i32,
+    next_page_token: Option<String>,
+    exhausted: bool,
+}
+
+#[cfg(feature = "ccm-core")]
+impl FolderChildrenPager {
+    fn new(config: Arc<Config>, folder_token: impl Into<String>) -> Self {
+        Self {
+            config,
+            folder_token: folder_token.into(),
+            doc_type: None,
+            page_size: crate::common::constants::DEFAULT_PAGE_SIZE,
+            next_page_token: None,
+            exhausted: false,
+        }
+    }
+
+    /// 设置文件类型过滤。
+    pub fn doc_type(mut self, doc_type: impl Into<String>) -> Self {
+        self.doc_type = Some(doc_type.into());
+        self
+    }
+
+    /// 设置分页大小，自动限制在 1..=MAX_PAGE_SIZE 范围内。
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = page_size.clamp(1, crate::common::constants::MAX_PAGE_SIZE);
+        self
+    }
+
+    /// 从指定分页 token 恢复读取。
+    pub fn next_page_token(mut self, next_page_token: impl Into<String>) -> Self {
+        self.next_page_token = Some(next_page_token.into());
+        self
+    }
+
+    /// 查看当前即将请求的下一页 token。
+    pub fn pending_page_token(&self) -> Option<&str> {
+        self.next_page_token.as_deref()
+    }
+
+    /// 读取下一页结果。
+    pub async fn fetch_next_page(&mut self) -> SDKResult<FolderChildrenPage> {
+        use crate::ccm::explorer::v2::{get_folder_children, GetFolderChildrenParams};
+
+        if self.exhausted {
+            return Ok(TypedPage::empty());
+        }
+
+        let response = get_folder_children(
+            self.config.as_ref(),
+            &self.folder_token,
+            Some(GetFolderChildrenParams {
+                page_size: Some(self.page_size),
+                page_token: self.next_page_token.clone(),
+                doc_type: self.doc_type.clone(),
+            }),
+        )
+        .await?;
+
+        let page = response
+            .data
+            .map(TypedPage::from)
+            .unwrap_or_else(TypedPage::empty);
+        self.exhausted = !page.has_more;
+        self.next_page_token = if page.has_more {
+            page.next_page_token.clone()
+        } else {
+            None
+        };
+
+        Ok(page)
+    }
+
+    /// 收集当前 pager 剩余的所有结果。
+    pub async fn collect_all(
+        mut self,
+    ) -> SDKResult<Vec<crate::ccm::explorer::v2::models::FileItem>> {
+        let mut items = Vec::new();
+
+        loop {
+            let page = self.fetch_next_page().await?;
+            let is_last_page = page.is_last_page();
+            items.extend(page.into_items());
+            if is_last_page {
+                break;
+            }
+        }
+
+        Ok(items)
+    }
+}
+
 /// Docs 链式入口：`docs.ccm.config()` / `docs.base.bitable.config()`（按 feature 裁剪）
 #[derive(Debug, Clone)]
 pub struct DocsClient {
@@ -83,6 +233,12 @@ impl DocsClient {
         &self.config
     }
 
+    /// 创建文件夹子项分页 helper。
+    #[cfg(feature = "ccm-core")]
+    pub fn folder_children_pager(&self, folder_token: impl Into<String>) -> FolderChildrenPager {
+        FolderChildrenPager::new(self.config.clone(), folder_token)
+    }
+
     /// 获取文件夹下的全部子项，自动处理分页。
     #[cfg(feature = "ccm-core")]
     pub async fn list_folder_children_all(
@@ -90,37 +246,14 @@ impl DocsClient {
         folder_token: &str,
         doc_type: Option<&str>,
     ) -> SDKResult<Vec<crate::ccm::explorer::v2::models::FileItem>> {
-        use crate::ccm::explorer::v2::{get_folder_children, GetFolderChildrenParams};
-
-        let mut items = Vec::new();
-        let mut page_token = None;
-
-        loop {
-            let response = get_folder_children(
-                self.config(),
-                folder_token,
-                Some(GetFolderChildrenParams {
-                    page_size: Some(crate::common::constants::MAX_PAGE_SIZE),
-                    page_token: page_token.clone(),
-                    doc_type: doc_type.map(str::to_owned),
-                }),
-            )
-            .await?;
-
-            let Some(data) = response.data else {
-                break;
-            };
-
-            items.extend(data.items);
-
-            if !data.has_more {
-                break;
-            }
-
-            page_token = data.page_token;
+        let mut pager = self
+            .folder_children_pager(folder_token)
+            .page_size(crate::common::constants::MAX_PAGE_SIZE);
+        if let Some(doc_type) = doc_type {
+            pager = pager.doc_type(doc_type);
         }
 
-        Ok(items)
+        pager.collect_all().await
     }
 
     /// 读取多维表格全部记录，自动处理分页。
@@ -353,6 +486,7 @@ impl MinutesClient {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use serde_json;
 
     #[test]
@@ -368,5 +502,54 @@ mod tests {
         let json = r#"{"field": "data"}"#;
         let value: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(value["field"], "data");
+    }
+
+    #[test]
+    fn test_typed_page_last_page_state() {
+        let page = TypedPage::new(vec![1, 2], false, None);
+        assert!(page.is_last_page());
+        assert_eq!(page.into_items(), vec![1, 2]);
+    }
+
+    #[cfg(feature = "ccm-core")]
+    #[test]
+    fn test_folder_children_page_maps_next_page_token() {
+        let data = crate::ccm::explorer::v2::models::FolderChildrenData {
+            items: vec![crate::ccm::explorer::v2::models::FileItem {
+                file_token: "folder_a".to_string(),
+                title: "Alpha".to_string(),
+                doc_type: "folder".to_string(),
+                is_folder: true,
+                create_time: 1,
+                update_time: 2,
+            }],
+            has_more: true,
+            page_token: Some("page_2".to_string()),
+        };
+
+        let page: FolderChildrenPage = TypedPage::from(data);
+        assert_eq!(page.items.len(), 1);
+        assert_eq!(page.items[0].title, "Alpha");
+        assert!(page.has_more);
+        assert_eq!(page.next_page_token.as_deref(), Some("page_2"));
+    }
+
+    #[cfg(feature = "ccm-core")]
+    #[test]
+    fn test_folder_children_pager_resume_token() {
+        let client = DocsClient::new(
+            Config::builder()
+                .app_id("test_app")
+                .app_secret("test_secret")
+                .build(),
+        );
+
+        let pager = client
+            .folder_children_pager("folder_token")
+            .page_size(999)
+            .doc_type("folder")
+            .next_page_token("page_2");
+
+        assert_eq!(pager.pending_page_token(), Some("page_2"));
     }
 }

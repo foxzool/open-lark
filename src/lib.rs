@@ -213,13 +213,22 @@ pub use openlark_client::UserClient;
 
 #[cfg(feature = "security")]
 #[doc(hidden)]
-pub use openlark_client::SecurityServices;
+pub use openlark_client::SecurityClient;
 
 /// 面向 `openlark` 用户的统一预导出。
 ///
 /// 该模块只导出“创建客户端 + 顶层业务入口”所需的稳定公共类型。
 /// registry / feature loader / traits 等高级客户端层能力保留在 `openlark-client`。
 pub mod prelude {
+    #[cfg(feature = "ai")]
+    #[doc(hidden)]
+    pub use crate::AiClient;
+    #[cfg(feature = "analytics")]
+    #[doc(hidden)]
+    pub use crate::AnalyticsClient;
+    #[cfg(feature = "application")]
+    #[doc(hidden)]
+    pub use crate::ApplicationClient;
     #[cfg(feature = "auth")]
     #[doc(hidden)]
     pub use crate::AuthClient;
@@ -240,40 +249,31 @@ pub mod prelude {
     ))]
     #[doc(hidden)]
     pub use crate::DocsClient;
-    #[cfg(feature = "hr")]
-    #[doc(hidden)]
-    pub use crate::HrClient;
-    #[cfg(feature = "meeting")]
-    #[doc(hidden)]
-    pub use crate::MeetingClient;
-    #[cfg(feature = "ai")]
-    #[doc(hidden)]
-    pub use crate::AiClient;
-    #[cfg(feature = "workflow")]
-    #[doc(hidden)]
-    pub use crate::WorkflowClient;
-    #[cfg(feature = "platform")]
-    #[doc(hidden)]
-    pub use crate::PlatformClient;
-    #[cfg(feature = "application")]
-    #[doc(hidden)]
-    pub use crate::ApplicationClient;
     #[cfg(feature = "helpdesk")]
     #[doc(hidden)]
     pub use crate::HelpdeskClient;
+    #[cfg(feature = "hr")]
+    #[doc(hidden)]
+    pub use crate::HrClient;
     #[cfg(feature = "mail")]
     #[doc(hidden)]
     pub use crate::MailClient;
-    #[cfg(feature = "analytics")]
+    #[cfg(feature = "meeting")]
     #[doc(hidden)]
-    pub use crate::AnalyticsClient;
+    pub use crate::MeetingClient;
+    #[cfg(feature = "platform")]
+    #[doc(hidden)]
+    pub use crate::PlatformClient;
+    pub use crate::SDKResult;
+    #[cfg(feature = "security")]
+    #[doc(hidden)]
+    pub use crate::SecurityClient;
     #[cfg(feature = "user")]
     #[doc(hidden)]
     pub use crate::UserClient;
-    #[cfg(feature = "security")]
+    #[cfg(feature = "workflow")]
     #[doc(hidden)]
-    pub use crate::SecurityServices;
-    pub use crate::SDKResult;
+    pub use crate::WorkflowClient;
     pub use crate::{Client, ClientBuilder, Config, CoreConfig, Error, Result};
     pub use crate::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType, RequestOption};
     pub use openlark_core::prelude::*;
@@ -355,6 +355,18 @@ mod tests {
         let _hr = &client.hr;
         let alias = std::any::type_name::<crate::HrClient>();
         let compat = std::any::type_name::<openlark_client::HrClient>();
+
+        assert_eq!(alias, compat);
+    }
+
+    #[cfg(feature = "security")]
+    #[test]
+    fn root_client_exposes_security_entrypoint() {
+        let client = build_test_client().expect("client should build with security feature");
+
+        let _security = &client.security;
+        let alias = std::any::type_name::<crate::SecurityClient>();
+        let compat = std::any::type_name::<openlark_client::SecurityClient>();
 
         assert_eq!(alias, compat);
     }

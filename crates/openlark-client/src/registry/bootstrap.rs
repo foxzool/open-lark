@@ -217,7 +217,11 @@ fn register_workflow(registry: &mut DefaultServiceRegistry) -> Result<()> {
         version: "1.0.0".to_string(),
         description: Some("飞书工作流服务，提供审批、任务、看板等功能".to_string()),
         dependencies: vec!["auth".to_string()],
-        provides: vec!["approval".to_string(), "task".to_string(), "board".to_string()],
+        provides: vec![
+            "approval".to_string(),
+            "task".to_string(),
+            "board".to_string(),
+        ],
         status: ServiceStatus::Uninitialized,
         priority: 4,
     };
