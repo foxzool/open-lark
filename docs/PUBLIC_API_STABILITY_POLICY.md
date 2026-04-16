@@ -61,6 +61,10 @@ typed API 的以下部分默认视为稳定：
   - 为 builder 新增可选 setter
   - 扩充不影响旧值含义的枚举别名 / 兼容解析能力
 
+generated typed API 的详细 semver 判定矩阵见：
+
+- `docs/TYPED_API_SEMVER_RULES.md`
+
 ### 3. Helpers
 
 helper 虽然是 convenience layer，但一旦被 README、示例或业务文档主推，就应视为稳定接口。
@@ -188,6 +192,7 @@ helper 的以下部分默认受兼容性约束：
 兼容性说明模板见：
 
 - `docs/api-compatibility-note-template.md`
+- `docs/TYPED_API_SEMVER_RULES.md`
 
 ## 例外原则
 
