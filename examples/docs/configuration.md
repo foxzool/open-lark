@@ -14,10 +14,20 @@ export OPENLARK_APP_SECRET="your_app_secret"
 ```bash
 export OPENLARK_BASE_URL="https://open.feishu.cn"
 export OPENLARK_FOLDER_TOKEN="folder_token"
+export OPENLARK_DOWNLOAD_FILE_TOKEN="file_token"
+export OPENLARK_DOWNLOAD_RANGE_DEMO="1"
+export OPENLARK_UPLOAD_FILE_PATH="/path/to/file"
 export OPENLARK_SPREADSHEET_TOKEN="spreadsheet_token"
 export OPENLARK_SHEET_TITLE="汇总表"
+export OPENLARK_SHEETS_WRITE_DEMO="1"
+export OPENLARK_SHEETS_WRITE_RANGE="A20:B20"
+export OPENLARK_SHEETS_APPEND_RANGE="A30:B30"
 export OPENLARK_BITABLE_APP_TOKEN="app_token"
 export OPENLARK_BITABLE_TABLE_ID="table_id"
+export OPENLARK_BITABLE_FILTER_FIELD="状态"
+export OPENLARK_BITABLE_FILTER_VALUE="进行中"
+export OPENLARK_WIKI_SPACE_ID="space_id"
+export OPENLARK_WIKI_NODE_PATH="产品文档/发布计划"
 ```
 
 如果你使用国际版 Lark：
@@ -29,7 +39,7 @@ export OPENLARK_BASE_URL="https://open.larksuite.com"
 ## 推荐做法
 
 ```bash
-cp examples/.env.example .env
+cp examples/01_getting_started/.env.example .env
 ```
 
 然后把上面的变量写进 `.env`。
@@ -39,11 +49,13 @@ cp examples/.env.example .env
 ```bash
 cargo run --example simple_api_call --features "auth,communication"
 cargo run --example docs_helpers --features "auth,docs-bitable"
+cargo run --example docs_workflows --features "auth,docs-bitable"
 cargo run --example websocket_echo_bot --features "communication,websocket"
 ```
 
 ## 说明
 
 - `simple_api_call` 只验证根 crate 单入口和 communication 模块是否可用。
-- `docs_helpers` 会按你是否提供相关 token，分别演示文件夹遍历、sheet 查找和多维表格读取。
+- `docs_helpers` 会按你是否提供相关 token，分别演示文件夹遍历、Drive 上传/下载、sheet 查找、批量读范围与多维表格读取；如需启用分片下载/批量写入演示，再额外设置 `OPENLARK_DOWNLOAD_RANGE_DEMO=1` / `OPENLARK_SHEETS_WRITE_DEMO=1`。
+- `docs_workflows` 会以任务流方式串起 Drive 文件流转、Spreadsheet 周报处理，以及 Wiki / Bitable 巡检流程。
 - `websocket_echo_bot` 需要额外完成飞书事件订阅和长连接配置。

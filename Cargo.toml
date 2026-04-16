@@ -254,6 +254,11 @@ path = "examples/01_getting_started/docs_helpers.rs"
 required-features = ["auth", "docs-bitable"]
 
 [[example]]
+name = "docs_workflows"
+path = "examples/01_getting_started/docs_workflows.rs"
+required-features = ["auth", "docs-bitable"]
+
+[[example]]
 name = "readme_quick_start"
 path = "examples/01_getting_started/readme_quick_start.rs"
 required-features = ["auth", "docs-bitable"]
