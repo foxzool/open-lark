@@ -14,6 +14,8 @@
 
 - 根 crate `openlark` 导出的公开类型、模块与入口
 - 各 published crate 暴露给最终用户直接使用的公开类型、函数、builder、trait
+- typed API 的 request / response / model 结构，以及它们对应的稳定字段语义
+- helper 的输入、默认值、返回类型与任务型结果表达
 - 对外文档、README、示例中主推的调用路径
 - 已发布到 crates.io 并在文档中公开声明的 feature 名称
 - 公开 re-export 的路径与名称
@@ -23,6 +25,72 @@
 - `pub(crate)`、内部模块、内部工具函数
 - 未在文档中承诺的实验性实现细节
 - 仅用于测试或生成流程的内部脚本接口
+
+## 按 surface 的兼容性边界
+
+### 1. Public entrypoints
+
+以下入口视为强稳定边界：
+
+- 根 crate `openlark` 的 `Client` / `ClientBuilder` / `prelude`
+- 业务 crate 的顶层 client / service 入口
+- README 和 examples 主推的 canonical 调用路径
+
+因此：
+
+- 改变默认推荐入口，默认视为兼容性变更
+- 删除历史兼容入口前，必须先给出迁移说明与 deprecation 周期
+
+### 2. Typed APIs
+
+typed API 的以下部分默认视为稳定：
+
+- request / response 类型名
+- 必填字段语义
+- 已公开字段名称
+- 公开 model 的结构层级
+
+默认规则：
+
+- **breaking**：
+  - 删除或重命名公开字段
+  - 把原本可选字段改成必填
+  - 改变字段语义，导致既有调用行为变化
+- **通常非 breaking**：
+  - 为响应新增可选字段
+  - 为 builder 新增可选 setter
+  - 扩充不影响旧值含义的枚举别名 / 兼容解析能力
+
+### 3. Helpers
+
+helper 虽然是 convenience layer，但一旦被 README、示例或业务文档主推，就应视为稳定接口。
+
+helper 的以下部分默认受兼容性约束：
+
+- 输入参数顺序与含义
+- 默认值策略
+- 返回类型
+- 返回结果的任务型语义
+
+默认规则：
+
+- **breaking**：
+  - 将 `Vec<T>` 改为不同的返回类型
+  - 改变默认值，导致行为语义明显变化
+  - 删除主推 helper 或改名
+- **通常非 breaking**：
+  - 新增更细粒度的可选参数
+  - 强化输入校验但不改变合法输入的行为
+
+### 4. Re-exports
+
+公开 re-export 一旦被文档或示例主推，应按 stable import path 处理。
+
+因此：
+
+- 删除 re-export，默认视为 breaking
+- 将 re-export 从主文档面移除但继续保留，可视为非 breaking 的文档收敛
+- 真正移除前，必须经过 deprecation 周期
 
 ## 版本语义
 
@@ -64,6 +132,21 @@
 
 如果因安全或严重正确性问题必须立即收缩接口，可以跳过完整废弃周期，但必须在发布说明中明确原因。
 
+### Deprecation 记录模板
+
+每次 deprecated 公开接口时，至少应记录以下信息：
+
+```md
+## Deprecation
+
+- Surface: [entrypoint | typed api | helper | feature | re-export]
+- Deprecated path: `...`
+- Replacement: `...`
+- First deprecated in: `x.y.z`
+- Earliest removal: `x.y+1` 或“至少一个公开发布周期后”
+- Reason: ...
+```
+
 ## Re-export 与入口规范
 
 根 crate `openlark` 是普通用户的默认官方入口。
@@ -99,6 +182,12 @@
 - release notes 已说明升级关注点
 - migration guide 已覆盖实际迁移路径
 - CI 已覆盖关键公开示例或等价验证
+
+### Release note / migration 模板
+
+兼容性说明模板见：
+
+- `docs/api-compatibility-note-template.md`
 
 ## 例外原则
 

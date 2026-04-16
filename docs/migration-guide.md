@@ -138,3 +138,7 @@ client.communication;
 - changelog 说明
 - release note 说明
 - 必要时的迁移文档更新
+
+兼容性说明模板见：
+
+- `docs/api-compatibility-note-template.md`
