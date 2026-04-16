@@ -6,6 +6,7 @@
 //! # OpenLark 文档服务模块
 //!
 //! 飞书开放平台云文档服务模块，提供文档、表格、知识库等 API 访问能力。
+//! Docs helper 的设计与命名规范见 `docs/docs-helper-guidelines.md`。
 //!
 //! ## 文档模块业务域结构 (严格按照 bizTag/project/version/resource 组织)
 //!
