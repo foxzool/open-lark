@@ -303,6 +303,12 @@ mod tests {
         let _request_option: Option<RequestOption> = None;
     }
 
+    #[test]
+    fn root_minimal_builder_works_without_service_features() {
+        let client = build_test_client().expect("client should build with minimal features");
+        assert_eq!(client.config().app_id, "test_app");
+    }
+
     #[cfg(feature = "auth")]
     #[test]
     fn root_client_exposes_auth_entrypoint() {
@@ -369,5 +375,70 @@ mod tests {
         let compat = std::any::type_name::<openlark_client::SecurityClient>();
 
         assert_eq!(alias, compat);
+    }
+
+    #[cfg(feature = "docs-bitable")]
+    #[test]
+    fn root_docs_bitable_feature_exposes_query_helper() {
+        let query = crate::docs::BitableRecordQuery::new("app_token", "table_id")
+            .where_equals("状态", "进行中");
+
+        assert_eq!(query.app_token, "app_token");
+        assert_eq!(query.table_id, "table_id");
+    }
+
+    #[cfg(feature = "docs-drive")]
+    #[test]
+    fn root_docs_drive_feature_exposes_drive_helpers() {
+        let upload = crate::docs::DriveUploadFile::new("demo.txt", vec![1, 2, 3]);
+        let range = crate::docs::DriveDownloadRange::from_start(0).with_end(9);
+
+        assert_eq!(upload.file_name, "demo.txt");
+        assert_eq!(upload.size(), 3);
+        assert_eq!(range.to_header_value(), "bytes=0-9");
+    }
+
+    #[cfg(feature = "essential")]
+    #[test]
+    fn root_essential_feature_combines_docs_and_communication_paths() {
+        let client = build_test_client().expect("client should build with essential feature");
+
+        let _communication = &client.communication;
+        let _docs = &client.docs;
+        let recipient = crate::communication::MessageRecipient::open_id("ou_xxx");
+        let query = crate::docs::BitableRecordQuery::new("app_token", "table_id");
+
+        assert_eq!(recipient.receive_id, "ou_xxx");
+        assert_eq!(query.table_id, "table_id");
+    }
+
+    #[cfg(feature = "enterprise")]
+    #[test]
+    fn root_enterprise_feature_combines_quality_critical_domains() {
+        let client = build_test_client().expect("client should build with enterprise feature");
+
+        let _security = &client.security;
+        let _hr = &client.hr;
+        let _workflow = &client.workflow;
+        let action = crate::workflow::ApprovalTaskAction::new(
+            "approval_code",
+            "instance_code",
+            "ou_xxx",
+            "task_123",
+        )
+        .comment("同意");
+
+        assert_eq!(action.task_id, "task_123");
+        assert_eq!(action.comment.as_deref(), Some("同意"));
+    }
+
+    #[cfg(feature = "webhook-full")]
+    #[test]
+    fn root_webhook_full_feature_exposes_signature_and_robot_client() {
+        let client = crate::webhook::WebhookClient::new();
+        let signature = crate::webhook::common::signature::sign(1_700_000_000, "secret");
+
+        let _ = client;
+        assert!(!signature.is_empty());
     }
 }

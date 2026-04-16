@@ -91,24 +91,30 @@ update-audit-db:
 # Test feature combinations (requires cargo-hack)
 test-features:
   @echo "🧪 Testing feature combinations..."
-  @echo "Testing each feature individually (excluding heavy features)..."
-  cargo hack test --each-feature --exclude-features websocket --lib
-  @echo "Testing core feature combinations..."
-  cargo hack test --feature-powerset --depth 2 \
-    --features "im,cloud-docs,contact,group,authentication,search" --lib
+  @echo "Testing each feature individually (excluding websocket/otel)..."
+  cargo hack test --each-feature --exclude-features websocket,otel --lib
+  @echo "Testing common feature combinations..."
+  cargo test --no-default-features --lib
+  cargo test --no-default-features --features "auth,communication" --lib
+  cargo test --no-default-features --features "auth,docs-bitable" --lib
+  cargo test --no-default-features --features "auth,docs-drive" --lib
+  cargo test --no-default-features --features "essential" --lib
+  cargo test --no-default-features --features "enterprise" --lib
+  cargo test --no-default-features --features "webhook-full" --lib
+  cargo test --no-default-features --features "communication,websocket" --lib
   @echo "✅ Feature matrix testing completed!"
 
 # Quick feature combination test (most common combinations)
 test-features-quick:
   @echo "🧪 Quick feature combination testing..."
-  @echo "Testing no features..."
+  @echo "Testing minimal build..."
   cargo test --no-default-features --lib
-  @echo "Testing default features..."
-  cargo test --lib
-  @echo "Testing all features..."
-  cargo test --all-features --lib
-  @echo "Testing websocket feature..."
-  cargo test --no-default-features --features websocket --lib
+  @echo "Testing essential business combo..."
+  cargo test --no-default-features --features "essential" --lib
+  @echo "Testing enterprise combo..."
+  cargo test --no-default-features --features "enterprise" --lib
+  @echo "Testing webhook combo..."
+  cargo test --no-default-features --features "webhook-full" --lib
   @echo "✅ Quick feature testing completed!"
 
 # Install development tools
