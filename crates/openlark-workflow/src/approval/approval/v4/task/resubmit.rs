@@ -10,6 +10,8 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+use crate::common::api_utils::{missing_response_data_error, request_serialization_error};
+
 /// 重新提交审批任务请求体（v4）
 #[derive(Debug, Clone, Serialize, Default)]
 pub struct ResubmitTaskBodyV4 {
@@ -115,16 +117,18 @@ impl ResubmitTaskRequestV4 {
             request = request.query("user_id_type", user_id_type);
         }
 
-        let body_json = serde_json::to_value(&self.body).map_err(|e| {
-            openlark_core::error::validation_error("序列化请求体失败", e.to_string().as_str())
-        })?;
+        let body_json = serde_json::to_value(&self.body)
+            .map_err(|e| request_serialization_error("重新提交审批任务", e))?;
 
         request = request.body(body_json);
 
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+            missing_response_data_error(
+                "重新提交审批任务",
+                response.raw_response.request_id.clone(),
+            )
         })
     }
 }

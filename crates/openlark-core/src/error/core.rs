@@ -963,6 +963,22 @@ impl CoreError {
         })
     }
 
+    /// 附加请求 ID，上下游都使用统一字段传播链路标识。
+    pub fn with_request_id(self, request_id: impl Into<String>) -> Self {
+        let request_id = request_id.into();
+        self.map_context(|ctx| {
+            ctx.set_request_id(request_id);
+        })
+    }
+
+    /// 附加资源上下文，统一记录当前错误所属的业务资源/动作描述。
+    pub fn with_resource(self, resource: impl Into<String>) -> Self {
+        let resource = resource.into();
+        self.map_context(|ctx| {
+            ctx.add_context("resource", resource);
+        })
+    }
+
     /// 添加操作和组件信息
     pub fn with_operation(
         self,
@@ -987,6 +1003,25 @@ impl CoreError {
             },
             other => other,
         }
+    }
+
+    /// 一次性附加标准错误上下文字段：operation / component / resource / request_id。
+    pub fn with_standard_context(
+        self,
+        operation: impl Into<String>,
+        component: impl Into<String>,
+        resource: impl Into<String>,
+        request_id: Option<String>,
+    ) -> Self {
+        let mut err = self
+            .with_operation(operation, component)
+            .with_resource(resource);
+
+        if let Some(request_id) = request_id.filter(|value| !value.trim().is_empty()) {
+            err = err.with_request_id(request_id);
+        }
+
+        err
     }
 
     /// 观测记录（可序列化）——供日志/指标/告警统一使用
@@ -1465,6 +1500,18 @@ mod tests {
     }
 
     #[test]
+    fn with_request_id_updates_context() {
+        let err = validation_error("field", "invalid").with_request_id("req-123");
+        assert_eq!(err.context().request_id(), Some("req-123"));
+    }
+
+    #[test]
+    fn with_resource_adds_resource_context() {
+        let err = validation_error("field", "invalid").with_resource("查询记录");
+        assert_eq!(err.context().get_context("resource"), Some("查询记录"));
+    }
+
+    #[test]
     fn with_operation_updates_timeout_field_and_context() {
         let err = timeout_error(Duration::from_secs(30), Some("old_op".to_string()))
             .with_operation("new_op", "client");
@@ -1481,5 +1528,20 @@ mod tests {
             }
             other => panic!("expected timeout error, got {:?}", other.error_type()),
         }
+    }
+
+    #[test]
+    fn with_standard_context_sets_all_standard_fields() {
+        let err = validation_error("response.data", "响应数据为空").with_standard_context(
+            "extract_response_data",
+            "openlark-docs",
+            "查询记录",
+            Some("req-456".to_string()),
+        );
+
+        assert_eq!(err.context().operation(), Some("extract_response_data"));
+        assert_eq!(err.context().component(), Some("openlark-docs"));
+        assert_eq!(err.context().get_context("resource"), Some("查询记录"));
+        assert_eq!(err.context().request_id(), Some("req-456"));
     }
 }

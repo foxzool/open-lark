@@ -10,6 +10,8 @@ use openlark_core::{
 use serde::Deserialize;
 use std::sync::Arc;
 
+use crate::common::api_utils::missing_response_data_error;
+
 /// 审批任务列表项（v4）
 #[derive(Debug, Clone, Deserialize)]
 pub struct TaskItemV4 {
@@ -124,7 +126,7 @@ impl QueryTaskRequestV4 {
         let response =
             openlark_core::http::Transport::request(request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error("响应数据为空", "服务器没有返回有效的数据")
+            missing_response_data_error("查询审批任务", response.raw_response.request_id.clone())
         })
     }
 }
