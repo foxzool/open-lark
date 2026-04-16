@@ -8,6 +8,7 @@
 //! - 读取多个单元格范围
 //! - 按条件筛选 bitable 记录
 //! - 多维表格全量读取
+//! - Wiki 路径导航 helper
 //!
 //! 运行方式：
 //! ```bash
@@ -143,6 +144,23 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         }
     } else {
         println!("未设置 OPENLARK_BITABLE_APP_TOKEN / OPENLARK_BITABLE_TABLE_ID，跳过多维表格示例");
+    }
+
+    if let (Ok(space_id), Ok(node_path)) = (
+        std::env::var("OPENLARK_WIKI_SPACE_ID"),
+        std::env::var("OPENLARK_WIKI_NODE_PATH"),
+    ) {
+        let node = client
+            .docs
+            .find_wiki_node_by_path(&space_id, &node_path)
+            .await?;
+        println!(
+            "Wiki 路径命中节点: {} ({})",
+            node.title.unwrap_or_else(|| "<无标题>".to_string()),
+            node.node_token
+        );
+    } else {
+        println!("未设置 OPENLARK_WIKI_SPACE_ID / OPENLARK_WIKI_NODE_PATH，跳过 Wiki 导航示例");
     }
 
     Ok(())

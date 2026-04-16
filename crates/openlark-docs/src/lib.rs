@@ -62,6 +62,9 @@
 //!                 .where_equals("状态", "进行中"),
 //!         )
 //!         .await?;
+//!     let _wiki_node = client
+//!         .find_wiki_node_by_path("space_id", "产品文档/发布计划")
+//!         .await?;
 //!     let mut pager = client.folder_children_pager("folder_token").page_size(50);
 //!     let _first_page = pager.fetch_next_page().await?;
 //!
@@ -113,6 +116,8 @@ pub mod prelude;
 pub use common::chain::BitableRecordQuery;
 pub use common::chain::DocsClient;
 pub use common::chain::TypedPage;
+#[cfg(feature = "ccm-core")]
+pub use common::chain::WikiNodePath;
 #[cfg(feature = "ccm-core")]
 pub use common::chain::{DriveDownloadRange, DriveUploadFile};
 #[cfg(feature = "ccm-core")]

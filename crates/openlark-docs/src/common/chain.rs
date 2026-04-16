@@ -383,6 +383,54 @@ impl std::fmt::Display for DriveDownloadRange {
     }
 }
 
+/// Wiki 节点路径 helper。
+///
+/// 统一处理 `产品文档/发布计划/周报` 这类按标题导航的路径表达。
+#[cfg(feature = "ccm-core")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct WikiNodePath {
+    segments: Vec<String>,
+}
+
+#[cfg(feature = "ccm-core")]
+impl WikiNodePath {
+    /// 基于路径片段创建 Wiki 路径。
+    pub fn new(segments: Vec<String>) -> SDKResult<Self> {
+        let segments = segments
+            .into_iter()
+            .map(validate_wiki_path_segment)
+            .collect::<SDKResult<Vec<_>>>()?;
+        if segments.is_empty() {
+            return Err(validation_error(
+                "wiki_path",
+                "wiki_path 至少需要一个路径片段",
+            ));
+        }
+        Ok(Self { segments })
+    }
+
+    /// 从 `/` 分隔的路径字符串解析 Wiki 路径。
+    pub fn parse(path: impl AsRef<str>) -> SDKResult<Self> {
+        let raw = path.as_ref().trim().trim_matches('/');
+        if raw.is_empty() {
+            return Err(validation_error("wiki_path", "wiki_path 不能为空"));
+        }
+        Self::new(raw.split('/').map(str::to_string).collect())
+    }
+
+    /// 返回路径片段。
+    pub fn segments(&self) -> &[String] {
+        &self.segments
+    }
+}
+
+#[cfg(feature = "ccm-core")]
+impl std::fmt::Display for WikiNodePath {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&self.segments.join("/"))
+    }
+}
+
 /// Drive 上传文件 helper。
 ///
 /// 统一封装文件名、字节内容与可选 checksum，并在 helper 层自动补全
@@ -799,6 +847,78 @@ impl DocsClient {
             .into_result()
     }
 
+    /// 获取指定知识空间下的所有节点，自动处理分页。
+    #[cfg(feature = "ccm-core")]
+    pub async fn list_wiki_space_nodes_all(
+        &self,
+        space_id: &str,
+        parent_node_token: Option<&str>,
+    ) -> SDKResult<Vec<crate::ccm::wiki::v2::models::WikiSpaceNode>> {
+        use crate::ccm::wiki::v2::space::node::{
+            ListWikiSpaceNodesParams, ListWikiSpaceNodesRequest,
+        };
+
+        let mut items = Vec::new();
+        let mut page_token: Option<String> = None;
+
+        loop {
+            let response = ListWikiSpaceNodesRequest::new(self.config().clone())
+                .space_id(space_id)
+                .execute(Some(ListWikiSpaceNodesParams {
+                    parent_node_token: parent_node_token.map(str::to_string),
+                    page_size: Some(crate::common::constants::MAX_PAGE_SIZE),
+                    page_token: page_token.clone(),
+                }))
+                .await?;
+
+            items.extend(response.items);
+
+            if !response.has_more.unwrap_or(false) {
+                break;
+            }
+
+            page_token = response.page_token;
+        }
+
+        Ok(items)
+    }
+
+    /// 在指定层级下按标题查找单个 Wiki 节点。
+    #[cfg(feature = "ccm-core")]
+    pub async fn find_wiki_node_by_title(
+        &self,
+        space_id: &str,
+        title: &str,
+        parent_node_token: Option<&str>,
+    ) -> SDKResult<crate::ccm::wiki::v2::models::WikiSpaceNode> {
+        let items = self
+            .list_wiki_space_nodes_all(space_id, parent_node_token)
+            .await?;
+        find_unique_wiki_node_by_title(&items, title)
+    }
+
+    /// 通过路径逐级导航 Wiki 节点。
+    #[cfg(feature = "ccm-core")]
+    pub async fn find_wiki_node_by_path(
+        &self,
+        space_id: &str,
+        path: impl AsRef<str>,
+    ) -> SDKResult<crate::ccm::wiki::v2::models::WikiSpaceNode> {
+        let path = WikiNodePath::parse(path)?;
+        let mut parent_node_token: Option<String> = None;
+        let mut current_node = None;
+
+        for segment in path.segments() {
+            let node = self
+                .find_wiki_node_by_title(space_id, segment, parent_node_token.as_deref())
+                .await?;
+            parent_node_token = Some(node.node_token.clone());
+            current_node = Some(node);
+        }
+
+        current_node.ok_or_else(|| business_error(format!("未找到 Wiki 路径: {}", path)))
+    }
+
     /// 根据工作表标题查找工作表。
     #[cfg(feature = "ccm-core")]
     pub async fn find_sheet_by_title(
@@ -883,6 +1003,46 @@ fn validate_sheet_range_part(field: &str, value: impl Into<String>) -> SDKResult
         return Err(validation_error(field, &format!("{field} 不能为空")));
     }
     Ok(value)
+}
+
+#[cfg(feature = "ccm-core")]
+fn validate_wiki_path_segment(value: impl Into<String>) -> SDKResult<String> {
+    let value = value.into().trim().to_string();
+    if value.is_empty() {
+        return Err(validation_error(
+            "wiki_path_segment",
+            "wiki_path_segment 不能为空",
+        ));
+    }
+    Ok(value)
+}
+
+#[cfg(feature = "ccm-core")]
+fn find_unique_wiki_node_by_title(
+    nodes: &[crate::ccm::wiki::v2::models::WikiSpaceNode],
+    title: &str,
+) -> SDKResult<crate::ccm::wiki::v2::models::WikiSpaceNode> {
+    let title = title.trim();
+    if title.is_empty() {
+        return Err(validation_error("title", "title 不能为空"));
+    }
+
+    let mut matches = nodes
+        .iter()
+        .filter(|node| node.title.as_deref() == Some(title))
+        .cloned();
+
+    let first = matches
+        .next()
+        .ok_or_else(|| business_error(format!("未找到 Wiki 节点标题: {title}")))?;
+
+    if matches.next().is_some() {
+        return Err(business_error(format!(
+            "找到多个同名 Wiki 节点，请缩小范围: {title}"
+        )));
+    }
+
+    Ok(first)
 }
 
 /// ccm：`docs.ccm`（云文档协同）
@@ -1035,6 +1195,50 @@ mod tests {
         assert_eq!(request.size, 3);
         assert_eq!(request.checksum.as_deref(), Some("abc123"));
         assert_eq!(request.file, vec![1, 2, 3]);
+    }
+
+    #[cfg(feature = "ccm-core")]
+    #[test]
+    fn test_wiki_node_path_parses_segments() {
+        let path = WikiNodePath::parse("/产品文档/发布计划/周报/").unwrap();
+
+        assert_eq!(
+            path.segments(),
+            &vec![
+                "产品文档".to_string(),
+                "发布计划".to_string(),
+                "周报".to_string()
+            ]
+        );
+        assert_eq!(path.to_string(), "产品文档/发布计划/周报");
+    }
+
+    #[cfg(feature = "ccm-core")]
+    #[test]
+    fn test_find_unique_wiki_node_by_title_rejects_duplicates() {
+        let nodes = vec![
+            crate::ccm::wiki::v2::models::WikiSpaceNode {
+                space_id: "space_1".to_string(),
+                node_token: "node_a".to_string(),
+                obj_token: None,
+                obj_type: None,
+                parent_node_token: None,
+                title: Some("周报".to_string()),
+                url: None,
+            },
+            crate::ccm::wiki::v2::models::WikiSpaceNode {
+                space_id: "space_1".to_string(),
+                node_token: "node_b".to_string(),
+                obj_token: None,
+                obj_type: None,
+                parent_node_token: None,
+                title: Some("周报".to_string()),
+                url: None,
+            },
+        ];
+
+        let error = find_unique_wiki_node_by_title(&nodes, "周报").unwrap_err();
+        assert!(error.to_string().contains("多个同名"));
     }
 
     #[cfg(feature = "bitable")]
