@@ -31,6 +31,7 @@
 Canonical 公开入口规则见 [`../../docs/PUBLIC_REEXPORT_POLICY.md`](../../docs/PUBLIC_REEXPORT_POLICY.md)。
 
 Docs request/response contract test 范围说明见 [`docs/CONTRACT_TEST_SCOPE.md`](docs/CONTRACT_TEST_SCOPE.md)。
+README 对齐的可编译示例见 `examples/docs_readme_examples.rs`。
 
 ## 功能选择（Feature Selection）
 
@@ -130,10 +131,10 @@ openlark-docs = { version = "0.15", features = ["your-features"] }
 
 ### 基础使用
 
-```rust
+```rust,no_run
 use openlark_core::{config::Config, SDKResult};
 use openlark_docs::DocsClient;
-use openlark_docs::ccm::docs::v1::{GetDocsContentRequest, get_docs_content};
+use openlark_docs::ccm::docs::v1::GetDocsContentRequest;
 
 #[tokio::main]
 async fn main() -> SDKResult<()> {
@@ -145,7 +146,12 @@ async fn main() -> SDKResult<()> {
 
     // 通过 DocsClient 获取业务域配置，再构建 Request
     let request = GetDocsContentRequest::new("doc_token", "docx", "markdown");
-    let doc = get_docs_content(request, docs.ccm.docs.config(), None).await?;
+    let doc = openlark_docs::ccm::docs::v1::content::get::get_docs_content(
+        request,
+        docs.ccm.config(),
+        None,
+    )
+    .await?;
     println!("Document: {:?}", doc);
 
     Ok(())
@@ -161,19 +167,28 @@ openlark-core = "0.15"
 openlark-docs = { version = "0.15", features = ["bitable"] }
 ```
 
-```rust
+```rust,no_run
 use openlark_core::config::Config;
+use openlark_docs::base::bitable::v1::GetAppRequest;
 use openlark_docs::DocsClient;
 
-let config = Config::builder()
-    .app_id("app_id")
-    .app_secret("app_secret")
-    .build();
-let docs = DocsClient::new(config);
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = Config::builder()
+        .app_id("app_id")
+        .app_secret("app_secret")
+        .build();
+    let docs = DocsClient::new(config);
 
-// 访问多维表格（使用 Request 对象方式）
-// 具体请参考 openlark_docs::base::bitable::v1::app 模块
-let app = CreateAppRequest::new(docs.base.bitable.config().clone(), ...).execute().await?;
+    // 访问多维表格（使用 Request 对象方式）
+    let app = GetAppRequest::new(docs.base.bitable().config().clone())
+        .app_token("app_token")
+        .execute()
+        .await?;
+    println!("App token: {}", app.app.app_token);
+
+    Ok(())
+}
 ```
 
 ### 云文档协同使用
@@ -185,20 +200,27 @@ openlark-core = "0.15"
 openlark-docs = { version = "0.15", features = ["ccm"] }
 ```
 
-```rust
+```rust,no_run
 use openlark_core::config::Config;
 use openlark_docs::DocsClient;
 use openlark_docs::ccm::drive::v1::file::DownloadFileRequest;
 
-let config = Config::builder()
-    .app_id("app_id")
-    .app_secret("app_secret")
-    .build();
-let docs = DocsClient::new(config);
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = Config::builder()
+        .app_id("app_id")
+        .app_secret("app_secret")
+        .build();
+    let docs = DocsClient::new(config);
 
-// 访问云文档协同
-let file = DownloadFileRequest::new(docs.ccm.drive.config().clone(), "file_token").execute().await?;
-// 表格操作请参考 openlark_docs::ccm::sheets 模块
+    // 访问云文档协同
+    let _file = DownloadFileRequest::new(docs.ccm.config().clone(), "file_token")
+        .execute()
+        .await?;
+    // 表格操作请参考 openlark_docs::ccm::sheets 模块
+
+    Ok(())
+}
 ```
 
 ### 知识库使用
@@ -210,19 +232,27 @@ openlark-core = "0.15"
 openlark-docs = { version = "0.15", features = ["baike"] }
 ```
 
-```rust
+```rust,no_run
 use openlark_core::config::Config;
+use openlark_docs::baike::baike::v1::GetEntityRequest;
 use openlark_docs::DocsClient;
 
-let config = Config::builder()
-    .app_id("app_id")
-    .app_secret("app_secret")
-    .build();
-let docs = DocsClient::new(config);
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = Config::builder()
+        .app_id("app_id")
+        .app_secret("app_secret")
+        .build();
+    let docs = DocsClient::new(config);
 
-// 访问知识库（使用 Request 对象方式）
-// 具体请参考 openlark_docs::baike::v1 模块
-let entity = CreateEntityRequest::new(docs.baike.config().clone(), ...).execute().await?;
+    // 访问知识库（使用 Request 对象方式）
+    let entity = GetEntityRequest::new(docs.baike.config().clone(), "entity_id")
+        .execute()
+        .await?;
+    println!("Entity exists: {}", entity.entity.is_some());
+
+    Ok(())
+}
 ```
 
 ## 性能优化建议
@@ -251,7 +281,7 @@ ls -lh target/release/
 
 ### 3. 使用流式 Builder 模式
 
-```rust
+```rust,ignore
 // ✅ 推荐：流式构建器
 let request = CreateDocRequest::new(config, doc_body)
     .user_id_type(UserIdType::OpenId)

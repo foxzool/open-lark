@@ -14,6 +14,16 @@
 | `websocket_echo_bot` | 长连接接收并回显文本消息 | `communication,websocket` |
 | `workflow_api_example` | 工作流模块调用 | `workflow` |
 
+## 校验约定
+
+这些对外公开示例会通过 `scripts/check-public-examples.sh` 进入 CI compile-check。
+
+后续新增公开示例时，请遵守：
+
+1. 如果示例会在 README / 文档中主推，必须加入 `scripts/check-public-examples.sh`
+2. 如果示例不适合真实执行，也应至少保证 `cargo check --example ...` 可通过
+3. 如果文档代码块不能真实运行，请使用 `no_run`、`ignore` 或补充原因说明
+
 ## 环境准备
 
 ```bash

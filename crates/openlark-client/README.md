@@ -86,9 +86,11 @@ openlark = { version = "0.15.0", features = ["essential"] }
 
 ## 🔧 快速开始
 
+README 对齐的可编译示例见 `examples/client_readme_examples.rs`。
+
 ### 基础用法
 
-```rust
+```rust,no_run
 use openlark_client::prelude::*;
 use std::time::Duration;
 
@@ -106,7 +108,7 @@ fn main() -> Result<()> {
 
 ### 从环境变量创建
 
-```rust
+```rust,no_run
 use openlark_client::prelude::*;
 
 fn main() -> Result<()> {
@@ -120,7 +122,7 @@ fn main() -> Result<()> {
 
 ### meta 单入口（推荐）
 
-```rust
+```rust,no_run
 use openlark_client::prelude::*;
 
 fn main() -> Result<()> {
@@ -140,7 +142,7 @@ fn main() -> Result<()> {
 
 ### 服务发现
 
-```rust
+```rust,no_run
 use openlark_client::prelude::*;
 
 fn main() -> Result<()> {
@@ -165,12 +167,15 @@ fn main() -> Result<()> {
 ### 从现有 LarkClient 迁移
 
 1. **新代码**（推荐）:
-   ```rust
+   ```rust,no_run
    use openlark_client::prelude::*;
-   let client = Client::builder()
-       .app_id("app_id")
-       .app_secret("app_secret")
-       .build()?;
+   fn main() -> Result<()> {
+       let _client = Client::builder()
+           .app_id("app_id")
+           .app_secret("app_secret")
+           .build()?;
+       Ok(())
+   }
    ```
 
 2. **服务访问更新**:

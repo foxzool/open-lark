@@ -176,17 +176,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 新架构特点
 
-```rust
-// 根 crate 单入口
-let client = Client::from_env()?;
+```rust,no_run
+use open_lark::prelude::*;
 
-// 文档 helper
-client.docs.list_folder_children_all("folder_token", None).await?;
-client.docs.find_sheet_by_title("spreadsheet_token", "汇总表").await?;
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::from_env()?;
 
-// 通讯模块
-let endpoint = open_lark::communication::endpoints::IM_V1_MESSAGES;
-println!("{}", endpoint);
+    // 文档 helper
+    let _items = client.docs.list_folder_children_all("folder_token", None).await?;
+    let _sheet = client
+        .docs
+        .find_sheet_by_title("spreadsheet_token", "汇总表")
+        .await?;
+
+    // 通讯模块
+    let endpoint = open_lark::communication::endpoints::IM_V1_MESSAGES;
+    println!("{}", endpoint);
+
+    Ok(())
+}
 ```
 
 - **🔗 单入口访问** - 从 `Client` 出发，按 feature 打开需要的能力
