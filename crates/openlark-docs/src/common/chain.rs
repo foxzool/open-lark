@@ -182,6 +182,125 @@ impl std::fmt::Display for SheetRange {
     }
 }
 
+/// 多维表格记录查询 helper。
+///
+/// 封装常见字段过滤场景，避免业务侧直接拼接 `FilterInfo` /
+/// `FilterCondition` 结构体。
+#[cfg(feature = "bitable")]
+#[derive(Debug, Clone, PartialEq)]
+pub struct BitableRecordQuery {
+    /// 多维表格 app_token。
+    pub app_token: String,
+    /// 数据表 table_id。
+    pub table_id: String,
+    conjunction: String,
+    filters: Vec<crate::base::bitable::v1::app::table::record::search::FilterCondition>,
+    field_names: Option<Vec<String>>,
+    automatic_fields: bool,
+}
+
+#[cfg(feature = "bitable")]
+impl BitableRecordQuery {
+    /// 创建一个新的记录查询 helper。
+    pub fn new(app_token: impl Into<String>, table_id: impl Into<String>) -> Self {
+        Self {
+            app_token: app_token.into(),
+            table_id: table_id.into(),
+            conjunction: "and".to_string(),
+            filters: Vec::new(),
+            field_names: None,
+            automatic_fields: true,
+        }
+    }
+
+    /// 指定返回字段名，减少无关字段回传。
+    pub fn field_names(mut self, field_names: Vec<String>) -> Self {
+        self.field_names = Some(field_names);
+        self
+    }
+
+    /// 控制是否返回自动字段。
+    pub fn automatic_fields(mut self, automatic_fields: bool) -> Self {
+        self.automatic_fields = automatic_fields;
+        self
+    }
+
+    /// 将条件组合方式切换为 `or`。
+    pub fn or(mut self) -> Self {
+        self.conjunction = "or".to_string();
+        self
+    }
+
+    /// 按字段精确匹配。
+    pub fn where_equals(mut self, field_name: impl Into<String>, value: impl Into<String>) -> Self {
+        self.filters.push(
+            crate::base::bitable::v1::app::table::record::search::FilterCondition {
+                field_name: field_name.into(),
+                operator: "is".to_string(),
+                value: Some(vec![value.into()]),
+            },
+        );
+        self
+    }
+
+    /// 按字段模糊包含匹配。
+    pub fn where_contains(
+        mut self,
+        field_name: impl Into<String>,
+        value: impl Into<String>,
+    ) -> Self {
+        self.filters.push(
+            crate::base::bitable::v1::app::table::record::search::FilterCondition {
+                field_name: field_name.into(),
+                operator: "contains".to_string(),
+                value: Some(vec![value.into()]),
+            },
+        );
+        self
+    }
+
+    /// 按字段命中多个候选值。
+    pub fn where_in(mut self, field_name: impl Into<String>, values: Vec<String>) -> Self {
+        self.filters.push(
+            crate::base::bitable::v1::app::table::record::search::FilterCondition {
+                field_name: field_name.into(),
+                operator: "isAnyOf".to_string(),
+                value: Some(values),
+            },
+        );
+        self
+    }
+
+    fn into_parts(
+        self,
+    ) -> (
+        String,
+        String,
+        Option<Vec<String>>,
+        bool,
+        Option<crate::base::bitable::v1::app::table::record::search::FilterInfo>,
+    ) {
+        let filter = if self.filters.is_empty() {
+            None
+        } else {
+            Some(
+                crate::base::bitable::v1::app::table::record::search::FilterInfo {
+                    conjunction: Some(self.conjunction),
+                    conditions: Some(self.filters),
+                },
+            )
+        };
+
+        (
+            self.app_token,
+            self.table_id,
+            self.field_names,
+            self.automatic_fields,
+            filter,
+        )
+    }
+}
+
 /// 批量写入单个范围的数据单元。
 #[cfg(feature = "ccm-core")]
 #[derive(Debug, Clone, PartialEq)]
@@ -410,6 +529,31 @@ impl DocsClient {
             .automatic_fields(true)
             .fetch_all()
             .await
+    }
+
+    /// 使用 helper 风格执行常见多维表格过滤查询，并自动处理分页。
+    #[cfg(feature = "bitable")]
+    pub async fn query_bitable_records(
+        &self,
+        query: BitableRecordQuery,
+    ) -> SDKResult<Vec<crate::base::bitable::v1::app::table::record::models::Record>> {
+        use crate::base::bitable::v1::app::table::record::search::SearchRecordRequest;
+
+        let (app_token, table_id, field_names, automatic_fields, filter) = query.into_parts();
+        let mut request = SearchRecordRequest::new(self.config().clone())
+            .app_token(app_token)
+            .table_id(table_id)
+            .automatic_fields(automatic_fields);
+
+        if let Some(field_names) = field_names {
+            request = request.field_names(field_names);
+        }
+
+        if let Some(filter) = filter {
+            request = request.filter(filter);
+        }
+
+        request.fetch_all().await
     }
 
     /// 读取多个单元格范围，返回聚合后的范围数据。
@@ -723,6 +867,49 @@ mod tests {
         let page = TypedPage::new(vec![1, 2], false, None);
         assert!(page.is_last_page());
         assert_eq!(page.into_items(), vec![1, 2]);
+    }
+
+    #[cfg(feature = "bitable")]
+    #[test]
+    fn test_bitable_record_query_builds_default_and_filters() {
+        let query = BitableRecordQuery::new("app_token", "table_id")
+            .where_equals("状态", "进行中")
+            .where_contains("负责人", "张三");
+
+        let (app_token, table_id, field_names, automatic_fields, filter) = query.into_parts();
+        let filter = filter.expect("filter should exist");
+
+        assert_eq!(app_token, "app_token");
+        assert_eq!(table_id, "table_id");
+        assert!(field_names.is_none());
+        assert!(automatic_fields);
+        assert_eq!(filter.conjunction.as_deref(), Some("and"));
+        assert_eq!(filter.conditions.as_ref().map(Vec::len), Some(2));
+        assert_eq!(filter.conditions.as_ref().unwrap()[0].operator, "is");
+        assert_eq!(filter.conditions.as_ref().unwrap()[1].operator, "contains");
+    }
+
+    #[cfg(feature = "bitable")]
+    #[test]
+    fn test_bitable_record_query_supports_or_and_value_lists() {
+        let query = BitableRecordQuery::new("app_token", "table_id")
+            .or()
+            .field_names(vec!["状态".to_string(), "负责人".to_string()])
+            .automatic_fields(false)
+            .where_in("状态", vec!["已完成".to_string(), "已归档".to_string()]);
+
+        let (_, _, field_names, automatic_fields, filter) = query.into_parts();
+        let filter = filter.expect("filter should exist");
+        let condition = filter.conditions.as_ref().unwrap().first().unwrap();
+
+        assert_eq!(field_names.unwrap().len(), 2);
+        assert!(!automatic_fields);
+        assert_eq!(filter.conjunction.as_deref(), Some("or"));
+        assert_eq!(condition.operator, "isAnyOf");
+        assert_eq!(
+            condition.value.as_ref().expect("values should exist"),
+            &vec!["已完成".to_string(), "已归档".to_string()]
+        );
     }
 
     #[cfg(feature = "ccm-core")]

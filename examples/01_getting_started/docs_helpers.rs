@@ -5,6 +5,7 @@
 //! - 文件夹 typed pagination helper
 //! - 按标题查找工作表
 //! - 读取多个单元格范围
+//! - 按条件筛选 bitable 记录
 //! - 多维表格全量读取
 //!
 //! 运行方式：
@@ -86,6 +87,20 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
             .search_bitable_records_all(&app_token, &table_id)
             .await?;
         println!("多维表格记录数: {}", records.len());
+
+        if let (Ok(filter_field), Ok(filter_value)) = (
+            std::env::var("OPENLARK_BITABLE_FILTER_FIELD"),
+            std::env::var("OPENLARK_BITABLE_FILTER_VALUE"),
+        ) {
+            let filtered = client
+                .docs
+                .query_bitable_records(
+                    open_lark::docs::BitableRecordQuery::new(app_token.clone(), table_id.clone())
+                        .where_equals(filter_field, filter_value),
+                )
+                .await?;
+            println!("筛选后记录数: {}", filtered.len());
+        }
     } else {
         println!("未设置 OPENLARK_BITABLE_APP_TOKEN / OPENLARK_BITABLE_TABLE_ID，跳过多维表格示例");
     }

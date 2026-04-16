@@ -55,6 +55,12 @@
 //!     let _ranges = client
 //!         .read_sheet_ranges("spreadsheet_token", vec![_range.clone()])
 //!         .await?;
+//!     let _records = client
+//!         .query_bitable_records(
+//!             openlark_docs::BitableRecordQuery::new("app_token", "table_id")
+//!                 .where_equals("状态", "进行中"),
+//!         )
+//!         .await?;
 //!     let mut pager = client.folder_children_pager("folder_token").page_size(50);
 //!     let _first_page = pager.fetch_next_page().await?;
 //!
@@ -102,6 +108,8 @@ pub mod common;
 pub mod prelude;
 
 // 重新导出主要类型
+#[cfg(feature = "bitable")]
+pub use common::chain::BitableRecordQuery;
 pub use common::chain::DocsClient;
 pub use common::chain::TypedPage;
 #[cfg(feature = "ccm-core")]
