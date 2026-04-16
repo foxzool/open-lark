@@ -13,7 +13,10 @@ fn docs_helper_outputs_snapshot() {
     let range = SheetRange::from_range_expr("sheet_001", "A1:C5").expect("range should parse");
     let write_range = SheetWriteRange::new(
         range.clone(),
-        vec![vec![json!("状态"), json!("进行中")], vec![json!("负责人"), json!("张三")]],
+        vec![
+            vec![json!("状态"), json!("进行中")],
+            vec![json!("负责人"), json!("张三")],
+        ],
     );
     let download = DriveDownloadRange::from_start(0).with_end(1023);
     let upload = DriveUploadFile::new("report.csv", b"status,owner\nactive,zhangsan".to_vec())

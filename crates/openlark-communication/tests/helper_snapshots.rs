@@ -13,7 +13,9 @@ fn communication_helper_outputs_snapshot() {
     let recipient = MessageRecipient::open_id("ou_xxx");
     let post = PostMessage::zh_cn("项目播报", "今天完成发布");
     let reply_target = ReplyTarget::in_thread("om_xxx");
-    let image_upload = MediaImageUpload::new(vec![1, 2, 3]).avatar().file_name("avatar.png");
+    let image_upload = MediaImageUpload::new(vec![1, 2, 3])
+        .avatar()
+        .file_name("avatar.png");
     let file_upload = MediaFileUpload::new("report.pdf", vec![9, 8, 7]).duration(15);
     let user = UserLookupItem {
         name: "zhangsan".to_string(),
