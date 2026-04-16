@@ -96,6 +96,10 @@ client.communication;
 - 旧的实现层 feature 心智，迁移为业务能力 feature 心智
 - 旧的分散示例入口，迁移为根 crate 与根 examples 的统一入口
 
+已加上 deprecated 标记的 legacy entrypoint 分类与替代路径见：
+
+- `docs/legacy-entrypoint-migration-notes.md`
+
 ## 5. 哪些变化可能影响你
 
 以下变化最可能影响升级：

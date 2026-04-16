@@ -165,6 +165,10 @@
 - deprecation 至少保留一个明确发布周期，并在 migration guide / changelog 中给出替代路径。
 - 只有在迁移说明和 deprecation 已完成后，才允许考虑移除兼容入口。
 
+当前已补齐的迁移说明见：
+
+- `docs/legacy-entrypoint-migration-notes.md`
+
 ## 当前冻结结论
 
 - 根 crate 的 canonical 入口冻结为：`Client` / `ClientBuilder` / `prelude` / `client.<domain>`

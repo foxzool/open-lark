@@ -38,11 +38,23 @@
 
 // 原始 crate-name passthrough re-export 仅用于兼容历史路径，
 // 不再作为根 crate 的推荐公开入口出现在文档中。
+#[deprecated(
+    since = "0.15.0",
+    note = "Use open_lark::{Client, ClientBuilder, prelude} or depend on openlark-client directly; open_lark::openlark_client is a legacy compatibility entrypoint."
+)]
 #[doc(hidden)]
 pub use openlark_client;
 pub use openlark_client::{Client, ClientBuilder, Config, Error, Result};
+#[deprecated(
+    since = "0.15.0",
+    note = "Use the root common types (CoreConfig, CoreError, RequestOption, SDKResult) or depend on openlark-core directly; open_lark::openlark_core is a legacy compatibility entrypoint."
+)]
 #[doc(hidden)]
 pub use openlark_core;
+#[deprecated(
+    since = "0.15.0",
+    note = "Use the root common types (CoreConfig, CoreError, RequestOption, SDKResult) or depend on openlark-core directly; open_lark::core is a legacy compatibility entrypoint."
+)]
 #[doc(hidden)]
 pub use openlark_core as core;
 pub use openlark_core::config::Config as CoreConfig;
@@ -57,6 +69,10 @@ pub mod ws_client {
 }
 
 #[cfg(feature = "auth")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use open_lark::auth or Client.auth for runtime access, or depend on the auth crate directly; open_lark::openlark_auth is a legacy compatibility entrypoint."
+)]
 #[doc(hidden)]
 pub use openlark_auth;
 
@@ -64,6 +80,10 @@ pub use openlark_auth;
 pub use openlark_auth as auth;
 
 #[cfg(feature = "communication")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use open_lark::communication or Client.communication for runtime access, or depend on the communication crate directly; open_lark::openlark_communication is a legacy compatibility entrypoint."
+)]
 #[doc(hidden)]
 pub use openlark_communication;
 
@@ -82,6 +102,10 @@ pub use openlark_communication as communication;
     feature = "docs-sheets-v3",
     feature = "docs-full"
 ))]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use open_lark::docs or Client.docs for runtime access, or depend on the docs crate directly; open_lark::openlark_docs is a legacy compatibility entrypoint."
+)]
 #[doc(hidden)]
 pub use openlark_docs;
 
@@ -133,6 +157,10 @@ pub use openlark_analytics as analytics;
 pub use openlark_user as user;
 
 #[cfg(feature = "webhook")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use open_lark::webhook or depend on openlark-webhook directly; open_lark::openlark_webhook is a legacy compatibility entrypoint."
+)]
 #[doc(hidden)]
 pub use openlark_webhook;
 
@@ -145,6 +173,10 @@ pub use openlark_cardkit as cardkit;
 // 顶层 meta client 类型 re-export 保留为兼容层；
 // 普通 `openlark` 用户优先通过 `Client` 字段访问业务能力。
 #[cfg(feature = "auth")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.auth for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::AuthClient;
 
@@ -160,58 +192,114 @@ pub use openlark_client::AuthClient;
     feature = "docs-sheets-v3",
     feature = "docs-full"
 ))]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.docs for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::DocsClient;
 
 #[cfg(feature = "communication")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.communication for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::CommunicationClient;
 
 #[cfg(feature = "hr")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.hr for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::HrClient;
 
 #[cfg(feature = "meeting")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.meeting for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::MeetingClient;
 
 #[cfg(feature = "cardkit")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.cardkit for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::CardkitClient;
 
 #[cfg(feature = "ai")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.ai for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::AiClient;
 
 #[cfg(feature = "workflow")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.workflow for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::WorkflowClient;
 
 #[cfg(feature = "platform")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.platform for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::PlatformClient;
 
 #[cfg(feature = "application")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.application for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::ApplicationClient;
 
 #[cfg(feature = "helpdesk")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.helpdesk for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::HelpdeskClient;
 
 #[cfg(feature = "mail")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.mail for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::MailClient;
 
 #[cfg(feature = "analytics")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.analytics for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::AnalyticsClient;
 
 #[cfg(feature = "user")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.user for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::UserClient;
 
 #[cfg(feature = "security")]
+#[deprecated(
+    since = "0.15.0",
+    note = "Use Client.security for runtime access, or use openlark-client / business-crate paths for explicit types; root-level *Client aliases are legacy compatibility entrypoints."
+)]
 #[doc(hidden)]
 pub use openlark_client::SecurityClient;
 
@@ -219,6 +307,7 @@ pub use openlark_client::SecurityClient;
 ///
 /// 该模块只导出“创建客户端 + 顶层业务入口”所需的稳定公共类型。
 /// registry / feature loader / traits 等高级客户端层能力保留在 `openlark-client`。
+#[allow(deprecated)]
 pub mod prelude {
     #[cfg(feature = "ai")]
     #[doc(hidden)]
@@ -311,6 +400,7 @@ mod tests {
 
     #[cfg(feature = "auth")]
     #[test]
+    #[allow(deprecated)]
     fn root_client_exposes_auth_entrypoint() {
         let client = build_test_client().expect("client should build with auth feature");
 
@@ -343,6 +433,7 @@ mod tests {
         feature = "docs-full"
     ))]
     #[test]
+    #[allow(deprecated)]
     fn root_client_exposes_docs_namespace() {
         let client = build_test_client().expect("client should build with docs feature");
 
@@ -355,6 +446,7 @@ mod tests {
 
     #[cfg(feature = "hr")]
     #[test]
+    #[allow(deprecated)]
     fn root_client_exposes_hr_entrypoint() {
         let client = build_test_client().expect("client should build with hr feature");
 
@@ -367,6 +459,7 @@ mod tests {
 
     #[cfg(feature = "security")]
     #[test]
+    #[allow(deprecated)]
     fn root_client_exposes_security_entrypoint() {
         let client = build_test_client().expect("client should build with security feature");
 
