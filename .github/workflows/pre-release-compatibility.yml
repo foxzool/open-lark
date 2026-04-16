@@ -1,0 +1,71 @@
+name: Pre-release Compatibility Verification
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+    paths:
+      - '.github/workflows/pre-release-compatibility.yml'
+      - '.github/workflows/release.yml'
+      - 'docs/0.15.0_RELEASE_CHECKLIST.md'
+      - 'docs/PUBLIC_API_STABILITY_POLICY.md'
+      - 'docs/TYPED_API_SEMVER_RULES.md'
+      - 'docs/HELPER_SEMVER_RULES.md'
+      - 'docs/api-compatibility-note-template.md'
+      - 'docs/migration-guide.md'
+      - 'docs/legacy-entrypoint-migration-notes.md'
+      - 'scripts/check-pre-release-compatibility.sh'
+      - 'scripts/check-public-examples.sh'
+      - 'tools/validate_apis.py'
+      - 'tools/release_quality_status.py'
+      - 'src/lib.rs'
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_TOOLCHAIN: stable
+  CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+          components: rustfmt, clippy
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Cache Cargo build files
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          version: 23.4
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run pre-release compatibility verification
+        run: bash scripts/check-pre-release-compatibility.sh
+
+      - name: Publish workflow summary
+        run: cat reports/pre_release_compatibility/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload compatibility artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-release-compatibility-report
+          path: |
+            reports/pre_release_compatibility/summary.md
+            reports/pre_release_compatibility/release_quality_status.md
+            reports/api_validation/summary.json
+            reports/api_validation/summary.md
+            reports/api_validation/dashboards/core_business.json
+            reports/api_validation/dashboards/core_business.md
