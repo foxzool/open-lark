@@ -30,6 +30,8 @@
 
 Canonical 公开入口规则见 [`../../docs/PUBLIC_REEXPORT_POLICY.md`](../../docs/PUBLIC_REEXPORT_POLICY.md)。
 
+Docs request/response contract test 范围说明见 [`docs/CONTRACT_TEST_SCOPE.md`](docs/CONTRACT_TEST_SCOPE.md)。
+
 ## 功能选择（Feature Selection）
 
 ### 使用方式
