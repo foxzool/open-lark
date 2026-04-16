@@ -30,6 +30,10 @@
 //!     .im
 //!     .reply_text(ReplyTarget::direct("om_xxx"), "收到")
 //!     .await?;
+//! let _uploaded = communication
+//!     .im
+//!     .upload_image(MediaImageUpload::new(vec![1, 2, 3]))
+//!     .await?;
 //! ```
 //!
 //! ## 子模块
@@ -81,4 +85,6 @@ pub mod prelude;
 // 重新导出主要类型
 pub use common::chain::CommunicationClient;
 #[cfg(feature = "im")]
-pub use common::chain::{MessageRecipient, PostMessage, ReplyTarget};
+pub use common::chain::{
+    MediaFileUpload, MediaImageUpload, MessageRecipient, PostMessage, ReplyTarget,
+};

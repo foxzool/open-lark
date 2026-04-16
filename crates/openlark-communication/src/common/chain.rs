@@ -10,6 +10,8 @@ use std::sync::Arc;
 
 use openlark_core::config::Config;
 #[cfg(feature = "im")]
+use openlark_core::validate_required;
+#[cfg(feature = "im")]
 use openlark_core::{error::validation_error, SDKResult};
 
 #[cfg(feature = "im")]
@@ -20,6 +22,17 @@ use crate::im::im::v1::message::{
 };
 #[cfg(feature = "im")]
 use crate::im::im::v1::thread::forward::{ForwardThreadBody, ForwardThreadRequest};
+#[cfg(feature = "im")]
+use crate::im::im::v1::{
+    file::{
+        create::{CreateFileBody, CreateFileRequest},
+        models::CreateFileResponse,
+    },
+    image::{
+        create::CreateImageRequest,
+        models::{CreateImageResponse, ImageType},
+    },
+};
 
 /// 消息接收者 helper。
 ///
@@ -125,6 +138,75 @@ impl ReplyTarget {
             message_id: message_id.into(),
             reply_in_thread: true,
         }
+    }
+}
+
+/// 图片上传 helper。
+///
+/// 默认按消息图片上传，调用方只需传入二进制内容；
+/// 如有需要，可额外补充文件名或切换为头像上传。
+#[cfg(feature = "im")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MediaImageUpload {
+    pub image_type: ImageType,
+    pub file_name: Option<String>,
+    pub bytes: Vec<u8>,
+}
+
+#[cfg(feature = "im")]
+impl MediaImageUpload {
+    pub fn new(bytes: Vec<u8>) -> Self {
+        Self {
+            image_type: ImageType::Message,
+            file_name: None,
+            bytes,
+        }
+    }
+
+    pub fn avatar(mut self) -> Self {
+        self.image_type = ImageType::Avatar;
+        self
+    }
+
+    pub fn file_name(mut self, file_name: impl Into<String>) -> Self {
+        self.file_name = Some(file_name.into());
+        self
+    }
+}
+
+/// 文件上传 helper。
+///
+/// 默认根据文件名后缀推断 `file_type`，必要时允许调用方显式覆盖。
+#[cfg(feature = "im")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MediaFileUpload {
+    pub file_name: String,
+    pub file_type: String,
+    pub duration: Option<i32>,
+    pub bytes: Vec<u8>,
+}
+
+#[cfg(feature = "im")]
+impl MediaFileUpload {
+    pub fn new(file_name: impl Into<String>, bytes: Vec<u8>) -> Self {
+        let file_name = file_name.into();
+        let file_type = infer_file_type(&file_name);
+        Self {
+            file_name,
+            file_type,
+            duration: None,
+            bytes,
+        }
+    }
+
+    pub fn file_type(mut self, file_type: impl Into<String>) -> Self {
+        self.file_type = file_type.into();
+        self
+    }
+
+    pub fn duration(mut self, duration: i32) -> Self {
+        self.duration = Some(duration);
+        self
     }
 }
 
@@ -240,6 +322,70 @@ impl ImClient {
             .await
     }
 
+    /// 上传消息图片 helper。
+    pub async fn upload_image(&self, upload: MediaImageUpload) -> SDKResult<CreateImageResponse> {
+        if upload.bytes.is_empty() {
+            return Err(validation_error("image", "image 不能为空"));
+        }
+        let mut request =
+            CreateImageRequest::new(self.config.as_ref().clone()).image_type(upload.image_type);
+        if let Some(file_name) = upload.file_name {
+            request = request.file_name(file_name);
+        }
+        request.execute(upload.bytes).await
+    }
+
+    /// 上传消息文件 helper。
+    pub async fn upload_file(&self, upload: MediaFileUpload) -> SDKResult<CreateFileResponse> {
+        let mut body = CreateFileBody::new(upload.file_type, upload.file_name);
+        if let Some(duration) = upload.duration {
+            body = body.duration(duration);
+        }
+        CreateFileRequest::new(self.config.as_ref().clone())
+            .execute(body, upload.bytes)
+            .await
+    }
+
+    /// 发送图片消息 helper。
+    pub async fn send_image(
+        &self,
+        recipient: MessageRecipient,
+        image_key: impl Into<String>,
+    ) -> SDKResult<serde_json::Value> {
+        let image_key = image_key.into();
+        if image_key.trim().is_empty() {
+            return Err(validation_error("image_key", "image_key 不能为空"));
+        }
+        let body = Self::build_media_body(
+            recipient,
+            "image",
+            serde_json::json!({ "image_key": image_key }).to_string(),
+        )?;
+        Self::create_message_request(self.config.clone(), body.receive_id_type())
+            .execute(body.into())
+            .await
+    }
+
+    /// 发送文件消息 helper。
+    pub async fn send_file(
+        &self,
+        recipient: MessageRecipient,
+        file_key: impl Into<String>,
+    ) -> SDKResult<serde_json::Value> {
+        let file_key = file_key.into();
+        if file_key.trim().is_empty() {
+            return Err(validation_error("file_key", "file_key 不能为空"));
+        }
+        let body = Self::build_media_body(
+            recipient,
+            "file",
+            serde_json::json!({ "file_key": file_key }).to_string(),
+        )?;
+        Self::create_message_request(self.config.clone(), body.receive_id_type())
+            .execute(body.into())
+            .await
+    }
+
     fn create_message_request(
         config: Arc<Config>,
         receive_id_type: ReceiveIdType,
@@ -273,6 +419,15 @@ impl ImClient {
             "post",
             post.into_content()?,
         ))
+    }
+
+    fn build_media_body(
+        recipient: MessageRecipient,
+        msg_type: &str,
+        content: String,
+    ) -> SDKResult<HelperMessageBody> {
+        validate_required!(content, "content 不能为空");
+        Ok(HelperMessageBody::new(recipient, msg_type, content))
     }
 
     fn build_reply_text_body(target: ReplyTarget, text: String) -> SDKResult<HelperReplyBody> {
@@ -357,6 +512,16 @@ impl From<HelperReplyBody> for ReplyMessageBody {
     fn from(value: HelperReplyBody) -> Self {
         value.body
     }
+}
+
+#[cfg(feature = "im")]
+fn infer_file_type(file_name: &str) -> String {
+    std::path::Path::new(file_name)
+        .extension()
+        .and_then(|ext| ext.to_str())
+        .map(|ext| ext.to_ascii_lowercase())
+        .filter(|ext| !ext.is_empty())
+        .unwrap_or_else(|| "stream".to_string())
 }
 
 #[cfg(feature = "contact")]
@@ -486,6 +651,24 @@ mod tests {
 
     #[cfg(feature = "im")]
     #[test]
+    fn test_media_image_upload_defaults() {
+        let upload = MediaImageUpload::new(vec![1, 2, 3]).file_name("image.png");
+        assert_eq!(upload.image_type, ImageType::Message);
+        assert_eq!(upload.file_name.as_deref(), Some("image.png"));
+        assert_eq!(upload.bytes, vec![1, 2, 3]);
+    }
+
+    #[cfg(feature = "im")]
+    #[test]
+    fn test_media_file_upload_infers_type() {
+        let upload = MediaFileUpload::new("report.pdf", vec![1, 2, 3]).duration(15);
+        assert_eq!(upload.file_type, "pdf");
+        assert_eq!(upload.file_name, "report.pdf");
+        assert_eq!(upload.duration, Some(15));
+    }
+
+    #[cfg(feature = "im")]
+    #[test]
     fn test_build_text_message_body() {
         let body = ImClient::build_text_body(MessageRecipient::open_id("ou_xxx"), "hello".into())
             .expect("text body should build");
@@ -514,6 +697,35 @@ mod tests {
 
     #[cfg(feature = "im")]
     #[test]
+    fn test_build_media_message_body_for_image() {
+        let body = ImClient::build_media_body(
+            MessageRecipient::open_id("ou_xxx"),
+            "image",
+            serde_json::json!({ "image_key": "img_xxx" }).to_string(),
+        )
+        .expect("image body should build");
+        let request_body: CreateMessageBody = body.into();
+        assert_eq!(request_body.msg_type, "image");
+        assert_eq!(request_body.content, r#"{"image_key":"img_xxx"}"#);
+    }
+
+    #[cfg(feature = "im")]
+    #[test]
+    fn test_build_media_message_body_for_file() {
+        let body = ImClient::build_media_body(
+            MessageRecipient::chat_id("oc_xxx"),
+            "file",
+            serde_json::json!({ "file_key": "file_xxx" }).to_string(),
+        )
+        .expect("file body should build");
+        let request_body: CreateMessageBody = body.into();
+        assert_eq!(request_body.msg_type, "file");
+        assert_eq!(request_body.receive_id, "oc_xxx");
+        assert_eq!(request_body.content, r#"{"file_key":"file_xxx"}"#);
+    }
+
+    #[cfg(feature = "im")]
+    #[test]
     fn test_build_reply_text_message_body() {
         let body = ImClient::build_reply_text_body(ReplyTarget::direct("om_xxx"), "收到".into())
             .expect("reply text body should build");
@@ -538,6 +750,42 @@ mod tests {
         assert_eq!(request_body.msg_type, "post");
         assert_eq!(request_body.reply_in_thread, Some(true));
         assert_eq!(value["post"]["zh_cn"]["title"], "进展");
+    }
+
+    #[cfg(feature = "im")]
+    #[tokio::test]
+    async fn test_send_image_rejects_empty_key() {
+        let client = CommunicationClient::new(create_test_config());
+        let error = client
+            .im
+            .send_image(MessageRecipient::open_id("ou_xxx"), "")
+            .await
+            .expect_err("empty image_key should fail");
+        assert!(error.to_string().contains("image_key"));
+    }
+
+    #[cfg(feature = "im")]
+    #[tokio::test]
+    async fn test_send_file_rejects_empty_key() {
+        let client = CommunicationClient::new(create_test_config());
+        let error = client
+            .im
+            .send_file(MessageRecipient::chat_id("oc_xxx"), "")
+            .await
+            .expect_err("empty file_key should fail");
+        assert!(error.to_string().contains("file_key"));
+    }
+
+    #[cfg(feature = "im")]
+    #[tokio::test]
+    async fn test_upload_image_rejects_empty_bytes() {
+        let client = CommunicationClient::new(create_test_config());
+        let error = client
+            .im
+            .upload_image(MediaImageUpload::new(Vec::new()))
+            .await
+            .expect_err("empty image bytes should fail");
+        assert!(error.to_string().contains("image"));
     }
 
     #[cfg(feature = "contact")]
