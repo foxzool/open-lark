@@ -20,10 +20,11 @@
 //! // 使用端点常量
 //! let messages_endpoint = IM_V1_MESSAGES;
 //!
-//! // 使用 Builder 模式发送消息
-//! let response = CreateMessageRequest::new(config)
-//!     .receive_id_type(ReceiveIdType::OpenId)
-//!     .execute(body)
+//! // 使用 helper 发送常见消息
+//! let communication = CommunicationClient::new(config);
+//! let response = communication
+//!     .im
+//!     .send_text(MessageRecipient::open_id("ou_xxx"), "Hello")
 //!     .await?;
 //! ```
 //!
@@ -75,3 +76,5 @@ pub mod prelude;
 
 // 重新导出主要类型
 pub use common::chain::CommunicationClient;
+#[cfg(feature = "im")]
+pub use common::chain::{MessageRecipient, PostMessage};
