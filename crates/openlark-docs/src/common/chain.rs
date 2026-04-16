@@ -40,7 +40,7 @@
 
 use openlark_core::config::Config;
 #[cfg(feature = "ccm-core")]
-use openlark_core::error::{business_error, CoreError};
+use openlark_core::error::{business_error, validation_error, CoreError};
 #[cfg(any(feature = "ccm-core", feature = "bitable"))]
 use openlark_core::SDKResult;
 use std::sync::Arc;
@@ -83,6 +83,104 @@ impl<T> TypedPage<T> {
 
 #[cfg(feature = "ccm-core")]
 pub type FolderChildrenPage = TypedPage<crate::ccm::explorer::v2::models::FileItem>;
+
+/// 电子表格范围 helper。
+///
+/// 统一 sheet 标识与 A1 范围表达，避免业务侧手工拼接
+/// `sheet_id!A1:C5` 之类的字符串。
+#[cfg(feature = "ccm-core")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SheetRange {
+    /// 工作表标识。
+    pub sheet_id: String,
+    /// 起始单元格。
+    pub start_cell: String,
+    /// 结束单元格；为空时表示单格或单起点范围。
+    pub end_cell: Option<String>,
+}
+
+#[cfg(feature = "ccm-core")]
+impl SheetRange {
+    /// 从工作表 ID + 起始单元格创建范围。
+    pub fn new(sheet_id: impl Into<String>, start_cell: impl Into<String>) -> Self {
+        Self {
+            sheet_id: sheet_id.into(),
+            start_cell: start_cell.into(),
+            end_cell: None,
+        }
+    }
+
+    /// 补充结束单元格，形成 `A1:C5` 这类闭区间范围。
+    pub fn with_end_cell(mut self, end_cell: impl Into<String>) -> Self {
+        self.end_cell = Some(end_cell.into());
+        self
+    }
+
+    /// 从工作表 ID 与相对范围表达式创建范围。
+    ///
+    /// `range_expr` 仅应包含单元格部分，例如 `A1` 或 `A1:C5`。
+    pub fn from_range_expr(
+        sheet_id: impl Into<String>,
+        range_expr: impl AsRef<str>,
+    ) -> SDKResult<Self> {
+        let sheet_id = validate_sheet_range_part("sheet_id", sheet_id.into())?;
+        let expr = range_expr.as_ref().trim();
+        if expr.is_empty() {
+            return Err(validation_error("range_expr", "range_expr 不能为空"));
+        }
+        if expr.contains('!') {
+            return Err(validation_error(
+                "range_expr",
+                "range_expr 不应包含工作表前缀，请仅传入单元格范围",
+            ));
+        }
+
+        match expr.split_once(':') {
+            Some((start, end)) => Ok(Self::new(
+                sheet_id,
+                validate_sheet_range_part("start_cell", start)?,
+            )
+            .with_end_cell(validate_sheet_range_part("end_cell", end)?)),
+            None => Ok(Self::new(
+                sheet_id,
+                validate_sheet_range_part("start_cell", expr)?,
+            )),
+        }
+    }
+
+    /// 解析完整的 A1 表达式，例如 `sheet_id!A1:C5`。
+    pub fn parse(a1_notation: impl AsRef<str>) -> SDKResult<Self> {
+        let notation = a1_notation.as_ref().trim();
+        let (sheet_id, range_expr) = notation.split_once('!').ok_or_else(|| {
+            validation_error(
+                "a1_notation",
+                "A1 表达式必须包含工作表前缀，例如 sheet_id!A1:C5",
+            )
+        })?;
+
+        Self::from_range_expr(sheet_id, range_expr)
+    }
+
+    /// 返回不带工作表前缀的范围表达式。
+    pub fn range_expr(&self) -> String {
+        match &self.end_cell {
+            Some(end_cell) => format!("{}:{}", self.start_cell, end_cell),
+            None => self.start_cell.clone(),
+        }
+    }
+
+    /// 返回完整的 A1 表达式。
+    pub fn to_a1_notation(&self) -> String {
+        format!("{}!{}", self.sheet_id, self.range_expr())
+    }
+}
+
+#[cfg(feature = "ccm-core")]
+impl std::fmt::Display for SheetRange {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&self.to_a1_notation())
+    }
+}
 
 #[cfg(feature = "ccm-core")]
 impl From<crate::ccm::explorer::v2::models::FolderChildrenData>
@@ -337,6 +435,18 @@ impl DocsClient {
             .ok_or_else(|| business_error(format!("未找到工作表: {title}")))
     }
 
+    /// 按工作表标题解析单个范围，返回统一的 `SheetRange` 表达。
+    #[cfg(feature = "ccm-core")]
+    pub async fn resolve_sheet_range_by_title(
+        &self,
+        spreadsheet_token: &str,
+        title: &str,
+        range_expr: &str,
+    ) -> SDKResult<SheetRange> {
+        let sheet = self.find_sheet_by_title(spreadsheet_token, title).await?;
+        SheetRange::from_range_expr(sheet.sheet_id, range_expr)
+    }
+
     #[cfg(feature = "ccm-core")]
     pub async fn list_sheet_infos(
         &self,
@@ -387,6 +497,15 @@ fn find_sheet_info(
     title: &str,
 ) -> Option<crate::ccm::sheets_v2::v2::spreadsheet::models::SpreadsheetSheetInfo> {
     sheets.iter().find(|sheet| sheet.title == title).cloned()
+}
+
+#[cfg(feature = "ccm-core")]
+fn validate_sheet_range_part(field: &str, value: impl Into<String>) -> SDKResult<String> {
+    let value = value.into().trim().to_string();
+    if value.is_empty() {
+        return Err(validation_error(field, &format!("{field} 不能为空")));
+    }
+    Ok(value)
 }
 
 /// ccm：`docs.ccm`（云文档协同）
@@ -509,6 +628,35 @@ mod tests {
         let page = TypedPage::new(vec![1, 2], false, None);
         assert!(page.is_last_page());
         assert_eq!(page.into_items(), vec![1, 2]);
+    }
+
+    #[cfg(feature = "ccm-core")]
+    #[test]
+    fn test_sheet_range_builds_a1_notation() {
+        let range = SheetRange::from_range_expr("sheet_001", "A1:C5").unwrap();
+
+        assert_eq!(range.sheet_id, "sheet_001");
+        assert_eq!(range.start_cell, "A1");
+        assert_eq!(range.end_cell.as_deref(), Some("C5"));
+        assert_eq!(range.to_string(), "sheet_001!A1:C5");
+    }
+
+    #[cfg(feature = "ccm-core")]
+    #[test]
+    fn test_sheet_range_parses_single_cell_notation() {
+        let range = SheetRange::parse("sheet_001!B2").unwrap();
+
+        assert_eq!(range.sheet_id, "sheet_001");
+        assert_eq!(range.start_cell, "B2");
+        assert!(range.end_cell.is_none());
+        assert_eq!(range.range_expr(), "B2");
+    }
+
+    #[cfg(feature = "ccm-core")]
+    #[test]
+    fn test_sheet_range_rejects_embedded_sheet_prefix() {
+        let error = SheetRange::from_range_expr("sheet_001", "sheet_002!A1:C5").unwrap_err();
+        assert!(error.to_string().contains("range_expr"));
     }
 
     #[cfg(feature = "ccm-core")]

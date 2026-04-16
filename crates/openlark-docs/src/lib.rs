@@ -49,6 +49,9 @@
 //!     // 高频读取场景也可以直接使用 helper
 //!     let _records = client.search_bitable_records_all("app_token", "table_id").await?;
 //!     let _sheet = client.find_sheet_by_title("spreadsheet_token", "2026").await?;
+//!     let _range = client
+//!         .resolve_sheet_range_by_title("spreadsheet_token", "2026", "A1:C5")
+//!         .await?;
 //!     let mut pager = client.folder_children_pager("folder_token").page_size(50);
 //!     let _first_page = pager.fetch_next_page().await?;
 //!
@@ -99,7 +102,7 @@ pub mod prelude;
 pub use common::chain::DocsClient;
 pub use common::chain::TypedPage;
 #[cfg(feature = "ccm-core")]
-pub use common::chain::{FolderChildrenPage, FolderChildrenPager};
+pub use common::chain::{FolderChildrenPage, FolderChildrenPager, SheetRange};
 
 // === 入口设计说明 ===
 //

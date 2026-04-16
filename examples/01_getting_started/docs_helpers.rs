@@ -54,12 +54,10 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
             .docs
             .find_sheet_by_title(&spreadsheet_token, &sheet_title)
             .await?;
+        let range = open_lark::docs::SheetRange::from_range_expr(sheet.sheet_id.clone(), "A1:C5")?;
         let data = client
             .docs
-            .read_multiple_ranges(
-                &spreadsheet_token,
-                vec![format!("{}!A1:C5", sheet.sheet_id)],
-            )
+            .read_multiple_ranges(&spreadsheet_token, vec![range.to_string()])
             .await?;
         println!("工作表标题: {}", sheet.title);
         println!("读取范围数量: {}", data.value_ranges.len());

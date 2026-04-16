@@ -18,17 +18,15 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         .await?;
     println!("文件夹子项数量: {}", folder_items.len());
 
-    let sheet = client
+    let summary_range = client
         .docs
-        .find_sheet_by_title("spreadsheet_token", "汇总表")
+        .resolve_sheet_range_by_title("spreadsheet_token", "汇总表", "A1:C10")
         .await?;
     let ranges = client
         .docs
-        .read_multiple_ranges(
-            "spreadsheet_token",
-            vec![format!("{}!A1:C10", sheet.sheet_id)],
-        )
+        .read_multiple_ranges("spreadsheet_token", vec![summary_range.to_string()])
         .await?;
+    println!("目标范围: {}", summary_range);
     println!("读取范围数量: {}", ranges.value_ranges.len());
 
     let records = client
