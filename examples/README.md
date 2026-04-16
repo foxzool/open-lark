@@ -8,6 +8,7 @@
 |------|------|----------------|
 | `readme_quick_start` | 对齐根 README 的快速开始与 docs helper 示例 | `auth,docs-bitable` |
 | `simple_api_call` | 创建 `Client`，并演示 communication 常量 + chat/user lookup helper | `auth,communication` |
+| `communication_workflows` | 用 2 个任务流演示 Communication / Workflow helper 的组合方式 | `auth,communication,workflow` |
 | `docs_helpers` | 演示 docs helper：分页遍历、查找 sheet、批量读范围、多维表格全量读取 | `auth,docs-bitable` |
 | `docs_workflows` | 用 3 个任务流演示 Drive / Sheets / Wiki / Bitable helper 的组合方式 | `auth,docs-bitable` |
 | `websocket_echo_bot` | 长连接接收并回显文本消息 | `communication,websocket` |
@@ -37,6 +38,7 @@ export OPENLARK_BASE_URL="https://open.larksuite.com"
 ```bash
 cargo run --example readme_quick_start --features "auth,docs-bitable"
 cargo run --example simple_api_call --features "auth,communication"
+cargo run --example communication_workflows --features "auth,communication,workflow"
 cargo run --example docs_helpers --features "auth,docs-bitable"
 cargo run --example docs_workflows --features "auth,docs-bitable"
 cargo run --example websocket_echo_bot --features "communication,websocket"

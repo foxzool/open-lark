@@ -249,6 +249,11 @@ path = "examples/01_getting_started/simple_api_call.rs"
 required-features = ["auth", "communication"]
 
 [[example]]
+name = "communication_workflows"
+path = "examples/01_getting_started/communication_workflows.rs"
+required-features = ["auth", "communication", "workflow"]
+
+[[example]]
 name = "docs_helpers"
 path = "examples/01_getting_started/docs_helpers.rs"
 required-features = ["auth", "docs-bitable"]
