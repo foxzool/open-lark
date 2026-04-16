@@ -26,6 +26,10 @@
 //!     .im
 //!     .send_text(MessageRecipient::open_id("ou_xxx"), "Hello")
 //!     .await?;
+//! let _reply = communication
+//!     .im
+//!     .reply_text(ReplyTarget::direct("om_xxx"), "收到")
+//!     .await?;
 //! ```
 //!
 //! ## 子模块
@@ -77,4 +81,4 @@ pub mod prelude;
 // 重新导出主要类型
 pub use common::chain::CommunicationClient;
 #[cfg(feature = "im")]
-pub use common::chain::{MessageRecipient, PostMessage};
+pub use common::chain::{MessageRecipient, PostMessage, ReplyTarget};

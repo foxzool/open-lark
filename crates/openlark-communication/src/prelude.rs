@@ -8,7 +8,7 @@ pub use openlark_core::{config::Config, SDKResult};
 // 重新导出通用工具
 pub use crate::common::chain::CommunicationClient;
 #[cfg(feature = "im")]
-pub use crate::common::chain::{MessageRecipient, PostMessage};
+pub use crate::common::chain::{MessageRecipient, PostMessage, ReplyTarget};
 
 // 重新导出端点常量
 pub use crate::endpoints::{aily::*, contact::*, event::*, im::*, mail::*, moments::*, vc::*};
