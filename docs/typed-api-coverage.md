@@ -118,3 +118,17 @@ python3 tools/validate_apis.py \
 - 先处理 `P0/P1` 缺口，再回到尾部模块做补齐。
 - 当某个业务域出现大批量缺口时，优先补其只读查询与主闭环写操作，避免只做边角接口。
 - 每次调整优先级规则后重新生成报告，保证计划依据与仓库现状同步。
+
+## 6. 发布准入
+
+typed coverage 的稳定版发布准入规则定义在：
+
+- `docs/typed-coverage-release-criteria.md`
+- `tools/typed_coverage_release.toml`
+
+推荐流程：
+
+1. 运行 `python3 tools/validate_apis.py --all-crates`
+2. 阅读 `summary.md` 与 `dashboards/core_business.md`
+3. 按 `tools/typed_coverage_release.toml` 判断 `PASS / WAIVER REQUIRED / BLOCKED`
+4. 若需要 waiver，在发布 checklist 中补齐审批记录

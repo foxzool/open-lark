@@ -1,0 +1,49 @@
+# Typed API 覆盖率发布准入策略
+#
+# 用途：
+# - 给发布前人工核查提供统一门槛
+# - 为后续 CI / release workflow 接入提供机器可读配置
+# - 区分“直接阻塞发布”的 hard gate 与“可申请例外”的 waiver gate
+
+version = 1
+policy_name = "typed-coverage-stable-release"
+
+[inputs]
+summary_report = "reports/api_validation/summary.json"
+core_dashboard = "reports/api_validation/dashboards/core_business.json"
+
+[stable_release.hard_gates]
+summary_completion_rate_min = 93.0
+core_business_completion_rate_min = 92.0
+core_crate_completion_rate_min = 80.0
+
+[stable_release.waiver_gates]
+core_business_p0_missing = "waiver_required"
+waiver_expire_after_release_count = 1
+
+[stable_release.waiver]
+required_approvers = ["maintainer", "domain-owner"]
+required_fields = [
+  "reason",
+  "affected_crates",
+  "affected_apis",
+  "compensating_controls",
+  "owner",
+  "target_release",
+]
+allowed_reasons = [
+  "upstream-contract-gap",
+  "dependency-blocker",
+  "release-window-constraint",
+  "low-risk-tail-gap",
+]
+
+[stable_release.reporting]
+must_attach = [
+  "reports/api_validation/summary.md",
+  "reports/api_validation/dashboards/core_business.md",
+]
+must_reference = [
+  "tools/typed_coverage_release.toml",
+  "docs/typed-coverage-release-criteria.md",
+]
