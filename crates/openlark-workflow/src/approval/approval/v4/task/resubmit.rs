@@ -182,4 +182,29 @@ mod tests {
             serde_json::from_value(json!({})).expect("empty data should deserialize");
         let _ = response;
     }
+
+    #[test]
+    fn test_resubmit_task_body_contract() {
+        let body = ResubmitTaskBodyV4 {
+            approval_code: "approval_code".to_string(),
+            instance_code: "instance_code".to_string(),
+            user_id: "ou_xxx".to_string(),
+            task_id: "task_123".to_string(),
+            comment: Some("重新提交".to_string()),
+            form: r#"[{"field":"reason","value":"补充材料"}]"#.to_string(),
+        };
+
+        let value = serde_json::to_value(&body).expect("resubmit body should serialize");
+        assert_eq!(
+            value,
+            json!({
+                "approval_code": "approval_code",
+                "instance_code": "instance_code",
+                "user_id": "ou_xxx",
+                "task_id": "task_123",
+                "comment": "重新提交",
+                "form": r#"[{"field":"reason","value":"补充材料"}]"#
+            })
+        );
+    }
 }

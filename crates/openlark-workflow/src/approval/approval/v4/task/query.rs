@@ -186,4 +186,31 @@ mod tests {
         assert_eq!(item.instance_code, "instance_ext_789");
         assert_eq!(item.title.as_deref(), Some("请假审批"));
     }
+
+    #[test]
+    fn test_query_task_response_contract() {
+        let response: QueryTaskResponseV4 = serde_json::from_value(serde_json::json!({
+            "tasks": [
+                {
+                    "task_external_id": "task_ext_123",
+                    "definition_code": "approval_code_456",
+                    "process_external_id": "instance_ext_789",
+                    "status": "Todo",
+                    "title": "请假审批",
+                    "user_id": "ou_xxx"
+                }
+            ],
+            "has_more": true,
+            "page_token": "next_page"
+        }))
+        .expect("query task response should deserialize");
+
+        assert_eq!(response.tasks.len(), 1);
+        assert_eq!(response.tasks[0].task_id, "task_ext_123");
+        assert_eq!(response.tasks[0].approval_code, "approval_code_456");
+        assert_eq!(response.tasks[0].instance_code, "instance_ext_789");
+        assert_eq!(response.tasks[0].user_id.as_deref(), Some("ou_xxx"));
+        assert_eq!(response.has_more, Some(true));
+        assert_eq!(response.page_token.as_deref(), Some("next_page"));
+    }
 }

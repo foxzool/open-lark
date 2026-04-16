@@ -178,4 +178,29 @@ mod tests {
             serde_json::from_value(json!({})).expect("empty data should deserialize");
         let _ = response;
     }
+
+    #[test]
+    fn test_reject_task_body_contract() {
+        let body = RejectTaskBodyV4 {
+            approval_code: "approval_code".to_string(),
+            instance_code: "instance_code".to_string(),
+            user_id: "ou_xxx".to_string(),
+            task_id: "task_123".to_string(),
+            comment: Some("拒绝".to_string()),
+            form: Some(r#"[{"field":"result","value":"rejected"}]"#.to_string()),
+        };
+
+        let value = serde_json::to_value(&body).expect("reject body should serialize");
+        assert_eq!(
+            value,
+            json!({
+                "approval_code": "approval_code",
+                "instance_code": "instance_code",
+                "user_id": "ou_xxx",
+                "task_id": "task_123",
+                "comment": "拒绝",
+                "form": r#"[{"field":"result","value":"rejected"}]"#
+            })
+        );
+    }
 }
