@@ -182,6 +182,47 @@ impl std::fmt::Display for SheetRange {
     }
 }
 
+/// 批量写入单个范围的数据单元。
+#[cfg(feature = "ccm-core")]
+#[derive(Debug, Clone, PartialEq)]
+pub struct SheetWriteRange {
+    /// 目标范围。
+    pub range: SheetRange,
+    /// 主维度，默认按行写入。
+    pub major_dimension: String,
+    /// 单元格值。
+    pub values: Vec<Vec<serde_json::Value>>,
+}
+
+#[cfg(feature = "ccm-core")]
+impl SheetWriteRange {
+    /// 创建一条按行写入的范围数据。
+    pub fn new(range: SheetRange, values: Vec<Vec<serde_json::Value>>) -> Self {
+        Self {
+            range,
+            major_dimension: "ROWS".to_string(),
+            values,
+        }
+    }
+
+    /// 覆盖主维度，例如 `COLUMNS`。
+    pub fn major_dimension(mut self, major_dimension: impl Into<String>) -> Self {
+        self.major_dimension = major_dimension.into();
+        self
+    }
+}
+
+#[cfg(feature = "ccm-core")]
+impl From<SheetWriteRange> for crate::ccm::sheets_v2::v2::data_io::models::BatchWriteData {
+    fn from(value: SheetWriteRange) -> Self {
+        Self {
+            data_range: value.range.to_string(),
+            major_dimension: value.major_dimension,
+            values: value.values,
+        }
+    }
+}
+
 #[cfg(feature = "ccm-core")]
 impl From<crate::ccm::explorer::v2::models::FolderChildrenData>
     for TypedPage<crate::ccm::explorer::v2::models::FileItem>
@@ -398,6 +439,20 @@ impl DocsClient {
             .ok_or_else(|| CoreError::api_data_error("读取多个范围"))
     }
 
+    /// 使用 typed `SheetRange` 批量读取多个范围。
+    #[cfg(feature = "ccm-core")]
+    pub async fn read_sheet_ranges(
+        &self,
+        spreadsheet_token: &str,
+        ranges: Vec<SheetRange>,
+    ) -> SDKResult<crate::ccm::sheets_v2::v2::data_io::models::MultipleRangeData> {
+        self.read_multiple_ranges(
+            spreadsheet_token,
+            ranges.into_iter().map(|range| range.to_string()).collect(),
+        )
+        .await
+    }
+
     /// 批量写入多个单元格范围。
     #[cfg(feature = "ccm-core")]
     pub async fn write_multiple_ranges(
@@ -420,6 +475,46 @@ impl DocsClient {
         response
             .data
             .ok_or_else(|| CoreError::api_data_error("批量写入多个范围"))
+    }
+
+    /// 使用 typed `SheetRange` 批量写入多个范围。
+    #[cfg(feature = "ccm-core")]
+    pub async fn write_sheet_ranges(
+        &self,
+        spreadsheet_token: &str,
+        ranges: Vec<SheetWriteRange>,
+    ) -> SDKResult<crate::ccm::sheets_v2::v2::data_io::models::BatchUpdateResult> {
+        self.write_multiple_ranges(
+            spreadsheet_token,
+            ranges.into_iter().map(Into::into).collect(),
+        )
+        .await
+    }
+
+    /// 使用 typed `SheetRange` 追加数据。
+    #[cfg(feature = "ccm-core")]
+    pub async fn append_sheet_range(
+        &self,
+        spreadsheet_token: &str,
+        range: SheetRange,
+        values: Vec<Vec<serde_json::Value>>,
+    ) -> SDKResult<crate::ccm::sheets_v2::v2::data_io::models::AppendResult> {
+        use crate::ccm::sheets_v2::v2::data_io::{append_values, AppendValuesParams};
+
+        let response = append_values(
+            self.config(),
+            spreadsheet_token,
+            AppendValuesParams {
+                range: range.to_string(),
+                major_dimension: None,
+                values,
+            },
+        )
+        .await?;
+
+        response
+            .data
+            .ok_or_else(|| CoreError::api_data_error("追加工作表范围"))
     }
 
     /// 根据工作表标题查找工作表。
@@ -657,6 +752,21 @@ mod tests {
     fn test_sheet_range_rejects_embedded_sheet_prefix() {
         let error = SheetRange::from_range_expr("sheet_001", "sheet_002!A1:C5").unwrap_err();
         assert!(error.to_string().contains("range_expr"));
+    }
+
+    #[cfg(feature = "ccm-core")]
+    #[test]
+    fn test_sheet_write_range_maps_to_batch_write_data() {
+        let write = SheetWriteRange::new(
+            SheetRange::from_range_expr("sheet_001", "A1:B2").unwrap(),
+            vec![vec![serde_json::json!("A1"), serde_json::json!("B1")]],
+        )
+        .major_dimension("ROWS");
+
+        let batch: crate::ccm::sheets_v2::v2::data_io::models::BatchWriteData = write.into();
+        assert_eq!(batch.data_range, "sheet_001!A1:B2");
+        assert_eq!(batch.major_dimension, "ROWS");
+        assert_eq!(batch.values.len(), 1);
     }
 
     #[cfg(feature = "ccm-core")]

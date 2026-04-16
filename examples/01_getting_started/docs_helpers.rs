@@ -57,10 +57,22 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         let range = open_lark::docs::SheetRange::from_range_expr(sheet.sheet_id.clone(), "A1:C5")?;
         let data = client
             .docs
-            .read_multiple_ranges(&spreadsheet_token, vec![range.to_string()])
+            .read_sheet_ranges(&spreadsheet_token, vec![range.clone()])
             .await?;
         println!("工作表标题: {}", sheet.title);
         println!("读取范围数量: {}", data.value_ranges.len());
+
+        if std::env::var("OPENLARK_SHEETS_WRITE_DEMO").ok().as_deref() == Some("1") {
+            let write = open_lark::docs::SheetWriteRange::new(
+                range.clone(),
+                vec![vec![serde_json::json!("demo"), serde_json::json!(2026)]],
+            );
+            let result = client
+                .docs
+                .write_sheet_ranges(&spreadsheet_token, vec![write])
+                .await?;
+            println!("批量写入更新单元格数: {}", result.total_updated_cells);
+        }
     } else {
         println!("未设置 OPENLARK_SPREADSHEET_TOKEN / OPENLARK_SHEET_TITLE，跳过表格示例");
     }
