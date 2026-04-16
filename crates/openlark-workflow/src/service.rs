@@ -407,9 +407,8 @@ impl WorkflowService {
             request = request.form(form);
         }
         let response = request.execute().await?;
-        Ok(ApprovalTaskActionResult {
-            success: response.success,
-        })
+        let _ = response;
+        Ok(ApprovalTaskActionResult { success: true })
     }
 
     /// 拒绝审批任务 helper。
@@ -432,9 +431,8 @@ impl WorkflowService {
             request = request.form(form);
         }
         let response = request.execute().await?;
-        Ok(ApprovalTaskActionResult {
-            success: response.success,
-        })
+        let _ = response;
+        Ok(ApprovalTaskActionResult { success: true })
     }
 
     /// 重新提交审批任务 helper。
@@ -457,9 +455,8 @@ impl WorkflowService {
             request = request.form(form);
         }
         let response = request.execute().await?;
-        Ok(ApprovalTaskActionResult {
-            success: response.success,
-        })
+        let _ = response;
+        Ok(ApprovalTaskActionResult { success: true })
     }
 }
 

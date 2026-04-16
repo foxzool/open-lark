@@ -16,6 +16,9 @@ pub struct TaskItemV4 {
     /// 任务 ID / 任务三方 ID
     #[serde(alias = "task_external_id")]
     pub task_id: String,
+    /// 审批定义 Code
+    #[serde(alias = "definition_code")]
+    pub approval_code: String,
     /// 审批实例 Code / 流程 Code / 流程三方 ID
     #[serde(alias = "process_code", alias = "process_external_id")]
     pub instance_code: String,
@@ -163,5 +166,22 @@ mod tests {
         assert_eq!(request.user_id_type.as_deref(), Some("open_id"));
         assert_eq!(request.page_size, Some(100));
         assert_eq!(request.page_token.as_deref(), Some("token_1"));
+    }
+
+    #[test]
+    fn test_task_item_response_aliases() {
+        let item: TaskItemV4 = serde_json::from_value(serde_json::json!({
+            "task_external_id": "task_ext_123",
+            "definition_code": "approval_code_456",
+            "process_external_id": "instance_ext_789",
+            "status": "Todo",
+            "title": "请假审批"
+        }))
+        .expect("task item should deserialize");
+
+        assert_eq!(item.task_id, "task_ext_123");
+        assert_eq!(item.approval_code, "approval_code_456");
+        assert_eq!(item.instance_code, "instance_ext_789");
+        assert_eq!(item.title.as_deref(), Some("请假审批"));
     }
 }

@@ -54,7 +54,7 @@
 //!     let _ = workflow_service
 //!         .approve_task(
 //!             ApprovalTaskAction::new(
-//!                 "approval_code",
+//!                 task.approval_code.clone(),
 //!                 task.instance_code.clone(),
 //!                 "ou_example_user",
 //!                 task.task_id.clone(),

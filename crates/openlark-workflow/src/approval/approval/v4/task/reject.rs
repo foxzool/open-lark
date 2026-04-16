@@ -30,11 +30,8 @@ pub struct RejectTaskBodyV4 {
 }
 
 /// 拒绝审批任务响应（v4）
-#[derive(Debug, Clone, Deserialize)]
-pub struct RejectTaskResponseV4 {
-    /// 是否成功
-    pub success: bool,
-}
+#[derive(Debug, Clone, Deserialize, Default)]
+pub struct RejectTaskResponseV4 {}
 
 /// 拒绝审批任务请求（v4）
 #[derive(Debug, Clone)]
@@ -142,6 +139,7 @@ impl ApiResponseTrait for RejectTaskResponseV4 {
 #[allow(unused_imports)]
 mod tests {
     use super::*;
+    use serde_json::json;
 
     #[test]
     fn test_task_reject_v4_url() {
@@ -171,5 +169,12 @@ mod tests {
         assert_eq!(request.body.user_id, "ou_xxx");
         assert_eq!(request.body.task_id, "task_123");
         assert_eq!(request.user_id_type.as_deref(), Some("open_id"));
+    }
+
+    #[test]
+    fn test_reject_task_response_accepts_empty_data() {
+        let response: RejectTaskResponseV4 =
+            serde_json::from_value(json!({})).expect("empty data should deserialize");
+        let _ = response;
     }
 }
