@@ -651,6 +651,140 @@ def _dedupe_preserve_order(values: List[str]) -> List[str]:
     return result
 
 
+def dashboard_slug(name: str) -> str:
+    """将 dashboard 分组名转换为稳定的文件名。"""
+    return re.sub(r"[^a-z0-9_]+", "_", name.strip().lower()).strip("_") or "dashboard"
+
+
+def collect_dashboard_groups(crates_config: Dict[str, Dict[str, Any]]) -> Dict[str, List[str]]:
+    """从 crate 映射配置中提取 dashboard 分组。"""
+    groups: Dict[str, List[str]] = defaultdict(list)
+    for crate_name in sorted(crates_config.keys()):
+        config = crates_config[crate_name]
+        for group_name in _dedupe_preserve_order(_as_string_list(config.get("dashboard_groups"))):
+            groups[group_name].append(crate_name)
+    return dict(sorted(groups.items()))
+
+
+def build_dashboard_payload(
+    dashboard_name: str,
+    crate_names: List[str],
+    crate_summaries: Dict[str, Any],
+    missing_apis: List[Tuple[str, APIInfo]],
+    priority_formula: str,
+) -> Dict[str, Any]:
+    """为指定 crate 分组构建专题 dashboard 载荷。"""
+    scoped_crates = [crate_name for crate_name in crate_names if crate_name in crate_summaries]
+    scoped_crate_set = set(scoped_crates)
+    scoped_missing = [(crate_name, api) for crate_name, api in missing_apis if crate_name in scoped_crate_set]
+
+    total_apis = sum(crate_summaries[crate_name]["total_apis"] for crate_name in scoped_crates)
+    implemented = sum(crate_summaries[crate_name]["implemented"] for crate_name in scoped_crates)
+    missing = sum(crate_summaries[crate_name]["missing"] for crate_name in scoped_crates)
+    extra_files = sum(crate_summaries[crate_name]["extra_files"] for crate_name in scoped_crates)
+    completion_rate = (implemented / total_apis * 100) if total_apis > 0 else 0.0
+
+    priority_counts: Dict[str, int] = defaultdict(int)
+    for _, api in scoped_missing:
+        priority_counts[api.priority_level] += 1
+    top_gap_by_crate: Dict[str, APIInfo] = {}
+    for crate_name, api in scoped_missing:
+        top_gap_by_crate.setdefault(crate_name, api)
+
+    crate_rows: List[Dict[str, Any]] = []
+    for crate_name in scoped_crates:
+        stats = crate_summaries[crate_name]
+        top_gap = top_gap_by_crate.get(crate_name)
+        crate_rows.append(
+            {
+                "crate": crate_name,
+                "biz_tags": stats["biz_tags"],
+                "total_apis": stats["total_apis"],
+                "implemented": stats["implemented"],
+                "missing": stats["missing"],
+                "completion_rate": stats["completion_rate"],
+                "extra_files": stats["extra_files"],
+                "priority_counts": stats["priority_counts"],
+                "report": stats["report"],
+                "top_missing_api": top_gap.name if top_gap is not None else "",
+                "top_missing_priority": top_gap.priority_level if top_gap is not None else "",
+            }
+        )
+
+    crate_rows.sort(key=lambda item: (-item["missing"], item["completion_rate"], item["crate"]))
+
+    return {
+        "dashboard": dashboard_name,
+        "priority_formula": priority_formula,
+        "crates_total": len(scoped_crates),
+        "total_apis": total_apis,
+        "implemented": implemented,
+        "missing": missing,
+        "completion_rate": round(completion_rate, 1),
+        "extra_files": extra_files,
+        "priority_counts": dict(sorted(priority_counts.items())),
+        "crates": crate_rows,
+        "top_missing_apis": [
+            {"crate": crate_name, **APIValidator._serialize_missing_api(api)}
+            for crate_name, api in scoped_missing[:20]
+        ],
+    }
+
+
+def write_dashboard_markdown(output_path: Path, payload: Dict[str, Any]) -> None:
+    """输出专题 dashboard 的 Markdown 视图。"""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", encoding="utf-8") as file:
+        file.write(f"# Typed API 覆盖率专题看板：{payload['dashboard']}\n\n")
+        file.write("## 总览\n\n")
+        file.write("| 指标 | 数量 |\n")
+        file.write("|------|------|\n")
+        file.write(f"| crate 数量 | {payload['crates_total']} |\n")
+        file.write(f"| API 总数 | {payload['total_apis']} |\n")
+        file.write(f"| 已实现 | {payload['implemented']} |\n")
+        file.write(f"| 未实现 | {payload['missing']} |\n")
+        file.write(f"| 完成率 | {payload['completion_rate']:.1f}% |\n")
+        file.write(f"| 额外文件 | {payload['extra_files']} |\n\n")
+
+        file.write("## 核心 crate 状态\n\n")
+        file.write("| crate | bizTag | 总数 | 已实现 | 未实现 | 完成率 | 重点缺口 | 报告 |\n")
+        file.write("|-------|--------|------|--------|--------|--------|----------|------|\n")
+        for row in payload["crates"]:
+            tags_text = ", ".join(row["biz_tags"])
+            focus_gap = row["top_missing_api"]
+            report_link = (Path("..") / row["report"]).as_posix()
+            if row["top_missing_priority"] and focus_gap:
+                focus_gap = f"{row['top_missing_priority']} · {focus_gap}"
+            elif not focus_gap:
+                focus_gap = "-"
+            file.write(
+                f"| {row['crate']} | `{tags_text}` | {row['total_apis']} | {row['implemented']} | "
+                f"{row['missing']} | {row['completion_rate']:.1f}% | {focus_gap} | "
+                f"[report]({report_link}) |\n"
+            )
+        file.write("\n")
+
+        if payload["priority_counts"]:
+            file.write("## 缺口优先级分布\n\n")
+            file.write("| 优先级 | 数量 |\n")
+            file.write("|--------|------|\n")
+            for priority, count in payload["priority_counts"].items():
+                file.write(f"| {priority} | {count} |\n")
+            file.write("\n")
+
+        if payload["top_missing_apis"]:
+            file.write("## 重点缺口 Backlog\n\n")
+            file.write(f"- 综合分公式：`{payload['priority_formula']}`\n\n")
+            file.write("| 优先级 | 综合分 | crate | API | 预期文件 | 判定规则 |\n")
+            file.write("|--------|--------|-------|-----|----------|----------|\n")
+            for item in payload["top_missing_apis"]:
+                file.write(
+                    f"| {item['priority_level']} | {item['priority_score']:.2f} | {item['crate']} | "
+                    f"{item['name']} | `{item['expected_file']}` | {', '.join(item['priority_reasons'])} |\n"
+                )
+            file.write("\n")
+
+
 def main() -> int:
     """主函数"""
     import argparse
@@ -751,6 +885,7 @@ def main() -> int:
         skip_old: bool,
         priority_source_path: str,
         top_missing_apis: List[Dict[str, Any]],
+        dashboards: Dict[str, Dict[str, Any]],
     ) -> None:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with output_path.open("w", encoding="utf-8") as file:
@@ -801,6 +936,18 @@ def main() -> int:
                         f"| {item['priority_level']} | {item['priority_score']:.2f} | "
                         f"{item['crate']} | {item['biz_tag']} | {item['name']} | "
                         f"`{item['expected_file']}` | {', '.join(item['priority_reasons'])} |\n"
+                    )
+                file.write("\n")
+
+            if dashboards:
+                file.write("## 专题 Dashboard\n\n")
+                file.write("| 分组 | crate 数量 | 未实现 | 完成率 | Markdown | JSON |\n")
+                file.write("|------|-----------|--------|--------|----------|------|\n")
+                for dashboard_name, payload in sorted(dashboards.items()):
+                    file.write(
+                        f"| {dashboard_name} | {payload['crates_total']} | {payload['missing']} | "
+                        f"{payload['completion_rate']:.1f}% | "
+                        f"[md]({payload['markdown_report']}) | [json]({payload['json_report']}) |\n"
                     )
                 file.write("\n")
 
@@ -859,9 +1006,36 @@ def main() -> int:
             for crate_name, api in all_missing_apis[:30]
         ]
 
+        dashboard_payloads: Dict[str, Dict[str, Any]] = {}
+        for dashboard_name, crate_names in collect_dashboard_groups(crates).items():
+            payload = build_dashboard_payload(
+                dashboard_name,
+                crate_names,
+                crate_summaries,
+                all_missing_apis,
+                priority_model.priority_formula(),
+            )
+            slug = dashboard_slug(dashboard_name)
+            markdown_path = report_dir / "dashboards" / f"{slug}.md"
+            json_path = report_dir / "dashboards" / f"{slug}.json"
+            write_dashboard_markdown(markdown_path, payload)
+            _write_summary_json(json_path, payload)
+            dashboard_payloads[dashboard_name] = {
+                **payload,
+                "markdown_report": markdown_path.relative_to(report_dir).as_posix(),
+                "json_report": json_path.relative_to(report_dir).as_posix(),
+            }
+
         summary_md = report_dir / "summary.md"
         summary_json = report_dir / "summary.json"
-        _write_summary_markdown(summary_md, crate_rows, args.skip_old, priority_model.source_path, top_missing_apis)
+        _write_summary_markdown(
+            summary_md,
+            crate_rows,
+            args.skip_old,
+            priority_model.source_path,
+            top_missing_apis,
+            dashboard_payloads,
+        )
 
         total_apis = sum(item["total_apis"] for item in crate_summaries.values())
         total_impl = sum(item["implemented"] for item in crate_summaries.values())
@@ -887,6 +1061,7 @@ def main() -> int:
             "extra_files": total_extra,
             "priority_counts": dict(sorted(priority_counts.items())),
             "top_missing_apis": top_missing_apis,
+            "dashboards": dashboard_payloads,
             "crates": crate_summaries,
         }
         _write_summary_json(summary_json, summary_payload)

@@ -2,15 +2,18 @@
 #
 # 目的：
 # - 给 tools/validate_apis.py 提供 --crate 的自动补全（src + filter）
+# - 给 typed coverage 专题 dashboard 提供 crate 分组元数据
 # - 给 .claude/skills/openlark-api/ 提供一致的"选 crate 口径"
 #
 # 约定：
 # - key 使用 workspace crate/package 名（例如 openlark-docs）
 # - biz_tags 使用 CSV 的 bizTag 原值（区分大小写，通常为小写）
+# - dashboard_groups 可选；当前 `core_business` 对齐 Cargo.toml 中 essential + enterprise 的业务 crate（排除 auth 基础设施）
 
 [crates.openlark-docs]
 src = "crates/openlark-docs/src"
 biz_tags = ["ccm", "base", "baike", "minutes"]
+dashboard_groups = ["core_business"]
 
 [crates.openlark-meeting]
 src = "crates/openlark-meeting/src"
@@ -19,6 +22,7 @@ biz_tags = ["calendar", "vc", "meeting_room"]
 [crates.openlark-communication]
 src = "crates/openlark-communication/src"
 biz_tags = ["im", "contact", "moments", "aily", "event"]
+dashboard_groups = ["core_business"]
 
 [crates.openlark-cardkit]
 src = "crates/openlark-cardkit/src"
@@ -36,10 +40,12 @@ biz_tags = [
   "okr",
   "ehr",
 ]
+dashboard_groups = ["core_business"]
 
 [crates.openlark-security]
 src = "crates/openlark-security/src"
 biz_tags = ["acs", "security_and_compliance"]
+dashboard_groups = ["core_business"]
 
 [crates.openlark-ai]
 src = "crates/openlark-ai/src"
@@ -56,6 +62,7 @@ biz_tags = ["admin", "directory", "app_engine", "trust_party", "tenant", "mdm"]
 [crates.openlark-workflow]
 src = "crates/openlark-workflow/src"
 biz_tags = ["task", "approval", "board"]
+dashboard_groups = ["core_business"]
 
 [crates.openlark-analytics]
 src = "crates/openlark-analytics/src"

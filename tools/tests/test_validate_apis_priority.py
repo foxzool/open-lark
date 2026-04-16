@@ -1,4 +1,5 @@
 import importlib.util
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -90,6 +91,121 @@ class PriorityModelTests(unittest.TestCase):
 
         ordered = sorted([low, high], key=model.sort_key)
         self.assertEqual([api.name for api in ordered], ["高优先", "低优先"])
+
+    def test_collect_dashboard_groups_uses_mapping_metadata(self):
+        groups = validate_apis.collect_dashboard_groups(
+            {
+                "openlark-workflow": {"dashboard_groups": ["core_business"]},
+                "openlark-user": {"dashboard_groups": ["secondary"]},
+                "openlark-docs": {"dashboard_groups": ["core_business"]},
+            }
+        )
+
+        self.assertEqual(
+            groups,
+            {
+                "core_business": ["openlark-docs", "openlark-workflow"],
+                "secondary": ["openlark-user"],
+            },
+        )
+
+    def test_build_dashboard_payload_filters_to_group_crates(self):
+        model = self._build_model()
+        high = self._build_api("task/task/v2/task/list.rs", "GET:/open-apis/task/v2/tasks", "高优先")
+        low = self._build_api("task/task/v1/task/create.rs", "POST:/open-apis/task/v1/tasks", "低优先")
+        low.expected_file = "task/task/v1/task/create.rs"
+        low.meta_version = "v1"
+        ignored = self._build_api("task/task/v1/task/get.rs", "GET:/open-apis/task/v1/tasks/:task_id", "组外缺口")
+        ignored.expected_file = "task/task/v1/task/get.rs"
+        ignored.meta_version = "v1"
+
+        model.evaluate(high)
+        model.evaluate(low)
+        model.evaluate(ignored)
+
+        payload = validate_apis.build_dashboard_payload(
+            "core_business",
+            ["openlark-workflow", "openlark-security"],
+            {
+                "openlark-workflow": {
+                    "biz_tags": ["task", "approval", "board"],
+                    "total_apis": 112,
+                    "implemented": 39,
+                    "missing": 73,
+                    "completion_rate": 34.8,
+                    "extra_files": 82,
+                    "priority_counts": {"P0": 48, "P1": 25},
+                    "report": "crates/openlark-workflow.md",
+                },
+                "openlark-security": {
+                    "biz_tags": ["acs", "security_and_compliance"],
+                    "total_apis": 27,
+                    "implemented": 22,
+                    "missing": 5,
+                    "completion_rate": 81.5,
+                    "extra_files": 40,
+                    "priority_counts": {"P1": 5},
+                    "report": "crates/openlark-security.md",
+                },
+                "openlark-user": {
+                    "biz_tags": ["personal_settings"],
+                    "total_apis": 6,
+                    "implemented": 6,
+                    "missing": 0,
+                    "completion_rate": 100.0,
+                    "extra_files": 6,
+                    "priority_counts": {},
+                    "report": "crates/openlark-user.md",
+                },
+            },
+            [
+                ("openlark-workflow", high),
+                ("openlark-security", low),
+                ("openlark-user", ignored),
+            ],
+            model.priority_formula(),
+        )
+
+        self.assertEqual(payload["crates_total"], 2)
+        self.assertEqual(payload["total_apis"], 139)
+        self.assertEqual(payload["missing"], 78)
+        self.assertEqual([item["name"] for item in payload["top_missing_apis"]], ["高优先", "低优先"])
+        self.assertEqual(payload["crates"][0]["crate"], "openlark-workflow")
+        self.assertEqual(payload["crates"][0]["top_missing_api"], "高优先")
+
+    def test_write_dashboard_markdown_uses_parent_relative_report_links(self):
+        payload = {
+            "dashboard": "core_business",
+            "crates_total": 1,
+            "total_apis": 112,
+            "implemented": 39,
+            "missing": 73,
+            "completion_rate": 34.8,
+            "extra_files": 82,
+            "priority_counts": {"P0": 48, "P1": 25},
+            "priority_formula": "业务价值×0.50 + 高频场景×0.30 + (6-实现复杂度)×0.20",
+            "crates": [
+                {
+                    "crate": "openlark-workflow",
+                    "biz_tags": ["task", "approval", "board"],
+                    "total_apis": 112,
+                    "implemented": 39,
+                    "missing": 73,
+                    "completion_rate": 34.8,
+                    "report": "crates/openlark-workflow.md",
+                    "top_missing_api": "获取评论详情",
+                    "top_missing_priority": "P0",
+                }
+            ],
+            "top_missing_apis": [],
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output = Path(temp_dir) / "dashboards" / "core_business.md"
+            validate_apis.write_dashboard_markdown(output, payload)
+            content = output.read_text(encoding="utf-8")
+
+        self.assertIn("[report](../crates/openlark-workflow.md)", content)
 
 
 if __name__ == "__main__":

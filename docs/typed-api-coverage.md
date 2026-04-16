@@ -49,6 +49,8 @@ business_value × 0.50
 
 - `reports/api_validation/summary.md`：面向人读的汇总看板（总览 + 各 crate 指标 + 高价值缺失 API backlog）。
 - `reports/api_validation/summary.json`：机器可读汇总（便于 CI/看板系统消费）。
+- `reports/api_validation/dashboards/<group>.md`：按 crate 分组的专题 dashboard（例如 `core_business`）。
+- `reports/api_validation/dashboards/<group>.json`：专题 dashboard 的机器可读输出。
 - `reports/api_validation/crates/<crate>.md`：每个 crate 的详细报告（含缺失 API 排序清单和按模块展开详情）。
 
 每个 crate 的报告至少包含：
@@ -58,6 +60,12 @@ business_value × 0.50
 - 未实现数量
 - 完成率
 - 缺失 API 的优先级表（含维度分数、综合分、判定规则）
+
+专题 dashboard 至少包含：
+
+- 分组内 crate 的集中状态视图
+- 每个 crate 的重点缺口
+- 分组级的优先级分布与重点 backlog
 
 ## 4. 使用方式
 
@@ -93,9 +101,20 @@ python3 tools/validate_apis.py \
   --priority-config tools/api_priority.toml
 ```
 
+### 4.5 生成核心业务 crate dashboard
+
+批量模式会自动读取 `tools/api_coverage.toml` 中的 `dashboard_groups` 元数据。
+
+当前默认的 `core_business` 分组对齐 `Cargo.toml` 中的 `essential + enterprise`
+业务 crate（排除基础设施性质的 `auth`），并输出：
+
+- `reports/api_validation/dashboards/core_business.md`
+- `reports/api_validation/dashboards/core_business.json`
+
 ## 5. 规划建议
 
 - 以 `summary.md` 中的 `高价值缺失 API Backlog` 作为季度实现清单入口，而不是只看 `未实现` 总数。
+- 以 `dashboards/core_business.md` 作为核心业务域的周度/发布前复盘入口。
 - 先处理 `P0/P1` 缺口，再回到尾部模块做补齐。
 - 当某个业务域出现大批量缺口时，优先补其只读查询与主闭环写操作，避免只做边角接口。
 - 每次调整优先级规则后重新生成报告，保证计划依据与仓库现状同步。
