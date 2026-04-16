@@ -7,7 +7,7 @@
 | 示例 | 功能 | 需要的 feature |
 |------|------|----------------|
 | `readme_quick_start` | 对齐根 README 的快速开始与 docs helper 示例 | `auth,docs-bitable` |
-| `simple_api_call` | 创建 `Client` 并访问 communication 常量 | `auth,communication` |
+| `simple_api_call` | 创建 `Client`，并演示 communication 常量 + chat/user lookup helper | `auth,communication` |
 | `docs_helpers` | 演示 docs helper：分页遍历、查找 sheet、批量读范围、多维表格全量读取 | `auth,docs-bitable` |
 | `docs_workflows` | 用 3 个任务流演示 Drive / Sheets / Wiki / Bitable helper 的组合方式 | `auth,docs-bitable` |
 | `websocket_echo_bot` | 长连接接收并回显文本消息 | `communication,websocket` |

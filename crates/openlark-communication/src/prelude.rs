@@ -7,9 +7,11 @@ pub use openlark_core::{config::Config, SDKResult};
 
 // 重新导出通用工具
 pub use crate::common::chain::CommunicationClient;
+#[cfg(feature = "contact")]
+pub use crate::common::chain::UserLookupItem;
 #[cfg(feature = "im")]
 pub use crate::common::chain::{
-    MediaFileUpload, MediaImageUpload, MessageRecipient, PostMessage, ReplyTarget,
+    ChatLookupItem, MediaFileUpload, MediaImageUpload, MessageRecipient, PostMessage, ReplyTarget,
 };
 
 // 重新导出端点常量

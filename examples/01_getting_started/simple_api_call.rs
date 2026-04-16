@@ -1,6 +1,6 @@
 //! 第一个API调用示例（简化版）
 //!
-//! 演示如何使用 openlark SDK 进行飞书API调用。
+//! 演示如何使用 openlark SDK 进行 communication helper 调用。
 //!
 //! 运行方式：
 //! ```bash
@@ -37,6 +37,36 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     // 访问 communication 模块的常量
     let endpoint = IM_V1_MESSAGES;
     println!("消息API端点: {}", endpoint);
+
+    if let Ok(user_name) = std::env::var("OPENLARK_USER_SEARCH_NAME") {
+        if !user_name.trim().is_empty() {
+            let user = client
+                .communication
+                .contact
+                .find_user_by_name(&user_name)
+                .await?;
+            println!("👤 命中用户: {} ({})", user.name, user.open_id);
+        } else {
+            println!("OPENLARK_USER_SEARCH_NAME 为空，跳过用户查找 helper");
+        }
+    } else {
+        println!("未设置 OPENLARK_USER_SEARCH_NAME，跳过用户查找 helper");
+    }
+
+    if let Ok(chat_name) = std::env::var("OPENLARK_CHAT_SEARCH_NAME") {
+        if !chat_name.trim().is_empty() {
+            let chat = client
+                .communication
+                .im
+                .find_chat_by_name(&chat_name)
+                .await?;
+            println!("💬 命中群聊: {} ({})", chat.name, chat.chat_id);
+        } else {
+            println!("OPENLARK_CHAT_SEARCH_NAME 为空，跳过群聊查找 helper");
+        }
+    } else {
+        println!("未设置 OPENLARK_CHAT_SEARCH_NAME，跳过群聊查找 helper");
+    }
 
     // 构建消息请求
     let message = json!({

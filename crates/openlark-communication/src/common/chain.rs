@@ -9,11 +9,21 @@
 use std::sync::Arc;
 
 use openlark_core::config::Config;
+#[cfg(any(feature = "im", feature = "contact"))]
+use openlark_core::error::business_error;
 #[cfg(feature = "im")]
 use openlark_core::validate_required;
-#[cfg(feature = "im")]
+#[cfg(any(feature = "im", feature = "contact"))]
 use openlark_core::{error::validation_error, SDKResult};
 
+#[cfg(feature = "contact")]
+use crate::contact::contact::v3::user::{
+    create::UserResponse,
+    get::GetUserRequest,
+    models::{DepartmentIdType, UserIdType as ContactUserIdType},
+};
+#[cfg(feature = "contact")]
+use crate::contact::contact_search::old::default::v1::user::SearchUserRequest;
 #[cfg(feature = "im")]
 use crate::im::im::v1::message::{
     create::{CreateMessageBody, CreateMessageRequest},
@@ -22,6 +32,11 @@ use crate::im::im::v1::message::{
 };
 #[cfg(feature = "im")]
 use crate::im::im::v1::thread::forward::{ForwardThreadBody, ForwardThreadRequest};
+#[cfg(feature = "im")]
+use crate::im::im::v1::{
+    chat::{get::GetChatRequest, search::SearchChatsRequest},
+    message::models::UserIdType as ImUserIdType,
+};
 #[cfg(feature = "im")]
 use crate::im::im::v1::{
     file::{
@@ -210,6 +225,64 @@ impl MediaFileUpload {
     }
 }
 
+/// 用户查找 helper。
+///
+/// 统一承载搜索用户接口里最常用的字段，避免调用方直接处理原始 JSON。
+#[cfg(feature = "contact")]
+#[derive(Debug, Clone, serde::Deserialize, PartialEq, Eq)]
+pub struct UserLookupItem {
+    pub name: String,
+    pub open_id: String,
+    #[serde(default)]
+    pub user_id: Option<String>,
+    #[serde(default)]
+    pub department_ids: Vec<String>,
+}
+
+/// 群查找 helper。
+///
+/// 统一承载群搜索结果里最常用的字段。
+#[cfg(feature = "im")]
+#[derive(Debug, Clone, serde::Deserialize, PartialEq, Eq)]
+pub struct ChatLookupItem {
+    pub chat_id: String,
+    pub name: String,
+    #[serde(default)]
+    pub description: Option<String>,
+    #[serde(default)]
+    pub owner_id: Option<String>,
+    #[serde(default)]
+    pub owner_id_type: Option<String>,
+    #[serde(default)]
+    pub external: bool,
+    #[serde(default)]
+    pub tenant_key: Option<String>,
+    #[serde(default)]
+    pub chat_status: Option<String>,
+}
+
+#[cfg(feature = "contact")]
+#[derive(Debug, Clone, serde::Deserialize)]
+struct UserLookupResponse {
+    #[serde(default)]
+    has_more: bool,
+    #[serde(default)]
+    page_token: Option<String>,
+    #[serde(default)]
+    users: Vec<UserLookupItem>,
+}
+
+#[cfg(feature = "im")]
+#[derive(Debug, Clone, serde::Deserialize)]
+struct ChatLookupResponse {
+    #[serde(default)]
+    has_more: bool,
+    #[serde(default)]
+    page_token: Option<String>,
+    #[serde(default)]
+    items: Vec<ChatLookupItem>,
+}
+
 /// Communication 链式入口：`communication.im` / `communication.contact` / `communication.moments`
 #[derive(Debug, Clone)]
 pub struct CommunicationClient {
@@ -386,6 +459,53 @@ impl ImClient {
             .await
     }
 
+    /// 搜索可见群聊并自动处理分页。
+    pub async fn search_chats_all(&self, query: impl AsRef<str>) -> SDKResult<Vec<ChatLookupItem>> {
+        let query = query.as_ref().trim().to_string();
+        if query.is_empty() {
+            return Err(validation_error("query", "query 不能为空"));
+        }
+
+        let mut items = Vec::new();
+        let mut page_token: Option<String> = None;
+
+        loop {
+            let mut request = SearchChatsRequest::new(self.config.as_ref().clone())
+                .query(query.clone())
+                .user_id_type(ImUserIdType::OpenId)
+                .page_size(100);
+            if let Some(token) = &page_token {
+                request = request.page_token(token.clone());
+            }
+
+            let response: ChatLookupResponse = serde_json::from_value(request.execute().await?)
+                .map_err(|e| validation_error("chat_lookup_response", e.to_string().as_str()))?;
+            items.extend(response.items);
+
+            if !response.has_more {
+                break;
+            }
+            page_token = response.page_token;
+        }
+
+        Ok(items)
+    }
+
+    /// 按群名称唯一查找单个群聊。
+    pub async fn find_chat_by_name(&self, name: &str) -> SDKResult<ChatLookupItem> {
+        let items = self.search_chats_all(name).await?;
+        find_unique_chat_by_name(&items, name)
+    }
+
+    /// 通过 chat_id 获取群详情。
+    pub async fn get_chat_info(&self, chat_id: impl Into<String>) -> SDKResult<serde_json::Value> {
+        GetChatRequest::new(self.config.as_ref().clone())
+            .chat_id(chat_id)
+            .user_id_type(ImUserIdType::OpenId)
+            .execute()
+            .await
+    }
+
     fn create_message_request(
         config: Arc<Config>,
         receive_id_type: ReceiveIdType,
@@ -525,6 +645,46 @@ fn infer_file_type(file_name: &str) -> String {
 }
 
 #[cfg(feature = "contact")]
+fn find_unique_user_by_name(users: &[UserLookupItem], name: &str) -> SDKResult<UserLookupItem> {
+    let name = name.trim();
+    if name.is_empty() {
+        return Err(validation_error("name", "name 不能为空"));
+    }
+
+    let mut matches = users.iter().filter(|user| user.name == name).cloned();
+
+    let first = matches
+        .next()
+        .ok_or_else(|| business_error(format!("未找到用户: {name}")))?;
+    if matches.next().is_some() {
+        return Err(business_error(format!(
+            "找到多个同名用户，请缩小范围: {name}"
+        )));
+    }
+    Ok(first)
+}
+
+#[cfg(feature = "im")]
+fn find_unique_chat_by_name(chats: &[ChatLookupItem], name: &str) -> SDKResult<ChatLookupItem> {
+    let name = name.trim();
+    if name.is_empty() {
+        return Err(validation_error("name", "name 不能为空"));
+    }
+
+    let mut matches = chats.iter().filter(|chat| chat.name == name).cloned();
+
+    let first = matches
+        .next()
+        .ok_or_else(|| business_error(format!("未找到群聊: {name}")))?;
+    if matches.next().is_some() {
+        return Err(business_error(format!(
+            "找到多个同名群聊，请缩小范围: {name}"
+        )));
+    }
+    Ok(first)
+}
+
+#[cfg(feature = "contact")]
 #[derive(Debug, Clone)]
 pub struct ContactClient {
     config: Arc<Config>,
@@ -538,6 +698,53 @@ impl ContactClient {
 
     pub fn config(&self) -> &Config {
         &self.config
+    }
+
+    /// 搜索用户并自动处理分页。
+    pub async fn search_users_all(&self, query: impl AsRef<str>) -> SDKResult<Vec<UserLookupItem>> {
+        let query = query.as_ref().trim().to_string();
+        if query.is_empty() {
+            return Err(validation_error("query", "query 不能为空"));
+        }
+
+        let mut users = Vec::new();
+        let mut page_token: Option<String> = None;
+
+        loop {
+            let mut request = SearchUserRequest::new(self.config.as_ref().clone())
+                .query(query.clone())
+                .page_size(100);
+            if let Some(token) = &page_token {
+                request = request.page_token(token.clone());
+            }
+
+            let response: UserLookupResponse = serde_json::from_value(request.execute().await?)
+                .map_err(|e| validation_error("user_lookup_response", e.to_string().as_str()))?;
+            users.extend(response.users);
+
+            if !response.has_more {
+                break;
+            }
+            page_token = response.page_token;
+        }
+
+        Ok(users)
+    }
+
+    /// 按用户名唯一查找单个用户。
+    pub async fn find_user_by_name(&self, name: &str) -> SDKResult<UserLookupItem> {
+        let users = self.search_users_all(name).await?;
+        find_unique_user_by_name(&users, name)
+    }
+
+    /// 通过 open_id 获取用户详情。
+    pub async fn get_user_by_open_id(&self, open_id: impl Into<String>) -> SDKResult<UserResponse> {
+        GetUserRequest::new(self.config.as_ref().clone())
+            .user_id(open_id)
+            .user_id_type(ContactUserIdType::OpenId)
+            .department_id_type(DepartmentIdType::OpenDepartmentId)
+            .execute()
+            .await
     }
 }
 
@@ -786,6 +993,108 @@ mod tests {
             .await
             .expect_err("empty image bytes should fail");
         assert!(error.to_string().contains("image"));
+    }
+
+    #[cfg(feature = "contact")]
+    #[test]
+    fn test_user_lookup_response_deserializes() {
+        let response: UserLookupResponse = serde_json::from_value(serde_json::json!({
+            "has_more": true,
+            "page_token": "token_1",
+            "users": [
+                {
+                    "name": "zhangsan",
+                    "open_id": "ou_xxx",
+                    "user_id": "u_xxx",
+                    "department_ids": ["od_1"]
+                }
+            ]
+        }))
+        .expect("user lookup response should deserialize");
+
+        assert!(response.has_more);
+        assert_eq!(response.page_token.as_deref(), Some("token_1"));
+        assert_eq!(response.users[0].name, "zhangsan");
+        assert_eq!(response.users[0].open_id, "ou_xxx");
+    }
+
+    #[cfg(feature = "contact")]
+    #[test]
+    fn test_find_unique_user_by_name_rejects_duplicates() {
+        let users = vec![
+            UserLookupItem {
+                name: "zhangsan".to_string(),
+                open_id: "ou_1".to_string(),
+                user_id: None,
+                department_ids: vec![],
+            },
+            UserLookupItem {
+                name: "zhangsan".to_string(),
+                open_id: "ou_2".to_string(),
+                user_id: None,
+                department_ids: vec![],
+            },
+        ];
+
+        let error =
+            find_unique_user_by_name(&users, "zhangsan").expect_err("duplicate user should fail");
+        assert!(error.to_string().contains("多个同名用户"));
+    }
+
+    #[cfg(feature = "im")]
+    #[test]
+    fn test_chat_lookup_response_deserializes() {
+        let response: ChatLookupResponse = serde_json::from_value(serde_json::json!({
+            "has_more": false,
+            "items": [
+                {
+                    "chat_id": "oc_xxx",
+                    "name": "项目群",
+                    "description": "研发群",
+                    "owner_id": "ou_owner",
+                    "owner_id_type": "open_id",
+                    "external": false,
+                    "tenant_key": "tenant_key",
+                    "chat_status": "normal"
+                }
+            ]
+        }))
+        .expect("chat lookup response should deserialize");
+
+        assert!(!response.has_more);
+        assert_eq!(response.items[0].chat_id, "oc_xxx");
+        assert_eq!(response.items[0].name, "项目群");
+    }
+
+    #[cfg(feature = "im")]
+    #[test]
+    fn test_find_unique_chat_by_name_rejects_duplicates() {
+        let chats = vec![
+            ChatLookupItem {
+                chat_id: "oc_1".to_string(),
+                name: "项目群".to_string(),
+                description: None,
+                owner_id: None,
+                owner_id_type: None,
+                external: false,
+                tenant_key: None,
+                chat_status: None,
+            },
+            ChatLookupItem {
+                chat_id: "oc_2".to_string(),
+                name: "项目群".to_string(),
+                description: None,
+                owner_id: None,
+                owner_id_type: None,
+                external: false,
+                tenant_key: None,
+                chat_status: None,
+            },
+        ];
+
+        let error =
+            find_unique_chat_by_name(&chats, "项目群").expect_err("duplicate chat should fail");
+        assert!(error.to_string().contains("多个同名群聊"));
     }
 
     #[cfg(feature = "contact")]

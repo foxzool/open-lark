@@ -26,6 +26,8 @@
 //!     .im
 //!     .send_text(MessageRecipient::open_id("ou_xxx"), "Hello")
 //!     .await?;
+//! let _user = communication.contact.find_user_by_name("zhangsan").await?;
+//! let _chat = communication.im.find_chat_by_name("项目群").await?;
 //! let _reply = communication
 //!     .im
 //!     .reply_text(ReplyTarget::direct("om_xxx"), "收到")
@@ -84,7 +86,9 @@ pub mod prelude;
 
 // 重新导出主要类型
 pub use common::chain::CommunicationClient;
+#[cfg(feature = "contact")]
+pub use common::chain::UserLookupItem;
 #[cfg(feature = "im")]
 pub use common::chain::{
-    MediaFileUpload, MediaImageUpload, MessageRecipient, PostMessage, ReplyTarget,
+    ChatLookupItem, MediaFileUpload, MediaImageUpload, MessageRecipient, PostMessage, ReplyTarget,
 };

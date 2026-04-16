@@ -13,6 +13,8 @@ export OPENLARK_APP_SECRET="your_app_secret"
 
 ```bash
 export OPENLARK_BASE_URL="https://open.feishu.cn"
+export OPENLARK_USER_SEARCH_NAME="zhangsan"
+export OPENLARK_CHAT_SEARCH_NAME="项目群"
 export OPENLARK_FOLDER_TOKEN="folder_token"
 export OPENLARK_DOWNLOAD_FILE_TOKEN="file_token"
 export OPENLARK_DOWNLOAD_RANGE_DEMO="1"
@@ -55,7 +57,7 @@ cargo run --example websocket_echo_bot --features "communication,websocket"
 
 ## 说明
 
-- `simple_api_call` 只验证根 crate 单入口和 communication 模块是否可用。
+- `simple_api_call` 会在你提供 `OPENLARK_USER_SEARCH_NAME` / `OPENLARK_CHAT_SEARCH_NAME` 时，额外演示 user/chat lookup helper。
 - `docs_helpers` 会按你是否提供相关 token，分别演示文件夹遍历、Drive 上传/下载、sheet 查找、批量读范围与多维表格读取；如需启用分片下载/批量写入演示，再额外设置 `OPENLARK_DOWNLOAD_RANGE_DEMO=1` / `OPENLARK_SHEETS_WRITE_DEMO=1`。
 - `docs_workflows` 会以任务流方式串起 Drive 文件流转、Spreadsheet 周报处理，以及 Wiki / Bitable 巡检流程。
 - `websocket_echo_bot` 需要额外完成飞书事件订阅和长连接配置。

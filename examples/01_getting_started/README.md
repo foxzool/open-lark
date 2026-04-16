@@ -7,7 +7,7 @@
 | 示例 | 说明 | 运行命令 |
 |------|------|----------|
 | `readme_quick_start` | 根 README 对齐示例，覆盖文档 helper 入口 | `cargo run --example readme_quick_start --features "auth,docs-bitable"` |
-| `simple_api_call` | 最小 communication 示例，验证客户端初始化和模块访问 | `cargo run --example simple_api_call --features "auth,communication"` |
+| `simple_api_call` | communication 示例，验证客户端初始化、模块访问以及 user/chat lookup helper | `cargo run --example simple_api_call --features "auth,communication"` |
 | `docs_helpers` | 演示 docs helper，包括文件夹遍历、sheet 查找、批量读范围、多维表格全量读取 | `cargo run --example docs_helpers --features "auth,docs-bitable"` |
 | `docs_workflows` | 以 Drive / Sheets / Wiki / Bitable 三组任务流展示 Docs helper 的组合方式 | `cargo run --example docs_workflows --features "auth,docs-bitable"` |
 | `websocket_echo_bot` | 长连接消息回显 | `cargo run --example websocket_echo_bot --features "communication,websocket"` |
@@ -24,6 +24,8 @@ export OPENLARK_APP_SECRET="your_app_secret"
 
 ```bash
 export OPENLARK_BASE_URL="https://open.feishu.cn"
+export OPENLARK_USER_SEARCH_NAME="zhangsan"
+export OPENLARK_CHAT_SEARCH_NAME="项目群"
 export OPENLARK_FOLDER_TOKEN="folder_token"
 export OPENLARK_DOWNLOAD_FILE_TOKEN="file_token"
 export OPENLARK_UPLOAD_FILE_PATH="/path/to/file"
