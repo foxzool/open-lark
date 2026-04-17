@@ -38,10 +38,10 @@ tokio-tungstenite = { workspace = true, optional = true }
 prost = { workspace = true, optional = true }
 openlark-protocol = { workspace = true, optional = true }
 lark-websocket-protobuf = { version = "0.1", optional = true }
-http = "1.0"
-num_cpus = "1.16"
+http = { workspace = true }
+num_cpus = { workspace = true }
 urlencoding = "2.1"
-serde_with = "3"
+serde_with = { workspace = true }
 
 # Internal dependencies暂时移除，避免循环依赖
 

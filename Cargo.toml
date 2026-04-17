@@ -89,6 +89,7 @@ prost = { version = "0.13" }
 reqwest = { version = "0.12.7", default-features = false, features = ["json", "multipart", "rustls-tls"] }
 tokio-tungstenite = { version = "0.23", features = ["rustls-tls-native-roots"] }
 lark-websocket-protobuf = "0.1"
+http = "1.0"
 
 # === 加密与安全 (Cryptography & Security) ===
 hmac = "0.12.1"
@@ -114,6 +115,8 @@ strum_macros = "0.27"
 urlencoding = "2.1"
 quick_cache = { version = "0.6.3", features = [] }
 walkdir = "2.4"
+num_cpus = "1.16"
+serde_with = "3"
 
 # === 工作空间内部依赖 (Internal Workspace Dependencies) ===
 # 核心基础设施模块

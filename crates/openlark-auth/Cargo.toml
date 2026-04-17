@@ -55,7 +55,7 @@ urlencoding = "2.1"
 [dev-dependencies]
 tokio-test = "0.4"
 mockall = "0.12"
-rstest = "0.18"
+rstest = { workspace = true }
 wiremock = "0.6"
 
 # 性能基准测试的依赖（可选）
