@@ -292,3 +292,39 @@ pub struct JobConfigInfo {
     #[serde(default, flatten)]
     pub extra: HashMap<String, Value>,
 }
+
+/// 外部投递摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ExternalApplicationSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_name: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 外部 Offer 摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ExternalOfferSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_offer_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offer_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}

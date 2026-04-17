@@ -822,6 +822,109 @@ mod serialization_tests {
             extra: Default::default(),
         }
     );
+    roundtrip_eq!(
+        test_external_application_create_response_serialization,
+        external_application::create::CreateResponse,
+        external_application::create::CreateResponse {
+            external_application_id: Some("ext_app_1".to_string()),
+            application_id: Some("app_1".to_string()),
+            status: Some(1),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_application_delete_response_serialization,
+        external_application::delete::DeleteResponse,
+        external_application::delete::DeleteResponse {
+            external_application_id: Some("ext_app_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_application_list_response_serialization,
+        external_application::list::ListResponse,
+        external_application::list::ListResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::ExternalApplicationSummary {
+                    external_application_id: Some("ext_app_1".to_string()),
+                    application_id: Some("app_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    job_id: Some("job_1".to_string()),
+                    status: Some(1),
+                    source_name: Some("Boss".to_string()),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_ext_app".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_application_update_response_serialization,
+        external_application::update::UpdateResponse,
+        external_application::update::UpdateResponse {
+            external_application_id: Some("ext_app_1".to_string()),
+            application_id: Some("app_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_offer_create_response_serialization,
+        external_offer::create::CreateResponse,
+        external_offer::create::CreateResponse {
+            external_offer_id: Some("ext_offer_1".to_string()),
+            offer_id: Some("offer_1".to_string()),
+            status: Some(1),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_offer_delete_response_serialization,
+        external_offer::delete::DeleteResponse,
+        external_offer::delete::DeleteResponse {
+            external_offer_id: Some("ext_offer_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_offer_batch_query_response_serialization,
+        external_offer::batch_query::BatchQueryResponse,
+        external_offer::batch_query::BatchQueryResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::ExternalOfferSummary {
+                    external_offer_id: Some("ext_offer_1".to_string()),
+                    offer_id: Some("offer_1".to_string()),
+                    application_id: Some("app_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    status: Some(2),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_ext_offer".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_offer_update_response_serialization,
+        external_offer::update::UpdateResponse,
+        external_offer::update::UpdateResponse {
+            external_offer_id: Some("ext_offer_1".to_string()),
+            offer_id: Some("offer_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
 
     roundtrip_eq!(
         test_evaluation_list_response_serialization,

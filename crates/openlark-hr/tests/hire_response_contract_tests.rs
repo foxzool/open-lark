@@ -1,8 +1,9 @@
 use openlark_hr::hire::hire::{
     v1::{
-        application, attachment, evaluation, interview_record as interview_record_v1, interviewer,
-        job, location, note, offer, offer_application_form, offer_schema, referral,
-        referral_account, role, subject, talent_object, talent_pool, todo, user_role, website,
+        application, attachment, evaluation, external_application, external_offer,
+        interview_record as interview_record_v1, interviewer, job, location, note, offer,
+        offer_application_form, offer_schema, referral, referral_account, role, subject,
+        talent_object, talent_pool, todo, user_role, website,
     },
     v2::{interview_record as interview_record_v2, talent},
 };
@@ -694,4 +695,71 @@ fn job_contracts_are_typed() {
         "result": true
     }));
     assert_eq!(update_config.result, Some(true));
+}
+
+#[test]
+fn external_application_and_offer_contracts_are_typed() {
+    let ext_app_created: external_application::create::CreateResponse = parse_contract(json!({
+        "external_application_id": "ext_app_1",
+        "application_id": "app_1",
+        "status": 1,
+        "success": true
+    }));
+    assert_eq!(
+        ext_app_created.external_application_id.as_deref(),
+        Some("ext_app_1")
+    );
+
+    let ext_app_list: external_application::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "external_application_id": "ext_app_1",
+            "application_id": "app_1",
+            "talent_id": "talent_1",
+            "job_id": "job_1",
+            "status": 1,
+            "source_name": "Boss"
+        }],
+        "has_more": false
+    }));
+    assert_eq!(ext_app_list.items[0].source_name.as_deref(), Some("Boss"));
+
+    let ext_app_updated: external_application::update::UpdateResponse = parse_contract(json!({
+        "external_application_id": "ext_app_1",
+        "result": true
+    }));
+    assert_eq!(ext_app_updated.result, Some(true));
+
+    let ext_offer_created: external_offer::create::CreateResponse = parse_contract(json!({
+        "external_offer_id": "ext_offer_1",
+        "offer_id": "offer_1",
+        "status": 2,
+        "success": true
+    }));
+    assert_eq!(ext_offer_created.offer_id.as_deref(), Some("offer_1"));
+
+    let ext_offer_list: external_offer::batch_query::BatchQueryResponse = parse_contract(json!({
+        "items": [{
+            "external_offer_id": "ext_offer_1",
+            "offer_id": "offer_1",
+            "application_id": "app_1",
+            "talent_id": "talent_1",
+            "status": 2
+        }],
+        "page_token": "cursor_ext_offer"
+    }));
+    assert_eq!(ext_offer_list.items[0].status, Some(2));
+    assert_eq!(
+        ext_offer_list.page_token.as_deref(),
+        Some("cursor_ext_offer")
+    );
+
+    let ext_offer_updated: external_offer::update::UpdateResponse = parse_contract(json!({
+        "external_offer_id": "ext_offer_1",
+        "offer_id": "offer_1",
+        "result": true
+    }));
+    assert_eq!(
+        ext_offer_updated.external_offer_id.as_deref(),
+        Some("ext_offer_1")
+    );
 }
