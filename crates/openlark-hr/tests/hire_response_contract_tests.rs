@@ -989,3 +989,65 @@ fn talent_and_job_requirement_contracts_are_typed() {
     }));
     assert_eq!(requirement_update.result, Some(true));
 }
+
+#[test]
+fn application_mutation_contracts_are_typed() {
+    let cancel: application::cancel_onboard::CancelOnboardResponse = parse_contract(json!({
+        "application_id": "app_1",
+        "result": true,
+        "success": true
+    }));
+    assert_eq!(cancel.operation.application_id.as_deref(), Some("app_1"));
+
+    let offer: application::offer::OfferResponse = parse_contract(json!({
+        "offer": {
+            "id": "offer_1",
+            "application_id": "app_1",
+            "basic_info": {
+                "department_id": "dept_1"
+            }
+        }
+    }));
+    assert_eq!(
+        offer.offer.as_ref().and_then(|v| v.id.as_deref()),
+        Some("offer_1")
+    );
+
+    let recover: application::recover::RecoverResponse = parse_contract(json!({
+        "application_id": "app_1",
+        "stage_id": "stage_resume",
+        "stage_name": "简历筛选",
+        "result": true
+    }));
+    assert_eq!(recover.operation.stage_name.as_deref(), Some("简历筛选"));
+
+    let terminate: application::terminate::TerminateResponse = parse_contract(json!({
+        "application_id": "app_1",
+        "result": true
+    }));
+    assert_eq!(terminate.operation.result, Some(true));
+
+    let transfer_onboard: application::transfer_onboard::TransferOnboardResponse =
+        parse_contract(json!({
+            "application_id": "app_1",
+            "employee_id": "emp_1",
+            "onboard_status": 1,
+            "success": true
+        }));
+    assert_eq!(
+        transfer_onboard.operation.employee_id.as_deref(),
+        Some("emp_1")
+    );
+
+    let transfer_stage: application::transfer_stage::TransferStageResponse =
+        parse_contract(json!({
+            "application_id": "app_1",
+            "stage_id": "stage_interview",
+            "stage_name": "面试",
+            "success": true
+        }));
+    assert_eq!(
+        transfer_stage.operation.stage_id.as_deref(),
+        Some("stage_interview")
+    );
+}

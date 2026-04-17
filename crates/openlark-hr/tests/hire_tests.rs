@@ -669,6 +669,105 @@ mod serialization_tests {
             extra: Default::default(),
         }
     );
+    roundtrip_eq!(
+        test_application_cancel_onboard_response_serialization,
+        application::cancel_onboard::CancelOnboardResponse,
+        application::cancel_onboard::CancelOnboardResponse {
+            operation: openlark_hr::hire::hire::common_models::ApplicationOperationResult {
+                application_id: Some("app_1".to_string()),
+                stage_id: None,
+                stage_name: None,
+                offer_id: None,
+                employee_id: None,
+                onboard_status: None,
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_application_offer_response_serialization,
+        application::offer::OfferResponse,
+        application::offer::OfferResponse {
+            offer: Some(openlark_hr::hire::hire::v1::offer::get::OfferDetail {
+                id: Some("offer_1".to_string()),
+                application_id: Some("app_1".to_string()),
+                basic_info: None,
+                salary_plan: None,
+                extra: Default::default(),
+            }),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_application_recover_response_serialization,
+        application::recover::RecoverResponse,
+        application::recover::RecoverResponse {
+            operation: openlark_hr::hire::hire::common_models::ApplicationOperationResult {
+                application_id: Some("app_1".to_string()),
+                stage_id: Some("stage_resume".to_string()),
+                stage_name: Some("简历筛选".to_string()),
+                offer_id: None,
+                employee_id: None,
+                onboard_status: None,
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_application_terminate_response_serialization,
+        application::terminate::TerminateResponse,
+        application::terminate::TerminateResponse {
+            operation: openlark_hr::hire::hire::common_models::ApplicationOperationResult {
+                application_id: Some("app_1".to_string()),
+                stage_id: None,
+                stage_name: None,
+                offer_id: None,
+                employee_id: None,
+                onboard_status: None,
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_application_transfer_onboard_response_serialization,
+        application::transfer_onboard::TransferOnboardResponse,
+        application::transfer_onboard::TransferOnboardResponse {
+            operation: openlark_hr::hire::hire::common_models::ApplicationOperationResult {
+                application_id: Some("app_1".to_string()),
+                stage_id: None,
+                stage_name: None,
+                offer_id: None,
+                employee_id: Some("emp_1".to_string()),
+                onboard_status: Some(1),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_application_transfer_stage_response_serialization,
+        application::transfer_stage::TransferStageResponse,
+        application::transfer_stage::TransferStageResponse {
+            operation: openlark_hr::hire::hire::common_models::ApplicationOperationResult {
+                application_id: Some("app_1".to_string()),
+                stage_id: Some("stage_interview".to_string()),
+                stage_name: Some("面试".to_string()),
+                offer_id: None,
+                employee_id: None,
+                onboard_status: None,
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
 
     roundtrip_eq!(
         test_job_combined_create_response_serialization,

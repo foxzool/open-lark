@@ -483,3 +483,26 @@ pub struct JobRequirementSummary {
     #[serde(default, flatten)]
     pub extra: HashMap<String, Value>,
 }
+
+/// 投递操作结果摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ApplicationOperationResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offer_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub employee_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub onboard_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}

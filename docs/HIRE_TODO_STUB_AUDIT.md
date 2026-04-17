@@ -37,7 +37,7 @@
 
 - **0 个文件**：零字段请求骨架已全部消除
 - **1 个接口**：`talent_object/query` 已确认是官方无参请求，不再视为骨架
-- **83 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
+- **77 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
 
 ## 分类结论
 
@@ -51,7 +51,7 @@
 
 已不再存在“零字段请求骨架仍待建模”的剩余项。
 
-### B. `Value` 响应直透（当前 83 files）
+### B. `Value` 响应直透（当前 77 files）
 
 这批接口已经具备 endpoint/execute 入口，但公共返回类型仍是 `pub data: Value`。这意味着：
 
@@ -275,3 +275,22 @@
 当前剩余 `pub data: Value` 直透响应数：**83**。
 
 后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪，并优先继续清 application 剩余 mutation / external_background_check / external_interview / tripartite_agreement 等路径。
+
+## #113 第十一批收敛进展
+
+本轮继续完成 application mutation 主路径的 typed response 收敛：
+
+- application.cancel_onboard
+- application.offer
+- application.recover
+- application.terminate
+- application.transfer_onboard
+- application.transfer_stage
+
+同时新增并复用的通用结构包括：
+
+- `ApplicationOperationResult`
+
+当前剩余 `pub data: Value` 直透响应数：**77**。
+
+后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪，并优先继续清 external_background_check / external_interview / tripartite_agreement / 其余 low-volume 域。

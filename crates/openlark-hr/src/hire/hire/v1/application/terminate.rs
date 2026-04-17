@@ -11,6 +11,8 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use crate::hire::hire::common_models::ApplicationOperationResult;
+
 /// 终止投递请求
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
@@ -76,12 +78,10 @@ impl TerminateRequest {
 }
 
 /// 终止投递响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct TerminateResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(flatten)]
+    pub operation: ApplicationOperationResult,
 }
 
 impl ApiResponseTrait for TerminateResponse {
