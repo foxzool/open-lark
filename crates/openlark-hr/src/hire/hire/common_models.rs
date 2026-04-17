@@ -627,3 +627,135 @@ pub struct EcoOperationResult {
     #[serde(default, flatten)]
     pub extra: HashMap<String, Value>,
 }
+
+/// 入职员工摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct EmployeeSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub employee_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub onboard_status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 内推账户操作结果。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ReferralAccountOperationResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 外部面评操作结果。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ExternalInterviewAssessmentResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_interview_assessment_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_interview_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 面试摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InterviewSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interview_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interview_round_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 背调订单摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct BackgroundCheckOrderSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub order_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vendor_name: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 外部内推奖励操作结果。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ExternalReferralRewardResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_referral_reward_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amount: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 人才库操作结果。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentPoolOperationResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_pool_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 生态考试操作结果。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct EcoExamOperationResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exam_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}

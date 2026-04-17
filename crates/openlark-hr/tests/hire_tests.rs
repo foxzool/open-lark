@@ -463,20 +463,6 @@ mod serialization_tests {
     );
 
     roundtrip_eq!(
-        test_interview_list_response_serialization,
-        interview::list::ListResponse,
-        interview::list::ListResponse {
-            data: json!({"items":[]})
-        }
-    );
-    roundtrip_eq!(
-        test_interview_get_by_talent_response_serialization,
-        interview::get_by_talent::GetByTalentResponse,
-        interview::get_by_talent::GetByTalentResponse {
-            data: json!({"interview_id":"iv_001"})
-        }
-    );
-    roundtrip_eq!(
         test_application_interview_list_response_serialization,
         application::interview::list::ListResponse,
         application::interview::list::ListResponse {
@@ -1564,6 +1550,270 @@ mod serialization_tests {
                 order_id: Some("order_1".to_string()),
                 status: Some(2),
                 progress: Some(80),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_employee_get_response_serialization,
+        employee::get::GetResponse,
+        employee::get::GetResponse {
+            employee: Some(openlark_hr::hire::hire::common_models::EmployeeSummary {
+                employee_id: Some("emp_1".to_string()),
+                application_id: Some("app_1".to_string()),
+                talent_id: Some("talent_1".to_string()),
+                status: Some(1),
+                onboard_status: Some(2),
+                extra: Default::default(),
+            }),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_employee_get_by_application_response_serialization,
+        employee::get_by_application::GetByApplicationResponse,
+        employee::get_by_application::GetByApplicationResponse {
+            employee: Some(openlark_hr::hire::hire::common_models::EmployeeSummary {
+                employee_id: Some("emp_1".to_string()),
+                application_id: Some("app_1".to_string()),
+                talent_id: Some("talent_1".to_string()),
+                status: Some(1),
+                onboard_status: Some(2),
+                extra: Default::default(),
+            }),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_employee_patch_response_serialization,
+        employee::patch::PatchResponse,
+        employee::patch::PatchResponse {
+            employee: Some(openlark_hr::hire::hire::common_models::EmployeeSummary {
+                employee_id: Some("emp_1".to_string()),
+                application_id: Some("app_1".to_string()),
+                talent_id: Some("talent_1".to_string()),
+                status: Some(2),
+                onboard_status: Some(2),
+                extra: Default::default(),
+            }),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_referral_account_deactivate_response_serialization,
+        referral_account::deactivate::DeactivateResponse,
+        referral_account::deactivate::DeactivateResponse {
+            operation: openlark_hr::hire::hire::common_models::ReferralAccountOperationResult {
+                account_id: Some("acc_1".to_string()),
+                status: Some(2),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_referral_account_enable_response_serialization,
+        referral_account::enable::EnableResponse,
+        referral_account::enable::EnableResponse {
+            operation: openlark_hr::hire::hire::common_models::ReferralAccountOperationResult {
+                account_id: Some("acc_1".to_string()),
+                status: Some(1),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_referral_account_withdraw_response_serialization,
+        referral_account::withdraw::WithdrawResponse,
+        referral_account::withdraw::WithdrawResponse {
+            operation: openlark_hr::hire::hire::common_models::ReferralAccountOperationResult {
+                account_id: Some("acc_1".to_string()),
+                status: Some(3),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_external_interview_assessment_create_response_serialization,
+        external_interview_assessment::create::CreateResponse,
+        external_interview_assessment::create::CreateResponse {
+            assessment: openlark_hr::hire::hire::common_models::ExternalInterviewAssessmentResult {
+                external_interview_assessment_id: Some("assess_1".to_string()),
+                external_interview_id: Some("iv_1".to_string()),
+                status: Some(1),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_external_interview_assessment_patch_response_serialization,
+        external_interview_assessment::patch::PatchResponse,
+        external_interview_assessment::patch::PatchResponse {
+            assessment: openlark_hr::hire::hire::common_models::ExternalInterviewAssessmentResult {
+                external_interview_assessment_id: Some("assess_1".to_string()),
+                external_interview_id: Some("iv_1".to_string()),
+                status: Some(2),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_interview_list_response_serialization,
+        interview::list::ListResponse,
+        interview::list::ListResponse {
+            items: vec![openlark_hr::hire::hire::common_models::InterviewSummary {
+                interview_id: Some("iv_1".to_string()),
+                application_id: Some("app_1".to_string()),
+                talent_id: Some("talent_1".to_string()),
+                status: Some(2),
+                interview_round_name: Some("一面".to_string()),
+                start_time: Some("2026-05-01T10:00:00Z".to_string()),
+                extra: Default::default(),
+            }],
+            page_token: Some("cursor_interview".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_interview_get_by_talent_response_serialization,
+        interview::get_by_talent::GetByTalentResponse,
+        interview::get_by_talent::GetByTalentResponse {
+            interview: Some(openlark_hr::hire::hire::common_models::InterviewSummary {
+                interview_id: Some("iv_1".to_string()),
+                application_id: Some("app_1".to_string()),
+                talent_id: Some("talent_1".to_string()),
+                status: Some(2),
+                interview_round_name: Some("一面".to_string()),
+                start_time: Some("2026-05-01T10:00:00Z".to_string()),
+                extra: Default::default(),
+            }),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_background_check_order_batch_query_response_serialization,
+        background_check_order::batch_query::BatchQueryResponse,
+        background_check_order::batch_query::BatchQueryResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::BackgroundCheckOrderSummary {
+                    order_id: Some("order_1".to_string()),
+                    application_id: Some("app_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    status: Some(2),
+                    vendor_name: Some("VendorA".to_string()),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_order".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_background_check_order_list_response_serialization,
+        background_check_order::list::ListResponse,
+        background_check_order::list::ListResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::BackgroundCheckOrderSummary {
+                    order_id: Some("order_1".to_string()),
+                    application_id: Some("app_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    status: Some(2),
+                    vendor_name: Some("VendorA".to_string()),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_order".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_referral_reward_create_response_serialization,
+        external_referral_reward::create::CreateResponse,
+        external_referral_reward::create::CreateResponse {
+            reward: openlark_hr::hire::hire::common_models::ExternalReferralRewardResult {
+                external_referral_reward_id: Some("reward_1".to_string()),
+                account_id: Some("acc_1".to_string()),
+                amount: Some(88.5),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_external_referral_reward_delete_response_serialization,
+        external_referral_reward::delete::DeleteResponse,
+        external_referral_reward::delete::DeleteResponse {
+            reward: openlark_hr::hire::hire::common_models::ExternalReferralRewardResult {
+                external_referral_reward_id: Some("reward_1".to_string()),
+                account_id: Some("acc_1".to_string()),
+                amount: None,
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_talent_pool_batch_change_response_serialization,
+        talent_pool::batch_change_talent_pool::BatchChangeTalentPoolResponse,
+        talent_pool::batch_change_talent_pool::BatchChangeTalentPoolResponse {
+            operation: openlark_hr::hire::hire::common_models::TalentPoolOperationResult {
+                talent_pool_id: Some("pool_1".to_string()),
+                talent_id: Some("talent_1".to_string()),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_talent_pool_move_talent_response_serialization,
+        talent_pool::move_talent::MoveTalentResponse,
+        talent_pool::move_talent::MoveTalentResponse {
+            operation: openlark_hr::hire::hire::common_models::TalentPoolOperationResult {
+                talent_pool_id: Some("pool_1".to_string()),
+                talent_id: Some("talent_1".to_string()),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_eco_exam_login_info_response_serialization,
+        eco_exam::login_info::LoginInfoResponse,
+        eco_exam::login_info::LoginInfoResponse {
+            exam: openlark_hr::hire::hire::common_models::EcoExamOperationResult {
+                exam_id: Some("exam_1".to_string()),
+                status: Some(1),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_eco_exam_update_result_response_serialization,
+        eco_exam::update_result::UpdateResultResponse,
+        eco_exam::update_result::UpdateResultResponse {
+            exam: openlark_hr::hire::hire::common_models::EcoExamOperationResult {
+                exam_id: Some("exam_1".to_string()),
+                status: Some(2),
                 result: Some(true),
                 success: Some(true),
                 extra: Default::default(),

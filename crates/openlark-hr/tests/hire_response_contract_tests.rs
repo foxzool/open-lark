@@ -1,12 +1,13 @@
 use openlark_hr::hire::hire::{
     v1::{
-        agency, application, attachment, eco_account_custom_field, eco_background_check,
-        eco_background_check_custom_field, eco_background_check_package, eco_exam_paper,
-        evaluation, external_application, external_background_check, external_interview,
-        external_offer, interview_record as interview_record_v1, interviewer, job, job_requirement,
-        location, note, offer, offer_application_form, offer_schema, referral, referral_account,
-        role, subject, talent, talent_object, talent_pool, todo, tripartite_agreement, user_role,
-        website,
+        agency, application, attachment, background_check_order, eco_account_custom_field,
+        eco_background_check, eco_background_check_custom_field, eco_background_check_package,
+        eco_exam, eco_exam_paper, employee, evaluation, external_application,
+        external_background_check, external_interview, external_interview_assessment,
+        external_offer, external_referral_reward, interview,
+        interview_record as interview_record_v1, interviewer, job, job_requirement, location, note,
+        offer, offer_application_form, offer_schema, referral, referral_account, role, subject,
+        talent, talent_object, talent_pool, todo, tripartite_agreement, user_role, website,
     },
     v2::interview_record as interview_record_v2,
 };
@@ -1194,4 +1195,96 @@ fn eco_operation_contracts_are_typed() {
             "success": true
         }));
     assert_eq!(bg_progress.operation.progress, Some(80));
+}
+
+#[test]
+fn remaining_low_volume_contracts_are_typed() {
+    let employee: employee::get::GetResponse = parse_contract(json!({
+        "employee": {
+            "employee_id": "emp_1",
+            "application_id": "app_1",
+            "talent_id": "talent_1",
+            "status": 1
+        }
+    }));
+    assert_eq!(
+        employee
+            .employee
+            .as_ref()
+            .and_then(|v| v.employee_id.as_deref()),
+        Some("emp_1")
+    );
+
+    let referral_enable: referral_account::enable::EnableResponse = parse_contract(json!({
+        "account_id": "acc_1",
+        "result": true,
+        "success": true
+    }));
+    assert_eq!(
+        referral_enable.operation.account_id.as_deref(),
+        Some("acc_1")
+    );
+
+    let assessment: external_interview_assessment::create::CreateResponse = parse_contract(json!({
+        "external_interview_assessment_id": "assess_1",
+        "external_interview_id": "iv_1",
+        "status": 1
+    }));
+    assert_eq!(
+        assessment
+            .assessment
+            .external_interview_assessment_id
+            .as_deref(),
+        Some("assess_1")
+    );
+
+    let interviews: interview::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "interview_id": "iv_1",
+            "application_id": "app_1",
+            "talent_id": "talent_1",
+            "status": 2,
+            "interview_round_name": "一面"
+        }]
+    }));
+    assert_eq!(
+        interviews.items[0].interview_round_name.as_deref(),
+        Some("一面")
+    );
+
+    let bg_orders: background_check_order::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "order_id": "order_1",
+            "application_id": "app_1",
+            "talent_id": "talent_1",
+            "status": 2,
+            "vendor_name": "VendorA"
+        }]
+    }));
+    assert_eq!(bg_orders.items[0].order_id.as_deref(), Some("order_1"));
+
+    let reward: external_referral_reward::create::CreateResponse = parse_contract(json!({
+        "external_referral_reward_id": "reward_1",
+        "account_id": "acc_1",
+        "amount": 88.5,
+        "success": true
+    }));
+    assert_eq!(reward.reward.amount, Some(88.5));
+
+    let talent_pool: talent_pool::move_talent::MoveTalentResponse = parse_contract(json!({
+        "talent_pool_id": "pool_1",
+        "talent_id": "talent_1",
+        "success": true
+    }));
+    assert_eq!(
+        talent_pool.operation.talent_pool_id.as_deref(),
+        Some("pool_1")
+    );
+
+    let exam: eco_exam::login_info::LoginInfoResponse = parse_contract(json!({
+        "exam_id": "exam_1",
+        "status": 1,
+        "success": true
+    }));
+    assert_eq!(exam.exam.exam_id.as_deref(), Some("exam_1"));
 }
