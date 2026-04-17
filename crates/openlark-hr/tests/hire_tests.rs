@@ -768,6 +768,159 @@ mod serialization_tests {
             },
         }
     );
+    roundtrip_eq!(
+        test_external_background_check_batch_query_response_serialization,
+        external_background_check::batch_query::BatchQueryResponse,
+        external_background_check::batch_query::BatchQueryResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::ExternalBackgroundCheckSummary {
+                    external_background_check_id: Some("bg_1".to_string()),
+                    application_id: Some("app_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    status: Some(1),
+                    vendor_name: Some("iBackground".to_string()),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_bg".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_background_check_create_response_serialization,
+        external_background_check::create::CreateResponse,
+        external_background_check::create::CreateResponse {
+            external_background_check_id: Some("bg_1".to_string()),
+            application_id: Some("app_1".to_string()),
+            status: Some(1),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_background_check_delete_response_serialization,
+        external_background_check::delete::DeleteResponse,
+        external_background_check::delete::DeleteResponse {
+            external_background_check_id: Some("bg_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_background_check_update_response_serialization,
+        external_background_check::update::UpdateResponse,
+        external_background_check::update::UpdateResponse {
+            external_background_check_id: Some("bg_1".to_string()),
+            application_id: Some("app_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_interview_batch_query_response_serialization,
+        external_interview::batch_query::BatchQueryResponse,
+        external_interview::batch_query::BatchQueryResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::ExternalInterviewSummary {
+                    external_interview_id: Some("iv_1".to_string()),
+                    application_id: Some("app_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    status: Some(2),
+                    interview_round_name: Some("一面".to_string()),
+                    start_time: Some("2026-05-01T10:00:00Z".to_string()),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_iv".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_interview_create_response_serialization,
+        external_interview::create::CreateResponse,
+        external_interview::create::CreateResponse {
+            external_interview_id: Some("iv_1".to_string()),
+            application_id: Some("app_1".to_string()),
+            status: Some(1),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_interview_delete_response_serialization,
+        external_interview::delete::DeleteResponse,
+        external_interview::delete::DeleteResponse {
+            external_interview_id: Some("iv_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_external_interview_update_response_serialization,
+        external_interview::update::UpdateResponse,
+        external_interview::update::UpdateResponse {
+            external_interview_id: Some("iv_1".to_string()),
+            application_id: Some("app_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_tripartite_agreement_create_response_serialization,
+        tripartite_agreement::create::CreateResponse,
+        tripartite_agreement::create::CreateResponse {
+            agreement_id: Some("agree_1".to_string()),
+            application_id: Some("app_1".to_string()),
+            status: Some(1),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_tripartite_agreement_delete_response_serialization,
+        tripartite_agreement::delete::DeleteResponse,
+        tripartite_agreement::delete::DeleteResponse {
+            agreement_id: Some("agree_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_tripartite_agreement_list_response_serialization,
+        tripartite_agreement::list::ListResponse,
+        tripartite_agreement::list::ListResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::TripartiteAgreementSummary {
+                    agreement_id: Some("agree_1".to_string()),
+                    application_id: Some("app_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    status: Some(1),
+                    sign_status: Some(2),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_agree".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_tripartite_agreement_update_response_serialization,
+        tripartite_agreement::update::UpdateResponse,
+        tripartite_agreement::update::UpdateResponse {
+            agreement_id: Some("agree_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
 
     roundtrip_eq!(
         test_job_combined_create_response_serialization,

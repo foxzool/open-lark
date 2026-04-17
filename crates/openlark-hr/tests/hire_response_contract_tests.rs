@@ -1,9 +1,10 @@
 use openlark_hr::hire::hire::{
     v1::{
-        agency, application, attachment, evaluation, external_application, external_offer,
+        agency, application, attachment, evaluation, external_application,
+        external_background_check, external_interview, external_offer,
         interview_record as interview_record_v1, interviewer, job, job_requirement, location, note,
         offer, offer_application_form, offer_schema, referral, referral_account, role, subject,
-        talent, talent_object, talent_pool, todo, user_role, website,
+        talent, talent_object, talent_pool, todo, tripartite_agreement, user_role, website,
     },
     v2::interview_record as interview_record_v2,
 };
@@ -1050,4 +1051,79 @@ fn application_mutation_contracts_are_typed() {
         transfer_stage.operation.stage_id.as_deref(),
         Some("stage_interview")
     );
+}
+
+#[test]
+fn external_background_interview_and_agreement_contracts_are_typed() {
+    let background_checks: external_background_check::batch_query::BatchQueryResponse =
+        parse_contract(json!({
+            "items": [{
+                "external_background_check_id": "bg_1",
+                "application_id": "app_1",
+                "talent_id": "talent_1",
+                "status": 1,
+                "vendor_name": "iBackground"
+            }],
+            "page_token": "cursor_bg"
+        }));
+    assert_eq!(background_checks.page_token.as_deref(), Some("cursor_bg"));
+
+    let background_created: external_background_check::create::CreateResponse =
+        parse_contract(json!({
+            "external_background_check_id": "bg_1",
+            "application_id": "app_1",
+            "status": 1,
+            "success": true
+        }));
+    assert_eq!(
+        background_created.external_background_check_id.as_deref(),
+        Some("bg_1")
+    );
+
+    let interviews: external_interview::batch_query::BatchQueryResponse = parse_contract(json!({
+        "items": [{
+            "external_interview_id": "iv_1",
+            "application_id": "app_1",
+            "talent_id": "talent_1",
+            "status": 2,
+            "interview_round_name": "一面"
+        }]
+    }));
+    assert_eq!(
+        interviews.items[0].interview_round_name.as_deref(),
+        Some("一面")
+    );
+
+    let interview_updated: external_interview::update::UpdateResponse = parse_contract(json!({
+        "external_interview_id": "iv_1",
+        "application_id": "app_1",
+        "result": true
+    }));
+    assert_eq!(interview_updated.result, Some(true));
+
+    let agreements: tripartite_agreement::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "agreement_id": "agree_1",
+            "application_id": "app_1",
+            "talent_id": "talent_1",
+            "status": 1,
+            "sign_status": 2
+        }],
+        "has_more": false
+    }));
+    assert_eq!(agreements.items[0].agreement_id.as_deref(), Some("agree_1"));
+
+    let agreement_create: tripartite_agreement::create::CreateResponse = parse_contract(json!({
+        "agreement_id": "agree_1",
+        "application_id": "app_1",
+        "status": 1,
+        "success": true
+    }));
+    assert_eq!(agreement_create.status, Some(1));
+
+    let agreement_delete: tripartite_agreement::delete::DeleteResponse = parse_contract(json!({
+        "agreement_id": "agree_1",
+        "result": true
+    }));
+    assert_eq!(agreement_delete.result, Some(true));
 }
