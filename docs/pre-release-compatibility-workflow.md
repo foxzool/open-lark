@@ -49,6 +49,7 @@ workflow 成功后会产生以下输出：
 
 1. 发布前先手动执行一次 `Pre-release Compatibility Verification`
 2. 检查 artifact 与 Step Summary
-3. 再执行正式 release 流程
+3. 再执行 `docs/api-compatibility-release-checklist.md`
+4. 最后执行正式 release 流程
 
 如果未来需要更强的自动化约束，可由 release workflow 通过 `workflow_call` 直接调用本流程。
