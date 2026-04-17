@@ -224,9 +224,31 @@ impl NewWsResponse {
 #[allow(unused_imports)]
 mod tests {
     use super::*;
+    use crate::ws_client::EventHandler;
     // use crate::event::dispatcher::EventDispatcherHandler; // TODO: 需要实现 event 模块
     use lark_websocket_protobuf::pbbp2::Header;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::sync::Arc;
     use tokio::sync::mpsc;
+
+    struct CountingHandler {
+        calls: Arc<AtomicUsize>,
+    }
+
+    impl EventHandler for CountingHandler {
+        fn handle(&self, _payload: &[u8]) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+            self.calls.fetch_add(1, Ordering::SeqCst);
+            Ok(())
+        }
+    }
+
+    struct NoopHandler;
+
+    impl EventHandler for NoopHandler {
+        fn handle(&self, _payload: &[u8]) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+            Ok(())
+        }
+    }
 
     fn create_test_frame(method: i32, headers: Vec<Header>, payload: Option<Vec<u8>>) -> Frame {
         Frame {
@@ -633,6 +655,56 @@ mod tests {
 
         let result = handler.do_without_validation(b"closed-channel");
         assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_event_dispatcher_registers_raw_catch_all_handler() {
+        let calls = Arc::new(AtomicUsize::new(0));
+        let handler = EventDispatcherHandler::builder()
+            .register_raw(
+                EventDispatcherHandler::RAW_EVENT_KEY,
+                CountingHandler {
+                    calls: Arc::clone(&calls),
+                },
+            )
+            .expect("raw handler should register")
+            .build();
+
+        let payload = br#"{"header":{"event_type":"im.message.receive_v1"}}"#;
+        let result = handler.do_without_validation(payload);
+
+        assert!(result.is_ok());
+        assert_eq!(calls.load(Ordering::SeqCst), 1);
+    }
+
+    #[test]
+    fn test_event_dispatcher_registers_event_type_specific_handler() {
+        let calls = Arc::new(AtomicUsize::new(0));
+        let handler = EventDispatcherHandler::builder()
+            .register_raw(
+                "im.message.receive_v1",
+                CountingHandler {
+                    calls: Arc::clone(&calls),
+                },
+            )
+            .expect("event-specific handler should register")
+            .build();
+
+        let payload = br#"{"header":{"event_type":"im.message.receive_v1"}}"#;
+        let result = handler.do_without_validation(payload);
+
+        assert!(result.is_ok());
+        assert_eq!(calls.load(Ordering::SeqCst), 1);
+    }
+
+    #[test]
+    fn test_event_dispatcher_rejects_duplicate_raw_handler_keys() {
+        let handler = EventDispatcherHandler::builder()
+            .register_raw("raw", NoopHandler)
+            .expect("first registration should work");
+
+        let duplicate = handler.register_raw("raw", NoopHandler);
+        assert!(duplicate.is_err());
     }
 
     #[test]
