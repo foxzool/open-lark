@@ -27,14 +27,13 @@
 //!
 //! let analytics_service = AnalyticsService::new(config)?;
 //!
-//! // 搜索场景（需要启用 search 和 v1 feature）
+//! // 搜索文档场景（需要启用 search feature）
 //! # #[cfg(all(feature = "search", feature = "v1"))]
 //! let results = analytics_service
 //!     .search()
 //!     .v2()
-//!     .query()
+//!     .doc_wiki
 //!     .search()
-//!     .search_term("项目文档")
 //!     .execute()
 //!     .await?;
 //! # Ok(())

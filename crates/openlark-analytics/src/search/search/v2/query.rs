@@ -1,9 +1,12 @@
 //! 查询搜索 API
 //!
-//! 提供通用搜索查询功能
+//! 当前仍是 runtime stub。
+//!
+//! 该模块历史上暴露了查询 / 搜索建议入口，但并没有对应的已接线服务端实现。
+//! 为避免继续返回占位 JSON，本模块现在会显式返回未接线错误。
 
 use crate::AnalyticsConfig;
-use openlark_core::SDKResult;
+use openlark_core::{error::business_error, req_option::RequestOption, SDKResult};
 use std::sync::Arc;
 
 /// 查询搜索 API
@@ -65,10 +68,23 @@ impl SearchRequest {
         self
     }
 
-    /// 执行请求
+    fn unsupported(operation: &str) -> openlark_core::error::CoreError {
+        business_error(format!(
+            "{operation}: openlark-analytics 尚未接入该 search runtime API，请改用已实现的 doc_wiki/schema/app/message 路径"
+        ))
+    }
+
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        // TODO: 实现实际的 API 调用
-        Ok(serde_json::json!({"items": []}))
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求并传入请求选项。
+    pub async fn execute_with_options(
+        self,
+        _option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+        Err(Self::unsupported("query.search"))
     }
 }
 
@@ -93,16 +109,30 @@ impl SuggestRequest {
         self
     }
 
-    /// 执行请求
+    fn unsupported(operation: &str) -> openlark_core::error::CoreError {
+        business_error(format!(
+            "{operation}: openlark-analytics 尚未接入该 search runtime API，请改用已实现的 doc_wiki/schema/app/message 路径"
+        ))
+    }
+
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        // TODO: 实现实际的 API 调用
-        Ok(serde_json::json!({"suggestions": []}))
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求并传入请求选项。
+    pub async fn execute_with_options(
+        self,
+        _option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+        Err(Self::unsupported("query.suggest"))
     }
 }
 
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
+    use super::*;
 
     #[test]
     fn test_serialization_roundtrip() {
@@ -117,5 +147,17 @@ mod tests {
         let json = r#"{"field": "data"}"#;
         let value: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(value["field"], "data");
+    }
+
+    #[tokio::test]
+    async fn test_query_stub_returns_explicit_error() {
+        let config = Arc::new(AnalyticsConfig::default());
+        let err = QueryApi::new(config)
+            .search()
+            .search_term("项目文档")
+            .execute()
+            .await
+            .expect_err("query search should now fail explicitly");
+        assert!(err.to_string().contains("尚未接入"));
     }
 }

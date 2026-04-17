@@ -19,11 +19,19 @@ impl SearchV2 {
     }
 
     /// 查询搜索
+    #[deprecated(
+        since = "0.15.0",
+        note = "This runtime stub is not wired to a Feishu endpoint. Prefer implemented analytics search surfaces such as `doc_wiki`, `schema`, `app`, or `message`."
+    )]
     pub fn query(&self) -> super::v2::query::QueryApi {
         super::v2::query::QueryApi::new(self.config.clone())
     }
 
     /// 用户搜索
+    #[deprecated(
+        since = "0.15.0",
+        note = "This runtime stub is not wired to a Feishu endpoint. Prefer implemented analytics search surfaces until a real user-search endpoint is added."
+    )]
     pub fn user(&self) -> super::v2::user::UserSearchApi {
         super::v2::user::UserSearchApi::new(self.config.clone())
     }

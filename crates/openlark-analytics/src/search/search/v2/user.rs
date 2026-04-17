@@ -1,9 +1,12 @@
 //! 用户搜索 API
 //!
-//! 提供用户搜索相关功能
+//! 当前仍是 runtime stub。
+//!
+//! 该入口没有对应的已接线服务端实现，因此现在会显式返回未接线错误，
+//! 而不再伪装成成功返回占位 JSON。
 
 use crate::AnalyticsConfig;
-use openlark_core::SDKResult;
+use openlark_core::{error::business_error, req_option::RequestOption, SDKResult};
 use std::sync::Arc;
 
 /// 用户搜索 API
@@ -52,16 +55,30 @@ impl SearchUserRequest {
         self
     }
 
-    /// 执行请求
+    fn unsupported() -> openlark_core::error::CoreError {
+        business_error(
+            "user.search: openlark-analytics 尚未接入用户搜索 runtime API，请等待后续真实端点支持",
+        )
+    }
+
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        // TODO: 实现实际的 API 调用
-        Ok(serde_json::json!({"items": []}))
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求并传入请求选项。
+    pub async fn execute_with_options(
+        self,
+        _option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+        Err(Self::unsupported())
     }
 }
 
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
+    use super::*;
 
     #[test]
     fn test_serialization_roundtrip() {
@@ -76,5 +93,17 @@ mod tests {
         let json = r#"{"field": "data"}"#;
         let value: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(value["field"], "data");
+    }
+
+    #[tokio::test]
+    async fn test_user_search_stub_returns_explicit_error() {
+        let config = Arc::new(AnalyticsConfig::default());
+        let err = UserSearchApi::new(config)
+            .search()
+            .query("zool")
+            .execute()
+            .await
+            .expect_err("user search should now fail explicitly");
+        assert!(err.to_string().contains("尚未接入"));
     }
 }
