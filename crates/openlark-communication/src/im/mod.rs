@@ -7,11 +7,14 @@ pub mod card;
 #[path = "im/mod.rs"]
 mod project;
 pub use project::{v1, v2};
+#[allow(clippy::module_inception)]
 #[deprecated(
     since = "0.15.0",
     note = "Use `openlark_communication::im::v1` or `::v2` directly; the nested `im::im` path is a legacy compatibility alias."
 )]
-pub use project as im;
+pub mod im {
+    pub use super::project::{v1, v2};
+}
 pub mod im_ephemeral;
 pub mod im_message;
 
@@ -20,10 +23,8 @@ mod tests {
     #[test]
     #[allow(deprecated)]
     fn nested_im_path_remains_a_compatibility_alias() {
-        let canonical =
-            std::any::type_name::<super::v1::message::create::CreateMessageBody>();
-        let legacy =
-            std::any::type_name::<super::im::v1::message::create::CreateMessageBody>();
+        let canonical = std::any::type_name::<super::v1::message::create::CreateMessageBody>();
+        let legacy = std::any::type_name::<super::im::v1::message::create::CreateMessageBody>();
 
         assert_eq!(canonical, legacy);
     }
