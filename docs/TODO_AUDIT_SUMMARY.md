@@ -54,3 +54,10 @@
 - #105 Replace contact test TODO placeholders with executable coverage
 - #106 Audit generated HR hire API TODO stubs in shipped source
 - #107 Track remaining runtime TODO API stubs in user/platform/analytics
+- #108 Implement analytics search runtime TODO stubs
+- #109 Implement user settings and preferences runtime TODO stubs
+- #110 Implement platform admin runtime TODO stubs
+
+运行时代码 TODO stub 的细化清单见：
+
+- `docs/RUNTIME_API_STUB_AUDIT.md`
