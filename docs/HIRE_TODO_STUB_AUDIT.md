@@ -37,7 +37,7 @@
 
 - **0 个文件**：零字段请求骨架已全部消除
 - **1 个接口**：`talent_object/query` 已确认是官方无参请求，不再视为骨架
-- **32 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
+- **0 个文件**：响应仍然是 `Value` 直透，Hire 主线 response 已全部 typed 化
 
 ## 分类结论
 
@@ -51,23 +51,16 @@
 
 已不再存在“零字段请求骨架仍待建模”的剩余项。
 
-### B. `Value` 响应直透（当前 32 files）
+### B. `Value` 响应直透（已完成）
 
-这批接口已经具备 endpoint/execute 入口，但公共返回类型仍是 `pub data: Value`。这意味着：
+`#113` 已完成对剩余 `pub data: Value` Hire response 的收尾收敛。现在：
 
-- 运行时可用
-- Rust 层 contract 仍弱
-- 字段级兼容性无法通过类型系统表达
-
-优先建议聚焦：
-
-- offer / note / job / interview / referral / website / attachment
-- v2 `interview_record` / `talent`
-- 外部招聘 / 外部面试 / 背调相关路径
+- `crates/openlark-hr/src/hire/hire/` 下剩余 `pub data: Value` 数量为 **0**
+- 所有公开 response 现在都至少有显式的顶层 typed 结构
+- 剩余未知字段统一沉到 `extra flatten`，而不是整个 `data: Value` 原样外露
 
 跟踪 issue：**#113 Continue replacing remaining Hire Value pass-through responses**
-
-`#113` 现在是 Hire schema debt 的主跟踪入口。
+当前状态：**已完成，可关闭**
 
 ## 决策
 
@@ -361,3 +354,61 @@
 当前剩余 `pub data: Value` 直透响应数：**32**。
 
 后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪，并优先继续清最后一小批散落接口。
+
+## #113 第十五批收敛进展（收尾完成）
+
+本轮完成了最后一批散落 Hire response 的 typed 化，覆盖：
+
+- 已开始但未提交的 detail / operation 收尾：
+  - role.get
+  - referral.get_by_application
+  - referral_website.job_post.get
+  - job.manager.get
+  - offer_custom_field.update
+  - interviewer.patch
+  - job.manager.batch_update
+- 目录 / 模板 / 枚举类列表：
+  - interview_registration_schema.list
+  - interview_feedback_form.list
+  - interview_round_type.list
+  - registration_schema.list
+  - portal_apply_schema.list
+  - questionnaire.list
+  - resume_source.list
+  - job_type.list
+  - job_schema.list
+  - job_requirement_schema.list
+  - job_process.list
+  - job_function.list
+  - offer_approval_template.list
+- 搜索 / 查询类尾项：
+  - test.search
+  - talent_operation_log.search
+  - diversity_inclusion.search
+  - job_publish_record.search
+  - location.query
+  - interview_task.list
+- 最后一批单体详情 / 操作结果：
+  - interview_record.get（v1 / v2）
+  - ehr_import_task.patch
+  - advertisement.publish
+  - talent_blocklist.change_talent_block
+  - exam.create
+
+同时新增并复用的通用结构包括：
+
+- `FlexibleText`
+- `CatalogItem`
+- `InterviewTaskSummary`
+- `TalentOperationLogEntry`
+- `DiversityInclusionRecord`
+- `JobPublishRecordSummary`
+- `GenericOperationResult`
+
+当前剩余 `pub data: Value` 直透响应数：**0**。
+
+结论：
+
+- `#113` 已完成
+- Hire generated source 中已不存在公开的 `pub data: Value` 直透 response
+- 后续 schema 优化将以“补强具体字段”而不是“替换整块 raw response”为主

@@ -11,6 +11,8 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use crate::hire::hire::common_models::GenericOperationResult;
+
 /// 更新 e-HR 导入任务结果请求
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
@@ -75,12 +77,10 @@ impl PatchRequest {
 }
 
 /// 更新 e-HR 导入任务结果响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct PatchResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(flatten)]
+    pub operation: GenericOperationResult,
 }
 
 impl ApiResponseTrait for PatchResponse {

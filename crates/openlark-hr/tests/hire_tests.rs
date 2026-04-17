@@ -476,7 +476,13 @@ mod serialization_tests {
         test_interview_record_get_response_serialization,
         interview_record::get::GetResponse,
         interview_record::get::GetResponse {
-            data: json!({"record_id":"ir_001"})
+            id: Some("ir_001".to_string()),
+            conclusion: Some(1),
+            interviewer: Some(openlark_hr::hire::hire::common_models::IdNameObject {
+                id: Some("ou_interviewer".to_string()),
+                ..Default::default()
+            }),
+            ..Default::default()
         }
     );
     roundtrip_eq!(
@@ -1992,7 +1998,20 @@ mod serialization_tests {
         test_interview_feedback_form_list_response_serialization,
         interview_feedback_form::list::ListResponse,
         interview_feedback_form::list::ListResponse {
-            data: json!({"items":[]})
+            items: vec![openlark_hr::hire::hire::common_models::CatalogItem {
+                id: Some("form_1".to_string()),
+                title: Some(openlark_hr::hire::hire::common_models::FlexibleText::I18n(
+                    openlark_hr::hire::hire::common_models::I18nText {
+                        zh_cn: Some("通用评价表".to_string()),
+                        en_us: Some("Default Form".to_string()),
+                        extra: Default::default(),
+                    },
+                )),
+                ..Default::default()
+            }],
+            page_token: None,
+            has_more: Some(false),
+            extra: Default::default(),
         }
     );
 
@@ -2086,7 +2105,12 @@ mod serialization_tests {
         test_advertisement_publish_response_serialization,
         advertisement::publish::PublishResponse,
         advertisement::publish::PublishResponse {
-            data: json!({"publish_id":"pub_001"})
+            operation: openlark_hr::hire::hire::common_models::GenericOperationResult {
+                publish_id: Some("pub_001".to_string()),
+                status: Some(1),
+                success: Some(true),
+                ..Default::default()
+            }
         }
     );
     roundtrip_eq!(
@@ -2122,6 +2146,168 @@ mod serialization_tests {
         referral::search::SearchResponse {
             items: vec![],
             extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_role_get_response_serialization,
+        role::get::GetResponse,
+        role::get::GetResponse {
+            role: Some(role::list::RoleItem {
+                id: Some("role_1".to_string()),
+                ..Default::default()
+            }),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_referral_get_by_application_response_serialization,
+        referral::get_by_application::GetByApplicationResponse,
+        referral::get_by_application::GetByApplicationResponse {
+            referral: Some(referral::search::ReferralItem {
+                id: Some("ref_1".to_string()),
+                ..Default::default()
+            }),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_referral_website_job_post_get_response_serialization,
+        referral_website::job_post::get::GetResponse,
+        referral_website::job_post::get::GetResponse {
+            job_post: Some(
+                referral_website::job_post::list::ReferralWebsiteJobPostItem {
+                    id: Some("job_post_1".to_string()),
+                    ..Default::default()
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_job_manager_get_response_serialization,
+        job::manager::get::GetResponse,
+        job::manager::get::GetResponse {
+            manager: Some(openlark_hr::hire::hire::common_models::JobRecruiterRecord {
+                manager_id: Some("mgr_1".to_string()),
+                ..Default::default()
+            }),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_offer_custom_field_update_response_serialization,
+        offer_custom_field::update::UpdateResponse,
+        offer_custom_field::update::UpdateResponse {
+            operation: openlark_hr::hire::hire::common_models::OfferCustomFieldOperationResult {
+                offer_custom_field_id: Some("field_1".to_string()),
+                success: Some(true),
+                ..Default::default()
+            }
+        }
+    );
+    roundtrip_eq!(
+        test_interviewer_patch_response_serialization,
+        interviewer::patch::PatchResponse,
+        interviewer::patch::PatchResponse {
+            interviewer: openlark_hr::hire::hire::common_models::InterviewerOperationResult {
+                interviewer_id: Some("interviewer_1".to_string()),
+                verify_status: Some(2),
+                ..Default::default()
+            }
+        }
+    );
+    roundtrip_eq!(
+        test_job_manager_batch_update_response_serialization,
+        job::manager::batch_update::BatchUpdateResponse,
+        job::manager::batch_update::BatchUpdateResponse {
+            operation: openlark_hr::hire::hire::common_models::JobManagerOperationResult {
+                job_id: Some("job_1".to_string()),
+                manager_id: Some("mgr_1".to_string()),
+                success: Some(true),
+                ..Default::default()
+            }
+        }
+    );
+    roundtrip_eq!(
+        test_job_type_list_response_serialization,
+        job_type::list::ListResponse,
+        job_type::list::ListResponse {
+            items: vec![openlark_hr::hire::hire::common_models::CatalogItem {
+                id: Some("type_1".to_string()),
+                name: Some(openlark_hr::hire::hire::common_models::FlexibleText::Plain(
+                    "研发".to_string(),
+                )),
+                ..Default::default()
+            }],
+            page_token: None,
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_interview_task_list_response_serialization,
+        interview_task::list::ListResponse,
+        interview_task::list::ListResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::InterviewTaskSummary {
+                    interview_id: Some("interview_1".to_string()),
+                    status: Some(2),
+                    ..Default::default()
+                }
+            ],
+            page_token: None,
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_talent_operation_log_search_response_serialization,
+        talent_operation_log::search::SearchResponse,
+        talent_operation_log::search::SearchResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::TalentOperationLogEntry {
+                    id: Some("log_1".to_string()),
+                    operation_type: Some("create".to_string()),
+                    ..Default::default()
+                }
+            ],
+            page_token: None,
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_ehr_import_task_patch_response_serialization,
+        ehr_import_task::patch::PatchResponse,
+        ehr_import_task::patch::PatchResponse {
+            operation: openlark_hr::hire::hire::common_models::GenericOperationResult {
+                task_id: Some("task_1".to_string()),
+                success: Some(true),
+                ..Default::default()
+            }
+        }
+    );
+    roundtrip_eq!(
+        test_exam_create_response_serialization,
+        exam::create::CreateResponse,
+        exam::create::CreateResponse {
+            operation: openlark_hr::hire::hire::common_models::GenericOperationResult {
+                exam_id: Some("exam_1".to_string()),
+                application_id: Some("app_1".to_string()),
+                success: Some(true),
+                ..Default::default()
+            }
+        }
+    );
+    roundtrip_eq!(
+        test_talent_blocklist_change_response_serialization,
+        talent_blocklist::change_talent_block::ChangeTalentBlockResponse,
+        talent_blocklist::change_talent_block::ChangeTalentBlockResponse {
+            operation: openlark_hr::hire::hire::common_models::GenericOperationResult {
+                talent_id: Some("talent_1".to_string()),
+                success: Some(true),
+                ..Default::default()
+            }
         }
     );
 }

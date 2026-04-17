@@ -8,8 +8,8 @@ use openlark_core::{
     http::Transport,
     validate_required, SDKResult,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
+
+use super::list::InterviewRecordItem;
 
 /// 获取面试评价详细信息请求
 #[derive(Debug, Clone)]
@@ -62,15 +62,9 @@ impl GetRequest {
 }
 
 /// 获取面试评价详细信息响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct GetResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
-}
+pub type GetResponse = InterviewRecordItem;
 
-impl ApiResponseTrait for GetResponse {
+impl ApiResponseTrait for InterviewRecordItem {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }

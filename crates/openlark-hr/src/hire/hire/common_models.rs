@@ -19,6 +19,23 @@ pub struct I18nText {
     pub extra: HashMap<String, Value>,
 }
 
+/// 可兼容普通字符串或多语言对象的文本字段。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(untagged)]
+pub enum FlexibleText {
+    Plain(String),
+    I18n(I18nText),
+}
+
+impl FlexibleText {
+    pub fn zh_cn_or_plain(&self) -> Option<&str> {
+        match self {
+            Self::Plain(value) => Some(value.as_str()),
+            Self::I18n(value) => value.zh_cn.as_deref().or(value.en_us.as_deref()),
+        }
+    }
+}
+
 /// 常见的 ID + 名称引用对象。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct IdNameObject {
@@ -50,6 +67,128 @@ pub struct PaginatedResponse<T> {
     pub page_token: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 末尾长尾接口常见的目录/模板类对象。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct CatalogItem {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<FlexibleText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<FlexibleText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub i18n_name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<FlexibleText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_id: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 面试任务摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InterviewTaskSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interview_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interview_round_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interview_round_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interviewer: Option<IdNameObject>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 候选人操作日志摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentOperationLogEntry {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operator: Option<IdNameObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_time: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 多元化附加信息摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct DiversityInclusionRecord {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gender: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 职位广告发布记录摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct JobPublishRecordSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publish_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 长尾接口常见的简单操作结果。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct GenericOperationResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publish_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exam_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
     #[serde(default, flatten)]
     pub extra: HashMap<String, Value>,
 }
@@ -752,6 +891,51 @@ pub struct EcoExamOperationResult {
     pub exam_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// Offer 自定义字段操作结果。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferCustomFieldOperationResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offer_custom_field_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 面试官更新结果。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InterviewerOperationResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interviewer_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub verify_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 职位 manager 操作结果。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct JobManagerOperationResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manager_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub result: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]

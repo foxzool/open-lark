@@ -1,13 +1,19 @@
 use openlark_hr::hire::hire::{
     v1::{
-        agency, application, attachment, background_check_order, eco_account_custom_field,
-        eco_background_check, eco_background_check_custom_field, eco_background_check_package,
-        eco_exam, eco_exam_paper, employee, evaluation, external_application,
+        advertisement, agency, application, attachment, background_check_order,
+        diversity_inclusion, eco_account_custom_field, eco_background_check,
+        eco_background_check_custom_field, eco_background_check_package, eco_exam, eco_exam_paper,
+        ehr_import_task, employee, evaluation, exam, external_application,
         external_background_check, external_interview, external_interview_assessment,
-        external_offer, external_referral_reward, interview,
-        interview_record as interview_record_v1, interviewer, job, job_requirement, location, note,
-        offer, offer_application_form, offer_schema, referral, referral_account, role, subject,
-        talent, talent_object, talent_pool, todo, tripartite_agreement, user_role, website,
+        external_offer, external_referral_reward, interview, interview_feedback_form,
+        interview_record as interview_record_v1, interview_registration_schema,
+        interview_round_type, interview_task, interviewer, job, job_function, job_process,
+        job_publish_record, job_requirement, job_requirement_schema, job_schema, job_type,
+        location, note, offer, offer_application_form, offer_approval_template, offer_custom_field,
+        offer_schema, portal_apply_schema, questionnaire, r#test as hire_test, referral,
+        referral_account, referral_website, registration_schema, resume_source, role, subject,
+        talent, talent_blocklist, talent_object, talent_operation_log, talent_pool, todo,
+        tripartite_agreement, user_role, website,
     },
     v2::interview_record as interview_record_v2,
 };
@@ -1287,4 +1293,349 @@ fn remaining_low_volume_contracts_are_typed() {
         "success": true
     }));
     assert_eq!(exam.exam.exam_id.as_deref(), Some("exam_1"));
+}
+
+#[test]
+fn tail_get_and_operation_contracts_are_typed() {
+    let role_detail: role::get::GetResponse = parse_contract(json!({
+        "role": {
+            "id": "role_1",
+            "name": {"zh_cn": "面试官", "en_us": "Interviewer"}
+        }
+    }));
+    assert_eq!(
+        role_detail
+            .role
+            .as_ref()
+            .and_then(|value| value.id.as_deref()),
+        Some("role_1")
+    );
+
+    let referral_detail: referral::get_by_application::GetByApplicationResponse =
+        parse_contract(json!({
+            "referral": {
+                "id": "ref_1",
+                "application_ids": ["app_1"]
+            }
+        }));
+    assert_eq!(
+        referral_detail
+            .referral
+            .as_ref()
+            .and_then(|value| value.id.as_deref()),
+        Some("ref_1")
+    );
+
+    let website_job_post: referral_website::job_post::get::GetResponse = parse_contract(json!({
+        "job_post": {
+            "id": "jp_1",
+            "job_id": "job_1"
+        }
+    }));
+    assert_eq!(
+        website_job_post
+            .job_post
+            .as_ref()
+            .and_then(|value| value.id.as_deref()),
+        Some("jp_1")
+    );
+
+    let manager: job::manager::get::GetResponse = parse_contract(json!({
+        "manager": {
+            "manager_id": "mgr_1",
+            "name": "张三"
+        }
+    }));
+    assert_eq!(
+        manager
+            .manager
+            .as_ref()
+            .and_then(|value| value.manager_id.as_deref()),
+        Some("mgr_1")
+    );
+
+    let custom_field: offer_custom_field::update::UpdateResponse = parse_contract(json!({
+        "offer_custom_field_id": "field_1",
+        "success": true
+    }));
+    assert_eq!(
+        custom_field.operation.offer_custom_field_id.as_deref(),
+        Some("field_1")
+    );
+
+    let interviewer_patch: interviewer::patch::PatchResponse = parse_contract(json!({
+        "interviewer_id": "int_1",
+        "user_id": "ou_1",
+        "verify_status": 2
+    }));
+    assert_eq!(
+        interviewer_patch.interviewer.user_id.as_deref(),
+        Some("ou_1")
+    );
+
+    let manager_update: job::manager::batch_update::BatchUpdateResponse = parse_contract(json!({
+        "job_id": "job_1",
+        "manager_id": "mgr_1",
+        "success": true
+    }));
+    assert_eq!(
+        manager_update.operation.manager_id.as_deref(),
+        Some("mgr_1")
+    );
+
+    let interview_record: interview_record_v1::get::GetResponse = parse_contract(json!({
+        "id": "record_1",
+        "conclusion": 1,
+        "interviewer": {"id": "ou_interviewer"}
+    }));
+    assert_eq!(interview_record.id.as_deref(), Some("record_1"));
+
+    let interview_record_v2_detail: interview_record_v2::get::GetResponse = parse_contract(json!({
+        "id": "record_v2_1",
+        "feedback_form_id": "form_1",
+        "interviewer": {"id": "ou_interviewer"}
+    }));
+    assert_eq!(
+        interview_record_v2_detail.feedback_form_id.as_deref(),
+        Some("form_1")
+    );
+
+    let publish: advertisement::publish::PublishResponse = parse_contract(json!({
+        "publish_id": "pub_1",
+        "status": 1,
+        "success": true
+    }));
+    assert_eq!(publish.operation.publish_id.as_deref(), Some("pub_1"));
+
+    let exam_result: exam::create::CreateResponse = parse_contract(json!({
+        "exam_id": "exam_1",
+        "application_id": "app_1",
+        "success": true
+    }));
+    assert_eq!(exam_result.operation.exam_id.as_deref(), Some("exam_1"));
+
+    let ehr_task: ehr_import_task::patch::PatchResponse = parse_contract(json!({
+        "task_id": "task_1",
+        "status": 2,
+        "success": true
+    }));
+    assert_eq!(ehr_task.operation.task_id.as_deref(), Some("task_1"));
+
+    let block_result: talent_blocklist::change_talent_block::ChangeTalentBlockResponse =
+        parse_contract(json!({
+            "talent_id": "talent_1",
+            "status": 1,
+            "success": true
+        }));
+    assert_eq!(
+        block_result.operation.talent_id.as_deref(),
+        Some("talent_1")
+    );
+}
+
+#[test]
+fn tail_catalog_and_search_contracts_are_typed() {
+    let job_types: job_type::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "type_1",
+            "name": {"zh_cn": "研发", "en_us": "Engineering"},
+            "status": 1
+        }]
+    }));
+    assert_eq!(job_types.items[0].id.as_deref(), Some("type_1"));
+    assert_eq!(
+        job_types.items[0]
+            .name
+            .as_ref()
+            .and_then(|value| value.zh_cn_or_plain()),
+        Some("研发")
+    );
+
+    let job_schemas: job_schema::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "schema_1",
+            "title": {"zh_cn": "标准职位模板", "en_us": "Default Job Schema"},
+            "version": 3
+        }]
+    }));
+    assert_eq!(job_schemas.items[0].version, Some(3));
+
+    let interview_forms: interview_feedback_form::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "form_1",
+            "title": {"zh_cn": "通用评价表", "en_us": "Default Form"}
+        }],
+        "has_more": false
+    }));
+    assert_eq!(
+        interview_forms.items[0]
+            .title
+            .as_ref()
+            .and_then(|value| value.zh_cn_or_plain()),
+        Some("通用评价表")
+    );
+
+    let interview_schemas: interview_registration_schema::list::ListResponse =
+        parse_contract(json!({
+            "items": [{
+                "id": "schema_interview_1",
+                "name": {"zh_cn": "校招登记表", "en_us": "Campus Schema"},
+                "status": 1
+            }],
+            "page_token": "cursor_5"
+        }));
+    assert_eq!(interview_schemas.page_token.as_deref(), Some("cursor_5"));
+
+    let round_types: interview_round_type::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "round_1",
+            "description": {"zh_cn": "技术一面", "en_us": "Tech Round 1"}
+        }]
+    }));
+    assert_eq!(
+        round_types.items[0]
+            .description
+            .as_ref()
+            .and_then(|value| value.zh_cn_or_plain()),
+        Some("技术一面")
+    );
+
+    let interview_tasks: interview_task::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "interview_id": "interview_1",
+            "application_id": "app_1",
+            "status": 2,
+            "interviewer": {"id": "ou_interviewer"}
+        }]
+    }));
+    assert_eq!(
+        interview_tasks.items[0].interview_id.as_deref(),
+        Some("interview_1")
+    );
+
+    let registrations: registration_schema::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "reg_schema_1",
+            "name": {"zh_cn": "默认申请表", "en_us": "Apply Schema"}
+        }]
+    }));
+    assert_eq!(registrations.items[0].id.as_deref(), Some("reg_schema_1"));
+
+    let portal_schemas: portal_apply_schema::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "portal_schema_1",
+            "title": {"zh_cn": "官网投递", "en_us": "Portal Apply"}
+        }]
+    }));
+    assert_eq!(
+        portal_schemas.items[0].id.as_deref(),
+        Some("portal_schema_1")
+    );
+
+    let questionnaires: questionnaire::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "questionnaire_1",
+            "name": {"zh_cn": "问卷 A", "en_us": "Questionnaire A"}
+        }]
+    }));
+    assert_eq!(
+        questionnaires.items[0].id.as_deref(),
+        Some("questionnaire_1")
+    );
+
+    let resume_sources: resume_source::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "source_1",
+            "code": "campus",
+            "name": {"zh_cn": "校园招聘", "en_us": "Campus"}
+        }]
+    }));
+    assert_eq!(resume_sources.items[0].code.as_deref(), Some("campus"));
+
+    let job_functions: job_function::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "func_1",
+            "parent_id": "func_root",
+            "name": {"zh_cn": "后端研发", "en_us": "Backend"}
+        }]
+    }));
+    assert_eq!(
+        job_functions.items[0].parent_id.as_deref(),
+        Some("func_root")
+    );
+
+    let job_processes: job_process::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "process_1",
+            "active_status": 1,
+            "name": {"zh_cn": "标准流程", "en_us": "Default Process"}
+        }]
+    }));
+    assert_eq!(job_processes.items[0].active_status, Some(1));
+
+    let job_requirement_schemas: job_requirement_schema::list::ListResponse =
+        parse_contract(json!({
+            "items": [{
+                "id": "jr_schema_1",
+                "version": 7
+            }]
+        }));
+    assert_eq!(job_requirement_schemas.items[0].version, Some(7));
+
+    let offer_templates: offer_approval_template::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "tpl_1",
+            "name": {"zh_cn": "默认 Offer 审批", "en_us": "Default Offer Approval"}
+        }]
+    }));
+    assert_eq!(offer_templates.items[0].id.as_deref(), Some("tpl_1"));
+
+    let tests: hire_test::search::SearchResponse = parse_contract(json!({
+        "items": [{
+            "id": "test_1",
+            "title": {"zh_cn": "Java 笔试", "en_us": "Java Test"}
+        }],
+        "has_more": false
+    }));
+    assert_eq!(tests.items[0].id.as_deref(), Some("test_1"));
+
+    let logs: talent_operation_log::search::SearchResponse = parse_contract(json!({
+        "items": [{
+            "id": "log_1",
+            "talent_id": "talent_1",
+            "operator": {"id": "ou_operator"},
+            "operation_type": "create"
+        }]
+    }));
+    assert_eq!(logs.items[0].operation_type.as_deref(), Some("create"));
+
+    let diversity: diversity_inclusion::search::SearchResponse = parse_contract(json!({
+        "items": [{
+            "application_id": "app_1",
+            "talent_id": "talent_1",
+            "gender": "female"
+        }]
+    }));
+    assert_eq!(diversity.items[0].gender.as_deref(), Some("female"));
+
+    let publish_records: job_publish_record::search::SearchResponse = parse_contract(json!({
+        "items": [{
+            "id": "record_1",
+            "job_id": "job_1",
+            "channel_id": "channel_1",
+            "publish_status": 2
+        }]
+    }));
+    assert_eq!(
+        publish_records.items[0].channel_id.as_deref(),
+        Some("channel_1")
+    );
+
+    let queried_locations: location::query::QueryResponse = parse_contract(json!({
+        "items": [{
+            "id": "loc_1",
+            "name": {"zh_cn": "上海", "en_us": "Shanghai"}
+        }]
+    }));
+    assert_eq!(queried_locations.items[0].id.as_deref(), Some("loc_1"));
 }
