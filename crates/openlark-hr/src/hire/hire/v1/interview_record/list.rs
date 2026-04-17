@@ -10,6 +10,9 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
+
+use crate::hire::hire::common_models::{I18nText, IdNameObject};
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListRequestBody {
@@ -94,12 +97,136 @@ impl ListRequest {
 }
 
 /// 批量获取面试评价详细信息响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InterviewLevelScore {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub level: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zh_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zh_description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub en_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub en_description: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InterviewAssessmentScore {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub calculate_type: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub full_score: Option<f64>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InterviewAbility {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<I18nText>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InterviewQuestion {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ability_list: Option<Vec<InterviewAbility>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InterviewRecordImage {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mime: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InterviewRecordDimensionAssessment {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f64>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InterviewRecordItem {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback_submit_time: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conclusion: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interview_score: Option<InterviewLevelScore>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assessment_score: Option<InterviewAssessmentScore>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub question_list: Option<Vec<InterviewQuestion>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_question_list: Option<Vec<InterviewQuestion>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interviewer: Option<IdNameObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_list: Option<Vec<InterviewRecordImage>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimension_assessment_list: Option<Vec<InterviewRecordDimensionAssessment>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ListResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(default)]
+    pub items: Vec<InterviewRecordItem>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_more: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for ListResponse {

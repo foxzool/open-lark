@@ -11,12 +11,9 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
-pub struct BonusAmount {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub point_bonus: Option<i32>,
-}
+use crate::hire::hire::common_models::BonusAmount;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TradeDetail {
@@ -131,12 +128,24 @@ impl ReconciliationRequest {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct CheckFailedAccountInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_withdraw_reward_info: Option<BonusAmount>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_recharge_reward_info: Option<BonusAmount>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ReconciliationResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(default)]
+    pub check_failed_list: Vec<CheckFailedAccountInfo>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for ReconciliationResponse {

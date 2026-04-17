@@ -3,6 +3,7 @@
 /// 按照bizTag/project/version/resource/name.rs模式组织
 use openlark_core::config::Config;
 
+pub mod common_models;
 pub mod v1;
 pub mod v2;
 

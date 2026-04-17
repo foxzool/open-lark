@@ -65,9 +65,9 @@
 - v2 `interview_record` / `talent`
 - 外部招聘 / 外部面试 / 背调相关路径
 
-跟踪 issue：**#112 Replace Hire Value pass-through responses with typed models**
+跟踪 issue：**#113 Continue replacing remaining Hire Value pass-through responses**
 
-`#112` 现在是 Hire schema debt 的主跟踪入口。
+`#113` 现在是 Hire schema debt 的主跟踪入口。
 
 ## 决策
 
@@ -85,5 +85,24 @@
 
 - Hire shipped source 中不再保留骨架式 TODO/FIXME
 - 零字段请求骨架已在 `#111` 中完成收敛
-- `Value` 响应直透已有独立跟踪（#112）
+- `Value` 响应直透已有独立跟踪（#113）
 - 审计结论已固化到仓库文档
+
+
+## #112 首批 typed response 收敛结果
+
+`#112` 已完成第一批高价值 Hire response typed 化，覆盖：
+
+- role / subject / website / talent_folder / talent_tag / termination_reason / todo
+- location / interviewer / evaluation / evaluation_task / exam_marking_task
+- minutes / referral.search / referral_account.create / referral_account.reconciliation
+- interview_record.list（v1 / v2）
+
+同时新增：
+
+- `crates/openlark-hr/src/hire/hire/common_models.rs`
+- `crates/openlark-hr/tests/hire_response_contract_tests.rs`
+
+当前剩余 `pub data: Value` 直透响应数：**159**
+
+后续统一由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪。

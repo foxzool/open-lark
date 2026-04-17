@@ -494,7 +494,10 @@ mod serialization_tests {
         test_interview_record_list_response_serialization,
         interview_record::list::ListResponse,
         interview_record::list::ListResponse {
-            data: json!({"items":[]})
+            items: vec![],
+            page_token: None,
+            has_more: None,
+            extra: Default::default(),
         }
     );
 
@@ -603,14 +606,20 @@ mod serialization_tests {
         test_evaluation_list_response_serialization,
         evaluation::list::ListResponse,
         evaluation::list::ListResponse {
-            data: json!({"items":[]})
+            items: vec![],
+            page_token: None,
+            has_more: None,
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
         test_evaluation_task_list_response_serialization,
         evaluation_task::list::ListResponse,
         evaluation_task::list::ListResponse {
-            data: json!({"items":[]})
+            items: vec![],
+            page_token: None,
+            has_more: None,
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
@@ -639,7 +648,8 @@ mod serialization_tests {
         test_referral_search_response_serialization,
         referral::search::SearchResponse,
         referral::search::SearchResponse {
-            data: json!({"items":[]})
+            items: vec![],
+            extra: Default::default(),
         }
     );
 }

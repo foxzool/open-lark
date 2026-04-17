@@ -108,7 +108,7 @@ async fn evaluation_list_serializes_query_parameters() {
         .await
         .unwrap();
 
-    assert_eq!(resp.data["items"], json!([]));
+    assert!(resp.items.is_empty());
 }
 
 #[tokio::test]
@@ -139,7 +139,7 @@ async fn referral_search_serializes_body_and_query() {
         .await
         .unwrap();
 
-    assert_eq!(resp.data["items"], json!([]));
+    assert!(resp.items.is_empty());
 }
 
 #[tokio::test]
@@ -153,7 +153,7 @@ async fn referral_account_create_serializes_nested_mobile_body() {
             "email": "hire@example.com"
         })))
         .respond_with(ResponseTemplate::new(200).set_body_json(
-            json!({"code":0,"msg":"success","data":{"data":{"account_id":"acc_001"}}}),
+            json!({"code":0,"msg":"success","data":{"account":{"account_id":"acc_001"}}}),
         ))
         .mount(&mock_server)
         .await;
@@ -165,7 +165,12 @@ async fn referral_account_create_serializes_nested_mobile_body() {
         .await
         .unwrap();
 
-    assert_eq!(resp.data["account_id"], "acc_001");
+    assert_eq!(
+        resp.account
+            .as_ref()
+            .and_then(|account| account.account_id.as_deref()),
+        Some("acc_001")
+    );
 }
 
 #[tokio::test]
@@ -194,7 +199,7 @@ async fn interview_record_v2_list_serializes_ids_as_json_array_query() {
         .await
         .unwrap();
 
-    assert_eq!(resp.data["items"], json!([]));
+    assert!(resp.items.is_empty());
 }
 
 #[tokio::test]
