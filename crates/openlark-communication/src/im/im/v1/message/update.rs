@@ -39,7 +39,7 @@ pub struct UpdateMessageBody {
 ///
 /// ```rust,ignore
 /// use openlark_core::config::Config;
-/// use openlark_communication::im::im::v1::message::{UpdateMessageRequest, UpdateMessageBody};
+/// use openlark_communication::im::v1::message::{UpdateMessageRequest, UpdateMessageBody};
 ///
 /// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
 /// let body = UpdateMessageBody {

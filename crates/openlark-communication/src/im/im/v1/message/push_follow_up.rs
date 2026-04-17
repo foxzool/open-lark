@@ -74,7 +74,7 @@ pub struct PushFollowUpBody {
 ///
 /// ```rust,ignore
 /// use openlark_core::config::Config;
-/// use openlark_communication::im::im::v1::message::{PushFollowUpRequest, PushFollowUpBody, FollowUp};
+/// use openlark_communication::im::v1::message::{PushFollowUpRequest, PushFollowUpBody, FollowUp};
 ///
 /// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
 /// let body = PushFollowUpBody {

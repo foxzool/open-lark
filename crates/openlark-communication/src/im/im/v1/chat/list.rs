@@ -26,9 +26,9 @@ use crate::{
 ///
 /// ```rust,ignore
 /// use openlark_core::config::Config;
-/// use openlark_communication::im::im::v1::chat::ListChatsRequest;
-/// use openlark_communication::im::im::v1::message::models::UserIdType;
-/// use openlark_communication::im::im::v1::chat::models::ChatSortType;
+/// use openlark_communication::im::v1::chat::ListChatsRequest;
+/// use openlark_communication::im::v1::message::models::UserIdType;
+/// use openlark_communication::im::v1::chat::models::ChatSortType;
 ///
 /// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
 /// let request = ListChatsRequest::new(config)

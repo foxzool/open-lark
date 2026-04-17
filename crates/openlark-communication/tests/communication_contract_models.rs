@@ -2,11 +2,11 @@
 //! Representative contract tests for high-frequency communication request/response models.
 
 use openlark_communication::contact::contact::v3::user::batch::BatchGetUsersResponse;
-use openlark_communication::im::im::v1::chat::models::GetChatLinkResponse;
-use openlark_communication::im::im::v1::file::models::CreateFileResponse;
-use openlark_communication::im::im::v1::image::models::CreateImageResponse;
-use openlark_communication::im::im::v1::message::create::CreateMessageBody;
-use openlark_communication::im::im::v1::message::reply::ReplyMessageBody;
+use openlark_communication::im::v1::chat::models::GetChatLinkResponse;
+use openlark_communication::im::v1::file::models::CreateFileResponse;
+use openlark_communication::im::v1::image::models::CreateImageResponse;
+use openlark_communication::im::v1::message::create::CreateMessageBody;
+use openlark_communication::im::v1::message::reply::ReplyMessageBody;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::{from_value, json, to_value, Value};

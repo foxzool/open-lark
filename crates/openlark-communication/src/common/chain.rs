@@ -25,20 +25,20 @@ use crate::contact::contact::v3::user::{
 #[cfg(feature = "contact")]
 use crate::contact::contact_search::old::default::v1::user::SearchUserRequest;
 #[cfg(feature = "im")]
-use crate::im::im::v1::message::{
+use crate::im::v1::message::{
     create::{CreateMessageBody, CreateMessageRequest},
     models::ReceiveIdType,
     reply::{ReplyMessageBody, ReplyMessageRequest},
 };
 #[cfg(feature = "im")]
-use crate::im::im::v1::thread::forward::{ForwardThreadBody, ForwardThreadRequest};
+use crate::im::v1::thread::forward::{ForwardThreadBody, ForwardThreadRequest};
 #[cfg(feature = "im")]
-use crate::im::im::v1::{
+use crate::im::v1::{
     chat::{get::GetChatRequest, search::SearchChatsRequest},
     message::models::UserIdType as ImUserIdType,
 };
 #[cfg(feature = "im")]
-use crate::im::im::v1::{
+use crate::im::v1::{
     file::{
         create::{CreateFileBody, CreateFileRequest},
         models::CreateFileResponse,

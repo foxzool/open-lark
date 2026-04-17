@@ -49,7 +49,7 @@ pub struct CreateMessageBody {
 ///
 /// ```rust,ignore
 /// use openlark_core::config::Config;
-/// use openlark_communication::im::im::v1::message::{CreateMessageRequest, CreateMessageBody};
+/// use openlark_communication::im::v1::message::{CreateMessageRequest, CreateMessageBody};
 ///
 /// let config = Config::builder().app_id("app_id").app_secret("app_secret").build();
 /// let body = CreateMessageBody {

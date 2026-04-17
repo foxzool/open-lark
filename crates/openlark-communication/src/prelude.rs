@@ -22,7 +22,7 @@ pub use openlark_core::req_option::RequestOption;
 
 // 重新导出常用的 API 类型（按 feature gate）
 #[cfg(feature = "im")]
-pub use crate::im::im::v1::message::models::ReceiveIdType;
+pub use crate::im::v1::message::models::ReceiveIdType;
 
 #[cfg(feature = "contact")]
 pub use crate::contact::contact::v3::user::models::UserIdType;
