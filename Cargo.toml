@@ -244,8 +244,8 @@ path = "examples/workflow_api_example.rs"
 required-features = ["workflow"]
 
 [[example]]
-name = "simple_api_call"
-path = "examples/01_getting_started/simple_api_call.rs"
+name = "client_setup"
+path = "examples/01_getting_started/client_setup.rs"
 required-features = ["auth", "communication"]
 
 [[example]]

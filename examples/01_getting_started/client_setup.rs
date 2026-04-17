@@ -1,12 +1,12 @@
-//! 第一个API调用示例（简化版）
+//! 客户端初始化与 helper 配置示例
 //!
-//! 演示如何使用 openlark SDK 进行 communication helper 调用。
+//! 演示如何创建 `Client`，并按需触发 communication helper。
 //!
 //! 运行方式：
 //! ```bash
 //! export OPENLARK_APP_ID="your_app_id"
 //! export OPENLARK_APP_SECRET="your_app_secret"
-//! cargo run --example simple_api_call --features "auth,communication"
+//! cargo run --example client_setup --features "auth,communication"
 //! ```
 
 use open_lark::communication::endpoints::IM_V1_MESSAGES;
@@ -15,7 +15,7 @@ use serde_json::json;
 
 #[tokio::main]
 async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
-    println!("openlark SDK 简化示例\n");
+    println!("openlark SDK 客户端配置示例\n");
 
     // 从环境变量加载配置
     dotenvy::dotenv().ok();
@@ -74,8 +74,8 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     });
 
     println!("\n📤 消息内容: {}", message);
-    println!("\n✅ 示例完成 - 这是一个简化演示");
-    println!("   实际使用时需要处理认证令牌和HTTP请求");
+    println!("\n✅ 示例完成 - 这是一个客户端初始化 / helper 配置演示");
+    println!("   如果你想触发真实的 lookup 请求，请设置 OPENLARK_USER_SEARCH_NAME / OPENLARK_CHAT_SEARCH_NAME 后再运行本示例");
 
     Ok(())
 }

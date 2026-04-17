@@ -7,7 +7,7 @@
 | 示例 | 说明 | 运行命令 |
 |------|------|----------|
 | `readme_quick_start` | 根 README 对齐示例，覆盖文档 helper 入口 | `cargo run --example readme_quick_start --features "auth,docs-bitable"` |
-| `simple_api_call` | communication 示例，验证客户端初始化、模块访问以及 user/chat lookup helper | `cargo run --example simple_api_call --features "auth,communication"` |
+| `client_setup` | communication 配置示例，验证客户端初始化、模块访问以及可选 user/chat lookup helper（默认不发真实请求） | `cargo run --example client_setup --features "auth,communication"` |
 | `communication_workflows` | 用 2 组任务流串起 Communication / Workflow helper 的组合方式 | `cargo run --example communication_workflows --features "auth,communication,workflow"` |
 | `docs_helpers` | 演示 docs helper，包括文件夹遍历、sheet 查找、批量读范围、多维表格全量读取 | `cargo run --example docs_helpers --features "auth,docs-bitable"` |
 | `docs_workflows` | 以 Drive / Sheets / Wiki / Bitable 三组任务流展示 Docs helper 的组合方式 | `cargo run --example docs_workflows --features "auth,docs-bitable"` |
@@ -51,11 +51,12 @@ export OPENLARK_APPROVAL_TOPIC="1"
 
 ## 学习顺序
 
-1. 先运行 `simple_api_call`，确认 `Client::from_env()` 和 `Client::builder()` 都能正常工作。
-2. 再运行 `communication_workflows`，查看 Communication / Workflow helper 如何串成完整业务流。
-3. 然后运行 `readme_quick_start` 或 `docs_helpers`，理解 `0.15.0` 推荐的文档 helper 能力。
-4. 接着运行 `docs_workflows`，查看任务型 Docs 工作流如何组合 Drive / Sheets / Wiki / Bitable helper。
-5. 最后运行 `websocket_echo_bot`，验证长连接能力。
+1. 先运行 `client_setup`，确认 `Client::from_env()` 和 `Client::builder()` 都能正常工作。
+2. 如需验证真实 lookup 请求，可设置 `OPENLARK_USER_SEARCH_NAME` / `OPENLARK_CHAT_SEARCH_NAME` 后再次运行 `client_setup`。
+3. 再运行 `communication_workflows`，查看 Communication / Workflow helper 如何串成完整业务流。
+4. 接着运行 `readme_quick_start` 或 `docs_helpers`，理解 `0.15.0` 推荐的文档 helper 能力。
+5. 再运行 `docs_workflows`，查看任务型 Docs 工作流如何组合 Drive / Sheets / Wiki / Bitable helper。
+6. 最后运行 `websocket_echo_bot`，验证长连接能力。
 
 ## 风险提示
 

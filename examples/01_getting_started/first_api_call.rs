@@ -295,7 +295,7 @@ fn show_next_steps() {
     println!("📚 推荐下一步学习：");
     println!("1. 📖 communication 基础：");
     println!("   - 查看根 crate 单入口和 communication 模块访问");
-    println!("   - 运行: cargo run --example simple_api_call --features \"auth,communication\"");
+    println!("   - 运行: cargo run --example client_setup --features \"auth,communication\"");
     println!();
 
     println!("2. 📁 文档 helper：");

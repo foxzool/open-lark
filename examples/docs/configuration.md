@@ -56,7 +56,7 @@ cp examples/01_getting_started/.env.example .env
 ## 运行示例
 
 ```bash
-cargo run --example simple_api_call --features "auth,communication"
+cargo run --example client_setup --features "auth,communication"
 cargo run --example communication_workflows --features "auth,communication,workflow"
 cargo run --example docs_helpers --features "auth,docs-bitable"
 cargo run --example docs_workflows --features "auth,docs-bitable"
@@ -65,7 +65,7 @@ cargo run --example websocket_echo_bot --features "communication,websocket"
 
 ## 说明
 
-- `simple_api_call` 会在你提供 `OPENLARK_USER_SEARCH_NAME` / `OPENLARK_CHAT_SEARCH_NAME` 时，额外演示 user/chat lookup helper。
+- `client_setup` 默认只演示客户端初始化；当你提供 `OPENLARK_USER_SEARCH_NAME` / `OPENLARK_CHAT_SEARCH_NAME` 时，才会额外触发 user/chat lookup helper。
 - `communication_workflows` 会串起“查人/查群 -> 发消息”和“列任务 -> 更新任务 -> 处理审批”两类任务流。
 - `docs_helpers` 会按你是否提供相关 token，分别演示文件夹遍历、Drive 上传/下载、sheet 查找、批量读范围与多维表格读取；如需启用分片下载/批量写入演示，再额外设置 `OPENLARK_DOWNLOAD_RANGE_DEMO=1` / `OPENLARK_SHEETS_WRITE_DEMO=1`。
 - `docs_workflows` 会以任务流方式串起 Drive 文件流转、Spreadsheet 周报处理，以及 Wiki / Bitable 巡检流程。

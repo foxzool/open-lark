@@ -8,8 +8,8 @@ cargo check --example readme_quick_start --no-default-features --features "auth,
 echo "Checking root architecture overview example..."
 cargo check --example docs_helpers --no-default-features --features "auth,docs-bitable"
 
-echo "Checking simple API example..."
-cargo check --example simple_api_call --no-default-features --features "auth,communication"
+echo "Checking client setup example..."
+cargo check --example client_setup --no-default-features --features "auth,communication"
 
 echo "Checking communication workflow example..."
 cargo check --example communication_workflows --no-default-features --features "auth,communication,workflow"
