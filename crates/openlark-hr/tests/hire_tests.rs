@@ -674,35 +674,152 @@ mod serialization_tests {
         test_job_combined_create_response_serialization,
         job::combined_create::CombinedCreateResponse,
         job::combined_create::CombinedCreateResponse {
-            data: json!({"job_id":"job_001"})
+            job_id: Some("job_001".to_string()),
+            active_status: Some(1),
+            success: Some(true),
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
         test_job_get_response_serialization,
         job::get::GetResponse,
         job::get::GetResponse {
-            data: json!({"job_id":"job_001"})
+            job_id: Some("job_001".to_string()),
+            job_name: Some("后端工程师".to_string()),
+            active_status: Some(1),
+            process_id: Some("process_1".to_string()),
+            process_name: Some("标准流程".to_string()),
+            department_id: Some("dept_1".to_string()),
+            recruiters: Some(vec![
+                openlark_hr::hire::hire::common_models::JobRecruiterRecord {
+                    recruiter_id: Some("rec_1".to_string()),
+                    manager_id: None,
+                    user_id: Some("ou_1".to_string()),
+                    name: Some("招聘负责人".to_string()),
+                    role: Some("owner".to_string()),
+                    role_type: Some(1),
+                    extra: Default::default(),
+                }
+            ]),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_job_get_detail_response_serialization,
+        job::get_detail::GetDetailResponse,
+        job::get_detail::GetDetailResponse {
+            job_id: Some("job_001".to_string()),
+            job_name: Some("后端工程师".to_string()),
+            active_status: Some(1),
+            process_id: Some("process_1".to_string()),
+            process_name: Some("标准流程".to_string()),
+            department_id: Some("dept_1".to_string()),
+            job_description: Some("负责核心服务开发".to_string()),
+            recruiters: Some(vec![
+                openlark_hr::hire::hire::common_models::JobRecruiterRecord {
+                    recruiter_id: Some("rec_1".to_string()),
+                    manager_id: None,
+                    user_id: Some("ou_1".to_string()),
+                    name: Some("招聘负责人".to_string()),
+                    role: Some("owner".to_string()),
+                    role_type: Some(1),
+                    extra: Default::default(),
+                }
+            ]),
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
         test_job_combined_update_response_serialization,
         job::combined_update::CombinedUpdateResponse,
         job::combined_update::CombinedUpdateResponse {
-            data: json!({"result":true})
+            job_id: Some("job_001".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
         test_job_list_response_serialization,
         job::list::ListResponse,
         job::list::ListResponse {
-            data: json!({"items":[]})
+            items: vec![openlark_hr::hire::hire::common_models::JobSummary {
+                job_id: Some("job_001".to_string()),
+                job_name: Some("后端工程师".to_string()),
+                active_status: Some(1),
+                process_id: Some("process_1".to_string()),
+                process_name: Some("标准流程".to_string()),
+                department_id: Some("dept_1".to_string()),
+                job_description: None,
+                recruiters: None,
+                extra: Default::default(),
+            }],
+            page_token: Some("cursor_job".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
         test_job_open_response_serialization,
         job::open::OpenResponse,
         job::open::OpenResponse {
-            data: json!({"result":true})
+            job_id: Some("job_001".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_job_close_response_serialization,
+        job::close::CloseResponse,
+        job::close::CloseResponse {
+            job_id: Some("job_001".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_job_config_response_serialization,
+        job::config::ConfigResponse,
+        job::config::ConfigResponse {
+            config: openlark_hr::hire::hire::common_models::JobConfigInfo {
+                job_id: Some("job_001".to_string()),
+                process_id: Some("process_1".to_string()),
+                process_name: Some("标准流程".to_string()),
+                job_requirement_schema_id: Some("schema_job".to_string()),
+                interview_registration_schema_id: Some("schema_interview".to_string()),
+                offer_application_form_id: Some("form_offer".to_string()),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_job_recruiter_response_serialization,
+        job::recruiter::RecruiterResponse,
+        job::recruiter::RecruiterResponse {
+            recruiters: vec![openlark_hr::hire::hire::common_models::JobRecruiterRecord {
+                recruiter_id: Some("rec_1".to_string()),
+                manager_id: None,
+                user_id: Some("ou_1".to_string()),
+                name: Some("招聘负责人".to_string()),
+                role: Some("owner".to_string()),
+                role_type: Some(1),
+                extra: Default::default(),
+            }],
+            page_token: None,
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_job_update_config_response_serialization,
+        job::update_config::UpdateConfigResponse,
+        job::update_config::UpdateConfigResponse {
+            job_id: Some("job_001".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
         }
     );
 

@@ -231,3 +231,64 @@ pub struct ApplicationInterviewRecord {
     #[serde(default, flatten)]
     pub extra: HashMap<String, Value>,
 }
+
+/// 职位上的招聘相关人员。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct JobRecruiterRecord {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recruiter_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manager_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_type: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 职位摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct JobSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub process_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub process_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub department_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recruiters: Option<Vec<JobRecruiterRecord>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 职位设置摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct JobConfigInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub process_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub process_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_requirement_schema_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interview_registration_schema_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offer_application_form_id: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}

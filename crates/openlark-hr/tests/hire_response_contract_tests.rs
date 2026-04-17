@@ -1,8 +1,8 @@
 use openlark_hr::hire::hire::{
     v1::{
         application, attachment, evaluation, interview_record as interview_record_v1, interviewer,
-        location, note, offer, offer_application_form, offer_schema, referral, referral_account,
-        role, subject, talent_object, talent_pool, todo, user_role, website,
+        job, location, note, offer, offer_application_form, offer_schema, referral,
+        referral_account, role, subject, talent_object, talent_pool, todo, user_role, website,
     },
     v2::{interview_record as interview_record_v2, talent},
 };
@@ -598,4 +598,100 @@ fn application_contracts_are_typed() {
         interviews.records[0].score.as_ref().and_then(|v| v.score),
         Some(88.0)
     );
+}
+
+#[test]
+fn job_contracts_are_typed() {
+    let created: job::combined_create::CombinedCreateResponse = parse_contract(json!({
+        "job_id": "job_1",
+        "active_status": 1,
+        "success": true
+    }));
+    assert_eq!(created.job_id.as_deref(), Some("job_1"));
+
+    let get_resp: job::get::GetResponse = parse_contract(json!({
+        "job_id": "job_1",
+        "job_name": "后端工程师",
+        "active_status": 1,
+        "process_id": "process_1",
+        "process_name": "标准流程",
+        "department_id": "dept_1",
+        "recruiters": [{
+            "recruiter_id": "rec_1",
+            "user_id": "ou_1",
+            "name": "招聘负责人",
+            "role": "owner",
+            "role_type": 1
+        }]
+    }));
+    assert_eq!(get_resp.job_name.as_deref(), Some("后端工程师"));
+    assert_eq!(get_resp.recruiters.as_ref().map(|v| v.len()), Some(1));
+
+    let detail: job::get_detail::GetDetailResponse = parse_contract(json!({
+        "job_id": "job_1",
+        "job_name": "后端工程师",
+        "job_description": "负责核心服务开发",
+        "recruiters": [{
+            "recruiter_id": "rec_1",
+            "name": "招聘负责人"
+        }]
+    }));
+    assert_eq!(detail.job_description.as_deref(), Some("负责核心服务开发"));
+
+    let listed: job::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "job_id": "job_1",
+            "job_name": "后端工程师",
+            "active_status": 1,
+            "process_name": "标准流程"
+        }],
+        "has_more": true,
+        "page_token": "cursor_job"
+    }));
+    assert_eq!(listed.items[0].job_id.as_deref(), Some("job_1"));
+    assert_eq!(listed.page_token.as_deref(), Some("cursor_job"));
+
+    let config: job::config::ConfigResponse = parse_contract(json!({
+        "job_id": "job_1",
+        "process_id": "process_1",
+        "process_name": "标准流程",
+        "job_requirement_schema_id": "schema_job",
+        "offer_application_form_id": "form_offer"
+    }));
+    assert_eq!(config.config.process_id.as_deref(), Some("process_1"));
+
+    let recruiters: job::recruiter::RecruiterResponse = parse_contract(json!({
+        "recruiters": [{
+            "recruiter_id": "rec_1",
+            "user_id": "ou_1",
+            "name": "招聘负责人",
+            "role_type": 1
+        }],
+        "has_more": false
+    }));
+    assert_eq!(recruiters.recruiters[0].user_id.as_deref(), Some("ou_1"));
+
+    let opened: job::open::OpenResponse = parse_contract(json!({
+        "job_id": "job_1",
+        "result": true
+    }));
+    assert_eq!(opened.result, Some(true));
+
+    let closed: job::close::CloseResponse = parse_contract(json!({
+        "job_id": "job_1",
+        "success": true
+    }));
+    assert_eq!(closed.success, Some(true));
+
+    let updated: job::combined_update::CombinedUpdateResponse = parse_contract(json!({
+        "job_id": "job_1",
+        "result": true
+    }));
+    assert_eq!(updated.job_id.as_deref(), Some("job_1"));
+
+    let update_config: job::update_config::UpdateConfigResponse = parse_contract(json!({
+        "job_id": "job_1",
+        "result": true
+    }));
+    assert_eq!(update_config.result, Some(true));
 }
