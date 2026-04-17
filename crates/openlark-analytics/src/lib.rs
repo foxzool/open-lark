@@ -27,15 +27,9 @@
 //!
 //! let analytics_service = AnalyticsService::new(config)?;
 //!
-//! // 搜索文档场景（需要启用 search feature）
+//! // 获取搜索服务入口（当前 query/user 子路径会显式返回未接线错误）
 //! # #[cfg(all(feature = "search", feature = "v1"))]
-//! let results = analytics_service
-//!     .search()
-//!     .v2()
-//!     .doc_wiki
-//!     .search()
-//!     .execute()
-//!     .await?;
+//! let _search_v2 = analytics_service.search().v2();
 //! # Ok(())
 //! # }
 //! ```
