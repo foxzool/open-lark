@@ -106,3 +106,25 @@
 当前剩余 `pub data: Value` 直透响应数：**159**
 
 后续统一由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪。
+
+
+## #113 继续收敛进展
+
+本轮继续完成第二批 Hire typed response 收敛，新增覆盖：
+
+- user_role.list
+- referral_website.job_post.list
+- talent_pool.search
+- interview_record.attachment.get
+- talent_object.query
+- referral_account.get_account_assets
+- v2 talent.get
+
+并顺手补齐了：
+
+- `referral_account/get_account_assets` 的真实查询参数透传
+- `v2/talent/get` 的 `user_id_type` 查询参数透传
+
+当前剩余 `pub data: Value` 直透响应数：**152**。
+
+后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪。

@@ -11,6 +11,9 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
+
+use crate::hire::hire::common_models::I18nText;
 
 /// 获取人才字段请求。
 ///
@@ -42,12 +45,88 @@ impl QueryRequest {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentObjectOption {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentObjectConfig {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub options: Option<Vec<TalentObjectOption>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentObjectSetting {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_type: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config: Option<TalentObjectConfig>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentObjectChild {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub setting: Option<TalentObjectSetting>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_customized: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_required: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentObjectItem {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub setting: Option<TalentObjectSetting>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_customized: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_required: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub children_list: Option<Vec<TalentObjectChild>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct QueryResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(default)]
+    pub items: Vec<TalentObjectItem>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for QueryResponse {

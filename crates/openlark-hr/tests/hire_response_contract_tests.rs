@@ -1,8 +1,9 @@
 use openlark_hr::hire::hire::{
     v1::{
-        evaluation, interviewer, location, referral, referral_account, role, subject, todo, website,
+        evaluation, interview_record as interview_record_v1, interviewer, location, referral,
+        referral_account, role, subject, talent_object, talent_pool, todo, user_role, website,
     },
-    v2::interview_record,
+    v2::{interview_record as interview_record_v2, talent},
 };
 use serde::de::DeserializeOwned;
 use serde_json::json;
@@ -180,7 +181,7 @@ fn referral_account_and_search_contracts_are_typed() {
 
 #[test]
 fn interview_record_v2_contract_is_typed() {
-    let records: interview_record::list::ListResponse = parse_contract(json!({
+    let records: interview_record_v2::list::ListResponse = parse_contract(json!({
         "items": [{
             "id": "record_1",
             "feedback_form_id": "form_1",
@@ -212,5 +213,104 @@ fn interview_record_v2_contract_is_typed() {
             .unwrap()[0]
             .dimension_score,
         Some(10.0)
+    );
+}
+
+#[test]
+fn user_role_and_talent_pool_contracts_are_typed() {
+    let roles: user_role::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "user_id": "ou_user",
+            "role_id": "101",
+            "role_name": {"zh_cn": "招聘 HRBP", "en_us": "Recruitment HRBP"},
+            "business_management_scopes": [{
+                "entity": {"code": "application", "name": {"zh_cn": "测试", "en_us": "test"}},
+                "scope_rule": {"rule_type": 1}
+            }]
+        }],
+        "has_more": true
+    }));
+    assert_eq!(roles.items[0].role_id.as_deref(), Some("101"));
+    assert_eq!(
+        roles.items[0].business_management_scopes.as_ref().unwrap()[0]
+            .scope_rule
+            .as_ref()
+            .unwrap()
+            .rule_type,
+        Some(1)
+    );
+
+    let pools: talent_pool::search::SearchResponse = parse_contract(json!({
+        "items": [{
+            "id": "pool_1",
+            "i18n_name": {"zh_cn": "公共人才库", "en_us": "Common Talent Pool"},
+            "is_private": 1
+        }],
+        "has_more": false
+    }));
+    assert_eq!(pools.items[0].id.as_deref(), Some("pool_1"));
+}
+
+#[test]
+fn attachment_talent_object_and_talent_v2_contracts_are_typed() {
+    let attachment: interview_record_v1::attachment::get::GetResponse = parse_contract(json!({
+        "attachment": {
+            "id": "att_1",
+            "url": "https://hire.feishu.cn/blob/xx/",
+            "name": "面试记录.pdf",
+            "mime": "application/pdf"
+        }
+    }));
+    assert_eq!(
+        attachment.attachment.as_ref().and_then(|v| v.id.as_deref()),
+        Some("att_1")
+    );
+
+    let talent_object_resp: talent_object::query::QueryResponse = parse_contract(json!({
+        "items": [{
+            "id": "obj_1",
+            "name": {"zh_cn": "教育经历", "en_us": "Education"},
+            "setting": {"object_type": 11, "config": {"options": [{"key": "1", "name": {"zh_cn": "选项1", "en_us": "Option1"}}]}},
+            "children_list": [{
+                "id": "child_1",
+                "name": {"zh_cn": "学历", "en_us": "Degree"},
+                "parent_id": "obj_1"
+            }]
+        }]
+    }));
+    assert_eq!(
+        talent_object_resp.items[0].children_list.as_ref().unwrap()[0]
+            .parent_id
+            .as_deref(),
+        Some("obj_1")
+    );
+
+    let talent_resp: talent::get::GetResponse = parse_contract(json!({
+        "talent_id": "talent_1",
+        "basic_info": {
+            "name": "张三",
+            "email": "test@example.com",
+            "customized_data_list": [{
+                "object_id": "obj_1",
+                "name": {"zh_cn": "字段1", "en_us": "field1"},
+                "value": {
+                    "content": "text",
+                    "option": {"key": "opt_1", "name": {"zh_cn": "选项1", "en_us": "Option1"}}
+                }
+            }]
+        }
+    }));
+    assert_eq!(talent_resp.talent_id.as_deref(), Some("talent_1"));
+    assert_eq!(
+        talent_resp
+            .basic_info
+            .as_ref()
+            .unwrap()
+            .customized_data_list
+            .as_ref()
+            .unwrap()[0]
+            .object_id
+            .as_deref(),
+        Some("obj_1")
     );
 }

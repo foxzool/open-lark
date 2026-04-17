@@ -10,6 +10,11 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
+
+use crate::hire::hire::common_models::I18nText;
+
+use crate::hire::hire::common_models::BonusAmount;
 
 /// 查询内推账户请求
 #[derive(Debug, Clone)]
@@ -18,6 +23,7 @@ pub struct GetAccountAssetsRequest {
     /// 配置信息
     config: Config,
     account_id: String,
+    user_id_type: Option<String>,
 }
 
 impl GetAccountAssetsRequest {
@@ -26,11 +32,17 @@ impl GetAccountAssetsRequest {
         Self {
             config,
             account_id: String::new(),
+            user_id_type: None,
         }
     }
 
     pub fn account_id(mut self, account_id: String) -> Self {
         self.account_id = account_id;
+        self
+    }
+
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
         self
     }
 
@@ -46,9 +58,13 @@ impl GetAccountAssetsRequest {
     ) -> SDKResult<GetAccountAssetsResponse> {
         validate_required!(self.account_id.trim(), "内推账户 ID 不能为空");
 
-        let request = ApiRequest::<GetAccountAssetsResponse>::get(
+        let mut request = ApiRequest::<GetAccountAssetsResponse>::get(
             "/open-apis/hire/v1/referral_account/get_account_assets",
         );
+        request = request.query("referral_account_id", self.account_id);
+        if let Some(user_id_type) = self.user_id_type {
+            request = request.query("user_id_type", user_id_type);
+        }
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {
@@ -61,12 +77,48 @@ impl GetAccountAssetsRequest {
 }
 
 /// 查询内推账户响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ReferralAccountAssets {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confirmed_bonus: Option<BonusAmount>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ReferralAccountWithReferrer {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assets: Option<ReferralAccountAssets>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub referrer: Option<ReferralAccountReferrer>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ReferralAccountReferrer {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mobile: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetAccountAssetsResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account: Option<ReferralAccountWithReferrer>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for GetAccountAssetsResponse {

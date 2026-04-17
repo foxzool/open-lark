@@ -10,6 +10,9 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
+
+use crate::hire::hire::common_models::{AttachmentMeta, I18nText};
 
 /// 获取人才详情请求
 #[derive(Debug, Clone)]
@@ -18,6 +21,7 @@ pub struct GetRequest {
     /// 配置信息
     config: Config,
     talent_id: String,
+    user_id_type: Option<String>,
 }
 
 impl GetRequest {
@@ -26,11 +30,17 @@ impl GetRequest {
         Self {
             config,
             talent_id: String::new(),
+            user_id_type: None,
         }
     }
 
     pub fn talent_id(mut self, talent_id: String) -> Self {
         self.talent_id = talent_id;
+        self
+    }
+
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
         self
     }
 
@@ -49,7 +59,10 @@ impl GetRequest {
         validate_required!(self.talent_id.trim(), "人才 ID 不能为空");
 
         let api_endpoint = HireApiV2::TalentGet(self.talent_id);
-        let request = ApiRequest::<GetResponse>::get(api_endpoint.to_url());
+        let mut request = ApiRequest::<GetResponse>::get(api_endpoint.to_url());
+        if let Some(user_id_type) = self.user_id_type {
+            request = request.query("user_id_type", user_id_type);
+        }
         let response = Transport::request(request, &self.config, Some(option)).await?;
 
         response.data.ok_or_else(|| {
@@ -62,12 +75,108 @@ impl GetRequest {
 }
 
 /// 获取人才详情响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentValueOption {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentTimeRange {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentCustomizedValue {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub option: Option<TalentValueOption>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub option_list: Option<Vec<TalentValueOption>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_range: Option<TalentTimeRange>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customized_attachment: Option<Vec<AttachmentMeta>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentCustomizedData {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_type: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<TalentCustomizedValue>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct TalentBasicInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mobile_number: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mobile_code: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experience_years: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub age: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nationality_code: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gender: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_location_code: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hometown_location_code: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_location_code_list: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_address: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identification_type: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identification_number: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub birthday: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marital_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customized_data_list: Option<Vec<TalentCustomizedData>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub basic_info: Option<TalentBasicInfo>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for GetResponse {

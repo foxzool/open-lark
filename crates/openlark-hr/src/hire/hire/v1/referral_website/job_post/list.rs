@@ -11,6 +11,9 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
+
+use crate::hire::hire::common_models::{CodeNameObject, I18nText, IdNameObject};
 
 #[derive(Debug, Clone)]
 pub struct ListRequest {
@@ -114,12 +117,66 @@ impl ListRequest {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct JobPostAddress {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub district: Option<CodeNameObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub city: Option<CodeNameObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<CodeNameObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub country: Option<CodeNameObject>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ReferralWebsiteJobPostItem {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_code: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_expire_time: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_active_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_process_type: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_recruitment_type: Option<IdNameObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_department: Option<IdNameObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_type: Option<IdNameObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_job_level: Option<IdNameObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_job_level: Option<IdNameObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address: Option<JobPostAddress>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ListResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(default)]
+    pub items: Vec<ReferralWebsiteJobPostItem>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_more: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for ListResponse {

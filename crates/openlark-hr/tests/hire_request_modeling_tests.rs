@@ -1,7 +1,7 @@
 use openlark_core::{config::Config, req_option::RequestOption};
 use openlark_hr::hire::hire::{
     v1::{evaluation, evaluation_task, location, referral, referral_account, talent_object, todo},
-    v2::interview_record,
+    v2::{interview_record, talent},
 };
 use serde_json::json;
 use wiremock::{
@@ -220,5 +220,63 @@ async fn talent_object_query_is_still_parameterless_and_executable() {
         .await
         .unwrap();
 
-    assert_eq!(resp.data["items"], json!([]));
+    assert!(resp.items.is_empty());
+}
+
+#[tokio::test]
+async fn referral_account_assets_serializes_query_parameters() {
+    let mock_server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path(
+            "/open-apis/hire/v1/referral_account/get_account_assets",
+        ))
+        .and(header("Authorization", "Bearer test_token"))
+        .and(query_param("referral_account_id", "acc_123"))
+        .and(query_param("user_id_type", "open_id"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+            "code":0,
+            "msg":"success",
+            "data":{"account":{"account_id":"acc_123"}}
+        })))
+        .mount(&mock_server)
+        .await;
+
+    let resp = referral_account::get_account_assets::GetAccountAssetsRequest::new(test_config(
+        &mock_server.uri(),
+    ))
+    .account_id("acc_123".to_string())
+    .user_id_type("open_id")
+    .execute_with_options(auth_option())
+    .await
+    .unwrap();
+
+    assert_eq!(
+        resp.account.as_ref().and_then(|v| v.account_id.as_deref()),
+        Some("acc_123")
+    );
+}
+
+#[tokio::test]
+async fn talent_v2_get_serializes_path_and_query() {
+    let mock_server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/open-apis/hire/v2/talents/talent_123"))
+        .and(header("Authorization", "Bearer test_token"))
+        .and(query_param("user_id_type", "open_id"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+            "code":0,
+            "msg":"success",
+            "data":{"talent_id":"talent_123","basic_info":{"name":"张三"}}
+        })))
+        .mount(&mock_server)
+        .await;
+
+    let resp = talent::get::GetRequest::new(test_config(&mock_server.uri()))
+        .talent_id("talent_123".to_string())
+        .user_id_type("open_id")
+        .execute_with_options(auth_option())
+        .await
+        .unwrap();
+
+    assert_eq!(resp.talent_id.as_deref(), Some("talent_123"));
 }
