@@ -398,3 +398,54 @@ pub struct WebsiteSiteUserSummary {
     #[serde(default, flatten)]
     pub extra: HashMap<String, Value>,
 }
+
+/// 猎头供应商摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct AgencySummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub agency_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 猎头供应商下的猎头账号摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct AgencyAccountSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub agency_account_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub agency_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 猎头保护期摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct AgencyProtectionSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protection_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub agency_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_time: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}

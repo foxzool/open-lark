@@ -37,7 +37,7 @@
 
 - **0 个文件**：零字段请求骨架已全部消除
 - **1 个接口**：`talent_object/query` 已确认是官方无参请求，不再视为骨架
-- **101 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
+- **94 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
 
 ## 分类结论
 
@@ -51,7 +51,7 @@
 
 已不再存在“零字段请求骨架仍待建模”的剩余项。
 
-### B. `Value` 响应直透（当前 101 files）
+### B. `Value` 响应直透（当前 94 files）
 
 这批接口已经具备 endpoint/execute 入口，但公共返回类型仍是 `pub data: Value`。这意味着：
 
@@ -233,3 +233,25 @@
 当前剩余 `pub data: Value` 直透响应数：**101**。
 
 后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪，并优先继续清 agency / talent / job_requirement / application 剩余 mutation 等路径。
+
+## #113 第九批收敛进展
+
+本轮继续完成 agency 主路径的 typed response 收敛：
+
+- agency.batch_query
+- agency.get
+- agency.get_agency_account
+- agency.operate_agency_account
+- agency.protect
+- agency.protect_search
+- agency.query
+
+同时新增并复用的通用结构包括：
+
+- `AgencySummary`
+- `AgencyAccountSummary`
+- `AgencyProtectionSummary`
+
+当前剩余 `pub data: Value` 直透响应数：**94**。
+
+后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪，并优先继续清 talent / job_requirement / application 剩余 mutation / external_background_check / external_interview 等路径。

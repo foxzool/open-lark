@@ -1111,6 +1111,113 @@ mod serialization_tests {
             extra: Default::default(),
         }
     );
+    roundtrip_eq!(
+        test_agency_batch_query_response_serialization,
+        agency::batch_query::BatchQueryResponse,
+        agency::batch_query::BatchQueryResponse {
+            items: vec![openlark_hr::hire::hire::common_models::AgencySummary {
+                agency_id: Some("agency_1".to_string()),
+                name: Some("猎企 A".to_string()),
+                code: Some("A001".to_string()),
+                active_status: Some(1),
+                status: None,
+                extra: Default::default(),
+            }],
+            page_token: Some("cursor_agency".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_agency_get_response_serialization,
+        agency::get::GetResponse,
+        agency::get::GetResponse {
+            agency: Some(openlark_hr::hire::hire::common_models::AgencySummary {
+                agency_id: Some("agency_1".to_string()),
+                name: Some("猎企 A".to_string()),
+                code: None,
+                active_status: None,
+                status: Some(1),
+                extra: Default::default(),
+            }),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_agency_get_account_response_serialization,
+        agency::get_agency_account::GetAgencyAccountResponse,
+        agency::get_agency_account::GetAgencyAccountResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::AgencyAccountSummary {
+                    agency_account_id: Some("acc_1".to_string()),
+                    agency_id: Some("agency_1".to_string()),
+                    user_id: Some("ou_1".to_string()),
+                    name: Some("猎头甲".to_string()),
+                    status: Some(1),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_acc".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_agency_operate_account_response_serialization,
+        agency::operate_agency_account::OperateAgencyAccountResponse,
+        agency::operate_agency_account::OperateAgencyAccountResponse {
+            agency_account_id: Some("acc_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_agency_protect_response_serialization,
+        agency::protect::ProtectResponse,
+        agency::protect::ProtectResponse {
+            protection_id: Some("protect_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_agency_protect_search_response_serialization,
+        agency::protect_search::ProtectSearchResponse,
+        agency::protect_search::ProtectSearchResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::AgencyProtectionSummary {
+                    protection_id: Some("protect_1".to_string()),
+                    agency_id: Some("agency_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    expiration_time: Some("2026-12-31T00:00:00Z".to_string()),
+                    status: Some(1),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_protect".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_agency_query_response_serialization,
+        agency::query::QueryResponse,
+        agency::query::QueryResponse {
+            items: vec![openlark_hr::hire::hire::common_models::AgencySummary {
+                agency_id: Some("agency_1".to_string()),
+                name: Some("猎企 A".to_string()),
+                code: None,
+                active_status: None,
+                status: None,
+                extra: Default::default(),
+            }],
+            page_token: Some("cursor_query".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
 
     roundtrip_eq!(
         test_evaluation_list_response_serialization,

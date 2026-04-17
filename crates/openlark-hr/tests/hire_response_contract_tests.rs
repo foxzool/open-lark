@@ -1,6 +1,6 @@
 use openlark_hr::hire::hire::{
     v1::{
-        application, attachment, evaluation, external_application, external_offer,
+        agency, application, attachment, evaluation, external_application, external_offer,
         interview_record as interview_record_v1, interviewer, job, location, note, offer,
         offer_application_form, offer_schema, referral, referral_account, role, subject,
         talent_object, talent_pool, todo, user_role, website,
@@ -847,4 +847,77 @@ fn website_channel_delivery_and_job_post_contracts_are_typed() {
             .and_then(|v| v.user_id.as_deref()),
         Some("ou_1")
     );
+}
+
+#[test]
+fn agency_contracts_are_typed() {
+    let batch: agency::batch_query::BatchQueryResponse = parse_contract(json!({
+        "items": [{
+            "agency_id": "agency_1",
+            "name": "猎企 A",
+            "code": "A001",
+            "active_status": 1
+        }],
+        "has_more": false
+    }));
+    assert_eq!(batch.items[0].agency_id.as_deref(), Some("agency_1"));
+
+    let get_resp: agency::get::GetResponse = parse_contract(json!({
+        "agency": {
+            "agency_id": "agency_1",
+            "name": "猎企 A",
+            "status": 1
+        }
+    }));
+    assert_eq!(
+        get_resp.agency.as_ref().and_then(|v| v.name.as_deref()),
+        Some("猎企 A")
+    );
+
+    let accounts: agency::get_agency_account::GetAgencyAccountResponse = parse_contract(json!({
+        "items": [{
+            "agency_account_id": "acc_1",
+            "agency_id": "agency_1",
+            "user_id": "ou_1",
+            "name": "猎头甲",
+            "status": 1
+        }]
+    }));
+    assert_eq!(
+        accounts.items[0].agency_account_id.as_deref(),
+        Some("acc_1")
+    );
+
+    let protect_search: agency::protect_search::ProtectSearchResponse = parse_contract(json!({
+        "items": [{
+            "protection_id": "protect_1",
+            "agency_id": "agency_1",
+            "talent_id": "talent_1",
+            "status": 1
+        }],
+        "page_token": "cursor_protect"
+    }));
+    assert_eq!(protect_search.page_token.as_deref(), Some("cursor_protect"));
+
+    let operate: agency::operate_agency_account::OperateAgencyAccountResponse =
+        parse_contract(json!({
+            "agency_account_id": "acc_1",
+            "result": true
+        }));
+    assert_eq!(operate.result, Some(true));
+
+    let protect: agency::protect::ProtectResponse = parse_contract(json!({
+        "protection_id": "protect_1",
+        "success": true
+    }));
+    assert_eq!(protect.success, Some(true));
+
+    let query: agency::query::QueryResponse = parse_contract(json!({
+        "items": [{
+            "agency_id": "agency_1",
+            "name": "猎企 A"
+        }],
+        "page_token": "cursor_agency"
+    }));
+    assert_eq!(query.page_token.as_deref(), Some("cursor_agency"));
 }
