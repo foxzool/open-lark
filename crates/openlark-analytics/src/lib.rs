@@ -41,7 +41,6 @@
 //! # }
 //! ```
 
-#![allow(missing_docs)]
 #![allow(clippy::module_inception)]
 
 mod service;

@@ -1,5 +1,4 @@
 #![warn(clippy::all)]
-#![allow(missing_docs)]
 
 //! # OpenLark 会议与日程服务模块
 //!

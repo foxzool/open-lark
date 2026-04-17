@@ -54,8 +54,6 @@
 //!
 //! 这些模块包含完整的 API 端点常量定义和测试用例。
 
-#![allow(missing_docs)]
-
 // Include macros first
 #[macro_use]
 mod macros;

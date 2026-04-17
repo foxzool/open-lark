@@ -40,8 +40,6 @@
 //! - `PayrollApiV1` - 薪资管理
 //! - `PerformanceApiV1` - 绩效管理
 
-#![allow(missing_docs)]
-
 pub mod common;
 
 #[cfg(feature = "attendance")]

@@ -1,5 +1,3 @@
-#![allow(missing_docs)]
-
 use tokio_tungstenite::tungstenite::protocol::CloseFrame;
 
 /// WebSocket 连接状态机

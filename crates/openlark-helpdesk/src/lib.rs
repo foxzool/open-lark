@@ -2,8 +2,6 @@
 //!
 //! OpenLark SDK 的帮助台模块，提供飞书帮助台 API 的完整访问。
 
-#![allow(missing_docs)]
-
 mod service;
 
 pub mod common;

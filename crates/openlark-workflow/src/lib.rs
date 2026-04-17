@@ -69,8 +69,6 @@
 //! # }
 //! ```
 
-#![allow(missing_docs)]
-
 mod service;
 
 // 通用模块

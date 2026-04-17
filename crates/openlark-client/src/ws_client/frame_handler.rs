@@ -1,5 +1,3 @@
-#![allow(missing_docs)]
-
 use lark_websocket_protobuf::pbbp2::{Frame, Header};
 use log::{debug, error, trace};
 use serde::{Deserialize, Serialize};
