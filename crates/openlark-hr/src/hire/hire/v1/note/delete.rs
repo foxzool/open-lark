@@ -11,6 +11,8 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use crate::hire::hire::common_models::NoteRecord;
+
 /// 删除备注请求
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
@@ -63,13 +65,8 @@ impl DeleteRequest {
 }
 
 /// 删除备注响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct DeleteResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
-}
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct DeleteResponse {}
 
 impl ApiResponseTrait for DeleteResponse {
     fn data_format() -> ResponseFormat {

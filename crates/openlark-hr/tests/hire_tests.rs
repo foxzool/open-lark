@@ -631,6 +631,58 @@ mod serialization_tests {
     );
 
     roundtrip_eq!(
+        test_note_create_response_serialization,
+        note::create::CreateResponse,
+        note::create::CreateResponse {
+            note: Some(openlark_hr::hire::hire::common_models::NoteRecord {
+                id: Some("note_1".to_string()),
+                content: Some("备注".to_string()),
+                ..Default::default()
+            })
+        }
+    );
+    roundtrip_eq!(
+        test_note_get_response_serialization,
+        note::get::GetResponse,
+        note::get::GetResponse {
+            note: Some(openlark_hr::hire::hire::common_models::NoteRecord {
+                id: Some("note_1".to_string()),
+                content: Some("备注".to_string()),
+                ..Default::default()
+            })
+        }
+    );
+    roundtrip_eq!(
+        test_note_list_response_serialization,
+        note::list::ListResponse,
+        note::list::ListResponse {
+            items: vec![openlark_hr::hire::hire::common_models::NoteRecord {
+                id: Some("note_1".to_string()),
+                content: Some("备注".to_string()),
+                ..Default::default()
+            }],
+            has_more: Some(false),
+            page_token: None,
+        }
+    );
+    roundtrip_eq!(
+        test_note_patch_response_serialization,
+        note::patch::PatchResponse,
+        note::patch::PatchResponse {
+            note: Some(openlark_hr::hire::hire::common_models::NoteRecord {
+                id: Some("note_1".to_string()),
+                content: Some("更新备注".to_string()),
+                ..Default::default()
+            })
+        }
+    );
+    roundtrip_eq!(
+        test_note_delete_response_serialization,
+        note::delete::DeleteResponse,
+        note::delete::DeleteResponse {}
+    );
+
+    roundtrip_eq!(
         test_advertisement_publish_response_serialization,
         advertisement::publish::PublishResponse,
         advertisement::publish::PublishResponse {
@@ -638,10 +690,30 @@ mod serialization_tests {
         }
     );
     roundtrip_eq!(
+        test_attachment_create_response_serialization,
+        attachment::create::CreateResponse,
+        attachment::create::CreateResponse {
+            id: Some("att_001".to_string()),
+            name: Some("resume.pdf".to_string()),
+            url: Some("https://example.com/file".to_string()),
+        }
+    );
+    roundtrip_eq!(
         test_attachment_get_response_serialization,
         attachment::get::GetResponse,
         attachment::get::GetResponse {
-            data: json!({"attachment_id":"att_001"})
+            attachment: Some(openlark_hr::hire::hire::common_models::HireAttachment {
+                id: Some("att_001".to_string()),
+                name: Some("resume.pdf".to_string()),
+                ..Default::default()
+            })
+        }
+    );
+    roundtrip_eq!(
+        test_attachment_preview_response_serialization,
+        attachment::preview::PreviewResponse,
+        attachment::preview::PreviewResponse {
+            url: Some("https://example.com/file".to_string()),
         }
     );
     roundtrip_eq!(

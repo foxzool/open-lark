@@ -11,6 +11,8 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use crate::hire::hire::common_models::NoteRecord;
+
 /// 更新备注请求
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
@@ -74,12 +76,10 @@ impl PatchRequest {
 }
 
 /// 更新备注响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct PatchResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub note: Option<NoteRecord>,
 }
 
 impl ApiResponseTrait for PatchResponse {

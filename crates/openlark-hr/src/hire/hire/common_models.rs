@@ -103,3 +103,43 @@ pub struct ScoreInfo {
     #[serde(default, flatten)]
     pub extra: HashMap<String, Value>,
 }
+
+/// 招聘备注。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct NoteRecord {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_private: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modify_time: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creator_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 招聘附件/文件句柄。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct HireAttachment {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mime: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<i64>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}

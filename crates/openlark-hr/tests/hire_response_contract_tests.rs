@@ -1,7 +1,8 @@
 use openlark_hr::hire::hire::{
     v1::{
-        evaluation, interview_record as interview_record_v1, interviewer, location, referral,
-        referral_account, role, subject, talent_object, talent_pool, todo, user_role, website,
+        attachment, evaluation, interview_record as interview_record_v1, interviewer, location,
+        note, referral, referral_account, role, subject, talent_object, talent_pool, todo,
+        user_role, website,
     },
     v2::{interview_record as interview_record_v2, talent},
 };
@@ -312,5 +313,64 @@ fn attachment_talent_object_and_talent_v2_contracts_are_typed() {
             .object_id
             .as_deref(),
         Some("obj_1")
+    );
+}
+
+#[test]
+fn note_and_attachment_contracts_are_typed() {
+    let created: note::create::CreateResponse = parse_contract(json!({
+        "note": {
+            "id": "note_1",
+            "talent_id": "talent_1",
+            "application_id": "app_1",
+            "is_private": false,
+            "content": "测试"
+        }
+    }));
+    assert_eq!(
+        created.note.as_ref().and_then(|v| v.id.as_deref()),
+        Some("note_1")
+    );
+
+    let notes: note::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "id": "note_1",
+            "creator_id": "ou_creator",
+            "content": "备注列表项"
+        }],
+        "has_more": true,
+        "page_token": "cursor_note"
+    }));
+    assert_eq!(notes.items[0].creator_id.as_deref(), Some("ou_creator"));
+    assert_eq!(notes.page_token.as_deref(), Some("cursor_note"));
+
+    let attachment_created: attachment::create::CreateResponse = parse_contract(json!({
+        "id": "att_1",
+        "name": "test.rar",
+        "url": "https://example.com/blob"
+    }));
+    assert_eq!(attachment_created.id.as_deref(), Some("att_1"));
+
+    let attachment_get: attachment::get::GetResponse = parse_contract(json!({
+        "attachment": {
+            "id": "att_1",
+            "name": "resume.pdf",
+            "mime": "application/pdf"
+        }
+    }));
+    assert_eq!(
+        attachment_get
+            .attachment
+            .as_ref()
+            .and_then(|v| v.name.as_deref()),
+        Some("resume.pdf")
+    );
+
+    let attachment_preview: attachment::preview::PreviewResponse = parse_contract(json!({
+        "url": "https://example.com/blob"
+    }));
+    assert_eq!(
+        attachment_preview.url.as_deref(),
+        Some("https://example.com/blob")
     );
 }
