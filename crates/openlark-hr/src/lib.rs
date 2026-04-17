@@ -23,11 +23,7 @@
 //!     .execute()
 //!     .await?;
 //!
-//! // 兼容：旧方法式入口仍可用
-//! client.attendance().v1().group().create()
-//!     .group_name("技术部".to_string())
-//!     .execute()
-//!     .await?;
+//! 字段访问是当前推荐方式；旧方法式入口只保留兼容职责。
 //! ```
 //!
 //! ## API 端点
@@ -129,41 +125,73 @@ impl HrClient {
     }
 
     #[cfg(feature = "attendance")]
+    #[deprecated(
+        since = "0.15.0",
+        note = "Use the `attendance` field directly (`client.attendance`) instead of the compatibility accessor method."
+    )]
     pub fn attendance(&self) -> attendance::Attendance {
         self.attendance.clone()
     }
 
     #[cfg(feature = "corehr")]
+    #[deprecated(
+        since = "0.15.0",
+        note = "Use the `corehr` field directly (`client.corehr`) instead of the compatibility accessor method."
+    )]
     pub fn corehr(&self) -> feishu_people::Corehr {
         self.corehr.clone()
     }
 
     #[cfg(feature = "compensation")]
+    #[deprecated(
+        since = "0.15.0",
+        note = "Use the `compensation` field directly (`client.compensation`) instead of the compatibility accessor method."
+    )]
     pub fn compensation(&self) -> compensation_management::CompensationManagement {
         self.compensation.clone()
     }
 
     #[cfg(feature = "payroll")]
+    #[deprecated(
+        since = "0.15.0",
+        note = "Use the `payroll` field directly (`client.payroll`) instead of the compatibility accessor method."
+    )]
     pub fn payroll(&self) -> payroll::Payroll {
         self.payroll.clone()
     }
 
     #[cfg(feature = "performance")]
+    #[deprecated(
+        since = "0.15.0",
+        note = "Use the `performance` field directly (`client.performance`) instead of the compatibility accessor method."
+    )]
     pub fn performance(&self) -> performance::Performance {
         self.performance.clone()
     }
 
     #[cfg(feature = "okr")]
+    #[deprecated(
+        since = "0.15.0",
+        note = "Use the `okr` field directly (`client.okr`) instead of the compatibility accessor method."
+    )]
     pub fn okr(&self) -> okr::Okr {
         self.okr.clone()
     }
 
     #[cfg(feature = "hire")]
+    #[deprecated(
+        since = "0.15.0",
+        note = "Use the `hire` field directly (`client.hire`) instead of the compatibility accessor method."
+    )]
     pub fn hire(&self) -> hire::Hire {
         self.hire.clone()
     }
 
     #[cfg(feature = "ehr")]
+    #[deprecated(
+        since = "0.15.0",
+        note = "Use the `ehr` field directly (`client.ehr`) instead of the compatibility accessor method."
+    )]
     pub fn ehr(&self) -> ehr::Ehr {
         self.ehr.clone()
     }
@@ -207,6 +235,7 @@ mod tests {
 
     #[cfg(feature = "attendance")]
     #[test]
+    #[allow(deprecated)]
     fn test_hr_client_attendance_method() {
         let config = create_test_config();
         let client = HrClient::new(config);
