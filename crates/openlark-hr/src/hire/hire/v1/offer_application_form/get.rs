@@ -10,6 +10,9 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
+
+use crate::hire::hire::common_models::I18nText;
 
 /// 获取 Offer 申请表信息请求
 #[derive(Debug, Clone)]
@@ -62,12 +65,126 @@ impl GetRequest {
 }
 
 /// 获取 Offer 申请表信息响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferFormOption {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<I18nText>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferFormPreObjectConfig {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operator: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<Vec<String>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferFormObjectDisplayConfig {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_condition: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pre_object_config_list: Option<Vec<OfferFormPreObjectConfig>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferFormObjectConfig {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub options: Option<Vec<OfferFormOption>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_display_config: Option<OfferFormObjectDisplayConfig>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferFormObject {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub module_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_customized: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_required: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub need_approve: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_sensitive: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_type: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_type_v2: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config: Option<OfferFormObjectConfig>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferFormModule {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_customized: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hint: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_list: Option<Vec<OfferFormObject>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferApplySchema {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub module_list: Option<Vec<OfferFormModule>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferApplyForm {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema: Option<OfferApplySchema>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(rename = "offer_apply_form", skip_serializing_if = "Option::is_none")]
+    pub offer_apply_form: Option<OfferApplyForm>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for GetResponse {

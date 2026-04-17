@@ -10,6 +10,9 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
+
+use crate::hire::hire::common_models::I18nText;
 
 /// 获取 Offer 申请表详细信息请求
 #[derive(Debug, Clone)]
@@ -62,12 +65,46 @@ impl GetRequest {
 }
 
 /// 获取 Offer 申请表详细信息响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferSchemaOption {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferSchemaObject {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<I18nText>,
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    pub object_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_customized: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub option_list: Option<Vec<OfferSchemaOption>>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scenario: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i32>,
+    #[serde(default)]
+    pub object_list: Vec<OfferSchemaObject>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for GetResponse {

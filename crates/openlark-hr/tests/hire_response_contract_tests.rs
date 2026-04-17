@@ -1,8 +1,8 @@
 use openlark_hr::hire::hire::{
     v1::{
         attachment, evaluation, interview_record as interview_record_v1, interviewer, location,
-        note, offer, offer_application_form, referral, referral_account, role, subject,
-        talent_object, talent_pool, todo, user_role, website,
+        note, offer, offer_application_form, offer_schema, referral, referral_account, role,
+        subject, talent_object, talent_pool, todo, user_role, website,
     },
     v2::{interview_record as interview_record_v2, talent},
 };
@@ -445,4 +445,81 @@ fn offer_contracts_are_typed() {
         }]
     }));
     assert_eq!(forms.items[0].id.as_deref(), Some("form_1"));
+}
+
+#[test]
+fn offer_detail_and_schema_contracts_are_typed() {
+    let detail: offer::get::GetResponse = parse_contract(json!({
+        "offer": {
+            "id": "offer_1",
+            "application_id": "app_1",
+            "basic_info": {
+                "offer_type": 1,
+                "employee_type": {"id": "1", "zh_name": "正式", "en_name": "Regular"},
+                "onboard_address": {
+                    "id": "addr_1",
+                    "zh_name": "名字",
+                    "en_name": "name",
+                    "city": {"zh_name": "中文", "en_name": "eng", "code": "400700", "location_type": 3}
+                }
+            },
+            "salary_plan": {"currency": "CNY", "basic_salary": "1000000"}
+        }
+    }));
+    assert_eq!(
+        detail
+            .offer
+            .as_ref()
+            .and_then(|v| v.salary_plan.as_ref())
+            .and_then(|v| v.currency.as_deref()),
+        Some("CNY")
+    );
+
+    let form: offer_application_form::get::GetResponse = parse_contract(json!({
+        "offer_apply_form": {
+            "id": "form_1",
+            "name": {"zh_cn": "校招 Offer 申请表", "en_us": "campus offer application form"},
+            "schema": {
+                "id": "schema_1",
+                "module_list": [{
+                    "id": "module_1",
+                    "name": {"zh_cn": "基础信息模块", "en_us": "basic info module"},
+                    "object_list": [{
+                        "id": "obj_1",
+                        "name": {"zh_cn": "薪资字段", "en_us": "salary field"},
+                        "config": {
+                            "options": [{"id": "opt_1", "name": {"zh_cn": "全年薪资", "en_us": "annual salary"}}],
+                            "object_display_config": {"display_condition": 1}
+                        }
+                    }]
+                }]
+            }
+        }
+    }));
+    assert_eq!(
+        form.offer_apply_form
+            .as_ref()
+            .and_then(|v| v.schema.as_ref())
+            .and_then(|v| v.module_list.as_ref())
+            .map(|v| v.len()),
+        Some(1)
+    );
+
+    let schema: offer_schema::get::GetResponse = parse_contract(json!({
+        "id": "schema_1",
+        "scenario": 1,
+        "version": 121,
+        "object_list": [{
+            "id": "obj_1",
+            "name": {"zh_cn": "名字", "en_us": "name"},
+            "type": "number",
+            "is_customized": true,
+            "option_list": [{
+                "name": {"zh_cn": "名字", "en_us": "name"},
+                "index": 121,
+                "active_status": 1
+            }]
+        }]
+    }));
+    assert_eq!(schema.object_list[0].object_type.as_deref(), Some("number"));
 }

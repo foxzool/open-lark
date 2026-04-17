@@ -519,7 +519,14 @@ mod serialization_tests {
         test_offer_get_response_serialization,
         offer::get::GetResponse,
         offer::get::GetResponse {
-            data: json!({"offer_id":"of_001","status":"pending"})
+            offer: Some(offer::get::OfferDetail {
+                id: Some("of_001".to_string()),
+                application_id: Some("ap_001".to_string()),
+                basic_info: None,
+                salary_plan: None,
+                extra: Default::default(),
+            }),
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
@@ -712,12 +719,36 @@ mod serialization_tests {
     );
 
     roundtrip_eq!(
+        test_offer_application_form_get_response_serialization,
+        offer_application_form::get::GetResponse,
+        offer_application_form::get::GetResponse {
+            offer_apply_form: Some(offer_application_form::get::OfferApplyForm {
+                id: Some("form_1".to_string()),
+                name: None,
+                schema: None,
+                extra: Default::default(),
+            }),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
         test_offer_application_form_list_response_serialization,
         offer_application_form::list::ListResponse,
         offer_application_form::list::ListResponse {
             has_more: Some(false),
             page_token: None,
             items: vec![],
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_offer_schema_get_response_serialization,
+        offer_schema::get::GetResponse,
+        offer_schema::get::GetResponse {
+            id: Some("schema_1".to_string()),
+            scenario: Some(1),
+            version: Some(121),
+            object_list: vec![],
             extra: Default::default(),
         }
     );

@@ -10,6 +10,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
 
 /// 获取 Offer 详情请求
 #[derive(Debug, Clone)]
@@ -62,12 +63,190 @@ impl GetRequest {
 }
 
 /// 获取 Offer 详情响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferGetCatalogRef {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zh_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub en_name: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferGetContractPeriod {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub period_type: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub period: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferGetLocationNode {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zh_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub en_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location_type: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferGetAddress {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zh_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub en_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub district: Option<OfferGetLocationNode>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub city: Option<OfferGetLocationNode>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<OfferGetLocationNode>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub country: Option<OfferGetLocationNode>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferGetSimpleAddress {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zh_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub en_name: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferWorkLocationAddressInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location_info: Option<OfferGetSimpleAddress>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address_info: Option<OfferGetSimpleAddress>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferGetCustomInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customize_value: Option<Value>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferGetBasicInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offer_type: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remark: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expire_time: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_user_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creator_user_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub employee_type: Option<OfferGetCatalogRef>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub leader_user_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub onboard_date: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub department_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub probation_month: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contract_year: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contract_period: Option<OfferGetContractPeriod>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recruitment_type: Option<OfferGetCatalogRef>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sequence: Option<OfferGetCatalogRef>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub level: Option<OfferGetCatalogRef>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub onboard_address: Option<OfferGetAddress>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_address: Option<OfferGetAddress>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customize_info_list: Option<Vec<OfferGetCustomInfo>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_location_address_info: Option<OfferWorkLocationAddressInfo>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_offered: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_grade_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub common_attachment_id_list: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pathway_id: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferSalaryPlan {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub currency: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub basic_salary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub probation_salary_percentage: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub award_salary_multiple: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub option_shares: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quarterly_bonus: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub half_year_bonus: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferDetail {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub basic_info: Option<OfferGetBasicInfo>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub salary_plan: Option<OfferSalaryPlan>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offer: Option<OfferDetail>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for GetResponse {

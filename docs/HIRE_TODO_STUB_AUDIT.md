@@ -33,11 +33,11 @@
 
 ### 2. 固化剩余 schema debt 的结构统计
 
-清理后，Hire 目录里不再保留 TODO/FIXME 标记。本轮继续完成 #111 后，当前剩余的 schema debt 为：
+清理后，Hire 目录里不再保留 TODO/FIXME 标记。随着 #112 / #113 持续推进，当前剩余的 schema debt 为：
 
 - **0 个文件**：零字段请求骨架已全部消除
 - **1 个接口**：`talent_object/query` 已确认是官方无参请求，不再视为骨架
-- **177 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
+- **135 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
 
 ## 分类结论
 
@@ -51,7 +51,7 @@
 
 已不再存在“零字段请求骨架仍待建模”的剩余项。
 
-### B. `Value` 响应直透（177 files）
+### B. `Value` 响应直透（当前 135 files）
 
 这批接口已经具备 endpoint/execute 入口，但公共返回类型仍是 `pub data: Value`。这意味着：
 
@@ -128,3 +128,24 @@
 当前剩余 `pub data: Value` 直透响应数：**138**。
 
 后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪。
+
+## #113 第三、四批收敛进展
+
+在前两批基础上，`#113` 又继续完成了：
+
+- note.create / get / list / patch / delete
+- attachment.create / get / preview
+- offer.create / list / update / offer_status / intern_offer_status
+- offer_application_form.list
+- offer.get
+- offer_application_form.get
+- offer_schema.get
+
+同步补强：
+
+- `crates/openlark-hr/tests/hire_tests.rs`
+- `crates/openlark-hr/tests/hire_response_contract_tests.rs`
+
+当前剩余 `pub data: Value` 直透响应数：**135**。
+
+后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪，并优先继续清 application / job / external_* 等剩余高价值路径。
