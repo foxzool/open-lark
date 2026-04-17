@@ -1218,6 +1218,153 @@ mod serialization_tests {
             extra: Default::default(),
         }
     );
+    roundtrip_eq!(
+        test_talent_add_to_folder_response_serialization,
+        talent::add_to_folder::AddToFolderResponse,
+        talent::add_to_folder::AddToFolderResponse {
+            talent_id: Some("talent_1".to_string()),
+            folder_id: Some("folder_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_talent_remove_to_folder_response_serialization,
+        talent::remove_to_folder::RemoveToFolderResponse,
+        talent::remove_to_folder::RemoveToFolderResponse {
+            talent_id: Some("talent_1".to_string()),
+            folder_id: Some("folder_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_talent_onboard_status_response_serialization,
+        talent::onboard_status::OnboardStatusResponse,
+        talent::onboard_status::OnboardStatusResponse {
+            talent_id: Some("talent_1".to_string()),
+            onboard_status: Some(2),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_talent_tag_response_serialization,
+        talent::tag::TagResponse,
+        talent::tag::TagResponse {
+            talent_id: Some("talent_1".to_string()),
+            tag_ids: Some(vec!["tag_1".to_string(), "tag_2".to_string()]),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_talent_external_info_create_response_serialization,
+        talent::external_info::create::CreateResponse,
+        talent::external_info::create::CreateResponse {
+            external_info: Some(
+                openlark_hr::hire::hire::common_models::TalentExternalInfoRecord {
+                    external_info_id: Some("ext_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    source_name: Some("Boss".to_string()),
+                    external_id: Some("boss_1".to_string()),
+                    status: Some(1),
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_talent_external_info_update_response_serialization,
+        talent::external_info::update::UpdateResponse,
+        talent::external_info::update::UpdateResponse {
+            external_info: Some(
+                openlark_hr::hire::hire::common_models::TalentExternalInfoRecord {
+                    external_info_id: Some("ext_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    source_name: Some("Boss".to_string()),
+                    external_id: Some("boss_1".to_string()),
+                    status: Some(2),
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_job_requirement_create_response_serialization,
+        job_requirement::create::CreateResponse,
+        job_requirement::create::CreateResponse {
+            job_requirement_id: Some("jr_1".to_string()),
+            job_id: Some("job_1".to_string()),
+            title: Some("招聘需求 A".to_string()),
+            status: Some(1),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_job_requirement_delete_response_serialization,
+        job_requirement::delete::DeleteResponse,
+        job_requirement::delete::DeleteResponse {
+            job_requirement_id: Some("jr_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_job_requirement_list_response_serialization,
+        job_requirement::list::ListResponse,
+        job_requirement::list::ListResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::JobRequirementSummary {
+                    job_requirement_id: Some("jr_1".to_string()),
+                    job_id: Some("job_1".to_string()),
+                    title: Some("招聘需求 A".to_string()),
+                    name: None,
+                    status: Some(1),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_jr".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_job_requirement_list_by_id_response_serialization,
+        job_requirement::list_by_id::ListByIdResponse,
+        job_requirement::list_by_id::ListByIdResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::JobRequirementSummary {
+                    job_requirement_id: Some("jr_1".to_string()),
+                    job_id: Some("job_1".to_string()),
+                    title: None,
+                    name: Some("需求 A".to_string()),
+                    status: Some(1),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_jr_id".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_job_requirement_update_response_serialization,
+        job_requirement::update::UpdateResponse,
+        job_requirement::update::UpdateResponse {
+            job_requirement_id: Some("jr_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
 
     roundtrip_eq!(
         test_evaluation_list_response_serialization,

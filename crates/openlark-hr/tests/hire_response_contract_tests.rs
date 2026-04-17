@@ -1,11 +1,11 @@
 use openlark_hr::hire::hire::{
     v1::{
         agency, application, attachment, evaluation, external_application, external_offer,
-        interview_record as interview_record_v1, interviewer, job, location, note, offer,
-        offer_application_form, offer_schema, referral, referral_account, role, subject,
-        talent_object, talent_pool, todo, user_role, website,
+        interview_record as interview_record_v1, interviewer, job, job_requirement, location, note,
+        offer, offer_application_form, offer_schema, referral, referral_account, role, subject,
+        talent, talent_object, talent_pool, todo, user_role, website,
     },
-    v2::{interview_record as interview_record_v2, talent},
+    v2::interview_record as interview_record_v2,
 };
 use serde::de::DeserializeOwned;
 use serde_json::json;
@@ -287,33 +287,23 @@ fn attachment_talent_object_and_talent_v2_contracts_are_typed() {
         Some("obj_1")
     );
 
-    let talent_resp: talent::get::GetResponse = parse_contract(json!({
-        "talent_id": "talent_1",
-        "basic_info": {
+    let talent_resp: talent::GetResponse = parse_contract(json!({
+        "talent": {
+            "talent_id": "talent_1",
             "name": "张三",
-            "email": "test@example.com",
-            "customized_data_list": [{
-                "object_id": "obj_1",
-                "name": {"zh_cn": "字段1", "en_us": "field1"},
-                "value": {
-                    "content": "text",
-                    "option": {"key": "opt_1", "name": {"zh_cn": "选项1", "en_us": "Option1"}}
-                }
-            }]
-        }
+            "email": "test@example.com"
+        },
+        "education_list": [{
+            "school": "四川大学",
+            "major": "计算机"
+        }]
     }));
-    assert_eq!(talent_resp.talent_id.as_deref(), Some("talent_1"));
+    assert_eq!(talent_resp.talent.talent_id.as_str(), "talent_1");
     assert_eq!(
-        talent_resp
-            .basic_info
-            .as_ref()
-            .unwrap()
-            .customized_data_list
-            .as_ref()
-            .unwrap()[0]
-            .object_id
+        talent_resp.education_list.as_ref().unwrap()[0]
+            .school
             .as_deref(),
-        Some("obj_1")
+        Some("四川大学")
     );
 }
 
@@ -920,4 +910,82 @@ fn agency_contracts_are_typed() {
         "page_token": "cursor_agency"
     }));
     assert_eq!(query.page_token.as_deref(), Some("cursor_agency"));
+}
+
+#[test]
+fn talent_and_job_requirement_contracts_are_typed() {
+    let add_folder: talent::add_to_folder::AddToFolderResponse = parse_contract(json!({
+        "talent_id": "talent_1",
+        "folder_id": "folder_1",
+        "result": true
+    }));
+    assert_eq!(add_folder.folder_id.as_deref(), Some("folder_1"));
+
+    let onboard: talent::onboard_status::OnboardStatusResponse = parse_contract(json!({
+        "talent_id": "talent_1",
+        "onboard_status": 2,
+        "success": true
+    }));
+    assert_eq!(onboard.onboard_status, Some(2));
+
+    let tag: talent::tag::TagResponse = parse_contract(json!({
+        "talent_id": "talent_1",
+        "tag_ids": ["tag_1", "tag_2"],
+        "result": true
+    }));
+    assert_eq!(tag.tag_ids.as_ref().map(|v| v.len()), Some(2));
+
+    let ext_info: talent::external_info::create::CreateResponse = parse_contract(json!({
+        "external_info": {
+            "external_info_id": "ext_1",
+            "talent_id": "talent_1",
+            "source_name": "Boss",
+            "external_id": "boss_1",
+            "status": 1
+        }
+    }));
+    assert_eq!(
+        ext_info
+            .external_info
+            .as_ref()
+            .and_then(|v| v.external_id.as_deref()),
+        Some("boss_1")
+    );
+
+    let requirements: job_requirement::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "job_requirement_id": "jr_1",
+            "job_id": "job_1",
+            "title": "招聘需求 A",
+            "status": 1
+        }],
+        "page_token": "cursor_jr"
+    }));
+    assert_eq!(requirements.page_token.as_deref(), Some("cursor_jr"));
+
+    let requirement_by_id: job_requirement::list_by_id::ListByIdResponse = parse_contract(json!({
+        "items": [{
+            "job_requirement_id": "jr_1",
+            "job_id": "job_1",
+            "name": "需求 A"
+        }]
+    }));
+    assert_eq!(
+        requirement_by_id.items[0].job_requirement_id.as_deref(),
+        Some("jr_1")
+    );
+
+    let requirement_create: job_requirement::create::CreateResponse = parse_contract(json!({
+        "job_requirement_id": "jr_1",
+        "job_id": "job_1",
+        "title": "招聘需求 A",
+        "status": 1
+    }));
+    assert_eq!(requirement_create.job_id.as_deref(), Some("job_1"));
+
+    let requirement_update: job_requirement::update::UpdateResponse = parse_contract(json!({
+        "job_requirement_id": "jr_1",
+        "result": true
+    }));
+    assert_eq!(requirement_update.result, Some(true));
 }
