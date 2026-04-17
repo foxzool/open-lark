@@ -143,3 +143,14 @@ pub struct HireAttachment {
     #[serde(default, flatten)]
     pub extra: HashMap<String, Value>,
 }
+
+/// `zh_name` / `en_name` 形式的双语文本。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct LocalizedLabel {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zh_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub en_name: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}

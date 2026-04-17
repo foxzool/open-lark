@@ -9,7 +9,6 @@ use openlark_core::{
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 use crate::hire::hire::common_models::NoteRecord;
 

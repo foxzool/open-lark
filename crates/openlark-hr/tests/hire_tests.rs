@@ -505,7 +505,14 @@ mod serialization_tests {
         test_offer_create_response_serialization,
         offer::create::CreateResponse,
         offer::create::CreateResponse {
-            data: json!({"offer_id":"of_001"})
+            offer_id: Some("of_001".to_string()),
+            application_id: Some("ap_001".to_string()),
+            schema_id: Some("schema_1".to_string()),
+            offer_type: Some(1),
+            basic_info: None,
+            salary_info: None,
+            customized_info_list: None,
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
@@ -519,22 +526,44 @@ mod serialization_tests {
         test_offer_update_response_serialization,
         offer::update::UpdateResponse,
         offer::update::UpdateResponse {
-            data: json!({"result":true})
+            offer_id: Some("of_001".to_string()),
+            application_id: None,
+            schema_id: Some("schema_1".to_string()),
+            offer_type: Some(1),
+            basic_info: None,
+            salary_info: None,
+            customized_info_list: None,
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
         test_offer_list_response_serialization,
         offer::list::ListResponse,
         offer::list::ListResponse {
-            data: json!({"items":[]})
+            has_more: Some(false),
+            page_token: None,
+            items: vec![],
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_offer_intern_status_response_serialization,
+        offer::intern_offer_status::InternOfferStatusResponse,
+        offer::intern_offer_status::InternOfferStatusResponse {
+            offer_id: Some("of_001".to_string()),
+            operation: Some("confirm_onboarding".to_string()),
+            onboarding_info: Some(offer::intern_offer_status::InternOnboardingInfo {
+                actual_onboarding_date: Some("2022-01-01".to_string()),
+                extra: Default::default(),
+            }),
+            offboarding_info: None,
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
         test_offer_status_response_serialization,
         offer::offer_status::OfferStatusResponse,
-        offer::offer_status::OfferStatusResponse {
-            data: json!({"status":"accepted"})
-        }
+        offer::offer_status::OfferStatusResponse {}
     );
 
     roundtrip_eq!(
@@ -682,6 +711,16 @@ mod serialization_tests {
         note::delete::DeleteResponse {}
     );
 
+    roundtrip_eq!(
+        test_offer_application_form_list_response_serialization,
+        offer_application_form::list::ListResponse,
+        offer_application_form::list::ListResponse {
+            has_more: Some(false),
+            page_token: None,
+            items: vec![],
+            extra: Default::default(),
+        }
+    );
     roundtrip_eq!(
         test_advertisement_publish_response_serialization,
         advertisement::publish::PublishResponse,

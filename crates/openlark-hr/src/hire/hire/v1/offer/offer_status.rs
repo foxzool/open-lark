@@ -72,13 +72,8 @@ impl OfferStatusRequest {
 }
 
 /// 更新 Offer 状态响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct OfferStatusResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
-}
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OfferStatusResponse {}
 
 impl ApiResponseTrait for OfferStatusResponse {
     fn data_format() -> ResponseFormat {

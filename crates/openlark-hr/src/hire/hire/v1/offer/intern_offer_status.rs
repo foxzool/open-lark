@@ -10,6 +10,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
 
 /// 更新实习 Offer 入/离职状态请求
 #[derive(Debug, Clone)]
@@ -72,12 +73,36 @@ impl InternOfferStatusRequest {
 }
 
 /// 更新实习 Offer 入/离职状态响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InternOnboardingInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actual_onboarding_date: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct InternOffboardingInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actual_offboarding_date: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notes: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct InternOfferStatusResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offer_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub onboarding_info: Option<InternOnboardingInfo>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offboarding_info: Option<InternOffboardingInfo>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for InternOfferStatusResponse {

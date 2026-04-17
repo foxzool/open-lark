@@ -11,8 +11,6 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::hire::hire::common_models::HireAttachment;
-
 /// 创建附件请求
 #[derive(Debug, Clone)]
 #[allow(dead_code)]

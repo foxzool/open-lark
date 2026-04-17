@@ -125,6 +125,6 @@
 - `referral_account/get_account_assets` 的真实查询参数透传
 - `v2/talent/get` 的 `user_id_type` 查询参数透传
 
-当前剩余 `pub data: Value` 直透响应数：**144**。
+当前剩余 `pub data: Value` 直透响应数：**138**。
 
 后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪。

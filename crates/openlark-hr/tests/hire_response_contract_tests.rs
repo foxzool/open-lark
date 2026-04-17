@@ -1,8 +1,8 @@
 use openlark_hr::hire::hire::{
     v1::{
         attachment, evaluation, interview_record as interview_record_v1, interviewer, location,
-        note, referral, referral_account, role, subject, talent_object, talent_pool, todo,
-        user_role, website,
+        note, offer, offer_application_form, referral, referral_account, role, subject,
+        talent_object, talent_pool, todo, user_role, website,
     },
     v2::{interview_record as interview_record_v2, talent},
 };
@@ -373,4 +373,76 @@ fn note_and_attachment_contracts_are_typed() {
         attachment_preview.url.as_deref(),
         Some("https://example.com/blob")
     );
+}
+
+#[test]
+fn offer_contracts_are_typed() {
+    let offers: offer::list::ListResponse = parse_contract(json!({
+        "has_more": true,
+        "page_token": "cursor_offer",
+        "items": [{
+            "id": "offer_1",
+            "job_info": {"job_id": "job_1", "job_name": "后端工程师"},
+            "offer_status": 1,
+            "employee_type": {"id": "1", "zh_name": "正式", "en_name": "Regular"}
+        }]
+    }));
+    assert_eq!(
+        offers.items[0]
+            .job_info
+            .as_ref()
+            .and_then(|v| v.job_id.as_deref()),
+        Some("job_1")
+    );
+
+    let created: offer::create::CreateResponse = parse_contract(json!({
+        "offer_id": "offer_1",
+        "application_id": "app_1",
+        "schema_id": "schema_1",
+        "offer_type": 1,
+        "basic_info": {"department_id": "od_1", "leader_user_id": "ou_leader"},
+        "salary_info": {"currency": "CNY", "basic_salary": "1000000"},
+        "customized_info_list": [{"id": "field_1", "value": "1"}]
+    }));
+    assert_eq!(created.offer_id.as_deref(), Some("offer_1"));
+    assert_eq!(
+        created
+            .salary_info
+            .as_ref()
+            .and_then(|v| v.currency.as_deref()),
+        Some("CNY")
+    );
+
+    let updated: offer::update::UpdateResponse = parse_contract(json!({
+        "offer_id": "offer_1",
+        "schema_id": "schema_1",
+        "offer_type": 1,
+        "basic_info": {"department_id": "od_1"}
+    }));
+    assert_eq!(updated.schema_id.as_deref(), Some("schema_1"));
+
+    let status: offer::offer_status::OfferStatusResponse = parse_contract(json!({}));
+    let intern: offer::intern_offer_status::InternOfferStatusResponse = parse_contract(json!({
+        "offer_id": "offer_1",
+        "operation": "confirm_onboarding",
+        "onboarding_info": {"actual_onboarding_date": "2022-01-01"}
+    }));
+    assert_eq!(
+        intern
+            .onboarding_info
+            .as_ref()
+            .and_then(|v| v.actual_onboarding_date.as_deref()),
+        Some("2022-01-01")
+    );
+    let _ = status;
+
+    let forms: offer_application_form::list::ListResponse = parse_contract(json!({
+        "has_more": false,
+        "items": [{
+            "id": "form_1",
+            "name": {"zh_cn": "校招 Offer 申请表", "en_us": "campus offer application form"},
+            "create_time": "1628512038000"
+        }]
+    }));
+    assert_eq!(forms.items[0].id.as_deref(), Some("form_1"));
 }
