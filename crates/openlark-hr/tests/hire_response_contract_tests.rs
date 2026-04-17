@@ -1,8 +1,8 @@
 use openlark_hr::hire::hire::{
     v1::{
-        attachment, evaluation, interview_record as interview_record_v1, interviewer, location,
-        note, offer, offer_application_form, offer_schema, referral, referral_account, role,
-        subject, talent_object, talent_pool, todo, user_role, website,
+        application, attachment, evaluation, interview_record as interview_record_v1, interviewer,
+        location, note, offer, offer_application_form, offer_schema, referral, referral_account,
+        role, subject, talent_object, talent_pool, todo, user_role, website,
     },
     v2::{interview_record as interview_record_v2, talent},
 };
@@ -522,4 +522,80 @@ fn offer_detail_and_schema_contracts_are_typed() {
         }]
     }));
     assert_eq!(schema.object_list[0].object_type.as_deref(), Some("number"));
+}
+
+#[test]
+fn application_contracts_are_typed() {
+    let created: application::create::CreateResponse = parse_contract(json!({
+        "application_id": "app_1",
+        "talent_id": "talent_1",
+        "job_id": "job_1",
+        "application_status": 1,
+        "stage_id": "stage_resume",
+        "stage_name": "简历筛选",
+        "job_info": {"job_id": "job_1", "job_name": "后端工程师"}
+    }));
+    assert_eq!(created.application_id.as_deref(), Some("app_1"));
+
+    let get_resp: application::get::GetResponse = parse_contract(json!({
+        "application_id": "app_1",
+        "talent_id": "talent_1",
+        "job_info": {"job_id": "job_1", "job_name": "后端工程师"},
+        "stage_name": "初筛"
+    }));
+    assert_eq!(
+        get_resp
+            .job_info
+            .as_ref()
+            .and_then(|v| v.job_name.as_deref()),
+        Some("后端工程师")
+    );
+
+    let detail: application::get_detail::GetDetailResponse = parse_contract(json!({
+        "application_id": "app_1",
+        "talent_info": {
+            "talent_id": "talent_1",
+            "talent_name": "张三",
+            "email": "zhangsan@example.com"
+        },
+        "job_info": {"job_id": "job_1", "job_name": "后端工程师"},
+        "offer_info": {"offer_id": "offer_1", "offer_status": 2}
+    }));
+    assert_eq!(
+        detail
+            .talent_info
+            .as_ref()
+            .and_then(|v| v.talent_name.as_deref()),
+        Some("张三")
+    );
+
+    let list: application::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "application_id": "app_1",
+            "talent_id": "talent_1",
+            "job_info": {"job_id": "job_1", "job_name": "后端工程师"},
+            "application_status": 1
+        }],
+        "has_more": true,
+        "page_token": "cursor_app"
+    }));
+    assert_eq!(list.items[0].application_id.as_deref(), Some("app_1"));
+    assert_eq!(list.page_token.as_deref(), Some("cursor_app"));
+
+    let interviews: application::interview::list::ListResponse = parse_contract(json!({
+        "records": [{
+            "interview_id": "iv_1",
+            "interview_round_id": "round_1",
+            "interview_round_name": "一面",
+            "status": 2,
+            "interviewer": {"id": "ou_1", "name": {"zh_cn": "面试官", "en_us": "Interviewer"}},
+            "score": {"score": 88.0, "total_score": 100.0}
+        }],
+        "has_more": false
+    }));
+    assert_eq!(interviews.records[0].interview_id.as_deref(), Some("iv_1"));
+    assert_eq!(
+        interviews.records[0].score.as_ref().and_then(|v| v.score),
+        Some(88.0)
+    );
 }

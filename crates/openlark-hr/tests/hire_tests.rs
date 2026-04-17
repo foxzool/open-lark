@@ -480,7 +480,10 @@ mod serialization_tests {
         test_application_interview_list_response_serialization,
         application::interview::list::ListResponse,
         application::interview::list::ListResponse {
-            data: json!({"records":[]})
+            records: vec![],
+            page_token: None,
+            has_more: None,
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
@@ -577,28 +580,93 @@ mod serialization_tests {
         test_application_create_response_serialization,
         application::create::CreateResponse,
         application::create::CreateResponse {
-            data: json!({"application_id":"ap_001"})
+            application_id: Some("ap_001".to_string()),
+            talent_id: Some("talent_001".to_string()),
+            job_id: Some("job_001".to_string()),
+            application_status: Some(1),
+            stage_id: Some("stage_1".to_string()),
+            stage_name: Some("初筛".to_string()),
+            job_info: Some(openlark_hr::hire::hire::common_models::ApplicationJobInfo {
+                job_id: Some("job_001".to_string()),
+                job_name: Some("后端工程师".to_string()),
+                extra: Default::default(),
+            }),
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
         test_application_get_response_serialization,
         application::get::GetResponse,
         application::get::GetResponse {
-            data: json!({"application_id":"ap_001"})
+            application_id: Some("ap_001".to_string()),
+            talent_id: Some("talent_001".to_string()),
+            job_id: Some("job_001".to_string()),
+            application_status: Some(1),
+            stage_id: Some("stage_1".to_string()),
+            stage_name: Some("初筛".to_string()),
+            job_info: Some(openlark_hr::hire::hire::common_models::ApplicationJobInfo {
+                job_id: Some("job_001".to_string()),
+                job_name: Some("后端工程师".to_string()),
+                extra: Default::default(),
+            }),
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
         test_application_get_detail_response_serialization,
         application::get_detail::GetDetailResponse,
         application::get_detail::GetDetailResponse {
-            data: json!({"application_id":"ap_001","detail":"x"})
+            application_id: Some("ap_001".to_string()),
+            talent_id: Some("talent_001".to_string()),
+            job_id: Some("job_001".to_string()),
+            application_status: Some(2),
+            stage_id: Some("stage_offer".to_string()),
+            stage_name: Some("Offer".to_string()),
+            job_info: Some(openlark_hr::hire::hire::common_models::ApplicationJobInfo {
+                job_id: Some("job_001".to_string()),
+                job_name: Some("后端工程师".to_string()),
+                extra: Default::default(),
+            }),
+            talent_info: Some(
+                openlark_hr::hire::hire::common_models::ApplicationTalentInfo {
+                    talent_id: Some("talent_001".to_string()),
+                    talent_name: Some("张三".to_string()),
+                    mobile: None,
+                    email: Some("zhangsan@example.com".to_string()),
+                    extra: Default::default(),
+                }
+            ),
+            offer_info: Some(
+                openlark_hr::hire::hire::common_models::ApplicationOfferInfo {
+                    offer_id: Some("offer_001".to_string()),
+                    offer_status: Some(1),
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
         }
     );
     roundtrip_eq!(
         test_application_list_response_serialization,
         application::list::ListResponse,
         application::list::ListResponse {
-            data: json!({"items":[]})
+            items: vec![openlark_hr::hire::hire::common_models::ApplicationSummary {
+                application_id: Some("ap_001".to_string()),
+                talent_id: Some("talent_001".to_string()),
+                job_id: Some("job_001".to_string()),
+                application_status: Some(1),
+                stage_id: Some("stage_1".to_string()),
+                stage_name: Some("初筛".to_string()),
+                job_info: Some(openlark_hr::hire::hire::common_models::ApplicationJobInfo {
+                    job_id: Some("job_001".to_string()),
+                    job_name: Some("后端工程师".to_string()),
+                    extra: Default::default(),
+                }),
+                extra: Default::default(),
+            }],
+            page_token: Some("cursor_1".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
         }
     );
 

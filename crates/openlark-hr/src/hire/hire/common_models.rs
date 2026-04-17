@@ -154,3 +154,80 @@ pub struct LocalizedLabel {
     #[serde(default, flatten)]
     pub extra: HashMap<String, Value>,
 }
+
+/// 投递所关联的职位摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ApplicationJobInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 投递所关联的候选人摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ApplicationTalentInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mobile: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 投递关联的 offer 摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ApplicationOfferInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offer_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offer_status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 投递摘要信息。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ApplicationSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_info: Option<ApplicationJobInfo>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 投递关联的面试记录摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct ApplicationInterviewRecord {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interview_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interview_round_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interview_round_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interviewer: Option<IdNameObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<ScoreInfo>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
