@@ -227,6 +227,7 @@ colored = "2.1"
 clap = { version = "4.4", features = ["derive"] }
 tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
 reqwest = { workspace = true }
+lark-websocket-protobuf = { workspace = true }
 
 [lib]
 name = "open_lark"

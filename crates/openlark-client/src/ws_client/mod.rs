@@ -14,7 +14,7 @@ pub use client::{
 };
 
 pub use frame_handler::{FrameHandler, FrameType};
-pub use state_machine::{ConnectionState, WebSocketStateMachine};
+pub use state_machine::{ConnectionState, StateMachineEvent, WebSocketStateMachine};
 
 #[cfg(test)]
 mod tests;
