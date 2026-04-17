@@ -3,6 +3,10 @@
 本模板用于 future release note / migration guide 中的兼容性说明，和
 `docs/PUBLIC_API_STABILITY_POLICY.md` 保持一致。
 
+如果迁移场景是较大的 refactor，而不是简短 release note，请改用：
+
+- `docs/api-refactor-migration-template.md`
+
 ## Release Notes 模板
 
 ```md

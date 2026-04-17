@@ -146,3 +146,7 @@ client.communication;
 兼容性说明模板见：
 
 - `docs/api-compatibility-note-template.md`
+
+重构型迁移文档模板见：
+
+- `docs/api-refactor-migration-template.md`
