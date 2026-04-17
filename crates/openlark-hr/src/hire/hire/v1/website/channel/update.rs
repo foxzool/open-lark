@@ -10,6 +10,9 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
+
+use crate::hire::hire::common_models::WebsiteChannelSummary;
 
 /// 更新招聘官网推广渠道请求
 #[derive(Debug, Clone)]
@@ -70,12 +73,12 @@ impl UpdateRequest {
 }
 
 /// 更新招聘官网推广渠道响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct UpdateResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel: Option<WebsiteChannelSummary>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for UpdateResponse {

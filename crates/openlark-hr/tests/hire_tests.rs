@@ -925,6 +925,192 @@ mod serialization_tests {
             extra: Default::default(),
         }
     );
+    roundtrip_eq!(
+        test_website_channel_create_response_serialization,
+        website::channel::create::CreateResponse,
+        website::channel::create::CreateResponse {
+            channel: Some(
+                openlark_hr::hire::hire::common_models::WebsiteChannelSummary {
+                    channel_id: Some("channel_1".to_string()),
+                    website_id: Some("site_1".to_string()),
+                    name: Some("Boss".to_string()),
+                    code: Some("boss".to_string()),
+                    active_status: Some(1),
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_website_channel_delete_response_serialization,
+        website::channel::delete::DeleteResponse,
+        website::channel::delete::DeleteResponse {
+            channel_id: Some("channel_1".to_string()),
+            result: Some(true),
+            success: Some(true),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_website_channel_list_response_serialization,
+        website::channel::list::ListResponse,
+        website::channel::list::ListResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::WebsiteChannelSummary {
+                    channel_id: Some("channel_1".to_string()),
+                    website_id: Some("site_1".to_string()),
+                    name: Some("Boss".to_string()),
+                    code: Some("boss".to_string()),
+                    active_status: Some(1),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_channel".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_website_channel_update_response_serialization,
+        website::channel::update::UpdateResponse,
+        website::channel::update::UpdateResponse {
+            channel: Some(
+                openlark_hr::hire::hire::common_models::WebsiteChannelSummary {
+                    channel_id: Some("channel_1".to_string()),
+                    website_id: Some("site_1".to_string()),
+                    name: Some("Boss".to_string()),
+                    code: Some("boss".to_string()),
+                    active_status: Some(1),
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_website_delivery_create_by_attachment_response_serialization,
+        website::delivery::create_by_attachment::CreateByAttachmentResponse,
+        website::delivery::create_by_attachment::CreateByAttachmentResponse {
+            delivery_task: Some(
+                openlark_hr::hire::hire::common_models::WebsiteDeliveryTaskResult {
+                    delivery_task_id: Some("task_1".to_string()),
+                    application_id: Some("app_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    status: Some(1),
+                    error_message: None,
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_website_delivery_create_by_resume_response_serialization,
+        website::delivery::create_by_resume::CreateByResumeResponse,
+        website::delivery::create_by_resume::CreateByResumeResponse {
+            delivery_task: Some(
+                openlark_hr::hire::hire::common_models::WebsiteDeliveryTaskResult {
+                    delivery_task_id: Some("task_1".to_string()),
+                    application_id: Some("app_1".to_string()),
+                    talent_id: Some("talent_1".to_string()),
+                    status: Some(1),
+                    error_message: None,
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_website_delivery_task_get_response_serialization,
+        website::delivery_task::get::GetResponse,
+        website::delivery_task::get::GetResponse {
+            delivery_task: openlark_hr::hire::hire::common_models::WebsiteDeliveryTaskResult {
+                delivery_task_id: Some("task_1".to_string()),
+                application_id: Some("app_1".to_string()),
+                talent_id: Some("talent_1".to_string()),
+                status: Some(2),
+                error_message: Some("invalid resume".to_string()),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_website_job_post_get_response_serialization,
+        website::job_post::get::GetResponse,
+        website::job_post::get::GetResponse {
+            job_post: Some(
+                openlark_hr::hire::hire::common_models::WebsiteJobPostSummary {
+                    job_post_id: Some("post_1".to_string()),
+                    website_id: Some("site_1".to_string()),
+                    job_id: Some("job_1".to_string()),
+                    title: Some("后端工程师".to_string()),
+                    active_status: Some(1),
+                    job_channel_id: Some("channel_1".to_string()),
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_website_job_post_list_response_serialization,
+        website::job_post::list::ListResponse,
+        website::job_post::list::ListResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::WebsiteJobPostSummary {
+                    job_post_id: Some("post_1".to_string()),
+                    website_id: Some("site_1".to_string()),
+                    job_id: Some("job_1".to_string()),
+                    title: Some("后端工程师".to_string()),
+                    active_status: Some(1),
+                    job_channel_id: Some("channel_1".to_string()),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_post".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_website_job_post_search_response_serialization,
+        website::job_post::search::SearchResponse,
+        website::job_post::search::SearchResponse {
+            items: vec![
+                openlark_hr::hire::hire::common_models::WebsiteJobPostSummary {
+                    job_post_id: Some("post_1".to_string()),
+                    website_id: Some("site_1".to_string()),
+                    job_id: Some("job_1".to_string()),
+                    title: Some("后端工程师".to_string()),
+                    active_status: Some(1),
+                    job_channel_id: Some("channel_1".to_string()),
+                    extra: Default::default(),
+                }
+            ],
+            page_token: Some("cursor_search".to_string()),
+            has_more: Some(false),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_website_site_user_create_response_serialization,
+        website::site_user::create::CreateResponse,
+        website::site_user::create::CreateResponse {
+            site_user: Some(
+                openlark_hr::hire::hire::common_models::WebsiteSiteUserSummary {
+                    site_user_id: Some("site_user_1".to_string()),
+                    website_id: Some("site_1".to_string()),
+                    user_id: Some("ou_1".to_string()),
+                    email: Some("test@example.com".to_string()),
+                    mobile: Some("13800000000".to_string()),
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
 
     roundtrip_eq!(
         test_evaluation_list_response_serialization,

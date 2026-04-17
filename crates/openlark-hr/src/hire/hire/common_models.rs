@@ -328,3 +328,73 @@ pub struct ExternalOfferSummary {
     #[serde(default, flatten)]
     pub extra: HashMap<String, Value>,
 }
+
+/// 招聘官网推广渠道摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct WebsiteChannelSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub website_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 招聘官网投递任务结果。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct WebsiteDeliveryTaskResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_task_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub talent_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 招聘官网职位广告摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct WebsiteJobPostSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_post_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub website_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_channel_id: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 招聘官网站点用户摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct WebsiteSiteUserSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub site_user_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub website_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mobile: Option<String>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}

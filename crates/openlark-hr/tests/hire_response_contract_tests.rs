@@ -763,3 +763,88 @@ fn external_application_and_offer_contracts_are_typed() {
         Some("ext_offer_1")
     );
 }
+
+#[test]
+fn website_channel_delivery_and_job_post_contracts_are_typed() {
+    let channel_created: website::channel::create::CreateResponse = parse_contract(json!({
+        "channel": {
+            "channel_id": "channel_1",
+            "website_id": "site_1",
+            "name": "Boss",
+            "code": "boss",
+            "active_status": 1
+        }
+    }));
+    assert_eq!(
+        channel_created
+            .channel
+            .as_ref()
+            .and_then(|v| v.channel_id.as_deref()),
+        Some("channel_1")
+    );
+
+    let channels: website::channel::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "channel_id": "channel_1",
+            "website_id": "site_1",
+            "name": "Boss",
+            "code": "boss",
+            "active_status": 1
+        }],
+        "has_more": false
+    }));
+    assert_eq!(channels.items[0].code.as_deref(), Some("boss"));
+
+    let delivery: website::delivery_task::get::GetResponse = parse_contract(json!({
+        "delivery_task_id": "task_1",
+        "application_id": "app_1",
+        "talent_id": "talent_1",
+        "status": 2,
+        "error_message": "invalid resume"
+    }));
+    assert_eq!(delivery.delivery_task.status, Some(2));
+
+    let post: website::job_post::get::GetResponse = parse_contract(json!({
+        "job_post": {
+            "job_post_id": "post_1",
+            "website_id": "site_1",
+            "job_id": "job_1",
+            "title": "后端工程师",
+            "active_status": 1,
+            "job_channel_id": "channel_1"
+        }
+    }));
+    assert_eq!(
+        post.job_post
+            .as_ref()
+            .and_then(|v| v.job_channel_id.as_deref()),
+        Some("channel_1")
+    );
+
+    let post_list: website::job_post::list::ListResponse = parse_contract(json!({
+        "items": [{
+            "job_post_id": "post_1",
+            "website_id": "site_1",
+            "job_id": "job_1",
+            "title": "后端工程师"
+        }],
+        "page_token": "cursor_post"
+    }));
+    assert_eq!(post_list.page_token.as_deref(), Some("cursor_post"));
+
+    let site_user: website::site_user::create::CreateResponse = parse_contract(json!({
+        "site_user": {
+            "site_user_id": "site_user_1",
+            "website_id": "site_1",
+            "user_id": "ou_1",
+            "email": "test@example.com"
+        }
+    }));
+    assert_eq!(
+        site_user
+            .site_user
+            .as_ref()
+            .and_then(|v| v.user_id.as_deref()),
+        Some("ou_1")
+    );
+}

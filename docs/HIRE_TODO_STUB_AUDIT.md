@@ -37,7 +37,7 @@
 
 - **0 个文件**：零字段请求骨架已全部消除
 - **1 个接口**：`talent_object/query` 已确认是官方无参请求，不再视为骨架
-- **112 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
+- **101 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
 
 ## 分类结论
 
@@ -51,7 +51,7 @@
 
 已不再存在“零字段请求骨架仍待建模”的剩余项。
 
-### B. `Value` 响应直透（当前 112 files）
+### B. `Value` 响应直透（当前 101 files）
 
 这批接口已经具备 endpoint/execute 入口，但公共返回类型仍是 `pub data: Value`。这意味着：
 
@@ -212,3 +212,24 @@
 当前剩余 `pub data: Value` 直透响应数：**112**。
 
 后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪，并优先继续清 agency / website / talent / job_requirement 等剩余高价值路径。
+
+## #113 第八批收敛进展
+
+本轮继续完成 website 主路径的 typed response 收敛：
+
+- website.channel.create / delete / list / update
+- website.delivery.create_by_attachment / create_by_resume
+- website.delivery_task.get
+- website.job_post.get / list / search
+- website.site_user.create
+
+同时新增并复用的通用结构包括：
+
+- `WebsiteChannelSummary`
+- `WebsiteDeliveryTaskResult`
+- `WebsiteJobPostSummary`
+- `WebsiteSiteUserSummary`
+
+当前剩余 `pub data: Value` 直透响应数：**101**。
+
+后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪，并优先继续清 agency / talent / job_requirement / application 剩余 mutation 等路径。
