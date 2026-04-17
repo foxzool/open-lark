@@ -97,3 +97,7 @@ use openlark_client::DocsClient;
 - 新文档、README、示例不再推广它们
 - 未来 minor 版本若要移除，必须先更新 migration guide、release notes 与 compatibility note
 - 如果某类 alias 仍然有保留价值，应给出书面解释，而不是继续扩张使用面
+
+更一般的 deprecated API 支持周期规则见：
+
+- `docs/DEPRECATED_API_SUPPORT_POLICY.md`

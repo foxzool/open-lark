@@ -155,6 +155,10 @@ helper / convenience method 的详细 semver 判定矩阵见：
 - Reason: ...
 ```
 
+deprecated API 的支持周期与移除条件见：
+
+- `docs/DEPRECATED_API_SUPPORT_POLICY.md`
+
 ## Re-export 与入口规范
 
 根 crate `openlark` 是普通用户的默认官方入口。

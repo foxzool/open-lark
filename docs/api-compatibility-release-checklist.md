@@ -57,6 +57,7 @@
 - [ ] 新 deprecated 入口已带有替代路径
 - [ ] deprecated API 的支持周期与移除条件清晰
 - [ ] migration guide 或 compatibility note 已包含 before / after 示例
+- [ ] deprecated API 记录已对齐 `docs/DEPRECATED_API_SUPPORT_POLICY.md`
 - [ ] legacy entrypoint 变化已同步到：
   - `docs/migration-guide.md`
   - `docs/legacy-entrypoint-migration-notes.md`
