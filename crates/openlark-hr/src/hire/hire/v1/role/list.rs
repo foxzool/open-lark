@@ -17,7 +17,7 @@ use serde_json::Value;
 pub struct ListRequest {
     /// 配置信息
     config: Config,
-    // TODO: 添加请求字段
+    // 当前生成骨架尚未建模请求字段；补齐 schema 前保持零字段请求。
 }
 
 impl ListRequest {
@@ -25,11 +25,11 @@ impl ListRequest {
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // TODO: 初始化字段
+            // 当前无已建模字段需要初始化。
         }
     }
 
-    // TODO: 添加字段 setter 方法
+    // 当前未暴露字段 setter；补齐 schema 后再按需补充。
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<ListResponse> {
@@ -57,7 +57,7 @@ impl ListRequest {
 pub struct ListResponse {
     /// 响应数据
     ///
-    /// TODO: 根据官方文档添加具体字段
+    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
     pub data: Value,
 }
 

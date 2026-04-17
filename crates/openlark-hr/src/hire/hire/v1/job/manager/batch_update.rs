@@ -104,7 +104,7 @@ impl BatchUpdateRequestBody {
 pub struct BatchUpdateResponse {
     /// 响应数据
     ///
-    /// TODO: 根据官方文档添加具体字段
+    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
     pub data: Value,
 }
 
