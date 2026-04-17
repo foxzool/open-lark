@@ -37,7 +37,7 @@
 
 - **0 个文件**：零字段请求骨架已全部消除
 - **1 个接口**：`talent_object/query` 已确认是官方无参请求，不再视为骨架
-- **65 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
+- **50 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
 
 ## 分类结论
 
@@ -51,7 +51,7 @@
 
 已不再存在“零字段请求骨架仍待建模”的剩余项。
 
-### B. `Value` 响应直透（当前 65 files）
+### B. `Value` 响应直透（当前 50 files）
 
 这批接口已经具备 endpoint/execute 入口，但公共返回类型仍是 `pub data: Value`。这意味着：
 
@@ -312,3 +312,24 @@
 当前剩余 `pub data: Value` 直透响应数：**65**。
 
 后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪，并优先继续清剩余 low-volume 业务域。
+
+## #113 第十三批收敛进展
+
+本轮继续完成低频生态域 typed response 收敛：
+
+- eco_account_custom_field.create / batch_update / batch_delete
+- eco_background_check_custom_field.create / batch_update / batch_delete
+- eco_background_check_package.create / batch_update / batch_delete
+- eco_exam_paper.create / batch_update / batch_delete
+- eco_background_check.cancel / update_progress / update_result
+
+同时新增并复用的通用结构包括：
+
+- `EcoCustomFieldSummary`
+- `EcoBackgroundCheckPackageSummary`
+- `EcoExamPaperSummary`
+- `EcoOperationResult`
+
+当前剩余 `pub data: Value` 直透响应数：**50**。
+
+后续仍由：**#113 Continue replacing remaining Hire Value pass-through responses** 跟踪，并优先继续清 employee / referral_account / interview / background_check_order / external_referral_reward / talent_pool / external_interview_assessment 等低频余项。

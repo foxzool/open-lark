@@ -1471,6 +1471,106 @@ mod serialization_tests {
         }
     );
     roundtrip_eq!(
+        test_eco_account_custom_field_create_response_serialization,
+        eco_account_custom_field::create::CreateResponse,
+        eco_account_custom_field::create::CreateResponse {
+            custom_field: Some(
+                openlark_hr::hire::hire::common_models::EcoCustomFieldSummary {
+                    custom_field_id: Some("field_1".to_string()),
+                    name: Some("账号字段".to_string()),
+                    code: Some("acct_code".to_string()),
+                    status: Some(1),
+                    active_status: None,
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_eco_account_custom_field_batch_update_response_serialization,
+        eco_account_custom_field::batch_update::BatchUpdateResponse,
+        eco_account_custom_field::batch_update::BatchUpdateResponse {
+            operation: openlark_hr::hire::hire::common_models::EcoOperationResult {
+                custom_field_id: Some("field_1".to_string()),
+                package_id: None,
+                paper_id: None,
+                background_check_id: None,
+                order_id: None,
+                status: Some(1),
+                progress: None,
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
+        test_eco_background_check_custom_field_create_response_serialization,
+        eco_background_check_custom_field::create::CreateResponse,
+        eco_background_check_custom_field::create::CreateResponse {
+            custom_field: Some(
+                openlark_hr::hire::hire::common_models::EcoCustomFieldSummary {
+                    custom_field_id: Some("bg_field_1".to_string()),
+                    name: Some("背调字段".to_string()),
+                    code: Some("bg_code".to_string()),
+                    status: Some(1),
+                    active_status: None,
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_eco_background_check_package_create_response_serialization,
+        eco_background_check_package::create::CreateResponse,
+        eco_background_check_package::create::CreateResponse {
+            package: Some(
+                openlark_hr::hire::hire::common_models::EcoBackgroundCheckPackageSummary {
+                    package_id: Some("pkg_1".to_string()),
+                    name: Some("标准背调套餐".to_string()),
+                    status: Some(1),
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_eco_exam_paper_create_response_serialization,
+        eco_exam_paper::create::CreateResponse,
+        eco_exam_paper::create::CreateResponse {
+            paper: Some(
+                openlark_hr::hire::hire::common_models::EcoExamPaperSummary {
+                    paper_id: Some("paper_1".to_string()),
+                    name: Some("算法笔试".to_string()),
+                    status: Some(1),
+                    extra: Default::default(),
+                }
+            ),
+            extra: Default::default(),
+        }
+    );
+    roundtrip_eq!(
+        test_eco_background_check_cancel_response_serialization,
+        eco_background_check::cancel::CancelResponse,
+        eco_background_check::cancel::CancelResponse {
+            operation: openlark_hr::hire::hire::common_models::EcoOperationResult {
+                custom_field_id: None,
+                package_id: None,
+                paper_id: None,
+                background_check_id: Some("bg_order_1".to_string()),
+                order_id: Some("order_1".to_string()),
+                status: Some(2),
+                progress: Some(80),
+                result: Some(true),
+                success: Some(true),
+                extra: Default::default(),
+            },
+        }
+    );
+    roundtrip_eq!(
         test_talent_add_to_folder_response_serialization,
         talent::add_to_folder::AddToFolderResponse,
         talent::add_to_folder::AddToFolderResponse {

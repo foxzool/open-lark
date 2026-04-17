@@ -559,3 +559,71 @@ pub struct TripartiteAgreementSummary {
     #[serde(default, flatten)]
     pub extra: HashMap<String, Value>,
 }
+
+/// 生态自定义字段摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct EcoCustomFieldSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_field_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 生态背调套餐摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct EcoBackgroundCheckPackageSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 生态考试试卷摘要。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct EcoExamPaperSummary {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub paper_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// 生态流程操作结果。
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct EcoOperationResult {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_field_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub paper_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub background_check_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub order_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub progress: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+    #[serde(default, flatten)]
+    pub extra: HashMap<String, Value>,
+}

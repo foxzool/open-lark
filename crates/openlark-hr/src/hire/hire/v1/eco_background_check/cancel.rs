@@ -11,6 +11,8 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use crate::hire::hire::common_models::EcoOperationResult;
+
 /// 终止背调订单请求
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
@@ -61,12 +63,10 @@ impl CancelRequest {
 }
 
 /// 终止背调订单响应
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct CancelResponse {
-    /// 响应数据
-    ///
-    /// 当前按未建模 JSON 原样透传；字段收敛后再替换为显式结构。
-    pub data: Value,
+    #[serde(flatten)]
+    pub operation: EcoOperationResult,
 }
 
 impl ApiResponseTrait for CancelResponse {

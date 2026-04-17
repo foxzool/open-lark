@@ -1,10 +1,12 @@
 use openlark_hr::hire::hire::{
     v1::{
-        agency, application, attachment, evaluation, external_application,
-        external_background_check, external_interview, external_offer,
-        interview_record as interview_record_v1, interviewer, job, job_requirement, location, note,
-        offer, offer_application_form, offer_schema, referral, referral_account, role, subject,
-        talent, talent_object, talent_pool, todo, tripartite_agreement, user_role, website,
+        agency, application, attachment, eco_account_custom_field, eco_background_check,
+        eco_background_check_custom_field, eco_background_check_package, eco_exam_paper,
+        evaluation, external_application, external_background_check, external_interview,
+        external_offer, interview_record as interview_record_v1, interviewer, job, job_requirement,
+        location, note, offer, offer_application_form, offer_schema, referral, referral_account,
+        role, subject, talent, talent_object, talent_pool, todo, tripartite_agreement, user_role,
+        website,
     },
     v2::interview_record as interview_record_v2,
 };
@@ -1126,4 +1128,70 @@ fn external_background_interview_and_agreement_contracts_are_typed() {
         "result": true
     }));
     assert_eq!(agreement_delete.result, Some(true));
+}
+
+#[test]
+fn eco_operation_contracts_are_typed() {
+    let account_field: eco_account_custom_field::create::CreateResponse = parse_contract(json!({
+        "custom_field": {
+            "custom_field_id": "field_1",
+            "name": "账号字段",
+            "code": "acct_code",
+            "status": 1
+        }
+    }));
+    assert_eq!(
+        account_field
+            .custom_field
+            .as_ref()
+            .and_then(|v| v.custom_field_id.as_deref()),
+        Some("field_1")
+    );
+
+    let bg_field_update: eco_background_check_custom_field::batch_update::BatchUpdateResponse =
+        parse_contract(json!({
+            "custom_field_id": "field_2",
+            "result": true
+        }));
+    assert_eq!(bg_field_update.operation.result, Some(true));
+
+    let package_create: eco_background_check_package::create::CreateResponse =
+        parse_contract(json!({
+            "package": {
+                "package_id": "pkg_1",
+                "name": "标准背调套餐",
+                "status": 1
+            }
+        }));
+    assert_eq!(
+        package_create
+            .package
+            .as_ref()
+            .and_then(|v| v.package_id.as_deref()),
+        Some("pkg_1")
+    );
+
+    let paper_create: eco_exam_paper::create::CreateResponse = parse_contract(json!({
+        "paper": {
+            "paper_id": "paper_1",
+            "name": "算法笔试",
+            "status": 1
+        }
+    }));
+    assert_eq!(
+        paper_create
+            .paper
+            .as_ref()
+            .and_then(|v| v.paper_id.as_deref()),
+        Some("paper_1")
+    );
+
+    let bg_progress: eco_background_check::update_progress::UpdateProgressResponse =
+        parse_contract(json!({
+            "background_check_id": "bg_order_1",
+            "progress": 80,
+            "status": 2,
+            "success": true
+        }));
+    assert_eq!(bg_progress.operation.progress, Some(80));
 }
