@@ -1,9 +1,13 @@
 //! 用户管理 API
 //!
-//! 提供后台用户管理功能
+//! 当前仍是 runtime stub。
+//!
+//! 平台 admin 已接入的真实用户统计接口是 `admin_user_stat/list.rs`，
+//! 但这里的 `users` facade 并没有对应的已接线服务端端点。
+//! 为避免继续返回占位 JSON，本模块现在会显式返回未接线错误。
 
 use crate::PlatformConfig;
-use openlark_core::SDKResult;
+use openlark_core::{error::business_error, req_option::RequestOption, SDKResult};
 use std::sync::Arc;
 
 /// 用户管理 API
@@ -56,8 +60,17 @@ impl ListAdminUsersRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        // TODO: 实现实际的 API 调用
-        Ok(serde_json::json!({"items": []}))
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求并传入请求选项。
+    pub async fn execute_with_options(
+        self,
+        _option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+        Err(business_error(
+            "admin.users.list: openlark-platform 尚未接入该 facade，请改用已实现的 admin_user_stat.list 等真实端点",
+        ))
     }
 }
 
@@ -84,8 +97,17 @@ impl DisableUserRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        // TODO: 实现实际的 API 调用
-        Ok(serde_json::json!({"success": true}))
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求并传入请求选项。
+    pub async fn execute_with_options(
+        self,
+        _option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+        Err(business_error(
+            "admin.users.disable: openlark-platform 尚未接入该 facade，请等待后续真实端点支持",
+        ))
     }
 }
 
@@ -112,13 +134,23 @@ impl EnableUserRequest {
 
     /// 执行请求
     pub async fn execute(self) -> SDKResult<serde_json::Value> {
-        // TODO: 实现实际的 API 调用
-        Ok(serde_json::json!({"success": true}))
+        self.execute_with_options(RequestOption::default()).await
+    }
+
+    /// 执行请求并传入请求选项。
+    pub async fn execute_with_options(
+        self,
+        _option: RequestOption,
+    ) -> SDKResult<serde_json::Value> {
+        Err(business_error(
+            "admin.users.enable: openlark-platform 尚未接入该 facade，请等待后续真实端点支持",
+        ))
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use super::*;
 
     use serde_json;
 
@@ -135,5 +167,17 @@ mod tests {
         let json = r#"{"field": "data"}"#;
         let value: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(value["field"], "data");
+    }
+
+    #[tokio::test]
+    async fn test_users_stub_returns_explicit_error() {
+        let config = Arc::new(PlatformConfig::default());
+        let err = UsersApi::new(config)
+            .list()
+            .page_size(20)
+            .execute()
+            .await
+            .expect_err("users stub should now fail explicitly");
+        assert!(err.to_string().contains("尚未接入"));
     }
 }
