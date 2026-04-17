@@ -5,33 +5,60 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    error,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-/// 批量获取待办事项请求
 #[derive(Debug, Clone)]
-#[allow(dead_code)]
 pub struct ListRequest {
-    /// 配置信息
     config: Config,
-    // 当前生成骨架尚未建模请求字段；补齐 schema 前保持零字段请求。
+    page_token: Option<String>,
+    page_size: Option<i32>,
+    user_id: Option<String>,
+    user_id_type: Option<String>,
+    todo_type: String,
 }
 
 impl ListRequest {
-    /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // 当前无已建模字段需要初始化。
+            page_token: None,
+            page_size: None,
+            user_id: None,
+            user_id_type: None,
+            todo_type: String::new(),
         }
     }
 
-    // 当前未暴露字段 setter；补齐 schema 后再按需补充。
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.page_token = Some(page_token.into());
+        self
+    }
 
-    /// 执行请求
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.page_size = Some(page_size);
+        self
+    }
+
+    pub fn user_id(mut self, user_id: impl Into<String>) -> Self {
+        self.user_id = Some(user_id.into());
+        self
+    }
+
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
+
+    pub fn todo_type(mut self, todo_type: impl Into<String>) -> Self {
+        self.todo_type = todo_type.into();
+        self
+    }
+
     pub async fn execute(self) -> SDKResult<ListResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
@@ -41,18 +68,40 @@ impl ListRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResponse> {
-        let request = ApiRequest::<ListResponse>::get("/open-apis/hire/v1/todos");
+        if let Some(page_size) = self.page_size {
+            if !(1..=100).contains(&page_size) {
+                return Err(error::validation_error(
+                    "page_size",
+                    "page_size 必须在 1-100 之间",
+                ));
+            }
+        }
+
+        if self.todo_type.trim().is_empty() {
+            return Err(error::validation_error("todo_type", "todo_type 不能为空"));
+        }
+
+        let mut request = ApiRequest::<ListResponse>::get("/open-apis/hire/v1/todos");
+        if let Some(page_token) = self.page_token {
+            request = request.query("page_token", page_token);
+        }
+        if let Some(page_size) = self.page_size {
+            request = request.query("page_size", page_size.to_string());
+        }
+        if let Some(user_id) = self.user_id {
+            request = request.query("user_id", user_id);
+        }
+        if let Some(user_id_type) = self.user_id_type {
+            request = request.query("user_id_type", user_id_type);
+        }
+        request = request.query("type", self.todo_type);
         let response = Transport::request(request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error(
-                "批量获取待办事项响应数据为空",
-                "服务器没有返回有效的数据",
-            )
+            error::validation_error("批量获取待办事项响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
 
-/// 批量获取待办事项响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListResponse {
     /// 响应数据
@@ -70,17 +119,14 @@ impl ApiResponseTrait for ListResponse {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-
     #[test]
     fn test_serialization_roundtrip() {
-        // 基础序列化测试
         let json = r#"{"test": "value"}"#;
         assert!(serde_json::from_str::<serde_json::Value>(json).is_ok());
     }
 
     #[test]
     fn test_deserialization_from_json() {
-        // 基础反序列化测试
         let json = r#"{"field": "data"}"#;
         let value: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(value["field"], "data");

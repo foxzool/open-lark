@@ -33,38 +33,23 @@
 
 ### 2. 固化剩余 schema debt 的结构统计
 
-清理后，Hire 目录里不再保留 TODO/FIXME 标记，但仍有两类明确的 schema debt：
+清理后，Hire 目录里不再保留 TODO/FIXME 标记。本轮继续完成 #111 后，当前剩余的 schema debt 为：
 
-- **22 个文件**：仍是“零字段请求 + `Value` 响应”
+- **0 个文件**：零字段请求骨架已全部消除
+- **1 个接口**：`talent_object/query` 已确认是官方无参请求，不再视为骨架
 - **177 个文件**：响应仍然是 `Value` 直透，需要后续 typed 化
 
 ## 分类结论
 
-### A. 零字段请求骨架（22 files）
+### A. 零字段请求骨架（已完成）
 
-这是最优先的一批，因为它们不仅响应未 typed，而且 Builder 也无法表达真实参数。
+`#111` 已完成以下收敛：
 
-代表文件：
+- 21 个接口已补齐 query/body/path builder 字段
+- `crates/openlark-hr/src/hire/hire/v1/talent_object/query.rs` 已确认官方本身无请求参数，因此保留为显式无参请求
+- 新增定向验证：`crates/openlark-hr/tests/hire_request_modeling_tests.rs`
 
-- `crates/openlark-hr/src/hire/hire/v2/interview_record/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/exam_marking_task/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/referral/search.rs`
-- `crates/openlark-hr/src/hire/hire/v1/role/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/talent_tag/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/location/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/website/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/user_role/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/subject/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/talent_folder/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/minutes/get.rs`
-- `crates/openlark-hr/src/hire/hire/v1/todo/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/evaluation_task/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/talent_object/query.rs`
-- `crates/openlark-hr/src/hire/hire/v1/evaluation/list.rs`
-- `crates/openlark-hr/src/hire/hire/v1/interviewer/list.rs`
-- 以及同类剩余文件
-
-跟踪 issue：**#111 Model the remaining zero-field Hire request skeletons**
+已不再存在“零字段请求骨架仍待建模”的剩余项。
 
 ### B. `Value` 响应直透（177 files）
 
@@ -82,6 +67,8 @@
 
 跟踪 issue：**#112 Replace Hire Value pass-through responses with typed models**
 
+`#112` 现在是 Hire schema debt 的主跟踪入口。
+
 ## 决策
 
 本轮 `#106` 的定位是：
@@ -97,6 +84,6 @@
 `#106` 可以关闭的条件：
 
 - Hire shipped source 中不再保留骨架式 TODO/FIXME
-- 零字段请求骨架已有独立跟踪（#111）
+- 零字段请求骨架已在 `#111` 中完成收敛
 - `Value` 响应直透已有独立跟踪（#112）
 - 审计结论已固化到仓库文档

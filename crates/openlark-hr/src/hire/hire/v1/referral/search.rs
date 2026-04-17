@@ -5,33 +5,62 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    error,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-/// 查询人才内推信息请求
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+struct SearchRequestBody {
+    talent_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    start_time: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    end_time: Option<String>,
+}
+
 #[derive(Debug, Clone)]
-#[allow(dead_code)]
 pub struct SearchRequest {
-    /// 配置信息
     config: Config,
-    // 当前生成骨架尚未建模请求字段；补齐 schema 前保持零字段请求。
+    user_id_type: Option<String>,
+    talent_id: String,
+    start_time: Option<String>,
+    end_time: Option<String>,
 }
 
 impl SearchRequest {
-    /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // 当前无已建模字段需要初始化。
+            user_id_type: None,
+            talent_id: String::new(),
+            start_time: None,
+            end_time: None,
         }
     }
 
-    // 当前未暴露字段 setter；补齐 schema 后再按需补充。
+    pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
+        self.user_id_type = Some(user_id_type.into());
+        self
+    }
 
-    /// 执行请求
+    pub fn talent_id(mut self, talent_id: impl Into<String>) -> Self {
+        self.talent_id = talent_id.into();
+        self
+    }
+
+    pub fn start_time(mut self, start_time: impl Into<String>) -> Self {
+        self.start_time = Some(start_time.into());
+        self
+    }
+
+    pub fn end_time(mut self, end_time: impl Into<String>) -> Self {
+        self.end_time = Some(end_time.into());
+        self
+    }
+
     pub async fn execute(self) -> SDKResult<SearchResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
@@ -41,22 +70,32 @@ impl SearchRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<SearchResponse> {
-        use crate::common::api_endpoints::HireApiV1;
+        if self.talent_id.trim().is_empty() {
+            return Err(error::validation_error("talent_id", "talent_id 不能为空"));
+        }
 
-        let api_endpoint = HireApiV1::ReferralSearch;
-        let request = ApiRequest::<SearchResponse>::post(api_endpoint.to_url());
+        let mut request = ApiRequest::<SearchResponse>::post("/open-apis/hire/v1/referrals/search");
+        if let Some(user_id_type) = self.user_id_type {
+            request = request.query("user_id_type", user_id_type);
+        }
+        request = request.body(
+            serde_json::to_value(SearchRequestBody {
+                talent_id: self.talent_id,
+                start_time: self.start_time,
+                end_time: self.end_time,
+            })
+            .map_err(|e| {
+                error::validation_error("request_body", format!("无法序列化请求体: {}", e))
+            })?,
+        );
+
         let response = Transport::request(request, &self.config, Some(option)).await?;
-
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error(
-                "查询人才内推信息响应数据为空",
-                "服务器没有返回有效的数据",
-            )
+            error::validation_error("查询人才内推信息响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
 
-/// 查询人才内推信息响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SearchResponse {
     /// 响应数据
@@ -74,17 +113,14 @@ impl ApiResponseTrait for SearchResponse {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-
     #[test]
     fn test_serialization_roundtrip() {
-        // 基础序列化测试
         let json = r#"{"test": "value"}"#;
         assert!(serde_json::from_str::<serde_json::Value>(json).is_ok());
     }
 
     #[test]
     fn test_deserialization_from_json() {
-        // 基础反序列化测试
         let json = r#"{"field": "data"}"#;
         let value: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(value["field"], "data");

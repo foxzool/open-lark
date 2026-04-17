@@ -5,33 +5,46 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    error,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-/// 获取面试记录附件请求
 #[derive(Debug, Clone)]
-#[allow(dead_code)]
 pub struct GetRequest {
-    /// 配置信息
     config: Config,
-    // 当前生成骨架尚未建模请求字段；补齐 schema 前保持零字段请求。
+    application_id: String,
+    interview_record_id: Option<String>,
+    language: Option<i32>,
 }
 
 impl GetRequest {
-    /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // 当前无已建模字段需要初始化。
+            application_id: String::new(),
+            interview_record_id: None,
+            language: None,
         }
     }
 
-    // 当前未暴露字段 setter；补齐 schema 后再按需补充。
+    pub fn application_id(mut self, application_id: impl Into<String>) -> Self {
+        self.application_id = application_id.into();
+        self
+    }
 
-    /// 执行请求
+    pub fn interview_record_id(mut self, interview_record_id: impl Into<String>) -> Self {
+        self.interview_record_id = Some(interview_record_id.into());
+        self
+    }
+
+    pub fn language(mut self, language: i32) -> Self {
+        self.language = Some(language);
+        self
+    }
+
     pub async fn execute(self) -> SDKResult<GetResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
@@ -41,19 +54,29 @@ impl GetRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<GetResponse> {
-        let request =
+        if self.application_id.trim().is_empty() {
+            return Err(error::validation_error(
+                "application_id",
+                "application_id 不能为空",
+            ));
+        }
+
+        let mut request =
             ApiRequest::<GetResponse>::get("/open-apis/hire/v1/interview_records/attachments");
+        request = request.query("application_id", self.application_id);
+        if let Some(interview_record_id) = self.interview_record_id {
+            request = request.query("interview_record_id", interview_record_id);
+        }
+        if let Some(language) = self.language {
+            request = request.query("language", language.to_string());
+        }
         let response = Transport::request(request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error(
-                "获取面试记录附件响应数据为空",
-                "服务器没有返回有效的数据",
-            )
+            error::validation_error("获取面试记录附件响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
 
-/// 获取面试记录附件响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetResponse {
     /// 响应数据
@@ -71,17 +94,14 @@ impl ApiResponseTrait for GetResponse {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-
     #[test]
     fn test_serialization_roundtrip() {
-        // 基础序列化测试
         let json = r#"{"test": "value"}"#;
         assert!(serde_json::from_str::<serde_json::Value>(json).is_ok());
     }
 
     #[test]
     fn test_deserialization_from_json() {
-        // 基础反序列化测试
         let json = r#"{"field": "data"}"#;
         let value: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(value["field"], "data");

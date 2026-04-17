@@ -5,33 +5,56 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    error,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-/// 注册内推账户请求
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Mobile {
+    pub code: String,
+    pub number: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+struct CreateRequestBody {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    mobile: Option<Mobile>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    email: Option<String>,
+}
+
 #[derive(Debug, Clone)]
-#[allow(dead_code)]
 pub struct CreateRequest {
-    /// 配置信息
     config: Config,
-    // 当前生成骨架尚未建模请求字段；补齐 schema 前保持零字段请求。
+    mobile: Option<Mobile>,
+    email: Option<String>,
 }
 
 impl CreateRequest {
-    /// 创建请求
     pub fn new(config: Config) -> Self {
         Self {
             config,
-            // 当前无已建模字段需要初始化。
+            mobile: None,
+            email: None,
         }
     }
 
-    // 当前未暴露字段 setter；补齐 schema 后再按需补充。
+    pub fn mobile(mut self, code: impl Into<String>, number: impl Into<String>) -> Self {
+        self.mobile = Some(Mobile {
+            code: code.into(),
+            number: number.into(),
+        });
+        self
+    }
 
-    /// 执行请求
+    pub fn email(mut self, email: impl Into<String>) -> Self {
+        self.email = Some(email.into());
+        self
+    }
+
     pub async fn execute(self) -> SDKResult<CreateResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
@@ -41,19 +64,31 @@ impl CreateRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<CreateResponse> {
-        let request = ApiRequest::<CreateResponse>::post("/open-apis/hire/v1/referral_account");
-        let response = Transport::request(request, &self.config, Some(option)).await?;
+        if self.mobile.is_none() && self.email.as_deref().unwrap_or("").trim().is_empty() {
+            return Err(error::validation_error(
+                "contact",
+                "mobile 和 email 至少需要提供一个",
+            ));
+        }
 
+        let request = ApiRequest::<CreateResponse>::post("/open-apis/hire/v1/referral_account")
+            .body(
+                serde_json::to_value(CreateRequestBody {
+                    mobile: self.mobile,
+                    email: self.email,
+                })
+                .map_err(|e| {
+                    error::validation_error("request_body", format!("无法序列化请求体: {}", e))
+                })?,
+            );
+
+        let response = Transport::request(request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error(
-                "注册内推账户响应数据为空",
-                "服务器没有返回有效的数据",
-            )
+            error::validation_error("注册内推账户响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
 
-/// 注册内推账户响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateResponse {
     /// 响应数据
@@ -71,17 +106,14 @@ impl ApiResponseTrait for CreateResponse {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-
     #[test]
     fn test_serialization_roundtrip() {
-        // 基础序列化测试
         let json = r#"{"test": "value"}"#;
         assert!(serde_json::from_str::<serde_json::Value>(json).is_ok());
     }
 
     #[test]
     fn test_deserialization_from_json() {
-        // 基础反序列化测试
         let json = r#"{"field": "data"}"#;
         let value: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(value["field"], "data");

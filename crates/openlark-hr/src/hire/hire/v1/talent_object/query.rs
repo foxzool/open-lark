@@ -5,33 +5,26 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
+    error,
     http::Transport,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-/// 获取人才字段请求
+/// 获取人才字段请求。
+///
+/// 官方文档未定义请求参数，因此该请求仅持有配置并直接发起调用。
 #[derive(Debug, Clone)]
-#[allow(dead_code)]
 pub struct QueryRequest {
-    /// 配置信息
     config: Config,
-    // 当前生成骨架尚未建模请求字段；补齐 schema 前保持零字段请求。
 }
 
 impl QueryRequest {
-    /// 创建请求
     pub fn new(config: Config) -> Self {
-        Self {
-            config,
-            // 当前无已建模字段需要初始化。
-        }
+        Self { config }
     }
 
-    // 当前未暴露字段 setter；补齐 schema 后再按需补充。
-
-    /// 执行请求
     pub async fn execute(self) -> SDKResult<QueryResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
@@ -44,15 +37,11 @@ impl QueryRequest {
         let request = ApiRequest::<QueryResponse>::get("/open-apis/hire/v1/talent_objects/query");
         let response = Transport::request(request, &self.config, Some(option)).await?;
         response.data.ok_or_else(|| {
-            openlark_core::error::validation_error(
-                "获取人才字段响应数据为空",
-                "服务器没有返回有效的数据",
-            )
+            error::validation_error("获取人才字段响应数据为空", "服务器没有返回有效的数据")
         })
     }
 }
 
-/// 获取人才字段响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryResponse {
     /// 响应数据
@@ -70,17 +59,14 @@ impl ApiResponseTrait for QueryResponse {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-
     #[test]
     fn test_serialization_roundtrip() {
-        // 基础序列化测试
         let json = r#"{"test": "value"}"#;
         assert!(serde_json::from_str::<serde_json::Value>(json).is_ok());
     }
 
     #[test]
     fn test_deserialization_from_json() {
-        // 基础反序列化测试
         let json = r#"{"field": "data"}"#;
         let value: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(value["field"], "data");
