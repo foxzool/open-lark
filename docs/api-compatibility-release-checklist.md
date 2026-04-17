@@ -67,6 +67,7 @@
 - [ ] breaking / deprecated / compatible extension 在 release notes 中可快速识别
 - [ ] crate 级质量状态摘要已附加到 release notes
 - [ ] 如需额外兼容性说明，已复用 `docs/api-compatibility-note-template.md`
+- [ ] changelog 分类已对齐 `docs/changelog-compatibility-categories.md`
 
 ### E. Evidence / verification
 
