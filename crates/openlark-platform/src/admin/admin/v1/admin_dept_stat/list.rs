@@ -1,8 +1,5 @@
 //! 获取部门维度的用户活跃和功能使用数据 API
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -12,6 +9,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 获取部门维度用户活跃和功能使用数据的请求构建器。
 pub struct ListAdminDeptStatBuilder {
     start_date: String,
     end_date: String,
@@ -21,6 +19,7 @@ pub struct ListAdminDeptStatBuilder {
 }
 
 impl ListAdminDeptStatBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             start_date: String::new(),
@@ -31,30 +30,36 @@ impl ListAdminDeptStatBuilder {
         }
     }
 
+    /// 设置统计开始日期。
     pub fn start_date(mut self, start_date: impl Into<String>) -> Self {
         self.start_date = start_date.into();
         self
     }
 
+    /// 设置统计结束日期。
     pub fn end_date(mut self, end_date: impl Into<String>) -> Self {
         self.end_date = end_date.into();
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: u32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页游标。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<ListAdminDeptStatResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -80,20 +85,31 @@ impl ListAdminDeptStatBuilder {
     }
 }
 
+/// 获取部门维度统计数据的响应。
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ListAdminDeptStatResponse {
+    /// 统计条目列表。
     pub items: Vec<AdminDeptStatItem>,
+    /// 下一页分页游标。
     pub page_token: Option<String>,
+    /// 是否还有更多数据。
     pub has_more: bool,
 }
 
+/// 单个部门的统计信息。
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct AdminDeptStatItem {
+    /// 部门 ID。
     pub dept_id: String,
+    /// 即时消息使用次数。
     pub im_count: u32,
+    /// 日历使用次数。
     pub calendar_count: u32,
+    /// 文档使用次数。
     pub doc_count: u32,
+    /// 视频会议使用次数。
     pub vc_count: u32,
+    /// 邮件使用次数。
     pub mail_count: u32,
 }
 

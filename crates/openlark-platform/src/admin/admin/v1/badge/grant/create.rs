@@ -2,9 +2,6 @@
 //!
 //! API文档: https://open.feishu.cn/document/server-docs/admin-v1/badge/badge-grant/create
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -22,6 +19,7 @@ pub struct CreateBadgeGrantBuilder {
 }
 
 impl CreateBadgeGrantBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             badge_id: String::new(),
@@ -30,20 +28,24 @@ impl CreateBadgeGrantBuilder {
         }
     }
 
+    /// 设置勋章 ID。
     pub fn badge_id(mut self, badge_id: impl Into<String>) -> Self {
         self.badge_id = badge_id.into();
         self
     }
 
+    /// 设置用户 ID 列表。
     pub fn user_ids(mut self, user_ids: Vec<String>) -> Self {
         self.user_ids = user_ids;
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<CreateBadgeGrantResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -74,10 +76,15 @@ struct CreateBadgeGrantRequest {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+/// 创建勋章授予名单的响应。
 pub struct CreateBadgeGrantResponse {
+    /// 授予记录 ID。
     pub grant_id: String,
+    /// 勋章 ID。
     pub badge_id: String,
+    /// 用户 ID 列表。
     pub user_ids: Vec<String>,
+    /// 创建时间。
     pub create_time: String,
 }
 

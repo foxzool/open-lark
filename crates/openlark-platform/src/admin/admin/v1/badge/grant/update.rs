@@ -1,8 +1,5 @@
 //! 修改勋章授予名单 API
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -12,6 +9,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 修改勋章授予名单的请求构建器。
 pub struct UpdateBadgeGrantBuilder {
     badge_id: String,
     grant_id: String,
@@ -20,6 +18,7 @@ pub struct UpdateBadgeGrantBuilder {
 }
 
 impl UpdateBadgeGrantBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             badge_id: String::new(),
@@ -29,25 +28,30 @@ impl UpdateBadgeGrantBuilder {
         }
     }
 
+    /// 设置勋章 ID。
     pub fn badge_id(mut self, badge_id: impl Into<String>) -> Self {
         self.badge_id = badge_id.into();
         self
     }
 
+    /// 设置授予记录 ID。
     pub fn grant_id(mut self, grant_id: impl Into<String>) -> Self {
         self.grant_id = grant_id.into();
         self
     }
 
+    /// 设置用户 ID 列表。
     pub fn user_ids(mut self, user_ids: Vec<String>) -> Self {
         self.user_ids = user_ids;
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<UpdateBadgeGrantResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -75,10 +79,15 @@ struct UpdateBadgeGrantRequest {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+/// 修改勋章授予名单的响应。
 pub struct UpdateBadgeGrantResponse {
+    /// 授予记录 ID。
     pub grant_id: String,
+    /// 勋章 ID。
     pub badge_id: String,
+    /// 用户 ID 列表。
     pub user_ids: Vec<String>,
+    /// 更新时间。
     pub update_time: String,
 }
 

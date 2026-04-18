@@ -6,20 +6,18 @@
 //! 当前这个更宽泛的 `audit` facade 并没有对应的已接线服务端端点。
 //! 为避免继续返回占位 JSON，本模块现在会显式返回未接线错误。
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use crate::PlatformConfig;
 use openlark_core::{error::business_error, req_option::RequestOption, SDKResult};
 use std::sync::Arc;
 
-/// 审计日志 API
+/// 审计日志 facade。
 #[derive(Debug, Clone)]
 pub struct AuditApi {
     config: Arc<PlatformConfig>,
 }
 
 impl AuditApi {
+    /// 创建新的审计日志 facade。
     pub fn new(config: Arc<PlatformConfig>) -> Self {
         Self { config }
     }

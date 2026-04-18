@@ -1,8 +1,5 @@
 //! 同意人工任务 API
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -12,12 +9,14 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 同意人工任务的请求构建器。
 pub struct AgreeTaskBuilder {
     approval_task_id: String,
     config: Config,
 }
 
 impl AgreeTaskBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             approval_task_id: String::new(),
@@ -25,15 +24,18 @@ impl AgreeTaskBuilder {
         }
     }
 
+    /// 设置人工任务 ID。
     pub fn approval_task_id(mut self, approval_task_id: impl Into<String>) -> Self {
         self.approval_task_id = approval_task_id.into();
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<AgreeTaskResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<AgreeTaskResponse> {
         validate_required!(self.approval_task_id, "任务ID不能为空");
 
@@ -51,7 +53,9 @@ impl AgreeTaskBuilder {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+/// 同意人工任务的响应。
 pub struct AgreeTaskResponse {
+    /// 执行结果。
     pub result: String,
 }
 

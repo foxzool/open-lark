@@ -1,8 +1,5 @@
 //! 删除勋章授予名单 API
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -12,6 +9,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 删除勋章授予名单的请求构建器。
 pub struct DeleteBadgeGrantBuilder {
     badge_id: String,
     grant_id: String,
@@ -19,6 +17,7 @@ pub struct DeleteBadgeGrantBuilder {
 }
 
 impl DeleteBadgeGrantBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             badge_id: String::new(),
@@ -27,20 +26,24 @@ impl DeleteBadgeGrantBuilder {
         }
     }
 
+    /// 设置勋章 ID。
     pub fn badge_id(mut self, badge_id: impl Into<String>) -> Self {
         self.badge_id = badge_id.into();
         self
     }
 
+    /// 设置授予记录 ID。
     pub fn grant_id(mut self, grant_id: impl Into<String>) -> Self {
         self.grant_id = grant_id.into();
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<DeleteBadgeGrantResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -59,7 +62,9 @@ impl DeleteBadgeGrantBuilder {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+/// 删除勋章授予名单的响应。
 pub struct DeleteBadgeGrantResponse {
+    /// 执行结果。
     pub result: String,
 }
 

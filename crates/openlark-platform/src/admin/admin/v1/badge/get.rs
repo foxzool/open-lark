@@ -2,9 +2,6 @@
 //!
 //! API文档: https://open.feishu.cn/document/server-docs/admin-v1/badge/badge/get
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -21,6 +18,7 @@ pub struct GetBadgeBuilder {
 }
 
 impl GetBadgeBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             badge_id: String::new(),
@@ -28,15 +26,18 @@ impl GetBadgeBuilder {
         }
     }
 
+    /// 设置勋章 ID。
     pub fn badge_id(mut self, badge_id: impl Into<String>) -> Self {
         self.badge_id = badge_id.into();
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<GetBadgeResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetBadgeResponse> {
         let api_request: ApiRequest<GetBadgeResponse> =
             ApiRequest::get(format!("/open-apis/admin/v1/badges/{}", self.badge_id));
@@ -50,11 +51,17 @@ impl GetBadgeBuilder {
 
 /// 获取勋章详情响应
 #[derive(Debug, Clone, Deserialize, Serialize)]
+/// 获取勋章详情的响应。
 pub struct GetBadgeResponse {
+    /// 勋章 ID。
     pub badge_id: String,
+    /// 名称。
     pub name: String,
+    /// 描述。
     pub description: Option<String>,
+    /// 图标地址。
     pub icon_url: Option<String>,
+    /// 创建时间。
     pub create_time: String,
 }
 

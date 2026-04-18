@@ -1,8 +1,5 @@
 //! 获取人工任务列表 API
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -12,6 +9,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 获取审批实例列表的请求构建器。
 pub struct ListInstanceBuilder {
     page_size: Option<u32>,
     page_token: Option<String>,
@@ -20,6 +18,7 @@ pub struct ListInstanceBuilder {
 }
 
 impl ListInstanceBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             page_size: None,
@@ -29,25 +28,30 @@ impl ListInstanceBuilder {
         }
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: u32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页游标。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 设置要过滤的用户 ID。
     pub fn user_id(mut self, user_id: impl Into<String>) -> Self {
         self.user_id = Some(user_id.into());
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<ListInstanceResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -79,18 +83,27 @@ impl ListInstanceBuilder {
     }
 }
 
+/// 审批实例列表响应。
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ListInstanceResponse {
+    /// 审批实例列表。
     pub items: Vec<InstanceItem>,
+    /// 下一页分页游标。
     pub page_token: Option<String>,
+    /// 是否还有更多数据。
     pub has_more: bool,
 }
 
+/// 单个审批实例信息。
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct InstanceItem {
+    /// 审批实例 ID。
     pub instance_id: String,
+    /// 审批实例状态。
     pub status: String,
+    /// 发起人 ID。
     pub initiator_id: String,
+    /// 创建时间。
     pub create_time: String,
 }
 

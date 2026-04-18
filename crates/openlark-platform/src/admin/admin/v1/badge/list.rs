@@ -2,9 +2,6 @@
 //!
 //! API文档: https://open.feishu.cn/document/server-docs/admin-v1/badge/badge/list
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use crate::common::api_endpoints::AdminApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -23,6 +20,7 @@ pub struct ListBadgeBuilder {
 }
 
 impl ListBadgeBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             page_size: None,
@@ -31,20 +29,24 @@ impl ListBadgeBuilder {
         }
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: u32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页游标。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<ListBadgeResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListBadgeResponse> {
         let mut url = AdminApiV1::ListBadge.path().to_string();
         let mut params = Vec::new();
@@ -72,18 +74,28 @@ impl ListBadgeBuilder {
 
 /// 获取勋章列表响应
 #[derive(Debug, Clone, Deserialize, Serialize)]
+/// 获取勋章列表的响应。
 pub struct ListBadgeResponse {
+    /// 结果条目列表。
     pub items: Vec<BadgeItem>,
+    /// 下一页分页游标。
     pub page_token: Option<String>,
+    /// 是否还有更多数据。
     pub has_more: bool,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+/// BadgeItem。
 pub struct BadgeItem {
+    /// 勋章 ID。
     pub badge_id: String,
+    /// 名称。
     pub name: String,
+    /// 描述。
     pub description: Option<String>,
+    /// 图标地址。
     pub icon_url: Option<String>,
+    /// 创建时间。
     pub create_time: String,
 }
 

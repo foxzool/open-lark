@@ -2,9 +2,6 @@
 //!
 //! API文档: https://open.feishu.cn/document/server-docs/admin-v1/badge/badge/create
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use crate::common::api_endpoints::AdminApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
@@ -24,6 +21,7 @@ pub struct CreateBadgeBuilder {
 }
 
 impl CreateBadgeBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             name: String::new(),
@@ -33,25 +31,30 @@ impl CreateBadgeBuilder {
         }
     }
 
+    /// 设置名称。
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.name = name.into();
         self
     }
 
+    /// 设置描述。
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.description = Some(description.into());
         self
     }
 
+    /// 设置图标地址。
     pub fn icon_url(mut self, icon_url: impl Into<String>) -> Self {
         self.icon_url = Some(icon_url.into());
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<CreateBadgeResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -87,11 +90,17 @@ struct CreateBadgeRequest {
 
 /// 创建勋章响应
 #[derive(Debug, Clone, Deserialize, Serialize)]
+/// 创建勋章的响应。
 pub struct CreateBadgeResponse {
+    /// 勋章 ID。
     pub badge_id: String,
+    /// 名称。
     pub name: String,
+    /// 描述。
     pub description: Option<String>,
+    /// 图标地址。
     pub icon_url: Option<String>,
+    /// 创建时间。
     pub create_time: String,
 }
 

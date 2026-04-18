@@ -1,8 +1,5 @@
 //! 上传勋章图片 API
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -12,12 +9,14 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 上传勋章图片的请求构建器。
 pub struct CreateBadgeImageBuilder {
     image: String,
     config: Config,
 }
 
 impl CreateBadgeImageBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             image: String::new(),
@@ -25,15 +24,18 @@ impl CreateBadgeImageBuilder {
         }
     }
 
+    /// 设置图片内容。
     pub fn image(mut self, image: impl Into<String>) -> Self {
         self.image = image.into();
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<CreateBadgeImageResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -58,8 +60,11 @@ struct CreateBadgeImageRequest {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+/// 上传勋章图片的响应。
 pub struct CreateBadgeImageResponse {
+    /// 图片 ID。
     pub image_id: String,
+    /// 图片访问地址。
     pub image_url: String,
 }
 

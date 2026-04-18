@@ -17,15 +17,9 @@ class OpenlarkPlatformMissingDocsTests(unittest.TestCase):
         self.assertNotIn("warning: missing documentation for ", output, msg=output)
 
     def test_v1_root_modules_do_not_use_missing_docs_allow(self):
-        root_modules = [
-            Path("crates/openlark-platform/src/app_engine/apaas/v1/mod.rs"),
-            Path("crates/openlark-platform/src/admin/admin/v1/mod.rs"),
-            Path("crates/openlark-platform/src/directory/directory/v1/mod.rs"),
-        ]
-
-        for path in root_modules:
+        for path in Path("crates/openlark-platform/src").rglob("*.rs"):
             content = path.read_text(encoding="utf-8")
-            self.assertNotIn("#![allow(missing_docs)]", content, msg=f"{path} still suppresses the full subtree")
+            self.assertNotIn("#![allow(missing_docs)]", content, msg=f"{path} still suppresses missing_docs warnings")
 
 
 if __name__ == "__main__":

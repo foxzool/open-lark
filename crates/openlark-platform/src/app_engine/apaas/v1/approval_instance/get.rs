@@ -1,8 +1,5 @@
 //! 获取人工任务详情 API
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -12,12 +9,14 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 获取审批实例详情的请求构建器。
 pub struct GetInstanceBuilder {
     approval_instance_id: String,
     config: Config,
 }
 
 impl GetInstanceBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             approval_instance_id: String::new(),
@@ -25,15 +24,18 @@ impl GetInstanceBuilder {
         }
     }
 
+    /// 设置审批实例 ID。
     pub fn approval_instance_id(mut self, approval_instance_id: impl Into<String>) -> Self {
         self.approval_instance_id = approval_instance_id.into();
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<GetInstanceResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -53,11 +55,16 @@ impl GetInstanceBuilder {
     }
 }
 
+/// 审批实例详情响应。
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct GetInstanceResponse {
+    /// 审批实例 ID。
     pub instance_id: String,
+    /// 审批实例状态。
     pub status: String,
+    /// 发起人 ID。
     pub initiator_id: String,
+    /// 创建时间。
     pub create_time: String,
 }
 

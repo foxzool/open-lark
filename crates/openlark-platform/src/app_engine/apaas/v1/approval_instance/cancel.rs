@@ -1,8 +1,5 @@
 //! 撤销人工任务 API
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -12,12 +9,14 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 撤销审批实例的请求构建器。
 pub struct CancelInstanceBuilder {
     approval_instance_id: String,
     config: Config,
 }
 
 impl CancelInstanceBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             approval_instance_id: String::new(),
@@ -25,15 +24,18 @@ impl CancelInstanceBuilder {
         }
     }
 
+    /// 设置审批实例 ID。
     pub fn approval_instance_id(mut self, approval_instance_id: impl Into<String>) -> Self {
         self.approval_instance_id = approval_instance_id.into();
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<CancelInstanceResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -53,8 +55,10 @@ impl CancelInstanceBuilder {
     }
 }
 
+/// 撤销审批实例的响应。
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct CancelInstanceResponse {
+    /// 撤销执行结果。
     pub result: String,
 }
 

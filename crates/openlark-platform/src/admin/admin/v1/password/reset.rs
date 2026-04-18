@@ -1,8 +1,5 @@
 //! 重置用户密码 API
 
-// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
-#![allow(missing_docs)]
-
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
@@ -12,6 +9,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 重置用户密码的请求构建器。
 pub struct ResetPasswordBuilder {
     user_id: String,
     new_password: String,
@@ -19,6 +17,7 @@ pub struct ResetPasswordBuilder {
 }
 
 impl ResetPasswordBuilder {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             user_id: String::new(),
@@ -27,20 +26,24 @@ impl ResetPasswordBuilder {
         }
     }
 
+    /// 设置用户 ID。
     pub fn user_id(mut self, user_id: impl Into<String>) -> Self {
         self.user_id = user_id.into();
         self
     }
 
+    /// 设置新密码。
     pub fn new_password(mut self, new_password: impl Into<String>) -> Self {
         self.new_password = new_password.into();
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<ResetPasswordResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -71,7 +74,9 @@ struct ResetPasswordRequest {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+/// 重置用户密码的响应。
 pub struct ResetPasswordResponse {
+    /// 执行结果。
     pub result: String,
 }
 
