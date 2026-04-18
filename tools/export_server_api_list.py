@@ -422,13 +422,31 @@ def finalize_rows(drafts: List[ApiRowDraft]) -> List[Dict[str, str]]:
         key = (d.meta_project, d.meta_version, d.meta_name_base)
         key_to_drafts.setdefault(key, []).append(d)
 
+    def normalize_doc_slug(doc_path: str) -> str:
+        slug = doc_path.rstrip("/").rsplit("/", 1)[-1] if doc_path else ""
+        slug = slug.replace("-", "_")
+        slug = re.sub(r"[^a-zA-Z0-9_/]+", "_", slug)
+        slug = re.sub(r"_+", "_", slug).strip("_")
+        return slug
+
     final: List[Dict[str, str]] = []
     for d in drafts:
+        if not (d.http_method and d.http_path):
+            continue
+
         meta_name = d.meta_name_base
         key = (d.meta_project, d.meta_version, d.meta_name_base)
         group = key_to_drafts.get(key) or []
         if d.meta_version == "old" and len(group) > 1 and d.http_method:
-            meta_name = f"{d.http_method.lower()}#{d.meta_name_base}"
+            duplicate_method_count = sum(1 for item in group if item.http_method == d.http_method)
+            if duplicate_method_count > 1:
+                slug_name = normalize_doc_slug(d.doc_path)
+                if slug_name:
+                    meta_name = f"{d.http_method.lower()}#{slug_name}"
+                else:
+                    meta_name = f"{d.http_method.lower()}#{d.api_id}"
+            else:
+                meta_name = f"{d.http_method.lower()}#{d.meta_name_base}"
 
         support_json = json.dumps(normalize_support_app_types(d.support_app_types), ensure_ascii=False)
         tags_json = "[]"

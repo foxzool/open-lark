@@ -1,5 +1,7 @@
+import csv
 import importlib.util
 import tempfile
+import tomllib
 import unittest
 from pathlib import Path
 
@@ -9,6 +11,9 @@ SPEC = importlib.util.spec_from_file_location("validate_apis", MODULE_PATH)
 validate_apis = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
 SPEC.loader.exec_module(validate_apis)
+
+MAPPING_PATH = Path(__file__).resolve().parents[1] / "api_coverage.toml"
+CSV_PATH = Path(__file__).resolve().parents[2] / "api_list_export.csv"
 
 
 class PriorityModelTests(unittest.TestCase):
@@ -206,6 +211,120 @@ class PriorityModelTests(unittest.TestCase):
             content = output.read_text(encoding="utf-8")
 
         self.assertIn("[report](../crates/openlark-workflow.md)", content)
+
+
+class MappingConfigTests(unittest.TestCase):
+    def test_openlark_auth_tracks_verification_information_biz_tag(self):
+        config = tomllib.loads(MAPPING_PATH.read_text(encoding="utf-8"))
+
+        self.assertIn(
+            "verification_information",
+            config["crates"]["openlark-auth"]["biz_tags"],
+        )
+        self.assertNotIn(
+            "verification",
+            config["crates"]["openlark-auth"]["biz_tags"],
+        )
+
+    def test_mapping_covers_all_csv_biz_tags(self):
+        config = tomllib.loads(MAPPING_PATH.read_text(encoding="utf-8"))
+        mapped_tags = set()
+        for crate_config in config["crates"].values():
+            mapped_tags.update(crate_config["biz_tags"])
+
+        with CSV_PATH.open("r", encoding="utf-8-sig", newline="") as handle:
+            csv_tags = {row["bizTag"] for row in csv.DictReader(handle)}
+
+        self.assertEqual(sorted(csv_tags - mapped_tags), [])
+        self.assertEqual(sorted(mapped_tags - csv_tags), [])
+
+
+class CSVIntegrityValidationTests(unittest.TestCase):
+    CSV_HEADER = [
+        "id",
+        "name",
+        "bizTag",
+        "meta.Project",
+        "meta.Version",
+        "meta.Resource",
+        "meta.Name",
+        "detail",
+        "chargingMethod",
+        "fullDose",
+        "fullPath",
+        "url",
+        "orderMark",
+        "supportAppTypes",
+        "tags",
+        "updateTime",
+        "isCharge",
+        "meta.Type",
+        "docPath",
+    ]
+
+    def _write_csv(self, rows):
+        temp_dir = tempfile.TemporaryDirectory()
+        csv_path = Path(temp_dir.name) / "api_list_export.csv"
+        with csv_path.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=self.CSV_HEADER)
+            writer.writeheader()
+            for row in rows:
+                writer.writerow(row)
+        return temp_dir, csv_path
+
+    def _base_row(self, **overrides):
+        row = {
+            "id": "1",
+            "name": "获取任务",
+            "bizTag": "task",
+            "meta.Project": "task",
+            "meta.Version": "v2",
+            "meta.Resource": "task",
+            "meta.Name": "get",
+            "detail": "",
+            "chargingMethod": "none",
+            "fullDose": "true",
+            "fullPath": "/document/mock",
+            "url": "GET:/open-apis/task/v2/tasks/:task_id",
+            "orderMark": "1",
+            "supportAppTypes": "[]",
+            "tags": "[]",
+            "updateTime": "0",
+            "isCharge": "false",
+            "meta.Type": "1",
+            "docPath": "https://open.feishu.cn/document/mock",
+        }
+        row.update(overrides)
+        return row
+
+    def test_parse_csv_rejects_unknown_rows(self):
+        temp_dir, csv_path = self._write_csv(
+            [
+                self._base_row(
+                    id="unknown-1",
+                    bizTag="unknown",
+                    **{"meta.Project": "unknown"},
+                )
+            ]
+        )
+        with temp_dir:
+            validator = validate_apis.APIValidator(csv_path=str(csv_path), src_path=temp_dir.name)
+
+            with self.assertRaisesRegex(ValueError, "unknown"):
+                validator.parse_csv()
+
+    def test_parse_csv_rejects_duplicate_expected_files(self):
+        temp_dir, csv_path = self._write_csv(
+            [
+                self._base_row(id="dup-1", name="获取任务"),
+                self._base_row(id="dup-2", name="再次获取任务"),
+            ]
+        )
+        with temp_dir:
+            validator = validate_apis.APIValidator(csv_path=str(csv_path), src_path=temp_dir.name)
+
+            with self.assertRaisesRegex(ValueError, "duplicate expected_file"):
+                validator.parse_csv()
 
 
 if __name__ == "__main__":

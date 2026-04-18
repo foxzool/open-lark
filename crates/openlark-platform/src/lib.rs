@@ -14,6 +14,7 @@
 //! - `app_engine` - 应用引擎相关 API (37 APIs)
 //! - `directory` - 目录服务相关 API (21 APIs)
 //! - `admin` - 系统管理相关 API (14 APIs)
+//! - `spark` - 妙搭平台相关 API (1 API)
 //!
 //! ## 使用示例
 //!
@@ -60,6 +61,9 @@ pub mod tenant;
 
 #[cfg(feature = "trust_party")]
 pub mod trust_party;
+
+#[cfg(feature = "spark")]
+pub mod spark;
 
 // Prelude 模块
 pub mod prelude;
@@ -151,5 +155,13 @@ mod service_tests {
         let config = create_test_config();
         let service = PlatformService::new(config).unwrap();
         let _admin = service.admin();
+    }
+
+    #[cfg(all(feature = "spark", feature = "v1"))]
+    #[test]
+    fn test_platform_service_spark() {
+        let config = create_test_config();
+        let service = PlatformService::new(config).unwrap();
+        let _request = service.spark().v1().directory().user().id_convert();
     }
 }

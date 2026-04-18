@@ -7,7 +7,7 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 documentation.workspace = true
-description = "飞书开放平台服务模块 - 应用管理、目录服务、系统管理 API (94 APIs)"
+description = "飞书开放平台服务模块 - 应用管理、目录服务、系统管理 API (95 APIs)"
 keywords = ["feishu", "lark", "platform", "api", "sdk"]
 categories = ["api-bindings", "web-programming"]
 
@@ -15,7 +15,7 @@ categories = ["api-bindings", "web-programming"]
 workspace = true
 
 [features]
-default = ["app-engine", "directory", "admin", "mdm", "tenant", "trust_party"]
+default = ["app-engine", "directory", "admin", "mdm", "tenant", "trust_party", "spark"]
 
 # === 核心功能模块 ===
 core = []
@@ -45,6 +45,10 @@ tenant = ["tenant-core", "core"]
 trust_party-core = []
 trust_party = ["trust_party-core", "core"]
 
+# 妙搭平台 (1 API)
+spark-core = []
+spark = ["spark-core", "core"]
+
 # === API版本支持 ===
 v1 = ["core"]
 v2 = ["v1"]
@@ -53,10 +57,10 @@ v4 = ["v3"]
 
 # === 功能组合 ===
 # 完整平台功能
-full = ["app-engine", "directory", "admin", "mdm", "tenant", "trust_party", "v4"]
+full = ["app-engine", "directory", "admin", "mdm", "tenant", "trust_party", "spark", "v4"]
 
 # 向后兼容别名
-platform = ["app-engine", "directory", "admin"]
+platform = ["app-engine", "directory", "admin", "spark"]
 all-platform = ["full"]
 
 [dependencies]

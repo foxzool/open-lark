@@ -39,6 +39,8 @@ pub struct SystemSettings {
 
 // API 端点定义
 pub mod api_endpoints;
+pub mod api_utils;
+pub mod constants;
 
 #[cfg(test)]
 mod tests {

@@ -59,6 +59,14 @@ impl PlatformService {
     pub fn admin(&self) -> crate::admin::AdminService {
         crate::admin::AdminService::new(self.config.clone())
     }
+
+    /// 妙搭平台服务
+    ///
+    /// 提供妙搭和开放平台用户 ID 转换等功能。
+    #[cfg(feature = "spark")]
+    pub fn spark(&self) -> crate::spark::SparkService {
+        crate::spark::SparkService::new(self.config.clone())
+    }
 }
 
 #[cfg(test)]

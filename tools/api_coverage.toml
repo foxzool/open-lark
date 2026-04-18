@@ -53,11 +53,11 @@ biz_tags = ["ai"]
 
 [crates.openlark-auth]
 src = "crates/openlark-auth/src"
-biz_tags = ["auth", "passport", "verification", "human_authentication"]
+biz_tags = ["auth", "passport", "verification_information", "human_authentication"]
 
 [crates.openlark-platform]
 src = "crates/openlark-platform/src"
-biz_tags = ["admin", "directory", "app_engine", "trust_party", "tenant", "mdm"]
+biz_tags = ["admin", "directory", "app_engine", "trust_party", "tenant", "mdm", "spark"]
 
 [crates.openlark-workflow]
 src = "crates/openlark-workflow/src"

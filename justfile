@@ -34,6 +34,16 @@ api-coverage:
   python3 tools/validate_apis.py --all-crates
   @echo "✅ Coverage reports generated in reports/api_validation/"
 
+# Regenerate crates.md from mapping + CSV
+update-crates-md:
+  @echo "📝 Regenerating crates.md..."
+  python3 tools/update_crates_md.py
+
+# Check crates.md is synced with mapping + CSV
+check-crates-md:
+  @echo "🔍 Checking crates.md sync..."
+  python3 tools/update_crates_md.py --check
+
 # Build release
 build-release:
   @echo "🚀 Building release..."

@@ -343,6 +343,8 @@ class APIValidator:
                 api.expected_file = self._generate_expected_file_path(api)
                 self.apis.append(api)
 
+        self._validate_csv_integrity()
+
         print(f"✅ 解析完成，共 {len(self.apis)} 个 API")
         if self.skip_old_versions and self.skipped_old_count > 0:
             print(f"   📋 已跳过 {self.skipped_old_count} 个旧版本 API")
@@ -360,6 +362,40 @@ class APIValidator:
         name_path = api.meta_name.replace(":", "_").rstrip("/")
         name_path = self._normalize_name_path(name_path)
         return f"{base}/{version}/{resource_path}/{name_path}.rs"
+
+    def _validate_csv_integrity(self) -> None:
+        """校验当前参与统计的 CSV 数据完整性。"""
+        issues: List[str] = []
+
+        unknown_apis = [
+            api
+            for api in self.apis
+            if api.biz_tag.strip().lower() == "unknown" or api.meta_project.strip().lower() == "unknown"
+        ]
+        if unknown_apis:
+            issues.append("unknown API rows detected:")
+            for api in unknown_apis[:10]:
+                issues.append(
+                    f"  - id={api.api_id} bizTag={api.biz_tag} meta.Project={api.meta_project} "
+                    f"expected_file={api.expected_file or '<empty>'}"
+                )
+
+        duplicates: Dict[str, List[APIInfo]] = defaultdict(list)
+        for api in self.apis:
+            if api.expected_file:
+                duplicates[api.expected_file].append(api)
+
+        duplicate_groups = [
+            (expected_file, apis) for expected_file, apis in duplicates.items() if len(apis) > 1
+        ]
+        if duplicate_groups:
+            issues.append("duplicate expected_file entries detected:")
+            for expected_file, apis in duplicate_groups[:10]:
+                issue_items = ", ".join(f"{api.api_id}:{api.name}" for api in apis)
+                issues.append(f"  - {expected_file} <- {issue_items}")
+
+        if issues:
+            raise ValueError("CSV integrity validation failed:\n" + "\n".join(issues))
 
     def scan_implementations(self) -> None:
         """扫描实际实现的文件"""
@@ -874,7 +910,11 @@ def main() -> int:
             with_timestamp,
             priority_model=priority_model,
         )
-        validator.parse_csv()
+        try:
+            validator.parse_csv()
+        except ValueError as exc:
+            print(f"❌ 错误: CSV 校验失败\n{exc}")
+            raise SystemExit(1) from exc
         validator.scan_implementations()
         validator.compare()
         return validator

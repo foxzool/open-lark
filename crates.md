@@ -19,14 +19,14 @@
 | `openlark-hr` | `hire`, `feishu_people`, `attendance`, `compensation_management`, `performance`, `payroll`, `okr`, `ehr` |
 | `openlark-security` | `acs`, `security_and_compliance` |
 | `openlark-ai` | `ai` |
-| `openlark-auth` | `auth`, `passport` |
-| `openlark-platform` | `admin`, `directory`, `app_engine` |
+| `openlark-auth` | `auth`, `passport`, `verification_information`, `human_authentication` |
+| `openlark-platform` | `admin`, `directory`, `app_engine`, `trust_party`, `tenant`, `mdm`, `spark` |
 | `openlark-workflow` | `task`, `approval`, `board` |
 | `openlark-analytics` | `search`, `report` |
 | `openlark-user` | `personal_settings` |
 | `openlark-mail` | `mail` |
 | `openlark-helpdesk` | `helpdesk` |
-| `openlark-application` | `application` |
+| `openlark-application` | `application`, `workplace` |
 
 ## bizTag API 数量（排除 meta.Version=old）
 
@@ -34,20 +34,20 @@
 
 | bizTag | API 数量（排除 old） | API 总数 | old 数量 |
 |---|---:|---:|---:|
-| `feishu_people` | 257 | 257 | 0 |
+| `feishu_people` | 262 | 262 | 0 |
 | `hire` | 182 | 182 | 0 |
-| `ccm` | 122 | 174 | 52 |
+| `ccm` | 122 | 171 | 49 |
 | `task` | 75 | 75 | 0 |
+| `contact` | 71 | 78 | 7 |
 | `im` | 71 | 75 | 4 |
-| `contact` | 70 | 77 | 7 |
 | `mail` | 67 | 67 | 0 |
 | `vc` | 56 | 56 | 0 |
+| `base` | 52 | 52 | 0 |
 | `helpdesk` | 50 | 50 | 0 |
-| `base` | 49 | 49 | 0 |
 | `app_engine` | 48 | 48 | 0 |
 | `calendar` | 44 | 44 | 0 |
 | `attendance` | 39 | 39 | 0 |
-| `approval` | 29 | 52 | 23 |
+| `approval` | 31 | 54 | 23 |
 | `application` | 27 | 32 | 5 |
 | `baike` | 27 | 27 | 0 |
 | `ai` | 23 | 23 | 0 |
@@ -58,11 +58,11 @@
 | `search` | 15 | 15 | 0 |
 | `acs` | 14 | 14 | 0 |
 | `admin` | 14 | 14 | 0 |
+| `security_and_compliance` | 13 | 13 | 0 |
 | `okr` | 12 | 12 | 0 |
 | `payroll` | 12 | 12 | 0 |
 | `auth` | 10 | 11 | 1 |
 | `cardkit` | 10 | 10 | 0 |
-| `security_and_compliance` | 8 | 8 | 0 |
 | `board` | 6 | 6 | 0 |
 | `personal_settings` | 6 | 6 | 0 |
 | `trust_party` | 5 | 5 | 0 |
@@ -76,11 +76,10 @@
 | `event` | 1 | 1 | 0 |
 | `human_authentication` | 1 | 4 | 3 |
 | `moments` | 1 | 1 | 0 |
+| `spark` | 1 | 1 | 0 |
 | `verification_information` | 1 | 1 | 0 |
 | `meeting_room` | 0 | 17 | 17 |
-| `pay` | 0 | 3 | 3 |
-| `unknown` | 0 | 1 | 1 |
-| **合计** | 1456 | 1572 | 116 |
+| **合计** | 1473 | 1582 | 109 |
 
 ## 工具用法
 
@@ -93,7 +92,7 @@
 
 | `open-lark` feature | 依赖的 workspace crate | 对应 bizTag |
 |---|---|---|
-| `auth` | `openlark-auth` | `auth`, `passport` |
+| `auth` | `openlark-auth` | `auth`, `passport`, `verification_information`, `human_authentication` |
 | `communication` | `openlark-communication` | `im`, `contact`, `moments`, `aily`, `event` |
 | `cardkit` | `openlark-cardkit` | `cardkit` |
 | `docs` / `base` / `bitable` | `openlark-docs` | `ccm`, `base`, `baike`, `minutes` |
@@ -101,9 +100,9 @@
 | `security` | `openlark-security` | `acs`, `security_and_compliance` |
 | `meeting` | `openlark-meeting` | `calendar`, `vc`, `meeting_room` |
 | `workflow` | `openlark-workflow` | `task`, `approval`, `board` |
-| `platform` | `openlark-platform` | `admin`, `directory`, `app_engine` |
+| `platform` | `openlark-platform` | `admin`, `directory`, `app_engine`, `trust_party`, `tenant`, `mdm`, `spark` |
 | `analytics` | `openlark-analytics` | `search`, `report` |
 | `user` | `openlark-user` | `personal_settings` |
 | `helpdesk` | `openlark-helpdesk` | `helpdesk` |
 | `mail` | `openlark-mail` | `mail` |
-| `application` | `openlark-application` | `application` |
+| `application` | `openlark-application` | `application`, `workplace` |
