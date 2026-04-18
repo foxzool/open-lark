@@ -1,5 +1,8 @@
 //! 修改勋章授予名单 API
 
+// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
+#![allow(missing_docs)]
+
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,

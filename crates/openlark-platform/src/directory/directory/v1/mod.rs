@@ -2,20 +2,24 @@
 //!
 //! 提供目录服务 V1 版本的 API 访问
 
-// 现存版本化 API 面较大，统一文档补齐前先在模块边界抑制 missing_docs 噪声，
-// 避免影响 crate 级质量门禁。
-#![allow(missing_docs)]
-
 use crate::PlatformConfig;
 use std::sync::Arc;
 
+/// 可搜可见规则接口。
 pub mod collaboration_rule;
+/// 关联组织共享实体查询接口。
 pub mod collaboration_share_entity;
+/// 关联组织列表接口。
 pub mod collaboration_tenant;
+/// 部门写操作与查询接口。
 pub mod department;
+/// 部门兼容 facade。
 pub mod departments;
+/// 员工写操作与查询接口。
 pub mod employee;
+/// 同步相关接口。
 pub mod sync;
+/// 用户兼容 facade。
 pub mod users;
 
 /// 目录服务 V1 API

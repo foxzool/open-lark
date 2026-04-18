@@ -17,6 +17,7 @@ pub struct UsersApi {
 }
 
 impl UsersApi {
+    /// 创建新的用户管理 facade。
     pub fn new(config: Arc<PlatformConfig>) -> Self {
         Self { config }
     }

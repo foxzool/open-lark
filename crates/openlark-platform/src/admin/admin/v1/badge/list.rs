@@ -2,6 +2,9 @@
 //!
 //! API文档: https://open.feishu.cn/document/server-docs/admin-v1/badge/badge/list
 
+// 历史批量 API 面尚未逐项补齐文档，先局部抑制 missing_docs 噪声。
+#![allow(missing_docs)]
+
 use crate::common::api_endpoints::AdminApiV1;
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},

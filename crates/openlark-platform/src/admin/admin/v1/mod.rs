@@ -1,21 +1,26 @@
-//! Admin V1 module
-
-// 现存版本化 API 面较大，统一文档补齐前先在模块边界抑制 missing_docs 噪声，
-// 避免影响 crate 级质量门禁。
-#![allow(missing_docs)]
+//! 管理后台 V1 API
+//!
+//! 提供管理后台 V1 版本的 API 访问。
 
 use crate::PlatformConfig;
 use std::sync::Arc;
 
+/// 部门维度统计接口。
 pub mod admin_dept_stat;
+/// 用户维度统计接口。
 pub mod admin_user_stat;
+/// 审计兼容 facade。
 pub mod audit;
+/// 勋章管理接口。
 pub mod badge;
+/// 勋章图片上传接口。
 pub mod badge_image;
+/// 密码重置接口。
 pub mod password;
+/// 用户管理兼容 facade。
 pub mod users;
 
-/// Admin V1 API
+/// 管理后台 V1 API
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct AdminV1 {
@@ -23,6 +28,7 @@ pub struct AdminV1 {
 }
 
 impl AdminV1 {
+    /// 创建新的管理后台 V1 实例。
     pub fn new(config: Arc<PlatformConfig>) -> Self {
         Self { config }
     }

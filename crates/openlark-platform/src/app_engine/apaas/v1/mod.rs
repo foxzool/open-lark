@@ -2,20 +2,24 @@
 //!
 //! 提供 aPaaS V1 版本的 API 访问
 
-// 现存版本化 API 面较大，统一文档补齐前先在模块边界抑制 missing_docs 噪声，
-// 避免影响 crate 级质量门禁。
-#![allow(missing_docs)]
-
 use crate::PlatformConfig;
 use std::sync::Arc;
 
+/// 应用列表与基础信息接口。
 pub mod app;
+/// 应用级对象、函数与环境变量接口。
 pub mod application;
+/// 审批实例查询与取消接口。
 pub mod approval_instance;
+/// 审批任务处理接口。
 pub mod approval_task;
+/// 席位活跃度查询接口。
 pub mod seat_activity;
+/// 席位分配查询接口。
 pub mod seat_assignment;
+/// 用户任务处理接口。
 pub mod user_task;
+/// 工作空间数据与元数据接口。
 pub mod workspace;
 
 /// aPaaS V1 API
@@ -26,6 +30,7 @@ pub struct ApaasV1 {
 }
 
 impl ApaasV1 {
+    /// 创建新的 aPaaS V1 实例。
     pub fn new(config: Arc<PlatformConfig>) -> Self {
         Self { config }
     }
