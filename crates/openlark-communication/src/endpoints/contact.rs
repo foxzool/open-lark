@@ -77,6 +77,7 @@ pub const CONTACT_V3_WORK_CITIES: &str = "/open-apis/contact/v3/work_cities";
 pub const CONTACT_V3_USERS: &str = "/open-apis/contact/v3/users";
 pub const CONTACT_V3_USER: &str = "/open-apis/contact/v3/users/{user_id}";
 pub const CONTACT_V3_USERS_BATCH: &str = "/open-apis/contact/v3/users/batch";
+pub const CONTACT_V3_USERS_BASIC_BATCH: &str = "/open-apis/contact/v3/users/basic_batch";
 pub const CONTACT_V3_USERS_FIND_BY_DEPARTMENT: &str =
     "/open-apis/contact/v3/users/find_by_department";
 pub const CONTACT_V3_USERS_BATCH_GET_ID: &str = "/open-apis/contact/v3/users/batch_get_id";
@@ -118,6 +119,7 @@ mod tests {
         assert!(CONTACT_V3_FUNCTIONAL_ROLES.contains("functional_roles"));
         assert!(CONTACT_V3_GROUP.contains("group"));
         assert!(CONTACT_V3_USERS.contains("users"));
+        assert!(CONTACT_V3_USERS_BASIC_BATCH.ends_with("basic_batch"));
         assert!(CONTACT_V3_JOB_LEVELS.contains("job_levels"));
         assert!(CONTACT_V3_JOB_FAMILIES.contains("job_families"));
         assert!(CONTACT_V3_WORK_CITIES.contains("work_cities"));

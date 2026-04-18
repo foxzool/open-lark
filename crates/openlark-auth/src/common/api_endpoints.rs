@@ -79,9 +79,27 @@ impl OAuthApiOld {
     }
 }
 
+/// Human Authentication V1 API 端点枚举
+#[derive(Debug, Clone)]
+pub enum HumanAuthenticationApiV1 {
+    /// 录入身份信息
+    IdentityCreate,
+}
+
+impl HumanAuthenticationApiV1 {
+    /// 获取对应的 API 路径
+    pub fn path(&self) -> &'static str {
+        match self {
+            HumanAuthenticationApiV1::IdentityCreate => {
+                "/open-apis/human_authentication/v1/identities"
+            }
+        }
+    }
+}
+
 /// 模块导出
 pub mod prelude {
-    pub use super::{AuthApiV3, AuthenApiV1, OAuthApiOld, PassportApiV1};
+    pub use super::{AuthApiV3, AuthenApiV1, HumanAuthenticationApiV1, OAuthApiOld, PassportApiV1};
 }
 
 /// Passport V1 API 端点枚举

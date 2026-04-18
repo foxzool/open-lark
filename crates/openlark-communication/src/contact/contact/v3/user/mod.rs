@@ -1,6 +1,7 @@
 //! 用户（user）
 //!
 
+pub mod basic_batch;
 pub mod batch;
 pub mod batch_get_id;
 pub mod create;

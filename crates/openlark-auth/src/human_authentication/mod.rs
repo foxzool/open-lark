@@ -2,4 +2,8 @@
 //!
 //! 提供人脸/实名认证相关 API
 
-pub mod v1;
+#![allow(clippy::module_inception)]
+
+mod human_authentication;
+
+pub use human_authentication::v1;

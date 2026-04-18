@@ -2,6 +2,7 @@
 //!
 //! 遵循飞书开放平台 API 规范的任务管理接口。
 
+pub mod attachment;
 pub mod custom_field;
 pub mod task;
 pub mod tasklist;
@@ -11,17 +12,32 @@ pub mod comment;
 // 重新导出所有子模块
 // custom_field 模块显式导出
 pub use custom_field::{
+    AddCustomFieldRequest,
+    CreateCustomFieldRequest,
+    CreateCustomFieldOptionRequest, GetCustomFieldRequest, ListCustomFieldsRequest,
     PatchCustomFieldBody,
     PatchCustomFieldRequest,
     PatchCustomFieldResponse,
+    RemoveCustomFieldRequest,
+    UpdateCustomFieldOptionRequest,
 };
+// attachment 模块显式导出
+pub use attachment::{DeleteAttachmentRequest, GetAttachmentRequest, ListAttachmentsRequest};
 // task 模块显式导出
 pub use task::{};
+pub use task::{GetTaskRequest, GetTaskTasklistsRequest, ListSubtasksRequest, ListTasksRequest};
 // tasklist 模块显式导出
-pub use tasklist::{};
+pub use tasklist::{GetTasklistRequest, GetTasklistTasksRequest, ListTasklistsRequest};
 // section 模块显式导出
 pub use section::{};
+pub use section::{GetSectionRequest, GetSectionTasksRequest, ListSectionsRequest};
 // comment 模块显式导出
 pub use comment::{
+    CreateCommentRequest,
+    DeleteCommentRequest,
+    GetCommentRequest,
+    GetCommentResponse,
+    ListCommentsRequest,
+    ListCommentsResponse,
     PatchCommentRequest,
 };
