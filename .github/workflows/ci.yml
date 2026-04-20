@@ -180,3 +180,52 @@ jobs:
           else
             cargo clippy --no-default-features --features "${{ matrix.features }}" --lib -- -D warnings
           fi
+
+  # MSRV 检查 (Minimum Supported Rust Version)
+  msrv:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: 1.75
+      - uses: Swatinem/rust-cache@v2
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          version: 23.4
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check MSRV build
+        run: cargo check --workspace --all-features
+
+  # 安全审计检查
+  security-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+      - uses: Swatinem/rust-cache@v2
+      - name: Install cargo-deny
+        uses: taiki-e/install-action@cargo-deny
+      - name: Run cargo-deny check
+        run: cargo deny check
+
+  # 未使用依赖检查
+  unused-deps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: true  # 允许失败，因为可能有误报
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+      - uses: Swatinem/rust-cache@v2
+      - name: Install cargo-machete
+        uses: taiki-e/install-action@cargo-machete
+      - name: Check unused dependencies
+        run: cargo machete

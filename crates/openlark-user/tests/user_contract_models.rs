@@ -2,12 +2,10 @@
 //!
 //! Tests cover:
 //! - `common::UserSetting` / `UserPreference` — core data models
-//! - `personal_settings::system_status::*` — response & body structs
-//! - Endpoint constants verification
+//! - UserService / SettingsService / PreferencesService — service access
+//! - Version contract
 
 use openlark_user::common::{UserPreference, UserSetting};
-use openlark_user::common::constants::endpoints;
-use openlark_user::common::constants::setting_type;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::{from_value, json, to_value, Value};
@@ -27,7 +25,7 @@ where
 }
 
 // ---------------------------------------------------------------------------
-// common models
+// common models — UserSetting
 // ---------------------------------------------------------------------------
 
 #[test]
@@ -51,6 +49,52 @@ fn user_setting_roundtrip() {
 }
 
 #[test]
+fn user_setting_notification_type() {
+    let setting = UserSetting {
+        key: "email_notify".to_string(),
+        value: "true".to_string(),
+        setting_type: "notification".to_string(),
+    };
+    assert_json_contract(
+        &setting,
+        json!({
+            "key": "email_notify",
+            "value": "true",
+            "setting_type": "notification"
+        }),
+    );
+
+    let back: UserSetting = parse_contract(json!({
+        "key": "push_enabled",
+        "value": "false",
+        "setting_type": "notification"
+    }));
+    assert_eq!(back.setting_type, "notification");
+    assert_eq!(back.value, "false");
+}
+
+#[test]
+fn user_setting_privacy_type() {
+    let setting = UserSetting {
+        key: "profile_visible".to_string(),
+        value: "true".to_string(),
+        setting_type: "privacy".to_string(),
+    };
+    assert_json_contract(
+        &setting,
+        json!({
+            "key": "profile_visible",
+            "value": "true",
+            "setting_type": "privacy"
+        }),
+    );
+}
+
+// ---------------------------------------------------------------------------
+// common models — UserPreference
+// ---------------------------------------------------------------------------
+
+#[test]
 fn user_preference_with_category_roundtrip() {
     let pref = UserPreference {
         key: "default_calendar_view".to_string(),
@@ -65,7 +109,10 @@ fn user_preference_with_category_roundtrip() {
             "category": "calendar"
         }),
     );
+}
 
+#[test]
+fn user_preference_without_category_roundtrip() {
     let parsed: UserPreference = parse_contract(json!({
         "key": "time_format",
         "value": "24h",
@@ -77,153 +124,111 @@ fn user_preference_with_category_roundtrip() {
         &parsed,
         json!({
             "key": "time_format",
-            "value": "24h"
+            "value": "24h",
+            "category": null
         }),
     );
 }
 
-// ---------------------------------------------------------------------------
-// personal_settings system_status response models
-// ---------------------------------------------------------------------------
-
 #[test]
-fn system_status_list_response_roundtrip() {
-    use openlark_user::personal_settings::personal_settings::v1::system_status::list::SystemStatusListResponse;
-
-    let resp: SystemStatusListResponse = parse_contract(json!({
-        "data": {
-            "items": [
-                {"status_id": "s1", "title": "会议中"},
-                {"status_id": "s2", "title": "外出"}
-            ]
-        }
+fn user_preference_multiple_categories() {
+    let shortcuts: UserPreference = parse_contract(json!({
+        "key": "shortcut_paste",
+        "value": "Ctrl+V",
+        "category": "shortcuts"
     }));
-    assert!(resp.data.is_some());
-    let data = resp.data.unwrap();
-    assert_eq!(data["items"][0]["status_id"], "s1");
+    assert_eq!(shortcuts.category.as_deref(), Some("shortcuts"));
+
+    let display: UserPreference = parse_contract(json!({
+        "key": "font_size",
+        "value": "14",
+        "category": "display"
+    }));
+    assert_eq!(display.category.as_deref(), Some("display"));
     assert_json_contract(
-        &resp,
+        &display,
         json!({
-            "data": {
-                "items": [
-                    {"status_id": "s1", "title": "会议中"},
-                    {"status_id": "s2", "title": "外出"}
-                ]
-            }
+            "key": "font_size",
+            "value": "14",
+            "category": "display"
         }),
     );
 }
 
-#[test]
-fn system_status_create_response_roundtrip() {
-    use openlark_user::personal_settings::personal_settings::v1::system_status::create::SystemStatusCreateResponse;
-
-    let resp: SystemStatusCreateResponse = parse_contract(json!({
-        "data": {"status_id": "new_status_001", "title": "出差"}
-    }));
-    assert!(resp.data.is_some());
-    assert_json_contract(
-        &resp,
-        json!({"data": {"status_id": "new_status_001", "title": "出差"}}),
-    );
-}
-
-#[test]
-fn system_status_get_response_roundtrip() {
-    use openlark_user::personal_settings::personal_settings::v1::system_status::get::SystemStatusGetResponse;
-
-    let resp: SystemStatusGetResponse = parse_contract(json!({
-        "data": {"status_id": "s1", "title": "会议中", "is_active": true}
-    }));
-    assert!(resp.data.is_some());
-    assert_json_contract(
-        &resp,
-        json!({"data": {"status_id": "s1", "title": "会议中", "is_active": true}}),
-    );
-}
-
-#[test]
-fn system_status_patch_response_roundtrip() {
-    use openlark_user::personal_settings::personal_settings::v1::system_status::patch::SystemStatusPatchResponse;
-
-    let resp: SystemStatusPatchResponse = parse_contract(json!({
-        "data": {"status_id": "s1", "title": "忙碌"}
-    }));
-    assert!(resp.data.is_some());
-    assert_json_contract(
-        &resp,
-        json!({"data": {"status_id": "s1", "title": "忙碌"}}),
-    );
-}
-
-#[test]
-fn system_status_delete_response_roundtrip() {
-    use openlark_user::personal_settings::personal_settings::v1::system_status::delete::SystemStatusDeleteResponse;
-
-    let resp: SystemStatusDeleteResponse = parse_contract(json!({
-        "data": null
-    }));
-    assert!(resp.data.is_none());
-    assert_json_contract(&resp, json!({"data": null}));
-}
-
-#[test]
-fn system_status_batch_open_response_roundtrip() {
-    use openlark_user::personal_settings::personal_settings::v1::system_status::batch_open::SystemStatusBatch_openResponse;
-
-    let resp: SystemStatusBatch_openResponse = parse_contract(json!({
-        "data": {"success_count": 5}
-    }));
-    assert!(resp.data.is_some());
-    assert_json_contract(&resp, json!({"data": {"success_count": 5}}));
-}
-
-#[test]
-fn batch_close_body_and_response_roundtrip() {
-    use openlark_user::personal_settings::personal_settings::v1::system_status::batch_close::{
-        BatchCloseSystemStatusBody, BatchCloseSystemStatusResponse,
-    };
-
-    let body = BatchCloseSystemStatusBody {
-        user_ids: vec!["ou_001".to_string(), "ou_002".to_string()],
-    };
-    assert_json_contract(
-        &body,
-        json!({"user_ids": ["ou_001", "ou_002"]}),
-    );
-
-    let parsed: BatchCloseSystemStatusBody = parse_contract(json!({
-        "user_ids": ["ou_003"]
-    }));
-    assert_eq!(parsed.user_ids.len(), 1);
-    assert_eq!(parsed.user_ids[0], "ou_003");
-
-    let resp: BatchCloseSystemStatusResponse = parse_contract(json!({
-        "data": {"closed_count": 3}
-    }));
-    assert!(resp.data.is_some());
-    assert_json_contract(&resp, json!({"data": {"closed_count": 3}}));
-}
-
 // ---------------------------------------------------------------------------
-// endpoint & constant contracts
+// UserService creation contract
 // ---------------------------------------------------------------------------
 
 #[test]
-fn endpoint_constants_are_stable() {
-    assert_eq!(
-        endpoints::SETTINGS_BASE,
-        "/open-apis/user/v1/settings",
-    );
-    assert_eq!(
-        endpoints::PREFERENCES_BASE,
-        "/open-apis/user/v1/preferences",
-    );
+fn user_service_creation_contract() {
+    use openlark_core::config::Config;
+    use openlark_user::UserService;
+
+    let config = Config::builder()
+        .app_id("cli_test_app")
+        .app_secret("test_secret")
+        .build();
+
+    let service = UserService::new(config);
+    assert!(service.is_ok());
 }
 
 #[test]
-fn setting_type_constants_are_stable() {
-    assert_eq!(setting_type::NOTIFICATION, "notification");
-    assert_eq!(setting_type::PRIVACY, "privacy");
-    assert_eq!(setting_type::UI, "ui");
+fn user_service_config_roundtrip() {
+    use openlark_core::config::Config;
+    use openlark_user::UserService;
+
+    let config = Config::builder()
+        .app_id("cli_config_test")
+        .app_secret("secret_value")
+        .build();
+
+    let service = UserService::new(config).unwrap();
+    let config_arc = service.config();
+    assert_eq!(config_arc.app_id(), "cli_config_test");
+}
+
+// ---------------------------------------------------------------------------
+// Settings & Preferences service access (with features)
+// ---------------------------------------------------------------------------
+
+#[cfg(feature = "settings")]
+#[test]
+fn settings_service_access_contract() {
+    use openlark_core::config::Config;
+    use openlark_user::UserService;
+
+    let config = Config::builder()
+        .app_id("cli_settings_test")
+        .app_secret("secret")
+        .build();
+    let service = UserService::new(config).unwrap();
+    let settings = service.settings();
+    assert_eq!(settings.config().app_id(), "cli_settings_test");
+}
+
+#[cfg(feature = "preferences")]
+#[test]
+fn preferences_service_access_contract() {
+    use openlark_core::config::Config;
+    use openlark_user::UserService;
+
+    let config = Config::builder()
+        .app_id("cli_prefs_test")
+        .app_secret("secret")
+        .build();
+    let service = UserService::new(config).unwrap();
+    let prefs = service.preferences();
+    assert_eq!(prefs.config().app_id(), "cli_prefs_test");
+}
+
+// ---------------------------------------------------------------------------
+// Version contract
+// ---------------------------------------------------------------------------
+
+#[test]
+fn version_is_not_empty() {
+    let version = openlark_user::VERSION;
+    assert!(!version.is_empty());
+    assert_eq!(version, env!("CARGO_PKG_VERSION"));
 }

@@ -1,178 +1,248 @@
-//! OpenLark Protocol 契约测试
+//! WebSocket 协议消息结构的契约测试。
 //!
-//! 测试 WebSocket 协议模块的主要数据模型序列化/反序列化契约。
+//! 验证 protobuf 生成的 Header / Frame 结构体在 prost 编解码过程中的双向一致性。
 
-use serde::{de::DeserializeOwned, Serialize};
-use serde_json::{from_value, json, to_value, Value};
+use openlark_protocol::pbbp2::{Frame, Header};
+use prost::Message;
 
-fn assert_json_contract<T>(value: &T, expected: Value)
+fn assert_encode_decode_roundtrip<T>(original: &T)
 where
-    T: Serialize,
+    T: Message + PartialEq + std::fmt::Debug + Default,
 {
-    assert_eq!(to_value(value).unwrap(), expected);
+    let bytes = original.encode_to_vec();
+    let decoded = T::decode(bytes.as_slice()).expect("解码不应失败");
+    assert_eq!(original, &decoded, "编解码往返后结构体应一致");
 }
 
-fn parse_contract<T>(payload: Value) -> T
+fn encode_contract<T>(value: &T, expected: &[u8])
 where
-    T: DeserializeOwned,
+    T: Message,
 {
-    from_value(payload).unwrap()
+    let bytes = value.encode_to_vec();
+    assert_eq!(bytes, expected, "编码结果应与预期字节一致");
+}
+
+fn decode_contract<T>(payload: &[u8]) -> T
+where
+    T: Message + Default,
+{
+    T::decode(payload).expect("解码不应失败")
 }
 
 #[test]
-fn test_json_serialization_contracts() {
-    let test_data = json!({
-        "msg_type": "text",
-        "content": "Hello"
-    });
-
-    let serialized = to_value(&test_data).unwrap();
-    let deserialized: Value = parse_contract(serialized.clone());
-    assert_eq!(serialized, deserialized);
+fn header_roundtrip() {
+    let header = Header {
+        key: "content-type".to_string(),
+        value: "application/json".to_string(),
+    };
+    assert_encode_decode_roundtrip(&header);
 }
 
 #[test]
-fn test_websocket_frame_contract() {
-    let frame = json!({
-        "frame_type": "message",
-        "version": 1,
-        "payload": {
-            "event_type": "message.receive_v1",
-            "token": "token_123",
-            "app_id": "app_456",
-            "tenant_key": "tenant_789"
-        }
-    });
-
-    let parsed: Value = parse_contract(frame.clone());
-    assert_eq!(parsed["frame_type"], "message");
-    assert_eq!(parsed["version"], 1);
-    assert_json_contract(&parsed, frame);
+fn header_encode_decode_contract() {
+    let header = Header {
+        key: "x-request-id".to_string(),
+        value: "req-abc-123".to_string(),
+    };
+    let bytes = header.encode_to_vec();
+    let decoded: Header = decode_contract(&bytes);
+    assert_eq!(decoded.key, "x-request-id");
+    assert_eq!(decoded.value, "req-abc-123");
+    encode_contract(&decoded, &bytes);
 }
 
 #[test]
-fn test_event_message_contract() {
-    let event = json!({
-        "schema": "2.0",
-        "header": {
-            "event_id": "event_123",
-            "event_type": "im.message.receive_v1",
-            "token": "token_456",
-            "app_id": "app_789",
-            "tenant_key": "tenant_abc",
-            "create_time": "1234567890000"
-        },
-        "event": {
-            "message": {
-                "message_id": "msg_123",
-                "root_id": "root_456",
-                "parent_id": "parent_789",
-                "create_time": "1234567890000",
-                "chat_id": "chat_abc",
-                "chat_type": "p2p",
-                "message_type": "text",
-                "content": "{\"text\":\"Hello\"}",
-                "mentions": []
+fn header_empty_values() {
+    let header = Header {
+        key: String::new(),
+        value: String::new(),
+    };
+    assert_encode_decode_roundtrip(&header);
+}
+
+#[test]
+fn header_unicode_values() {
+    let header = Header {
+        key: "飞书头".to_string(),
+        value: "值=测试&编码".to_string(),
+    };
+    assert_encode_decode_roundtrip(&header);
+}
+
+#[test]
+fn frame_minimal_roundtrip() {
+    let frame = Frame {
+        seq_id: 1,
+        log_id: 100,
+        service: 1,
+        method: 1,
+        headers: vec![],
+        payload_encoding: None,
+        payload_type: None,
+        payload: None,
+        log_id_new: None,
+    };
+    assert_encode_decode_roundtrip(&frame);
+}
+
+#[test]
+fn frame_full_fields_roundtrip() {
+    let frame = Frame {
+        seq_id: 42,
+        log_id: 999,
+        service: 5,
+        method: 10,
+        headers: vec![
+            Header {
+                key: "authorization".to_string(),
+                value: "Bearer token_xxx".to_string(),
             },
-            "sender": {
-                "sender_id": {
-                    "union_id": "union_123",
-                    "user_id": "user_456",
-                    "open_id": "ou_789"
-                },
-                "sender_type": "user",
-                "tenant_key": "tenant_abc"
-            }
-        }
-    });
-
-    let parsed: Value = parse_contract(event.clone());
-    assert_eq!(parsed["schema"], "2.0");
-    assert_eq!(parsed["header"]["event_type"], "im.message.receive_v1");
-    assert_json_contract(&parsed, event);
+            Header {
+                key: "x-custom".to_string(),
+                value: "自定义值".to_string(),
+            },
+        ],
+        payload_encoding: Some("gzip".to_string()),
+        payload_type: Some("application/json".to_string()),
+        payload: Some(b"{\"event\":\"message\"}".to_vec()),
+        log_id_new: Some("log-new-001".to_string()),
+    };
+    assert_encode_decode_roundtrip(&frame);
 }
 
 #[test]
-fn test_challenge_request_contract() {
-    let challenge = json!({
-        "challenge": "challenge_token_123",
-        "token": "verification_token_456",
-        "type": "url_verification"
-    });
-
-    let parsed: Value = parse_contract(challenge.clone());
-    assert_eq!(parsed["type"], "url_verification");
-    assert_json_contract(&parsed, challenge);
+fn frame_with_headers_contract() {
+    let frame = Frame {
+        seq_id: 100,
+        log_id: 200,
+        service: 3,
+        method: 7,
+        headers: vec![Header {
+            key: "content-type".to_string(),
+            value: "text/plain".to_string(),
+        }],
+        payload_encoding: None,
+        payload_type: Some("text/plain".to_string()),
+        payload: Some(b"hello".to_vec()),
+        log_id_new: None,
+    };
+    let bytes = frame.encode_to_vec();
+    let decoded: Frame = decode_contract(&bytes);
+    assert_eq!(decoded.seq_id, 100);
+    assert_eq!(decoded.log_id, 200);
+    assert_eq!(decoded.service, 3);
+    assert_eq!(decoded.method, 7);
+    assert_eq!(decoded.headers.len(), 1);
+    assert_eq!(decoded.headers[0].key, "content-type");
+    assert_eq!(decoded.headers[0].value, "text/plain");
+    assert_eq!(decoded.payload_type.as_deref(), Some("text/plain"));
+    assert_eq!(decoded.payload.as_deref(), Some(b"hello".as_slice()));
+    assert!(decoded.payload_encoding.is_none());
+    assert!(decoded.log_id_new.is_none());
 }
 
 #[test]
-fn test_challenge_response_contract() {
-    let response = json!({
-        "challenge": "challenge_token_123"
-    });
-
-    let parsed: Value = parse_contract(response.clone());
-    assert_eq!(parsed["challenge"], "challenge_token_123");
-    assert_json_contract(&parsed, response);
+fn frame_empty_payload_roundtrip() {
+    let frame = Frame {
+        seq_id: 0,
+        log_id: 0,
+        service: 0,
+        method: 0,
+        headers: vec![],
+        payload_encoding: None,
+        payload_type: None,
+        payload: Some(vec![]),
+        log_id_new: None,
+    };
+    assert_encode_decode_roundtrip(&frame);
 }
 
 #[test]
-fn test_pong_response_contract() {
-    let pong = json!({
-        "type": "pong",
-        "timestamp": 1234567890
-    });
-
-    let parsed: Value = parse_contract(pong.clone());
-    assert_eq!(parsed["type"], "pong");
-    assert_json_contract(&parsed, pong);
+fn frame_large_seq_and_log_id() {
+    let frame = Frame {
+        seq_id: u64::MAX,
+        log_id: u64::MAX,
+        service: i32::MAX,
+        method: i32::MIN,
+        headers: vec![],
+        payload_encoding: None,
+        payload_type: None,
+        payload: None,
+        log_id_new: None,
+    };
+    let bytes = frame.encode_to_vec();
+    let decoded: Frame = decode_contract(&bytes);
+    assert_eq!(decoded.seq_id, u64::MAX);
+    assert_eq!(decoded.log_id, u64::MAX);
+    assert_eq!(decoded.service, i32::MAX);
+    assert_eq!(decoded.method, i32::MIN);
 }
 
 #[test]
-fn test_ping_request_contract() {
-    let ping = json!({
-        "type": "ping",
-        "timestamp": 1234567890
-    });
-
-    let parsed: Value = parse_contract(ping.clone());
-    assert_eq!(parsed["type"], "ping");
-    assert_json_contract(&parsed, ping);
+fn frame_binary_payload_roundtrip() {
+    let binary_data: Vec<u8> = (0..=255).collect();
+    let frame = Frame {
+        seq_id: 1,
+        log_id: 1,
+        service: 1,
+        method: 1,
+        headers: vec![],
+        payload_encoding: Some("none".to_string()),
+        payload_type: Some("application/octet-stream".to_string()),
+        payload: Some(binary_data.clone()),
+        log_id_new: None,
+    };
+    assert_encode_decode_roundtrip(&frame);
+    let bytes = frame.encode_to_vec();
+    let decoded: Frame = decode_contract(&bytes);
+    assert_eq!(decoded.payload.as_deref(), Some(binary_data.as_slice()));
 }
 
 #[test]
-fn test_message_content_text_contract() {
-    let content = json!({
-        "text": "Hello World"
-    });
-
-    let parsed: Value = parse_contract(content.clone());
-    assert_eq!(parsed["text"], "Hello World");
-    assert_json_contract(&parsed, content);
+fn frame_log_id_new_field() {
+    let frame = Frame {
+        seq_id: 1,
+        log_id: 50,
+        service: 1,
+        method: 1,
+        headers: vec![],
+        payload_encoding: None,
+        payload_type: None,
+        payload: None,
+        log_id_new: Some("log-id-new-uuid-xxx".to_string()),
+    };
+    let bytes = frame.encode_to_vec();
+    let decoded: Frame = decode_contract(&bytes);
+    assert_eq!(
+        decoded.log_id_new.as_deref(),
+        Some("log-id-new-uuid-xxx")
+    );
 }
 
 #[test]
-fn test_message_content_image_contract() {
-    let content = json!({
-        "image_key": "img_123"
-    });
-
-    let parsed: Value = parse_contract(content.clone());
-    assert_eq!(parsed["image_key"], "img_123");
-    assert_json_contract(&parsed, content);
-}
-
-#[test]
-fn test_error_response_contract() {
-    let error_response = json!({
-        "code": 400,
-        "msg": "Invalid WebSocket frame",
-        "error": {
-            "log_id": "log_123"
-        }
-    });
-
-    let parsed: Value = parse_contract(error_response.clone());
-    assert_eq!(parsed["code"], 400);
-    assert_json_contract(&parsed, error_response);
+fn frame_multiple_headers_ordering() {
+    let headers: Vec<Header> = (0..10)
+        .map(|i| Header {
+            key: format!("key-{i}"),
+            value: format!("value-{i}"),
+        })
+        .collect();
+    let frame = Frame {
+        seq_id: 1,
+        log_id: 1,
+        service: 1,
+        method: 1,
+        headers: headers.clone(),
+        payload_encoding: None,
+        payload_type: None,
+        payload: None,
+        log_id_new: None,
+    };
+    let bytes = frame.encode_to_vec();
+    let decoded: Frame = decode_contract(&bytes);
+    assert_eq!(decoded.headers.len(), 10);
+    for (i, h) in decoded.headers.iter().enumerate() {
+        assert_eq!(h.key, format!("key-{i}"));
+        assert_eq!(h.value, format!("value-{i}"));
+    }
 }
