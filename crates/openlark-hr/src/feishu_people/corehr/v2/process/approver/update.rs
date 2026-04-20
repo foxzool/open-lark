@@ -90,7 +90,9 @@ pub struct UpdateResponse {
     /// 响应数据
     ///
     /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// process信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub process: Option<Value>,
 }
 
 impl ApiResponseTrait for UpdateResponse {

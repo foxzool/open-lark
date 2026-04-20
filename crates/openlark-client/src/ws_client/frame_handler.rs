@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 use std::time::Instant;
 
 use super::{ClientConfig, WsEvent};
-// use openlark_core::event::dispatcher::EventDispatcherHandler; // TODO: 需要实现 event 模块
 
 // 导入 client.rs 中的 EventDispatcherHandler
 use super::client::EventDispatcherHandler;
@@ -227,7 +226,6 @@ impl NewWsResponse {
 mod tests {
     use super::*;
     use crate::ws_client::EventHandler;
-    // use crate::event::dispatcher::EventDispatcherHandler; // TODO: 需要实现 event 模块
     use lark_websocket_protobuf::pbbp2::Header;
     use std::sync::atomic::{AtomicUsize, Ordering};
     use std::sync::Arc;

@@ -69,7 +69,9 @@ pub struct DeleteResponse {
     /// 响应数据
     ///
     /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// 操作结果
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<Value>,
 }
 
 impl ApiResponseTrait for DeleteResponse {
