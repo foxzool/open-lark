@@ -320,11 +320,9 @@ impl GetAccessPhotoBuilder {
 }
 
 /// 获取应用访问令牌的辅助函数
-async fn get_app_token(_config: &crate::models::SecurityConfig) -> crate::SecurityResult<String> {
-    // 这里应该调用认证服务获取应用访问令牌
-    // 为了简化实现，暂时返回占位符
-    // TODO: 集成 openlark-auth 服务
-    Ok("placeholder_app_token".to_string())
+async fn get_app_token(config: &crate::models::SecurityConfig) -> crate::SecurityResult<String> {
+    // 使用 SecurityConfig 的 get_app_access_token 方法获取真实的 token
+    config.get_app_access_token().await
 }
 
 #[cfg(test)]
