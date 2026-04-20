@@ -20,3 +20,7 @@ prost = "0.13.1"
 
 [build-dependencies]
 prost-build = "0.12.6"
+
+[dev-dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
