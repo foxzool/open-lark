@@ -1,7 +1,14 @@
+/// image 子模块。
 pub mod image;
+/// okr 子模块。
 pub mod okr;
+/// period 子模块。
 pub mod period;
+/// period_rule 子模块。
 pub mod period_rule;
+/// progress_record 子模块。
 pub mod progress_record;
+/// review 子模块。
 pub mod review;
+/// user 子模块。
 pub mod user;

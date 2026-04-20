@@ -8,17 +8,24 @@ use serde::{Deserialize, Serialize};
 /// 用户组信息（字段随文档演进，未显式建模字段使用 `extra` 透传）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Group {
+    /// 用户组 ID。
     pub id: String,
+    /// 用户组名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 用户组描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 用户成员数量。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_user_count: Option<i32>,
+    /// 部门成员数量。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_department_count: Option<i32>,
+    /// 用户组类型。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub r#type: Option<i32>,
+    /// 未显式建模的扩展字段。
     #[serde(default, flatten)]
     pub extra: HashMap<String, serde_json::Value>,
 }
@@ -26,6 +33,7 @@ pub struct Group {
 /// 查询指定用户组响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetGroupResponse {
+    /// 用户组详情。
     pub group: Group,
 }
 
@@ -38,6 +46,7 @@ impl ApiResponseTrait for GetGroupResponse {
 /// 创建用户组响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateGroupResponse {
+    /// 新创建的用户组 ID。
     pub group_id: String,
 }
 
@@ -50,12 +59,16 @@ impl ApiResponseTrait for CreateGroupResponse {
 /// 查询用户组列表响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SimpleListGroupsResponse {
+    /// 用户组列表。
     #[serde(default)]
     pub grouplist: Vec<Group>,
+    /// 分页标记。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
+    /// 是否还有更多数据。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
+    /// 未显式建模的扩展字段。
     #[serde(default, flatten)]
     pub extra: HashMap<String, serde_json::Value>,
 }
@@ -69,10 +82,13 @@ impl ApiResponseTrait for SimpleListGroupsResponse {
 /// 查询用户所属用户组响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct MemberBelongGroupsResponse {
+    /// 所属用户组 ID 列表。
     #[serde(default)]
     pub group_list: Vec<String>,
+    /// 分页标记。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
+    /// 是否还有更多数据。
     #[serde(default)]
     pub has_more: bool,
 }

@@ -10,14 +10,17 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// Unsubscribe Mailbox Event Request。
 #[derive(Debug, Clone)]
 pub struct UnsubscribeMailboxEventRequest {
     config: Arc<Config>,
     user_mailbox_id: String,
 }
 
+/// Unsubscribe Mailbox Event Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UnsubscribeMailboxEventResponse {
+    /// 响应数据。
     pub data: Option<serde_json::Value>,
 }
 
@@ -28,6 +31,7 @@ impl ApiResponseTrait for UnsubscribeMailboxEventResponse {
 }
 
 impl UnsubscribeMailboxEventRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, user_mailbox_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -35,10 +39,12 @@ impl UnsubscribeMailboxEventRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UnsubscribeMailboxEventResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

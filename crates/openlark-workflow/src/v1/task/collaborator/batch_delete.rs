@@ -12,6 +12,7 @@ use std::sync::Arc;
 
 /// 批量删除任务协作者请求体（v1）
 #[derive(Debug, Clone, Serialize, Default)]
+/// 批量删除任务协作者请求体。
 pub struct BatchDeleteTaskCollaboratorBodyV1 {
     /// 需要删除的协作者用户 ID 列表
     pub collaborator_ids: Vec<String>,
@@ -19,6 +20,7 @@ pub struct BatchDeleteTaskCollaboratorBodyV1 {
 
 /// 批量删除任务协作者响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 批量删除任务协作者响应。
 pub struct BatchDeleteTaskCollaboratorResponseV1 {
     /// 删除失败的用户 ID 列表
     pub failed_collaborator_ids: Option<Vec<String>>,
@@ -26,6 +28,7 @@ pub struct BatchDeleteTaskCollaboratorResponseV1 {
 
 /// 批量删除任务协作者请求（v1）
 #[derive(Debug, Clone)]
+/// 批量删除任务协作者请求构建器。
 pub struct BatchDeleteTaskCollaboratorRequestV1 {
     config: Arc<Config>,
     task_id: String,
@@ -33,6 +36,7 @@ pub struct BatchDeleteTaskCollaboratorRequestV1 {
 }
 
 impl BatchDeleteTaskCollaboratorRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_id: impl Into<String>) -> Self {
         Self {
             config,

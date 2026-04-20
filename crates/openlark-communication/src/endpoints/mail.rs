@@ -17,14 +17,17 @@
 /// Mail邮件组管理
 /// 企业邮件组的创建和管理
 pub const MAIL_V1_MAILGROUPS: &str = "/open-apis/mail/v1/mailgroups";
+/// 端点路径常量。
 pub const MAIL_V1_MAILGROUP: &str = "/open-apis/mail/v1/mailgroups/{mailgroup_id}";
 
 /// Mail邮件组管理员
 /// 邮件组管理员权限管理
 pub const MAIL_V1_MAILGROUP_MANAGERS_BATCH_CREATE: &str =
     "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers/batch_create";
+/// 端点路径常量。
 pub const MAIL_V1_MAILGROUP_MANAGERS_BATCH_DELETE: &str =
     "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers/batch_delete";
+/// 端点路径常量。
 pub const MAIL_V1_MAILGROUP_MANAGERS: &str =
     "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers";
 
@@ -36,8 +39,10 @@ pub const MAIL_V1_USER_MAILBOXES: &str = "/open-apis/mail/v1/user_mailboxes";
 /// 邮箱事件的订阅和管理
 pub const MAIL_V1_USER_MAILBOX_EVENTS_SUBSCRIBE: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscribe";
+/// 端点路径常量。
 pub const MAIL_V1_USER_MAILBOX_EVENTS_SUBSCRIPTION: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscription";
+/// 端点路径常量。
 pub const MAIL_V1_USER_MAILBOX_EVENTS_UNSUBSCRIBE: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/unsubscribe";
 
@@ -45,6 +50,7 @@ pub const MAIL_V1_USER_MAILBOX_EVENTS_UNSUBSCRIBE: &str =
 /// 邮件文件夹组织管理
 pub const MAIL_V1_USER_MAILBOX_FOLDERS: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders";
+/// 端点路径常量。
 pub const MAIL_V1_USER_MAILBOX_FOLDER: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders/{folder_id}";
 
@@ -52,8 +58,10 @@ pub const MAIL_V1_USER_MAILBOX_FOLDER: &str =
 /// 邮件消息的处理和管理
 pub const MAIL_V1_USER_MAILBOX_MESSAGES: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages";
+/// 端点路径常量。
 pub const MAIL_V1_USER_MAILBOX_MESSAGE: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/{message_id}";
+/// 端点路径常量。
 pub const MAIL_V1_USER_MAILBOX_MESSAGES_GET_BY_CARD: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/get_by_card";
 
@@ -61,8 +69,10 @@ pub const MAIL_V1_USER_MAILBOX_MESSAGES_GET_BY_CARD: &str =
 /// 邮件处理规则和过滤设置
 pub const MAIL_V1_USER_MAILBOX_RULES: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules";
+/// 端点路径常量。
 pub const MAIL_V1_USER_MAILBOX_RULE: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/{rule_id}";
+/// 端点路径常量。
 pub const MAIL_V1_USER_MAILBOX_RULES_REORDER: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/reorder";
 
@@ -70,6 +80,7 @@ pub const MAIL_V1_USER_MAILBOX_RULES_REORDER: &str =
 /// 邮件联系人管理
 pub const MAIL_V1_USER_MAILBOX_MAIL_CONTACTS: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts";
+/// 端点路径常量。
 pub const MAIL_V1_USER_MAILBOX_MAIL_CONTACT: &str =
     "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts/{contact_id}";
 

@@ -67,6 +67,7 @@ pub struct SearchEntityRequest {
 }
 
 impl SearchEntityRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -131,10 +132,12 @@ impl SearchEntityRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<SearchEntityResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<SearchEntityResp> {
         // ===== 参数校验 =====
         if let Some(page_size) = self.page_size {

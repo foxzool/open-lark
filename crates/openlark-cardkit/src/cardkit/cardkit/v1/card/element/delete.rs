@@ -16,7 +16,9 @@ use crate::endpoints::cardkit_v1_card_element;
 /// 删除组件请求体
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct DeleteCardElementBody {
+    /// 卡片 ID。
     pub card_id: String,
+    /// 组件 ID。
     pub element_id: String,
 }
 
@@ -29,6 +31,7 @@ pub struct DeleteCardElementRequest {
 }
 
 impl DeleteCardElementRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,

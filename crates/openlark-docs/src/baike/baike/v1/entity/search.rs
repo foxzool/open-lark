@@ -11,22 +11,30 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 模糊搜索请求体。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SearchEntityReqBody {
+    /// 模糊搜索关键词。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query: Option<String>,
+    /// 分类筛选条件。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classification_filter: Option<ClassificationFilter>,
+    /// 来源筛选。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sources: Option<Vec<i32>>,
+    /// 创建者筛选。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creators: Option<Vec<String>>,
 }
 
+/// 模糊搜索响应 data。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SearchEntityResponse {
+    /// 词条列表。
     #[serde(default)]
     pub entities: Vec<Entity>,
+    /// 下一页分页标记。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
@@ -37,10 +45,13 @@ impl ApiResponseTrait for SearchEntityResponse {
     }
 }
 
+/// 分类筛选条件。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct ClassificationFilter {
+    /// 需要包含的分类 ID 列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include: Option<Vec<String>>,
+    /// 需要排除的分类 ID 列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclude: Option<Vec<String>>,
 }
@@ -58,6 +69,7 @@ pub struct SearchEntityRequest {
 }
 
 impl SearchEntityRequest {
+    /// 创建新的词条模糊搜索请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -68,45 +80,54 @@ impl SearchEntityRequest {
         }
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
         self.user_id_type = Some(user_id_type);
         self
     }
 
+    /// 设置模糊搜索关键词。
     pub fn query(mut self, query: impl Into<String>) -> Self {
         self.req.query = Some(query.into());
         self
     }
 
+    /// 设置分类筛选条件。
     pub fn classification_filter(mut self, filter: ClassificationFilter) -> Self {
         self.req.classification_filter = Some(filter);
         self
     }
 
+    /// 设置来源筛选。
     pub fn sources(mut self, sources: Vec<i32>) -> Self {
         self.req.sources = Some(sources);
         self
     }
 
+    /// 设置创建者筛选。
     pub fn creators(mut self, creators: Vec<String>) -> Self {
         self.req.creators = Some(creators);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<SearchEntityResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

@@ -8,12 +8,16 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum UserIdType {
+    /// open_id。
     OpenId,
+    /// union_id。
     UnionId,
+    /// user_id。
     UserId,
 }
 
 impl UserIdType {
+    /// 返回请求参数使用的字符串值。
     pub fn as_str(&self) -> &'static str {
         match self {
             UserIdType::OpenId => "open_id",

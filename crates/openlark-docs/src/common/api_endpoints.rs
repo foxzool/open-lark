@@ -63,69 +63,113 @@ impl BaseApiV2 {
 pub enum BitableApiV1 {
     /// App管理相关
     AppCreate,
+    /// 公开项说明。
     AppCopy(String),
+    /// 公开项说明。
     AppGet(String),
+    /// 公开项说明。
     AppUpdate(String),
+    /// 公开项说明。
     DashboardList(String),
+    /// 公开项说明。
     DashboardCopy(String, String),
     /// 自动化流程
     BlockWorkflowList(String),
+    /// 公开项说明。
     WorkflowList(String),
+    /// 公开项说明。
     WorkflowUpdate(String, String),
 
     /// 表格管理相关
     TableCreate(String),
+    /// 公开项说明。
     TableBatchCreate(String),
+    /// 公开项说明。
     TableUpdate(String, String),
+    /// 公开项说明。
     TableDelete(String, String),
+    /// 公开项说明。
     TableBatchDelete(String),
+    /// 公开项说明。
     TableGet(String, String),
+    /// 公开项说明。
     TableList(String),
+    /// 公开项说明。
     TablePatch(String, String),
 
     /// 字段管理相关
     FieldCreate(String, String),
+    /// 公开项说明。
     FieldGroupCreate(String, String),
+    /// 公开项说明。
     FieldUpdate(String, String, String),
+    /// 公开项说明。
     FieldDelete(String, String, String),
+    /// 公开项说明。
     FieldList(String, String),
 
     /// 视图管理相关
     ViewCreate(String, String),
+    /// 公开项说明。
     ViewUpdate(String, String, String),
+    /// 公开项说明。
     ViewDelete(String, String, String),
+    /// 公开项说明。
     ViewGet(String, String, String),
+    /// 公开项说明。
     ViewList(String, String),
+    /// 公开项说明。
     ViewPatch(String, String, String),
 
     /// 记录管理相关
     RecordCreate(String, String),
+    /// 公开项说明。
     RecordBatchCreate(String, String),
+    /// 公开项说明。
     RecordGet(String, String, String),
+    /// 公开项说明。
     RecordBatchGet(String, String),
+    /// 公开项说明。
     RecordUpdate(String, String, String),
+    /// 公开项说明。
     RecordBatchUpdate(String, String),
+    /// 公开项说明。
     RecordDelete(String, String, String),
+    /// 公开项说明。
     RecordBatchDelete(String, String),
+    /// 公开项说明。
     RecordList(String, String),
+    /// 公开项说明。
     RecordSearch(String, String),
 
     /// 表单管理相关
     FormGet(String, String, String),
+    /// 公开项说明。
     FormPatch(String, String, String),
+    /// 公开项说明。
     FormUpgrade(String, String, String),
+    /// 公开项说明。
     FormFieldList(String, String, String),
+    /// 公开项说明。
     FormFieldPatch(String, String, String, String),
 
     /// 权限管理相关
     RoleCreate(String),
+    /// 公开项说明。
     RoleUpdate(String, String),
+    /// 公开项说明。
     RoleDelete(String, String),
+    /// 公开项说明。
     RoleList(String),
+    /// 公开项说明。
     RoleMemberCreate(String, String),
+    /// 公开项说明。
     RoleMemberBatchCreate(String, String),
+    /// 公开项说明。
     RoleMemberDelete(String, String, String),
+    /// 公开项说明。
     RoleMemberBatchDelete(String, String),
+    /// 公开项说明。
     RoleMemberList(String, String),
 }
 
@@ -2243,6 +2287,7 @@ impl SheetsApiV3 {
 }
 
 // Sheets API v3 端点
+/// 公开项说明。
 pub const SHEETS_API_V3: &str = "/open-apis/sheets/v3";
 
 // ============================================================================
@@ -2254,17 +2299,26 @@ pub const SHEETS_API_V3: &str = "/open-apis/sheets/v3";
 pub enum BaikeApiV1 {
     /// 草稿管理
     DraftCreate,
+    /// 公开项说明。
     DraftUpdate(String), // draft_id
 
     /// 词条管理
     EntityCreate,
+    /// 公开项说明。
     EntityUpdate(String), // entity_id
-    EntityGet(String),    // entity_id
+    /// 公开项说明。
+    EntityGet(String), // entity_id
+    /// 公开项说明。
     EntityDelete(String), // entity_id
+    /// 公开项说明。
     EntityList,
+    /// 公开项说明。
     EntityMatch,
+    /// 公开项说明。
     EntitySearch,
+    /// 公开项说明。
     EntityHighlight,
+    /// 公开项说明。
     EntityExtract,
 
     /// 分类管理
@@ -2272,10 +2326,12 @@ pub enum BaikeApiV1 {
 
     /// 文件管理
     FileUpload,
+    /// 公开项说明。
     FileDownload(String), // file_token
 }
 
 impl BaikeApiV1 {
+    /// 提供 `to_url` 能力。
     pub fn to_url(&self) -> String {
         match self {
             BaikeApiV1::DraftCreate => "/open-apis/baike/v1/drafts".to_string(),
@@ -2307,6 +2363,7 @@ impl BaikeApiV1 {
 }
 
 // Baike API v1 端点
+/// 公开项说明。
 pub const BAIKE_API_V1: &str = "/open-apis/baike/v1";
 
 // ============================================================================
@@ -2318,21 +2375,34 @@ pub const BAIKE_API_V1: &str = "/open-apis/baike/v1";
 pub enum LingoApiV1 {
     /// 草稿管理
     DraftCreate,
+    /// 公开项说明。
     DraftUpdate(String), // draft_id
 
     /// 词条管理
     EntityCreate,
+    /// 公开项说明。
     EntityUpdate(String), // entity_id
+    /// 公开项说明。
     EntityDelete(String), // entity_id
-    EntityGet(String),    // entity_id
+    /// 公开项说明。
+    EntityGet(String), // entity_id
+    /// 公开项说明。
     EntityList,
+    /// 公开项说明。
     EntityMatch,
+    /// 公开项说明。
     EntitySearch,
+    /// 公开项说明。
     EntityHighlight,
+    /// 公开项说明。
     EntityBatchGet,
+    /// 公开项说明。
     EntityBatchUpdate,
+    /// 公开项说明。
     EntitySearchRecommend,
+    /// 公开项说明。
     EntityHistoryGet(String), // entity_id
+    /// 公开项说明。
     EntityHistoryList,
 
     /// 分类管理
@@ -2343,15 +2413,19 @@ pub enum LingoApiV1 {
 
     /// 文件管理
     FileUpload,
+    /// 公开项说明。
     FileDownload(String), // file_token
 
     /// 智能处理
     GenerateSummary,
+    /// 公开项说明。
     ExtractKeywords,
+    /// 公开项说明。
     TranslateText,
 }
 
 impl LingoApiV1 {
+    /// 提供 `to_url` 能力。
     pub fn to_url(&self) -> String {
         match self {
             LingoApiV1::DraftCreate => "/open-apis/lingo/v1/drafts".to_string(),
@@ -2395,6 +2469,7 @@ impl LingoApiV1 {
 }
 
 // Lingo API v1 端点
+/// 公开项说明。
 pub const LINGO_API_V1: &str = "/open-apis/lingo/v1";
 
 #[cfg(test)]

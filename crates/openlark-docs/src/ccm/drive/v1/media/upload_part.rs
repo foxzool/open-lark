@@ -59,6 +59,7 @@ pub struct UploadPartMediaRequest {
 }
 
 impl UploadPartMediaRequest {
+    /// 创建新的上传分片请求。
     pub fn new(
         config: Config,
         upload_id: impl Into<String>,
@@ -82,11 +83,13 @@ impl UploadPartMediaRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UploadPartMediaResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

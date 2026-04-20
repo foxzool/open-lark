@@ -12,6 +12,7 @@ use std::sync::Arc;
 
 /// 创建任务关注者请求体（v1）
 #[derive(Debug, Clone, Serialize, Default)]
+/// 创建任务关注者请求体。
 pub struct CreateTaskFollowerBodyV1 {
     /// 关注者用户 ID
     pub follower_id: String,
@@ -19,6 +20,7 @@ pub struct CreateTaskFollowerBodyV1 {
 
 /// 创建任务关注者响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 创建任务关注者响应。
 pub struct CreateTaskFollowerResponseV1 {
     /// 关注者用户 ID
     pub follower_id: String,
@@ -26,6 +28,7 @@ pub struct CreateTaskFollowerResponseV1 {
 
 /// 创建任务关注者请求（v1）
 #[derive(Debug, Clone)]
+/// 创建任务关注者请求构建器。
 pub struct CreateTaskFollowerRequestV1 {
     config: Arc<Config>,
     task_id: String,
@@ -33,6 +36,7 @@ pub struct CreateTaskFollowerRequestV1 {
 }
 
 impl CreateTaskFollowerRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_id: impl Into<String>) -> Self {
         Self {
             config,

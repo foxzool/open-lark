@@ -15,6 +15,7 @@ use std::collections::HashMap;
 
 use crate::hire::hire::common_models::I18nText;
 
+/// `SearchRequest` 请求。
 #[derive(Debug, Clone)]
 pub struct SearchRequest {
     config: Config,
@@ -24,6 +25,7 @@ pub struct SearchRequest {
 }
 
 impl SearchRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -33,26 +35,31 @@ impl SearchRequest {
         }
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 设置 `id_list`。
     pub fn id_list(mut self, id_list: Vec<String>) -> Self {
         self.id_list = Some(id_list);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<SearchResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -94,35 +101,49 @@ impl SearchRequest {
     }
 }
 
+/// `TalentPoolItem`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct TalentPoolItem {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 标识。
     pub id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `i18n_name` 字段。
     pub i18n_name: Option<I18nText>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `i18n_description` 字段。
     pub i18n_description: Option<I18nText>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `parent_id` 字段。
     pub parent_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `is_private` 字段。
     pub is_private: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `create_time` 字段。
     pub create_time: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `modify_time` 字段。
     pub modify_time: Option<String>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `SearchResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct SearchResponse {
     #[serde(default)]
+    /// 结果项列表。
     pub items: Vec<TalentPoolItem>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 下一页分页标记。
     pub page_token: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 是否还有更多结果。
     pub has_more: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

@@ -3,9 +3,13 @@
 //! 提供工单自定义字段相关的 API。
 
 pub mod list;
+/// 创建接口。
 pub mod create;
+/// 获取接口。
 pub mod get;
+/// 更新接口。
 pub mod patch;
+/// 删除接口。
 pub mod delete;
 
 use openlark_core::config::Config;

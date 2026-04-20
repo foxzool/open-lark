@@ -491,10 +491,13 @@ pub mod common_types {
     #[derive(Debug, Clone, Serialize, Deserialize, Default)]
     pub struct DocxBlockPage {
         #[serde(default)]
+        /// 公开项说明。
         pub items: Vec<DocxBlock>,
         #[serde(skip_serializing_if = "Option::is_none")]
+        /// 公开项说明。
         pub page_token: Option<String>,
         #[serde(skip_serializing_if = "Option::is_none")]
+        /// 公开项说明。
         pub has_more: Option<bool>,
     }
 }

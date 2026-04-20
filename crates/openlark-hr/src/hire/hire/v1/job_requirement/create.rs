@@ -30,6 +30,7 @@ impl CreateRequest {
         }
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: CreateRequestBody) -> Self {
         self.request_body = request_body;
         self
@@ -41,6 +42,7 @@ impl CreateRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -68,13 +70,16 @@ impl CreateRequest {
     }
 }
 
+/// `CreateRequestBody`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateRequestBody {
     #[serde(flatten)]
+    /// `fields` 字段。
     pub fields: Value,
 }
 
 impl CreateRequestBody {
+    /// 创建新的请求实例。
     pub fn new(fields: Value) -> Self {
         Self { fields }
     }
@@ -95,14 +100,19 @@ impl CreateRequestBody {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct CreateResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_requirement_id` 字段。
     pub job_requirement_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_id` 字段。
     pub job_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 标题。
     pub title: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `status` 字段。
     pub status: Option<i32>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

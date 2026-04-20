@@ -71,6 +71,7 @@ pub struct UploadAllMediaRequest {
 }
 
 impl UploadAllMediaRequest {
+    /// 创建新的素材上传请求。
     pub fn new(
         config: Config,
         file_name: impl Into<String>,
@@ -103,11 +104,13 @@ impl UploadAllMediaRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UploadAllMediaResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

@@ -1,6 +1,7 @@
 //! Speech recognition module
 
 pub mod file_recognize;
+/// stream_recognize 模块。
 pub mod stream_recognize;
 
 use openlark_core::config::Config;
@@ -14,6 +15,7 @@ pub struct Speech {
 }
 
 impl Speech {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }

@@ -11,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+/// `PatchRequest` 请求。
 #[derive(Debug, Clone)]
 pub struct PatchRequest {
     config: Config,
@@ -19,6 +20,7 @@ pub struct PatchRequest {
 }
 
 impl PatchRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -27,21 +29,25 @@ impl PatchRequest {
         }
     }
 
+    /// 设置 `international_assignment_id`。
     pub fn international_assignment_id(mut self, international_assignment_id: String) -> Self {
         self.international_assignment_id = Some(international_assignment_id);
         self
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<PatchResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -72,8 +78,10 @@ impl PatchRequest {
     }
 }
 
+/// `PatchResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchResponse {
+    /// 原始响应数据。
     pub data: Value,
 }
 

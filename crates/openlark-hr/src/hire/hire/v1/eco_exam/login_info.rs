@@ -33,11 +33,13 @@ impl LoginInfoRequest {
         }
     }
 
+    /// 设置 `exam_id`。
     pub fn exam_id(mut self, exam_id: impl Into<String>) -> Self {
         self.exam_id = exam_id.into();
         self
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
@@ -49,6 +51,7 @@ impl LoginInfoRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -77,6 +80,7 @@ impl LoginInfoRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct LoginInfoResponse {
     #[serde(flatten)]
+    /// `exam` 字段。
     pub exam: EcoExamOperationResult,
 }
 

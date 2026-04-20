@@ -34,8 +34,10 @@ impl FilterApi {
 }
 
 // 导出模型定义
+/// models 子模块。
 pub mod models;
 // models 模块显式导出
+/// 重新导出相关类型。
 pub use models::{
     CreateFilterParams, CreateFilterResponse, DeleteFilterParams, DeleteFilterResponse,
     DeleteFilterResult, FilterCondition, FilterInfo, FilterResult, FilterSpec, GetFilterParams,

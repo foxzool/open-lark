@@ -8,11 +8,17 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "snake_case")]
 pub enum RoleMemberIdType {
     #[default]
+    /// open_id。
     OpenId,
+    /// union_id。
     UnionId,
+    /// user_id。
     UserId,
+    /// chat_id。
     ChatId,
+    /// department_id。
     DepartmentId,
+    /// open_department_id。
     OpenDepartmentId,
 }
 
@@ -20,9 +26,13 @@ pub enum RoleMemberIdType {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum RoleMemberType {
+    /// 用户。
     User,
+    /// 群聊。
     Chat,
+    /// 部门。
     Department,
+    /// 未知类型。
     #[serde(other)]
     Unknown,
 }

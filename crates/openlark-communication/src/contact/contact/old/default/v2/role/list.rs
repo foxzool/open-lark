@@ -10,11 +10,14 @@ use crate::{common::api_utils::extract_response_data, endpoints::CONTACT_V2_ROLE
 
 /// 获取角色列表请求
 pub struct ListRolesRequest {
+    /// 配置信息。
     config: Config,
+    /// 查询参数集合。
     query: HashMap<String, String>,
 }
 
 impl ListRolesRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -36,6 +39,7 @@ impl ListRolesRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

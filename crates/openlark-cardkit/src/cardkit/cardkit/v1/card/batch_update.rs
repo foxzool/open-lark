@@ -28,8 +28,10 @@ pub struct BatchUpdateCardBody {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchUpdateCardResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 卡片 ID。
     pub card_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 应用 ID。
     pub app_id: Option<String>,
 }
 
@@ -44,6 +46,7 @@ pub struct BatchUpdateCardRequest {
 }
 
 impl BatchUpdateCardRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,

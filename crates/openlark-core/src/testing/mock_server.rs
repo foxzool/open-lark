@@ -14,16 +14,19 @@ pub struct TestServer {
 
 #[cfg(test)]
 impl TestServer {
+    /// 启动一个新的 mock HTTP 服务器。
     pub async fn new() -> Self {
         Self {
             inner: MockServer::start().await,
         }
     }
 
+    /// 返回 mock 服务器的基础地址。
     pub fn uri(&self) -> String {
         self.inner.uri()
     }
 
+    /// Mock 一个成功的 POST 请求响应。
     pub async fn mock_success(&self, route: &str, body: Value) {
         Mock::given(method("POST"))
             .and(path_matcher(route))
@@ -32,6 +35,7 @@ impl TestServer {
             .await;
     }
 
+    /// Mock 一个带自定义状态码的 POST 错误响应。
     pub async fn mock_error(&self, route: &str, code: u16, error: Value) {
         Mock::given(method("POST"))
             .and(path_matcher(route))
@@ -40,6 +44,7 @@ impl TestServer {
             .await;
     }
 
+    /// Mock 一个会延迟返回的 POST 请求。
     pub async fn mock_timeout(&self, route: &str, delay: std::time::Duration) {
         Mock::given(method("POST"))
             .and(path_matcher(route))
@@ -48,6 +53,7 @@ impl TestServer {
             .await;
     }
 
+    /// Mock 一个校验请求体后返回成功结果的 POST 请求。
     pub async fn mock_with_verification(&self, route: &str, expected_body: Value, response: Value) {
         Mock::given(method("POST"))
             .and(path_matcher(route))
@@ -57,6 +63,7 @@ impl TestServer {
             .await;
     }
 
+    /// Mock 一个成功的 GET 请求响应。
     pub async fn mock_get(&self, route: &str, body: Value) {
         Mock::given(method("GET"))
             .and(path_matcher(route))
@@ -65,6 +72,7 @@ impl TestServer {
             .await;
     }
 
+    /// Mock 一个成功的 PUT 请求响应。
     pub async fn mock_put(&self, route: &str, body: Value) {
         Mock::given(method("PUT"))
             .and(path_matcher(route))
@@ -73,6 +81,7 @@ impl TestServer {
             .await;
     }
 
+    /// Mock 一个成功的 DELETE 请求响应。
     pub async fn mock_delete(&self, route: &str, body: Value) {
         Mock::given(method("DELETE"))
             .and(path_matcher(route))

@@ -58,6 +58,7 @@ pub const IM_V2_URL_PREVIEWS_BATCH_UPDATE: &str = "/open-apis/im/v2/url_previews
 
 /// IM 应用消息流卡片 v2
 pub const IM_V2_APP_FEED_CARD: &str = "/open-apis/im/v2/app_feed_card";
+/// 端点路径常量。
 pub const IM_V2_APP_FEED_CARD_BATCH: &str = "/open-apis/im/v2/app_feed_card/batch";
 
 /// IM 消息流卡片 v2

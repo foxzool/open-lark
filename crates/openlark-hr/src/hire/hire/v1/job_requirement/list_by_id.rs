@@ -32,6 +32,7 @@ impl ListByIdRequest {
         }
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: ListByIdRequestBody) -> Self {
         self.request_body = request_body;
         self
@@ -43,6 +44,7 @@ impl ListByIdRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -70,13 +72,16 @@ impl ListByIdRequest {
     }
 }
 
+/// `ListByIdRequestBody`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListByIdRequestBody {
     #[serde(flatten)]
+    /// `fields` 字段。
     pub fields: Value,
 }
 
 impl ListByIdRequestBody {
+    /// 创建新的请求实例。
     pub fn new(fields: Value) -> Self {
         Self { fields }
     }
@@ -97,12 +102,16 @@ impl ListByIdRequestBody {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ListByIdResponse {
     #[serde(default, alias = "job_requirements")]
+    /// 结果项列表。
     pub items: Vec<JobRequirementSummary>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 下一页分页标记。
     pub page_token: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 是否还有更多结果。
     pub has_more: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

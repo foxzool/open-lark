@@ -69,6 +69,7 @@ pub struct Manager {
 }
 
 impl Manager {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, group_id: String) -> Self {
         Self { config, group_id }
     }
@@ -98,6 +99,7 @@ pub struct BatchCreateMailGroupManagerRequest {
 }
 
 impl BatchCreateMailGroupManagerRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, group_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -112,11 +114,13 @@ impl BatchCreateMailGroupManagerRequest {
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<BatchCreateMailGroupManagerResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -149,6 +153,7 @@ pub struct BatchDeleteMailGroupManagerRequest {
 }
 
 impl BatchDeleteMailGroupManagerRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, group_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -163,11 +168,13 @@ impl BatchDeleteMailGroupManagerRequest {
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<BatchDeleteMailGroupManagerResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -201,6 +208,7 @@ pub struct MailGroupManagerListRequest {
 }
 
 impl MailGroupManagerListRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, group_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -210,21 +218,25 @@ impl MailGroupManagerListRequest {
         }
     }
 
+    /// page_token。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// page_size。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<MailGroupManagerListResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

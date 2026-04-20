@@ -16,6 +16,8 @@ use super::super::models::WikiSpace;
 use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 获取知识空间信息请求
+///
+/// 用于查询指定知识空间详情。
 pub struct GetWikiSpaceRequest {
     space_id: String,
     config: Config,
@@ -55,6 +57,7 @@ impl GetWikiSpaceRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

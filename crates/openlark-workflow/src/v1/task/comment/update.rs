@@ -12,6 +12,7 @@ use std::sync::Arc;
 
 /// 更新任务评论请求体（v1）
 #[derive(Debug, Clone, Serialize, Default)]
+/// 更新任务评论请求体。
 pub struct UpdateTaskCommentBodyV1 {
     /// 评论内容
     pub content: String,
@@ -19,6 +20,7 @@ pub struct UpdateTaskCommentBodyV1 {
 
 /// 更新任务评论响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 更新任务评论响应。
 pub struct UpdateTaskCommentResponseV1 {
     /// 评论 ID
     pub comment_id: String,
@@ -28,6 +30,7 @@ pub struct UpdateTaskCommentResponseV1 {
 
 /// 更新任务评论请求（v1）
 #[derive(Debug, Clone)]
+/// 更新任务评论请求构建器。
 pub struct UpdateTaskCommentRequestV1 {
     config: Arc<Config>,
     task_id: String,
@@ -36,6 +39,7 @@ pub struct UpdateTaskCommentRequestV1 {
 }
 
 impl UpdateTaskCommentRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(
         config: Arc<Config>,
         task_id: impl Into<String>,

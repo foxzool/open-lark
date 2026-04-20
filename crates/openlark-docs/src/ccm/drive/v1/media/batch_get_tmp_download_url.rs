@@ -25,6 +25,7 @@ pub struct BatchGetTmpDownloadUrlRequest {
 }
 
 impl BatchGetTmpDownloadUrlRequest {
+    /// 创建新的临时下载链接请求。
     pub fn new(config: Config, file_tokens: Vec<String>) -> Self {
         Self {
             config,
@@ -33,21 +34,25 @@ impl BatchGetTmpDownloadUrlRequest {
         }
     }
 
+    /// 追加一个素材 token。
     pub fn add_file_token(mut self, file_token: impl Into<String>) -> Self {
         self.file_tokens.push(file_token.into());
         self
     }
 
+    /// 设置扩展参数。
     pub fn extra(mut self, extra: impl Into<String>) -> Self {
         self.extra = Some(extra.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchGetTmpDownloadUrlResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

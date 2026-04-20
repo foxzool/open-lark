@@ -11,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// Batch Create Mail Group Member Request。
 #[derive(Debug, Clone)]
 pub struct BatchCreateMailGroupMemberRequest {
     config: Arc<Config>,
@@ -18,20 +19,27 @@ pub struct BatchCreateMailGroupMemberRequest {
     body: BatchCreateMailGroupMemberBody,
 }
 
+/// Batch Create Mail Group Member Body。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchCreateMailGroupMemberBody {
+    /// 成员列表。
     pub members: Vec<MailGroupMemberItem>,
 }
 
+/// Mail Group Member Item。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MailGroupMemberItem {
+    /// 成员 ID。
     pub member_id: String,
+    /// member_type 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_type: Option<String>,
 }
 
+/// Batch Create Mail Group Member Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchCreateMailGroupMemberResponse {
+    /// 响应数据。
     pub data: Option<BatchCreateMailGroupMemberData>,
 }
 
@@ -41,18 +49,24 @@ impl ApiResponseTrait for BatchCreateMailGroupMemberResponse {
     }
 }
 
+/// Batch Create Mail Group Member Data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchCreateMailGroupMemberData {
+    /// 结果列表。
     pub results: Vec<MailGroupMemberResult>,
 }
 
+/// Mail Group Member Result。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MailGroupMemberResult {
+    /// 成员 ID。
     pub member_id: String,
+    /// 状态。
     pub status: String,
 }
 
 impl BatchCreateMailGroupMemberRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailgroup_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -61,15 +75,18 @@ impl BatchCreateMailGroupMemberRequest {
         }
     }
 
+    /// members。
     pub fn members(mut self, members: Vec<MailGroupMemberItem>) -> Self {
         self.body.members = members;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchCreateMailGroupMemberResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

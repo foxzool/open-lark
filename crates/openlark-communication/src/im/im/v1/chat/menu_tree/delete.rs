@@ -13,12 +13,15 @@ use crate::{
 };
 
 /// 删除群菜单请求
+///
+/// 用于删除群聊菜单树中的一级菜单项。
 pub struct DeleteChatMenuTreeRequest {
     config: Config,
     chat_id: String,
 }
 
 impl DeleteChatMenuTreeRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -40,6 +43,7 @@ impl DeleteChatMenuTreeRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: ChatMenuTopLevelIdsBody,

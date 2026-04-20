@@ -29,6 +29,7 @@ impl DeleteRequest {
         }
     }
 
+    /// 设置 `pathway_id`。
     pub fn pathway_id(mut self, pathway_id: String) -> Self {
         self.pathway_id = Some(pathway_id);
         self
@@ -40,6 +41,7 @@ impl DeleteRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

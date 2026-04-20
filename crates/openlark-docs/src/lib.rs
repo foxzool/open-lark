@@ -86,29 +86,37 @@
 mod macros;
 
 // Core modules
+/// 通用文档数据模型。
 pub mod models;
 
 // 功能模块按业务域组织
 #[cfg(feature = "ccm-core")]
+/// 云文档协同能力模块。
 pub mod ccm;
 
 #[cfg(any(feature = "base", feature = "bitable"))]
+/// 多维表格与基础服务模块。
 pub mod base;
 
 #[cfg(any(feature = "baike", feature = "lingo"))]
+/// 企业知识库模块。
 pub mod baike;
 
 #[cfg(feature = "minutes")]
+/// 会议纪要模块。
 pub mod minutes;
 
 // API版本模块
 #[cfg(any(feature = "v1", feature = "v2", feature = "v3"))]
+/// 版本兼容入口模块。
 pub mod versions;
 
 // 通用模块 - 工具宏和类型
+/// 通用工具、链式 helper 与端点定义。
 pub mod common;
 
 // Prelude模块 - 常用导入
+/// 常用类型预导出模块。
 pub mod prelude;
 
 // 重新导出主要类型

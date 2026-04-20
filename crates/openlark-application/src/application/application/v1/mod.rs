@@ -1,3 +1,4 @@
+/// 应用资源接口。
 pub mod app;
 
 // app 模块显式导出
@@ -13,6 +14,7 @@ pub struct ApplicationV1 {
 }
 
 impl ApplicationV1 {
+    /// 创建新的 ApplicationV1 实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }

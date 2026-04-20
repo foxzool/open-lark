@@ -18,27 +18,36 @@ use crate::{
 /// 说明：字段均为可选，不传表示不更新。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateJobFamilyBody {
+    /// 序列名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 序列描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 父序列 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_job_family_id: Option<String>,
+    /// 状态。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<bool>,
+    /// 国际化名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_name: Option<Vec<I18nContent>>,
+    /// 国际化描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_description: Option<Vec<I18nContent>>,
 }
 
 /// 更新序列请求
 pub struct UpdateJobFamilyRequest {
+    /// 配置信息。
     config: Config,
+    /// 序列 ID。
     job_family_id: String,
 }
 
 impl UpdateJobFamilyRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -60,6 +69,8 @@ impl UpdateJobFamilyRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UpdateJobFamilyBody,

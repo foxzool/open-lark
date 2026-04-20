@@ -1,6 +1,7 @@
 //! 子任务模块
 
 pub mod create;
+/// 列表接口。
 pub mod list;
 
 use openlark_core::config::Config;
@@ -14,6 +15,7 @@ pub struct Subtask {
 }
 
 impl Subtask {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, task_guid: impl Into<String>) -> Self {
         Self {
             config,

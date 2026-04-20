@@ -1,13 +1,11 @@
-/// Drive v2 API 模块
-///
-/// 提供云空间文件管理的增强功能
+/// Drive v2 文件接口模块。
 pub mod file;
+/// Drive v2 权限接口模块。
 pub mod permission;
 
-// 使用通配符导出所有子模块
-// file 模块显式导出
+/// 重新导出文件点赞相关类型。
 pub use file::{FileLike, ListFileLikesRequest, ListFileLikesResponse};
-// permission 模块显式导出
+/// 重新导出公开权限相关类型。
 pub use permission::{
     GetPermissionPublicRequest, GetPermissionPublicResponse, PermissionPublic,
     UpdatePermissionPublicRequest, UpdatePermissionPublicResponse,

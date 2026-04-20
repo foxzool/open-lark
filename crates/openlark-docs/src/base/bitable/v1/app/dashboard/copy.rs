@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::BitableApiV1;
 
-/// 复制仪表盘请求
+/// 复制仪表盘请求。
 #[derive(Debug, Clone)]
 pub struct CopyDashboardRequest {
     config: Config,
@@ -22,6 +22,7 @@ pub struct CopyDashboardRequest {
 }
 
 impl CopyDashboardRequest {
+    /// 创建新的仪表盘复制请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -31,11 +32,13 @@ impl CopyDashboardRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
         self.app_token = app_token.into();
         self
     }
 
+    /// 设置仪表盘 block_id。
     pub fn block_id(mut self, block_id: impl Into<String>) -> Self {
         self.block_id = block_id.into();
         self
@@ -47,10 +50,12 @@ impl CopyDashboardRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CopyDashboardResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

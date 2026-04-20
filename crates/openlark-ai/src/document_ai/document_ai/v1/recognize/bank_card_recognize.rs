@@ -22,6 +22,7 @@ pub struct BankCardRecognizeBody {
 }
 
 impl BankCardRecognizeBody {
+    /// 校验请求体。
     pub fn validate(&self) -> Result<(), String> {
         if self.file_token.trim().is_empty() {
             return Err("file_token 不能为空".to_string());
@@ -33,6 +34,7 @@ impl BankCardRecognizeBody {
 /// 银行卡识别响应
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BankCardRecognizeResponse {
+    /// data 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<BankCardRecognizeResult>,
 }
@@ -42,10 +44,12 @@ impl openlark_core::api::ApiResponseTrait for BankCardRecognizeResponse {}
 /// 银行卡识别结果
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BankCardRecognizeResult {
+    /// parsing_result 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parsing_result: Option<ParsingResult>,
 }
 
+/// Parsing_Result 结果。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ParsingResult {
     /// 银行名称
@@ -69,10 +73,12 @@ pub struct BankCardRecognizeRequest {
 }
 
 impl BankCardRecognizeRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(
         self,
         body: BankCardRecognizeBody,
@@ -81,6 +87,7 @@ impl BankCardRecognizeRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: BankCardRecognizeBody,
@@ -107,6 +114,7 @@ pub struct BankCardRecognizeRequestBuilder {
 }
 
 impl BankCardRecognizeRequestBuilder {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             request: BankCardRecognizeRequest::new(config),
@@ -115,16 +123,19 @@ impl BankCardRecognizeRequestBuilder {
         }
     }
 
+    /// file_token。
     pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
         self.file_token = Some(file_token.into());
         self
     }
 
+    /// 设置 is_async。
     pub fn is_async(mut self, is_async: impl Into<bool>) -> Self {
         self.is_async = Some(is_async.into());
         self
     }
 
+    /// 构建请求体。
     pub fn body(self) -> BankCardRecognizeBody {
         BankCardRecognizeBody {
             file_token: self.file_token.unwrap_or_default(),
@@ -132,11 +143,13 @@ impl BankCardRecognizeRequestBuilder {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BankCardRecognizeResponse> {
         let body = self.clone().body();
         self.request.execute(body).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

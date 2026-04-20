@@ -18,14 +18,17 @@ use crate::{
 /// 批量添加角色成员请求体
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchCreateMembersBody {
+    /// 待添加的成员 ID 列表。
     pub members: Vec<String>,
 }
 
 impl BatchCreateMembersBody {
+    /// 创建空的批量添加成员请求体。
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// 追加一个成员 ID。
     pub fn member(mut self, member_id: impl Into<String>) -> Self {
         self.members.push(member_id.into());
         self
@@ -58,12 +61,16 @@ impl BatchCreateMembersBody {
 ///     .execute(body).await?;
 /// ```
 pub struct BatchCreateRoleMembersRequest {
+    /// 配置信息。
     config: Config,
+    /// 角色 ID。
     role_id: String,
+    /// 用户 ID 类型。
     user_id_type: Option<UserIdType>,
 }
 
 impl BatchCreateRoleMembersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -95,6 +102,7 @@ impl BatchCreateRoleMembersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: BatchCreateMembersBody,

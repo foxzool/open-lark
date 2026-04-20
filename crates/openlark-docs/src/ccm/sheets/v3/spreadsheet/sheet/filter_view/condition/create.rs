@@ -14,19 +14,23 @@ use serde::{Deserialize, Serialize};
 use super::Condition;
 use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 
-/// 创建筛选条件请求体
+/// 创建筛选条件请求体。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFilterConditionRequest {
     /// 设置筛选条件的列，用字母表示（如 "E"）
     pub condition_id: String,
+    /// 筛选类型。
     pub filter_type: String,
+    /// 比较类型。
     pub compare_type: String,
+    /// 期望值列表。
     pub expected: Vec<String>,
 }
 
-/// 创建筛选条件响应体 data
+/// 创建筛选条件响应体 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFilterConditionResponse {
+    /// 新建后的筛选条件。
     pub condition: Condition,
 }
 
@@ -36,7 +40,7 @@ impl ApiResponseTrait for CreateFilterConditionResponse {
     }
 }
 
-/// 创建筛选条件
+/// 创建筛选条件。
 pub async fn create_filter_condition(
     config: &Config,
     spreadsheet_token: &str,
@@ -55,7 +59,7 @@ pub async fn create_filter_condition(
     .await
 }
 
-/// 创建筛选条件（支持请求选项）
+/// 创建筛选条件（支持请求选项）。
 pub async fn create_filter_condition_with_options(
     config: &Config,
     spreadsheet_token: &str,

@@ -11,20 +11,27 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 潜在词条提取请求体。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct ExtractEntityReqBody {
+    /// 待提取词条的原始文本。
     pub text: String,
 }
 
+/// 潜在词条提取响应 data。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct ExtractEntityResponse {
+    /// 提取到的候选词条列表。
     #[serde(default)]
     pub entity_word: Vec<ExtractedWord>,
 }
 
+/// 提取出的词条候选项。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct ExtractedWord {
+    /// 词条名称。
     pub name: String,
+    /// 别名列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aliases: Option<Vec<String>>,
 }
@@ -42,6 +49,7 @@ pub struct ExtractEntityRequest {
 }
 
 impl ExtractEntityRequest {
+    /// 创建新的候选词条提取请求。
     pub fn new(config: Config, text: impl Into<String>) -> Self {
         Self {
             config,
@@ -49,10 +57,12 @@ impl ExtractEntityRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ExtractEntityResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

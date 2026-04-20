@@ -13,6 +13,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
+/// `ListRequest` 请求。
 #[derive(Debug, Clone)]
 pub struct ListRequest {
     config: Config,
@@ -24,6 +25,7 @@ pub struct ListRequest {
 }
 
 impl ListRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -35,36 +37,43 @@ impl ListRequest {
         }
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置 `user_id`。
     pub fn user_id(mut self, user_id: impl Into<String>) -> Self {
         self.user_id = Some(user_id.into());
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
+    /// 设置 `todo_type`。
     pub fn todo_type(mut self, todo_type: impl Into<String>) -> Self {
         self.todo_type = todo_type.into();
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -103,43 +112,60 @@ impl ListRequest {
     }
 }
 
+/// `TodoTarget`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct TodoTarget {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 候选人 ID。
     pub talent_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_id` 字段。
     pub job_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `application_id` 字段。
     pub application_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 标识。
     pub id: Option<String>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `TodoItem`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct TodoItem {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `evaluation` 字段。
     pub evaluation: Option<TodoTarget>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `offer` 字段。
     pub offer: Option<TodoTarget>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `exam` 字段。
     pub exam: Option<TodoTarget>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `interview` 字段。
     pub interview: Option<TodoTarget>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `ListResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ListResponse {
     #[serde(default)]
+    /// 结果项列表。
     pub items: Vec<TodoItem>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 下一页分页标记。
     pub page_token: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 是否还有更多结果。
     pub has_more: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

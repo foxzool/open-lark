@@ -19,10 +19,12 @@ use crate::{
 /// 部门群转为普通群请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UnbindDepartmentChatBody {
+    /// 部门 ID。
     pub department_id: String,
 }
 
 impl UnbindDepartmentChatBody {
+    /// 创建新的部门群解绑请求体。
     pub fn new(department_id: impl Into<String>) -> Self {
         Self {
             department_id: department_id.into(),
@@ -56,6 +58,7 @@ pub struct UnbindDepartmentChatRequest {
 }
 
 impl UnbindDepartmentChatRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -77,6 +80,8 @@ impl UnbindDepartmentChatRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UnbindDepartmentChatBody,

@@ -13,11 +13,14 @@ use crate::{
 
 /// 更新消息流卡片按钮请求
 pub struct UpdateChatButtonRequest {
+    /// 配置信息。
     config: Config,
+    /// 用户 ID 类型。
     user_id_type: Option<UserIdType>,
 }
 
 impl UpdateChatButtonRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -41,6 +44,8 @@ impl UpdateChatButtonRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: serde_json::Value,

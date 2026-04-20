@@ -20,6 +20,7 @@ pub struct GetRequest {
 }
 
 impl GetRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -27,16 +28,19 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `process_id`。
     pub fn process_id(mut self, process_id: impl Into<String>) -> Self {
         self.process_id = process_id.into();
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         _option: openlark_core::req_option::RequestOption,
@@ -62,6 +66,7 @@ impl GetRequest {
 /// 获取流程表单数据响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetResponse {
+    /// 原始响应数据。
     pub data: Value,
 }
 

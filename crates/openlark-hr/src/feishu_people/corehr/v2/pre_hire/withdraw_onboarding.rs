@@ -11,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+/// `WithdrawOnboardingRequest` 请求。
 #[derive(Debug, Clone)]
 pub struct WithdrawOnboardingRequest {
     config: Config,
@@ -18,6 +19,7 @@ pub struct WithdrawOnboardingRequest {
 }
 
 impl WithdrawOnboardingRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -25,16 +27,19 @@ impl WithdrawOnboardingRequest {
         }
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<WithdrawOnboardingResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -59,8 +64,10 @@ impl WithdrawOnboardingRequest {
     }
 }
 
+/// `WithdrawOnboardingResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct WithdrawOnboardingResponse {
+    /// 原始响应数据。
     pub data: Value,
 }
 

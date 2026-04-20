@@ -29,13 +29,18 @@ use crate::{
 ///     .group_type(1);
 /// ```
 pub struct SimpleListGroupsRequest {
+    /// 配置信息。
     config: Config,
+    /// 分页大小。
     page_size: Option<i32>,
+    /// 分页标记。
     page_token: Option<String>,
+    /// 用户组类型。
     r#type: Option<i32>,
 }
 
 impl SimpleListGroupsRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -71,6 +76,8 @@ impl SimpleListGroupsRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

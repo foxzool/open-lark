@@ -28,11 +28,14 @@ use crate::{
 ///     .execute().await?;
 /// ```
 pub struct GetBatchMessageReadUserRequest {
+    /// 配置信息。
     config: Config,
+    /// 批量消息任务 ID。
     batch_message_id: String,
 }
 
 impl GetBatchMessageReadUserRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -54,6 +57,7 @@ impl GetBatchMessageReadUserRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

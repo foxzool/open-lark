@@ -17,15 +17,22 @@ use crate::common::constants::MAX_PAGE_SIZE;
 /// 用于封装常见的任务列表过滤条件，并让 helper 统一处理分页。
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct WorkflowTaskListQuery {
+    /// 任务清单 GUID。
     pub tasklist_guid: Option<String>,
+    /// 分组 GUID。
     pub section_guid: Option<String>,
+    /// 过滤条件。
     pub filter: Option<String>,
+    /// 排序条件。
     pub sort: Option<serde_json::Value>,
+    /// 用户 ID 类型。
     pub user_type: Option<String>,
+    /// 分页大小。
     pub page_size: Option<i32>,
 }
 
 impl WorkflowTaskListQuery {
+    /// 为指定任务清单创建查询条件。
     pub fn for_tasklist(tasklist_guid: impl Into<String>) -> Self {
         Self {
             tasklist_guid: Some(tasklist_guid.into()),
@@ -33,26 +40,31 @@ impl WorkflowTaskListQuery {
         }
     }
 
+    /// 设置分组 GUID。
     pub fn section_guid(mut self, section_guid: impl Into<String>) -> Self {
         self.section_guid = Some(section_guid.into());
         self
     }
 
+    /// 设置过滤条件。
     pub fn filter(mut self, filter: impl Into<String>) -> Self {
         self.filter = Some(filter.into());
         self
     }
 
+    /// 设置排序条件。
     pub fn sort(mut self, sort: serde_json::Value) -> Self {
         self.sort = Some(sort);
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_type(mut self, user_type: impl Into<String>) -> Self {
         self.user_type = Some(user_type.into());
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
@@ -64,44 +76,58 @@ impl WorkflowTaskListQuery {
 /// 只覆盖高频可变字段，不试图替代完整 typed request。
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct WorkflowTaskMutation {
+    /// 任务标题。
     pub summary: Option<String>,
+    /// 任务描述。
     pub description: Option<String>,
+    /// 截止时间。
     pub due: Option<String>,
+    /// 优先级。
     pub priority: Option<i32>,
+    /// 执行者。
     pub assignee: Option<String>,
+    /// 状态。
     pub status: Option<String>,
 }
 
 impl WorkflowTaskMutation {
+    /// 创建空的任务变更描述。
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// 设置任务标题。
     pub fn summary(mut self, summary: impl Into<String>) -> Self {
         self.summary = Some(summary.into());
         self
     }
 
+    /// 设置任务描述。
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.description = Some(description.into());
         self
     }
 
+    /// 设置截止时间。
     pub fn due(mut self, due: impl Into<String>) -> Self {
         self.due = Some(due.into());
         self
     }
 
+    /// 设置优先级。
     pub fn priority(mut self, priority: i32) -> Self {
         self.priority = Some(priority);
         self
     }
 
+    /// 设置执行者。
     pub fn assignee(mut self, assignee: impl Into<String>) -> Self {
         self.assignee = Some(assignee.into());
         self
     }
 
+    /// 设置审批状态。
+    /// 设置任务状态。
     pub fn status(mut self, status: impl Into<String>) -> Self {
         self.status = Some(status.into());
         self
@@ -113,15 +139,22 @@ impl WorkflowTaskMutation {
 /// 用于封装审批待办的常见筛选条件。
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct ApprovalTaskQuery {
+    /// 用户 ID。
     pub user_id: String,
+    /// 审批主题。
     pub topic: String,
+    /// 用户 ID 类型。
     pub user_id_type: Option<String>,
+    /// 审批状态。
     pub status: Option<String>,
+    /// 实例编码。
     pub instance_code: Option<String>,
+    /// 分页大小。
     pub page_size: Option<i32>,
 }
 
 impl ApprovalTaskQuery {
+    /// 创建审批任务查询条件。
     pub fn new(user_id: impl Into<String>, topic: impl Into<String>) -> Self {
         Self {
             user_id: user_id.into(),
@@ -130,21 +163,26 @@ impl ApprovalTaskQuery {
         }
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
+    /// 设置审批状态。
+    /// 设置任务状态。
     pub fn status(mut self, status: impl Into<String>) -> Self {
         self.status = Some(status.into());
         self
     }
 
+    /// 设置实例编码。
     pub fn instance_code(mut self, instance_code: impl Into<String>) -> Self {
         self.instance_code = Some(instance_code.into());
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
@@ -156,16 +194,24 @@ impl ApprovalTaskQuery {
 /// 统一高频审批动作的 `task_id + comment` 组合。
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct ApprovalTaskAction {
+    /// 审批定义编码。
     pub approval_code: String,
+    /// 审批实例编码。
     pub instance_code: String,
+    /// 操作人用户 ID。
     pub user_id: String,
+    /// 审批任务 ID。
     pub task_id: String,
+    /// 用户 ID 类型。
     pub user_id_type: Option<String>,
+    /// 备注。
     pub comment: Option<String>,
+    /// 表单内容。
     pub form: Option<String>,
 }
 
 impl ApprovalTaskAction {
+    /// 创建审批任务动作参数。
     pub fn new(
         approval_code: impl Into<String>,
         instance_code: impl Into<String>,
@@ -183,27 +229,32 @@ impl ApprovalTaskAction {
         }
     }
 
+    /// 设置备注。
     pub fn comment(mut self, comment: impl Into<String>) -> Self {
         self.comment = Some(comment.into());
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
+    /// 设置表单内容。
     pub fn form(mut self, form: impl Into<String>) -> Self {
         self.form = Some(form.into());
         self
     }
 }
 
+/// 审批任务条目类型别名。
 pub type ApprovalTaskItem = approval_task_query::TaskItemV4;
 
 /// 审批任务动作结果 helper。
 #[derive(Debug, Clone, PartialEq)]
 pub struct ApprovalTaskActionResult {
+    /// 操作是否成功。
     pub success: bool,
 }
 
@@ -217,6 +268,7 @@ pub struct WorkflowService {
 }
 
 impl WorkflowService {
+    /// 创建工作流服务入口。
     pub fn new(config: Config) -> Self {
         Self {
             config: Arc::new(config),
@@ -224,21 +276,25 @@ impl WorkflowService {
     }
 
     #[cfg(feature = "v1")]
+    /// 返回 v1 任务服务入口。
     pub fn v1(&self) -> crate::v1::TaskV1 {
         crate::v1::TaskV1::new(self.config.clone())
     }
 
     #[cfg(feature = "v2")]
+    /// 返回 v2 任务服务入口。
     pub fn v2(&self) -> crate::v2::TaskV2 {
         crate::v2::TaskV2::new(self.config.clone())
     }
 
     #[cfg(feature = "v2")]
+    /// 返回 v2 任务资源入口。
     pub fn task(&self) -> crate::v2::task::Task {
         crate::v2::task::Task::new(self.config.clone())
     }
 
     #[cfg(feature = "v2")]
+    /// 返回 v2 任务清单资源入口。
     pub fn tasklist(&self) -> crate::v2::tasklist::Tasklist {
         crate::v2::tasklist::Tasklist::new(self.config.clone())
     }

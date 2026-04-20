@@ -1,3 +1,5 @@
+//! hire response contract tests 集成测试。
+
 use openlark_hr::hire::hire::{
     v1::{
         advertisement, agency, application, attachment, background_check_order,

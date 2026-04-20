@@ -29,6 +29,7 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `process_id`。
     pub fn process_id(mut self, process_id: String) -> Self {
         self.process_id = Some(process_id);
         self
@@ -40,6 +41,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

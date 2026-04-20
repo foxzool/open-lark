@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::BitableApiV1;
 
-/// 列出仪表盘请求
+/// 列出仪表盘请求。
 #[derive(Debug, Clone)]
 pub struct ListDashboardsRequest {
     config: Config,
@@ -22,6 +22,7 @@ pub struct ListDashboardsRequest {
 }
 
 impl ListDashboardsRequest {
+    /// 创建新的仪表盘列表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -31,25 +32,30 @@ impl ListDashboardsRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
         self.app_token = app_token.into();
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListDashboardsResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -78,12 +84,15 @@ impl ListDashboardsRequest {
     }
 }
 
-/// 列出仪表盘响应
+/// 列出仪表盘响应。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListDashboardsResponse {
+    /// 仪表盘列表。
     pub dashboards: Vec<super::Dashboard>,
+    /// 下一页分页标记。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
+    /// 是否还有更多数据。
     pub has_more: bool,
 }
 

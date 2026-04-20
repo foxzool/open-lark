@@ -31,11 +31,13 @@ impl OfferStatusRequest {
         }
     }
 
+    /// 设置 `offer_id`。
     pub fn offer_id(mut self, offer_id: String) -> Self {
         self.offer_id = offer_id;
         self
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
@@ -47,6 +49,7 @@ impl OfferStatusRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

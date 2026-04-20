@@ -40,6 +40,7 @@ pub struct CreateDocumentBlockChildrenParams {
 /// 创建块响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateDocumentBlockChildrenResponse {
+    /// 新建子块列表。
     #[serde(default)]
     pub children: Vec<DocxBlock>,
 }
@@ -51,11 +52,14 @@ impl ApiResponseTrait for CreateDocumentBlockChildrenResponse {
 }
 
 /// 创建块请求
+///
+/// 用于在文档块下插入一批新的子块。
 pub struct CreateDocumentBlockChildrenRequest {
     config: Config,
 }
 
 impl CreateDocumentBlockChildrenRequest {
+    /// 创建新的创建子块请求。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -71,6 +75,7 @@ impl CreateDocumentBlockChildrenRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         params: CreateDocumentBlockChildrenParams,

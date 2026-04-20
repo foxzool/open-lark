@@ -14,9 +14,10 @@ use serde::{Deserialize, Serialize};
 use super::FilterView;
 use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 
-/// 查询筛选视图响应体 data
+/// 查询筛选视图响应体 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct QueryFilterViewsResponse {
+    /// 筛选视图列表。
     pub items: Vec<FilterView>,
 }
 
@@ -26,7 +27,7 @@ impl ApiResponseTrait for QueryFilterViewsResponse {
     }
 }
 
-/// 查询筛选视图
+/// 查询筛选视图。
 pub async fn query_filter_views(
     config: &Config,
     spreadsheet_token: &str,
@@ -41,7 +42,7 @@ pub async fn query_filter_views(
     .await
 }
 
-/// 查询筛选视图（支持自定义选项）
+/// 查询筛选视图（支持自定义选项）。
 pub async fn query_filter_views_with_options(
     config: &Config,
     spreadsheet_token: &str,

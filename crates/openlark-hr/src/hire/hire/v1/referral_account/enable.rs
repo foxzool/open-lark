@@ -30,6 +30,7 @@ impl EnableRequest {
         }
     }
 
+    /// 设置 `account_id`。
     pub fn account_id(mut self, account_id: String) -> Self {
         self.account_id = account_id;
         self
@@ -41,6 +42,7 @@ impl EnableRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -64,6 +66,7 @@ impl EnableRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct EnableResponse {
     #[serde(flatten)]
+    /// `operation` 字段。
     pub operation: ReferralAccountOperationResult,
 }
 

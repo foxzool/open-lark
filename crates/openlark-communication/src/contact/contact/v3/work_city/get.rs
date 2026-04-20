@@ -13,11 +13,14 @@ use crate::{
 
 /// 获取单个工作城市信息请求
 pub struct GetWorkCityRequest {
+    /// 配置信息。
     config: Config,
+    /// 工作城市 ID。
     work_city_id: String,
 }
 
 impl GetWorkCityRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -39,6 +42,8 @@ impl GetWorkCityRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

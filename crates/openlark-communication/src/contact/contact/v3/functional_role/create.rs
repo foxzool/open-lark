@@ -16,15 +16,18 @@ use crate::{
 /// 创建角色请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFunctionalRoleBody {
+    /// 角色名称。
     pub role_name: String,
 }
 
 /// 创建角色请求
 pub struct CreateFunctionalRoleRequest {
+    /// 配置信息。
     config: Config,
 }
 
 impl CreateFunctionalRoleRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -40,6 +43,7 @@ impl CreateFunctionalRoleRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: CreateFunctionalRoleBody,

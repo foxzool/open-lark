@@ -25,10 +25,8 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 use super::models::Subscription;
 
-/// 获取订阅状态请求
-
+/// 获取订阅状态请求。
 #[derive(Debug, Clone, Serialize, Deserialize)]
-
 pub struct GetSubscriptionRequest {
     /// 文件 token
     pub file_token: String,
@@ -38,6 +36,7 @@ pub struct GetSubscriptionRequest {
 }
 
 impl GetSubscriptionRequest {
+    /// 创建新的订阅状态查询请求。
     pub fn new(file_token: impl Into<String>, subscription_id: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
@@ -47,6 +46,7 @@ impl GetSubscriptionRequest {
     }
 }
 
+/// 获取订阅状态响应 data。
 pub type GetSubscriptionResponse = Subscription;
 
 /// 获取订阅状态

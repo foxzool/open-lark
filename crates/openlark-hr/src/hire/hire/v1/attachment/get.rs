@@ -30,6 +30,7 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `attachment_id`。
     pub fn attachment_id(mut self, attachment_id: String) -> Self {
         self.attachment_id = attachment_id;
         self
@@ -41,6 +42,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -67,6 +69,7 @@ impl GetRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `attachment` 字段。
     pub attachment: Option<HireAttachment>,
 }
 

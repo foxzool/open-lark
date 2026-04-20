@@ -32,11 +32,13 @@ impl FlowVariableDataRequest {
         }
     }
 
+    /// 设置 `process_id`。
     pub fn process_id(mut self, process_id: impl Into<String>) -> Self {
         self.process_id = Some(process_id.into());
         self
     }
 
+    /// 设置请求体。
     pub fn body(mut self, body: Value) -> Self {
         self.body = Some(body);
         self
@@ -48,6 +50,7 @@ impl FlowVariableDataRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

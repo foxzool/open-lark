@@ -1,19 +1,23 @@
 pub mod get;
+/// 应用详情相关数据模型。
 pub mod models;
 
 use openlark_core::config::Config;
 use std::sync::Arc;
 
+/// 应用资源服务。
 #[derive(Clone)]
 pub struct App {
     config: Arc<Config>,
 }
 
 impl App {
+    /// 创建新的应用资源服务。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 
+    /// 获取应用详情。
     pub fn get(&self) -> get::GetAppRequest {
         get::GetAppRequest::new(self.config.clone())
     }

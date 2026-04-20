@@ -30,6 +30,7 @@ impl DeleteRequest {
         }
     }
 
+    /// 提供 `external_background_check_id` 能力。
     pub fn external_background_check_id(
         mut self,
         external_background_check_id: impl Into<String>,
@@ -44,6 +45,7 @@ impl DeleteRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -71,12 +73,16 @@ impl DeleteRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct DeleteResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `external_background_check_id` 字段。
     pub external_background_check_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `result` 字段。
     pub result: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `success` 字段。
     pub success: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

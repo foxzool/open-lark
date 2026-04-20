@@ -18,6 +18,7 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetExportTaskRequest {
     #[serde(skip)]
+    /// SDK 配置。
     config: Config,
     /// 任务ticket
     pub ticket: String,
@@ -26,6 +27,7 @@ pub struct GetExportTaskRequest {
 }
 
 impl GetExportTaskRequest {
+    /// 创建新的导出任务查询请求。
     pub fn new(config: Config, ticket: impl Into<String>, token: impl Into<String>) -> Self {
         Self {
             config,
@@ -34,11 +36,13 @@ impl GetExportTaskRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetExportTaskResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

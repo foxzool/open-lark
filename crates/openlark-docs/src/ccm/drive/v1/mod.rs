@@ -1,35 +1,29 @@
-/// Drive v1 API 模块
-///
-/// 提供云空间文件管理相关的API功能,包括:
-/// - 文件操作:列表、创建、删除、移动、复制等
-/// - 文件元数据:批量查询文件元数据
-/// - 文件上传下载:小文件上传、分片上传、素材上传下载等
-/// - 权限管理:协作者权限、公开权限、密码保护等
-/// - 导入导出:文件导入导出任务管理
-/// - 版本管理:文档版本创建、查询、删除
-/// - 评论管理:评论和回复的增删改查
-/// - 媒体管理:媒体上传任务、分享链接等
-/// - 统计分析:文件统计、查看记录等
-/// - 密码保护:文件密码的增删改查
-/// - 文件搜索:文件搜索功能
+/// 云盘导出任务模块。
 pub mod export_task;
+/// 云盘文件模块。
 pub mod file;
+/// 云盘导入任务模块。
 pub mod import_task;
+/// 云盘媒体模块。
 pub mod media;
+/// 云盘元数据模块。
 pub mod meta;
+/// 云盘权限模块。
 pub mod permission;
 
-// 显式导出 - 避免使用 glob reexport
+/// 重新导出导出任务相关类型。
 pub use export_task::{
     CreateExportTaskRequest, CreateExportTaskResponse, DownloadExportRequest, ExportTaskResult,
     GetExportTaskRequest, GetExportTaskResponse,
 };
 
+/// 重新导出导入任务相关类型。
 pub use import_task::{
     CreateImportTaskRequest, CreateImportTaskResponse, GetImportTaskRequest, GetImportTaskResponse,
     ImportTaskResult,
 };
 
+/// 重新导出媒体相关类型。
 pub use media::{
     BatchGetTmpDownloadUrlRequest, BatchGetTmpDownloadUrlResponse, DownloadMediaRequest,
     TmpDownloadUrlInfo, UploadAllMediaRequest, UploadAllMediaResponse, UploadFinishMediaRequest,
@@ -37,6 +31,5 @@ pub use media::{
     UploadPrepareMediaRequest, UploadPrepareMediaResponse,
 };
 
+/// 重新导出批量元数据查询请求。
 pub use meta::BatchQueryMetaRequest;
-
-// 注意: permission 模块已使用显式导出

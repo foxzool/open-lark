@@ -32,11 +32,13 @@ impl InternOfferStatusRequest {
         }
     }
 
+    /// 设置 `offer_id`。
     pub fn offer_id(mut self, offer_id: String) -> Self {
         self.offer_id = offer_id;
         self
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
@@ -48,6 +50,7 @@ impl InternOfferStatusRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -76,32 +79,44 @@ impl InternOfferStatusRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct InternOnboardingInfo {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `actual_onboarding_date` 字段。
     pub actual_onboarding_date: Option<String>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `InternOffboardingInfo` 信息。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct InternOffboardingInfo {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `actual_offboarding_date` 字段。
     pub actual_offboarding_date: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `notes` 字段。
     pub notes: Option<String>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `InternOfferStatusResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct InternOfferStatusResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `offer_id` 字段。
     pub offer_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `operation` 字段。
     pub operation: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `onboarding_info` 字段。
     pub onboarding_info: Option<InternOnboardingInfo>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `offboarding_info` 字段。
     pub offboarding_info: Option<InternOffboardingInfo>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

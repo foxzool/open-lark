@@ -11,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// Create Mail Group Alias Request。
 #[derive(Debug, Clone)]
 pub struct CreateMailGroupAliasRequest {
     config: Arc<Config>,
@@ -18,13 +19,17 @@ pub struct CreateMailGroupAliasRequest {
     body: CreateMailGroupAliasBody,
 }
 
+/// Create Mail Group Alias Body。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateMailGroupAliasBody {
+    /// alias 字段。
     pub alias: String,
 }
 
+/// Create Mail Group Alias Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateMailGroupAliasResponse {
+    /// 响应数据。
     pub data: Option<MailGroupAliasData>,
 }
 
@@ -34,12 +39,15 @@ impl ApiResponseTrait for CreateMailGroupAliasResponse {
     }
 }
 
+/// Mail Group Alias Data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MailGroupAliasData {
+    /// 别名 ID。
     pub alias_id: String,
 }
 
 impl CreateMailGroupAliasRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailgroup_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -48,15 +56,18 @@ impl CreateMailGroupAliasRequest {
         }
     }
 
+    /// 访问别名资源。
     pub fn alias(mut self, alias: impl Into<String>) -> Self {
         self.body.alias = alias.into();
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateMailGroupAliasResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

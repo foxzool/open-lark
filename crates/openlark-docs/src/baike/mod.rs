@@ -2,7 +2,9 @@
 
 /// Baike 模块
 pub mod baike;
+/// Lingo 模块。
 pub mod lingo;
+/// Baike/Lingo 共享数据模型。
 pub mod models;
 
 // 显式导出 models 中的公共数据类型（避免与 baike/lingo 子模块名冲突）

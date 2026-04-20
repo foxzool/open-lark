@@ -14,7 +14,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 更新数据表请求 (Patch)
+/// 更新数据表请求。
 #[derive(Debug, Clone)]
 pub struct PatchTableRequest {
     /// 配置信息
@@ -28,7 +28,7 @@ pub struct PatchTableRequest {
 }
 
 impl PatchTableRequest {
-    /// 创建新的更新请求
+    /// 创建新的数据表更新请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -38,30 +38,31 @@ impl PatchTableRequest {
         }
     }
 
-    /// 设置应用token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置数据表ID
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
-    /// 设置表名
+    /// 设置表名。
     pub fn name(mut self, name: String) -> Self {
         self.name = Some(name);
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<PatchTableResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -147,14 +148,14 @@ impl PatchTableRequest {
     }
 }
 
-/// 更新数据表请求体
+/// 更新数据表请求体（内部使用）。
 #[derive(Serialize)]
 struct PatchTableRequestBody {
     /// 表名
     name: String,
 }
 
-/// 更新数据表响应
+/// 更新数据表响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchTableResponse {
     /// 新的数据表名称

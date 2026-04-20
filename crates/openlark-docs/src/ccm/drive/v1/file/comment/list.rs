@@ -70,6 +70,7 @@ pub struct ListCommentsRequest {
 }
 
 impl ListCommentsRequest {
+    /// 创建新的评论列表请求。
     pub fn new(file_token: impl Into<String>, file_type: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
@@ -88,30 +89,35 @@ impl ListCommentsRequest {
         }
     }
 
+    /// 设置是否只返回全文评论。
     pub fn is_whole(mut self, is_whole: bool) -> Self {
         self.is_whole = Some(is_whole);
 
         self
     }
 
+    /// 设置是否只返回已解决评论。
     pub fn is_solved(mut self, is_solved: bool) -> Self {
         self.is_solved = Some(is_solved);
 
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
 
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
 
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
 
@@ -130,12 +136,15 @@ impl ListCommentsRequest {
 /// - `items`: 评论列表
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListCommentsResponse {
+    /// 是否还有更多评论。
     #[serde(default)]
     pub has_more: bool,
 
+    /// 下一页分页标记。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 
+    /// 评论列表。
     #[serde(default)]
     pub items: Vec<Comment>,
 }

@@ -17,25 +17,45 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize_repr, Deserialize_repr)]
 #[repr(i32)]
 pub enum FieldType {
+    /// 文本。
     Text = 1,
+    /// 数字。
     Number = 2,
+    /// 单选。
     SingleSelect = 3,
+    /// 多选。
     MultiSelect = 4,
+    /// 日期时间。
     DateTime = 5,
+    /// 复选框。
     Checkbox = 7,
+    /// 用户。
     User = 11,
+    /// 电话号码。
     PhoneNumber = 13,
+    /// 链接。
     Url = 15,
+    /// 附件。
     Attachment = 17,
+    /// 关联记录。
     Link = 18,
+    /// 公式。
     Formula = 20,
+    /// 双向关联。
     DuplexLink = 21,
+    /// 地点。
     Location = 22,
+    /// 群聊。
     GroupChat = 23,
+    /// 创建时间。
     CreatedTime = 1001,
+    /// 修改时间。
     ModifiedTime = 1002,
+    /// 创建人。
     CreatedUser = 1003,
+    /// 修改人。
     ModifiedUser = 1004,
+    /// 自动编号。
     AutoNumber = 1005,
 }
 
@@ -93,7 +113,7 @@ pub struct CreateFieldRequest {
 }
 
 impl CreateFieldRequest {
-    /// 创建字段请求
+    /// 创建新的字段创建请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -108,60 +128,61 @@ impl CreateFieldRequest {
         }
     }
 
-    /// 设置应用token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置数据表ID
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
-    /// 设置客户端token
+    /// 设置客户端幂等 token。
     pub fn client_token(mut self, client_token: String) -> Self {
         self.client_token = Some(client_token);
         self
     }
 
-    /// 设置字段名称
+    /// 设置字段名称。
     pub fn field_name(mut self, field_name: String) -> Self {
         self.field_name = field_name;
         self
     }
 
-    /// 设置字段类型
+    /// 设置字段类型。
     pub fn field_type(mut self, field_type: FieldType) -> Self {
         self.r#type = field_type;
         self
     }
 
-    /// 设置字段属性
+    /// 设置字段属性。
     pub fn property(mut self, property: FieldProperty) -> Self {
         self.property = Some(property);
         self
     }
 
-    /// 设置字段描述
+    /// 设置字段描述。
     pub fn description(mut self, description: Value) -> Self {
         self.description = Some(description);
         self
     }
 
-    /// 设置界面类型
+    /// 设置界面类型。
     pub fn ui_type(mut self, ui_type: String) -> Self {
         self.ui_type = Some(ui_type);
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateFieldResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

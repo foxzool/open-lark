@@ -30,6 +30,7 @@ impl OpenRequest {
         }
     }
 
+    /// 设置 `job_id`。
     pub fn job_id(mut self, job_id: String) -> Self {
         self.job_id = job_id;
         self
@@ -41,6 +42,7 @@ impl OpenRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -66,12 +68,16 @@ impl OpenRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct OpenResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_id` 字段。
     pub job_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `result` 字段。
     pub result: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `success` 字段。
     pub success: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

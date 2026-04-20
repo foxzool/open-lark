@@ -23,6 +23,7 @@ pub enum WorkflowStatus {
     Disable,
 }
 
+/// 更新自动化流程状态请求体。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateWorkflowBody {
     /// 自动化状态
@@ -40,6 +41,8 @@ impl ApiResponseTrait for UpdateWorkflowResponse {
 }
 
 /// 更新自动化流程状态请求
+///
+/// 用于更新多维表格中的自动化流程状态。
 pub struct UpdateWorkflowRequest {
     config: Config,
     app_token: String,
@@ -48,6 +51,7 @@ pub struct UpdateWorkflowRequest {
 }
 
 impl UpdateWorkflowRequest {
+    /// 创建新的自动化流程更新请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -80,6 +84,7 @@ impl UpdateWorkflowRequest {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

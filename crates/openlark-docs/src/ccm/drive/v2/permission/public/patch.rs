@@ -13,8 +13,10 @@ use serde::{Deserialize, Serialize};
 use super::models::PermissionPublic;
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
+/// 更新云文档权限设置请求。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdatePermissionPublicRequest {
+    /// 文档 token。
     pub token: String,
     /// 云文档类型（query 参数 `type`），需要与 token 匹配
     pub r#type: String,
@@ -35,6 +37,7 @@ pub struct UpdatePermissionPublicRequest {
 }
 
 impl UpdatePermissionPublicRequest {
+    /// 创建新的权限更新请求。
     pub fn new(token: impl Into<String>, r#type: impl Into<String>) -> Self {
         Self {
             token: token.into(),
@@ -50,8 +53,10 @@ impl UpdatePermissionPublicRequest {
     }
 }
 
+/// 更新云文档权限设置响应 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdatePermissionPublicResponse {
+    /// 权限设置详情。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permission_public: Option<PermissionPublic>,
 }
@@ -80,6 +85,7 @@ struct UpdatePermissionPublicBody {
     copy_entity: Option<String>,
 }
 
+/// 更新云文档权限设置。
 pub async fn update_permission_public(
     request: UpdatePermissionPublicRequest,
     config: &Config,
@@ -92,6 +98,7 @@ pub async fn update_permission_public(
     .await
 }
 
+/// 使用指定请求选项更新云文档权限设置。
 pub async fn update_permission_public_with_options(
     request: UpdatePermissionPublicRequest,
     config: &Config,

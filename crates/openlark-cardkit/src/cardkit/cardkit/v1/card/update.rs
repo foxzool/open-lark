@@ -24,9 +24,11 @@ pub struct UpdateCardBody {
     pub card_content: serde_json::Value,
     /// 卡片类型（可选）
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 卡片类型。
     pub card_type: Option<String>,
     /// 更新掩码（可选）
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 更新字段掩码。
     pub update_mask: Option<Vec<String>>,
 }
 
@@ -34,8 +36,10 @@ pub struct UpdateCardBody {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateCardResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 卡片 ID。
     pub card_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 应用 ID。
     pub app_id: Option<String>,
 }
 
@@ -52,6 +56,7 @@ pub struct UpdateCardRequest {
 }
 
 impl UpdateCardRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,

@@ -15,12 +15,15 @@ use crate::endpoints::DOCUMENT_AI_BUSINESS_LICENSE_RECOGNIZE;
 /// 营业执照识别请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BusinessLicenseRecognizeBody {
+    /// file_token 字段。
     pub file_token: String,
+    /// is_async 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_async: Option<bool>,
 }
 
 impl BusinessLicenseRecognizeBody {
+    /// 校验请求体。
     pub fn validate(&self) -> Result<(), String> {
         if self.file_token.trim().is_empty() {
             return Err("file_token 不能为空".to_string());
@@ -29,20 +32,25 @@ impl BusinessLicenseRecognizeBody {
     }
 }
 
+/// Business_License_Recognize_Response 响应。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BusinessLicenseRecognizeResponse {
+    /// data 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<BusinessLicenseRecognizeResult>,
 }
 
 impl openlark_core::api::ApiResponseTrait for BusinessLicenseRecognizeResponse {}
 
+/// Business_License_Recognize_Result 结果。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BusinessLicenseRecognizeResult {
+    /// parsing_result 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parsing_result: Option<ParsingResult>,
 }
 
+/// Parsing_Result 结果。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ParsingResult {
     /// 统一社会信用代码
@@ -80,16 +88,19 @@ pub struct ParsingResult {
     pub company_type: Option<String>,
 }
 
+/// Business_License_Recognize_Request 请求。
 #[derive(Debug, Clone)]
 pub struct BusinessLicenseRecognizeRequest {
     config: Config,
 }
 
 impl BusinessLicenseRecognizeRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(
         self,
         body: BusinessLicenseRecognizeBody,
@@ -98,6 +109,7 @@ impl BusinessLicenseRecognizeRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: BusinessLicenseRecognizeBody,
@@ -115,6 +127,7 @@ impl BusinessLicenseRecognizeRequest {
     }
 }
 
+/// Business_License_Recognize_Request_Builder 请求构建器。
 #[derive(Debug, Clone)]
 pub struct BusinessLicenseRecognizeRequestBuilder {
     request: BusinessLicenseRecognizeRequest,
@@ -123,6 +136,7 @@ pub struct BusinessLicenseRecognizeRequestBuilder {
 }
 
 impl BusinessLicenseRecognizeRequestBuilder {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             request: BusinessLicenseRecognizeRequest::new(config),
@@ -131,16 +145,19 @@ impl BusinessLicenseRecognizeRequestBuilder {
         }
     }
 
+    /// file_token。
     pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
         self.file_token = Some(file_token.into());
         self
     }
 
+    /// 设置 is_async。
     pub fn is_async(mut self, is_async: impl Into<bool>) -> Self {
         self.is_async = Some(is_async.into());
         self
     }
 
+    /// 构建请求体。
     pub fn body(self) -> BusinessLicenseRecognizeBody {
         BusinessLicenseRecognizeBody {
             file_token: self.file_token.unwrap_or_default(),
@@ -148,11 +165,13 @@ impl BusinessLicenseRecognizeRequestBuilder {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BusinessLicenseRecognizeResponse> {
         let body = self.clone().body();
         self.request.execute(body).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -162,6 +181,7 @@ impl BusinessLicenseRecognizeRequestBuilder {
     }
 }
 
+/// business_license_recognize。
 pub async fn business_license_recognize(
     config: &Config,
     body: BusinessLicenseRecognizeBody,
@@ -169,6 +189,7 @@ pub async fn business_license_recognize(
     business_license_recognize_with_options(config, body, RequestOption::default()).await
 }
 
+/// business_license_recognize_with_options。
 pub async fn business_license_recognize_with_options(
     config: &Config,
     body: BusinessLicenseRecognizeBody,

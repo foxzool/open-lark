@@ -17,6 +17,7 @@ use crate::common::api_endpoints::LingoApiV1;
 /// 更新草稿响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateDraftResp {
+    /// 草稿详情。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub draft: Option<Draft>,
 }
@@ -36,6 +37,7 @@ pub struct UpdateDraftRequest {
 }
 
 impl UpdateDraftRequest {
+    /// 创建新的 lingo 草稿更新请求。
     pub fn new(config: Config, draft_id: impl Into<String>, body: DraftUpdateEntityInput) -> Self {
         Self {
             config,
@@ -51,10 +53,12 @@ impl UpdateDraftRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UpdateDraftResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<UpdateDraftResp> {
         // ===== 参数校验 =====
         validate_required!(self.draft_id, "draft_id 不能为空");

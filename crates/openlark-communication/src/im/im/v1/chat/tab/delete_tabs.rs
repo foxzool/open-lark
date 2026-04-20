@@ -13,12 +13,15 @@ use crate::{
 };
 
 /// 删除会话标签页请求
+///
+/// 用于批量删除指定群聊中的标签页。
 pub struct DeleteChatTabsRequest {
     config: Config,
     chat_id: String,
 }
 
 impl DeleteChatTabsRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -40,6 +43,7 @@ impl DeleteChatTabsRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: TabIdsBody,

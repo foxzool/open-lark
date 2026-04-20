@@ -34,11 +34,13 @@ impl UpdateRequest {
         }
     }
 
+    /// 设置 `website_id`。
     pub fn website_id(mut self, website_id: String) -> Self {
         self.website_id = website_id;
         self
     }
 
+    /// 设置 `channel_id`。
     pub fn channel_id(mut self, channel_id: String) -> Self {
         self.channel_id = channel_id;
         self
@@ -50,6 +52,7 @@ impl UpdateRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -76,8 +79,10 @@ impl UpdateRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct UpdateResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `channel` 字段。
     pub channel: Option<WebsiteChannelSummary>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

@@ -12,7 +12,9 @@ use super::client::EventDispatcherHandler;
 /// Frame 类型
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum FrameType {
+    /// 控制帧。
     Control = 0,
+    /// 数据帧。
     Data = 1,
 }
 

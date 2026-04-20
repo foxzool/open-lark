@@ -36,6 +36,7 @@ impl CreateTicketMessageBody {
 /// 发送工单消息响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateTicketMessageResponse {
+    /// 响应数据。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<CreateTicketMessageResult>,
 }

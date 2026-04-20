@@ -56,6 +56,7 @@ pub struct GetRecordRequest {
 }
 
 impl GetRecordRequest {
+    /// 创建新的记录查询请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -70,16 +71,19 @@ impl GetRecordRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
+    /// 设置记录 ID。
     pub fn record_id(mut self, record_id: String) -> Self {
         self.record_id = record_id;
         self
@@ -115,11 +119,13 @@ impl GetRecordRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetRecordResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -164,7 +170,7 @@ impl GetRecordRequest {
     }
 }
 
-/// 获取记录响应
+/// 获取记录响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetRecordResponse {
     /// 记录

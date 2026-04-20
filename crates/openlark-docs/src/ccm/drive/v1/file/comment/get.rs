@@ -28,10 +28,8 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 use super::models::Comment;
 
-/// 获取全文评论请求
-
+/// 获取全文评论请求。
 #[derive(Debug, Clone, Serialize, Deserialize)]
-
 pub struct GetCommentRequest {
     /// 文件 token
     pub file_token: String,
@@ -49,6 +47,7 @@ pub struct GetCommentRequest {
 }
 
 impl GetCommentRequest {
+    /// 创建新的全文评论查询请求。
     pub fn new(
         file_token: impl Into<String>,
 
@@ -67,6 +66,7 @@ impl GetCommentRequest {
         }
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
 
@@ -74,6 +74,7 @@ impl GetCommentRequest {
     }
 }
 
+/// 获取全文评论响应 data。
 pub type GetCommentResponse = Comment;
 
 /// 获取全文评论

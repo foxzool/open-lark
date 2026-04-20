@@ -15,11 +15,16 @@ use crate::common::api_utils::*;
 /// 表单问题项
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FormFieldQuestion {
+    /// 字段 ID。
     pub field_id: String,
+    /// 问题标题。
     pub title: String,
+    /// 问题描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 是否必答。
     pub required: bool,
+    /// 是否可见。
     pub visible: bool,
 }
 
@@ -35,6 +40,7 @@ pub struct ListFormFieldQuestionRequest {
 }
 
 impl ListFormFieldQuestionRequest {
+    /// 创建新的表单问题列表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -46,36 +52,43 @@ impl ListFormFieldQuestionRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
+    /// 设置表单 ID。
     pub fn form_id(mut self, form_id: String) -> Self {
         self.form_id = form_id;
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: String) -> Self {
         self.page_token = Some(page_token);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListFormFieldQuestionResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -117,13 +130,17 @@ impl ListFormFieldQuestionRequest {
     }
 }
 
-/// 列出表单问题响应（data）
+/// 列出表单问题响应（data）。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListFormFieldQuestionResponse {
+    /// 问题列表。
     pub items: Vec<FormFieldQuestion>,
+    /// 下一页分页标记。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
+    /// 是否还有更多数据。
     pub has_more: bool,
+    /// 总数。
     pub total: i32,
 }
 

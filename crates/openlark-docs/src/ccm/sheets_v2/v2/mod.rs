@@ -61,19 +61,29 @@ impl CcmSheetV2 {
     }
 }
 
-// 导出所有子模块
+/// data_io 子模块。
 pub mod data_io;
+/// filter 子模块。
 pub mod filter;
+/// float_image 子模块。
 pub mod float_image;
+/// sheet 子模块。
 pub mod sheet;
+/// sheet_operations 子模块。
 pub mod sheet_operations;
+/// spreadsheet 子模块。
 pub mod spreadsheet;
 
 // 重新导出主要的API结构体
+/// 重新导出相关类型。
 pub use data_io::DataIOApi;
+/// 重新导出相关类型。
 pub use filter::FilterApi;
+/// 重新导出相关类型。
 pub use float_image::FloatImageApi;
+/// 重新导出相关类型。
 pub use sheet::SheetApi;
+/// 重新导出相关类型。
 pub use sheet_operations::SheetOperationsApi;
 // pub use self::spreadsheet::SpreadsheetApi; // Generated: Module use not found
 

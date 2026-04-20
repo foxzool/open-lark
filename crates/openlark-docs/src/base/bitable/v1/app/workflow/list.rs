@@ -40,6 +40,8 @@ impl ApiResponseTrait for ListWorkflowResponse {
 }
 
 /// 列出自动化流程请求
+///
+/// 用于分页查询多维表格中的自动化流程。
 pub struct ListWorkflowRequest {
     config: Config,
     app_token: String,
@@ -48,6 +50,7 @@ pub struct ListWorkflowRequest {
 }
 
 impl ListWorkflowRequest {
+    /// 创建新的自动化流程列表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -80,6 +83,7 @@ impl ListWorkflowRequest {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

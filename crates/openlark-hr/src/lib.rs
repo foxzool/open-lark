@@ -36,29 +36,39 @@
 //! - `PayrollApiV1` - 薪资管理
 //! - `PerformanceApiV1` - 绩效管理
 
+/// 通用宏、端点与共享模型。
 pub mod common;
 
 #[cfg(feature = "attendance")]
+/// 考勤模块。
 pub mod attendance;
 #[cfg(feature = "compensation")]
+/// 薪酬管理模块。
 pub mod compensation_management;
 #[cfg(feature = "ehr")]
+/// 员工档案模块。
 pub mod ehr;
 #[cfg(feature = "corehr")]
+/// 核心人力模块。
 pub mod feishu_people;
 #[cfg(feature = "hire")]
+/// 招聘模块。
 pub mod hire;
 #[cfg(feature = "okr")]
+/// OKR 模块。
 pub mod okr;
 #[cfg(feature = "payroll")]
+/// 薪资模块。
 pub mod payroll;
 #[cfg(feature = "performance")]
+/// 绩效模块。
 pub mod performance;
 
 // 端点保留（已废弃，请使用 common::api_endpoints 中的枚举系统）
 #[allow(deprecated)]
 mod endpoints;
 
+/// 常用类型预导出模块。
 pub mod prelude {
     pub use openlark_core::{config::Config, SDKResult};
 }
@@ -72,31 +82,40 @@ pub struct HrClient {
     config: Arc<Config>,
 
     #[cfg(feature = "attendance")]
+    /// 考勤入口。
     pub attendance: attendance::Attendance,
 
     #[cfg(feature = "corehr")]
+    /// 核心人力入口。
     pub corehr: feishu_people::Corehr,
 
     #[cfg(feature = "compensation")]
+    /// 薪酬管理入口。
     pub compensation: compensation_management::CompensationManagement,
 
     #[cfg(feature = "payroll")]
+    /// 薪资入口。
     pub payroll: payroll::Payroll,
 
     #[cfg(feature = "performance")]
+    /// 绩效入口。
     pub performance: performance::Performance,
 
     #[cfg(feature = "okr")]
+    /// OKR 入口。
     pub okr: okr::Okr,
 
     #[cfg(feature = "hire")]
+    /// 招聘入口。
     pub hire: hire::Hire,
 
     #[cfg(feature = "ehr")]
+    /// 员工档案入口。
     pub ehr: ehr::Ehr,
 }
 
 impl HrClient {
+    /// 创建新的 HR 客户端。
     pub fn new(config: Config) -> Self {
         let config = Arc::new(config);
         Self {
@@ -120,6 +139,7 @@ impl HrClient {
         }
     }
 
+    /// 返回底层配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -129,6 +149,7 @@ impl HrClient {
         since = "0.15.0",
         note = "Use the `attendance` field directly (`client.attendance`) instead of the compatibility accessor method."
     )]
+    /// 兼容旧接口：返回考勤模块客户端。
     pub fn attendance(&self) -> attendance::Attendance {
         self.attendance.clone()
     }
@@ -138,6 +159,7 @@ impl HrClient {
         since = "0.15.0",
         note = "Use the `corehr` field directly (`client.corehr`) instead of the compatibility accessor method."
     )]
+    /// 兼容旧接口：返回核心人力模块客户端。
     pub fn corehr(&self) -> feishu_people::Corehr {
         self.corehr.clone()
     }
@@ -147,6 +169,7 @@ impl HrClient {
         since = "0.15.0",
         note = "Use the `compensation` field directly (`client.compensation`) instead of the compatibility accessor method."
     )]
+    /// 兼容旧接口：返回薪酬管理模块客户端。
     pub fn compensation(&self) -> compensation_management::CompensationManagement {
         self.compensation.clone()
     }
@@ -156,6 +179,7 @@ impl HrClient {
         since = "0.15.0",
         note = "Use the `payroll` field directly (`client.payroll`) instead of the compatibility accessor method."
     )]
+    /// 兼容旧接口：返回薪资模块客户端。
     pub fn payroll(&self) -> payroll::Payroll {
         self.payroll.clone()
     }
@@ -165,6 +189,7 @@ impl HrClient {
         since = "0.15.0",
         note = "Use the `performance` field directly (`client.performance`) instead of the compatibility accessor method."
     )]
+    /// 兼容旧接口：返回绩效模块客户端。
     pub fn performance(&self) -> performance::Performance {
         self.performance.clone()
     }
@@ -174,6 +199,7 @@ impl HrClient {
         since = "0.15.0",
         note = "Use the `okr` field directly (`client.okr`) instead of the compatibility accessor method."
     )]
+    /// 兼容旧接口：返回 OKR 模块客户端。
     pub fn okr(&self) -> okr::Okr {
         self.okr.clone()
     }
@@ -183,6 +209,7 @@ impl HrClient {
         since = "0.15.0",
         note = "Use the `hire` field directly (`client.hire`) instead of the compatibility accessor method."
     )]
+    /// 兼容旧接口：返回招聘模块客户端。
     pub fn hire(&self) -> hire::Hire {
         self.hire.clone()
     }
@@ -192,6 +219,7 @@ impl HrClient {
         since = "0.15.0",
         note = "Use the `ehr` field directly (`client.ehr`) instead of the compatibility accessor method."
     )]
+    /// 兼容旧接口：返回员工档案模块客户端。
     pub fn ehr(&self) -> ehr::Ehr {
         self.ehr.clone()
     }

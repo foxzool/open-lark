@@ -11,10 +11,12 @@ pub struct CardkitV1Service {
 }
 
 impl CardkitV1Service {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 访问 card 资源。
     pub fn card(&self) -> card::CardService {
         card::CardService::new(self.config.clone())
     }

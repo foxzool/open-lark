@@ -1,13 +1,24 @@
+/// collaborator 模块。
 pub mod collaborator;
+/// 评论模块。
 pub mod comment;
+/// 完成任务接口。
 pub mod complete;
+/// 创建接口。
 pub mod create;
+/// 删除接口。
 pub mod delete;
+/// follower 模块。
 pub mod follower;
+/// 获取接口。
 pub mod get;
+/// 列表接口。
 pub mod list;
+/// 更新接口。
 pub mod patch;
+/// reminder 模块。
 pub mod reminder;
+/// 取消完成接口。
 pub mod uncomplete;
 
 // 显式导出 Request 类型，避免 ambiguous glob re-exports
@@ -44,34 +55,42 @@ pub struct Task {
 }
 
 impl Task {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 
+    /// 创建新建请求。
     pub fn create(&self) -> CreateTaskRequestV1 {
         CreateTaskRequestV1::new(self.config.clone())
     }
 
+    /// 创建获取详情请求。
     pub fn get(&self, task_id: impl Into<String>) -> GetTaskRequestV1 {
         GetTaskRequestV1::new(self.config.clone(), task_id)
     }
 
+    /// 创建更新请求。
     pub fn update(&self, task_id: impl Into<String>) -> UpdateTaskRequestV1 {
         UpdateTaskRequestV1::new(self.config.clone(), task_id)
     }
 
+    /// 创建删除请求。
     pub fn delete(&self, task_id: impl Into<String>) -> DeleteTaskRequestV1 {
         DeleteTaskRequestV1::new(self.config.clone(), task_id)
     }
 
+    /// 创建完成任务请求。
     pub fn complete(&self, task_id: impl Into<String>) -> CompleteTaskRequestV1 {
         CompleteTaskRequestV1::new(self.config.clone(), task_id)
     }
 
+    /// 创建取消完成请求。
     pub fn uncomplete(&self, task_id: impl Into<String>) -> UncompleteTaskRequestV1 {
         UncompleteTaskRequestV1::new(self.config.clone(), task_id)
     }
 
+    /// 创建列表请求。
     pub fn list(&self) -> ListTaskRequestV1 {
         ListTaskRequestV1::new(self.config.clone())
     }
@@ -81,6 +100,7 @@ impl Task {
         CreateTaskFollowerRequestV1::new(self.config.clone(), task_id)
     }
 
+    /// follower_delete。
     pub fn follower_delete(
         &self,
         task_id: impl Into<String>,
@@ -89,10 +109,12 @@ impl Task {
         DeleteTaskFollowerRequestV1::new(self.config.clone(), task_id, follower_id)
     }
 
+    /// follower_list。
     pub fn follower_list(&self, task_id: impl Into<String>) -> ListTaskFollowerRequestV1 {
         ListTaskFollowerRequestV1::new(self.config.clone(), task_id)
     }
 
+    /// follower_batch_delete。
     pub fn follower_batch_delete(
         &self,
         task_id: impl Into<String>,
@@ -108,6 +130,7 @@ impl Task {
         CreateTaskCollaboratorRequestV1::new(self.config.clone(), task_id)
     }
 
+    /// collaborator_delete。
     pub fn collaborator_delete(
         &self,
         task_id: impl Into<String>,
@@ -116,10 +139,12 @@ impl Task {
         DeleteTaskCollaboratorRequestV1::new(self.config.clone(), task_id, collaborator_id)
     }
 
+    /// collaborator_list。
     pub fn collaborator_list(&self, task_id: impl Into<String>) -> ListTaskCollaboratorRequestV1 {
         ListTaskCollaboratorRequestV1::new(self.config.clone(), task_id)
     }
 
+    /// collaborator_batch_delete。
     pub fn collaborator_batch_delete(
         &self,
         task_id: impl Into<String>,
@@ -132,6 +157,7 @@ impl Task {
         CreateTaskReminderRequestV1::new(self.config.clone(), task_id)
     }
 
+    /// reminder_delete。
     pub fn reminder_delete(
         &self,
         task_id: impl Into<String>,
@@ -140,6 +166,7 @@ impl Task {
         DeleteTaskReminderRequestV1::new(self.config.clone(), task_id, reminder_id)
     }
 
+    /// reminder_list。
     pub fn reminder_list(&self, task_id: impl Into<String>) -> ListTaskReminderRequestV1 {
         ListTaskReminderRequestV1::new(self.config.clone(), task_id)
     }
@@ -149,6 +176,7 @@ impl Task {
         CreateTaskCommentRequestV1::new(self.config.clone(), task_id)
     }
 
+    /// comment_get。
     pub fn comment_get(
         &self,
         task_id: impl Into<String>,
@@ -157,6 +185,7 @@ impl Task {
         GetTaskCommentRequestV1::new(self.config.clone(), task_id, comment_id)
     }
 
+    /// comment_update。
     pub fn comment_update(
         &self,
         task_id: impl Into<String>,
@@ -165,6 +194,7 @@ impl Task {
         UpdateTaskCommentRequestV1::new(self.config.clone(), task_id, comment_id)
     }
 
+    /// comment_delete。
     pub fn comment_delete(
         &self,
         task_id: impl Into<String>,
@@ -173,6 +203,7 @@ impl Task {
         DeleteTaskCommentRequestV1::new(self.config.clone(), task_id, comment_id)
     }
 
+    /// comment_list。
     pub fn comment_list(&self, task_id: impl Into<String>) -> ListTaskCommentRequestV1 {
         ListTaskCommentRequestV1::new(self.config.clone(), task_id)
     }

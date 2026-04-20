@@ -30,6 +30,7 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `note_id`。
     pub fn note_id(mut self, note_id: String) -> Self {
         self.note_id = note_id;
         self
@@ -41,6 +42,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -67,6 +69,7 @@ impl GetRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `note` 字段。
     pub note: Option<NoteRecord>,
 }
 

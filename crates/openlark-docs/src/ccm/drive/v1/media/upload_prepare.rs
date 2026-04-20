@@ -65,6 +65,7 @@ pub struct UploadPrepareMediaRequest {
 }
 
 impl UploadPrepareMediaRequest {
+    /// 创建新的预上传请求。
     pub fn new(
         config: Config,
         file_name: impl Into<String>,
@@ -82,16 +83,19 @@ impl UploadPrepareMediaRequest {
         }
     }
 
+    /// 设置扩展参数。
     pub fn extra(mut self, extra: impl Into<String>) -> Self {
         self.extra = Some(extra.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UploadPrepareMediaResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

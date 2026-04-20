@@ -28,6 +28,7 @@ impl LeaveTypesRequest {
         }
     }
 
+    /// 追加查询参数。
     pub fn query_param(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
         self.query_params.push((key.into(), value.into()));
         self
@@ -39,6 +40,7 @@ impl LeaveTypesRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

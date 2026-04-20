@@ -16,6 +16,8 @@ use super::super::models::WikiTask;
 use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 获取任务结果请求
+///
+/// 用于查询 wiki 异步任务结果。
 pub struct GetWikiTaskRequest {
     task_id: String,
     task_type: Option<String>,
@@ -63,6 +65,7 @@ impl GetWikiTaskRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

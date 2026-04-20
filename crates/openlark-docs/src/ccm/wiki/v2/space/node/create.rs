@@ -16,6 +16,8 @@ use crate::ccm::wiki::v2::models::WikiSpaceNode;
 use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 创建知识空间节点请求
+///
+/// 用于在指定知识空间中创建新节点。
 pub struct CreateWikiSpaceNodeRequest {
     space_id: String,
     config: Config,
@@ -130,6 +132,7 @@ impl CreateWikiSpaceNodeRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         params: CreateWikiSpaceNodeParams,

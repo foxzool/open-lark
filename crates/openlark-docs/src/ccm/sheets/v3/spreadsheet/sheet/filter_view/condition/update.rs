@@ -14,20 +14,24 @@ use serde::{Deserialize, Serialize};
 use super::Condition;
 use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 
-/// 更新筛选条件请求体（字段在文档中标注为非必填，可按需传入）
+/// 更新筛选条件请求体（字段在文档中标注为非必填，可按需传入）。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateFilterConditionRequest {
+    /// 筛选类型。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_type: Option<String>,
+    /// 比较类型。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compare_type: Option<String>,
+    /// 期望值列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expected: Option<Vec<String>>,
 }
 
-/// 更新筛选条件响应体 data
+/// 更新筛选条件响应体 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateFilterConditionResponse {
+    /// 更新后的筛选条件。
     pub condition: Condition,
 }
 
@@ -37,7 +41,7 @@ impl ApiResponseTrait for UpdateFilterConditionResponse {
     }
 }
 
-/// 更新筛选条件
+/// 更新筛选条件。
 pub async fn update_filter_condition(
     config: &Config,
     spreadsheet_token: &str,
@@ -58,7 +62,7 @@ pub async fn update_filter_condition(
     .await
 }
 
-/// 更新筛选条件（带请求选项）
+/// 更新筛选条件（带请求选项）。
 pub async fn update_filter_condition_with_options(
     config: &Config,
     spreadsheet_token: &str,

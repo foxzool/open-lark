@@ -32,6 +32,7 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `job_post_id`。
     pub fn job_post_id(mut self, job_post_id: String) -> Self {
         self.job_post_id = job_post_id;
         self
@@ -43,6 +44,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -68,8 +70,10 @@ impl GetRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_post` 字段。
     pub job_post: Option<ReferralWebsiteJobPostItem>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

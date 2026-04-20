@@ -35,6 +35,7 @@ pub struct ConvertCardIdRequest {
 }
 
 impl ConvertCardIdRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,

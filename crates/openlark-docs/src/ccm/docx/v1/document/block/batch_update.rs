@@ -29,6 +29,7 @@ pub struct BatchUpdateDocumentBlocksParams {
 /// 单个批量更新请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchUpdateRequest {
+    /// 块 ID。
     pub block_id: String,
     /// 操作内容（例如 update_text_elements / merge_table_cells 等）
     #[serde(flatten)]
@@ -38,6 +39,7 @@ pub struct BatchUpdateRequest {
 /// 批量更新块内容响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchUpdateDocumentBlocksResponse {
+    /// 更新后的块列表。
     #[serde(default)]
     pub blocks: Vec<DocxBlock>,
 }
@@ -49,15 +51,19 @@ impl ApiResponseTrait for BatchUpdateDocumentBlocksResponse {
 }
 
 /// 批量更新块内容请求
+///
+/// 用于批量修改文档中的多个块内容。
 pub struct BatchUpdateDocumentBlocksRequest {
     config: Config,
 }
 
 impl BatchUpdateDocumentBlocksRequest {
+    /// 创建新的批量更新块请求。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(
         self,
         params: BatchUpdateDocumentBlocksParams,
@@ -66,6 +72,7 @@ impl BatchUpdateDocumentBlocksRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         params: BatchUpdateDocumentBlocksParams,

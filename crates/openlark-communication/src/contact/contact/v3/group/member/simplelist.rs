@@ -33,15 +33,22 @@ use crate::{
 ///     .page_size(50);
 /// ```
 pub struct SimpleListGroupMembersRequest {
+    /// 配置信息。
     config: Config,
+    /// 用户组 ID。
     group_id: String,
+    /// 分页大小。
     page_size: Option<i32>,
+    /// 分页标记。
     page_token: Option<String>,
+    /// 成员 ID 类型。
     member_id_type: Option<String>,
+    /// 成员类型。
     member_type: Option<String>,
 }
 
 impl SimpleListGroupMembersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -91,6 +98,9 @@ impl SimpleListGroupMembersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

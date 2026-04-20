@@ -32,13 +32,18 @@ use crate::{
 ///     .user_id_type(UserIdType::OpenId);
 /// ```
 pub struct GetUserRequest {
+    /// 配置信息。
     config: Config,
+    /// 用户 ID。
     user_id: String,
+    /// 用户 ID 类型。
     user_id_type: Option<UserIdType>,
+    /// 部门 ID 类型。
     department_id_type: Option<DepartmentIdType>,
 }
 
 impl GetUserRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -74,6 +79,8 @@ impl GetUserRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

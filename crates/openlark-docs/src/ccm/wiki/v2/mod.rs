@@ -1,15 +1,15 @@
-/// Wiki V2 API 模块
+/// Wiki v2 模型模块。
+pub mod models;
+/// Wiki v2 空间模块。
 pub mod space;
+/// Wiki v2 任务模块。
 pub mod task;
 
-// 导出数据模型
-pub mod models;
-
-// 导出数据模型
+/// 重新导出 Wiki v2 模型。
 pub use models::{
     WikiSearchResult, WikiSpace, WikiSpaceMember, WikiSpaceNode, WikiSpaceSetting, WikiTask,
 };
 
-// 导出API服务 - 使用通配符导出space模块的所有内容
+/// 重新导出 Wiki v2 空间接口。
 #[allow(deprecated)]
 pub use space::*;

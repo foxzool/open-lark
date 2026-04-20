@@ -16,12 +16,15 @@ use crate::{
 };
 
 /// 更新群公告信息请求
+///
+/// 用于提交新的群公告内容和版本号。
 pub struct PatchChatAnnouncementRequest {
     config: Config,
     chat_id: String,
 }
 
 impl PatchChatAnnouncementRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -43,6 +46,7 @@ impl PatchChatAnnouncementRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: PatchChatAnnouncementBody,

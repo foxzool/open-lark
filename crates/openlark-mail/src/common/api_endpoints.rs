@@ -4,87 +4,154 @@
 #[derive(Debug, Clone, PartialEq)]
 pub enum MailApiV1 {
     // MailGroup APIs
+    /// Mail Group Create 端点。
     MailGroupCreate,
+    /// Mail Group Get 端点。
     MailGroupGet(String),
+    /// Mail Group Update 端点。
     MailGroupUpdate(String),
+    /// Mail Group Delete 端点。
     MailGroupDelete(String),
+    /// Mail Group List 端点。
     MailGroupList,
+    /// Mail Group Patch 端点。
     MailGroupPatch(String),
     // MailGroup Alias APIs
+    /// Mail Group Alias Create 端点。
     MailGroupAliasCreate(String),
+    /// Mail Group Alias Delete 端点。
     MailGroupAliasDelete(String, String),
+    /// Mail Group Alias List 端点。
     MailGroupAliasList(String),
     // MailGroup Manager APIs
+    /// Mail Group Manager Batch Create 端点。
     MailGroupManagerBatchCreate(String),
+    /// Mail Group Manager Batch Delete 端点。
     MailGroupManagerBatchDelete(String),
+    /// Mail Group Manager List 端点。
     MailGroupManagerList(String),
     // MailGroup Member APIs
+    /// Mail Group Member Create 端点。
     MailGroupMemberCreate(String),
+    /// Mail Group Member Delete 端点。
     MailGroupMemberDelete(String, String),
+    /// Mail Group Member Get 端点。
     MailGroupMemberGet(String, String),
+    /// Mail Group Member List 端点。
     MailGroupMemberList(String),
+    /// Mail Group Member Batch Create 端点。
     MailGroupMemberBatchCreate(String),
+    /// Mail Group Member Batch Delete 端点。
     MailGroupMemberBatchDelete(String),
     // MailGroup Permission Member APIs
+    /// Mail Group Permission Member Create 端点。
     MailGroupPermissionMemberCreate(String),
+    /// Mail Group Permission Member Delete 端点。
     MailGroupPermissionMemberDelete(String, String),
+    /// Mail Group Permission Member Get 端点。
     MailGroupPermissionMemberGet(String, String),
+    /// Mail Group Permission Member List 端点。
     MailGroupPermissionMemberList(String),
+    /// Mail Group Permission Member Batch Create 端点。
     MailGroupPermissionMemberBatchCreate(String),
+    /// Mail Group Permission Member Batch Delete 端点。
     MailGroupPermissionMemberBatchDelete(String),
     // Public Mailbox APIs
+    /// Public Mailbox Create 端点。
     PublicMailboxCreate,
+    /// Public Mailbox Get 端点。
     PublicMailboxGet(String),
+    /// Public Mailbox Update 端点。
     PublicMailboxUpdate(String),
+    /// Public Mailbox Delete 端点。
     PublicMailboxDelete(String),
+    /// Public Mailbox List 端点。
     PublicMailboxList,
+    /// Public Mailbox Patch 端点。
     PublicMailboxPatch(String),
+    /// Public Mailbox Remove To Recycle Bin 端点。
     PublicMailboxRemoveToRecycleBin(String),
     // Public Mailbox Alias APIs
+    /// Public Mailbox Alias Create 端点。
     PublicMailboxAliasCreate(String),
+    /// Public Mailbox Alias Delete 端点。
     PublicMailboxAliasDelete(String, String),
+    /// Public Mailbox Alias List 端点。
     PublicMailboxAliasList(String),
     // Public Mailbox Member APIs
+    /// Public Mailbox Member Create 端点。
     PublicMailboxMemberCreate(String),
+    /// Public Mailbox Member Delete 端点。
     PublicMailboxMemberDelete(String, String),
+    /// Public Mailbox Member Get 端点。
     PublicMailboxMemberGet(String, String),
+    /// Public Mailbox Member List 端点。
     PublicMailboxMemberList(String),
+    /// Public Mailbox Member Batch Create 端点。
     PublicMailboxMemberBatchCreate(String),
+    /// Public Mailbox Member Batch Delete 端点。
     PublicMailboxMemberBatchDelete(String),
+    /// Public Mailbox Member Clear 端点。
     PublicMailboxMemberClear(String),
     // User APIs
+    /// User Query 端点。
     UserQuery,
     // User Mailbox APIs
+    /// User Mailbox Delete 端点。
     UserMailboxDelete(String),
     // User Mailbox Alias APIs
+    /// User Mailbox Alias Create 端点。
     UserMailboxAliasCreate(String),
+    /// User Mailbox Alias Delete 端点。
     UserMailboxAliasDelete(String, String),
+    /// User Mailbox Alias List 端点。
     UserMailboxAliasList(String),
     // User Mailbox Event APIs
+    /// User Mailbox Event Subscribe 端点。
     UserMailboxEventSubscribe(String),
+    /// User Mailbox Event Unsubscribe 端点。
     UserMailboxEventUnsubscribe(String),
+    /// User Mailbox Event Subscription 端点。
     UserMailboxEventSubscription(String),
     // User Mailbox Folder APIs
+    /// User Mailbox Folder Create 端点。
     UserMailboxFolderCreate(String),
+    /// User Mailbox Folder Delete 端点。
     UserMailboxFolderDelete(String),
+    /// User Mailbox Folder List 端点。
     UserMailboxFolderList(String),
+    /// User Mailbox Folder Patch 端点。
     UserMailboxFolderPatch(String),
     // User Mailbox Mail Contact APIs
+    /// User Mailbox Mail Contact Create 端点。
     UserMailboxMailContactCreate(String),
+    /// User Mailbox Mail Contact Delete 端点。
     UserMailboxMailContactDelete(String),
+    /// User Mailbox Mail Contact List 端点。
     UserMailboxMailContactList(String),
+    /// User Mailbox Mail Contact Patch 端点。
     UserMailboxMailContactPatch(String),
     // User Mailbox Message APIs
+    /// User Mailbox Message Get 端点。
     UserMailboxMessageGet(String),
+    /// User Mailbox Message Get By Card 端点。
     UserMailboxMessageGetByCard(String),
+    /// User Mailbox Message List 端点。
     UserMailboxMessageList(String),
+    /// User Mailbox Message Send 端点。
     UserMailboxMessageSend(String),
+    /// User Mailbox Message Attachment Download Url 端点。
     UserMailboxMessageAttachmentDownloadUrl(String),
     // User Mailbox Rule APIs
+    /// User Mailbox Rule Create 端点。
     UserMailboxRuleCreate(String),
+    /// User Mailbox Rule Delete 端点。
     UserMailboxRuleDelete(String),
+    /// User Mailbox Rule List 端点。
     UserMailboxRuleList(String),
+    /// User Mailbox Rule Reorder 端点。
     UserMailboxRuleReorder(String),
+    /// User Mailbox Rule Update 端点。
     UserMailboxRuleUpdate(String),
 }
 

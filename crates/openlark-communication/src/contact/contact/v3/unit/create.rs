@@ -26,11 +26,14 @@ pub struct CreateUnitBody {
 }
 
 /// 创建单位请求
+///
+/// 用于新增一个通讯录单位并返回新建单位的标识信息。
 pub struct CreateUnitRequest {
     config: Config,
 }
 
 impl CreateUnitRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -43,6 +46,7 @@ impl CreateUnitRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: CreateUnitBody,

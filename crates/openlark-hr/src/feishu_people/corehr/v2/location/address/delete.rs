@@ -34,11 +34,13 @@ impl DeleteRequest {
         }
     }
 
+    /// 设置 `location_id`。
     pub fn location_id(mut self, location_id: impl Into<String>) -> Self {
         self.location_id = Some(location_id.into());
         self
     }
 
+    /// 设置 `address_id`。
     pub fn address_id(mut self, address_id: impl Into<String>) -> Self {
         self.address_id = Some(address_id.into());
         self
@@ -56,6 +58,7 @@ impl DeleteRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

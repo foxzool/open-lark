@@ -12,10 +12,12 @@ pub struct Search {
 }
 
 impl Search {
+    /// 创建新的 Search API 入口。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 
+    /// 访问 v2 版本搜索 API。
     pub fn v2(&self) -> v2::SearchV2 {
         v2::SearchV2::new(self.config.clone())
     }

@@ -37,24 +37,30 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 use super::models::ReplyInfo;
 
+/// 获取评论回复列表请求。
 #[derive(Debug, Clone, Serialize, Deserialize)]
-
 pub struct ListCommentReplyRequest {
+    /// 文件 token。
     pub file_token: String,
 
+    /// 评论 ID。
     pub comment_id: String,
 
     /// 云文档类型（必填）
     pub file_type: String,
 
+    /// 分页标记。
     pub page_token: Option<String>,
 
+    /// 分页大小。
     pub page_size: Option<i32>,
 
+    /// 用户 ID 类型。
     pub user_id_type: Option<String>,
 }
 
 impl ListCommentReplyRequest {
+    /// 创建新的回复列表请求。
     pub fn new(
         file_token: impl Into<String>,
 
@@ -77,18 +83,21 @@ impl ListCommentReplyRequest {
         }
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
 
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
 
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
 
@@ -96,15 +105,18 @@ impl ListCommentReplyRequest {
     }
 }
 
+/// 获取评论回复列表响应 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
-
 pub struct ListCommentReplyResponse {
+    /// 回复列表。
     #[serde(default)]
     pub items: Vec<ReplyInfo>,
 
+    /// 下一页分页标记。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 
+    /// 是否还有更多数据。
     pub has_more: bool,
 }
 
@@ -114,6 +126,7 @@ impl ApiResponseTrait for ListCommentReplyResponse {
     }
 }
 
+/// 获取指定评论的回复列表。
 pub async fn list_comment_reply(
     request: ListCommentReplyRequest,
 

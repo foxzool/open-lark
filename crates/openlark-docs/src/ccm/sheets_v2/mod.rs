@@ -1,13 +1,9 @@
-/// Sheets V2 API 模块（旧版）
-///
-/// 电子表格操作API实现，包含全面的表格功能：
-///
-/// ## 数据读写API (8个)
+/// Sheets V2 通用模型模块。
 pub mod models;
+/// Sheets V2 接口模块。
 pub mod v2;
 
-// 使用通配符导出所有子模块
-// models 模块显式导出
+/// 重新导出 Sheets V2 通用模型。
 pub use models::{
     AppendDataRequest, AppendDataResponse, BatchUpdateRequest, BatchUpdateSheetRequest,
     BatchUpdateSheetResponse, CellStyle, Color, DeleteDimensionRequest, DeleteDimensionResponse,
@@ -18,5 +14,5 @@ pub use models::{
     WriteMultipleRangesResponse, WriteSingleRangeRequest, WriteSingleRangeResponse,
 };
 
-// 重新导出 v2 模块的所有内容
+/// 重新导出 Sheets V2 接口类型。
 pub use v2::*;

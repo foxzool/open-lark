@@ -19,16 +19,21 @@ use crate::{
 /// 创建用户组请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateGroupBody {
+    /// 用户组名称。
     pub name: String,
+    /// 用户组描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 用户组类型。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub r#type: Option<i32>,
+    /// 自定义用户组 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
 }
 
 impl CreateGroupBody {
+    /// 创建新的用户组请求体。
     pub fn new(name: impl Into<String>) -> Self {
         Self {
             name: name.into(),
@@ -70,6 +75,7 @@ pub struct CreateGroupRequest {
 }
 
 impl CreateGroupRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -98,6 +104,8 @@ impl CreateGroupRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: CreateGroupBody,

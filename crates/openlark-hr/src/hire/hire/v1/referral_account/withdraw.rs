@@ -30,6 +30,7 @@ impl WithdrawRequest {
         }
     }
 
+    /// 设置 `account_id`。
     pub fn account_id(mut self, account_id: impl Into<String>) -> Self {
         self.account_id = Some(account_id.into());
         self
@@ -41,6 +42,7 @@ impl WithdrawRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -67,6 +69,7 @@ impl WithdrawRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct WithdrawResponse {
     #[serde(flatten)]
+    /// `operation` 字段。
     pub operation: ReferralAccountOperationResult,
 }
 

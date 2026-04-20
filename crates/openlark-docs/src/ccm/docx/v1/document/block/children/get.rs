@@ -37,9 +37,9 @@ pub struct GetDocumentBlockChildrenResponse {
     /// 子块列表
     #[serde(default)]
     pub items: Vec<DocxBlock>,
-    /// 分页信息
+    /// 下一页分页标记。
     pub page_token: Option<String>,
-    /// 是否有更多
+    /// 是否还有更多数据。
     pub has_more: Option<bool>,
 }
 
@@ -50,15 +50,19 @@ impl ApiResponseTrait for GetDocumentBlockChildrenResponse {
 }
 
 /// 获取所有子块请求
+///
+/// 用于查询文档块下的子块列表。
 pub struct GetDocumentBlockChildrenRequest {
     config: Config,
 }
 
 impl GetDocumentBlockChildrenRequest {
+    /// 创建新的获取子块请求。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(
         self,
         params: GetDocumentBlockChildrenParams,
@@ -67,6 +71,7 @@ impl GetDocumentBlockChildrenRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         params: GetDocumentBlockChildrenParams,

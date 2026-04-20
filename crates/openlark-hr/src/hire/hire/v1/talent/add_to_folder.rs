@@ -30,6 +30,7 @@ impl AddToFolderRequest {
         }
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
@@ -41,6 +42,7 @@ impl AddToFolderRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -65,14 +67,19 @@ impl AddToFolderRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct AddToFolderResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 候选人 ID。
     pub talent_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `folder_id` 字段。
     pub folder_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `result` 字段。
     pub result: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `success` 字段。
     pub success: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

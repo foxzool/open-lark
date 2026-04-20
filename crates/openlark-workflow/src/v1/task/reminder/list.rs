@@ -12,6 +12,7 @@ use std::sync::Arc;
 
 /// 任务提醒列表项（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 任务提醒列表项。
 pub struct TaskReminderItemV1 {
     /// 提醒 ID
     pub reminder_id: String,
@@ -23,6 +24,7 @@ pub struct TaskReminderItemV1 {
 
 /// 获取任务提醒列表响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 任务提醒列表响应。
 pub struct ListTaskReminderResponseV1 {
     /// 提醒列表
     pub items: Vec<TaskReminderItemV1>,
@@ -30,12 +32,14 @@ pub struct ListTaskReminderResponseV1 {
 
 /// 获取任务提醒列表请求（v1）
 #[derive(Debug, Clone)]
+/// 获取任务提醒列表请求构建器。
 pub struct ListTaskReminderRequestV1 {
     config: Arc<Config>,
     task_id: String,
 }
 
 impl ListTaskReminderRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_id: impl Into<String>) -> Self {
         Self {
             config,

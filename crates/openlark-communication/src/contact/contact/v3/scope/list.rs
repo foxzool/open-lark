@@ -44,14 +44,20 @@ impl ApiResponseTrait for ListScopesResponse {
 
 /// 获取通讯录授权范围请求
 pub struct ListScopesRequest {
+    /// 配置信息。
     config: Config,
+    /// 用户 ID 类型。
     user_id_type: Option<UserIdType>,
+    /// 部门 ID 类型。
     department_id_type: Option<DepartmentIdType>,
+    /// 分页标记。
     page_token: Option<String>,
+    /// 分页大小。
     page_size: Option<i32>,
 }
 
 impl ListScopesRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -94,6 +100,8 @@ impl ListScopesRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

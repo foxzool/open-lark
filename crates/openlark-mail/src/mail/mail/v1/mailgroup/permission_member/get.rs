@@ -10,6 +10,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// Get Mail Group Permission Member Request。
 #[derive(Debug, Clone)]
 pub struct GetMailGroupPermissionMemberRequest {
     config: Arc<Config>,
@@ -17,8 +18,10 @@ pub struct GetMailGroupPermissionMemberRequest {
     permission_member_id: String,
 }
 
+/// Get Mail Group Permission Member Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetMailGroupPermissionMemberResponse {
+    /// 响应数据。
     pub data: Option<PermissionMemberData>,
 }
 
@@ -28,14 +31,19 @@ impl ApiResponseTrait for GetMailGroupPermissionMemberResponse {
     }
 }
 
+/// Permission Member Data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PermissionMemberData {
+    /// 权限成员 ID。
     pub permission_member_id: String,
+    /// 成员 ID。
     pub member_id: String,
+    /// member_type 字段。
     pub member_type: String,
 }
 
 impl GetMailGroupPermissionMemberRequest {
+    /// 创建新的实例。
     pub fn new(
         config: Arc<Config>,
         mailgroup_id: impl Into<String>,
@@ -48,10 +56,12 @@ impl GetMailGroupPermissionMemberRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetMailGroupPermissionMemberResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

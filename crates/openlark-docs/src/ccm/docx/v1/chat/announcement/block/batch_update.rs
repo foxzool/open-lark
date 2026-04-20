@@ -28,6 +28,7 @@ pub struct BatchUpdateChatAnnouncementBlocksParams {
 /// 单个批量更新请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchUpdateRequest {
+    /// 块 ID。
     pub block_id: String,
     /// 操作内容（例如 update_text_elements / merge_table_cells 等）
     #[serde(flatten)]
@@ -37,6 +38,7 @@ pub struct BatchUpdateRequest {
 /// 批量更新群公告块内容响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchUpdateChatAnnouncementBlocksResponse {
+    /// 更新后的块列表。
     #[serde(default)]
     pub blocks: Vec<DocxBlock>,
 }
@@ -48,6 +50,8 @@ impl ApiResponseTrait for BatchUpdateChatAnnouncementBlocksResponse {
 }
 
 /// 批量更新群公告块内容请求
+///
+/// 用于批量修改群公告中的块内容。
 pub struct BatchUpdateChatAnnouncementBlocksRequest {
     config: Config,
 }
@@ -69,6 +73,7 @@ impl BatchUpdateChatAnnouncementBlocksRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     /// 执行请求（带请求选项）
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/batch_update

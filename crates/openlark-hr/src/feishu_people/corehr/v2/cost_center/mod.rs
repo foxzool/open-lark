@@ -1,6 +1,12 @@
+/// create 子模块。
 pub mod create;
+/// delete 子模块。
 pub mod delete;
+/// patch 子模块。
 pub mod patch;
+/// query_recent_change 子模块。
 pub mod query_recent_change;
+/// search 子模块。
 pub mod search;
+/// version 子模块。
 pub mod version;

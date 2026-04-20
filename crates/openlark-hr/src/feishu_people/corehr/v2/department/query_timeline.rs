@@ -44,6 +44,7 @@ pub struct QueryTimelineResponse {
     pub data: Option<QueryTimelineResponseData>,
 }
 
+/// `QueryTimelineResponseData`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryTimelineResponseData {
     /// 部门 ID

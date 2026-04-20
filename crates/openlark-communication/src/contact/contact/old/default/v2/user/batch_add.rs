@@ -11,10 +11,12 @@ use crate::{
 
 /// 批量新增用户请求
 pub struct BatchAddUsersRequest {
+    /// 配置信息。
     config: Config,
 }
 
 impl BatchAddUsersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -27,6 +29,7 @@ impl BatchAddUsersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         params: serde_json::Value,

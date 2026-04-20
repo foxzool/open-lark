@@ -1,6 +1,10 @@
+/// download_as_image 模块。
 pub mod download_as_image;
+/// node 模块。
 pub mod node;
+/// theme 模块。
 pub mod theme;
+/// update_theme 模块。
 pub mod update_theme;
 
 // download_as_image 模块显式导出

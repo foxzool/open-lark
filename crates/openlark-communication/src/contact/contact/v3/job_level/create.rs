@@ -16,24 +16,32 @@ use crate::{
 /// 创建职级请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateJobLevelBody {
+    /// 职级名称。
     pub name: String,
+    /// 职级描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 排序值。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order: Option<i32>,
+    /// 状态。
     pub status: bool,
+    /// 国际化名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_name: Option<Vec<I18nContent>>,
+    /// 国际化描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_description: Option<Vec<I18nContent>>,
 }
 
 /// 创建职级请求
 pub struct CreateJobLevelRequest {
+    /// 配置信息。
     config: Config,
 }
 
 impl CreateJobLevelRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -46,6 +54,7 @@ impl CreateJobLevelRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: CreateJobLevelBody,

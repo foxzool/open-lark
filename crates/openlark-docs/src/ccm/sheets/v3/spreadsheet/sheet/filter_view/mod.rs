@@ -1,30 +1,34 @@
-/// 筛选视图（spreadsheet.sheet.filter_view）
+/// 筛选视图条件模块。
 pub mod condition;
+/// 创建筛选视图接口。
 pub mod create;
+/// 删除筛选视图接口。
 pub mod delete;
+/// 获取筛选视图接口。
 pub mod get;
+/// 更新筛选视图接口。
 pub mod patch;
+/// 查询筛选视图接口。
 pub mod query;
 
-// 导出共享类型
+/// 重新导出共享筛选视图模型。
 pub use crate::ccm::sheets::v3::models::{
     FilterViewCondition as Condition, FilterViewInfo as FilterView,
 };
 
-// condition 模块显式导出
-
+/// 重新导出筛选条件相关类型。
 pub use condition::{
     CreateFilterConditionRequest, CreateFilterConditionResponse, DeleteFilterConditionResponse,
     GetFilterConditionResponse, QueryFilterConditionsResponse, UpdateFilterConditionRequest,
     UpdateFilterConditionResponse,
 };
-// create 模块显式导出
+/// 重新导出创建筛选视图类型。
 pub use create::{CreateFilterViewRequest, CreateFilterViewResponse};
-// delete 模块显式导出
+/// 重新导出删除筛选视图响应。
 pub use delete::DeleteFilterViewResponse;
-// get 模块显式导出
+/// 重新导出获取筛选视图响应。
 pub use get::GetFilterViewResponse;
-// patch 模块显式导出
+/// 重新导出更新筛选视图类型。
 pub use patch::{UpdateFilterViewRequest, UpdateFilterViewResponse};
-// query 模块显式导出
+/// 重新导出查询筛选视图响应。
 pub use query::QueryFilterViewsResponse;

@@ -28,6 +28,7 @@ impl PreviewRequest {
         }
     }
 
+    /// 设置 `attachment_id`。
     pub fn attachment_id(mut self, attachment_id: String) -> Self {
         self.attachment_id = attachment_id;
         self
@@ -39,6 +40,7 @@ impl PreviewRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -65,6 +67,7 @@ impl PreviewRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct PreviewResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `url` 字段。
     pub url: Option<String>,
 }
 

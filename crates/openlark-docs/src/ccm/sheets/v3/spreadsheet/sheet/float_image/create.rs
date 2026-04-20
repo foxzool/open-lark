@@ -17,18 +17,23 @@ use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 /// 创建浮动图片请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFloatImageRequest {
+    /// 浮动图片 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub float_image_id: Option<String>,
     /// 浮动图片 token（素材 file_token）
     pub float_image_token: String,
     /// 浮动图片左上角所在单元格位置（只允许单个单元格）
     pub range: String,
+    /// 宽度。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<f64>,
+    /// 高度。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub height: Option<f64>,
+    /// X 轴偏移。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offset_x: Option<f64>,
+    /// Y 轴偏移。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offset_y: Option<f64>,
 }
@@ -36,6 +41,7 @@ pub struct CreateFloatImageRequest {
 /// 创建浮动图片响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFloatImageResponse {
+    /// 新建后的浮动图片。
     pub float_image: FloatImage,
 }
 
@@ -46,6 +52,8 @@ impl ApiResponseTrait for CreateFloatImageResponse {
 }
 
 /// 创建浮动图片
+///
+/// 在指定工作表中创建一张浮动图片。
 pub async fn create_float_image(
     config: &Config,
     spreadsheet_token: &str,
@@ -63,6 +71,8 @@ pub async fn create_float_image(
 }
 
 /// 创建浮动图片（带请求选项）
+///
+/// 在指定工作表中创建一张浮动图片，并允许传入自定义请求选项。
 pub async fn create_float_image_with_options(
     config: &Config,
     spreadsheet_token: &str,

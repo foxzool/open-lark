@@ -11,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// Batch Delete Mail Group Permission Member Request。
 #[derive(Debug, Clone)]
 pub struct BatchDeleteMailGroupPermissionMemberRequest {
     config: Arc<Config>,
@@ -18,13 +19,17 @@ pub struct BatchDeleteMailGroupPermissionMemberRequest {
     body: BatchDeleteMailGroupPermissionMemberBody,
 }
 
+/// Batch Delete Mail Group Permission Member Body。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchDeleteMailGroupPermissionMemberBody {
+    /// permission_member_ids 字段。
     pub permission_member_ids: Vec<String>,
 }
 
+/// Batch Delete Mail Group Permission Member Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchDeleteMailGroupPermissionMemberResponse {
+    /// 响应数据。
     pub data: Option<serde_json::Value>,
 }
 
@@ -35,6 +40,7 @@ impl ApiResponseTrait for BatchDeleteMailGroupPermissionMemberResponse {
 }
 
 impl BatchDeleteMailGroupPermissionMemberRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailgroup_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -43,15 +49,18 @@ impl BatchDeleteMailGroupPermissionMemberRequest {
         }
     }
 
+    /// permission member ids。
     pub fn permission_member_ids(mut self, ids: Vec<String>) -> Self {
         self.body.permission_member_ids = ids;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchDeleteMailGroupPermissionMemberResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

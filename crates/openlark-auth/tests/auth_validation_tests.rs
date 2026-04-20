@@ -1,3 +1,5 @@
+//! openlark-auth 校验与错误处理回归测试。
+
 use std::time::Duration;
 
 use openlark_auth::auth::auth::v3::*;

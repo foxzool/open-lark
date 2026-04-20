@@ -38,6 +38,7 @@ pub struct TransferOwnerRequest {
 }
 
 impl TransferOwnerRequest {
+    /// 创建新的所有者转移请求。
     /// 创建转移所有者请求
     ///
     /// # 参数
@@ -90,11 +91,13 @@ impl TransferOwnerRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<TransferOwnerResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -193,6 +196,7 @@ impl TransferOwnerRequest {
 }
 
 /// 转移所有者响应
+/// 转移所有者响应 data。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct TransferOwnerResponse {}
 

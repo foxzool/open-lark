@@ -36,6 +36,7 @@ pub struct CreateDepartmentBody {
 }
 
 impl CreateDepartmentBody {
+    /// 创建新的部门请求体。
     pub fn new(name: impl Into<String>, parent_department_id: impl Into<String>) -> Self {
         Self {
             name: name.into(),
@@ -79,6 +80,7 @@ pub struct CreateDepartmentRequest {
 }
 
 impl CreateDepartmentRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -114,6 +116,8 @@ impl CreateDepartmentRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: CreateDepartmentBody,

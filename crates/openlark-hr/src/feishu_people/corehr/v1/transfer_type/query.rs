@@ -31,6 +31,7 @@ impl QueryRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         _option: openlark_core::req_option::RequestOption,

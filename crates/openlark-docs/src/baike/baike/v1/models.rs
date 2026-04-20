@@ -8,12 +8,16 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum UserIdType {
+    /// open_id。
     OpenId,
+    /// union_id。
     UnionId,
+    /// user_id。
     UserId,
 }
 
 impl UserIdType {
+    /// 返回请求参数使用的字符串值。
     pub fn as_str(&self) -> &'static str {
         match self {
             UserIdType::OpenId => "open_id",
@@ -148,8 +152,11 @@ pub struct Entity {
 /// 分类条目
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ClassificationItem {
+    /// 分类 ID。
     pub id: String,
+    /// 分类名称。
     pub name: String,
+    /// 父分类 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub father_id: Option<String>,
 }

@@ -14,15 +14,19 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
+/// 停用云文档密码请求。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeletePermissionPublicPasswordRequest {
     #[serde(skip)]
     config: Config,
+    /// 云文档 token。
     pub token: String,
+    /// 云文档类型。
     pub r#type: String,
 }
 
 impl DeletePermissionPublicPasswordRequest {
+    /// 创建新的密码停用请求。
     pub fn new(config: Config, token: impl Into<String>, r#type: impl Into<String>) -> Self {
         Self {
             config,
@@ -31,11 +35,13 @@ impl DeletePermissionPublicPasswordRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<DeletePermissionPublicPasswordResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -83,6 +89,7 @@ impl DeletePermissionPublicPasswordRequest {
     }
 }
 
+/// 停用云文档密码响应 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeletePermissionPublicPasswordResponse {
     // Empty response body usually implies success

@@ -11,6 +11,7 @@ pub struct ApplicationService {
 }
 
 impl ApplicationService {
+    /// 创建新的应用管理服务实例。
     pub fn new(config: Config) -> Self {
         Self {
             config: Arc::new(config),
@@ -18,6 +19,7 @@ impl ApplicationService {
     }
 
     #[cfg(feature = "v1")]
+    /// 访问 v1 版本应用 API。
     pub fn v1(&self) -> crate::application::application::v1::ApplicationV1 {
         crate::application::application::v1::ApplicationV1::new(self.config.clone())
     }

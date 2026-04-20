@@ -32,6 +32,7 @@ impl GetByTalentRequest {
         }
     }
 
+    /// 设置 `talent_id`。
     pub fn talent_id(mut self, talent_id: String) -> Self {
         self.talent_id = talent_id;
         self
@@ -43,6 +44,7 @@ impl GetByTalentRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -68,8 +70,10 @@ impl GetByTalentRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetByTalentResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `interview` 字段。
     pub interview: Option<InterviewSummary>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

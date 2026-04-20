@@ -62,6 +62,7 @@ pub struct DeletePermissionMemberRequest {
 }
 
 impl DeletePermissionMemberRequest {
+    /// 创建新的移除协作者请求。
     /// 创建移除协作者权限请求
     ///
     /// # 参数
@@ -103,11 +104,13 @@ impl DeletePermissionMemberRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<DeletePermissionMemberResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -223,7 +226,7 @@ impl DeletePermissionMemberRequest {
     }
 }
 
-/// 移除协作者权限响应
+/// 移除协作者权限响应 data。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeletePermissionMemberResponse {}
 

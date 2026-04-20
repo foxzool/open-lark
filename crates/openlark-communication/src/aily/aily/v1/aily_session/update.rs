@@ -11,22 +11,27 @@ use serde::{Deserialize, Serialize};
 /// 更新会话请求体
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateSessionBody {
+    /// 会话名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 会话描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 }
 
 impl UpdateSessionBody {
+    /// 创建空的更新请求体。
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// 设置会话名称。
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.name = Some(name.into());
         self
     }
 
+    /// 设置会话描述。
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.description = Some(description.into());
         self
@@ -63,6 +68,7 @@ pub struct UpdateSessionRequest {
 }
 
 impl UpdateSessionRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -84,6 +90,7 @@ impl UpdateSessionRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UpdateSessionBody,

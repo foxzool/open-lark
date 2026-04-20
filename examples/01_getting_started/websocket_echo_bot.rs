@@ -1,3 +1,7 @@
+//! WebSocket Echo Bot 示例。
+//!
+//! 展示如何使用 openlark 根 crate 建立长连接并回显消息事件。
+
 use std::sync::Arc;
 use std::time::Duration;
 

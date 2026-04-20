@@ -29,11 +29,13 @@ impl PatchRequest {
         }
     }
 
+    /// 设置 `pre_hire_id`。
     pub fn pre_hire_id(mut self, pre_hire_id: String) -> Self {
         self.pre_hire_id = pre_hire_id;
         self
     }
 
+    /// 设置 `pre_hire`。
     pub fn pre_hire(mut self, pre_hire: Value) -> Self {
         self.pre_hire = Some(pre_hire);
         self
@@ -45,6 +47,7 @@ impl PatchRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -73,6 +76,7 @@ impl PatchRequest {
 /// 更新待入职信息（不推荐）响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchResponse {
+    /// 原始响应数据。
     pub data: Value,
 }
 

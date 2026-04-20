@@ -11,11 +11,14 @@ use crate::{common::api_utils::extract_response_data, endpoints::IM_V1_MESSAGES}
 /// 消息资源类型
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MessageResourceType {
+    /// 图片资源。
     Image,
+    /// 文件资源。
     File,
 }
 
 impl MessageResourceType {
+    /// 返回请求参数使用的资源类型字符串。
     pub fn as_str(self) -> &'static str {
         match self {
             Self::Image => "image",
@@ -52,6 +55,7 @@ pub struct GetMessageResourceRequest {
 }
 
 impl GetMessageResourceRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -87,6 +91,7 @@ impl GetMessageResourceRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

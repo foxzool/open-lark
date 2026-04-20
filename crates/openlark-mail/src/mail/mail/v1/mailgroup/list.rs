@@ -18,6 +18,7 @@ pub struct MailGroupListRequest {
 }
 
 impl MailGroupListRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self {
             config,
@@ -26,21 +27,25 @@ impl MailGroupListRequest {
         }
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页游标。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<MailGroupListResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

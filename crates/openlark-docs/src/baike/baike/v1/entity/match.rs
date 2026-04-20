@@ -13,6 +13,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::BaikeApiV1;
 
+/// 精准匹配请求体。
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MatchEntityReq {
     /// 搜索关键词，将与词条名、别名进行精准匹配
@@ -22,12 +23,15 @@ pub struct MatchEntityReq {
 /// 精准搜索词条响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MatchEntityResp {
+    /// 匹配结果列表。
     #[serde(default)]
     pub results: Vec<MatchEntityResult>,
 }
 
+/// 精准匹配结果项。
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MatchEntityResult {
+    /// 词条 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_id: Option<String>,
     /// 匹配类型（文档示例为 int，如 0）
@@ -49,6 +53,7 @@ pub struct MatchEntityRequest {
 }
 
 impl MatchEntityRequest {
+    /// 创建新的词条精准匹配请求。
     pub fn new(config: Config, word: impl Into<String>) -> Self {
         Self {
             config,
@@ -56,10 +61,12 @@ impl MatchEntityRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<MatchEntityResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<MatchEntityResp> {
         // ===== 验证必填字段 =====
         validate_required!(self.req.word, "word 不能为空");

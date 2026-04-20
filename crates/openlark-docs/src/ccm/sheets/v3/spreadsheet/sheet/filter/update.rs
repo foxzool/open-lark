@@ -17,7 +17,9 @@ use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 /// 更新筛选请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateFilterRequest {
+    /// 列标识。
     pub col: String,
+    /// 新的筛选条件。
     pub condition: Condition,
 }
 
@@ -32,6 +34,8 @@ impl ApiResponseTrait for UpdateFilterResponse {
 }
 
 /// 更新筛选
+///
+/// 更新指定子表的列筛选条件。
 pub async fn update_filter(
     config: &Config,
     spreadsheet_token: &str,
@@ -49,6 +53,8 @@ pub async fn update_filter(
 }
 
 /// 更新筛选（带选项）
+///
+/// 更新指定子表的列筛选条件，并允许传入自定义请求选项。
 pub async fn update_filter_with_options(
     config: &Config,
     spreadsheet_token: &str,

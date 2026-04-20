@@ -61,6 +61,7 @@ pub struct HighlightEntityRequest {
 }
 
 impl HighlightEntityRequest {
+    /// 创建新的实例。
     pub fn new(config: Config, text: impl Into<String>) -> Self {
         Self {
             config,
@@ -68,10 +69,12 @@ impl HighlightEntityRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<HighlightEntityResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

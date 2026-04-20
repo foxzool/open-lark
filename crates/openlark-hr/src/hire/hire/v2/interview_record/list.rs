@@ -15,6 +15,7 @@ use std::collections::HashMap;
 
 use crate::hire::hire::common_models::{AttachmentMeta, I18nText, IdNameObject, ScoreInfo};
 
+/// `ListRequest` 请求。
 #[derive(Debug, Clone)]
 pub struct ListRequest {
     config: Config,
@@ -25,6 +26,7 @@ pub struct ListRequest {
 }
 
 impl ListRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -35,31 +37,37 @@ impl ListRequest {
         }
     }
 
+    /// 设置 ID 列表。
     pub fn ids(mut self, ids: Vec<String>) -> Self {
         self.ids = Some(ids);
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -107,71 +115,101 @@ impl ListRequest {
     }
 }
 
+/// `InterviewRecordDimensionAssessment`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct InterviewRecordDimensionAssessment {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `interview_feedback_form_dimension_id` 字段。
     pub interview_feedback_form_dimension_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 维度名称。
     pub dimension_name: Option<I18nText>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 维度类型。
     pub dimension_type: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 维度权重。
     pub dimension_weight: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 维度分数。
     pub dimension_score: Option<f64>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `InterviewRecordModuleAssessment`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct InterviewRecordModuleAssessment {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `interview_feedback_form_module_id` 字段。
     pub interview_feedback_form_module_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 模块名称。
     pub module_name: Option<I18nText>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 模块类型。
     pub module_type: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 模块权重。
     pub module_weight: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 模块分数。
     pub module_score: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 维度评估列表。
     pub dimension_assessments: Option<Vec<InterviewRecordDimensionAssessment>>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `InterviewRecordItem`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct InterviewRecordItem {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 标识。
     pub id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `feedback_form_id` 字段。
     pub feedback_form_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `commit_status` 字段。
     pub commit_status: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `submit_time` 字段。
     pub submit_time: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `record_score` 字段。
     pub record_score: Option<ScoreInfo>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `interviewer` 字段。
     pub interviewer: Option<IdNameObject>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 附件列表。
     pub attachments: Option<Vec<AttachmentMeta>>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 模块评估列表。
     pub module_assessments: Option<Vec<InterviewRecordModuleAssessment>>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `ListResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ListResponse {
     #[serde(default)]
+    /// 结果项列表。
     pub items: Vec<InterviewRecordItem>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 下一页分页标记。
     pub page_token: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 是否还有更多结果。
     pub has_more: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

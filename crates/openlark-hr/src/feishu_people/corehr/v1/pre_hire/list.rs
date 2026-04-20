@@ -31,16 +31,19 @@ impl ListRequest {
         }
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: String) -> Self {
         self.page_token = Some(page_token);
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: String) -> Self {
         self.user_id_type = Some(user_id_type);
         self
@@ -52,6 +55,7 @@ impl ListRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -85,6 +89,7 @@ impl ListRequest {
 /// 批量查询待入职信息响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListResponse {
+    /// 原始响应数据。
     pub data: Value,
 }
 

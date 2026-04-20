@@ -32,6 +32,7 @@ pub struct ActiveResponse {
     pub data: Option<ActiveResponseData>,
 }
 
+/// `ActiveResponseData`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ActiveResponseData {
     /// 公司 ID

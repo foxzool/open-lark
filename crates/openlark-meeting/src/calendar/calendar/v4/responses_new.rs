@@ -51,18 +51,21 @@ pub struct CalendarListData {
 /// 获取日历信息响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetCalendarResponse {
+    /// 日历数据。
     pub calendar: CalendarData,
 }
 
 /// 获取日历列表响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListCalendarResponse {
+    /// 响应数据。
     pub data: CalendarListData,
 }
 
 /// 创建日历响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateCalendarResponse {
+    /// 日历数据。
     pub calendar: CalendarData,
 }
 
@@ -73,30 +76,35 @@ pub struct DeleteCalendarResponse {}
 /// 更新日历响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchCalendarResponse {
+    /// 日历数据。
     pub calendar: CalendarData,
 }
 
 /// 搜索日历响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SearchCalendarResponse {
+    /// 响应数据。
     pub data: CalendarListData,
 }
 
 /// 批量获取日历响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct MgetCalendarResponse {
+    /// 响应数据。
     pub data: CalendarListData,
 }
 
 /// 设置主日历响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PrimaryCalendarResponse {
+    /// 日历数据。
     pub calendar: CalendarData,
 }
 
 /// 获取主日历响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetPrimaryCalendarResponse {
+    /// 日历数据。
     pub calendar: CalendarData,
 }
 
@@ -149,12 +157,14 @@ pub struct AttendeeData {
 /// 获取日程信息响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetEventResponse {
+    /// 日程数据。
     pub event: EventData,
 }
 
 /// 获取日程列表响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListEventResponse {
+    /// 响应数据。
     pub data: EventListData,
 }
 
@@ -172,12 +182,14 @@ pub struct EventListData {
 /// 创建日程响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateEventResponse {
+    /// 日程数据。
     pub event: EventData,
 }
 
 /// 更新日程响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchEventResponse {
+    /// 日程数据。
     pub event: EventData,
 }
 
@@ -188,12 +200,14 @@ pub struct DeleteEventResponse {}
 /// 批量获取日程响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct MgetEventResponse {
+    /// 响应数据。
     pub data: EventListData,
 }
 
 /// 搜索日程响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SearchEventResponse {
+    /// 响应数据。
     pub data: EventListData,
 }
 
@@ -204,6 +218,7 @@ pub struct EventInstanceViewResponse {}
 /// 获取日程实例响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct EventInstancesResponse {
+    /// 响应数据。
     pub data: EventListData,
 }
 
@@ -216,6 +231,7 @@ pub struct ReplyEventResponse {}
 /// 获取参会人列表响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListAttendeeResponse {
+    /// 响应数据。
     pub data: AttendeeListData,
 }
 
@@ -233,6 +249,7 @@ pub struct AttendeeListData {
 /// 创建参会人响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateAttendeeResponse {
+    /// 参会人数据。
     pub attendee: AttendeeData,
 }
 
@@ -247,6 +264,7 @@ pub struct BatchDeleteAttendeeResponse {}
 /// 获取会议群成员响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AttendeeChatMemberListResponse {
+    /// 响应数据。
     pub data: ChatMemberListData,
 }
 
@@ -293,6 +311,7 @@ pub struct BusyTime {
 /// 查询忙闲响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryFreebusyResponse {
+    /// 响应数据。
     pub data: FreebusyListData,
 }
 
@@ -306,6 +325,7 @@ pub struct FreebusyListData {
 /// 批量查询忙闲响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchFreebusyResponse {
+    /// 响应数据。
     pub data: FreebusyListData,
 }
 
@@ -332,18 +352,21 @@ pub struct WorkingHours {
 /// 获取日历设置响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetCalendarSettingsResponse {
+    /// 响应数据。
     pub data: CalendarSettingsData,
 }
 
 /// 更新日历设置响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpdateCalendarSettingsResponse {
+    /// 响应数据。
     pub data: CalendarSettingsData,
 }
 
 /// 生成 CalDAV 配置响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GenerateCaldavConfResponse {
+    /// 响应数据。
     pub data: CaldavConfData,
 }
 
@@ -378,12 +401,14 @@ pub struct TimeoffEventData {
 /// 创建请假日程响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateTimeoffEventResponse {
+    /// 日程数据。
     pub event: TimeoffEventData,
 }
 
 /// 获取请假日程列表响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListTimeoffEventResponse {
+    /// 响应数据。
     pub data: TimeoffEventListData,
 }
 
@@ -418,6 +443,7 @@ pub struct ExchangeBindingData {
 /// 获取 Exchange 绑定响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetExchangeBindingResponse {
+    /// 响应数据。
     pub data: ExchangeBindingListData,
 }
 
@@ -431,6 +457,7 @@ pub struct ExchangeBindingListData {
 /// 创建 Exchange 绑定响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateExchangeBindingResponse {
+    /// exchange_binding 字段。
     pub exchange_binding: ExchangeBindingData,
 }
 
@@ -456,6 +483,7 @@ pub struct AclData {
 /// 获取 ACL 列表响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListAclResponse {
+    /// 响应数据。
     pub data: AclListData,
 }
 
@@ -469,6 +497,7 @@ pub struct AclListData {
 /// 创建 ACL 响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateAclResponse {
+    /// 访问控制规则。
     pub acl: AclData,
 }
 
@@ -481,6 +510,7 @@ pub struct DeleteAclResponse {}
 /// 获取会议群响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetMeetingChatResponse {
+    /// 响应数据。
     pub data: MeetingChatData,
 }
 
@@ -509,12 +539,14 @@ pub struct MeetingMinuteData {
 /// 获取会议纪要响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetMeetingMinuteResponse {
+    /// 响应数据。
     pub data: MeetingMinuteData,
 }
 
 /// 更新会议纪要响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchMeetingMinuteResponse {
+    /// 响应数据。
     pub data: MeetingMinuteData,
 }
 

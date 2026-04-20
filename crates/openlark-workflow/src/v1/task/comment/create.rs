@@ -12,16 +12,19 @@ use std::sync::Arc;
 
 /// 创建任务评论请求体（v1）
 #[derive(Debug, Clone, Serialize, Default)]
+/// 创建任务评论请求体。
 pub struct CreateTaskCommentBodyV1 {
     /// 评论内容
     pub content: String,
     /// 父评论 ID（回复评论时使用）
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 父评论 ID。
     pub parent_id: Option<String>,
 }
 
 /// 创建任务评论响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 创建任务评论响应。
 pub struct CreateTaskCommentResponseV1 {
     /// 评论 ID
     pub comment_id: String,
@@ -29,6 +32,7 @@ pub struct CreateTaskCommentResponseV1 {
 
 /// 创建任务评论请求（v1）
 #[derive(Debug, Clone)]
+/// 创建任务评论请求构建器。
 pub struct CreateTaskCommentRequestV1 {
     config: Arc<Config>,
     task_id: String,
@@ -36,6 +40,7 @@ pub struct CreateTaskCommentRequestV1 {
 }
 
 impl CreateTaskCommentRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_id: impl Into<String>) -> Self {
         Self {
             config,

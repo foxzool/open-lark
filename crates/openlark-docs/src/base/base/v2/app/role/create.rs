@@ -22,6 +22,7 @@ pub struct Create {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+/// 新增自定义角色请求体。
 pub struct CreateReq {
     /// 自定义角色的名字
     pub role_name: String,
@@ -36,6 +37,7 @@ pub struct CreateReq {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+/// 新增自定义角色响应。
 pub struct CreateResp {
     /// 自定义角色
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -43,6 +45,7 @@ pub struct CreateResp {
 }
 
 impl Create {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -86,11 +89,13 @@ impl Create {
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<CreateResp> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

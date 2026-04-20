@@ -14,9 +14,10 @@ use serde::{Deserialize, Serialize};
 use super::Condition;
 use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 
-/// 查询筛选条件响应体 data
+/// 查询筛选条件响应体 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct QueryFilterConditionsResponse {
+    /// 筛选条件列表。
     pub items: Vec<Condition>,
 }
 
@@ -26,7 +27,7 @@ impl ApiResponseTrait for QueryFilterConditionsResponse {
     }
 }
 
-/// 查询筛选条件
+/// 查询筛选条件。
 pub async fn query_filter_conditions(
     config: &Config,
     spreadsheet_token: &str,
@@ -43,7 +44,7 @@ pub async fn query_filter_conditions(
     .await
 }
 
-/// 查询筛选条件（支持请求选项）
+/// 查询筛选条件（支持请求选项）。
 pub async fn query_filter_conditions_with_options(
     config: &Config,
     spreadsheet_token: &str,

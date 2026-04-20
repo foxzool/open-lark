@@ -11,7 +11,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 重用Field类型
+/// 重用 `Field` 类型。
 pub use super::create::Field;
 
 /// 列出字段请求
@@ -34,7 +34,7 @@ pub struct ListFieldRequest {
 }
 
 impl ListFieldRequest {
-    /// 创建列出字段请求
+    /// 创建新的字段列表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -47,48 +47,49 @@ impl ListFieldRequest {
         }
     }
 
-    /// 设置应用token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置数据表ID
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
-    /// 设置视图ID
+    /// 设置视图 ID。
     pub fn view_id(mut self, view_id: String) -> Self {
         self.view_id = Some(view_id);
         self
     }
 
-    /// 设置文本字段为数组格式
+    /// 设置文本字段返回为数组格式。
     pub fn text_field_as_array(mut self, text_field_as_array: bool) -> Self {
         self.text_field_as_array = Some(text_field_as_array);
         self
     }
 
-    /// 设置分页标记
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: String) -> Self {
         self.page_token = Some(page_token);
         self
     }
 
-    /// 设置分页大小
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size.min(100)); // 限制最大100
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListFieldResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -143,7 +144,7 @@ impl ListFieldRequest {
     }
 }
 
-/// 列出字段响应
+/// 列出字段响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListFieldResponse {
     /// 是否还有更多项

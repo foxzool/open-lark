@@ -39,19 +39,24 @@
 mod service;
 
 // 通用模块
+/// 邮件模块通用工具与端点定义。
 pub mod common;
 
 // mail 模块
 #[cfg(feature = "v1")]
+/// 邮件 API 模块。
 pub mod mail;
 
 // Prelude 模块
+/// 邮件模块常用预导出。
 pub mod prelude;
 
 // 重新导出核心服务
+/// 邮件服务统一入口。
 pub use service::MailService;
 
 /// 邮件模块版本信息
+/// 当前 crate 版本号。
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[cfg(test)]

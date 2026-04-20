@@ -32,6 +32,7 @@ impl GetByApplicationRequest {
         }
     }
 
+    /// 设置 `application_id`。
     pub fn application_id(mut self, application_id: String) -> Self {
         self.application_id = application_id;
         self
@@ -43,6 +44,7 @@ impl GetByApplicationRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -68,8 +70,10 @@ impl GetByApplicationRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetByApplicationResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `referral` 字段。
     pub referral: Option<ReferralItem>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

@@ -12,6 +12,7 @@ use std::sync::Arc;
 
 /// 取消完成任务响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 取消完成任务响应。
 pub struct UncompleteTaskResponseV1 {
     /// 任务 ID
     pub id: String,
@@ -23,12 +24,14 @@ pub struct UncompleteTaskResponseV1 {
 
 /// 取消完成任务请求（v1）
 #[derive(Debug, Clone)]
+/// 取消完成任务请求构建器。
 pub struct UncompleteTaskRequestV1 {
     config: Arc<Config>,
     task_id: String,
 }
 
 impl UncompleteTaskRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_id: impl Into<String>) -> Self {
         Self {
             config,

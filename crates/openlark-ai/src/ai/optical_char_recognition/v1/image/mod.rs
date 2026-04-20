@@ -13,6 +13,7 @@ pub struct Image {
 }
 
 impl Image {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }

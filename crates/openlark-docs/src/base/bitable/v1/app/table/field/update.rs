@@ -12,7 +12,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-/// 重用Field类型
+/// 重用 `Field`、`FieldProperty` 和 `FieldType` 类型。
 pub use super::create::{Field, FieldProperty, FieldType};
 
 /// 更新字段请求
@@ -67,7 +67,7 @@ pub struct UpdateFieldRequest {
 }
 
 impl UpdateFieldRequest {
-    /// 创建更新字段请求
+    /// 创建新的字段更新请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -82,60 +82,61 @@ impl UpdateFieldRequest {
         }
     }
 
-    /// 设置应用token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置数据表ID
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
-    /// 设置字段ID
+    /// 设置字段 ID。
     pub fn field_id(mut self, field_id: String) -> Self {
         self.field_id = field_id;
         self
     }
 
-    /// 设置字段名称
+    /// 设置字段名称。
     pub fn field_name(mut self, field_name: String) -> Self {
         self.field_name = field_name;
         self
     }
 
-    /// 设置字段类型
+    /// 设置字段类型。
     pub fn field_type(mut self, field_type: FieldType) -> Self {
         self.r#type = field_type;
         self
     }
 
-    /// 设置字段属性
+    /// 设置字段属性。
     pub fn property(mut self, property: FieldProperty) -> Self {
         self.property = Some(property);
         self
     }
 
-    /// 设置字段描述
+    /// 设置字段描述。
     pub fn description(mut self, description: Value) -> Self {
         self.description = Some(description);
         self
     }
 
-    /// 设置界面类型
+    /// 设置界面类型。
     pub fn ui_type(mut self, ui_type: String) -> Self {
         self.ui_type = Some(ui_type);
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UpdateFieldResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -179,7 +180,7 @@ impl UpdateFieldRequest {
     }
 }
 
-/// 请求体结构
+/// 更新字段请求体（内部使用）。
 #[derive(Serialize)]
 struct UpdateFieldRequestBody {
     field_name: String,
@@ -189,7 +190,7 @@ struct UpdateFieldRequestBody {
     ui_type: Option<String>,
 }
 
-/// 更新字段响应
+/// 更新字段响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpdateFieldResponse {
     /// 字段信息

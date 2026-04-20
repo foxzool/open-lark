@@ -33,6 +33,7 @@ pub struct UpdateDocumentBlockParams {
 /// 更新块内容响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateDocumentBlockResponse {
+    /// 更新后的块内容。
     pub block: DocxBlock,
 }
 
@@ -43,15 +44,19 @@ impl ApiResponseTrait for UpdateDocumentBlockResponse {
 }
 
 /// 更新块内容请求
+///
+/// 用于更新指定文档块的内容。
 pub struct UpdateDocumentBlockRequest {
     config: Config,
 }
 
 impl UpdateDocumentBlockRequest {
+    /// 创建新的更新块请求。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(
         self,
         params: UpdateDocumentBlockParams,
@@ -60,6 +65,7 @@ impl UpdateDocumentBlockRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         params: UpdateDocumentBlockParams,

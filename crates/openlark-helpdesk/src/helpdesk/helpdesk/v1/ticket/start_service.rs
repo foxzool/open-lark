@@ -50,6 +50,7 @@ impl StartServiceBody {
 /// 创建服务台对话响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct StartServiceResponse {
+    /// 响应数据。
     pub data: Option<StartServiceData>,
 }
 
@@ -67,6 +68,7 @@ pub struct StartServiceData {
 }
 
 impl StartServiceRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self {
             config,
@@ -74,25 +76,30 @@ impl StartServiceRequest {
         }
     }
 
+    /// 设置用户 ID。
     pub fn user_id(mut self, user_id: impl Into<String>) -> Self {
         self.body.user_id = user_id.into();
         self
     }
 
+    /// 设置服务 ID。
     pub fn service_id(mut self, service_id: impl Into<String>) -> Self {
         self.body.service_id = service_id.into();
         self
     }
 
+    /// 设置问题内容。
     pub fn question(mut self, question: impl Into<String>) -> Self {
         self.body.question = Some(question.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<StartServiceResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

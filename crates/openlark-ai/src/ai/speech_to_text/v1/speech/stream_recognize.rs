@@ -31,6 +31,7 @@ pub struct StreamRecognizeBody {
 }
 
 impl StreamRecognizeBody {
+    /// 校验请求体。
     pub fn validate(&self) -> Result<(), String> {
         if self.audio.trim().is_empty() {
             return Err("audio 不能为空".to_string());
@@ -42,6 +43,7 @@ impl StreamRecognizeBody {
 /// 识别流式语音响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct StreamRecognizeResponse {
+    /// data 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<serde_json::Value>,
 }

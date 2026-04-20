@@ -1,6 +1,10 @@
+/// 邮件组模块。
 pub mod mailgroup;
+/// 公共邮箱模块。
 pub mod public_mailbox;
+/// 用户邮箱服务模块。
 pub mod user;
+/// 用户邮箱资源模块。
 pub mod user_mailbox;
 
 use openlark_core::config::Config;
@@ -13,6 +17,7 @@ pub struct MailV1 {
 }
 
 impl MailV1 {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }

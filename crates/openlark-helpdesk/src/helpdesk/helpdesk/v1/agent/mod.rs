@@ -3,7 +3,9 @@
 //! 提供客服相关的 API。
 
 pub mod agent_email;
+/// 更新接口。
 pub mod patch;
+/// 客服工作日程接口。
 pub mod schedules;
 
 use openlark_core::config::Config;

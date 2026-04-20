@@ -34,6 +34,7 @@ pub struct PutTopNoticeRequest {
 }
 
 impl PutTopNoticeRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -41,16 +42,19 @@ impl PutTopNoticeRequest {
         }
     }
 
+    /// 群 ID（路径参数）。
     pub fn chat_id(mut self, chat_id: impl Into<String>) -> Self {
         self.chat_id = chat_id.into();
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self, body: serde_json::Value) -> SDKResult<EmptyData> {
         self.execute_with_options(body, openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: serde_json::Value,

@@ -11,10 +11,12 @@ use serde::{Deserialize, Serialize};
 /// 调用技能请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct StartSkillBody {
+    /// 技能输入参数。
     pub input: serde_json::Value,
 }
 
 impl StartSkillBody {
+    /// 创建新的请求构建器。
     pub fn new(input: serde_json::Value) -> Self {
         Self { input }
     }
@@ -50,6 +52,7 @@ pub struct StartSkillRequest {
 }
 
 impl StartSkillRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -78,6 +81,10 @@ impl StartSkillRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: StartSkillBody,

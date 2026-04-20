@@ -12,6 +12,7 @@ use std::sync::Arc;
 
 use crate::common::api_endpoints::HelpdeskApiV1;
 
+/// 获取工单图片请求。
 #[derive(Debug, Clone)]
 pub struct GetTicketImageRequest {
     config: Arc<Config>,
@@ -19,8 +20,10 @@ pub struct GetTicketImageRequest {
     image_key: String,
 }
 
+/// 获取工单图片响应。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetTicketImageResponse {
+    /// 响应数据。
     pub data: Option<GetTicketImageData>,
 }
 
@@ -30,12 +33,15 @@ impl ApiResponseTrait for GetTicketImageResponse {
     }
 }
 
+/// 工单图片数据。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetTicketImageData {
+    /// 图片地址。
     pub image_url: String,
 }
 
 impl GetTicketImageRequest {
+    /// 创建新的实例。
     pub fn new(
         config: Arc<Config>,
         ticket_id: impl Into<String>,
@@ -48,10 +54,12 @@ impl GetTicketImageRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetTicketImageResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

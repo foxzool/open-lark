@@ -11,6 +11,7 @@ pub struct MailService {
 }
 
 impl MailService {
+    /// 创建新的邮件服务实例。
     pub fn new(config: Config) -> Self {
         Self {
             config: Arc::new(config),
@@ -18,11 +19,13 @@ impl MailService {
     }
 
     #[cfg(feature = "v1")]
+    /// 访问邮件 API。
     pub fn mail(&self) -> crate::mail::mail::Mail {
         crate::mail::mail::Mail::new(self.config.clone())
     }
 
     #[cfg(feature = "v1")]
+    /// 访问邮件组 API。
     pub fn mailgroup(&self) -> crate::mail::mail::v1::mailgroup::MailGroup {
         crate::mail::mail::v1::mailgroup::MailGroup::new(self.config.clone())
     }

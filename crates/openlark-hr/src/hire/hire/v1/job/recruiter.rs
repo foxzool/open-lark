@@ -35,6 +35,7 @@ impl RecruiterRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -60,12 +61,16 @@ impl RecruiterRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct RecruiterResponse {
     #[serde(default, alias = "items", alias = "recruiters")]
+    /// `recruiters` 字段。
     pub recruiters: Vec<JobRecruiterRecord>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 下一页分页标记。
     pub page_token: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 是否还有更多结果。
     pub has_more: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

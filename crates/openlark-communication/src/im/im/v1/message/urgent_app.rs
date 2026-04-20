@@ -31,6 +31,7 @@ use crate::{
 /// ```
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UrgentAppBody {
+    /// 需要接收加急通知的用户 ID 列表。
     user_id_list: Vec<String>,
 }
 
@@ -41,12 +42,14 @@ impl Default for UrgentAppBody {
 }
 
 impl UrgentAppBody {
+    /// 创建空的请求体构建器。
     pub fn new() -> Self {
         Self {
             user_id_list: Vec::new(),
         }
     }
 
+    /// 设置接收加急通知的用户列表。
     pub fn user_id_list(mut self, user_id_list: Vec<String>) -> Self {
         self.user_id_list = user_id_list;
         self
@@ -56,6 +59,7 @@ impl UrgentAppBody {
 /// 发送应用内加急响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UrgentAppResponse {
+    /// 无法发送加急通知的用户 ID 列表。
     #[serde(default)]
     pub invalid_user_id_list: Vec<String>,
 }
@@ -93,6 +97,7 @@ pub struct UrgentAppRequest {
 }
 
 impl UrgentAppRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -121,6 +126,7 @@ impl UrgentAppRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UrgentAppBody,

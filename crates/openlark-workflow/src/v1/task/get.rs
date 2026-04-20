@@ -12,6 +12,7 @@ use std::sync::Arc;
 
 /// 任务信息（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 任务详情。
 pub struct TaskV1 {
     /// 任务 ID
     pub id: String,
@@ -19,15 +20,19 @@ pub struct TaskV1 {
     pub summary: String,
     /// 任务描述
     #[serde(default)]
+    /// 任务描述。
     pub description: Option<String>,
     /// 任务开始时间
     #[serde(default)]
+    /// 任务开始时间。
     pub start: Option<String>,
     /// 任务截止时间
     #[serde(default)]
+    /// 任务截止时间。
     pub due: Option<String>,
     /// 任务优先级（1-5）
     #[serde(default)]
+    /// 任务优先级。
     pub priority: Option<i32>,
     /// 任务是否完成
     pub is_completed: bool,
@@ -39,6 +44,7 @@ pub struct TaskV1 {
 
 /// 获取任务响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 获取任务响应。
 pub struct GetTaskResponseV1 {
     /// 任务信息
     pub task: TaskV1,
@@ -46,12 +52,14 @@ pub struct GetTaskResponseV1 {
 
 /// 获取任务请求（v1）
 #[derive(Debug, Clone)]
+/// 获取任务请求构建器。
 pub struct GetTaskRequestV1 {
     config: Arc<Config>,
     task_id: String,
 }
 
 impl GetTaskRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_id: impl Into<String>) -> Self {
         Self {
             config,

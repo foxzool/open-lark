@@ -1,5 +1,6 @@
 //! Mail API 模块
 
+/// Mail v1 模块。
 pub mod v1;
 
 use openlark_core::config::Config;
@@ -12,6 +13,7 @@ pub struct Mail {
 }
 
 impl Mail {
+    /// 创建新的 Mail API 入口。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }

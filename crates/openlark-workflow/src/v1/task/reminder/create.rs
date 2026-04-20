@@ -12,6 +12,7 @@ use std::sync::Arc;
 
 /// 创建任务提醒请求体（v1）
 #[derive(Debug, Clone, Serialize, Default)]
+/// 创建任务提醒请求体。
 pub struct CreateTaskReminderBodyV1 {
     /// 提醒时间（Unix 时间戳）
     pub trigger_time: i64,
@@ -21,6 +22,7 @@ pub struct CreateTaskReminderBodyV1 {
 
 /// 创建任务提醒响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 创建任务提醒响应。
 pub struct CreateTaskReminderResponseV1 {
     /// 提醒 ID
     pub reminder_id: String,
@@ -28,6 +30,7 @@ pub struct CreateTaskReminderResponseV1 {
 
 /// 创建任务提醒请求（v1）
 #[derive(Debug, Clone)]
+/// 创建任务提醒请求构建器。
 pub struct CreateTaskReminderRequestV1 {
     config: Arc<Config>,
     task_id: String,
@@ -35,6 +38,7 @@ pub struct CreateTaskReminderRequestV1 {
 }
 
 impl CreateTaskReminderRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_id: impl Into<String>) -> Self {
         Self {
             config,

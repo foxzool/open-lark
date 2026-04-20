@@ -29,6 +29,7 @@ pub enum RecordFieldValue {
     ///
     /// 可以是单个 ID 或多个 ID 的数组
     SingleId(String),
+    /// 公开项说明。
     MultipleIds(Vec<String>),
 
     /// 附件信息

@@ -17,6 +17,7 @@ use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 /// 查询浮动图片响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct QueryFloatImagesResponse {
+    /// 浮动图片列表。
     pub items: Vec<FloatImage>,
 }
 
@@ -27,6 +28,8 @@ impl ApiResponseTrait for QueryFloatImagesResponse {
 }
 
 /// 查询浮动图片
+///
+/// 返回指定子表内全部浮动图片信息。
 pub async fn query_float_images(
     config: &Config,
     spreadsheet_token: &str,
@@ -42,6 +45,8 @@ pub async fn query_float_images(
 }
 
 /// 查询浮动图片（带请求选项）
+///
+/// 返回指定子表内全部浮动图片信息，并允许传入自定义请求选项。
 pub async fn query_float_images_with_options(
     config: &Config,
     spreadsheet_token: &str,

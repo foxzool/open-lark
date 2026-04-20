@@ -6,14 +6,18 @@ use serde::{Deserialize, Serialize};
 /// 单个用户失败原因
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FailedUserReason {
+    /// 错误码。
     pub error_code: i32,
+    /// 错误信息。
     pub error_message: String,
+    /// 失败用户 ID。
     pub user_id: String,
 }
 
 /// 更新按钮响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ChatButtonUpdateResponse {
+    /// 失败用户原因列表。
     #[serde(default)]
     pub failed_user_reasons: Option<Vec<FailedUserReason>>,
 }

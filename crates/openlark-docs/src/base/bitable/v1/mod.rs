@@ -1,8 +1,10 @@
+/// app 子模块。
 pub mod app;
 mod field_types;
 
 // 使用通配符导出所有子模块
 // app 模块显式导出
+/// 重新导出相关类型。
 pub use app::{
     App, AppService, AppSettings, BatchCreateRecordRequest, BatchCreateRecordResponse,
     BatchCreateRoleMemberRequest, BatchCreateRoleMemberResponse, BatchCreateTableRequest,
@@ -37,6 +39,7 @@ pub use app::{
     UpdateWorkflowResponse, View, Workflow, WorkflowStatus,
 };
 // field_types 模块显式导出
+/// 重新导出相关类型。
 pub use field_types::{
     AttachmentInfo, AutoNumberInfo, KanbanItem, LinkInfo, LocationInfo, MentionInfo, PeopleInfo,
     ProgressInfo, RecordFieldValue, RecordFields, RecordFieldsBuilder, TextSegment, TextStyle,

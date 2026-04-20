@@ -37,9 +37,7 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 use super::models::ReplyContent;
 
 /// 更新回复请求
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
-
 pub struct UpdateReplyRequest {
     /// 文件 token
     pub file_token: String,
@@ -61,6 +59,7 @@ pub struct UpdateReplyRequest {
 }
 
 impl UpdateReplyRequest {
+    /// 创建新的回复更新请求。
     pub fn new(
         file_token: impl Into<String>,
 
@@ -87,6 +86,7 @@ impl UpdateReplyRequest {
         }
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
 
@@ -100,10 +100,8 @@ struct UpdateReplyRequestBody {
     content: ReplyContent,
 }
 
-/// 更新回复响应（data 为 {}）
-
+/// 更新回复响应 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
-
 pub struct UpdateReplyResponse {}
 
 impl ApiResponseTrait for UpdateReplyResponse {
@@ -112,7 +110,7 @@ impl ApiResponseTrait for UpdateReplyResponse {
     }
 }
 
-/// 更新回复的内容
+/// 更新回复的内容。
 pub async fn update_reply(
     request: UpdateReplyRequest,
 

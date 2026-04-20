@@ -17,6 +17,7 @@ use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 /// 获取筛选响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetFilterResponse {
+    /// 子表筛选详情。
     pub sheet_filter_info: SheetFilterInfo,
 }
 
@@ -27,6 +28,8 @@ impl ApiResponseTrait for GetFilterResponse {
 }
 
 /// 获取筛选
+///
+/// 获取指定子表的筛选配置。
 pub async fn get_filter(
     config: &Config,
     spreadsheet_token: &str,
@@ -42,6 +45,8 @@ pub async fn get_filter(
 }
 
 /// 获取筛选（带选项）
+///
+/// 获取指定子表的筛选配置，并允许传入自定义请求选项。
 pub async fn get_filter_with_options(
     config: &Config,
     spreadsheet_token: &str,

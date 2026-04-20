@@ -4,5 +4,7 @@
 
 #![allow(clippy::module_inception)]
 
+/// calendar 模块。
 pub mod calendar;
+/// service 模块。
 pub mod service;

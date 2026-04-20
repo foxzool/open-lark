@@ -1,8 +1,14 @@
+/// 附件模块。
 pub mod attachment;
+/// 评论模块。
 pub mod comment;
+/// 自定义字段模块。
 pub mod custom_field;
+/// 分组模块。
 pub mod section;
+/// 任务模块。
 pub mod task;
+/// 任务清单模块。
 pub mod tasklist;
 
 use openlark_core::config::Config;
@@ -15,6 +21,7 @@ pub struct TaskV2 {
 }
 
 impl TaskV2 {
+    /// 创建新的任务 v2 API 入口。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }

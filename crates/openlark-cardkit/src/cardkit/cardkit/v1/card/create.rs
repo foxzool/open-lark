@@ -19,19 +19,24 @@ pub struct CreateCardBody {
     pub card_content: serde_json::Value,
     /// 卡片类型（可选）
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 卡片类型。
     pub card_type: Option<String>,
     /// 模板ID（可选）
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 模板 ID。
     pub template_id: Option<String>,
     /// 临时卡片标记（可选）
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 临时卡片标记。
     pub temp: Option<bool>,
     /// 临时卡片过期时间（可选，秒）
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 临时卡片过期时间。
     pub temp_expire_time: Option<i32>,
 }
 
 impl CreateCardBody {
+    /// 校验请求体。
     pub fn validate(&self) -> Result<(), String> {
         if self.card_content.is_null() {
             return Err("card_content 不能为空".to_string());
@@ -54,8 +59,10 @@ impl CreateCardBody {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateCardResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 卡片 ID。
     pub card_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 应用 ID。
     pub app_id: Option<String>,
 }
 
@@ -68,6 +75,7 @@ pub struct CreateCardRequest {
 }
 
 impl CreateCardRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }

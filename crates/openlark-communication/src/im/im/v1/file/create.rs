@@ -35,6 +35,7 @@ pub struct CreateFileBody {
 }
 
 impl CreateFileBody {
+    /// 创建新的上传文件请求体。
     pub fn new(file_type: impl Into<String>, file_name: impl Into<String>) -> Self {
         Self {
             file_type: file_type.into(),
@@ -43,16 +44,19 @@ impl CreateFileBody {
         }
     }
 
+    /// 设置文件类型。
     pub fn file_type(mut self, file_type: impl Into<String>) -> Self {
         self.file_type = file_type.into();
         self
     }
 
+    /// 设置文件名。
     pub fn file_name(mut self, file_name: impl Into<String>) -> Self {
         self.file_name = file_name.into();
         self
     }
 
+    /// 设置视频时长。
     pub fn duration(mut self, duration: i32) -> Self {
         self.duration = Some(duration);
         self
@@ -80,6 +84,7 @@ pub struct CreateFileRequest {
 }
 
 impl CreateFileRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -102,6 +107,7 @@ impl CreateFileRequest {
         .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: CreateFileBody,

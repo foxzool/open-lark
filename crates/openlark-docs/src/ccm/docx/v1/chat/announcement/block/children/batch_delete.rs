@@ -35,7 +35,9 @@ pub struct BatchDeleteChatAnnouncementBlockChildrenParams {
 /// 删除群公告中的块响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchDeleteChatAnnouncementBlockChildrenResponse {
+    /// 文档修订版本。
     pub revision_id: i64,
+    /// 幂等 token。
     pub client_token: String,
 }
 
@@ -46,6 +48,8 @@ impl ApiResponseTrait for BatchDeleteChatAnnouncementBlockChildrenResponse {
 }
 
 /// 删除群公告中的块请求
+///
+/// 用于删除群公告块下的一段子块。
 pub struct BatchDeleteChatAnnouncementBlockChildrenRequest {
     config: Config,
 }
@@ -67,6 +71,7 @@ impl BatchDeleteChatAnnouncementBlockChildrenRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     /// 执行请求（带请求选项）
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/batch_delete

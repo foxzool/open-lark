@@ -12,10 +12,12 @@ pub struct DocumentAi {
 }
 
 impl DocumentAi {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 
+    /// 访问 v1 版本 API。
     pub fn v1(&self) -> v1::DocumentAiV1 {
         v1::DocumentAiV1::new(self.config.clone())
     }

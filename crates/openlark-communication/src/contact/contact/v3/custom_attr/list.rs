@@ -17,12 +17,16 @@ use crate::{common::api_utils::extract_response_data, endpoints::CONTACT_V3_CUST
 /// 自定义用户字段配置（字段随文档演进，未显式建模字段使用 `extra` 透传）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CustomAttr {
+    /// 字段 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 字段类型。
     #[serde(skip_serializing_if = "Option::is_none", rename = "type")]
     pub attr_type: Option<String>,
+    /// 字段选项。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<serde_json::Value>,
+    /// 未显式建模的扩展字段。
     #[serde(default, flatten)]
     pub extra: HashMap<String, serde_json::Value>,
 }
@@ -30,10 +34,13 @@ pub struct CustomAttr {
 /// 获取企业自定义用户字段响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListCustomAttrsResponse {
+    /// 自定义字段列表。
     #[serde(default)]
     pub items: Vec<CustomAttr>,
+    /// 分页标记。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
+    /// 是否还有更多数据。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
 }
@@ -46,12 +53,16 @@ impl ApiResponseTrait for ListCustomAttrsResponse {
 
 /// 获取企业自定义用户字段请求
 pub struct ListCustomAttrsRequest {
+    /// 配置信息。
     config: Config,
+    /// 分页大小。
     page_size: Option<i32>,
+    /// 分页标记。
     page_token: Option<String>,
 }
 
 impl ListCustomAttrsRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -80,6 +91,8 @@ impl ListCustomAttrsRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

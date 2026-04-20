@@ -12,12 +12,15 @@ use crate::{
 };
 
 /// 判断用户或机器人是否在群里请求
+///
+/// 用于查询当前身份是否已经加入某个群聊。
 pub struct IsInChatRequest {
     config: Config,
     chat_id: String,
 }
 
 impl IsInChatRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -39,6 +42,7 @@ impl IsInChatRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

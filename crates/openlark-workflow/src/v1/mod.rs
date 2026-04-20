@@ -1,3 +1,4 @@
+/// 任务模块。
 pub mod task;
 
 use openlark_core::config::Config;
@@ -10,6 +11,7 @@ pub struct TaskV1 {
 }
 
 impl TaskV1 {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }

@@ -17,10 +17,12 @@ use crate::{
 /// 更新用户 ID 请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateUserIdBody {
+    /// 新用户 ID。
     pub new_user_id: String,
 }
 
 impl UpdateUserIdBody {
+    /// 创建新的用户 ID 更新请求体。
     pub fn new(new_user_id: impl Into<String>) -> Self {
         Self {
             new_user_id: new_user_id.into(),
@@ -51,12 +53,16 @@ impl UpdateUserIdBody {
 ///     .user_id_type(UserIdType::OpenId);
 /// ```
 pub struct UpdateUserIdRequest {
+    /// 配置信息。
     config: Config,
+    /// 用户 ID。
     user_id: String,
+    /// 用户 ID 类型。
     user_id_type: Option<UserIdType>,
 }
 
 impl UpdateUserIdRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -85,6 +91,8 @@ impl UpdateUserIdRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UpdateUserIdBody,

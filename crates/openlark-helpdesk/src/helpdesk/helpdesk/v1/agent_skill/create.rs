@@ -39,6 +39,7 @@ impl CreateAgentSkillBody {
 /// 创建客服技能响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateAgentSkillResponse {
+    /// 响应数据。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<CreateAgentSkillResult>,
 }

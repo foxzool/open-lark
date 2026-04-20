@@ -1,4 +1,5 @@
 #[allow(clippy::module_inception)]
+/// Board 子模块。
 pub mod board;
 
 // board 模块显式导出

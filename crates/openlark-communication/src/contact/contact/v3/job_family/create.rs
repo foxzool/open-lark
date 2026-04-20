@@ -31,19 +31,26 @@ use crate::{
 /// ```
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateJobFamilyBody {
+    /// 序列名称。
     name: String,
+    /// 序列描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
+    /// 父序列 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     parent_job_family_id: Option<String>,
+    /// 状态。
     status: bool,
+    /// 国际化名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     i18n_name: Option<Vec<I18nContent>>,
+    /// 国际化描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     i18n_description: Option<Vec<I18nContent>>,
 }
 
 impl CreateJobFamilyBody {
+    /// 创建新的序列请求体。
     pub fn new(name: impl Into<String>, status: bool) -> Self {
         Self {
             name: name.into(),
@@ -55,26 +62,36 @@ impl CreateJobFamilyBody {
         }
     }
 
+    /// 设置序列名称。
+    /// 设置序列名称。
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.name = name.into();
         self
     }
 
+    /// 设置序列描述。
+    /// 设置序列描述。
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.description = Some(description.into());
         self
     }
 
+    /// 设置父序列 ID。
+    /// 设置父序列 ID。
     pub fn parent_job_family_id(mut self, parent_job_family_id: impl Into<String>) -> Self {
         self.parent_job_family_id = Some(parent_job_family_id.into());
         self
     }
 
+    /// 设置国际化名称。
+    /// 设置国际化名称。
     pub fn i18n_name(mut self, i18n_name: Vec<I18nContent>) -> Self {
         self.i18n_name = Some(i18n_name);
         self
     }
 
+    /// 设置国际化描述。
+    /// 设置国际化描述。
     pub fn i18n_description(mut self, i18n_description: Vec<I18nContent>) -> Self {
         self.i18n_description = Some(i18n_description);
         self
@@ -101,6 +118,7 @@ pub struct CreateJobFamilyRequest {
 }
 
 impl CreateJobFamilyRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -113,6 +131,8 @@ impl CreateJobFamilyRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: CreateJobFamilyBody,

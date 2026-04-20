@@ -60,6 +60,7 @@ pub struct TypedPage<T> {
 }
 
 impl<T> TypedPage<T> {
+    /// 创建新的实例。
     pub fn new(items: Vec<T>, has_more: bool, next_page_token: Option<String>) -> Self {
         Self {
             items,
@@ -68,20 +69,24 @@ impl<T> TypedPage<T> {
         }
     }
 
+    /// 提供 `empty` 能力。
     pub fn empty() -> Self {
         Self::new(Vec::new(), false, None)
     }
 
+    /// 提供 `is_last_page` 能力。
     pub fn is_last_page(&self) -> bool {
         !self.has_more
     }
 
+    /// 提供 `into_items` 能力。
     pub fn into_items(self) -> Vec<T> {
         self.items
     }
 }
 
 #[cfg(feature = "ccm-core")]
+/// 公开项说明。
 pub type FolderChildrenPage = TypedPage<crate::ccm::explorer::v2::models::FileItem>;
 
 /// 电子表格范围 helper。
@@ -606,19 +611,24 @@ pub struct DocsClient {
     config: Arc<Config>,
 
     #[cfg(feature = "ccm-core")]
+    /// 公开项说明。
     pub ccm: CcmClient,
 
     #[cfg(any(feature = "base", feature = "bitable"))]
+    /// 公开项说明。
     pub base: BaseClient,
 
     #[cfg(any(feature = "baike", feature = "lingo"))]
+    /// 公开项说明。
     pub baike: BaikeClient,
 
     #[cfg(feature = "minutes")]
+    /// 公开项说明。
     pub minutes: MinutesClient,
 }
 
 impl DocsClient {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         let config = Arc::new(config);
         Self {
@@ -634,6 +644,7 @@ impl DocsClient {
         }
     }
 
+    /// 返回共享配置。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -945,6 +956,7 @@ impl DocsClient {
     }
 
     #[cfg(feature = "ccm-core")]
+    /// 列出 sheet infos。
     pub async fn list_sheet_infos(
         &self,
         spreadsheet_token: &str,
@@ -1058,6 +1070,7 @@ impl CcmClient {
         Self { config }
     }
 
+    /// 返回共享配置。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -1076,11 +1089,13 @@ impl BaseClient {
         Self { config }
     }
 
+    /// 返回共享配置。
     pub fn config(&self) -> &Config {
         &self.config
     }
 
     #[cfg(feature = "bitable")]
+    /// 返回多维表格客户端。
     pub fn bitable(&self) -> BitableClient {
         BitableClient::new(self.config.clone())
     }
@@ -1099,6 +1114,7 @@ impl BitableClient {
         Self { config }
     }
 
+    /// 返回共享配置。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -1117,6 +1133,7 @@ impl BaikeClient {
         Self { config }
     }
 
+    /// 返回共享配置。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -1135,6 +1152,7 @@ impl MinutesClient {
         Self { config }
     }
 
+    /// 返回共享配置。
     pub fn config(&self) -> &Config {
         &self.config
     }

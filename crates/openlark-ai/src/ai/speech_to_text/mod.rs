@@ -14,10 +14,12 @@ pub struct SpeechToText {
 }
 
 impl SpeechToText {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 
+    /// 访问 v1 版本 API。
     pub fn v1(&self) -> v1::SpeechToTextV1 {
         v1::SpeechToTextV1::new(self.config.clone())
     }

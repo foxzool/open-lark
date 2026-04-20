@@ -11,14 +11,18 @@ use serde::{Deserialize, Serialize};
 /// 创建数据知识请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateDataAssetBody {
+    /// 数据知识名称。
     pub name: String,
+    /// 数据知识描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 标签列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<String>>,
 }
 
 impl CreateDataAssetBody {
+    /// 创建新的数据知识请求体。
     pub fn new(name: impl Into<String>) -> Self {
         Self {
             name: name.into(),
@@ -27,11 +31,19 @@ impl CreateDataAssetBody {
         }
     }
 
+    /// 设置描述。
+    /// 设置数据知识描述。
+    /// 设置数据知识描述。
+    /// 设置数据知识描述。
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.description = Some(description.into());
         self
     }
 
+    /// 设置标签列表。
+    /// 设置标签列表。
+    /// 设置标签列表。
+    /// 设置标签列表。
     pub fn tags(mut self, tags: Vec<String>) -> Self {
         self.tags = Some(tags);
         self
@@ -69,6 +81,7 @@ pub struct CreateDataAssetRequest {
 }
 
 impl CreateDataAssetRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -90,6 +103,10 @@ impl CreateDataAssetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: CreateDataAssetBody,

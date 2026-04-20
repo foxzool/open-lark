@@ -11,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// 回复用户提问请求。
 #[derive(Debug, Clone)]
 pub struct AnswerUserQueryRequest {
     config: Arc<Config>,
@@ -18,9 +19,12 @@ pub struct AnswerUserQueryRequest {
     body: AnswerUserQueryBody,
 }
 
+/// 回复用户提问请求体。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct AnswerUserQueryBody {
+    /// 回复内容。
     pub content: String,
+    /// 回复内容类型。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_type: Option<String>,
 }
@@ -37,8 +41,10 @@ impl AnswerUserQueryBody {
     }
 }
 
+/// 回复用户提问响应。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnswerUserQueryResponse {
+    /// 响应数据。
     pub data: Option<AnswerUserQueryData>,
 }
 
@@ -48,12 +54,15 @@ impl ApiResponseTrait for AnswerUserQueryResponse {
     }
 }
 
+/// 回复用户提问响应数据。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnswerUserQueryData {
+    /// 消息 ID。
     pub message_id: String,
 }
 
 impl AnswerUserQueryRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, ticket_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -62,20 +71,24 @@ impl AnswerUserQueryRequest {
         }
     }
 
+    /// 设置回复内容。
     pub fn content(mut self, content: impl Into<String>) -> Self {
         self.body.content = content.into();
         self
     }
 
+    /// 设置回复内容类型。
     pub fn content_type(mut self, content_type: impl Into<String>) -> Self {
         self.body.content_type = Some(content_type.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<AnswerUserQueryResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

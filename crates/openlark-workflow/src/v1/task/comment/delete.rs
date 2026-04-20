@@ -12,6 +12,7 @@ use std::sync::Arc;
 
 /// 删除任务评论响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 删除任务评论响应。
 pub struct DeleteTaskCommentResponseV1 {
     /// 是否成功删除
     pub success: bool,
@@ -19,6 +20,7 @@ pub struct DeleteTaskCommentResponseV1 {
 
 /// 删除任务评论请求（v1）
 #[derive(Debug, Clone)]
+/// 删除任务评论请求构建器。
 pub struct DeleteTaskCommentRequestV1 {
     config: Arc<Config>,
     task_id: String,
@@ -26,6 +28,7 @@ pub struct DeleteTaskCommentRequestV1 {
 }
 
 impl DeleteTaskCommentRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(
         config: Arc<Config>,
         task_id: impl Into<String>,

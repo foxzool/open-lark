@@ -32,11 +32,13 @@ impl UpdateRequest {
         }
     }
 
+    /// 设置 `external_offer_id`。
     pub fn external_offer_id(mut self, external_offer_id: impl Into<String>) -> Self {
         self.external_offer_id = external_offer_id.into();
         self
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
@@ -48,6 +50,7 @@ impl UpdateRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -76,14 +79,19 @@ impl UpdateRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct UpdateResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `external_offer_id` 字段。
     pub external_offer_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `offer_id` 字段。
     pub offer_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `result` 字段。
     pub result: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `success` 字段。
     pub success: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

@@ -9,6 +9,7 @@ use openlark_core::{
 };
 use std::sync::Arc;
 
+/// 获取工单详情请求。
 #[derive(Debug, Clone)]
 pub struct GetTicketRequest {
     config: Arc<Config>,
@@ -16,10 +17,12 @@ pub struct GetTicketRequest {
 }
 
 impl GetTicketRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, ticket_id: String) -> Self {
         Self { config, ticket_id }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetTicketResponse> {
         validate_required!(self.ticket_id.trim(), "工单ID不能为空");
 

@@ -29,6 +29,7 @@ impl DeleteRequest {
         }
     }
 
+    /// 设置 `record_id`。
     pub fn record_id(mut self, record_id: String) -> Self {
         self.record_id = record_id;
         self
@@ -40,6 +41,7 @@ impl DeleteRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

@@ -32,6 +32,7 @@ pub struct ParentsResponse {
     pub data: Option<ParentsResponseData>,
 }
 
+/// `ParentsResponseData`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ParentsResponseData {
     /// 父部门列表（按层级从顶部门到直接父部门排序）
@@ -39,6 +40,7 @@ pub struct ParentsResponseData {
     pub items: Option<Vec<DepartmentItem>>,
 }
 
+/// `DepartmentItem`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DepartmentItem {
     /// 部门 ID

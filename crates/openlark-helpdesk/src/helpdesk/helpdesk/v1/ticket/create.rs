@@ -9,6 +9,7 @@ use openlark_core::{
 };
 use std::sync::Arc;
 
+/// 创建工单请求。
 #[derive(Debug, Clone)]
 pub struct CreateTicketRequest {
     config: Arc<Config>,
@@ -16,6 +17,7 @@ pub struct CreateTicketRequest {
 }
 
 impl CreateTicketRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self {
             config,
@@ -23,21 +25,25 @@ impl CreateTicketRequest {
         }
     }
 
+    /// 设置标题。
     pub fn title(mut self, title: impl Into<String>) -> Self {
         self.body.title = title.into();
         self
     }
 
+    /// 设置描述。
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.body.description = Some(description.into());
         self
     }
 
+    /// 设置优先级。
     pub fn priority(mut self, priority: impl Into<String>) -> Self {
         self.body.priority = Some(priority.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateTicketResponse> {
         validate_required!(self.body.title.trim(), "工单标题不能为空");
 

@@ -31,6 +31,7 @@ impl BatchDeleteRequest {
         }
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
@@ -42,6 +43,7 @@ impl BatchDeleteRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -67,6 +69,7 @@ impl BatchDeleteRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct BatchDeleteResponse {
     #[serde(flatten)]
+    /// `operation` 字段。
     pub operation: EcoOperationResult,
 }
 

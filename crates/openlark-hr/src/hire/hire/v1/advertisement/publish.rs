@@ -33,11 +33,13 @@ impl PublishRequest {
         }
     }
 
+    /// 设置 `job_id`。
     pub fn job_id(mut self, job_id: String) -> Self {
         self.job_id = job_id;
         self
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
@@ -49,6 +51,7 @@ impl PublishRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -79,6 +82,7 @@ impl PublishRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct PublishResponse {
     #[serde(flatten)]
+    /// `operation` 字段。
     pub operation: GenericOperationResult,
 }
 

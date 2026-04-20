@@ -1,16 +1,17 @@
-/// 文件订阅管理模块
-///
-/// 提供云文档订阅管理功能。
+/// 创建文件订阅接口。
 pub mod create;
+/// 获取文件订阅接口。
 pub mod get;
+/// 文件订阅模型模块。
 pub mod models;
+/// 更新文件订阅接口。
 pub mod patch;
 
-// 显式导出 - 避免使用 glob reexport
+/// 重新导出创建文件订阅请求。
 pub use create::CreateFileSubscriptionRequest;
-
+/// 重新导出获取文件订阅类型。
 pub use get::{GetSubscriptionRequest, GetSubscriptionResponse};
-
+/// 重新导出文件订阅模型。
 pub use models::Subscription;
-
+/// 重新导出更新文件订阅请求。
 pub use patch::PatchSubscriptionRequest;

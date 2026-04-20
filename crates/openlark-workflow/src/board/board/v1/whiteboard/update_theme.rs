@@ -9,24 +9,34 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone, Serialize, Default)]
+/// 更新白板主题请求体。
 pub struct UpdateWhiteboardThemeBodyV1 {
     #[serde(skip_serializing_if = "String::is_empty")]
+    /// 主题名称。
     pub name: String,
     #[serde(skip_serializing_if = "String::is_empty")]
+    /// 背景颜色。
     pub background_color: String,
     #[serde(default)]
+    /// 主题配置。
     pub theme_config: serde_json::Value,
 }
 
 #[derive(Debug, Clone, Deserialize)]
+/// 更新白板主题响应。
 pub struct UpdateWhiteboardThemeResponseV1 {
+    /// 主题 ID。
     pub theme_id: String,
+    /// 主题名称。
     pub name: String,
+    /// 背景颜色。
     pub background_color: String,
+    /// 更新时间。
     pub update_time: i64,
 }
 
 #[derive(Debug, Clone)]
+/// 更新白板主题请求构建器。
 pub struct UpdateWhiteboardThemeRequestV1 {
     config: Arc<Config>,
     board_id: String,
@@ -34,6 +44,7 @@ pub struct UpdateWhiteboardThemeRequestV1 {
 }
 
 impl UpdateWhiteboardThemeRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, board_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -42,26 +53,31 @@ impl UpdateWhiteboardThemeRequestV1 {
         }
     }
 
+    /// 设置主题名称。
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.body.name = name.into();
         self
     }
 
+    /// 设置背景颜色。
     pub fn background_color(mut self, background_color: impl Into<String>) -> Self {
         self.body.background_color = background_color.into();
         self
     }
 
+    /// 设置主题配置。
     pub fn theme_config(mut self, theme_config: serde_json::Value) -> Self {
         self.body.theme_config = theme_config;
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<UpdateWhiteboardThemeResponseV1> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

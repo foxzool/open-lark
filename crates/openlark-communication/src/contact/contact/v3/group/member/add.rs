@@ -17,11 +17,11 @@ use crate::{
 /// 添加用户组成员请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AddGroupMemberBody {
-    /// 用户组成员类型（目前仅支持 user）
+    /// 用户组成员类型（目前仅支持 user）。
     pub member_type: String,
-    /// 用户 ID 类型
+    /// 用户 ID 类型。
     pub member_id_type: String,
-    /// 用户 ID
+    /// 用户 ID。
     pub member_id: String,
 }
 
@@ -52,6 +52,7 @@ pub struct AddGroupMemberRequest {
 }
 
 impl AddGroupMemberRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -83,6 +84,9 @@ impl AddGroupMemberRequest {
         .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         member_id_type: UserIdType,

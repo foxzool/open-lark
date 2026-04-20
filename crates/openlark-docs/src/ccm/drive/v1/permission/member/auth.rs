@@ -29,6 +29,7 @@ pub struct AuthPermissionMemberRequest {
 }
 
 impl AuthPermissionMemberRequest {
+    /// 创建新的权限判断请求。
     /// 创建判断用户云文档权限请求
     ///
     /// # 参数
@@ -50,11 +51,13 @@ impl AuthPermissionMemberRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<AuthPermissionMemberResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

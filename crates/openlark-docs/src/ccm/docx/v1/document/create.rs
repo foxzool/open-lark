@@ -14,6 +14,8 @@ use serde::{Deserialize, Serialize};
 use crate::common::{api_endpoints::DocxApiV1, api_utils::*};
 
 /// 创建文档请求（流式 Builder 模式）
+///
+/// 用于创建新版文档。
 pub struct CreateDocumentRequest {
     config: Config,
     /// 文档标题（可选）
@@ -36,14 +38,18 @@ struct CreateDocumentRequestBody {
 /// 创建文档响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateDocumentResponse {
+    /// 创建后的文档信息。
     pub document: CreatedDocument,
 }
 
 /// 创建文档返回的文档信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreatedDocument {
+    /// 文档 ID。
     pub document_id: String,
+    /// 文档修订版本号。
     pub revision_id: i64,
+    /// 文档标题。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
 }
@@ -55,6 +61,7 @@ impl ApiResponseTrait for CreateDocumentResponse {
 }
 
 impl CreateDocumentRequest {
+    /// 创建新的文档创建请求。
     /// 创建创建文档请求
     pub fn new(config: Config) -> Self {
         Self {
@@ -85,6 +92,7 @@ impl CreateDocumentRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

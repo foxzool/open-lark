@@ -15,6 +15,8 @@ use serde::{Deserialize, Serialize};
 use super::models::Form;
 
 /// 获取表单请求
+///
+/// 用于查询指定表单的元数据。
 #[derive(Debug, Clone)]
 pub struct GetFormRequest {
     config: Config,
@@ -24,7 +26,7 @@ pub struct GetFormRequest {
 }
 
 impl GetFormRequest {
-    /// 创建获取表单请求
+    /// 创建新的表单查询请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -34,29 +36,30 @@ impl GetFormRequest {
         }
     }
 
-    /// 设置应用token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置数据表ID
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
-    /// 设置表单ID
+    /// 设置表单 ID。
     pub fn form_id(mut self, form_id: String) -> Self {
         self.form_id = form_id;
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetFormResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetFormResponse> {
         // 参数验证
         validate_required!(self.app_token.trim(), "app_token");
@@ -74,7 +77,7 @@ impl GetFormRequest {
     }
 }
 
-/// 获取表单响应
+/// 获取表单响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetFormResponse {
     /// 表单元数据

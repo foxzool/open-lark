@@ -25,12 +25,15 @@ pub struct PatchUnitBody {
 }
 
 /// 修改单位信息请求
+///
+/// 用于更新指定单位的基本属性。
 pub struct PatchUnitRequest {
     config: Config,
     unit_id: String,
 }
 
 impl PatchUnitRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -52,6 +55,7 @@ impl PatchUnitRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: PatchUnitBody,

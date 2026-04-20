@@ -1,5 +1,6 @@
 //! Application API 模块
 
+/// 应用管理 v1 版本 API。
 pub mod v1;
 
 use openlark_core::config::Config;
@@ -12,10 +13,12 @@ pub struct Application {
 }
 
 impl Application {
+    /// 创建新的应用 API 入口。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 
+    /// 访问 v1 版本 API。
     pub fn v1(&self) -> v1::ApplicationV1 {
         v1::ApplicationV1::new(self.config.clone())
     }

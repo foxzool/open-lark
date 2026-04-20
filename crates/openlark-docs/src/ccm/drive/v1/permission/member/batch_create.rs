@@ -36,6 +36,7 @@ struct BatchCreatePermissionMemberBody {
 }
 
 impl BatchCreatePermissionMemberRequest {
+    /// 创建新的批量增加协作者请求。
     /// 创建批量增加协作者权限请求
     ///
     /// # 参数
@@ -64,11 +65,13 @@ impl BatchCreatePermissionMemberRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchCreatePermissionMemberResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

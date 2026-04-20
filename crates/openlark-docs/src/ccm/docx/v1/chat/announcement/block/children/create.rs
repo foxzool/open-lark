@@ -34,6 +34,7 @@ pub struct CreateChatAnnouncementBlockChildrenParams {
 /// 在群公告中创建块响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateChatAnnouncementBlockChildrenResponse {
+    /// 新建子块列表。
     #[serde(default)]
     pub children: Vec<DocxBlock>,
 }
@@ -45,6 +46,8 @@ impl ApiResponseTrait for CreateChatAnnouncementBlockChildrenResponse {
 }
 
 /// 在群公告中创建块请求
+///
+/// 用于在群公告块下插入一批子块。
 pub struct CreateChatAnnouncementBlockChildrenRequest {
     config: Config,
 }
@@ -66,6 +69,7 @@ impl CreateChatAnnouncementBlockChildrenRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     /// 执行请求（带请求选项）
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block-children/create

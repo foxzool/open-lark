@@ -15,6 +15,8 @@ use serde::{Deserialize, Serialize};
 use super::models::Form;
 
 /// 更新表单元数据请求
+///
+/// 用于更新表单基础配置。
 #[derive(Debug, Clone)]
 pub struct PatchFormRequest {
     config: Config,
@@ -30,6 +32,7 @@ pub struct PatchFormRequest {
 }
 
 impl PatchFormRequest {
+    /// 创建新的表单更新请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -44,50 +47,60 @@ impl PatchFormRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
+    /// 设置表单 ID。
     pub fn form_id(mut self, form_id: String) -> Self {
         self.form_id = form_id;
         self
     }
 
+    /// 设置表单名称。
     pub fn name(mut self, name: String) -> Self {
         self.name = Some(name);
         self
     }
 
+    /// 设置表单描述。
     pub fn description(mut self, description: String) -> Self {
         self.description = Some(description);
         self
     }
 
+    /// 设置是否共享。
     pub fn shared(mut self, shared: bool) -> Self {
         self.shared = Some(shared);
         self
     }
 
+    /// 设置共享范围限制。
     pub fn shared_limit(mut self, shared_limit: String) -> Self {
         self.shared_limit = Some(shared_limit);
         self
     }
 
+    /// 设置是否限制单次提交。
     pub fn submit_limit_once(mut self, submit_limit_once: bool) -> Self {
         self.submit_limit_once = Some(submit_limit_once);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<PatchFormResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<PatchFormResponse> {
         // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "app_token");
@@ -139,9 +152,10 @@ struct PatchFormRequestBody {
     submit_limit_once: Option<bool>,
 }
 
-/// 更新表单元数据响应（data）
+/// 更新表单元数据响应（data）。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchFormResponse {
+    /// 更新后的表单元数据。
     pub form: Form,
 }
 

@@ -35,6 +35,7 @@ impl GetDetailRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -60,22 +61,31 @@ impl GetDetailRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetDetailResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_id` 字段。
     pub job_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_name` 字段。
     pub job_name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `active_status` 字段。
     pub active_status: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `process_id` 字段。
     pub process_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `process_name` 字段。
     pub process_name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `department_id` 字段。
     pub department_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_description` 字段。
     pub job_description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `recruiters` 字段。
     pub recruiters: Option<Vec<JobRecruiterRecord>>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

@@ -1,5 +1,6 @@
 use openlark_core::{error, SDKResult};
 
+/// extract response data。
 pub fn extract_response_data<T>(
     response: openlark_core::api::Response<T>,
     context: &str,
@@ -12,6 +13,7 @@ pub fn extract_response_data<T>(
     })
 }
 
+/// serialize params。
 pub fn serialize_params<T: serde::Serialize>(
     params: &T,
     context: &str,

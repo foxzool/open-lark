@@ -7,18 +7,22 @@ pub struct MeetingRoomService {
 }
 
 impl MeetingRoomService {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 
+    /// 访问 building 资源。
     pub fn building(&self) -> BuildingResource {
         BuildingResource::new(self.config.clone())
     }
 
+    /// 访问 room 资源。
     pub fn room(&self) -> RoomResource {
         RoomResource::new(self.config.clone())
     }
@@ -31,10 +35,12 @@ pub struct BuildingResource {
 }
 
 impl BuildingResource {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -47,10 +53,12 @@ pub struct RoomResource {
 }
 
 impl RoomResource {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }

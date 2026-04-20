@@ -16,6 +16,7 @@ pub struct UserSearchApi {
 }
 
 impl UserSearchApi {
+    /// 创建新的用户搜索 facade。
     pub fn new(config: Arc<AnalyticsConfig>) -> Self {
         Self { config }
     }

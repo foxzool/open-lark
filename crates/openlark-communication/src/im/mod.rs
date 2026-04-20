@@ -3,19 +3,24 @@
 //! 按 bizTag=im 组织的 API 实现。
 
 // 先按 meta.Project 建目录，后续逐个补齐
+/// Card 模块。
 pub mod card;
 #[path = "im/mod.rs"]
 mod project;
+/// IM v1/v2 版本入口。
 pub use project::{v1, v2};
 #[allow(clippy::module_inception)]
 #[deprecated(
     since = "0.15.0",
     note = "Use `openlark_communication::im::v1` or `::v2` directly; the nested `im::im` path is a legacy compatibility alias."
 )]
+/// 兼容历史嵌套路径的 IM 模块别名。
 pub mod im {
     pub use super::project::{v1, v2};
 }
+/// Im Ephemeral 模块。
 pub mod im_ephemeral;
+/// IM Message 模块。
 pub mod im_message;
 
 #[cfg(test)]

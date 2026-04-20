@@ -13,6 +13,8 @@ use crate::{
 };
 
 /// 获取会话历史消息请求
+///
+/// 用于按会话和时间范围分页拉取消息记录。
 pub struct ListMessagesRequest {
     config: Config,
     container_id_type: Option<ContainerIdType>,
@@ -25,6 +27,7 @@ pub struct ListMessagesRequest {
 }
 
 impl ListMessagesRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -88,6 +91,7 @@ impl ListMessagesRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

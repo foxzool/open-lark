@@ -31,13 +31,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
+/// 删除回复请求。
 #[derive(Debug, Clone, Serialize, Deserialize)]
-
 pub struct DeleteCommentReplyRequest {
+    /// 文件 token。
     pub file_token: String,
 
+    /// 评论 ID。
     pub comment_id: String,
 
+    /// 回复 ID。
     pub reply_id: String,
 
     /// 云文档类型（必填）
@@ -45,6 +48,7 @@ pub struct DeleteCommentReplyRequest {
 }
 
 impl DeleteCommentReplyRequest {
+    /// 创建新的回复删除请求。
     pub fn new(
         file_token: impl Into<String>,
 
@@ -66,8 +70,8 @@ impl DeleteCommentReplyRequest {
     }
 }
 
+/// 删除回复响应 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
-
 pub struct DeleteCommentReplyResponse {}
 
 impl ApiResponseTrait for DeleteCommentReplyResponse {
@@ -76,6 +80,7 @@ impl ApiResponseTrait for DeleteCommentReplyResponse {
     }
 }
 
+/// 删除指定评论下的回复。
 pub async fn delete_comment_reply(
     request: DeleteCommentReplyRequest,
 

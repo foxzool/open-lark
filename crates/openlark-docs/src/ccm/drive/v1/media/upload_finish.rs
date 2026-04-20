@@ -47,6 +47,7 @@ pub struct UploadFinishMediaRequest {
 }
 
 impl UploadFinishMediaRequest {
+    /// 创建新的完成上传请求。
     pub fn new(config: Config, upload_id: impl Into<String>, block_num: i32) -> Self {
         Self {
             config,
@@ -55,11 +56,13 @@ impl UploadFinishMediaRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UploadFinishMediaResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

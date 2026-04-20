@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 use crate::baike::baike::v1::models::{Entity, OuterInfo, RelatedMeta, Term, UserIdType};
 use crate::common::api_endpoints::BaikeApiV1;
 
+/// 创建草稿请求体。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct CreateDraftReq {
     /// 词条 ID（更新已有词条时填写）
@@ -41,13 +42,17 @@ pub struct CreateDraftReq {
 /// 创建草稿响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CreateDraftResp {
+    /// 草稿详情。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub draft: Option<Draft>,
 }
 
+/// 草稿信息。
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Draft {
+    /// 草稿 ID。
     pub draft_id: String,
+    /// 草稿实体。
     pub entity: Entity,
 }
 
@@ -65,6 +70,7 @@ pub struct CreateDraftRequest {
 }
 
 impl CreateDraftRequest {
+    /// 创建新的草稿请求。
     pub fn new(config: Config, req: CreateDraftReq) -> Self {
         Self {
             config,
@@ -79,10 +85,12 @@ impl CreateDraftRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateDraftResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CreateDraftResp> {
         // ===== 参数校验 =====
         validate_required!(self.req.main_keys, "main_keys 不能为空");

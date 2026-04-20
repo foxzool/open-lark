@@ -51,7 +51,7 @@ pub struct CreateViewRequest {
 }
 
 impl CreateViewRequest {
-    /// 创建新增视图请求
+    /// 创建新的视图创建请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -61,29 +61,30 @@ impl CreateViewRequest {
         }
     }
 
-    /// 设置应用token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置数据表ID
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
-    /// 设置视图信息
+    /// 设置视图信息。
     pub fn view(mut self, view: CreateViewData) -> Self {
         self.view = view;
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateViewResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -155,6 +156,7 @@ pub struct CreateViewData {
 }
 
 impl CreateViewData {
+    /// 创建仅包含名称的视图配置。
     pub fn new(view_name: impl ToString) -> Self {
         Self {
             view_name: view_name.to_string(),
@@ -194,14 +196,14 @@ impl CreateViewData {
         }
     }
 
-    /// 设置视图类型
+    /// 设置视图类型。
     pub fn with_view_type(mut self, view_type: impl ToString) -> Self {
         self.view_type = Some(view_type.to_string());
         self
     }
 }
 
-/// 创建视图响应
+/// 创建视图响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateViewResponse {
     /// 视图信息

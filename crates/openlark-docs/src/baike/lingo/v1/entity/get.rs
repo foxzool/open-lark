@@ -18,6 +18,7 @@ use crate::common::api_endpoints::LingoApiV1;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetEntityResp {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 公开项说明。
     pub entity: Option<Entity>,
 }
 
@@ -37,6 +38,7 @@ pub struct GetEntityRequest {
 }
 
 impl GetEntityRequest {
+    /// 创建新的实例。
     pub fn new(config: Config, entity_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -65,10 +67,12 @@ impl GetEntityRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetEntityResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetEntityResp> {
         // ===== 参数校验 =====
         validate_required!(self.entity_id, "entity_id 不能为空");

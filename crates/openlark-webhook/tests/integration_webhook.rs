@@ -1,3 +1,5 @@
+//! openlark-webhook 集成测试。
+
 use openlark_webhook::common::error::WebhookError;
 use openlark_webhook::robot::v1::client::WebhookClient;
 use openlark_webhook::robot::v1::send::SendWebhookMessageRequest;

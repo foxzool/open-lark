@@ -16,6 +16,8 @@ use crate::{
 };
 
 /// 删除群管理员请求
+///
+/// 用于从指定群聊批量移除管理员。
 pub struct DeleteChatManagersRequest {
     config: Config,
     chat_id: String,
@@ -23,6 +25,7 @@ pub struct DeleteChatManagersRequest {
 }
 
 impl DeleteChatManagersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -51,6 +54,7 @@ impl DeleteChatManagersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: ChatManagersBody,

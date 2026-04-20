@@ -52,6 +52,7 @@ pub struct PatchViewData {
 }
 
 impl PatchViewData {
+    /// 创建仅修改视图名称的更新载荷。
     pub fn new(view_name: impl Into<String>) -> Self {
         Self {
             view_name: Some(view_name.into()),
@@ -59,13 +60,14 @@ impl PatchViewData {
         }
     }
 
+    /// 设置视图属性。
     pub fn with_property(mut self, property: Value) -> Self {
         self.property = Some(property);
         self
     }
 }
 
-/// 更新视图响应
+/// 更新视图响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchViewResponse {
     /// 视图信息
@@ -89,6 +91,7 @@ pub struct PatchViewRequest {
 }
 
 impl PatchViewRequest {
+    /// 创建新的视图更新请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -99,30 +102,36 @@ impl PatchViewRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
+    /// 设置视图 ID。
     pub fn view_id(mut self, view_id: String) -> Self {
         self.view_id = view_id;
         self
     }
 
+    /// 设置更新载荷。
     pub fn payload(mut self, payload: PatchViewData) -> Self {
         self.payload = payload;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<PatchViewResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<PatchViewResponse> {
         validate_required!(self.app_token.trim(), "app_token");
         validate_required!(self.table_id.trim(), "table_id");

@@ -33,11 +33,13 @@ impl BatchUpdateRequest {
         }
     }
 
+    /// 设置 `job_id`。
     pub fn job_id(mut self, job_id: impl Into<String>) -> Self {
         self.job_id = Some(job_id.into());
         self
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: BatchUpdateRequestBody) -> Self {
         self.request_body = request_body;
         self
@@ -49,6 +51,7 @@ impl BatchUpdateRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -78,13 +81,16 @@ impl BatchUpdateRequest {
     }
 }
 
+/// `BatchUpdateRequestBody`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchUpdateRequestBody {
     #[serde(flatten)]
+    /// `fields` 字段。
     pub fields: Value,
 }
 
 impl BatchUpdateRequestBody {
+    /// 创建新的请求实例。
     pub fn new(fields: Value) -> Self {
         Self { fields }
     }
@@ -105,6 +111,7 @@ impl BatchUpdateRequestBody {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct BatchUpdateResponse {
     #[serde(flatten)]
+    /// `operation` 字段。
     pub operation: JobManagerOperationResult,
 }
 

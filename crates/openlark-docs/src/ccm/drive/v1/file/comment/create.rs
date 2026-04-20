@@ -34,10 +34,8 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 use super::models::{Comment, CreateCommentReplyList};
 
-/// 添加评论请求
-
+/// 添加评论请求。
 #[derive(Debug, Clone, Serialize, Deserialize)]
-
 pub struct CreateCommentRequest {
     /// 文件 token
     pub file_token: String,
@@ -55,6 +53,7 @@ pub struct CreateCommentRequest {
 }
 
 impl CreateCommentRequest {
+    /// 创建新的全文评论请求。
     pub fn new(
         file_token: impl Into<String>,
 
@@ -73,6 +72,7 @@ impl CreateCommentRequest {
         }
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
 

@@ -32,11 +32,13 @@ impl CombinedUpdateRequest {
         }
     }
 
+    /// 设置 `job_id`。
     pub fn job_id(mut self, job_id: impl Into<String>) -> Self {
         self.job_id = Some(job_id.into());
         self
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: CombinedUpdateRequestBody) -> Self {
         self.request_body = request_body;
         self
@@ -48,6 +50,7 @@ impl CombinedUpdateRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -77,13 +80,16 @@ impl CombinedUpdateRequest {
     }
 }
 
+/// `CombinedUpdateRequestBody`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct CombinedUpdateRequestBody {
     #[serde(flatten)]
+    /// `fields` 字段。
     pub fields: Value,
 }
 
 impl CombinedUpdateRequestBody {
+    /// 创建新的请求实例。
     pub fn new(fields: Value) -> Self {
         Self { fields }
     }
@@ -104,12 +110,16 @@ impl CombinedUpdateRequestBody {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct CombinedUpdateResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_id` 字段。
     pub job_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `result` 字段。
     pub result: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `success` 字段。
     pub success: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

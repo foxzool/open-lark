@@ -33,11 +33,13 @@ impl TransferStageRequest {
         }
     }
 
+    /// 设置 `application_id`。
     pub fn application_id(mut self, application_id: String) -> Self {
         self.application_id = application_id;
         self
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = request_body;
         self
@@ -49,6 +51,7 @@ impl TransferStageRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -81,6 +84,7 @@ impl TransferStageRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct TransferStageResponse {
     #[serde(flatten)]
+    /// `operation` 字段。
     pub operation: ApplicationOperationResult,
 }
 

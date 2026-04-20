@@ -32,11 +32,13 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `website_id`。
     pub fn website_id(mut self, website_id: impl Into<String>) -> Self {
         self.website_id = Some(website_id.into());
         self
     }
 
+    /// 设置 `delivery_task_id`。
     pub fn delivery_task_id(mut self, delivery_task_id: impl Into<String>) -> Self {
         self.delivery_task_id = Some(delivery_task_id.into());
         self
@@ -48,6 +50,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -76,6 +79,7 @@ impl GetRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
     #[serde(flatten)]
+    /// `delivery_task` 字段。
     pub delivery_task: WebsiteDeliveryTaskResult,
 }
 

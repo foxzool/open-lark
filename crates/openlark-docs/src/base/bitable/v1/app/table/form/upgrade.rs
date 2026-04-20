@@ -18,10 +18,13 @@ use crate::common::api_endpoints::BitableApiV1;
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum FormDisplayMode {
+    /// 传统单页表单。
     Traditional,
+    /// 每页一道题。
     OneQuestionPerPage,
 }
 
+/// 升级表单请求体（内部使用）。
 #[derive(Debug, Clone, Serialize)]
 struct UpgradeFormRequestBody {
     form_name: String,
@@ -31,12 +34,14 @@ struct UpgradeFormRequestBody {
 /// 升级后的表单
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpgradedForm {
+    /// 升级后的表单 ID。
     pub id: String,
 }
 
 /// 升级表单响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpgradeFormResponse {
+    /// 升级后的表单信息。
     pub form: UpgradedForm,
 }
 
@@ -47,6 +52,8 @@ impl ApiResponseTrait for UpgradeFormResponse {
 }
 
 /// 升级表单请求
+///
+/// 用于把旧版表单升级为新版表单。
 #[derive(Debug, Clone)]
 pub struct UpgradeFormRequest {
     config: Config,
@@ -58,6 +65,7 @@ pub struct UpgradeFormRequest {
 }
 
 impl UpgradeFormRequest {
+    /// 创建新的表单升级请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -69,35 +77,42 @@ impl UpgradeFormRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
         self.app_token = app_token.into();
         self
     }
 
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: impl Into<String>) -> Self {
         self.table_id = table_id.into();
         self
     }
 
+    /// 设置表单 ID。
     pub fn form_id(mut self, form_id: impl Into<String>) -> Self {
         self.form_id = form_id.into();
         self
     }
 
+    /// 设置升级后的表单名称。
     pub fn form_name(mut self, form_name: impl Into<String>) -> Self {
         self.form_name = form_name.into();
         self
     }
 
+    /// 设置表单展示模式。
     pub fn display_mode(mut self, display_mode: FormDisplayMode) -> Self {
         self.display_mode = Some(display_mode);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UpgradeFormResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

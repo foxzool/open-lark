@@ -31,6 +31,7 @@ use crate::{
 /// ```
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UrgentPhoneBody {
+    /// 需要接收电话加急的用户 ID 列表。
     user_id_list: Vec<String>,
 }
 
@@ -41,12 +42,14 @@ impl Default for UrgentPhoneBody {
 }
 
 impl UrgentPhoneBody {
+    /// 创建空的请求体构建器。
     pub fn new() -> Self {
         Self {
             user_id_list: Vec::new(),
         }
     }
 
+    /// 设置接收电话加急的用户列表。
     pub fn user_id_list(mut self, user_id_list: Vec<String>) -> Self {
         self.user_id_list = user_id_list;
         self
@@ -56,6 +59,7 @@ impl UrgentPhoneBody {
 /// 发送电话加急响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UrgentPhoneResponse {
+    /// 无法发送电话加急的用户 ID 列表。
     #[serde(default)]
     pub invalid_user_id_list: Vec<String>,
 }
@@ -93,6 +97,7 @@ pub struct UrgentPhoneRequest {
 }
 
 impl UrgentPhoneRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -121,6 +126,7 @@ impl UrgentPhoneRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UrgentPhoneBody,

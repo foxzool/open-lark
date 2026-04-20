@@ -22,6 +22,7 @@ pub struct List {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+/// 列出自定义角色请求参数。
 pub struct ListReq {
     /// 分页大小
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -32,6 +33,7 @@ pub struct ListReq {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+/// 列出自定义角色响应。
 pub struct ListResp {
     /// 角色列表
     #[serde(default)]
@@ -47,6 +49,7 @@ pub struct ListResp {
 }
 
 impl List {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -76,11 +79,13 @@ impl List {
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<ListResp> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

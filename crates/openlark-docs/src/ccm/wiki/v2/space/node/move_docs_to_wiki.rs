@@ -15,6 +15,8 @@ use serde::{Deserialize, Serialize};
 use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 移动云空间文档至知识空间请求（流式 Builder 模式）
+///
+/// 用于把云空间文档挂载到指定知识空间节点下。
 pub struct MoveDocsToWikiRequest {
     config: Config,
     /// 知识空间ID
@@ -92,6 +94,7 @@ impl MoveDocsToWikiRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

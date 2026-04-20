@@ -74,6 +74,7 @@ pub struct PatchResponse {
     pub data: Option<PatchResponseData>,
 }
 
+/// `PatchResponseData`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PatchResponseData {
     /// 地点 ID

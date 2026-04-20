@@ -33,11 +33,13 @@ impl MoveTalentRequest {
         }
     }
 
+    /// 设置 `talent_pool_id`。
     pub fn talent_pool_id(mut self, talent_pool_id: impl Into<String>) -> Self {
         self.talent_pool_id = talent_pool_id.into();
         self
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
@@ -49,6 +51,7 @@ impl MoveTalentRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -77,6 +80,7 @@ impl MoveTalentRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct MoveTalentResponse {
     #[serde(flatten)]
+    /// `operation` 字段。
     pub operation: TalentPoolOperationResult,
 }
 

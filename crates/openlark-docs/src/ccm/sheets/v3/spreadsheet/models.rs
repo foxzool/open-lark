@@ -21,16 +21,21 @@ pub struct CreateSpreadsheetParams {
 /// 创建电子表格响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateSpreadsheetResponse {
+    /// 公开项说明。
     pub spreadsheet: CreatedSpreadsheet,
 }
 
 /// 创建电子表格返回的表格信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreatedSpreadsheet {
+    /// 公开项说明。
     pub title: String,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 公开项说明。
     pub folder_token: Option<String>,
+    /// 公开项说明。
     pub url: String,
+    /// 公开项说明。
     pub spreadsheet_token: String,
 }
 
@@ -49,16 +54,20 @@ pub struct UpdateSpreadsheetResponse {}
 /// 获取电子表格信息响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetSpreadsheetResponse {
+    /// 公开项说明。
     pub spreadsheet: SpreadsheetInfo,
 }
 
 /// 电子表格信息（获取电子表格信息接口返回）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SpreadsheetInfo {
+    /// 公开项说明。
     pub title: String,
+    /// 公开项说明。
     pub owner_id: String,
     /// 表格 token（等价 spreadsheet_token）
     pub token: String,
+    /// 公开项说明。
     pub url: String,
 }
 
@@ -69,43 +78,60 @@ pub struct SpreadsheetInfo {
 /// 获取工作表列表响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct QuerySheetResponse {
+    /// 公开项说明。
     pub sheets: Vec<Sheet>,
 }
 
 /// 查询工作表响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetSheetResponse {
+    /// 公开项说明。
     pub sheet: Sheet,
 }
 
 /// 工作表属性
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Sheet {
+    /// 公开项说明。
     pub sheet_id: String,
+    /// 公开项说明。
     pub title: String,
+    /// 公开项说明。
     pub index: i32,
+    /// 公开项说明。
     pub hidden: bool,
+    /// 公开项说明。
     pub grid_properties: GridProperties,
+    /// 公开项说明。
     pub resource_type: String,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 公开项说明。
     pub merges: Option<Vec<MergeRange>>,
 }
 
 /// 网格属性
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GridProperties {
+    /// 公开项说明。
     pub frozen_row_count: i32,
+    /// 公开项说明。
     pub frozen_column_count: i32,
+    /// 公开项说明。
     pub row_count: i32,
+    /// 公开项说明。
     pub column_count: i32,
 }
 
 /// 合并单元格范围
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MergeRange {
+    /// 公开项说明。
     pub start_row_index: i32,
+    /// 公开项说明。
     pub end_row_index: i32,
+    /// 公开项说明。
     pub start_column_index: i32,
+    /// 公开项说明。
     pub end_column_index: i32,
 }
 
@@ -123,7 +149,9 @@ pub struct MoveDimensionParams {
 pub struct DimensionSource {
     /// ROWS 或 COLUMNS
     pub major_dimension: String,
+    /// 公开项说明。
     pub start_index: i32,
+    /// 公开项说明。
     pub end_index: i32,
 }
 
@@ -138,45 +166,60 @@ pub struct MoveDimensionResponse {}
 /// 查找条件
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FindCondition {
+    /// 公开项说明。
     pub range: String,
+    /// 公开项说明。
     pub match_case: bool,
+    /// 公开项说明。
     pub match_entire_cell: bool,
+    /// 公开项说明。
     pub search_by_regex: bool,
+    /// 公开项说明。
     pub include_formulas: bool,
 }
 
 /// 查找单元格请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FindParams {
+    /// 公开项说明。
     pub find_condition: FindCondition,
+    /// 公开项说明。
     pub find: String,
 }
 
 /// 查找单元格响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FindResponse {
+    /// 公开项说明。
     pub find_result: FindResult,
 }
 
 /// 替换单元格请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FindReplaceParams {
+    /// 公开项说明。
     pub find_condition: FindCondition,
+    /// 公开项说明。
     pub find: String,
+    /// 公开项说明。
     pub replacement: String,
 }
 
 /// 替换单元格响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FindReplaceResponse {
+    /// 公开项说明。
     pub replace_result: FindResult,
 }
 
 /// 查找/替换结果
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FindResult {
+    /// 公开项说明。
     pub matched_cells: Vec<String>,
+    /// 公开项说明。
     pub matched_formula_cells: Vec<String>,
+    /// 公开项说明。
     pub rows_count: i32,
 }
 

@@ -12,14 +12,17 @@ use std::sync::Arc;
 
 /// 完成任务请求体（v1）
 #[derive(Debug, Clone, Serialize, Default)]
+/// 完成任务请求体。
 pub struct CompleteTaskBodyV1 {
     /// 完成时间（可选）
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 完成时间。
     pub completed_at: Option<String>,
 }
 
 /// 完成任务响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 完成任务响应。
 pub struct CompleteTaskResponseV1 {
     /// 任务 ID
     pub id: String,
@@ -29,11 +32,13 @@ pub struct CompleteTaskResponseV1 {
     pub is_completed: bool,
     /// 完成时间
     #[serde(default)]
+    /// 完成时间。
     pub completed_at: Option<String>,
 }
 
 /// 完成任务请求（v1）
 #[derive(Debug, Clone)]
+/// 完成任务请求构建器。
 pub struct CompleteTaskRequestV1 {
     config: Arc<Config>,
     task_id: String,
@@ -41,6 +46,7 @@ pub struct CompleteTaskRequestV1 {
 }
 
 impl CompleteTaskRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_id: impl Into<String>) -> Self {
         Self {
             config,

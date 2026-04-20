@@ -27,6 +27,7 @@ impl DeleteRequest {
         }
     }
 
+    /// 设置 `person_id`。
     pub fn person_id(mut self, person_id: String) -> Self {
         self.person_id = person_id;
         self
@@ -38,6 +39,7 @@ impl DeleteRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -62,6 +64,7 @@ impl DeleteRequest {
 /// 删除个人信息响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteResponse {
+    /// 原始响应数据。
     pub data: Value,
 }
 

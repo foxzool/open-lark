@@ -17,14 +17,19 @@ use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 /// 更新浮动图片请求体（字段均为可选）
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateFloatImageRequest {
+    /// 新的范围。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub range: Option<String>,
+    /// 新的宽度。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<f64>,
+    /// 新的高度。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub height: Option<f64>,
+    /// 新的 X 轴偏移。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offset_x: Option<f64>,
+    /// 新的 Y 轴偏移。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offset_y: Option<f64>,
 }
@@ -32,6 +37,7 @@ pub struct UpdateFloatImageRequest {
 /// 更新浮动图片响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateFloatImageResponse {
+    /// 更新后的浮动图片。
     pub float_image: FloatImage,
 }
 
@@ -42,6 +48,8 @@ impl ApiResponseTrait for UpdateFloatImageResponse {
 }
 
 /// 更新浮动图片
+///
+/// 更新指定浮动图片的位置和尺寸。
 pub async fn update_float_image(
     config: &Config,
     spreadsheet_token: &str,
@@ -61,6 +69,8 @@ pub async fn update_float_image(
 }
 
 /// 更新浮动图片（带请求选项）
+///
+/// 更新指定浮动图片的位置和尺寸，并允许传入自定义请求选项。
 pub async fn update_float_image_with_options(
     config: &Config,
     spreadsheet_token: &str,

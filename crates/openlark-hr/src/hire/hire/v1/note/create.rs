@@ -31,6 +31,7 @@ impl CreateRequest {
         }
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
@@ -42,6 +43,7 @@ impl CreateRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -70,6 +72,7 @@ impl CreateRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct CreateResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `note` 字段。
     pub note: Option<NoteRecord>,
 }
 

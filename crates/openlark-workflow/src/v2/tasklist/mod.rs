@@ -1,13 +1,24 @@
+/// 动态订阅模块。
 pub mod activity_subscription;
+/// 添加成员接口。
 pub mod add_members;
+/// 创建接口。
 pub mod create;
+/// 删除接口。
 pub mod delete;
+/// 获取接口。
 pub mod get;
+/// 列表接口。
 pub mod list;
+/// 数据模型。
 pub mod models;
+/// 更新接口。
 pub mod patch;
+/// 移除成员接口。
 pub mod remove_members;
+/// 任务列表接口。
 pub mod tasks;
+/// 更新接口。
 pub mod update;
 
 use openlark_core::config::Config;
@@ -20,26 +31,32 @@ pub struct Tasklist {
 }
 
 impl Tasklist {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 
+    /// 创建新建请求。
     pub fn create(&self) -> create::CreateTasklistRequest {
         create::CreateTasklistRequest::new(self.config.clone())
     }
 
+    /// 创建获取详情请求。
     pub fn get(&self, tasklist_guid: impl Into<String>) -> get::GetTasklistRequest {
         get::GetTasklistRequest::new(self.config.clone(), tasklist_guid.into())
     }
 
+    /// 创建更新请求。
     pub fn update(&self, tasklist_guid: impl Into<String>) -> update::UpdateTasklistRequest {
         update::UpdateTasklistRequest::new(self.config.clone(), tasklist_guid.into())
     }
 
+    /// 创建删除请求。
     pub fn delete(&self, tasklist_guid: impl Into<String>) -> delete::DeleteTasklistRequest {
         delete::DeleteTasklistRequest::new(self.config.clone(), tasklist_guid.into())
     }
 
+    /// 创建列表请求。
     pub fn list(&self) -> list::ListTasklistsRequest {
         list::ListTasklistsRequest::new(self.config.clone())
     }

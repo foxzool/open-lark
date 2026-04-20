@@ -7,30 +7,43 @@ use serde::{Deserialize, Serialize};
 /// 用户信息（字段随文档演进，未显式建模字段使用 `extra` 透传）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct User {
+    /// union_id。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub union_id: Option<String>,
+    /// user_id。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// open_id。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_id: Option<String>,
+    /// 用户姓名。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 英文名。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub en_name: Option<String>,
+    /// 昵称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nickname: Option<String>,
+    /// 邮箱。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
+    /// 手机号。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mobile: Option<String>,
+    /// 手机号是否可见。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mobile_visible: Option<bool>,
+    /// 性别。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gender: Option<i32>,
+    /// 头像 key。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar_key: Option<String>,
+    /// 头像详情。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar: Option<UserAvatar>,
+    /// 未显式建模的扩展字段。
     #[serde(default, flatten)]
     pub extra: HashMap<String, serde_json::Value>,
 }
@@ -38,12 +51,16 @@ pub struct User {
 /// 用户头像
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UserAvatar {
+    /// 72 像素头像地址。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar_72: Option<String>,
+    /// 240 像素头像地址。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar_240: Option<String>,
+    /// 640 像素头像地址。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar_640: Option<String>,
+    /// 未显式建模的扩展字段。
     #[serde(default, flatten)]
     pub extra: HashMap<String, serde_json::Value>,
 }
@@ -52,12 +69,16 @@ pub struct UserAvatar {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum UserIdType {
+    /// open_id。
     OpenId,
+    /// union_id。
     UnionId,
+    /// user_id。
     UserId,
 }
 
 impl UserIdType {
+    /// 返回请求参数使用的字符串值。
     pub fn as_str(self) -> &'static str {
         match self {
             Self::OpenId => "open_id",
@@ -71,11 +92,14 @@ impl UserIdType {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum DepartmentIdType {
+    /// department_id。
     DepartmentId,
+    /// open_department_id。
     OpenDepartmentId,
 }
 
 impl DepartmentIdType {
+    /// 返回请求参数使用的字符串值。
     pub fn as_str(self) -> &'static str {
         match self {
             Self::DepartmentId => "department_id",

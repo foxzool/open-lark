@@ -4,22 +4,27 @@
 /// 包含chat公告和document操作的相关API
 /// 数据模型定义（模型，不算 API）
 pub mod documents;
+/// models 子模块。
 pub mod models;
+/// v1 子模块。
 pub mod v1;
 
 // 使用通配符导出所有子模块
 // models 模块显式导出
+/// 重新导出相关类型。
 pub use models::{
     DocumentBasicInfo, DocumentItem, DocumentMetaItem, DocumentPermissions, DocumentStatistics,
     FolderInfo, GetDocMetaRequest, GetDocMetaResponse, SearchDocsRequest, SearchDocsResponse,
     UserInfo,
 };
 // models::common_types 子模块导出
+/// 重新导出相关类型。
 pub use models::common_types::{
     BatchOperationResult, BlockContent, BlockItem, BlockUpdate, DocxBlock, DocxBlockPage,
     FailedItem, PageData, Paragraph, RichText, TextElement, TextRun, TextStyle,
 };
 // models::models_docx 子模块导出
+/// 重新导出相关类型。
 pub use models::models_docx::{
     BatchDeleteBlocksRequest, BatchDeleteBlocksResponse, BatchUpdateBlocksRequest,
     BatchUpdateBlocksResponse, BlockInfo, CreateBlockRequest, CreateBlockResponse,
@@ -29,4 +34,5 @@ pub use models::models_docx::{
     UpdateBlockRequest, UpdateBlockResponse,
 };
 // v1 模块显式导出
+/// 重新导出相关类型。
 pub use v1::*;

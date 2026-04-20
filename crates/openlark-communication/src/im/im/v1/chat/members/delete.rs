@@ -15,6 +15,8 @@ use crate::{
 };
 
 /// 将用户或机器人移出群聊请求
+///
+/// 用于批量移除群聊中的成员。
 pub struct DeleteChatMembersRequest {
     config: Config,
     chat_id: String,
@@ -22,6 +24,7 @@ pub struct DeleteChatMembersRequest {
 }
 
 impl DeleteChatMembersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -53,6 +56,7 @@ impl DeleteChatMembersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: DeleteChatMembersBody,

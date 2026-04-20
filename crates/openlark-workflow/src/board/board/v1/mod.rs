@@ -1,3 +1,4 @@
+/// 白板模块。
 pub mod whiteboard;
 
 // whiteboard 模块显式导出

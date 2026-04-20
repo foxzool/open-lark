@@ -18,6 +18,7 @@ pub struct GetDisableInformRequest {
 }
 
 impl GetDisableInformRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,

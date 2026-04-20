@@ -1,8 +1,14 @@
+/// 创建接口。
 pub mod create;
+/// 删除接口。
 pub mod delete;
+/// 获取接口。
 pub mod get;
+/// 列表接口。
 pub mod list;
+/// 数据模型。
 pub mod models;
+/// 更新接口。
 pub mod update;
 
 use openlark_core::config::Config;
@@ -16,6 +22,7 @@ pub struct Comment {
 }
 
 impl Comment {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self {
             config,
@@ -23,15 +30,18 @@ impl Comment {
         }
     }
 
+    /// 绑定任务上下文。
     pub fn with_task(mut self, task_guid: impl Into<String>) -> Self {
         self.task_guid = task_guid.into();
         self
     }
 
+    /// 创建新建请求。
     pub fn create(&self) -> create::CreateCommentRequest {
         create::CreateCommentRequest::new(self.config.clone(), self.task_guid.clone())
     }
 
+    /// 创建获取详情请求。
     pub fn get(&self, comment_guid: impl Into<String>) -> get::GetCommentRequest {
         get::GetCommentRequest::new(
             self.config.clone(),
@@ -40,6 +50,7 @@ impl Comment {
         )
     }
 
+    /// 创建更新请求。
     pub fn update(&self, comment_guid: impl Into<String>) -> update::UpdateCommentRequest {
         update::UpdateCommentRequest::new(
             self.config.clone(),
@@ -48,6 +59,7 @@ impl Comment {
         )
     }
 
+    /// 创建删除请求。
     pub fn delete(&self, comment_guid: impl Into<String>) -> delete::DeleteCommentRequest {
         delete::DeleteCommentRequest::new(
             self.config.clone(),
@@ -56,6 +68,7 @@ impl Comment {
         )
     }
 
+    /// 创建列表请求。
     pub fn list(&self) -> list::ListCommentsRequest {
         list::ListCommentsRequest::new(self.config.clone(), self.task_guid.clone())
     }

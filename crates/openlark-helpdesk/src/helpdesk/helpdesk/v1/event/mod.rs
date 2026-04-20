@@ -3,6 +3,7 @@
 //! 提供服务台事件订阅和取消订阅功能。
 
 pub mod subscribe;
+/// unsubscribe 模块。
 pub mod unsubscribe;
 
 use openlark_core::config::Config;

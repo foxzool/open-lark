@@ -1,6 +1,7 @@
 use openlark_core::config::Config;
 use std::sync::Arc;
 
+/// 帮助台服务入口。
 #[derive(Clone)]
 #[allow(dead_code)]
 pub struct HelpdeskService {
@@ -8,17 +9,20 @@ pub struct HelpdeskService {
 }
 
 impl HelpdeskService {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config: Arc::new(config),
         }
     }
 
+    /// 访问帮助台 API。
     #[cfg(feature = "v1")]
     pub fn helpdesk(&self) -> crate::helpdesk::helpdesk::Helpdesk {
         crate::helpdesk::helpdesk::Helpdesk::new(self.config.clone())
     }
 
+    /// 访问工单 API。
     #[cfg(feature = "v1")]
     pub fn ticket(&self) -> crate::helpdesk::helpdesk::v1::ticket::Ticket {
         crate::helpdesk::helpdesk::v1::ticket::Ticket::new(self.config.clone())

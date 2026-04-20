@@ -30,7 +30,9 @@ impl ApiResponseTrait for UploadFileResp {
 /// 上传图片请求（multipart/form-data）
 pub struct UploadFileRequest {
     config: Config,
+    /// 文件名。
     name: String,
+    /// 文件二进制内容。
     file: Vec<u8>,
 }
 
@@ -46,10 +48,12 @@ impl UploadFileRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UploadFileResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<UploadFileResp> {
         // ===== 参数校验 =====
         validate_required!(self.name, "name 不能为空");

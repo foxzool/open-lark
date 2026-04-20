@@ -12,15 +12,23 @@ pub enum ConnectionState {
     /// 正在断开连接
     Disconnecting,
     /// 已断开连接
-    Disconnected { reason: Option<CloseReason> },
+    Disconnected {
+        /// 断开连接原因。
+        reason: Option<CloseReason>,
+    },
     /// 连接错误
-    Error { message: String },
+    Error {
+        /// 错误描述。
+        message: String,
+    },
 }
 
 /// 连接关闭原因
 #[derive(Debug, Clone, PartialEq)]
 pub struct CloseReason {
+    /// 关闭状态码。
     pub code: u16,
+    /// 关闭原因描述。
     pub reason: String,
 }
 
@@ -60,6 +68,7 @@ pub struct WebSocketStateMachine {
 }
 
 impl WebSocketStateMachine {
+    /// 创建新的 WebSocket 状态机。
     pub fn new() -> Self {
         Self {
             state: ConnectionState::Initial,

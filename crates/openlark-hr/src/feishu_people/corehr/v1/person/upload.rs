@@ -24,6 +24,7 @@ impl UploadRequest {
         Self { config, file: None }
     }
 
+    /// 设置 `file`。
     pub fn file(mut self, file: Value) -> Self {
         self.file = Some(file);
         self
@@ -35,6 +36,7 @@ impl UploadRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -61,6 +63,7 @@ impl UploadRequest {
 /// 上传文件响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UploadResponse {
+    /// 原始响应数据。
     pub data: Value,
 }
 

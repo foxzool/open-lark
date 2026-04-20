@@ -11,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// Batch Create Mail Group Permission Member Request。
 #[derive(Debug, Clone)]
 pub struct BatchCreateMailGroupPermissionMemberRequest {
     config: Arc<Config>,
@@ -18,20 +19,27 @@ pub struct BatchCreateMailGroupPermissionMemberRequest {
     body: BatchCreateMailGroupPermissionMemberBody,
 }
 
+/// Batch Create Mail Group Permission Member Body。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchCreateMailGroupPermissionMemberBody {
+    /// 成员列表。
     pub members: Vec<PermissionMemberItem>,
 }
 
+/// Permission Member Item。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PermissionMemberItem {
+    /// 成员 ID。
     pub member_id: String,
+    /// member_type 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_type: Option<String>,
 }
 
+/// Batch Create Mail Group Permission Member Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchCreateMailGroupPermissionMemberResponse {
+    /// 响应数据。
     pub data: Option<BatchCreatePermissionMemberData>,
 }
 
@@ -41,18 +49,24 @@ impl ApiResponseTrait for BatchCreateMailGroupPermissionMemberResponse {
     }
 }
 
+/// Batch Create Permission Member Data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchCreatePermissionMemberData {
+    /// 结果列表。
     pub results: Vec<PermissionMemberResult>,
 }
 
+/// Permission Member Result。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PermissionMemberResult {
+    /// 成员 ID。
     pub member_id: String,
+    /// 状态。
     pub status: String,
 }
 
 impl BatchCreateMailGroupPermissionMemberRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailgroup_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -61,15 +75,18 @@ impl BatchCreateMailGroupPermissionMemberRequest {
         }
     }
 
+    /// members。
     pub fn members(mut self, members: Vec<PermissionMemberItem>) -> Self {
         self.body.members = members;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchCreateMailGroupPermissionMemberResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

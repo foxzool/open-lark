@@ -18,16 +18,20 @@ use crate::{
 /// 修改角色名称请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateFunctionalRoleBody {
+    /// 角色名称。
     pub role_name: String,
 }
 
 /// 修改角色名称请求
 pub struct UpdateFunctionalRoleRequest {
+    /// 配置信息。
     config: Config,
+    /// 角色 ID。
     role_id: String,
 }
 
 impl UpdateFunctionalRoleRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -49,6 +53,7 @@ impl UpdateFunctionalRoleRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UpdateFunctionalRoleBody,

@@ -20,6 +20,7 @@ pub struct PublicMailboxListRequest {
 }
 
 impl PublicMailboxListRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self {
             config,
@@ -40,11 +41,13 @@ impl PublicMailboxListRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<PublicMailboxListResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

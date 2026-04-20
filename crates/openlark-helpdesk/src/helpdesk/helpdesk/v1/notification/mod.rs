@@ -3,13 +3,21 @@
 //! 提供客服推送通知相关的 API。
 
 pub mod cancel_approve;
+/// cancel_send 模块。
 pub mod cancel_send;
+/// 创建接口。
 pub mod create;
+/// execute_send 模块。
 pub mod execute_send;
+/// 获取接口。
 pub mod get;
+/// 列表接口。
 pub mod list;
+/// 更新接口。
 pub mod patch;
+/// preview 模块。
 pub mod preview;
+/// submit_approve 模块。
 pub mod submit_approve;
 
 use openlark_core::config::Config;

@@ -16,6 +16,7 @@ pub struct QueryApi {
 }
 
 impl QueryApi {
+    /// 创建新的查询搜索 facade。
     pub fn new(config: Arc<AnalyticsConfig>) -> Self {
         Self { config }
     }

@@ -53,6 +53,7 @@ impl ApiResponseTrait for MatchEntityResp {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+/// 公开项说明。
 pub struct MatchEntityBody {
     /// 搜索关键词，将与词条名、别名进行精准匹配
     pub word: String,
@@ -66,6 +67,7 @@ pub struct MatchEntityRequest {
 }
 
 impl MatchEntityRequest {
+    /// 创建新的实例。
     pub fn new(config: Config, word: impl Into<String>) -> Self {
         Self {
             config,
@@ -80,10 +82,12 @@ impl MatchEntityRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<MatchEntityResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<MatchEntityResp> {
         validate_required!(self.body.word, "word 不能为空");
 

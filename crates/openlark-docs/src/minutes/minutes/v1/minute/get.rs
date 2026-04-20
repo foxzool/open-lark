@@ -12,6 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::MinutesApiV1, api_utils::*};
 
+/// 获取妙记信息请求。
 #[derive(Debug, Clone)]
 pub struct GetMinuteRequest {
     config: Config,
@@ -20,6 +21,7 @@ pub struct GetMinuteRequest {
 }
 
 impl GetMinuteRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -28,21 +30,25 @@ impl GetMinuteRequest {
         }
     }
 
+    /// 设置妙记 token。
     pub fn minute_token(mut self, minute_token: impl Into<String>) -> Self {
         self.minute_token = Some(minute_token.into());
         self
     }
 
+    /// 设置查询时使用的用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetMinuteResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -147,8 +153,10 @@ mod tests {
     }
 }
 
+/// 获取妙记信息响应 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetMinuteResponse {
+    /// 妙记详情。
     pub minute: MinuteInfo,
 }
 
@@ -158,15 +166,21 @@ impl ApiResponseTrait for GetMinuteResponse {
     }
 }
 
+/// 妙记详情。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MinuteInfo {
+    /// 妙记 token。
     pub token: String,
+    /// 所有者 ID。
     pub owner_id: String,
     /// 妙记创建时间 timestamp（ms 级别）
     pub create_time: String,
+    /// 标题。
     pub title: String,
+    /// 封面链接。
     pub cover: String,
     /// 妙记时长（ms 级别）
     pub duration: String,
+    /// 妙记访问链接。
     pub url: String,
 }

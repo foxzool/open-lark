@@ -12,6 +12,7 @@ use openlark_core::{
 
 use crate::common::api_endpoints::MinutesApiV1;
 
+/// 导出妙记文字记录请求。
 #[derive(Debug, Clone)]
 pub struct GetMinuteTranscriptRequest {
     config: Config,
@@ -22,6 +23,7 @@ pub struct GetMinuteTranscriptRequest {
 }
 
 impl GetMinuteTranscriptRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -32,21 +34,25 @@ impl GetMinuteTranscriptRequest {
         }
     }
 
+    /// 设置妙记 token。
     pub fn minute_token(mut self, minute_token: impl Into<String>) -> Self {
         self.minute_token = Some(minute_token.into());
         self
     }
 
+    /// 设置是否导出说话人信息。
     pub fn need_speaker(mut self, need_speaker: bool) -> Self {
         self.need_speaker = Some(need_speaker);
         self
     }
 
+    /// 设置是否导出时间戳。
     pub fn need_timestamp(mut self, need_timestamp: bool) -> Self {
         self.need_timestamp = Some(need_timestamp);
         self
     }
 
+    /// 设置导出文件格式。
     pub fn file_format(mut self, file_format: impl Into<String>) -> Self {
         self.file_format = Some(file_format.into());
         self

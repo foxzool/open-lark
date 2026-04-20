@@ -1,6 +1,7 @@
 //! 自定义字段选项模块
 
 pub mod create;
+/// 更新接口。
 pub mod patch;
 
 use openlark_core::config::Config;
@@ -14,6 +15,7 @@ pub struct CustomFieldOptionResource {
 }
 
 impl CustomFieldOptionResource {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, custom_field_guid: impl Into<String>) -> Self {
         Self {
             config,

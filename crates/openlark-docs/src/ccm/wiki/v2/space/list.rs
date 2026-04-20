@@ -16,6 +16,8 @@ use super::super::models::WikiSpace;
 use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 获取知识空间列表请求（流式 Builder 模式）
+///
+/// 用于分页查询当前可访问的知识空间。
 pub struct ListWikiSpacesRequest {
     config: Config,
     /// 每页大小（最大 50）
@@ -70,6 +72,7 @@ impl ListWikiSpacesRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

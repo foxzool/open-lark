@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 
 use super::models::RoleMemberIdType;
 
-/// 删除协作者请求
+/// 删除协作者请求。
 #[derive(Debug, Clone)]
 pub struct DeleteRoleMemberRequest {
     config: Config,
@@ -26,6 +26,7 @@ pub struct DeleteRoleMemberRequest {
 }
 
 impl DeleteRoleMemberRequest {
+    /// 创建新的协作者删除请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -36,30 +37,36 @@ impl DeleteRoleMemberRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置角色 ID。
     pub fn role_id(mut self, role_id: String) -> Self {
         self.role_id = role_id;
         self
     }
 
+    /// 设置成员 ID。
     pub fn member_id(mut self, member_id: String) -> Self {
         self.member_id = member_id;
         self
     }
 
+    /// 设置成员 ID 类型。
     pub fn member_id_type(mut self, member_id_type: RoleMemberIdType) -> Self {
         self.member_id_type = Some(member_id_type);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<DeleteRoleMemberResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -98,7 +105,7 @@ impl DeleteRoleMemberRequest {
     }
 }
 
-/// 删除协作者响应（data 为 {}）
+/// 删除协作者响应（data 为 {}）。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteRoleMemberResponse {}
 

@@ -35,9 +35,13 @@ pub const CONTACT_V3_SCOPES: &str = "/open-apis/contact/v3/scopes";
 
 /// Contact 部门 v3
 pub const CONTACT_V3_DEPARTMENTS: &str = "/open-apis/contact/v3/departments";
+/// 端点路径常量。
 pub const CONTACT_V3_DEPARTMENTS_BATCH: &str = "/open-apis/contact/v3/departments/batch";
+/// 端点路径常量。
 pub const CONTACT_V3_DEPARTMENTS_PARENT: &str = "/open-apis/contact/v3/departments/parent";
+/// 端点路径常量。
 pub const CONTACT_V3_DEPARTMENTS_SEARCH: &str = "/open-apis/contact/v3/departments/search";
+/// 端点路径常量。
 pub const CONTACT_V3_DEPARTMENTS_UNBIND_DEPARTMENT_CHAT: &str =
     "/open-apis/contact/v3/departments/unbind_department_chat";
 
@@ -46,7 +50,9 @@ pub const CONTACT_V3_FUNCTIONAL_ROLES: &str = "/open-apis/contact/v3/functional_
 
 /// Contact 用户组 v3
 pub const CONTACT_V3_GROUP: &str = "/open-apis/contact/v3/group";
+/// 端点路径常量。
 pub const CONTACT_V3_GROUP_SIMPLELIST: &str = "/open-apis/contact/v3/group/simplelist";
+/// 端点路径常量。
 pub const CONTACT_V3_GROUP_MEMBER_BELONG: &str = "/open-apis/contact/v3/group/member_belong";
 
 /// Contact 企业自定义用户字段 v3
@@ -57,8 +63,11 @@ pub const CONTACT_V3_EMPLOYEE_TYPE_ENUMS: &str = "/open-apis/contact/v3/employee
 
 /// Contact 单位 v3
 pub const CONTACT_V3_UNIT: &str = "/open-apis/contact/v3/unit";
+/// 端点路径常量。
 pub const CONTACT_V3_UNIT_BIND_DEPARTMENT: &str = "/open-apis/contact/v3/unit/bind_department";
+/// 端点路径常量。
 pub const CONTACT_V3_UNIT_UNBIND_DEPARTMENT: &str = "/open-apis/contact/v3/unit/unbind_department";
+/// 端点路径常量。
 pub const CONTACT_V3_UNIT_LIST_DEPARTMENT: &str = "/open-apis/contact/v3/unit/list_department";
 
 /// Contact 职级 v3
@@ -75,14 +84,21 @@ pub const CONTACT_V3_WORK_CITIES: &str = "/open-apis/contact/v3/work_cities";
 
 /// Contact 用户 v3
 pub const CONTACT_V3_USERS: &str = "/open-apis/contact/v3/users";
+/// 端点路径常量。
 pub const CONTACT_V3_USER: &str = "/open-apis/contact/v3/users/{user_id}";
+/// 端点路径常量。
 pub const CONTACT_V3_USERS_BATCH: &str = "/open-apis/contact/v3/users/batch";
+/// 端点路径常量。
 pub const CONTACT_V3_USERS_BASIC_BATCH: &str = "/open-apis/contact/v3/users/basic_batch";
+/// 端点路径常量。
 pub const CONTACT_V3_USERS_FIND_BY_DEPARTMENT: &str =
     "/open-apis/contact/v3/users/find_by_department";
+/// 端点路径常量。
 pub const CONTACT_V3_USERS_BATCH_GET_ID: &str = "/open-apis/contact/v3/users/batch_get_id";
+/// 端点路径常量。
 pub const CONTACT_V3_USER_UPDATE_USER_ID: &str =
     "/open-apis/contact/v3/users/{user_id}/update_user_id";
+/// 端点路径常量。
 pub const CONTACT_V3_USER_RESURRECT: &str = "/open-apis/contact/v3/users/{user_id}/resurrect";
 
 // ==================== User/Search ====================
@@ -98,10 +114,12 @@ pub const USER_V4_APP_ADMIN_USER_LIST: &str = "/open-apis/user/v4/app_admin_user
 /// 为保持向后兼容性，提供一些简短的别名
 /// IM别名
 pub const SEND_MESSAGE: &str = "/open-apis/im/v1/messages";
+/// 端点路径常量。
 pub const CHAT_CREATE: &str = "/open-apis/im/v1/chats";
 
 /// VC别名
 pub const ROOM_LIST: &str = "/open-apis/vc/v1/rooms";
+/// 端点路径常量。
 pub const MEETING_LIST: &str = "/open-apis/vc/v1/meetings";
 
 /// Mail别名

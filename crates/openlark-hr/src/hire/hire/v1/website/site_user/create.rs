@@ -32,6 +32,7 @@ impl CreateRequest {
         }
     }
 
+    /// 设置 `website_id`。
     pub fn website_id(mut self, website_id: impl Into<String>) -> Self {
         self.website_id = Some(website_id.into());
         self
@@ -43,6 +44,7 @@ impl CreateRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -69,8 +71,10 @@ impl CreateRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct CreateResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `site_user` 字段。
     pub site_user: Option<WebsiteSiteUserSummary>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

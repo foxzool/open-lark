@@ -13,11 +13,14 @@ use crate::{
 
 /// 删除角色请求
 pub struct DeleteFunctionalRoleRequest {
+    /// 配置信息。
     config: Config,
+    /// 角色 ID。
     role_id: String,
 }
 
 impl DeleteFunctionalRoleRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -39,6 +42,7 @@ impl DeleteFunctionalRoleRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

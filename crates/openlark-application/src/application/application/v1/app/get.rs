@@ -10,13 +10,16 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// 获取应用详情请求。
 #[derive(Debug, Clone)]
 pub struct GetAppRequest {
     config: Arc<Config>,
 }
 
+/// 获取应用详情的原始响应封装。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AppGetResponse {
+    /// 响应数据载荷。
     pub data: Option<serde_json::Value>,
 }
 
@@ -27,14 +30,17 @@ impl ApiResponseTrait for AppGetResponse {
 }
 
 impl GetAppRequest {
+    /// 创建新的获取应用详情请求。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<AppGetResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<AppGetResponse> {
         let path = "/open-apis/application/v3/app/info".to_string();
         let req: ApiRequest<AppGetResponse> = ApiRequest::get(&path);

@@ -1,3 +1,4 @@
+/// 为 Builder 实现基于借用服务的可执行能力。
 #[macro_export]
 macro_rules! impl_executable_builder {
     ($builder:ty, $service:ty, $request:ty, $response:ty, $method:ident) => {
@@ -29,6 +30,7 @@ macro_rules! impl_executable_builder {
     };
 }
 
+/// 为 Builder 实现基于所有权传递的可执行能力。
 #[macro_export]
 macro_rules! impl_executable_builder_owned {
     ($builder:ty, $service:ty, $request:ty, $response:ty, $method:ident) => {
@@ -60,6 +62,7 @@ macro_rules! impl_executable_builder_owned {
     };
 }
 
+/// 为 Builder 实现基于配置透传的可执行能力。
 #[macro_export]
 macro_rules! impl_executable_builder_config {
     ($builder:ty, $service:ty, $request:ty, $response:ty, $method:ident) => {
@@ -91,6 +94,7 @@ macro_rules! impl_executable_builder_config {
     };
 }
 
+/// 为服务类型实现完整的 Service trait 元信息。
 #[macro_export]
 macro_rules! impl_full_service {
     ($service:ty, $name:expr, $version:expr) => {

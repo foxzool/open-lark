@@ -9,18 +9,21 @@ pub struct CardkitService {
 }
 
 impl CardkitService {
+    /// 创建新的实例。
     pub fn new(config: openlark_core::config::Config) -> Self {
         Self {
             config: Arc::new(config),
         }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &openlark_core::config::Config {
         &self.config
     }
 
     /// 访问 cardkit 项目 v1
     #[cfg(feature = "v1")]
+    /// 访问 v1 版本 API。
     pub fn v1(&self) -> crate::cardkit::cardkit::v1::CardkitV1Service {
         crate::cardkit::cardkit::v1::CardkitV1Service::new((*self.config).clone())
     }

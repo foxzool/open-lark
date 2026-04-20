@@ -22,10 +22,13 @@ use crate::{
 /// 通过手机号或邮箱获取用户 ID 请求体
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchGetIdBody {
+    /// 待查询的邮箱列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emails: Option<Vec<String>>,
+    /// 待查询的手机号列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mobiles: Option<Vec<String>>,
+    /// 是否包含离职用户。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_resigned: Option<bool>,
 }
@@ -33,14 +36,19 @@ pub struct BatchGetIdBody {
 /// 用户状态
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserStatus {
+    /// 是否冻结。
     #[serde(default)]
     pub is_frozen: bool,
+    /// 是否离职。
     #[serde(default)]
     pub is_resigned: bool,
+    /// 是否已激活。
     #[serde(default)]
     pub is_activated: bool,
+    /// 是否已退出。
     #[serde(default)]
     pub is_exited: bool,
+    /// 是否未加入。
     #[serde(default)]
     pub is_unjoin: bool,
 }
@@ -48,14 +56,19 @@ pub struct UserStatus {
 /// 用户 ID 查询结果
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchGetIdItem {
+    /// 查询到的用户 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// 命中的邮箱。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
+    /// 命中的手机号。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mobile: Option<String>,
+    /// 用户状态。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<UserStatus>,
+    /// 未显式建模的扩展字段。
     #[serde(default, flatten)]
     pub extra: HashMap<String, serde_json::Value>,
 }
@@ -63,6 +76,7 @@ pub struct BatchGetIdItem {
 /// 通过手机号或邮箱获取用户 ID 响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchGetIdResponse {
+    /// 查询结果列表。
     #[serde(default)]
     pub user_list: Vec<BatchGetIdItem>,
 }
@@ -105,6 +119,7 @@ pub struct BatchGetIdRequest {
 }
 
 impl BatchGetIdRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -126,6 +141,7 @@ impl BatchGetIdRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: BatchGetIdBody,

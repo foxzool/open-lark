@@ -15,6 +15,8 @@ use std::collections::HashMap;
 use crate::common::{api_endpoints::DocxApiV1, api_utils::*};
 
 /// 获取群公告基本信息请求
+///
+/// 用于获取群公告元信息。
 pub struct GetChatAnnouncementRequest {
     chat_id: String,
     user_id_type: Option<String>,
@@ -24,23 +26,34 @@ pub struct GetChatAnnouncementRequest {
 /// 获取群公告基本信息响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetChatAnnouncementResponse {
+    /// 修订版本号。
     pub revision_id: i64,
+    /// 创建时间。
     pub create_time: i64,
+    /// 更新时间。
     pub update_time: i64,
+    /// 创建者 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_id: Option<String>,
+    /// 创建者 ID 类型。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_id_type: Option<String>,
+    /// 更新者 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub modifier_id: Option<String>,
+    /// 更新者 ID 类型。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub modifier_id_type: Option<String>,
+    /// 公告类型。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub announcement_type: Option<String>,
+    /// 创建时间 v2 格式。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time_v2: Option<String>,
+    /// 更新时间 v2 格式。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time_v2: Option<String>,
+    /// 未建模扩展字段。
     #[serde(default, flatten)]
     pub extra: HashMap<String, serde_json::Value>,
 }
@@ -81,6 +94,7 @@ impl GetChatAnnouncementRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

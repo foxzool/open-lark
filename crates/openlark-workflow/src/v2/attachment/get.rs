@@ -48,6 +48,7 @@ pub struct GetAttachmentRequest {
 }
 
 impl GetAttachmentRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, attachment_guid: impl Into<String>) -> Self {
         Self {
             config,

@@ -15,6 +15,8 @@ use crate::{
 };
 
 /// 将用户或机器人拉入群聊请求
+///
+/// 用于批量把用户或机器人加入群聊。
 pub struct CreateChatMembersRequest {
     config: Config,
     chat_id: String,
@@ -23,6 +25,7 @@ pub struct CreateChatMembersRequest {
 }
 
 impl CreateChatMembersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -61,6 +64,7 @@ impl CreateChatMembersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: CreateChatMembersBody,

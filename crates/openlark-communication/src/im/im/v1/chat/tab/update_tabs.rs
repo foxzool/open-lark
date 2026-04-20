@@ -12,12 +12,15 @@ use crate::{
 };
 
 /// 更新会话标签页请求
+///
+/// 用于批量更新群聊标签页定义。
 pub struct UpdateChatTabsRequest {
     config: Config,
     chat_id: String,
 }
 
 impl UpdateChatTabsRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -41,6 +44,7 @@ impl UpdateChatTabsRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: serde_json::Value,

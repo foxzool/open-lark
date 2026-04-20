@@ -26,6 +26,7 @@ pub struct TableRole {
 }
 
 impl TableRole {
+    /// 创建仅包含权限级别的表角色配置。
     pub fn new(table_perm: i32) -> Self {
         Self {
             table_perm,

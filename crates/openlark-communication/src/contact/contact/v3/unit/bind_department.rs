@@ -19,18 +19,24 @@ use crate::{
 /// 建立部门与单位的绑定关系请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BindDepartmentBody {
+    /// 单位 ID。
     pub unit_id: String,
+    /// 部门 ID。
     pub department_id: String,
+    /// 部门 ID 类型。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<DepartmentIdType>,
 }
 
 /// 建立部门与单位的绑定关系请求
+///
+/// 用于把指定部门挂接到某个单位下。
 pub struct BindDepartmentRequest {
     config: Config,
 }
 
 impl BindDepartmentRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -43,6 +49,7 @@ impl BindDepartmentRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: BindDepartmentBody,

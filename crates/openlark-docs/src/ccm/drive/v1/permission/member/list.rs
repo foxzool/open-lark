@@ -31,6 +31,7 @@ pub struct ListPermissionMembersRequest {
 }
 
 impl ListPermissionMembersRequest {
+    /// 创建新的协作者列表请求。
     /// 创建获取协作者列表请求
     ///
     /// # 参数
@@ -59,11 +60,13 @@ impl ListPermissionMembersRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListPermissionMembersResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

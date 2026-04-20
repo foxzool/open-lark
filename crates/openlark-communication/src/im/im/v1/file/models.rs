@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 /// 上传文件响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateFileResponse {
+    /// 文件 key。
     pub file_key: String,
 }
 

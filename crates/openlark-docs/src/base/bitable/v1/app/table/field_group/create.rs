@@ -67,6 +67,7 @@ pub struct CreateFieldGroupRequest {
 }
 
 impl CreateFieldGroupRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -76,25 +77,30 @@ impl CreateFieldGroupRequest {
         }
     }
 
+    /// 设置 `app_token`。
     pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
         self.app_token = app_token.into();
         self
     }
 
+    /// 设置 `table_id`。
     pub fn table_id(mut self, table_id: impl Into<String>) -> Self {
         self.table_id = table_id.into();
         self
     }
 
+    /// 设置 `field_groups`。
     pub fn field_groups(mut self, field_groups: Vec<CreateFieldGroupItem>) -> Self {
         self.field_groups = field_groups;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateFieldGroupResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

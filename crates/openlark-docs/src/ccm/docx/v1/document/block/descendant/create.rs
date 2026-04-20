@@ -40,6 +40,7 @@ pub struct CreateDocumentBlockDescendantParams {
 /// 创建嵌套块响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateDocumentBlockDescendantResponse {
+    /// 临时块 ID 与真实块 ID 的映射。
     #[serde(default)]
     pub block_id_relations: Vec<BlockIdRelation>,
 }
@@ -47,7 +48,9 @@ pub struct CreateDocumentBlockDescendantResponse {
 /// 临时 block_id 与实际 block_id 的映射关系
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BlockIdRelation {
+    /// 真实块 ID。
     pub block_id: String,
+    /// 临时块 ID。
     pub temporary_block_id: String,
 }
 
@@ -58,15 +61,19 @@ impl ApiResponseTrait for CreateDocumentBlockDescendantResponse {
 }
 
 /// 创建嵌套块请求
+///
+/// 用于在文档块下创建一批存在父子关系的嵌套块。
 pub struct CreateDocumentBlockDescendantRequest {
     config: Config,
 }
 
 impl CreateDocumentBlockDescendantRequest {
+    /// 创建新的创建嵌套块请求。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(
         self,
         params: CreateDocumentBlockDescendantParams,
@@ -75,6 +82,7 @@ impl CreateDocumentBlockDescendantRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         params: CreateDocumentBlockDescendantParams,

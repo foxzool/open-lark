@@ -3,6 +3,7 @@
 //! 提供工单消息相关的 API。
 
 pub mod create;
+/// 列表接口。
 pub mod list;
 
 /// 工单消息服务（挂载在 Ticket 下）

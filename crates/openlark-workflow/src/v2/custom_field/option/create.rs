@@ -56,6 +56,7 @@ pub struct CreateCustomFieldOptionRequest {
 }
 
 impl CreateCustomFieldOptionRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, custom_field_guid: impl Into<String>) -> Self {
         Self {
             config,

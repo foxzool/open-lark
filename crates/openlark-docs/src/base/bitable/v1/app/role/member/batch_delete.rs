@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 
 use super::models::RoleMemberId;
 
-/// 批量删除协作者请求
+/// 批量删除协作者请求。
 #[derive(Debug, Clone)]
 pub struct BatchDeleteRoleMemberRequest {
     config: Config,
@@ -24,6 +24,7 @@ pub struct BatchDeleteRoleMemberRequest {
 }
 
 impl BatchDeleteRoleMemberRequest {
+    /// 创建新的批量删除协作者请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -33,30 +34,36 @@ impl BatchDeleteRoleMemberRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置角色 ID。
     pub fn role_id(mut self, role_id: String) -> Self {
         self.role_id = role_id;
         self
     }
 
+    /// 设置成员列表。
     pub fn member_list(mut self, member_list: Vec<RoleMemberId>) -> Self {
         self.member_list = member_list;
         self
     }
 
+    /// 追加一个成员。
     pub fn add_member(mut self, member: RoleMemberId) -> Self {
         self.member_list.push(member);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchDeleteRoleMemberResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -97,12 +104,13 @@ impl BatchDeleteRoleMemberRequest {
     }
 }
 
+/// 批量删除协作者请求体（内部使用）。
 #[derive(Serialize)]
 struct BatchDeleteRoleMemberRequestBody {
     member_list: Vec<RoleMemberId>,
 }
 
-/// 批量删除协作者响应（data 为 {}）
+/// 批量删除协作者响应（data 为 {}）。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchDeleteRoleMemberResponse {}
 

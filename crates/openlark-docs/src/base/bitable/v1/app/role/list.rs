@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 
 use super::models::Role;
 
-/// 列出自定义角色请求
+/// 列出自定义角色请求。
 #[derive(Debug, Clone)]
 pub struct ListAppRoleRequest {
     config: Config,
@@ -24,6 +24,7 @@ pub struct ListAppRoleRequest {
 }
 
 impl ListAppRoleRequest {
+    /// 创建新的自定义角色列表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -33,11 +34,13 @@ impl ListAppRoleRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: String) -> Self {
         self.page_token = Some(page_token);
         self
@@ -49,10 +52,12 @@ impl ListAppRoleRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListAppRoleResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -85,7 +90,7 @@ impl ListAppRoleRequest {
     }
 }
 
-/// 列出自定义角色响应
+/// 列出自定义角色响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListAppRoleResponse {
     /// 自定义角色列表

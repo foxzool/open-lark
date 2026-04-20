@@ -32,6 +32,7 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `role_id`。
     pub fn role_id(mut self, role_id: impl Into<String>) -> Self {
         self.role_id = role_id.into();
         self
@@ -43,6 +44,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -65,8 +67,10 @@ impl GetRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `role` 字段。
     pub role: Option<RoleItem>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

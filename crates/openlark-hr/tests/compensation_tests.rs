@@ -1,3 +1,5 @@
+//! compensation tests 集成测试。
+
 use openlark_core::{config::Config, req_option::RequestOption};
 use openlark_hr::compensation_management::compensation::v1::{
     archive, change_reason, indicator, item, item_category, lump_sum_payment, plan,

@@ -12,10 +12,12 @@ pub struct TranslationV1 {
 }
 
 impl TranslationV1 {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 
+    /// text。
     pub fn text(&self) -> text::Text {
         text::Text::new(self.config.clone())
     }

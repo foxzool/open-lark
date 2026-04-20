@@ -12,6 +12,8 @@ use crate::{
 };
 
 /// 修改群菜单元信息请求
+///
+/// 用于修改指定菜单项的元信息。
 pub struct PatchChatMenuItemRequest {
     config: Config,
     chat_id: String,
@@ -19,6 +21,7 @@ pub struct PatchChatMenuItemRequest {
 }
 
 impl PatchChatMenuItemRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -49,6 +52,7 @@ impl PatchChatMenuItemRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: serde_json::Value,

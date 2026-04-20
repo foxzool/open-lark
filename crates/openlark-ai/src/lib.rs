@@ -39,21 +39,27 @@
 //! - `translation`: 翻译服务API端点
 
 // 导入通用工具模块
+/// common 模块。
 pub mod common;
 
 // 导入服务端点模块
+/// endpoints 模块。
 pub mod endpoints;
 
 // AI service modules
+/// ai 模块。
 pub mod ai;
 
 // Document AI 模块（新的组织结构）
+/// document_ai 模块。
 pub mod document_ai;
 
 // Speech-to-Text 独立模块
+/// speech_to_text 模块。
 pub mod speech_to_text;
 
 // 服务入口
+/// service 模块。
 pub mod service;
 
 // 重新导出服务客户端

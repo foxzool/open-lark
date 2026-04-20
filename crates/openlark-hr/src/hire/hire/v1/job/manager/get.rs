@@ -34,6 +34,7 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `manager_id`。
     pub fn manager_id(mut self, manager_id: String) -> Self {
         self.manager_id = manager_id;
         self
@@ -45,6 +46,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -71,8 +73,10 @@ impl GetRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `manager` 字段。
     pub manager: Option<JobRecruiterRecord>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

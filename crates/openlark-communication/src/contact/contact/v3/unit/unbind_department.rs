@@ -19,18 +19,24 @@ use crate::{
 /// 解除部门与单位的绑定关系请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UnbindDepartmentBody {
+    /// 单位 ID。
     pub unit_id: String,
+    /// 部门 ID。
     pub department_id: String,
+    /// 部门 ID 类型。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<DepartmentIdType>,
 }
 
 /// 解除部门与单位的绑定关系请求
+///
+/// 用于把某个部门从指定单位下解绑。
 pub struct UnbindDepartmentRequest {
     config: Config,
 }
 
 impl UnbindDepartmentRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -43,6 +49,7 @@ impl UnbindDepartmentRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UnbindDepartmentBody,

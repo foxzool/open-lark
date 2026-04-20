@@ -11,27 +11,38 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 词条高亮请求体。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct HighlightEntityReqBody {
+    /// 待高亮文本。
     pub text: String,
 }
 
+/// 词条高亮响应 data。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct HighlightEntityResponse {
+    /// 高亮短语列表。
     #[serde(default)]
     pub phrases: Vec<Phrase>,
 }
 
+/// 高亮短语信息。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct Phrase {
+    /// 词条名称。
     pub name: String,
+    /// 命中的词条 ID 列表。
     pub entity_ids: Vec<String>,
+    /// 文本位置区间。
     pub span: Span,
 }
 
+/// 文本高亮位置区间。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct Span {
+    /// 起始位置。
     pub start: i32,
+    /// 结束位置。
     pub end: i32,
 }
 
@@ -48,6 +59,7 @@ pub struct HighlightEntityRequest {
 }
 
 impl HighlightEntityRequest {
+    /// 创建新的词条高亮请求。
     pub fn new(config: Config, text: impl Into<String>) -> Self {
         Self {
             config,
@@ -55,10 +67,12 @@ impl HighlightEntityRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<HighlightEntityResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

@@ -32,6 +32,7 @@ impl PatchRequest {
         }
     }
 
+    /// 设置 `job_grade_id`。
     pub fn job_grade_id(mut self, job_grade_id: impl Into<String>) -> Self {
         self.job_grade_id = Some(job_grade_id.into());
         self
@@ -49,6 +50,7 @@ impl PatchRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

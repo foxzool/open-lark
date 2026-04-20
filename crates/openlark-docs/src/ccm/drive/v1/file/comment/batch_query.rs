@@ -53,6 +53,7 @@ pub struct BatchQueryCommentRequest {
 }
 
 impl BatchQueryCommentRequest {
+    /// 创建新的批量评论查询请求。
     pub fn new(
         file_token: impl Into<String>,
 
@@ -71,6 +72,7 @@ impl BatchQueryCommentRequest {
         }
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
 
@@ -93,6 +95,7 @@ struct BatchQueryCommentRequestBody {
 /// - `items`: 评论详情列表
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchQueryCommentResponse {
+    /// 评论详情列表。
     #[serde(default)]
     pub items: Vec<Comment>,
 }

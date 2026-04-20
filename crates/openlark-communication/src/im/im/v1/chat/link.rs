@@ -37,6 +37,7 @@ pub struct GetChatLinkRequest {
 }
 
 impl GetChatLinkRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -45,21 +46,25 @@ impl GetChatLinkRequest {
         }
     }
 
+    /// 设置群 ID。
     pub fn chat_id(mut self, chat_id: impl Into<String>) -> Self {
         self.chat_id = chat_id.into();
         self
     }
 
+    /// 设置分享链接有效期。
     pub fn validity_period(mut self, validity_period: ChatLinkValidityPeriod) -> Self {
         self.validity_period = Some(validity_period);
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<GetChatLinkResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -81,7 +86,9 @@ impl GetChatLinkRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+/// 获取群分享链接请求体。
 pub struct GetChatLinkBody {
+    /// 链接有效期。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validity_period: Option<String>,
 }

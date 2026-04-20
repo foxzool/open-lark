@@ -54,6 +54,7 @@ pub struct BatchCreateRecordRequest {
 }
 
 impl BatchCreateRecordRequest {
+    /// 创建新的批量新增记录请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -66,41 +67,49 @@ impl BatchCreateRecordRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: String) -> Self {
         self.user_id_type = Some(user_id_type);
         self
     }
 
+    /// 设置客户端幂等令牌。
     pub fn client_token(mut self, client_token: String) -> Self {
         self.client_token = Some(client_token);
         self
     }
 
+    /// 设置是否忽略一致性检查。
     pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
         self.ignore_consistency_check = Some(ignore_consistency_check);
         self
     }
 
+    /// 设置待新增记录列表。
     pub fn records(mut self, records: Vec<CreateRecordItem>) -> Self {
         self.records = records;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchCreateRecordResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -156,12 +165,13 @@ pub struct CreateRecordItem {
     pub fields: Value,
 }
 
+/// 批量新增记录请求体（内部使用）。
 #[derive(Serialize)]
 struct BatchCreateRecordRequestBody {
     records: Vec<CreateRecordItem>,
 }
 
-/// 批量新增记录响应
+/// 批量新增记录响应。
 ///
 /// 包含新增成功的记录列表。
 ///

@@ -18,6 +18,7 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateExportTaskRequest {
     #[serde(skip)]
+    /// SDK 配置。
     config: Config,
     /// 将云文档导出为本地文件后，本地文件的扩展名
     pub file_extension: String,
@@ -31,6 +32,7 @@ pub struct CreateExportTaskRequest {
 }
 
 impl CreateExportTaskRequest {
+    /// 创建新的导出任务请求。
     pub fn new(
         config: Config,
         file_extension: impl Into<String>,
@@ -46,16 +48,19 @@ impl CreateExportTaskRequest {
         }
     }
 
+    /// 设置子资源 ID。
     pub fn sub_id(mut self, sub_id: impl Into<String>) -> Self {
         self.sub_id = Some(sub_id.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateExportTaskResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

@@ -12,7 +12,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 删除自定义角色请求
+/// 删除自定义角色请求。
 #[derive(Debug, Clone)]
 pub struct DeleteAppRoleRequest {
     config: Config,
@@ -21,6 +21,7 @@ pub struct DeleteAppRoleRequest {
 }
 
 impl DeleteAppRoleRequest {
+    /// 创建新的自定义角色删除请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -29,20 +30,24 @@ impl DeleteAppRoleRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置角色 ID。
     pub fn role_id(mut self, role_id: String) -> Self {
         self.role_id = role_id;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<DeleteAppRoleResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -64,7 +69,7 @@ impl DeleteAppRoleRequest {
     }
 }
 
-/// 删除自定义角色响应（data 为空对象）
+/// 删除自定义角色响应（data 为空对象）。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DeleteAppRoleResponse {}
 

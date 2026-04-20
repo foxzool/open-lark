@@ -3,36 +3,44 @@
 /// 按照bizTag/project/version/resource/name.rs模式组织
 use openlark_core::config::Config;
 
+/// v1 子模块。
 pub mod v1;
+/// v2 子模块。
 pub mod v2;
 
 /// corehr 项目 v1 版本服务
+/// CorehrV1 服务入口。
 #[derive(Debug, Clone)]
 pub struct CorehrV1 {
     config: Config,
 }
 
 impl CorehrV1 {
+    /// 创建新的服务入口实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 返回共享配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 }
 
 /// corehr 项目 v2 版本服务
+/// CorehrV2 服务入口。
 #[derive(Debug, Clone)]
 pub struct CorehrV2 {
     config: Config,
 }
 
 impl CorehrV2 {
+    /// 创建新的服务入口实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 返回共享配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }

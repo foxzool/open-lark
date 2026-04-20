@@ -35,14 +35,17 @@ pub struct ListRepoRequest {
 }
 
 impl ListRepoRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListRepoResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListRepoResp> {
         let api_request: ApiRequest<ListRepoResp> = ApiRequest::get(&LingoApiV1::RepoList.to_url());
 

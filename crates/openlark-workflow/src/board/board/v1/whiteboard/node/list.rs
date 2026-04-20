@@ -9,43 +9,62 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Debug, Clone, Deserialize)]
+/// 白板节点信息。
 pub struct WhiteboardNode {
+    /// 节点 ID。
     pub node_id: String,
+    /// 节点标题。
     pub title: String,
+    /// 节点类型。
     pub node_type: String,
     #[serde(default)]
+    /// 父节点 ID。
     pub parent_id: String,
     #[serde(default)]
+    /// 节点内容。
     pub content: serde_json::Value,
     #[serde(default)]
+    /// 节点位置。
     pub position: NodePosition,
+    /// 创建时间。
     pub create_time: i64,
     #[serde(default)]
+    /// 更新时间。
     pub update_time: i64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
+/// 节点位置信息。
 pub struct NodePosition {
     #[serde(default)]
+    /// 横坐标。
     pub x: f64,
     #[serde(default)]
+    /// 纵坐标。
     pub y: f64,
     #[serde(default)]
+    /// 宽度。
     pub width: f64,
     #[serde(default)]
+    /// 高度。
     pub height: f64,
 }
 
 #[derive(Debug, Clone, Deserialize)]
+/// 白板节点列表响应。
 pub struct ListWhiteboardNodeResponseV1 {
+    /// 节点列表。
     pub nodes: Vec<WhiteboardNode>,
     #[serde(default)]
+    /// 是否还有更多数据。
     pub has_more: bool,
     #[serde(default)]
+    /// 分页令牌。
     pub page_token: String,
 }
 
 #[derive(Debug, Clone)]
+/// 获取白板节点列表请求构建器。
 pub struct ListWhiteboardNodeRequestV1 {
     config: Arc<Config>,
     board_id: String,
@@ -55,6 +74,7 @@ pub struct ListWhiteboardNodeRequestV1 {
 }
 
 impl ListWhiteboardNodeRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, board_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -65,26 +85,31 @@ impl ListWhiteboardNodeRequestV1 {
         }
     }
 
+    /// 设置父节点过滤条件。
     pub fn parent_id(mut self, parent_id: impl Into<String>) -> Self {
         self.parent_id = Some(parent_id.into());
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: u32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页令牌。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<ListWhiteboardNodeResponseV1> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

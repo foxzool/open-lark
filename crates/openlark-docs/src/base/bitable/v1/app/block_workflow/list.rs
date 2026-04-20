@@ -37,7 +37,7 @@ impl ApiResponseTrait for ListBlockWorkflowResponse {
     }
 }
 
-/// 列出工作流请求
+/// 列出工作流请求。
 #[derive(Debug, Clone)]
 pub struct ListBlockWorkflowRequest {
     config: Config,
@@ -45,6 +45,7 @@ pub struct ListBlockWorkflowRequest {
 }
 
 impl ListBlockWorkflowRequest {
+    /// 创建新的工作流列表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -58,10 +59,12 @@ impl ListBlockWorkflowRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListBlockWorkflowResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

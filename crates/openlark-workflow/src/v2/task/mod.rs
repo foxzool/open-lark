@@ -1,21 +1,40 @@
+/// 添加依赖接口。
 pub mod add_dependencies;
+/// 添加成员接口。
 pub mod add_members;
+/// 添加提醒接口。
 pub mod add_reminders;
+/// 加入任务清单接口。
 pub mod add_tasklist;
+/// 完成任务接口。
 pub mod complete;
+/// 创建接口。
 pub mod create;
+/// 删除接口。
 pub mod delete;
+/// 获取接口。
 pub mod get;
+/// 列表接口。
 pub mod list;
+/// 数据模型。
 pub mod models;
+/// 更新接口。
 pub mod patch;
+/// 移除依赖接口。
 pub mod remove_dependencies;
+/// 移除成员接口。
 pub mod remove_members;
+/// 移除提醒接口。
 pub mod remove_reminders;
+/// 移出任务清单接口。
 pub mod remove_tasklist;
+/// 子任务模块。
 pub mod subtask;
+/// tasklists 模块。
 pub mod tasklists;
+/// 取消完成接口。
 pub mod uncomplete;
+/// 更新接口。
 pub mod update;
 
 use openlark_core::config::Config;
@@ -28,34 +47,42 @@ pub struct Task {
 }
 
 impl Task {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 
+    /// 创建新建请求。
     pub fn create(&self) -> create::CreateTaskRequest {
         create::CreateTaskRequest::new(self.config.clone())
     }
 
+    /// 创建更新请求。
     pub fn update(&self, task_guid: impl Into<String>) -> update::UpdateTaskRequest {
         update::UpdateTaskRequest::new(self.config.clone(), task_guid.into())
     }
 
+    /// 创建删除请求。
     pub fn delete(&self, task_guid: impl Into<String>) -> delete::DeleteTaskRequest {
         delete::DeleteTaskRequest::new(self.config.clone(), task_guid.into())
     }
 
+    /// 创建获取详情请求。
     pub fn get(&self, task_guid: impl Into<String>) -> get::GetTaskRequest {
         get::GetTaskRequest::new(self.config.clone(), task_guid.into())
     }
 
+    /// 创建列表请求。
     pub fn list(&self) -> list::ListTasksRequest {
         list::ListTasksRequest::new(self.config.clone())
     }
 
+    /// 创建完成任务请求。
     pub fn complete(&self, task_guid: impl Into<String>) -> complete::CompleteTaskRequest {
         complete::CompleteTaskRequest::new(self.config.clone(), task_guid.into())
     }
 
+    /// 创建取消完成请求。
     pub fn uncomplete(&self, task_guid: impl Into<String>) -> uncomplete::UncompleteTaskRequest {
         uncomplete::UncompleteTaskRequest::new(self.config.clone(), task_guid.into())
     }

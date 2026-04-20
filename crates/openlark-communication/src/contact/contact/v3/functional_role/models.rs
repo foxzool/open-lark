@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 /// 创建角色响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateFunctionalRoleResponse {
+    /// 新创建的角色 ID。
     pub role_id: String,
 }
 

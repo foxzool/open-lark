@@ -12,10 +12,12 @@ use openlark_core::config::Config;
 #[derive(Debug, Clone)]
 pub struct DocumentAiClient {
     config: Arc<Config>,
+    /// v1 字段。
     pub v1: DocumentAiV1Client,
 }
 
 impl DocumentAiClient {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         let config = Arc::new(config);
         Self {
@@ -24,6 +26,7 @@ impl DocumentAiClient {
         }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -33,6 +36,7 @@ impl DocumentAiClient {
 #[derive(Debug, Clone)]
 pub struct DocumentAiV1Client {
     config: Arc<Config>,
+    /// recognize 字段。
     pub recognize: RecognizeResource,
 }
 
@@ -44,6 +48,7 @@ impl DocumentAiV1Client {
         }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -60,6 +65,7 @@ impl RecognizeResource {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }

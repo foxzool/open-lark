@@ -32,6 +32,7 @@ impl PatchRequest {
         }
     }
 
+    /// 设置 `department_id`。
     pub fn department_id(mut self, department_id: impl Into<String>) -> Self {
         self.department_id = Some(department_id.into());
         self
@@ -49,6 +50,7 @@ impl PatchRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

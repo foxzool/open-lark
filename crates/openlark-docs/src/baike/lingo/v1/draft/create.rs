@@ -17,6 +17,7 @@ use crate::common::api_endpoints::LingoApiV1;
 /// 创建草稿响应（data）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateDraftResp {
+    /// 草稿详情。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub draft: Option<Draft>,
 }
@@ -36,6 +37,7 @@ pub struct CreateDraftRequest {
 }
 
 impl CreateDraftRequest {
+    /// 创建新的 lingo 草稿请求。
     pub fn new(config: Config, body: DraftEntityInput) -> Self {
         Self {
             config,
@@ -57,10 +59,12 @@ impl CreateDraftRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateDraftResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CreateDraftResp> {
         // ===== 参数校验 =====
         validate_required!(self.body.main_keys, "main_keys 不能为空");

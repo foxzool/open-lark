@@ -35,7 +35,9 @@ pub struct BatchDeleteDocumentBlockChildrenParams {
 /// 删除块响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchDeleteDocumentBlockChildrenResponse {
+    /// 文档修订版本号。
     pub document_revision_id: i64,
+    /// 客户端幂等 token。
     pub client_token: String,
 }
 
@@ -46,15 +48,19 @@ impl ApiResponseTrait for BatchDeleteDocumentBlockChildrenResponse {
 }
 
 /// 删除块请求
+///
+/// 用于删除文档块下指定范围的子块。
 pub struct BatchDeleteDocumentBlockChildrenRequest {
     config: Config,
 }
 
 impl BatchDeleteDocumentBlockChildrenRequest {
+    /// 创建新的删除子块请求。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(
         self,
         params: BatchDeleteDocumentBlockChildrenParams,
@@ -63,6 +69,7 @@ impl BatchDeleteDocumentBlockChildrenRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         params: BatchDeleteDocumentBlockChildrenParams,

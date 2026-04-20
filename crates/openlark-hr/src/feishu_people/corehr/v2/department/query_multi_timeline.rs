@@ -71,9 +71,11 @@ impl QueryMultiTimelineRequest {
 /// 批量查询部门版本信息响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryMultiTimelineResponse {
+    /// 原始响应数据。
     pub data: Option<QueryMultiTimelineResponseData>,
 }
 
+/// `QueryMultiTimelineResponseData`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryMultiTimelineResponseData {
     /// 分页标记
@@ -87,6 +89,7 @@ pub struct QueryMultiTimelineResponseData {
     pub items: Option<Vec<DepartmentTimelineItem>>,
 }
 
+/// `DepartmentTimelineItem`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DepartmentTimelineItem {
     /// 部门 ID

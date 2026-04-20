@@ -14,7 +14,7 @@ use super::models::App;
 use super::AppService;
 use crate::common::api_utils::missing_response_data_error;
 
-/// 获取多维表格请求
+/// 获取多维表格请求。
 #[derive(Debug, Clone)]
 pub struct GetAppRequest {
     /// 应用token
@@ -37,6 +37,7 @@ impl ApiResponseTrait for GetAppResponse {
 }
 
 impl GetAppRequest {
+    /// 创建新的多维表格查询请求。
     /// 创建获取多维表格请求
     pub fn new(config: Config) -> Self {
         Self {
@@ -51,12 +52,13 @@ impl GetAppRequest {
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetAppResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -81,7 +83,7 @@ impl GetAppRequest {
 }
 
 impl AppService {
-    /// 创建获取多维表格请求
+    /// 创建获取多维表格请求 builder。
     pub fn get_builder(&self, app_token: impl Into<String>) -> GetAppRequest {
         GetAppRequest::new(self.config.clone()).app_token(app_token)
     }

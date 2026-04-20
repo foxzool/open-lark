@@ -2,6 +2,7 @@
 ///
 /// 提供openlark-workflow项目中通用的工具、宏和类型定义。
 pub mod api_endpoints;
+/// 工作流 API 通用辅助函数。
 pub mod api_utils;
 
 // 重新导出API端点枚举

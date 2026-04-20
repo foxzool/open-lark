@@ -13,12 +13,15 @@ use crate::{
 };
 
 /// 会话标签页排序请求
+///
+/// 用于调整群聊标签页顺序。
 pub struct SortChatTabsRequest {
     config: Config,
     chat_id: String,
 }
 
 impl SortChatTabsRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -40,6 +43,7 @@ impl SortChatTabsRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: TabIdsBody,

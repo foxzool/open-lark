@@ -12,6 +12,7 @@ use std::sync::Arc;
 
 /// 任务关注者列表项（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 任务关注者列表项。
 pub struct TaskFollowerItemV1 {
     /// 关注者用户 ID
     pub follower_id: String,
@@ -21,6 +22,7 @@ pub struct TaskFollowerItemV1 {
 
 /// 获取任务关注者列表响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 任务关注者列表响应。
 pub struct ListTaskFollowerResponseV1 {
     /// 关注者列表
     pub items: Vec<TaskFollowerItemV1>,
@@ -32,6 +34,7 @@ pub struct ListTaskFollowerResponseV1 {
 
 /// 获取任务关注者列表请求（v1）
 #[derive(Debug, Clone)]
+/// 获取任务关注者列表请求构建器。
 pub struct ListTaskFollowerRequestV1 {
     config: Arc<Config>,
     task_id: String,
@@ -42,6 +45,7 @@ pub struct ListTaskFollowerRequestV1 {
 }
 
 impl ListTaskFollowerRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_id: impl Into<String>) -> Self {
         Self {
             config,

@@ -1,3 +1,5 @@
+//! openlark-hr 招聘请求建模测试。
+
 use openlark_core::{config::Config, req_option::RequestOption};
 use openlark_hr::hire::hire::{
     v1::{evaluation, evaluation_task, location, referral, referral_account, talent_object, todo},

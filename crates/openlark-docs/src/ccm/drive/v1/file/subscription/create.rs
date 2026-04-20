@@ -30,10 +30,8 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 use super::models::Subscription;
 
-/// 创建订阅请求
-
+/// 创建订阅请求。
 #[derive(Debug, Clone, Serialize, Deserialize)]
-
 pub struct CreateFileSubscriptionRequest {
     /// 文件 token
     pub file_token: String,
@@ -52,6 +50,7 @@ pub struct CreateFileSubscriptionRequest {
 }
 
 impl CreateFileSubscriptionRequest {
+    /// 创建新的文件订阅请求。
     pub fn new(
         file_token: impl Into<String>,
 
@@ -72,12 +71,14 @@ impl CreateFileSubscriptionRequest {
         }
     }
 
+    /// 设置订阅关系 ID。
     pub fn subscription_id(mut self, subscription_id: impl Into<String>) -> Self {
         self.subscription_id = Some(subscription_id.into());
 
         self
     }
 
+    /// 设置是否订阅。
     pub fn is_subcribe(mut self, is_subcribe: bool) -> Self {
         self.is_subcribe = Some(is_subcribe);
 
@@ -99,6 +100,7 @@ struct CreateFileSubscriptionRequestBody {
     file_type: String,
 }
 
+/// 创建订阅响应 data。
 pub type CreateFileSubscriptionResponse = Subscription;
 
 /// 创建订阅

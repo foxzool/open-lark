@@ -17,8 +17,10 @@ use crate::common::api_endpoints::BaikeApiV1;
 /// 获取词条列表响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ListEntityResp {
+    /// 词条列表。
     #[serde(default)]
     pub entities: Vec<Entity>,
+    /// 下一页分页标记。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
@@ -39,6 +41,7 @@ pub struct ListEntityRequest {
 }
 
 impl ListEntityRequest {
+    /// 创建新的词条列表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -49,30 +52,36 @@ impl ListEntityRequest {
         }
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 设置外部系统提供方。
     pub fn provider(mut self, provider: impl Into<String>) -> Self {
         self.provider = Some(provider.into());
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
         self.user_id_type = Some(user_id_type);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListEntityResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListEntityResp> {
         // ===== 参数校验 =====
         if let Some(page_size) = self.page_size {

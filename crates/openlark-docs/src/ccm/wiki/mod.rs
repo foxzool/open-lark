@@ -1,16 +1,16 @@
-/// Wiki 知识库服务模块
-///
-/// 提供企业知识库和Wiki管理功能。
+/// Wiki v1 接口模块。
 pub mod v1;
+/// Wiki v2 接口模块。
 pub mod v2;
 
-// 导出 V1 类型
+/// 重新导出 v1 搜索请求类型。
 pub use v1::node::search::SearchWikiRequest;
 
-// 导出 V2 类型
+/// 重新导出 v2 Wiki 模型。
 pub use v2::models::{
     WikiSearchResult, WikiSpace, WikiSpaceMember, WikiSpaceNode, WikiSpaceSetting, WikiTask,
 };
+/// 重新导出 v2 空间管理类型。
 pub use v2::space::{
     CopyWikiSpaceNodeRequest, CopyWikiSpaceNodeResponse, CreateWikiSpaceMemberRequest,
     CreateWikiSpaceMemberResponse, CreateWikiSpaceNodeRequest, CreateWikiSpaceNodeResponse,
@@ -23,4 +23,5 @@ pub use v2::space::{
     UpdateWikiSpaceNodeTitleResponse, UpdateWikiSpaceSettingRequest,
     UpdateWikiSpaceSettingResponse,
 };
+/// 重新导出 v2 任务查询类型。
 pub use v2::task::get::{GetWikiTaskRequest, GetWikiTaskResponse};

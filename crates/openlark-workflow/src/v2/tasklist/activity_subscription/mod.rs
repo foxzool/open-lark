@@ -1,10 +1,15 @@
 //! 动态订阅模块
 
 pub mod create;
+/// 删除接口。
 pub mod delete;
+/// 获取接口。
 pub mod get;
+/// 列表接口。
 pub mod list;
+/// 数据模型。
 pub mod models;
+/// 更新接口。
 pub mod patch;
 
 use openlark_core::config::Config;
@@ -18,6 +23,7 @@ pub struct ActivitySubscriptionResource {
 }
 
 impl ActivitySubscriptionResource {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, tasklist_guid: impl Into<String>) -> Self {
         Self {
             config,

@@ -9,6 +9,7 @@ use openlark_core::{
 };
 use std::sync::Arc;
 
+/// 更新工单请求。
 #[derive(Debug, Clone)]
 pub struct UpdateTicketRequest {
     config: Arc<Config>,
@@ -17,6 +18,7 @@ pub struct UpdateTicketRequest {
 }
 
 impl UpdateTicketRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, ticket_id: String) -> Self {
         Self {
             config,
@@ -25,21 +27,25 @@ impl UpdateTicketRequest {
         }
     }
 
+    /// 设置标题。
     pub fn title(mut self, title: impl Into<String>) -> Self {
         self.body.title = Some(title.into());
         self
     }
 
+    /// 设置描述。
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.body.description = Some(description.into());
         self
     }
 
+    /// status。
     pub fn status(mut self, status: impl Into<String>) -> Self {
         self.body.status = Some(status.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UpdateTicketResponse> {
         validate_required!(self.ticket_id.trim(), "工单ID不能为空");
 

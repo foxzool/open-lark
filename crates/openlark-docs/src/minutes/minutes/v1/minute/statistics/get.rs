@@ -12,6 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::MinutesApiV1, api_utils::*};
 
+/// 获取妙记统计数据请求。
 #[derive(Debug, Clone)]
 pub struct GetMinuteStatisticsRequest {
     config: Config,
@@ -20,6 +21,7 @@ pub struct GetMinuteStatisticsRequest {
 }
 
 impl GetMinuteStatisticsRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -28,21 +30,25 @@ impl GetMinuteStatisticsRequest {
         }
     }
 
+    /// 设置妙记 token。
     pub fn minute_token(mut self, minute_token: impl Into<String>) -> Self {
         self.minute_token = Some(minute_token.into());
         self
     }
 
+    /// 设置查询时使用的用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetMinuteStatisticsResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -203,8 +209,10 @@ mod tests {
     }
 }
 
+/// 获取妙记统计数据响应 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetMinuteStatisticsResponse {
+    /// 妙记统计信息。
     pub statistics: MinuteStatistics,
 }
 
@@ -214,16 +222,22 @@ impl ApiResponseTrait for GetMinuteStatisticsResponse {
     }
 }
 
+/// 妙记统计数据。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MinuteStatistics {
+    /// 用户浏览数。
     pub user_view_count: String,
+    /// 页面浏览数。
     pub page_view_count: String,
+    /// 用户浏览明细列表。
     #[serde(default)]
     pub user_view_list: Vec<UserViewDetail>,
 }
 
+/// 用户浏览明细。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserViewDetail {
+    /// 用户 ID。
     pub user_id: String,
     /// 用户的最近查看时间 timestamp（ms 级别）
     pub view_time: String,

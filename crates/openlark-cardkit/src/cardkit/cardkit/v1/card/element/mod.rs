@@ -47,10 +47,12 @@ pub struct CardElementResource {
 pub type CardElementService = CardElementResource;
 
 impl CardElementResource {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }

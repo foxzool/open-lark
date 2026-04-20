@@ -31,9 +31,12 @@ pub struct GetChatAnnouncementBlocksParams {
 /// 获取群公告所有块响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetChatAnnouncementBlocksResponse {
+    /// 块列表。
     #[serde(default)]
     pub items: Vec<DocxBlock>,
+    /// 下一页分页标记。
     pub page_token: Option<String>,
+    /// 是否还有更多数据。
     pub has_more: Option<bool>,
 }
 
@@ -44,6 +47,8 @@ impl ApiResponseTrait for GetChatAnnouncementBlocksResponse {
 }
 
 /// 获取群公告所有块请求
+///
+/// 用于分页查询群公告中的全部块。
 pub struct GetChatAnnouncementBlocksRequest {
     config: Config,
 }
@@ -65,6 +70,7 @@ impl GetChatAnnouncementBlocksRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     /// 执行请求（带请求选项）
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement-block/list

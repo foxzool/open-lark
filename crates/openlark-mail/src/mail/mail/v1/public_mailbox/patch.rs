@@ -20,6 +20,7 @@ pub struct PatchPublicMailboxRequest {
 }
 
 impl PatchPublicMailboxRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailbox_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -40,11 +41,13 @@ impl PatchPublicMailboxRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<PatchPublicMailboxResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

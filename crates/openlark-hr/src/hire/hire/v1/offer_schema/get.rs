@@ -32,6 +32,7 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `schema_id`。
     pub fn schema_id(mut self, schema_id: String) -> Self {
         self.schema_id = schema_id;
         self
@@ -43,6 +44,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -68,42 +70,59 @@ impl GetRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct OfferSchemaOption {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 名称。
     pub name: Option<I18nText>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `index` 字段。
     pub index: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `active_status` 字段。
     pub active_status: Option<i32>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `OfferSchemaObject`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct OfferSchemaObject {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 标识。
     pub id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 名称。
     pub name: Option<I18nText>,
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    /// 对象类型。
     pub object_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `is_customized` 字段。
     pub is_customized: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 选项列表。
     pub option_list: Option<Vec<OfferSchemaOption>>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `GetResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 标识。
     pub id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `scenario` 字段。
     pub scenario: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `version` 字段。
     pub version: Option<i32>,
     #[serde(default)]
+    /// `object_list` 字段。
     pub object_list: Vec<OfferSchemaObject>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

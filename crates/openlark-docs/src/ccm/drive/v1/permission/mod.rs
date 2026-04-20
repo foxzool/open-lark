@@ -1,9 +1,9 @@
-/// 权限管理模块
+/// 协作者权限模块。
 pub mod member;
+/// 公开权限模块。
 pub mod public;
 
-// 重新导出所有API函数
-// member 模块显式导出
+/// 重新导出协作者权限相关类型。
 pub use member::{
     AuthPermissionMemberRequest, AuthPermissionMemberResponse, BatchCreatePermissionMemberRequest,
     BatchCreatePermissionMemberResponse, CreatePermissionMemberRequest,
@@ -12,7 +12,7 @@ pub use member::{
     PermissionMemberItem, TransferOwnerRequest, TransferOwnerResponse,
     UpdatePermissionMemberRequest, UpdatePermissionMemberResponse,
 };
-// public 模块显式导出
+/// 重新导出公开权限相关类型。
 pub use public::{
     CreatePermissionPublicPasswordRequest, CreatePermissionPublicPasswordResponse,
     DeletePermissionPublicPasswordRequest, DeletePermissionPublicPasswordResponse,

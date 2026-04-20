@@ -47,6 +47,7 @@ pub struct GetTaskTasklistsRequest {
 }
 
 impl GetTaskTasklistsRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_guid: impl Into<String>) -> Self {
         Self {
             config,

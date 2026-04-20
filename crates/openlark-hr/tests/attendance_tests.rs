@@ -1,3 +1,5 @@
+//! attendance tests 集成测试。
+
 use openlark_core::{config::Config, req_option::RequestOption};
 use openlark_hr::attendance::attendance::v1::{
     approval_info, file, group, shift, user_approval, user_setting, user_stats_data,

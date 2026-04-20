@@ -45,6 +45,7 @@ impl PatchCategoryBody {
 /// 更新知识库分类响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchCategoryResponse {
+    /// 响应数据。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<PatchCategoryResult>,
 }

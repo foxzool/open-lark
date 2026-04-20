@@ -29,11 +29,13 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `pre_hire_id`。
     pub fn pre_hire_id(mut self, pre_hire_id: String) -> Self {
         self.pre_hire_id = pre_hire_id;
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: String) -> Self {
         self.user_id_type = Some(user_id_type);
         self
@@ -45,6 +47,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -73,6 +76,7 @@ impl GetRequest {
 /// 查询单个待入职信息响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetResponse {
+    /// 原始响应数据。
     pub data: Value,
 }
 

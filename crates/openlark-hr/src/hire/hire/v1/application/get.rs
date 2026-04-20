@@ -32,6 +32,7 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `application_id`。
     pub fn application_id(mut self, application_id: String) -> Self {
         self.application_id = application_id;
         self
@@ -43,6 +44,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -68,20 +70,28 @@ impl GetRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `application_id` 字段。
     pub application_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 候选人 ID。
     pub talent_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_id` 字段。
     pub job_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `application_status` 字段。
     pub application_status: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `stage_id` 字段。
     pub stage_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `stage_name` 字段。
     pub stage_name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_info` 字段。
     pub job_info: Option<ApplicationJobInfo>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

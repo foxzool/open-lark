@@ -11,12 +11,15 @@ use serde::{Deserialize, Serialize};
 /// 执行数据知识问答请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AskKnowledgeBody {
+    /// 提问内容。
     pub question: String,
+    /// 是否流式返回。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream: Option<bool>,
 }
 
 impl AskKnowledgeBody {
+    /// 创建新的请求构建器。
     pub fn new(question: impl Into<String>) -> Self {
         Self {
             question: question.into(),
@@ -24,6 +27,10 @@ impl AskKnowledgeBody {
         }
     }
 
+    /// 设置是否流式返回。
+    /// 设置是否流式返回。
+    /// 设置是否流式返回。
+    /// 设置是否流式返回。
     pub fn stream(mut self, stream: bool) -> Self {
         self.stream = Some(stream);
         self
@@ -59,6 +66,7 @@ pub struct AskKnowledgeRequest {
 }
 
 impl AskKnowledgeRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -80,6 +88,10 @@ impl AskKnowledgeRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: AskKnowledgeBody,

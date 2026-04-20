@@ -13,12 +13,15 @@ use crate::{
 };
 
 /// 排序群菜单请求
+///
+/// 用于调整群聊一级菜单的展示顺序。
 pub struct SortChatMenuTreeRequest {
     config: Config,
     chat_id: String,
 }
 
 impl SortChatMenuTreeRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -40,6 +43,7 @@ impl SortChatMenuTreeRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: ChatMenuTopLevelIdsBody,

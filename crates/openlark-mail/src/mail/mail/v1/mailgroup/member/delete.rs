@@ -7,6 +7,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// Delete Mail Group Member Request。
 #[derive(Debug, Clone)]
 pub struct DeleteMailGroupMemberRequest {
     config: Arc<Config>,
@@ -14,12 +15,15 @@ pub struct DeleteMailGroupMemberRequest {
     member_id: String,
 }
 
+/// Delete Mail Group Member Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteMailGroupMemberResponse {
+    /// 响应数据。
     pub data: Option<serde_json::Value>,
 }
 
 impl DeleteMailGroupMemberRequest {
+    /// 创建新的实例。
     pub fn new(
         config: Arc<Config>,
         mailgroup_id: impl Into<String>,
@@ -32,10 +36,12 @@ impl DeleteMailGroupMemberRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<DeleteMailGroupMemberResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

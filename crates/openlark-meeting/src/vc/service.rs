@@ -8,14 +8,17 @@ pub struct VcService {
 }
 
 impl VcService {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 
+    /// 访问 v1 版本 API。
     pub fn v1(&self) -> VcV1Service {
         VcV1Service::new(self.config.clone())
     }
@@ -28,22 +31,27 @@ pub struct VcV1Service {
 }
 
 impl VcV1Service {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 
+    /// 访问 room 资源。
     pub fn room(&self) -> RoomResource {
         RoomResource::new(self.config.clone())
     }
 
+    /// 访问 meeting 资源。
     pub fn meeting(&self) -> MeetingResource {
         MeetingResource::new(self.config.clone())
     }
 
+    /// 访问 reserve 资源。
     pub fn reserve(&self) -> ReserveResource {
         ReserveResource::new(self.config.clone())
     }
@@ -56,10 +64,12 @@ pub struct RoomResource {
 }
 
 impl RoomResource {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -72,10 +82,12 @@ pub struct MeetingResource {
 }
 
 impl MeetingResource {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -88,10 +100,12 @@ pub struct ReserveResource {
 }
 
 impl ReserveResource {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }

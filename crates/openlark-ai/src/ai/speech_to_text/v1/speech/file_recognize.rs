@@ -25,6 +25,7 @@ pub struct FileRecognizeBody {
 }
 
 impl FileRecognizeBody {
+    /// 校验请求体。
     pub fn validate(&self) -> Result<(), String> {
         if self.file_token.trim().is_empty() {
             return Err("file_token 不能为空".to_string());
@@ -36,6 +37,7 @@ impl FileRecognizeBody {
 /// 识别语音文件响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FileRecognizeResponse {
+    /// data 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<serde_json::Value>,
 }

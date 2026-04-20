@@ -12,17 +12,21 @@ use openlark_core::config::Config;
 pub struct MeetingClient {
     config: Config,
 
+    /// 日历客户端入口。
     #[cfg(feature = "calendar")]
     pub calendar: CalendarClient,
 
+    /// 视频会议客户端入口。
     #[cfg(feature = "vc")]
     pub vc: VcClient,
 
+    /// 会议室客户端入口。
     #[cfg(feature = "meeting-room")]
     pub meeting_room: MeetingRoomClient,
 }
 
 impl MeetingClient {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         let config_cloned = config.clone();
         Self {
@@ -36,15 +40,18 @@ impl MeetingClient {
         }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 }
 
+/// 日历链式调用客户端。
 #[cfg(feature = "calendar")]
 #[derive(Debug, Clone)]
 pub struct CalendarClient {
     config: Config,
+    /// v4 版本客户端入口。
     pub v4: CalendarV4Client,
 }
 
@@ -57,15 +64,18 @@ impl CalendarClient {
         }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 }
 
+/// 日历 v4 链式调用客户端。
 #[cfg(feature = "calendar")]
 #[derive(Debug, Clone)]
 pub struct CalendarV4Client {
     config: Config,
+    /// 日历客户端入口。
     pub calendar: CalendarResourceClient,
 }
 
@@ -78,11 +88,13 @@ impl CalendarV4Client {
         }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 }
 
+/// 日历资源客户端。
 #[cfg(feature = "calendar")]
 #[derive(Debug, Clone)]
 pub struct CalendarResourceClient {
@@ -95,15 +107,18 @@ impl CalendarResourceClient {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 }
 
+/// 视频会议链式调用客户端。
 #[cfg(feature = "vc")]
 #[derive(Debug, Clone)]
 pub struct VcClient {
     config: Config,
+    /// v1 版本客户端入口。
     pub v1: VcV1Client,
 }
 
@@ -116,17 +131,22 @@ impl VcClient {
         }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 }
 
+/// 视频会议 v1 链式调用客户端。
 #[cfg(feature = "vc")]
 #[derive(Debug, Clone)]
 pub struct VcV1Client {
     config: Config,
+    /// room 资源入口。
     pub room: VcRoomResourceClient,
+    /// meeting 资源入口。
     pub meeting: VcMeetingResourceClient,
+    /// reserve 资源入口。
     pub reserve: VcReserveResourceClient,
 }
 
@@ -141,11 +161,13 @@ impl VcV1Client {
         }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 }
 
+/// 视频会议 room 资源客户端。
 #[cfg(feature = "vc")]
 #[derive(Debug, Clone)]
 pub struct VcRoomResourceClient {
@@ -158,11 +180,13 @@ impl VcRoomResourceClient {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 }
 
+/// 视频会议 meeting 资源客户端。
 #[cfg(feature = "vc")]
 #[derive(Debug, Clone)]
 pub struct VcMeetingResourceClient {
@@ -175,11 +199,13 @@ impl VcMeetingResourceClient {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 }
 
+/// 视频会议 reserve 资源客户端。
 #[cfg(feature = "vc")]
 #[derive(Debug, Clone)]
 pub struct VcReserveResourceClient {
@@ -192,11 +218,13 @@ impl VcReserveResourceClient {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 }
 
+/// 会议室链式调用客户端。
 #[cfg(feature = "meeting-room")]
 #[derive(Debug, Clone)]
 pub struct MeetingRoomClient {
@@ -209,6 +237,7 @@ impl MeetingRoomClient {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }

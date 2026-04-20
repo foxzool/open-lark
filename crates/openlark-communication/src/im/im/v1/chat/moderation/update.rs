@@ -16,6 +16,8 @@ use crate::{
 };
 
 /// 更新群发言权限请求
+///
+/// 用于调整群聊的禁言模式及可发言成员列表。
 pub struct UpdateChatModerationRequest {
     config: Config,
     chat_id: String,
@@ -23,6 +25,7 @@ pub struct UpdateChatModerationRequest {
 }
 
 impl UpdateChatModerationRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -51,6 +54,7 @@ impl UpdateChatModerationRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UpdateChatModerationBody,

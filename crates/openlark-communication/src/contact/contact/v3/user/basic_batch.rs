@@ -20,10 +20,13 @@ use crate::{
 /// 国际化用户名。
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, Eq)]
 pub struct I18nName {
+    /// 中文名。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub zh_cn: Option<String>,
+    /// 日文名。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ja_jp: Option<String>,
+    /// 英文名。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub en_us: Option<String>,
 }
@@ -31,10 +34,13 @@ pub struct I18nName {
 /// 用户基础信息。
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, Eq)]
 pub struct BasicUser {
+    /// 用户 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// 用户姓名。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 国际化姓名。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_name: Option<I18nName>,
 }
@@ -42,12 +48,14 @@ pub struct BasicUser {
 /// 获取用户姓名请求体。
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, Eq)]
 pub struct BasicBatchUsersBody {
+    /// 用户 ID 列表。
     pub user_ids: Vec<String>,
 }
 
 /// 获取用户姓名响应 data。
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, Eq)]
 pub struct BasicBatchUsersResponse {
+    /// 用户基础信息列表。
     #[serde(default)]
     pub users: Vec<BasicUser>,
 }
@@ -60,12 +68,16 @@ impl ApiResponseTrait for BasicBatchUsersResponse {
 
 /// 获取用户姓名请求。
 pub struct BasicBatchUsersRequest {
+    /// 配置信息。
     config: Config,
+    /// 用户 ID 列表。
     user_ids: Vec<String>,
+    /// 用户 ID 类型。
     user_id_type: Option<UserIdType>,
 }
 
 impl BasicBatchUsersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -92,11 +104,15 @@ impl BasicBatchUsersRequest {
         self
     }
 
+    /// 使用默认请求选项执行请求。
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<BasicBatchUsersResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

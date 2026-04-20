@@ -14,6 +14,8 @@ use crate::{
 };
 
 /// 获取单位绑定的部门列表请求
+///
+/// 用于分页查询指定单位已经绑定的部门。
 pub struct ListUnitDepartmentsRequest {
     config: Config,
     unit_id: String,
@@ -23,6 +25,7 @@ pub struct ListUnitDepartmentsRequest {
 }
 
 impl ListUnitDepartmentsRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -65,6 +68,7 @@ impl ListUnitDepartmentsRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

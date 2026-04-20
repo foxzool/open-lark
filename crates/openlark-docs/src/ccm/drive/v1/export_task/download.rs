@@ -22,6 +22,7 @@ pub struct DownloadExportRequest {
 }
 
 impl DownloadExportRequest {
+    /// 创建新的导出文件下载请求。
     pub fn new(config: Config, file_token: impl Into<String>) -> Self {
         Self {
             config,

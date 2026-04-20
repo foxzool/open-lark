@@ -9,6 +9,7 @@ use openlark_core::{
 };
 use std::sync::Arc;
 
+/// 工单列表请求。
 #[derive(Debug, Clone)]
 pub struct TicketListRequest {
     config: Arc<Config>,
@@ -17,6 +18,7 @@ pub struct TicketListRequest {
 }
 
 impl TicketListRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self {
             config,
@@ -25,16 +27,19 @@ impl TicketListRequest {
         }
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页游标。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<TicketListResponse> {
         let api_endpoint = HelpdeskApiV1::TicketList;
         let mut request = ApiRequest::<TicketListResponse>::get(api_endpoint.to_url());

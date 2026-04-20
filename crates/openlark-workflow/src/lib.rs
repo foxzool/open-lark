@@ -72,20 +72,25 @@
 mod service;
 
 // 通用模块
+/// 工作流通用工具、端点与模型。
 pub mod common;
 
 // 版本模块
 #[cfg(feature = "v1")]
+/// 任务 v1 API 模块。
 pub mod v1;
 
 #[cfg(feature = "v2")]
+/// 任务 v2 API 模块。
 pub mod v2;
 
 // 看板模块
 #[cfg(feature = "board")]
+/// 白板/看板模块。
 pub mod board;
 
 // Prelude 模块
+/// 常用工作流类型预导出模块。
 pub mod prelude;
 
 // 重新导出核心服务

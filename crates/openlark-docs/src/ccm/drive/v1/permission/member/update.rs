@@ -73,6 +73,7 @@ pub struct UpdatePermissionMemberRequest {
 }
 
 impl UpdatePermissionMemberRequest {
+    /// 创建新的协作者权限更新请求。
     /// 创建更新协作者权限请求
     ///
     /// # 参数
@@ -124,11 +125,13 @@ impl UpdatePermissionMemberRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UpdatePermissionMemberResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

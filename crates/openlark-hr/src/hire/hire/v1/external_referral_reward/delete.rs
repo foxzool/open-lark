@@ -30,6 +30,7 @@ impl DeleteRequest {
         }
     }
 
+    /// 提供 `external_referral_reward_id` 能力。
     pub fn external_referral_reward_id(
         mut self,
         external_referral_reward_id: impl Into<String>,
@@ -44,6 +45,7 @@ impl DeleteRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -71,6 +73,7 @@ impl DeleteRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct DeleteResponse {
     #[serde(flatten)]
+    /// `reward` 字段。
     pub reward: ExternalReferralRewardResult,
 }
 

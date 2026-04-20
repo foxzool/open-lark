@@ -30,6 +30,7 @@ impl ListRequest {
         }
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: Value) -> Self {
         self.request_body = Some(request_body);
         self
@@ -41,6 +42,7 @@ impl ListRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -67,24 +69,33 @@ impl ListRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct OfferApplicationFormSummary {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 标识。
     pub id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 名称。
     pub name: Option<crate::hire::hire::common_models::I18nText>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `create_time` 字段。
     pub create_time: Option<String>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `ListResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ListResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 是否还有更多结果。
     pub has_more: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 下一页分页标记。
     pub page_token: Option<String>,
     #[serde(default)]
+    /// 结果项列表。
     pub items: Vec<OfferApplicationFormSummary>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

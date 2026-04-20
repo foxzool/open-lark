@@ -1,6 +1,7 @@
-/// 示例：使用工作流 API
-///
-/// 此示例展示如何通过 openlark 根 crate 使用任务型 workflow / approval helper
+//! 示例：使用工作流 API。
+//!
+//! 此示例展示如何通过 openlark 根 crate 使用任务型 workflow / approval helper。
+
 use open_lark::workflow::{
     ApprovalTaskAction, ApprovalTaskQuery, WorkflowService, WorkflowTaskListQuery,
     WorkflowTaskMutation,

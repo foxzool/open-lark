@@ -1,11 +1,16 @@
+/// 获取接口。
 pub mod get;
+/// get_by_card 模块。
 pub mod get_by_card;
+/// 列表接口。
 pub mod list;
+/// send 模块。
 pub mod send;
 
 use openlark_core::config::Config;
 use std::sync::Arc;
 
+/// 用户邮箱消息资源。
 #[derive(Clone)]
 pub struct Message {
     config: Arc<Config>,
@@ -13,6 +18,7 @@ pub struct Message {
 }
 
 impl Message {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailbox_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -20,14 +26,17 @@ impl Message {
         }
     }
 
+    /// 创建列表请求。
     pub fn list(&self) -> list::ListMailboxMessageRequest {
         list::ListMailboxMessageRequest::new(self.config.clone(), self.mailbox_id.clone())
     }
 
+    /// 创建获取详情请求。
     pub fn get(&self, message_id: impl Into<String>) -> get::GetMailboxMessageRequest {
         get::GetMailboxMessageRequest::new(self.config.clone(), self.mailbox_id.clone(), message_id)
     }
 
+    /// get_by_card。
     pub fn get_by_card(&self) -> get_by_card::GetMailboxMessageByCardRequest {
         get_by_card::GetMailboxMessageByCardRequest::new(
             self.config.clone(),
@@ -35,6 +44,7 @@ impl Message {
         )
     }
 
+    /// send。
     pub fn send(&self) -> send::SendMailboxMessageRequest {
         send::SendMailboxMessageRequest::new(self.config.clone(), self.mailbox_id.clone())
     }

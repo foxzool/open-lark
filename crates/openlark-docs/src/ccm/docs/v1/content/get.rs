@@ -32,6 +32,7 @@ pub struct GetDocsContentRequest {
 }
 
 impl GetDocsContentRequest {
+    /// 创建新的实例。
     pub fn new(
         doc_token: impl Into<String>,
 
@@ -50,6 +51,7 @@ impl GetDocsContentRequest {
         }
     }
 
+    /// 设置 `lang`。
     pub fn lang(mut self, lang: impl Into<String>) -> Self {
         self.lang = Some(lang.into());
 
@@ -62,6 +64,7 @@ impl GetDocsContentRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 
 pub struct GetDocsContentResponse {
+    /// 公开项说明。
     pub content: String,
 }
 

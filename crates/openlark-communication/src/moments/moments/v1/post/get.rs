@@ -18,6 +18,7 @@ use crate::endpoints::moments::MOMENTS_V1_POST_GET;
 /// 查询帖子信息响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetPostResponse {
+    /// 帖子详情。
     pub post: Post,
 }
 
@@ -30,12 +31,16 @@ impl ApiResponseTrait for GetPostResponse {
 /// 帖子信息（字段随文档演进，未显式建模字段使用 `extra` 透传）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Post {
+    /// 发帖用户 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// 帖子正文。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
+    /// 图片资源 key 列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_key_list: Option<Vec<String>>,
+    /// 未显式建模的扩展字段。
     #[serde(default, flatten)]
     pub extra: HashMap<String, serde_json::Value>,
 }
@@ -65,6 +70,7 @@ pub struct GetPostRequest {
 }
 
 impl GetPostRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -93,6 +99,7 @@ impl GetPostRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

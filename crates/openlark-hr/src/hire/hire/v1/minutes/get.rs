@@ -15,6 +15,7 @@ use std::collections::HashMap;
 
 use crate::hire::hire::common_models::I18nText;
 
+/// `GetRequest` 请求。
 #[derive(Debug, Clone)]
 pub struct GetRequest {
     config: Config,
@@ -24,6 +25,7 @@ pub struct GetRequest {
 }
 
 impl GetRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -33,26 +35,31 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `interview_id`。
     pub fn interview_id(mut self, interview_id: impl Into<String>) -> Self {
         self.interview_id = interview_id.into();
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -88,37 +95,51 @@ impl GetRequest {
     }
 }
 
+/// `MinuteSentence`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct MinuteSentence {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 内容。
     pub content: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `speak_time` 字段。
     pub speak_time: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `user_type` 字段。
     pub user_type: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `speaker_name` 字段。
     pub speaker_name: Option<I18nText>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `MinutesDetail`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct MinutesDetail {
     #[serde(default)]
+    /// `sentences` 字段。
     pub sentences: Vec<MinuteSentence>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `GetResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `minutes` 字段。
     pub minutes: Option<MinutesDetail>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 下一页分页标记。
     pub page_token: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 是否还有更多结果。
     pub has_more: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

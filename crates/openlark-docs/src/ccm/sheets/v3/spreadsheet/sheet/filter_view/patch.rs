@@ -14,18 +14,21 @@ use serde::{Deserialize, Serialize};
 use super::FilterView;
 use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 
-/// 更新筛选视图请求体
+/// 更新筛选视图请求体。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateFilterViewRequest {
+    /// 筛选视图名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_view_name: Option<String>,
+    /// 筛选范围。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub range: Option<String>,
 }
 
-/// 更新筛选视图响应体 data
+/// 更新筛选视图响应体 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateFilterViewResponse {
+    /// 更新后的筛选视图。
     pub filter_view: FilterView,
 }
 
@@ -35,7 +38,7 @@ impl ApiResponseTrait for UpdateFilterViewResponse {
     }
 }
 
-/// 更新筛选视图
+/// 更新筛选视图。
 pub async fn update_filter_view(
     config: &Config,
     spreadsheet_token: &str,
@@ -54,7 +57,7 @@ pub async fn update_filter_view(
     .await
 }
 
-/// 更新筛选视图（支持自定义选项）
+/// 更新筛选视图（支持自定义选项）。
 pub async fn update_filter_view_with_options(
     config: &Config,
     spreadsheet_token: &str,

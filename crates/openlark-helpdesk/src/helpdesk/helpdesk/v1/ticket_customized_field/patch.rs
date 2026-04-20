@@ -43,6 +43,7 @@ impl PatchTicketCustomizedFieldBody {
 /// 更新工单自定义字段响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchTicketCustomizedFieldResponse {
+    /// 响应数据。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<PatchTicketCustomizedFieldResult>,
 }

@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 use super::models::{App, AppSettings, UpdateAppRequest as UpdateAppRequestBody};
 use super::AppService;
 
-/// 更新多维表格请求
+/// 更新多维表格请求。
 pub struct UpdateAppRequest {
     /// 应用token
     app_token: String,
@@ -41,6 +41,7 @@ impl ApiResponseTrait for UpdateAppResponse {
 }
 
 impl UpdateAppRequest {
+    /// 创建新的多维表格更新请求。
     /// 创建更新多维表格请求
     pub fn new(config: Config) -> Self {
         Self {
@@ -76,12 +77,13 @@ impl UpdateAppRequest {
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UpdateAppResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -116,7 +118,7 @@ impl UpdateAppRequest {
 }
 
 impl AppService {
-    /// 创建更新多维表格请求
+    /// 创建更新多维表格请求 builder。
     pub fn update_builder(&self, app_token: impl Into<String>) -> UpdateAppRequest {
         UpdateAppRequest::new(self.config.clone()).app_token(app_token)
     }

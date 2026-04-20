@@ -25,6 +25,7 @@ pub struct UpdateCustomFieldRequest {
 }
 
 impl UpdateCustomFieldRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, tasklist_guid: String, field_guid: String) -> Self {
         Self {
             config,

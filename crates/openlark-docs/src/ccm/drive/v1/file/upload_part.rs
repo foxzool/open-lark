@@ -62,6 +62,7 @@ pub struct UploadPartRequest {
 }
 
 impl UploadPartRequest {
+    /// 创建新的实例。
     pub fn new(
         config: Config,
         upload_id: impl Into<String>,
@@ -85,11 +86,13 @@ impl UploadPartRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UploadPartResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

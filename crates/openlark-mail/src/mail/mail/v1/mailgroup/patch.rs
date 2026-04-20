@@ -11,6 +11,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// Patch Mail Group Request。
 #[derive(Debug, Clone)]
 pub struct PatchMailGroupRequest {
     config: Arc<Config>,
@@ -18,20 +19,26 @@ pub struct PatchMailGroupRequest {
     body: PatchMailGroupBody,
 }
 
+/// Patch Mail Group Body。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct PatchMailGroupBody {
+    /// 描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// owner 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
 }
 
+/// Patch Mail Group Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchMailGroupResponse {
+    /// 响应数据。
     pub data: Option<serde_json::Value>,
 }
 
 impl PatchMailGroupRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailgroup_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -40,20 +47,24 @@ impl PatchMailGroupRequest {
         }
     }
 
+    /// description。
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.body.description = Some(description.into());
         self
     }
 
+    /// owner。
     pub fn owner(mut self, owner: impl Into<String>) -> Self {
         self.body.owner = Some(owner.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<PatchMailGroupResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

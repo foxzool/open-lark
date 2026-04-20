@@ -10,14 +10,17 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// List Mail Group Alias Request。
 #[derive(Debug, Clone)]
 pub struct ListMailGroupAliasRequest {
     config: Arc<Config>,
     mailgroup_id: String,
 }
 
+/// List Mail Group Alias Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListMailGroupAliasResponse {
+    /// 响应数据。
     pub data: Option<ListMailGroupAliasData>,
 }
 
@@ -27,18 +30,24 @@ impl ApiResponseTrait for ListMailGroupAliasResponse {
     }
 }
 
+/// List Mail Group Alias Data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListMailGroupAliasData {
+    /// aliases 字段。
     pub aliases: Vec<MailGroupAlias>,
 }
 
+/// Mail Group Alias。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MailGroupAlias {
+    /// 别名 ID。
     pub alias_id: String,
+    /// alias 字段。
     pub alias: String,
 }
 
 impl ListMailGroupAliasRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailgroup_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -46,10 +55,12 @@ impl ListMailGroupAliasRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListMailGroupAliasResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

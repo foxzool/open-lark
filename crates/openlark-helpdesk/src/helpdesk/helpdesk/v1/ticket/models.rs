@@ -1,63 +1,93 @@
 use serde::{Deserialize, Serialize};
 
+/// 创建工单请求体。
 #[derive(Debug, Clone, Serialize, Default)]
 pub struct CreateTicketBody {
+    /// 标题。
     pub title: String,
+    /// 描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// priority 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<String>,
 }
 
+/// 创建工单响应。
 #[derive(Debug, Clone, Deserialize)]
 pub struct CreateTicketResponse {
+    /// 工单 ID。
     pub ticket_id: String,
+    /// 标题。
     pub title: String,
+    /// 创建时间。
     pub created_at: String,
 }
 
+/// 获取工单详情响应。
 #[derive(Debug, Clone, Deserialize)]
 pub struct GetTicketResponse {
+    /// 工单 ID。
     pub ticket_id: String,
+    /// 标题。
     pub title: String,
+    /// 描述。
     #[serde(default)]
     pub description: Option<String>,
+    /// 状态。
     pub status: String,
+    /// 创建时间。
     pub created_at: String,
 }
 
+/// 更新工单请求体。
 #[derive(Debug, Clone, Serialize, Default)]
 pub struct UpdateTicketBody {
+    /// 标题。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
+    /// 描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 状态。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
+/// 更新工单响应。
 #[derive(Debug, Clone, Deserialize)]
 pub struct UpdateTicketResponse {
+    /// 工单 ID。
     pub ticket_id: String,
+    /// 更新时间。
     pub updated_at: String,
 }
 
+/// 删除工单响应。
 #[derive(Debug, Clone, Deserialize)]
 pub struct DeleteTicketResponse {
+    /// 是否成功。
     pub success: bool,
 }
 
+/// 工单列表响应。
 #[derive(Debug, Clone, Deserialize)]
 pub struct TicketListResponse {
+    /// 工单列表。
     pub tickets: Vec<TicketItem>,
+    /// 下一页分页游标。
     #[serde(default)]
     pub page_token: Option<String>,
 }
 
+/// 工单条目。
 #[derive(Debug, Clone, Deserialize)]
 pub struct TicketItem {
+    /// 工单 ID。
     pub ticket_id: String,
+    /// 标题。
     pub title: String,
+    /// 状态。
     pub status: String,
 }
 

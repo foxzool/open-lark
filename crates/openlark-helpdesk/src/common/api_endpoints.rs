@@ -1,70 +1,124 @@
+/// HelpdeskApiV1 枚举。
 #[derive(Debug, Clone, PartialEq)]
 pub enum HelpdeskApiV1 {
     // Ticket APIs
+    /// 创建工单端点。
     TicketCreate,
+    /// 获取工单详情端点。
     TicketGet(String),
+    /// 更新工单端点。
     TicketUpdate(String),
+    /// 工单列表端点。
     TicketList,
     // Agent APIs
+    /// 坐席邮箱端点。
     AgentEmail,
+    /// 更新坐席端点。
     AgentPatch(String),
+    /// 坐席排班列表端点。
     AgentScheduleList,
+    /// 创建坐席排班端点。
     AgentScheduleCreate,
+    /// 获取坐席排班端点。
     AgentScheduleGet(String),
+    /// 更新坐席排班端点。
     AgentSchedulePatch(String),
+    /// 删除坐席排班端点。
     AgentScheduleDelete(String),
+    /// 坐席技能列表端点。
     AgentSkillList,
+    /// 获取坐席技能端点。
     AgentSkillGet(String),
+    /// 创建坐席技能端点。
     AgentSkillCreate,
+    /// 更新坐席技能端点。
     AgentSkillPatch(String),
+    /// 删除坐席技能端点。
     AgentSkillDelete(String),
+    /// 坐席技能规则列表端点。
     AgentSkillRuleList,
     // Category APIs
+    /// 分类列表端点。
     CategoryList,
+    /// 获取分类端点。
     CategoryGet(String),
+    /// 创建分类端点。
     CategoryCreate,
+    /// 更新分类端点。
     CategoryPatch(String),
+    /// 删除分类端点。
     CategoryDelete(String),
     // FAQ APIs
+    /// FAQ 列表端点。
     FaqList,
+    /// 获取 FAQ 端点。
     FaqGet(String),
+    /// 创建 FAQ 端点。
     FaqCreate,
+    /// 更新 FAQ 端点。
     FaqPatch(String),
+    /// 删除 FAQ 端点。
     FaqDelete(String),
+    /// FAQ 搜索端点。
     FaqSearch,
+    /// FAQ 图片端点。
     FaqImage(String, String),
     // Notification APIs
+    /// 通知列表端点。
     NotificationList,
+    /// 获取通知端点。
     NotificationGet(String),
+    /// 创建通知端点。
     NotificationCreate,
+    /// 更新通知端点。
     NotificationPatch(String),
+    /// 提交通知审批端点。
     NotificationSubmitApprove(String),
+    /// 取消通知审批端点。
     NotificationCancelApprove(String),
+    /// 执行通知发送端点。
     NotificationExecuteSend(String),
+    /// 通知预览端点。
     NotificationPreview(String),
+    /// 取消通知发送端点。
     NotificationCancelSend(String),
     // Ticket Message APIs
+    /// 工单消息列表端点。
     TicketMessageList(String),
+    /// 创建工单消息端点。
     TicketMessageCreate(String),
     // Ticket Customized Field APIs
+    /// 工单自定义字段列表端点。
     TicketCustomizedFieldList,
+    /// 获取工单自定义字段端点。
     TicketCustomizedFieldGet(String),
+    /// 创建工单自定义字段端点。
     TicketCustomizedFieldCreate,
+    /// 更新工单自定义字段端点。
     TicketCustomizedFieldPatch(String),
+    /// 删除工单自定义字段端点。
     TicketCustomizedFieldDelete(String),
     // Event APIs
+    /// 事件订阅端点。
     EventSubscribe,
+    /// 事件取消订阅端点。
     EventUnsubscribe,
     // Bot Message
+    /// 机器人消息端点。
     BotMessageCreate,
     // Other Ticket APIs
+    /// 回复用户提问端点。
     TicketAnswerUserQuery(String),
+    /// 工单自定义字段端点。
     TicketCustomizedFields,
+    /// 拉起服务端点。
     TicketStartService,
+    /// 工单图片端点。
     TicketImage,
 }
 
 impl HelpdeskApiV1 {
+    /// 返回对应的端点 URL。
     pub fn to_url(&self) -> String {
         match self {
             // Ticket APIs

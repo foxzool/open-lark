@@ -13,7 +13,7 @@ use serde_json::Value;
 
 use super::models::Record;
 
-/// 创建记录请求
+/// 创建记录请求。
 #[derive(Debug, Clone)]
 pub struct CreateRecordRequest {
     /// 多维表格的 app_token
@@ -33,7 +33,7 @@ pub struct CreateRecordRequest {
 }
 
 impl CreateRecordRequest {
-    /// 创建记录请求
+    /// 创建新的记录创建请求。
     pub fn new(config: Config) -> Self {
         Self {
             app_token: String::new(),
@@ -46,25 +46,25 @@ impl CreateRecordRequest {
         }
     }
 
-    /// 设置应用token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置数据表ID
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
-    /// 设置用户ID类型
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: String) -> Self {
         self.user_id_type = Some(user_id_type);
         self
     }
 
-    /// 设置客户端令牌
+    /// 设置客户端幂等令牌。
     pub fn client_token(mut self, client_token: String) -> Self {
         self.client_token = Some(client_token);
         self
@@ -76,18 +76,19 @@ impl CreateRecordRequest {
         self
     }
 
-    /// 设置记录数据
+    /// 设置记录数据。
     pub fn fields(mut self, fields: Value) -> Self {
         self.fields = fields;
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateRecordResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -127,13 +128,13 @@ impl CreateRecordRequest {
     }
 }
 
-/// 创建记录请求体（内部使用）
+/// 创建记录请求体（内部使用）。
 #[derive(Serialize)]
 struct CreateRecordRequestBody {
     fields: Value,
 }
 
-/// 创建记录响应
+/// 创建记录响应。
 ///
 /// 包含新增记录的完整信息，包括记录ID、字段值以及创建元数据。
 ///

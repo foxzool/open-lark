@@ -1,3 +1,5 @@
+//! performance tests 集成测试。
+
 use openlark_core::{config::Config, req_option::RequestOption};
 use openlark_hr::performance::performance::{v1, v2};
 use rstest::rstest;

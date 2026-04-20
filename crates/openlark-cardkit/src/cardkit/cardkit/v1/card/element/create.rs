@@ -30,6 +30,7 @@ pub struct CreateCardElementRequest {
 }
 
 impl CreateCardElementRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,

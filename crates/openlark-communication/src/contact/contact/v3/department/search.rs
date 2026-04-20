@@ -19,10 +19,12 @@ use crate::{
 /// 搜索部门请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchDepartmentsBody {
+    /// 搜索关键词。
     pub query: String,
 }
 
 impl SearchDepartmentsBody {
+    /// 创建新的部门搜索请求体。
     pub fn new(query: impl Into<String>) -> Self {
         Self {
             query: query.into(),
@@ -63,6 +65,7 @@ pub struct SearchDepartmentsRequest {
 }
 
 impl SearchDepartmentsRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -105,6 +108,8 @@ impl SearchDepartmentsRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: SearchDepartmentsBody,

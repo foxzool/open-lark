@@ -10,6 +10,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// Delete Mail Group Alias Request。
 #[derive(Debug, Clone)]
 pub struct DeleteMailGroupAliasRequest {
     config: Arc<Config>,
@@ -17,8 +18,10 @@ pub struct DeleteMailGroupAliasRequest {
     alias_id: String,
 }
 
+/// Delete Mail Group Alias Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteMailGroupAliasResponse {
+    /// 响应数据。
     pub data: Option<serde_json::Value>,
 }
 
@@ -29,6 +32,7 @@ impl openlark_core::api::ApiResponseTrait for DeleteMailGroupAliasResponse {
 }
 
 impl DeleteMailGroupAliasRequest {
+    /// 创建新的实例。
     pub fn new(
         config: Arc<Config>,
         mailgroup_id: impl Into<String>,
@@ -41,10 +45,12 @@ impl DeleteMailGroupAliasRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<DeleteMailGroupAliasResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

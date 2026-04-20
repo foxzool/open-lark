@@ -25,6 +25,7 @@ pub struct UpdateSectionRequest {
 }
 
 impl UpdateSectionRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, tasklist_guid: String, section_guid: String) -> Self {
         Self {
             config,

@@ -32,6 +32,7 @@ impl PatchRequest {
         }
     }
 
+    /// 设置 `cost_center_id`。
     pub fn cost_center_id(mut self, cost_center_id: impl Into<String>) -> Self {
         self.cost_center_id = Some(cost_center_id.into());
         self
@@ -49,6 +50,7 @@ impl PatchRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

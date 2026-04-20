@@ -24,6 +24,7 @@ struct SearchRequestBody {
     end_time: Option<String>,
 }
 
+/// `SearchRequest` 请求。
 #[derive(Debug, Clone)]
 pub struct SearchRequest {
     config: Config,
@@ -34,6 +35,7 @@ pub struct SearchRequest {
 }
 
 impl SearchRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -44,31 +46,37 @@ impl SearchRequest {
         }
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
+    /// 设置 `talent_id`。
     pub fn talent_id(mut self, talent_id: impl Into<String>) -> Self {
         self.talent_id = talent_id.into();
         self
     }
 
+    /// 设置 `start_time`。
     pub fn start_time(mut self, start_time: impl Into<String>) -> Self {
         self.start_time = Some(start_time.into());
         self
     }
 
+    /// 设置 `end_time`。
     pub fn end_time(mut self, end_time: impl Into<String>) -> Self {
         self.end_time = Some(end_time.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<SearchResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -99,25 +107,34 @@ impl SearchRequest {
     }
 }
 
+/// `ReferralItem`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ReferralItem {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 标识。
     pub id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `application_ids` 字段。
     pub application_ids: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `create_time` 字段。
     pub create_time: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `referral_user` 字段。
     pub referral_user: Option<IdNameObject>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `SearchResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct SearchResponse {
     #[serde(default)]
+    /// 结果项列表。
     pub items: Vec<ReferralItem>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

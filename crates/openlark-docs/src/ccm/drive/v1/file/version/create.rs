@@ -26,6 +26,7 @@ pub struct CreateFileVersionRequest {
 }
 
 impl CreateFileVersionRequest {
+    /// 创建新的文档版本请求。
     pub fn new(
         config: Config,
         file_token: impl Into<String>,
@@ -41,16 +42,19 @@ impl CreateFileVersionRequest {
         }
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateFileVersionResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

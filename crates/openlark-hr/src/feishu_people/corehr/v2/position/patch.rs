@@ -31,11 +31,13 @@ impl PatchRequest {
         }
     }
 
+    /// 设置 `position_id`。
     pub fn position_id(mut self, position_id: String) -> Self {
         self.position_id = Some(position_id);
         self
     }
 
+    /// 设置请求体。
     pub fn body(mut self, body: Value) -> Self {
         self.body = Some(body);
         self
@@ -47,6 +49,7 @@ impl PatchRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

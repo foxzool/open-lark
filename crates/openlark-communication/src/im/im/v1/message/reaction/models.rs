@@ -6,22 +6,29 @@ use serde::{Deserialize, Serialize};
 /// 表情类型
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ReactionType {
+    /// emoji 类型编码。
     pub emoji_type: String,
 }
 
 /// 操作者信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ReactionOperator {
+    /// 操作者 ID。
     pub operator_id: String,
+    /// 操作者类型。
     pub operator_type: String,
 }
 
 /// 表情回复
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct MessageReaction {
+    /// 表情回复 ID。
     pub reaction_id: String,
+    /// 操作者信息。
     pub operator: ReactionOperator,
+    /// 操作时间。
     pub action_time: String,
+    /// 表情类型。
     pub reaction_type: ReactionType,
 }
 
@@ -34,15 +41,19 @@ impl ApiResponseTrait for MessageReaction {
 /// 添加消息表情回复请求体
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateMessageReactionBody {
+    /// 待添加的表情类型。
     pub reaction_type: ReactionType,
 }
 
 /// 获取消息表情回复列表响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListMessageReactionsResponse {
+    /// 表情回复列表。
     #[serde(default)]
     pub items: Option<Vec<MessageReaction>>,
+    /// 是否还有更多数据。
     pub has_more: bool,
+    /// 下一页分页标记。
     #[serde(default)]
     pub page_token: Option<String>,
 }

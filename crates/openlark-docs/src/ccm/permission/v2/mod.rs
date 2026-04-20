@@ -14,7 +14,7 @@ use openlark_core::{
 
 use crate::common::{api_endpoints::PermissionApiOld, api_utils::*};
 
-// 导出模型定义
+/// 权限接口模型模块。
 pub mod models;
 
 impl ApiResponseTrait for CheckMemberPermissionResponse {
@@ -36,20 +36,24 @@ impl ApiResponseTrait for GetPublicPermissionResponse {
 }
 
 #[derive(Debug, Clone)]
+/// 检查协作者权限请求构建器。
 pub struct CheckMemberPermissionRequest {
     config: Config,
     params: CheckMemberPermissionParams,
 }
 
 impl CheckMemberPermissionRequest {
+    /// 创建检查协作者权限请求。
     pub fn new(config: Config, params: CheckMemberPermissionParams) -> Self {
         Self { config, params }
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<CheckMemberPermissionResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -68,20 +72,24 @@ impl CheckMemberPermissionRequest {
 }
 
 #[derive(Debug, Clone)]
+/// 转移文档拥有者请求构建器。
 pub struct TransferOwnerRequest {
     config: Config,
     params: TransferOwnerParams,
 }
 
 impl TransferOwnerRequest {
+    /// 创建转移拥有者请求。
     pub fn new(config: Config, params: TransferOwnerParams) -> Self {
         Self { config, params }
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<TransferOwnerResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -101,20 +109,24 @@ impl TransferOwnerRequest {
 }
 
 #[derive(Debug, Clone)]
+/// 获取公开权限设置请求构建器。
 pub struct GetPublicPermissionRequest {
     config: Config,
     params: GetPublicPermissionParams,
 }
 
 impl GetPublicPermissionRequest {
+    /// 创建获取公开权限设置请求。
     pub fn new(config: Config, params: GetPublicPermissionParams) -> Self {
         Self { config, params }
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<GetPublicPermissionResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -175,8 +187,7 @@ pub async fn get_public_permission(
 
 // API函数已经在模块中定义，不需要重复导出
 
-// 重新导出模型
-// models 模块显式导出
+/// 重新导出权限接口模型。
 pub use models::{
     CheckMemberPermissionParams, CheckMemberPermissionResponse, GetPublicPermissionParams,
     GetPublicPermissionResponse, PermissionCheckResult, PublicPermission, TransferOwnerParams,

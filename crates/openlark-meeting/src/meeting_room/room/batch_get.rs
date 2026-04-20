@@ -16,6 +16,7 @@ pub struct BatchGetRoomRequest {
 }
 
 impl BatchGetRoomRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -23,6 +24,7 @@ impl BatchGetRoomRequest {
         }
     }
 
+    /// 追加查询参数。
     pub fn query_param(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
         self.query_params.push((key.into(), value.into()));
         self

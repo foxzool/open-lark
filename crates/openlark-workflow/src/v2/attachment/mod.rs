@@ -1,7 +1,12 @@
+/// 删除接口。
 pub mod delete;
+/// 获取接口。
 pub mod get;
+/// 列表接口。
 pub mod list;
+/// 数据模型。
 pub mod models;
+/// 上传接口。
 pub mod upload;
 
 use openlark_core::config::Config;
@@ -15,6 +20,7 @@ pub struct Attachment {
 }
 
 impl Attachment {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self {
             config,
@@ -22,15 +28,18 @@ impl Attachment {
         }
     }
 
+    /// 绑定任务上下文。
     pub fn with_task(mut self, task_guid: impl Into<String>) -> Self {
         self.task_guid = task_guid.into();
         self
     }
 
+    /// upload。
     pub fn upload(&self, file_path: String) -> upload::UploadAttachmentRequest {
         upload::UploadAttachmentRequest::new(self.config.clone(), self.task_guid.clone(), file_path)
     }
 
+    /// 创建删除请求。
     pub fn delete(&self, attachment_guid: impl Into<String>) -> delete::DeleteAttachmentRequest {
         delete::DeleteAttachmentRequest::new(
             self.config.clone(),

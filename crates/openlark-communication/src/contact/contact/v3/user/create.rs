@@ -41,6 +41,7 @@ pub struct CreateUserBody {
 }
 
 impl CreateUserBody {
+    /// 创建最小必填字段的请求体。
     pub fn new(
         name: impl Into<String>,
         mobile: impl Into<String>,
@@ -61,6 +62,7 @@ impl CreateUserBody {
 /// 创建/更新/查询用户类接口通用响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserResponse {
+    /// 用户详情。
     pub user: User,
 }
 
@@ -110,6 +112,7 @@ pub struct CreateUserRequest {
 }
 
 impl CreateUserRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -145,6 +148,7 @@ impl CreateUserRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: CreateUserBody,

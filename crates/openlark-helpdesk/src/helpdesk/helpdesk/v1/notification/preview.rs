@@ -16,6 +16,7 @@ use crate::common::api_utils::extract_response_data;
 /// 预览推送通知响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PreviewNotificationResponse {
+    /// 响应数据。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<PreviewNotificationResult>,
 }

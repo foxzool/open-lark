@@ -19,10 +19,12 @@ use crate::{
 /// 更新部门 ID 请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateDepartmentIdBody {
+    /// 新部门 ID。
     pub new_department_id: String,
 }
 
 impl UpdateDepartmentIdBody {
+    /// 创建新的部门 ID 更新请求体。
     pub fn new(new_department_id: impl Into<String>) -> Self {
         Self {
             new_department_id: new_department_id.into(),
@@ -59,6 +61,7 @@ pub struct UpdateDepartmentIdRequest {
 }
 
 impl UpdateDepartmentIdRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -87,6 +90,8 @@ impl UpdateDepartmentIdRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UpdateDepartmentIdBody,

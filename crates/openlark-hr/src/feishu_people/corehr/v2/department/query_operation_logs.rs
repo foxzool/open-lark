@@ -71,9 +71,11 @@ impl QueryOperationLogsRequest {
 /// 批量查询部门操作日志响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryOperationLogsResponse {
+    /// 原始响应数据。
     pub data: Option<QueryOperationLogsResponseData>,
 }
 
+/// `QueryOperationLogsResponseData`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryOperationLogsResponseData {
     /// 分页标记
@@ -87,6 +89,7 @@ pub struct QueryOperationLogsResponseData {
     pub items: Option<Vec<OperationLogItem>>,
 }
 
+/// `OperationLogItem`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct OperationLogItem {
     /// 操作日志 ID

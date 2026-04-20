@@ -1,12 +1,15 @@
-/// 电子表格管理模块
+/// 创建电子表格接口。
 pub mod create;
+/// 获取电子表格接口。
 pub mod get;
+/// 电子表格通用模型模块。
 pub mod models;
+/// 更新电子表格接口。
 pub mod patch;
+/// 工作表子资源模块。
 pub mod sheet;
 
-// create 和 get 模块保留但不导出具体类型
-// models 模块显式导出
+/// 重新导出电子表格模型与请求类型。
 pub use models::{
     CreateSpreadsheetParams, CreateSpreadsheetResponse, CreatedSpreadsheet, DimensionSource,
     FindCondition, FindParams, FindReplaceParams, FindReplaceResponse, FindResponse, FindResult,
@@ -15,7 +18,7 @@ pub use models::{
     UpdateSpreadsheetResponse,
 };
 
-// sheet 模块显式导出
+/// 重新导出工作表子资源类型。
 pub use sheet::{
     CreateFilterConditionRequest, CreateFilterConditionResponse, CreateFilterRequest,
     CreateFilterResponse, CreateFilterViewRequest, CreateFilterViewResponse,

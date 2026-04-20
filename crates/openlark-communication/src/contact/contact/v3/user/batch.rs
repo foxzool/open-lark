@@ -20,6 +20,7 @@ use crate::{
 /// 批量获取用户信息响应 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchGetUsersResponse {
+    /// 用户列表。
     #[serde(default)]
     pub items: Vec<User>,
 }
@@ -50,13 +51,18 @@ impl ApiResponseTrait for BatchGetUsersResponse {
 ///     .user_id_type(UserIdType::OpenId);
 /// ```
 pub struct BatchGetUsersRequest {
+    /// 配置信息。
     config: Config,
+    /// 用户 ID 列表。
     user_ids: Vec<String>,
+    /// 用户 ID 类型。
     user_id_type: Option<UserIdType>,
+    /// 部门 ID 类型。
     department_id_type: Option<DepartmentIdType>,
 }
 
 impl BatchGetUsersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -92,6 +98,8 @@ impl BatchGetUsersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

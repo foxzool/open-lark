@@ -28,10 +28,8 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 
 use super::models::Subscription;
 
-/// 更新订阅状态请求
-
+/// 更新订阅状态请求。
 #[derive(Debug, Clone, Serialize, Deserialize)]
-
 pub struct PatchSubscriptionRequest {
     /// 文件 token
     pub file_token: String,
@@ -47,6 +45,7 @@ pub struct PatchSubscriptionRequest {
 }
 
 impl PatchSubscriptionRequest {
+    /// 创建新的订阅状态更新请求。
     pub fn new(
         file_token: impl Into<String>,
 
@@ -76,6 +75,7 @@ struct PatchSubscriptionRequestBody {
     file_type: String,
 }
 
+/// 更新订阅状态响应 data。
 pub type PatchSubscriptionResponse = Subscription;
 
 /// 更新订阅状态

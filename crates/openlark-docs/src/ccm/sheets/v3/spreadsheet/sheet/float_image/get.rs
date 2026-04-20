@@ -17,6 +17,7 @@ use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 /// 获取浮动图片响应体 data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetFloatImageResponse {
+    /// 浮动图片详情。
     pub float_image: FloatImage,
 }
 
@@ -27,6 +28,8 @@ impl ApiResponseTrait for GetFloatImageResponse {
 }
 
 /// 获取浮动图片
+///
+/// 获取指定浮动图片的详细信息。
 pub async fn get_float_image(
     config: &Config,
     spreadsheet_token: &str,
@@ -44,6 +47,8 @@ pub async fn get_float_image(
 }
 
 /// 获取浮动图片（带请求选项）
+///
+/// 获取指定浮动图片的详细信息，并允许传入自定义请求选项。
 pub async fn get_float_image_with_options(
     config: &Config,
     spreadsheet_token: &str,

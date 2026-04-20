@@ -25,11 +25,14 @@ use crate::{common::api_utils::extract_response_data, endpoints::IM_V1_BATCH_MES
 ///     .execute().await?;
 /// ```
 pub struct GetBatchMessageProgressRequest {
+    /// 配置信息。
     config: Config,
+    /// 批量消息任务 ID。
     batch_message_id: String,
 }
 
 impl GetBatchMessageProgressRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -51,6 +54,7 @@ impl GetBatchMessageProgressRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

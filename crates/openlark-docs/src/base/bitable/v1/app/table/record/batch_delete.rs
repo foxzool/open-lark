@@ -43,6 +43,7 @@ pub struct BatchDeleteRecordRequest {
 }
 
 impl BatchDeleteRecordRequest {
+    /// 创建新的批量删除记录请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -52,26 +53,31 @@ impl BatchDeleteRecordRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
+    /// 设置待删除记录 ID 列表。
     pub fn record_ids(mut self, record_ids: Vec<String>) -> Self {
         self.record_ids = record_ids;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchDeleteRecordResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -107,6 +113,7 @@ impl BatchDeleteRecordRequest {
     }
 }
 
+/// 批量删除记录请求体（内部使用）。
 #[derive(Serialize)]
 struct BatchDeleteRecordRequestBody {
     record_ids: Vec<String>,
@@ -122,13 +129,16 @@ struct BatchDeleteRecordRequestBody {
 /// - `record_id`: 记录 ID
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DeletedRecord {
+    /// 是否删除成功。
     pub deleted: bool,
+    /// 记录 ID。
     pub record_id: String,
 }
 
-/// 批量删除记录响应
+/// 批量删除记录响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchDeleteRecordResponse {
+    /// 删除结果列表。
     pub records: Vec<DeletedRecord>,
 }
 

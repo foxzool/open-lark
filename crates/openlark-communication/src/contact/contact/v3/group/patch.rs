@@ -19,22 +19,29 @@ use crate::{
 /// 更新用户组请求体
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct PatchGroupBody {
+    /// 用户组名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 用户组描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 }
 
 impl PatchGroupBody {
+    /// 创建空的用户组更新请求体。
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// 设置用户组名称。
+    /// 设置用户组名称。
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.name = Some(name.into());
         self
     }
 
+    /// 设置用户组描述。
+    /// 设置用户组描述。
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.description = Some(description.into());
         self
@@ -74,6 +81,7 @@ pub struct PatchGroupRequest {
 }
 
 impl PatchGroupRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -109,6 +117,8 @@ impl PatchGroupRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: PatchGroupBody,

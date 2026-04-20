@@ -10,12 +10,16 @@ use crate::{common::api_utils::extract_response_data, endpoints::IM_V2_BIZ_ENTIT
 
 /// 查询实体与标签的绑定关系请求
 pub struct GetBizEntityTagRelationRequest {
+    /// 配置信息。
     config: Config,
+    /// 标签业务类型。
     tag_biz_type: String,
+    /// 业务实体 ID。
     biz_entity_id: String,
 }
 
 impl GetBizEntityTagRelationRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -44,6 +48,8 @@ impl GetBizEntityTagRelationRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 use super::models::{App, CopyAppRequest as CopyAppRequestBody};
 use super::AppService;
 
-/// 复制多维表格请求
+/// 复制多维表格请求。
 pub struct CopyAppRequest {
     /// 应用token
     app_token: String,
@@ -44,6 +44,7 @@ impl ApiResponseTrait for CopyAppResponse {
 }
 
 impl CopyAppRequest {
+    /// 创建新的多维表格复制请求。
     /// 创建复制多维表格请求
     pub fn new(config: Config) -> Self {
         Self {
@@ -86,11 +87,12 @@ impl CopyAppRequest {
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CopyAppResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CopyAppResponse> {
         // 验证必填字段
         validate_required!(self.app_token, "应用令牌不能为空");
@@ -123,7 +125,7 @@ impl CopyAppRequest {
 }
 
 impl AppService {
-    /// 创建复制多维表格请求
+    /// 创建复制多维表格请求 builder。
     pub fn copy_builder(&self, app_token: impl Into<String>) -> CopyAppRequest {
         CopyAppRequest::new(self.config.clone()).app_token(app_token)
     }

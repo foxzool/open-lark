@@ -1,6 +1,6 @@
-/// 通用工具模块
-///
-/// 包含端点枚举、宏定义和公共模型
+/// HR API 端点定义。
 pub mod api_endpoints;
+/// HR 项目通用宏定义。
 pub mod macros;
+/// HR 通用模型定义。
 pub mod models;

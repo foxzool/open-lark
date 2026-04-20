@@ -38,6 +38,7 @@ pub struct BatchGetResponse {
     pub data: Option<BatchGetResponseData>,
 }
 
+/// `BatchGetResponseData`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchGetResponseData {
     /// 部门列表
@@ -45,6 +46,7 @@ pub struct BatchGetResponseData {
     pub items: Option<Vec<DepartmentItem>>,
 }
 
+/// `DepartmentItem`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DepartmentItem {
     /// 部门 ID

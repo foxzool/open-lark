@@ -16,6 +16,7 @@ use crate::common::api_utils::extract_response_data;
 /// 删除知识库响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteFaqResponse {
+    /// 响应数据。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<DeleteFaqResult>,
 }

@@ -16,6 +16,7 @@ use crate::common::api_endpoints::BaikeApiV1;
 
 use super::create::Draft;
 
+/// 更新草稿请求体。
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct UpdateDraftReq {
     /// 词条 ID（需要更新某个词条时填写）
@@ -40,6 +41,7 @@ pub struct UpdateDraftReq {
 /// 更新草稿响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct UpdateDraftResp {
+    /// 草稿详情。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub draft: Option<Draft>,
 }
@@ -59,6 +61,7 @@ pub struct UpdateDraftRequest {
 }
 
 impl UpdateDraftRequest {
+    /// 创建新的草稿更新请求。
     pub fn new(config: Config, draft_id: impl Into<String>, req: UpdateDraftReq) -> Self {
         Self {
             config,
@@ -74,10 +77,12 @@ impl UpdateDraftRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UpdateDraftResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<UpdateDraftResp> {
         // ===== 参数校验 =====
         validate_required!(self.draft_id, "draft_id 不能为空");

@@ -1,8 +1,11 @@
 //! 公共邮箱别名模块
 
 pub mod create;
+/// 删除接口。
 pub mod delete;
+/// 列表接口。
 pub mod list;
+/// 数据模型。
 pub mod models;
 
 use openlark_core::config::Config;
@@ -16,6 +19,7 @@ pub struct Alias {
 }
 
 impl Alias {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailbox_id: String) -> Self {
         Self { config, mailbox_id }
     }

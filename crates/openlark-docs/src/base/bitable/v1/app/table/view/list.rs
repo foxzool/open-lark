@@ -56,7 +56,7 @@ pub struct ListViewsRequest {
 }
 
 impl ListViewsRequest {
-    /// 创建列出视图请求
+    /// 创建新的视图列表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -68,41 +68,42 @@ impl ListViewsRequest {
         }
     }
 
-    /// 设置应用token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置数据表ID
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
-    /// 设置用户ID类型
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: String) -> Self {
         self.user_id_type = Some(user_id_type);
         self
     }
 
-    /// 设置分页标记
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: String) -> Self {
         self.page_token = Some(page_token);
         self
     }
 
-    /// 设置分页大小
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size.min(100)); // 限制最大100
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListViewsResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListViewsResponse> {
         // === 必填字段验证 ===
         validate_required!(self.app_token.trim(), "app_token");
@@ -150,7 +151,7 @@ impl ListViewsRequest {
     }
 }
 
-/// 列出视图响应
+/// 列出视图响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListViewsResponse {
     /// 视图信息

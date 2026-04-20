@@ -6,14 +6,20 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ReceiveIdType {
+    /// open_id。
     OpenId,
+    /// union_id。
     UnionId,
+    /// user_id。
     UserId,
+    /// 邮箱。
     Email,
+    /// 会话 ID。
     ChatId,
 }
 
 impl ReceiveIdType {
+    /// 返回请求参数使用的字符串值。
     pub fn as_str(self) -> &'static str {
         match self {
             Self::OpenId => "open_id",
@@ -29,12 +35,16 @@ impl ReceiveIdType {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum UserIdType {
+    /// open_id。
     OpenId,
+    /// union_id。
     UnionId,
+    /// user_id。
     UserId,
 }
 
 impl UserIdType {
+    /// 返回请求参数使用的字符串值。
     pub fn as_str(self) -> &'static str {
         match self {
             Self::OpenId => "open_id",
@@ -48,11 +58,14 @@ impl UserIdType {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ContainerIdType {
+    /// 聊天会话。
     Chat,
+    /// 话题线程。
     Thread,
 }
 
 impl ContainerIdType {
+    /// 返回请求参数使用的字符串值。
     pub fn as_str(self) -> &'static str {
         match self {
             Self::Chat => "chat",
@@ -64,11 +77,14 @@ impl ContainerIdType {
 /// 消息排序方式（sort_type）
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SortType {
+    /// 按创建时间升序。
     ByCreateTimeAsc,
+    /// 按创建时间降序。
     ByCreateTimeDesc,
 }
 
 impl SortType {
+    /// 返回请求参数使用的字符串值。
     pub fn as_str(self) -> &'static str {
         match self {
             Self::ByCreateTimeAsc => "ByCreateTimeAsc",

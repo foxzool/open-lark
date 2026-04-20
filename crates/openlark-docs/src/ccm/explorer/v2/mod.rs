@@ -45,7 +45,7 @@ impl ApiResponseTrait for DriveListFilesData {
     }
 }
 
-// 导出模型定义
+/// Explorer v2 模型模块。
 pub mod models;
 
 impl ApiResponseTrait for FolderMetaResponse {
@@ -85,19 +85,24 @@ impl ApiResponseTrait for DeleteFileResponse {
 }
 
 #[derive(Debug, Clone)]
+/// 获取根文件夹元信息请求构建器。
 pub struct GetRootFolderMetaRequest {
     config: Config,
 }
 
 impl GetRootFolderMetaRequest {
+    /// 创建获取根文件夹元信息请求。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 使用默认请求选项执行请求。
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<FolderMetaResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -110,12 +115,14 @@ impl GetRootFolderMetaRequest {
 }
 
 #[derive(Debug, Clone)]
+/// 获取文件夹元信息请求构建器。
 pub struct GetFolderMetaRequest {
     config: Config,
     folder_token: String,
 }
 
 impl GetFolderMetaRequest {
+    /// 创建获取文件夹元信息请求。
     pub fn new(config: Config, folder_token: impl Into<String>) -> Self {
         Self {
             config,
@@ -123,10 +130,12 @@ impl GetFolderMetaRequest {
         }
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<FolderMetaResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -141,6 +150,7 @@ impl GetFolderMetaRequest {
 }
 
 #[derive(Debug, Clone)]
+/// 新建文件请求构建器。
 pub struct CreateFileRequest {
     config: Config,
     folder_token: String,
@@ -148,6 +158,7 @@ pub struct CreateFileRequest {
 }
 
 impl CreateFileRequest {
+    /// 创建新建文件请求。
     pub fn new(config: Config, folder_token: impl Into<String>, params: CreateFileParams) -> Self {
         Self {
             config,
@@ -156,10 +167,12 @@ impl CreateFileRequest {
         }
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<CreateFileResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -178,6 +191,7 @@ impl CreateFileRequest {
 }
 
 #[derive(Debug, Clone)]
+/// 复制文件请求构建器。
 pub struct CopyFileRequest {
     config: Config,
     file_token: String,
@@ -185,6 +199,7 @@ pub struct CopyFileRequest {
 }
 
 impl CopyFileRequest {
+    /// 创建复制文件请求。
     pub fn new(config: Config, file_token: impl Into<String>, params: CopyFileParams) -> Self {
         Self {
             config,
@@ -193,10 +208,12 @@ impl CopyFileRequest {
         }
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<CopyFileResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<CopyFileResponse> {
         validate_required!(self.file_token.trim(), "文件Token不能为空");
         validate_required!(self.params.folder_token.trim(), "目标文件夹Token不能为空");
@@ -211,12 +228,14 @@ impl CopyFileRequest {
 }
 
 #[derive(Debug, Clone)]
+/// 删除 Doc 请求构建器。
 pub struct DeleteDocRequest {
     config: Config,
     doc_token: String,
 }
 
 impl DeleteDocRequest {
+    /// 创建删除 Doc 请求。
     pub fn new(config: Config, doc_token: impl Into<String>) -> Self {
         Self {
             config,
@@ -224,10 +243,12 @@ impl DeleteDocRequest {
         }
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<DeleteFileResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -244,12 +265,14 @@ impl DeleteDocRequest {
 }
 
 #[derive(Debug, Clone)]
+/// 删除 Sheet 请求构建器。
 pub struct DeleteSheetRequest {
     config: Config,
     spreadsheet_token: String,
 }
 
 impl DeleteSheetRequest {
+    /// 创建删除 Sheet 请求。
     pub fn new(config: Config, spreadsheet_token: impl Into<String>) -> Self {
         Self {
             config,
@@ -257,10 +280,12 @@ impl DeleteSheetRequest {
         }
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<DeleteFileResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -277,6 +302,7 @@ impl DeleteSheetRequest {
 }
 
 #[derive(Debug, Clone)]
+/// 获取文件夹子项列表请求构建器。
 pub struct GetFolderChildrenRequest {
     config: Config,
     folder_token: String,
@@ -284,6 +310,7 @@ pub struct GetFolderChildrenRequest {
 }
 
 impl GetFolderChildrenRequest {
+    /// 创建获取文件夹子项列表请求。
     pub fn new(
         config: Config,
         folder_token: impl Into<String>,
@@ -296,10 +323,12 @@ impl GetFolderChildrenRequest {
         }
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<GetFolderChildrenResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -359,6 +388,7 @@ impl GetFolderChildrenRequest {
 }
 
 #[derive(Debug, Clone)]
+/// 新建文件夹请求构建器。
 pub struct CreateFolderRequest {
     config: Config,
     folder_token: String,
@@ -366,6 +396,7 @@ pub struct CreateFolderRequest {
 }
 
 impl CreateFolderRequest {
+    /// 创建新建文件夹请求。
     pub fn new(
         config: Config,
         folder_token: impl Into<String>,
@@ -378,10 +409,12 @@ impl CreateFolderRequest {
         }
     }
 
+    /// 使用默认请求选项执行请求。
     pub async fn execute(self) -> SDKResult<CreateFolderResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -500,8 +533,7 @@ pub async fn create_folder(
 
 // API函数已经在模块中定义，不需要重复导出
 
-// 重新导出模型
-// models 模块显式导出
+/// 重新导出 Explorer v2 模型。
 pub use models::{
     CopyFileParams, CopyFileResponse, CopyResult, CreateFileParams, CreateFileResponse,
     CreateFolderParams, CreateFolderResponse, DeleteFileResponse, DeleteResult, FileInfo, FileItem,

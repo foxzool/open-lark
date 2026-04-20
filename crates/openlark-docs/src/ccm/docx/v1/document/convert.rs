@@ -27,8 +27,10 @@ pub struct ConvertContentToBlocksParams {
 /// 内容类型
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ContentType {
+    /// Markdown 内容。
     #[serde(rename = "markdown")]
     Markdown,
+    /// HTML 内容。
     #[serde(rename = "html")]
     Html,
 }
@@ -36,6 +38,7 @@ pub enum ContentType {
 /// Markdown/HTML 内容转换为文档块响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ConvertContentToBlocksResponse {
+    /// 一级块 ID 列表。
     #[serde(default)]
     pub first_level_block_ids: Vec<String>,
 }
@@ -47,11 +50,14 @@ impl ApiResponseTrait for ConvertContentToBlocksResponse {
 }
 
 /// Markdown/HTML 内容转换为文档块请求
+///
+/// 用于把 markdown/html 转换为可插入文档的块结构。
 pub struct ConvertContentToBlocksRequest {
     config: Config,
 }
 
 impl ConvertContentToBlocksRequest {
+    /// 创建新的内容转换请求。
     /// 创建Markdown/HTML 内容转换为文档块请求
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -68,6 +74,7 @@ impl ConvertContentToBlocksRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     /// 执行请求（带请求选项）
     ///
     /// docPath: /document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/convert

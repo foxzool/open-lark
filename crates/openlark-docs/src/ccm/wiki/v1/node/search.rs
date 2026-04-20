@@ -17,6 +17,8 @@ use crate::common::api_endpoints::WikiApiV1;
 use crate::common::api_utils::*;
 
 /// 搜索 Wiki 请求（流式 Builder 模式）
+///
+/// 用于按关键词搜索当前可见的 wiki 节点。
 pub struct SearchWikiRequest {
     config: Config,
     /// 搜索关键词
@@ -112,6 +114,7 @@ impl SearchWikiRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

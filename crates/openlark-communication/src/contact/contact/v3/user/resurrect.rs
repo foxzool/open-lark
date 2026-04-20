@@ -17,16 +17,21 @@ use crate::{
 /// 恢复用户部门信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserDepartmentInfo {
+    /// 部门 ID。
     pub department_id: String,
+    /// 部门内排序。
     pub department_order: i32,
+    /// 用户在部门中的排序。
     pub user_order: i32,
 }
 
 /// 恢复已删除用户请求体
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ResurrectUserBody {
+    /// 部门信息列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub departments: Option<Vec<UserDepartmentInfo>>,
+    /// 订阅 ID 列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_ids: Option<Vec<String>>,
 }
@@ -64,13 +69,18 @@ pub struct ResurrectUserBody {
 ///     .user_id_type(UserIdType::OpenId);
 /// ```
 pub struct ResurrectUserRequest {
+    /// 配置信息。
     config: Config,
+    /// 用户 ID。
     user_id: String,
+    /// 用户 ID 类型。
     user_id_type: Option<UserIdType>,
+    /// 部门 ID 类型。
     department_id_type: Option<DepartmentIdType>,
 }
 
 impl ResurrectUserRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -106,6 +116,8 @@ impl ResurrectUserRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: ResurrectUserBody,

@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 
 use super::models::{BlockRole, Role, TableRole};
 
-/// 更新自定义角色请求
+/// 更新自定义角色请求。
 #[derive(Debug, Clone)]
 pub struct UpdateAppRoleRequest {
     config: Config,
@@ -26,6 +26,7 @@ pub struct UpdateAppRoleRequest {
 }
 
 impl UpdateAppRoleRequest {
+    /// 创建新的自定义角色更新请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -37,35 +38,42 @@ impl UpdateAppRoleRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置角色 ID。
     pub fn role_id(mut self, role_id: String) -> Self {
         self.role_id = role_id;
         self
     }
 
+    /// 设置角色名称。
     pub fn role_name(mut self, role_name: String) -> Self {
         self.role_name = role_name;
         self
     }
 
+    /// 设置表级权限列表。
     pub fn table_roles(mut self, table_roles: Vec<TableRole>) -> Self {
         self.table_roles = table_roles;
         self
     }
 
+    /// 设置仪表盘权限列表。
     pub fn block_roles(mut self, block_roles: Vec<BlockRole>) -> Self {
         self.block_roles = Some(block_roles);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UpdateAppRoleResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -108,6 +116,7 @@ impl UpdateAppRoleRequest {
     }
 }
 
+/// 更新自定义角色请求体（内部使用）。
 #[derive(Debug, Serialize, Default)]
 pub struct UpdateAppRoleRequestBody {
     role_name: String,
@@ -116,9 +125,10 @@ pub struct UpdateAppRoleRequestBody {
     block_roles: Option<Vec<BlockRole>>,
 }
 
-/// 更新自定义角色响应
+/// 更新自定义角色响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpdateAppRoleResponse {
+    /// 更新后的角色信息。
     pub role: Role,
 }
 

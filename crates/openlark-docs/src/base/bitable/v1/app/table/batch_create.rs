@@ -14,7 +14,7 @@ use crate::common::api_endpoints::BitableApiV1;
 
 use super::create::TableData;
 
-/// 批量新增数据表请求
+/// 批量新增数据表请求。
 #[derive(Debug, Clone)]
 pub struct BatchCreateTableRequest {
     config: Config,
@@ -25,6 +25,7 @@ pub struct BatchCreateTableRequest {
 }
 
 impl BatchCreateTableRequest {
+    /// 创建新的批量新增数据表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -35,35 +36,37 @@ impl BatchCreateTableRequest {
         }
     }
 
-    /// 设置应用 token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
         self.app_token = app_token.into();
         self
     }
 
-    /// 用户 ID 类型（查询参数）
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
-    /// 幂等标识（查询参数）
+    /// 设置幂等标识。
     pub fn client_token(mut self, client_token: impl Into<String>) -> Self {
         self.client_token = Some(client_token.into());
         self
     }
 
-    /// 设置要新增的数据表列表（单次最多 50 个）
+    /// 设置要新增的数据表列表（单次最多 50 个）。
     pub fn tables(mut self, tables: Vec<TableData>) -> Self {
         self.tables = tables;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchCreateTableResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -100,12 +103,13 @@ impl BatchCreateTableRequest {
     }
 }
 
+/// 批量新增数据表请求体（内部使用）。
 #[derive(Debug, Serialize)]
 struct BatchCreateTableRequestBody {
     tables: Vec<TableData>,
 }
 
-/// 批量新增数据表响应
+/// 批量新增数据表响应。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchCreateTableResponse {
     /// 新增的数据表 ID 列表

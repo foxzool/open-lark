@@ -4,31 +4,42 @@ use serde::{Deserialize, Serialize};
 /// 获取日历信息响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetCalendarResponse {
+    /// 日历详情。
     pub calendar: Calendar,
 }
 
 /// 创建日历响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateCalendarResponse {
+    /// 新创建的日历详情。
     pub calendar: Calendar,
 }
 
 /// 日历信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Calendar {
+    /// 日历 ID。
     pub calendar_id: String,
+    /// 日历标题。
     pub summary: String,
+    /// 日历描述。
     pub description: Option<String>,
+    /// 日历颜色。
     pub color: Option<String>,
+    /// 当前访问权限。
     pub permissions: Option<CalendarPermissions>,
+    /// 是否为主日历。
     pub primary: Option<bool>,
+    /// 日历类型。
     pub calendar_type: Option<String>,
 }
 
 /// 日历权限
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CalendarPermissions {
+    /// 是否可读。
     pub is_readable: Option<bool>,
+    /// 是否可写。
     pub is_writable: Option<bool>,
 }
 

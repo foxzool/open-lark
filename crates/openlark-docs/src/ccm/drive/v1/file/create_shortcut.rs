@@ -102,6 +102,7 @@ impl CreateFileShortcutRequest {
         }
     }
 
+    /// 设置 `user_id_type`。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
@@ -113,6 +114,7 @@ impl CreateFileShortcutRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

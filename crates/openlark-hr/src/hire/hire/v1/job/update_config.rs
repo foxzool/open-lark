@@ -32,6 +32,7 @@ impl UpdateConfigRequest {
         }
     }
 
+    /// 设置 `request_body`。
     pub fn request_body(mut self, request_body: UpdateConfigRequestBody) -> Self {
         self.request_body = request_body;
         self
@@ -43,6 +44,7 @@ impl UpdateConfigRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -71,13 +73,16 @@ impl UpdateConfigRequest {
     }
 }
 
+/// `UpdateConfigRequestBody`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpdateConfigRequestBody {
     #[serde(flatten)]
+    /// `fields` 字段。
     pub fields: Value,
 }
 
 impl UpdateConfigRequestBody {
+    /// 创建新的请求实例。
     pub fn new(fields: Value) -> Self {
         Self { fields }
     }
@@ -98,12 +103,16 @@ impl UpdateConfigRequestBody {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct UpdateConfigResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `job_id` 字段。
     pub job_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `result` 字段。
     pub result: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `success` 字段。
     pub success: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

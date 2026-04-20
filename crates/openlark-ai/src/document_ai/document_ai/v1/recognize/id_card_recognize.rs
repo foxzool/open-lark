@@ -34,6 +34,7 @@ impl IdCardRecognizeBody {
 /// 身份证识别响应
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct IdCardRecognizeResponse {
+    /// data 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<IdCardRecognizeResult>,
 }
@@ -90,15 +91,18 @@ pub struct IdCardRecognizeRequest {
 }
 
 impl IdCardRecognizeRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(self, body: IdCardRecognizeBody) -> SDKResult<IdCardRecognizeResponse> {
         self.execute_with_options(body, RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: IdCardRecognizeBody,
@@ -125,6 +129,7 @@ pub struct IdCardRecognizeRequestBuilder {
 }
 
 impl IdCardRecognizeRequestBuilder {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             request: IdCardRecognizeRequest::new(config),
@@ -133,16 +138,19 @@ impl IdCardRecognizeRequestBuilder {
         }
     }
 
+    /// file_token。
     pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
         self.file_token = Some(file_token.into());
         self
     }
 
+    /// 设置 is_async。
     pub fn is_async(mut self, is_async: impl Into<bool>) -> Self {
         self.is_async = Some(is_async.into());
         self
     }
 
+    /// 构建请求体。
     pub fn body(self) -> IdCardRecognizeBody {
         IdCardRecognizeBody {
             file_token: self.file_token.unwrap_or_default(),
@@ -150,11 +158,13 @@ impl IdCardRecognizeRequestBuilder {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<IdCardRecognizeResponse> {
         let body = self.clone().body();
         self.request.execute(body).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

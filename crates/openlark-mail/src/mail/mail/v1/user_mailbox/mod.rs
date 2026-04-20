@@ -1,10 +1,16 @@
 //! 用户邮箱模块
 
+/// 用户邮箱别名模块。
 pub mod alias;
+/// event 模块。
 pub mod event;
+/// 文件夹模块。
 pub mod folder;
+/// 联系人模块。
 pub mod mail_contact;
+/// 消息模块。
 pub mod message;
+/// 规则模块。
 pub mod rule;
 
 use openlark_core::config::Config;
@@ -18,6 +24,7 @@ pub struct UserMailbox {
 }
 
 impl UserMailbox {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailbox_id: impl Into<String>) -> Self {
         Self {
             config,

@@ -22,7 +22,9 @@ use crate::{
 /// - `content`: 消息内容，JSON 字符串格式
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateMessageBody {
+    /// 消息类型，仅支持 text 或 post。
     pub msg_type: String,
+    /// 消息内容，JSON 字符串格式。
     pub content: String,
 }
 
@@ -56,6 +58,7 @@ pub struct UpdateMessageRequest {
 }
 
 impl UpdateMessageRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -77,6 +80,7 @@ impl UpdateMessageRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UpdateMessageBody,

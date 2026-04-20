@@ -22,7 +22,7 @@ pub struct CreateTableRequest {
     table: TableData,
 }
 
-/// 创建数据表响应
+/// 创建数据表响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateTableResponse {
     /// 多维表格数据表的 ID
@@ -42,7 +42,7 @@ impl ApiResponseTrait for CreateTableResponse {
 }
 
 impl CreateTableRequest {
-    /// 创建新增数据表请求
+    /// 创建新的数据表创建请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -51,24 +51,25 @@ impl CreateTableRequest {
         }
     }
 
-    /// 设置应用token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置数据表信息
+    /// 设置数据表信息。
     pub fn table(mut self, table: TableData) -> Self {
         self.table = table;
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateTableResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -182,6 +183,7 @@ pub struct TableData {
 }
 
 impl TableData {
+    /// 创建仅包含名称的数据表配置。
     pub fn new(name: impl Into<String>) -> Self {
         Self {
             name: name.into(),
@@ -190,13 +192,13 @@ impl TableData {
         }
     }
 
-    /// 设置默认视图名称
+    /// 设置默认视图名称。
     pub fn with_default_view_name(mut self, view_name: impl Into<String>) -> Self {
         self.default_view_name = Some(view_name.into());
         self
     }
 
-    /// 设置初始字段
+    /// 设置初始字段。
     pub fn with_fields(mut self, fields: Vec<TableField>) -> Self {
         self.fields = Some(fields);
         self
@@ -283,6 +285,7 @@ mod tests {
 }
 
 impl TableField {
+    /// 创建字段配置。
     pub fn new(name: impl Into<String>, field_type: i32) -> Self {
         Self {
             field_name: name.into(),

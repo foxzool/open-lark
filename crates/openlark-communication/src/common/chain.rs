@@ -56,12 +56,15 @@ use crate::im::v1::{
 #[cfg(feature = "im")]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MessageRecipient {
+    /// 接收者 ID。
     pub receive_id: String,
+    /// 接收者 ID 类型。
     pub receive_id_type: ReceiveIdType,
 }
 
 #[cfg(feature = "im")]
 impl MessageRecipient {
+    /// 使用指定接收者 ID 和类型创建 helper。
     pub fn new(receive_id: impl Into<String>, receive_id_type: ReceiveIdType) -> Self {
         Self {
             receive_id: receive_id.into(),
@@ -69,18 +72,22 @@ impl MessageRecipient {
         }
     }
 
+    /// 创建使用 `open_id` 的接收者。
     pub fn open_id(receive_id: impl Into<String>) -> Self {
         Self::new(receive_id, ReceiveIdType::OpenId)
     }
 
+    /// 创建使用 `user_id` 的接收者。
     pub fn user_id(receive_id: impl Into<String>) -> Self {
         Self::new(receive_id, ReceiveIdType::UserId)
     }
 
+    /// 创建使用邮箱的接收者。
     pub fn email(receive_id: impl Into<String>) -> Self {
         Self::new(receive_id, ReceiveIdType::Email)
     }
 
+    /// 创建使用群 ID 的接收者。
     pub fn chat_id(receive_id: impl Into<String>) -> Self {
         Self::new(receive_id, ReceiveIdType::ChatId)
     }
@@ -92,13 +99,17 @@ impl MessageRecipient {
 #[cfg(feature = "im")]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PostMessage {
+    /// 语言区域。
     pub locale: String,
+    /// 标题。
     pub title: String,
+    /// 文本内容。
     pub text: String,
 }
 
 #[cfg(feature = "im")]
 impl PostMessage {
+    /// 创建中文富文本消息 helper。
     pub fn zh_cn(title: impl Into<String>, text: impl Into<String>) -> Self {
         Self {
             locale: "zh_cn".to_string(),
@@ -135,12 +146,15 @@ impl PostMessage {
 #[cfg(feature = "im")]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ReplyTarget {
+    /// 目标消息 ID。
     pub message_id: String,
+    /// 是否以话题形式回复。
     pub reply_in_thread: bool,
 }
 
 #[cfg(feature = "im")]
 impl ReplyTarget {
+    /// 创建普通回复目标。
     pub fn direct(message_id: impl Into<String>) -> Self {
         Self {
             message_id: message_id.into(),
@@ -148,6 +162,7 @@ impl ReplyTarget {
         }
     }
 
+    /// 创建话题内回复目标。
     pub fn in_thread(message_id: impl Into<String>) -> Self {
         Self {
             message_id: message_id.into(),
@@ -163,13 +178,17 @@ impl ReplyTarget {
 #[cfg(feature = "im")]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MediaImageUpload {
+    /// 图片用途类型。
     pub image_type: ImageType,
+    /// 文件名。
     pub file_name: Option<String>,
+    /// 图片二进制内容。
     pub bytes: Vec<u8>,
 }
 
 #[cfg(feature = "im")]
 impl MediaImageUpload {
+    /// 使用图片字节创建上传 helper。
     pub fn new(bytes: Vec<u8>) -> Self {
         Self {
             image_type: ImageType::Message,
@@ -178,11 +197,13 @@ impl MediaImageUpload {
         }
     }
 
+    /// 将图片类型切换为头像。
     pub fn avatar(mut self) -> Self {
         self.image_type = ImageType::Avatar;
         self
     }
 
+    /// 设置上传文件名。
     pub fn file_name(mut self, file_name: impl Into<String>) -> Self {
         self.file_name = Some(file_name.into());
         self
@@ -195,14 +216,19 @@ impl MediaImageUpload {
 #[cfg(feature = "im")]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MediaFileUpload {
+    /// 文件名。
     pub file_name: String,
+    /// 文件类型。
     pub file_type: String,
+    /// 时长，通常用于音视频。
     pub duration: Option<i32>,
+    /// 文件二进制内容。
     pub bytes: Vec<u8>,
 }
 
 #[cfg(feature = "im")]
 impl MediaFileUpload {
+    /// 使用文件名和内容创建上传 helper。
     pub fn new(file_name: impl Into<String>, bytes: Vec<u8>) -> Self {
         let file_name = file_name.into();
         let file_type = infer_file_type(&file_name);
@@ -214,11 +240,13 @@ impl MediaFileUpload {
         }
     }
 
+    /// 显式覆盖文件类型。
     pub fn file_type(mut self, file_type: impl Into<String>) -> Self {
         self.file_type = file_type.into();
         self
     }
 
+    /// 设置媒体时长。
     pub fn duration(mut self, duration: i32) -> Self {
         self.duration = Some(duration);
         self
@@ -231,10 +259,14 @@ impl MediaFileUpload {
 #[cfg(feature = "contact")]
 #[derive(Debug, Clone, serde::Deserialize, PartialEq, Eq)]
 pub struct UserLookupItem {
+    /// 用户名称。
     pub name: String,
+    /// 用户 open_id。
     pub open_id: String,
+    /// 用户 user_id。
     #[serde(default)]
     pub user_id: Option<String>,
+    /// 用户所在部门 ID 列表。
     #[serde(default)]
     pub department_ids: Vec<String>,
 }
@@ -245,18 +277,26 @@ pub struct UserLookupItem {
 #[cfg(feature = "im")]
 #[derive(Debug, Clone, serde::Deserialize, PartialEq, Eq)]
 pub struct ChatLookupItem {
+    /// 群 ID。
     pub chat_id: String,
+    /// 群名称。
     pub name: String,
+    /// 群描述。
     #[serde(default)]
     pub description: Option<String>,
+    /// 群主 ID。
     #[serde(default)]
     pub owner_id: Option<String>,
+    /// 群主 ID 类型。
     #[serde(default)]
     pub owner_id_type: Option<String>,
+    /// 是否外部群。
     #[serde(default)]
     pub external: bool,
+    /// 租户 key。
     #[serde(default)]
     pub tenant_key: Option<String>,
+    /// 群状态。
     #[serde(default)]
     pub chat_status: Option<String>,
 }
@@ -289,16 +329,20 @@ pub struct CommunicationClient {
     config: Arc<Config>,
 
     #[cfg(feature = "im")]
+    /// IM helper 入口。
     pub im: ImClient,
 
     #[cfg(feature = "contact")]
+    /// 通讯录 helper 入口。
     pub contact: ContactClient,
 
     #[cfg(feature = "moments")]
+    /// Moments helper 入口。
     pub moments: MomentsClient,
 }
 
 impl CommunicationClient {
+    /// 使用配置创建 communication 链式入口。
     pub fn new(config: Config) -> Self {
         let config = Arc::new(config);
         Self {
@@ -312,12 +356,14 @@ impl CommunicationClient {
         }
     }
 
+    /// 返回底层共享配置。
     pub fn config(&self) -> &Config {
         &self.config
     }
 }
 
 #[cfg(feature = "im")]
+/// IM 链式 helper 入口。
 #[derive(Debug, Clone)]
 pub struct ImClient {
     config: Arc<Config>,
@@ -329,6 +375,7 @@ impl ImClient {
         Self { config }
     }
 
+    /// 返回底层共享配置。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -685,6 +732,7 @@ fn find_unique_chat_by_name(chats: &[ChatLookupItem], name: &str) -> SDKResult<C
 }
 
 #[cfg(feature = "contact")]
+/// 通讯录链式 helper 入口。
 #[derive(Debug, Clone)]
 pub struct ContactClient {
     config: Arc<Config>,
@@ -696,6 +744,7 @@ impl ContactClient {
         Self { config }
     }
 
+    /// 返回底层共享配置。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -749,6 +798,7 @@ impl ContactClient {
 }
 
 #[cfg(feature = "moments")]
+/// Moments 链式 helper 入口。
 #[derive(Debug, Clone)]
 pub struct MomentsClient {
     config: Arc<Config>,
@@ -760,6 +810,7 @@ impl MomentsClient {
         Self { config }
     }
 
+    /// 返回底层共享配置。
     pub fn config(&self) -> &Config {
         &self.config
     }

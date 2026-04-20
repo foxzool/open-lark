@@ -90,6 +90,7 @@ impl ApiResponseTrait for ListFilesResponse {
 }
 
 impl ListFilesRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -102,41 +103,49 @@ impl ListFilesRequest {
         }
     }
 
+    /// 设置 `folder_token`。
     pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
         self.folder_token = Some(folder_token.into());
         self
     }
 
+    /// 设置 `page_size`。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置 `page_token`。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 设置 `order_by`。
     pub fn order_by(mut self, order_by: impl Into<String>) -> Self {
         self.order_by = Some(order_by.into());
         self
     }
 
+    /// 设置 `direction`。
     pub fn direction(mut self, direction: impl Into<String>) -> Self {
         self.direction = Some(direction.into());
         self
     }
 
+    /// 设置 `user_id_type`。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListFilesResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

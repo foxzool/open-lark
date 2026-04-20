@@ -10,6 +10,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// Get Mailbox Message Request。
 #[derive(Debug, Clone)]
 pub struct GetMailboxMessageRequest {
     config: Arc<Config>,
@@ -17,8 +18,10 @@ pub struct GetMailboxMessageRequest {
     message_id: String,
 }
 
+/// Get Mailbox Message Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetMailboxMessageResponse {
+    /// 响应数据。
     pub data: Option<MessageData>,
 }
 
@@ -28,14 +31,19 @@ impl ApiResponseTrait for GetMailboxMessageResponse {
     }
 }
 
+/// Message Data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MessageData {
+    /// 消息 ID。
     pub message_id: String,
+    /// subject 字段。
     pub subject: String,
+    /// body 字段。
     pub body: String,
 }
 
 impl GetMailboxMessageRequest {
+    /// 创建新的实例。
     pub fn new(
         config: Arc<Config>,
         user_mailbox_id: impl Into<String>,
@@ -48,10 +56,12 @@ impl GetMailboxMessageRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetMailboxMessageResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

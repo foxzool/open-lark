@@ -47,7 +47,7 @@ pub struct DeleteViewRequest {
 }
 
 impl DeleteViewRequest {
-    /// 创建删除视图请求
+    /// 创建新的视图删除请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -57,29 +57,30 @@ impl DeleteViewRequest {
         }
     }
 
-    /// 设置应用token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置数据表ID
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
-    /// 设置视图ID
+    /// 设置视图 ID。
     pub fn view_id(mut self, view_id: String) -> Self {
         self.view_id = view_id;
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<DeleteViewResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -112,7 +113,7 @@ impl DeleteViewRequest {
     }
 }
 
-/// 删除视图响应
+/// 删除视图响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteViewResponse {}
 

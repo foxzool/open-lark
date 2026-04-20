@@ -34,6 +34,7 @@ pub struct UpdateCardElementRequest {
 }
 
 impl UpdateCardElementRequest {
+    /// 创建新的更新组件请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,

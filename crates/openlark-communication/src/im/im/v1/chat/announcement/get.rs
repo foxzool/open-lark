@@ -38,6 +38,7 @@ pub struct GetChatAnnouncementRequest {
 }
 
 impl GetChatAnnouncementRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -46,21 +47,25 @@ impl GetChatAnnouncementRequest {
         }
     }
 
+    /// 群 ID（路径参数）。
     pub fn chat_id(mut self, chat_id: impl Into<String>) -> Self {
         self.chat_id = chat_id.into();
         self
     }
 
+    /// 用户 ID 类型（查询参数）。
     pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
         self.user_id_type = Some(user_id_type);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetChatAnnouncementResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

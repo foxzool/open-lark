@@ -21,12 +21,24 @@ pub struct CreateTasklistBody {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type")]
 pub enum TasklistIcon {
+    /// 默认图标。
     #[serde(rename = "default")]
-    Default { index: i32 },
+    Default {
+        /// 默认图标索引。
+        index: i32,
+    },
+    /// Emoji 图标。
     #[serde(rename = "emoji")]
-    Emoji { emoji: String },
+    Emoji {
+        /// Emoji 文本。
+        emoji: String,
+    },
+    /// 图片图标。
     #[serde(rename = "image")]
-    Image { image_key: String },
+    Image {
+        /// 图片资源 key。
+        image_key: String,
+    },
 }
 
 /// 更新任务清单请求体

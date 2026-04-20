@@ -17,8 +17,11 @@ use crate::{
 /// 移除用户组成员请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RemoveGroupMemberBody {
+    /// 用户组成员类型。
     pub member_type: String,
+    /// 用户 ID。
     pub member_id: String,
+    /// 用户 ID 类型。
     pub member_id_type: String,
 }
 
@@ -49,6 +52,7 @@ pub struct RemoveGroupMemberRequest {
 }
 
 impl RemoveGroupMemberRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -80,6 +84,9 @@ impl RemoveGroupMemberRequest {
         .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         member_id_type: UserIdType,

@@ -18,6 +18,7 @@ pub struct UpdateMailGroupRequest {
 }
 
 impl UpdateMailGroupRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mail_group_id: String) -> Self {
         Self {
             config,
@@ -26,21 +27,25 @@ impl UpdateMailGroupRequest {
         }
     }
 
+    /// description。
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.body.description = Some(description.into());
         self
     }
 
+    /// only admins send。
     pub fn only_admins_send(mut self, only_admins_send: bool) -> Self {
         self.body.only_admins_send = Some(only_admins_send);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UpdateMailGroupResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

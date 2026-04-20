@@ -101,6 +101,7 @@ pub struct CreateResponse {
     pub data: Option<CreateResponseData>,
 }
 
+/// `CreateResponseData`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateResponseData {
     /// 员工 ID

@@ -13,11 +13,14 @@ use crate::{
 
 /// 修改标签请求
 pub struct PatchTagRequest {
+    /// 配置信息。
     config: Config,
+    /// 标签 ID。
     tag_id: String,
 }
 
 impl PatchTagRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -41,6 +44,8 @@ impl PatchTagRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: serde_json::Value,

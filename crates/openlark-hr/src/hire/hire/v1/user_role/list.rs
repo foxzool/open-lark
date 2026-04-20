@@ -15,6 +15,7 @@ use std::collections::HashMap;
 
 use crate::hire::hire::common_models::{I18nText, IdNameObject};
 
+/// `ListRequest` 请求。
 #[derive(Debug, Clone)]
 pub struct ListRequest {
     config: Config,
@@ -28,6 +29,7 @@ pub struct ListRequest {
 }
 
 impl ListRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -41,46 +43,55 @@ impl ListRequest {
         }
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置 `user_id`。
     pub fn user_id(mut self, user_id: impl Into<String>) -> Self {
         self.user_id = Some(user_id.into());
         self
     }
 
+    /// 设置 `role_id`。
     pub fn role_id(mut self, role_id: impl Into<String>) -> Self {
         self.role_id = Some(role_id.into());
         self
     }
 
+    /// 设置 `update_start_time`。
     pub fn update_start_time(mut self, update_start_time: impl Into<String>) -> Self {
         self.update_start_time = Some(update_start_time.into());
         self
     }
 
+    /// 设置 `update_end_time`。
     pub fn update_end_time(mut self, update_end_time: impl Into<String>) -> Self {
         self.update_end_time = Some(update_end_time.into());
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -123,51 +134,71 @@ impl ListRequest {
     }
 }
 
+/// `ScopeRule`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ScopeRule {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `rule_type` 字段。
     pub rule_type: Option<i32>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `BusinessManagementScope`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct BusinessManagementScope {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `entity` 字段。
     pub entity: Option<IdNameObject>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `scope_rule` 字段。
     pub scope_rule: Option<ScopeRule>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `UserRoleItem`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct UserRoleItem {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `user_id` 字段。
     pub user_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `role_id` 字段。
     pub role_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `modify_time` 字段。
     pub modify_time: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `role_name` 字段。
     pub role_name: Option<I18nText>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `role_description` 字段。
     pub role_description: Option<I18nText>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `business_management_scopes` 字段。
     pub business_management_scopes: Option<Vec<BusinessManagementScope>>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `ListResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ListResponse {
     #[serde(default)]
+    /// 结果项列表。
     pub items: Vec<UserRoleItem>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 下一页分页标记。
     pub page_token: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 是否还有更多结果。
     pub has_more: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

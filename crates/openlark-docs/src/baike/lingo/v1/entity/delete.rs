@@ -32,6 +32,7 @@ pub struct DeleteEntityRequest {
 }
 
 impl DeleteEntityRequest {
+    /// 创建新的实例。
     pub fn new(config: Config, entity_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -53,10 +54,12 @@ impl DeleteEntityRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<DeleteEntityResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<DeleteEntityResp> {
         validate_required!(self.entity_id, "entity_id 不能为空");
 

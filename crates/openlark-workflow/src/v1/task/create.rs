@@ -12,29 +12,35 @@ use std::sync::Arc;
 
 /// 创建任务请求体（v1）
 #[derive(Debug, Clone, Serialize, Default)]
+/// 创建任务请求体。
 pub struct CreateTaskBodyV1 {
     /// 任务标题
     pub summary: String,
 
     /// 任务描述
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 任务描述。
     pub description: Option<String>,
 
     /// 任务开始时间
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 任务开始时间。
     pub start: Option<String>,
 
     /// 任务截止时间
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 任务截止时间。
     pub due: Option<String>,
 
     /// 任务优先级（1-5）
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 任务优先级。
     pub priority: Option<i32>,
 }
 
 /// 创建任务响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 创建任务响应。
 pub struct CreateTaskResponseV1 {
     /// 任务 GUID
     pub task_guid: String,
@@ -45,12 +51,14 @@ pub struct CreateTaskResponseV1 {
 
 /// 创建任务请求（v1）
 #[derive(Debug, Clone)]
+/// 创建任务请求构建器。
 pub struct CreateTaskRequestV1 {
     config: Arc<Config>,
     body: CreateTaskBodyV1,
 }
 
 impl CreateTaskRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>) -> Self {
         Self {
             config,

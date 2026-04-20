@@ -1,3 +1,4 @@
+/// Board v1 模块。
 pub mod v1;
 
 // v1 模块显式导出

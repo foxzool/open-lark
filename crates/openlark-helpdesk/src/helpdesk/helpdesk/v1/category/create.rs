@@ -42,6 +42,7 @@ impl CreateCategoryBody {
 /// 创建知识库分类响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateCategoryResponse {
+    /// 响应数据。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<CreateCategoryResult>,
 }

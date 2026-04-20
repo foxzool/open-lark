@@ -16,6 +16,7 @@
 
 /// AILY 会话管理 v1
 pub const AILY_V1_SESSIONS: &str = "/open-apis/aily/v1/sessions";
+/// 端点路径常量。
 pub const AILY_V1_SESSION: &str = "/open-apis/aily/v1/sessions/{session_id}";
 
 /// AILY 消息管理 v1
@@ -23,14 +24,19 @@ pub const AILY_V1_MESSAGES: &str = "/open-apis/aily/v1/sessions/{session_id}/mes
 
 /// AILY 运行管理 v1
 pub const AILY_V1_RUNS: &str = "/open-apis/aily/v1/sessions/{session_id}/runs";
+/// 端点路径常量。
 pub const AILY_V1_RUN: &str = "/open-apis/aily/v1/sessions/{session_id}/runs/{run_id}";
+/// 端点路径常量。
 pub const AILY_V1_RUN_CANCEL: &str =
     "/open-apis/aily/v1/sessions/{session_id}/runs/{run_id}/cancel";
 
 /// AILY 数据资产管理 v1
 pub const AILY_V1_DATA_ASSETS: &str = "/open-apis/aily/v1/apps/{app_id}/data_assets";
+/// 端点路径常量。
 pub const AILY_V1_DATA_ASSET: &str = "/open-apis/aily/v1/apps/{app_id}/data_assets/{data_asset_id}";
+/// 端点路径常量。
 pub const AILY_V1_DATA_ASSET_TAGS: &str = "/open-apis/aily/v1/apps/{app_id}/data_asset_tags";
+/// 端点路径常量。
 pub const AILY_V1_UPLOAD_FILE: &str = "/open-apis/aily/v1/apps/{app_id}/data_assets/upload_file";
 
 /// AILY 知识问答 v1
@@ -38,7 +44,9 @@ pub const AILY_V1_KNOWLEDGE_ASK: &str = "/open-apis/aily/v1/apps/{app_id}/knowle
 
 /// AILY 技能管理 v1
 pub const AILY_V1_SKILLS: &str = "/open-apis/aily/v1/apps/{app_id}/skills";
+/// 端点路径常量。
 pub const AILY_V1_SKILL: &str = "/open-apis/aily/v1/apps/{app_id}/skills/{skill_id}";
+/// 端点路径常量。
 pub const AILY_V1_SKILL_START: &str = "/open-apis/aily/v1/apps/{app_id}/skills/{skill_id}/start";
 
 #[cfg(test)]

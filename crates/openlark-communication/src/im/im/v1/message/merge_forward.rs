@@ -61,6 +61,7 @@ pub struct MergeForwardMessageRequest {
 }
 
 impl MergeForwardMessageRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -89,6 +90,7 @@ impl MergeForwardMessageRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: MergeForwardMessageBody,

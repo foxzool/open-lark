@@ -34,14 +34,20 @@ use crate::{
 ///     .page_size(50);
 /// ```
 pub struct ListRoleMembersRequest {
+    /// 配置信息。
     config: Config,
+    /// 角色 ID。
     role_id: String,
+    /// 分页大小。
     page_size: Option<i32>,
+    /// 分页标记。
     page_token: Option<String>,
+    /// 用户 ID 类型。
     user_id_type: Option<UserIdType>,
 }
 
 impl ListRoleMembersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -84,6 +90,7 @@ impl ListRoleMembersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

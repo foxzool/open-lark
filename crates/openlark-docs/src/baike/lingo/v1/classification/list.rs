@@ -43,6 +43,7 @@ pub struct ListClassificationRequest {
 }
 
 impl ListClassificationRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -70,10 +71,12 @@ impl ListClassificationRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListClassificationResp> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

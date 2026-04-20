@@ -29,6 +29,7 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `interview_record_id`。
     pub fn interview_record_id(mut self, interview_record_id: String) -> Self {
         self.interview_record_id = interview_record_id;
         self
@@ -40,6 +41,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

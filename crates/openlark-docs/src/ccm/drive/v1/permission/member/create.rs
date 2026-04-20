@@ -51,6 +51,7 @@ struct CreatePermissionMemberRequestBody {
 }
 
 impl CreatePermissionMemberRequest {
+    /// 创建新的添加协作者请求。
     /// 创建添加协作者请求
     ///
     /// # 参数
@@ -102,11 +103,13 @@ impl CreatePermissionMemberRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreatePermissionMemberResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

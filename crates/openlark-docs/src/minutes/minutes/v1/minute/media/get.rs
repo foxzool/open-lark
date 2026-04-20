@@ -12,6 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::{api_endpoints::MinutesApiV1, api_utils::*};
 
+/// 下载妙记音视频文件请求。
 #[derive(Debug, Clone)]
 pub struct GetMinuteMediaRequest {
     config: Config,
@@ -19,6 +20,7 @@ pub struct GetMinuteMediaRequest {
 }
 
 impl GetMinuteMediaRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -26,16 +28,19 @@ impl GetMinuteMediaRequest {
         }
     }
 
+    /// 设置妙记 token。
     pub fn minute_token(mut self, minute_token: impl Into<String>) -> Self {
         self.minute_token = Some(minute_token.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetMinuteMediaResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -131,8 +136,10 @@ mod tests {
     }
 }
 
+/// 下载妙记音视频文件响应 data。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetMinuteMediaResponse {
+    /// 音视频下载链接。
     pub download_url: String,
 }
 

@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 
 use super::models::Record;
 
-/// 批量获取记录请求
+/// 批量获取记录请求。
 #[derive(Debug, Clone)]
 pub struct BatchGetRecordRequest {
     config: Config,
@@ -26,6 +26,7 @@ pub struct BatchGetRecordRequest {
 }
 
 impl BatchGetRecordRequest {
+    /// 创建新的批量获取记录请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -38,41 +39,49 @@ impl BatchGetRecordRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
+    /// 设置记录 ID 列表。
     pub fn record_ids(mut self, record_ids: Vec<String>) -> Self {
         self.record_ids = record_ids;
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: String) -> Self {
         self.user_id_type = Some(user_id_type);
         self
     }
 
+    /// 设置是否返回分享链接。
     pub fn with_shared_url(mut self, with_shared_url: bool) -> Self {
         self.with_shared_url = Some(with_shared_url);
         self
     }
 
+    /// 设置是否返回自动计算字段。
     pub fn automatic_fields(mut self, automatic_fields: bool) -> Self {
         self.automatic_fields = Some(automatic_fields);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchGetRecordResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -108,6 +117,7 @@ impl BatchGetRecordRequest {
     }
 }
 
+/// 批量获取记录请求体（内部使用）。
 #[derive(Serialize)]
 struct BatchGetRecordRequestBody {
     record_ids: Vec<String>,
@@ -119,13 +129,16 @@ struct BatchGetRecordRequestBody {
     automatic_fields: Option<bool>,
 }
 
-/// 批量获取记录响应
+/// 批量获取记录响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchGetRecordResponse {
+    /// 成功获取到的记录列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub records: Option<Vec<Record>>,
+    /// 无权限读取的记录 ID 列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forbidden_record_ids: Option<Vec<String>>,
+    /// 不存在的记录 ID 列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub absent_record_ids: Option<Vec<String>>,
 }

@@ -13,6 +13,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
+/// `GetRequest` 请求。
 #[derive(Debug, Clone)]
 pub struct GetRequest {
     config: Config,
@@ -22,6 +23,7 @@ pub struct GetRequest {
 }
 
 impl GetRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -31,26 +33,31 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `application_id`。
     pub fn application_id(mut self, application_id: impl Into<String>) -> Self {
         self.application_id = application_id.into();
         self
     }
 
+    /// 设置 `interview_record_id`。
     pub fn interview_record_id(mut self, interview_record_id: impl Into<String>) -> Self {
         self.interview_record_id = Some(interview_record_id.into());
         self
     }
 
+    /// 设置 `language`。
     pub fn language(mut self, language: i32) -> Self {
         self.language = Some(language);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -78,27 +85,37 @@ impl GetRequest {
     }
 }
 
+/// `InterviewRecordAttachment`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct InterviewRecordAttachment {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 标识。
     pub id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `url` 字段。
     pub url: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 名称。
     pub name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `mime` 字段。
     pub mime: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `create_time` 字段。
     pub create_time: Option<String>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `GetResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `attachment` 字段。
     pub attachment: Option<InterviewRecordAttachment>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

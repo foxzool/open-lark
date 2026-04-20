@@ -1,6 +1,7 @@
 //! Text translation module
 
 pub mod detect;
+/// translate 模块。
 pub mod translate;
 
 use openlark_core::config::Config;
@@ -14,6 +15,7 @@ pub struct Text {
 }
 
 impl Text {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }

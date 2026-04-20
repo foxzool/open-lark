@@ -12,12 +12,15 @@ use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_SESSION
 /// 创建会话请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateSessionBody {
+    /// 会话名称。
     pub name: String,
+    /// 会话描述。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 }
 
 impl CreateSessionBody {
+    /// 创建新的会话请求体。
     pub fn new(name: impl Into<String>) -> Self {
         Self {
             name: name.into(),
@@ -25,6 +28,7 @@ impl CreateSessionBody {
         }
     }
 
+    /// 设置会话描述。
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.description = Some(description.into());
         self
@@ -57,6 +61,7 @@ pub struct CreateSessionRequest {
 }
 
 impl CreateSessionRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -69,6 +74,7 @@ impl CreateSessionRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: CreateSessionBody,

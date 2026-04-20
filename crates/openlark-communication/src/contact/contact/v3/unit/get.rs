@@ -12,12 +12,15 @@ use crate::{
 };
 
 /// 获取单位信息请求
+///
+/// 用于查询单个单位的详情。
 pub struct GetUnitRequest {
     config: Config,
     unit_id: String,
 }
 
 impl GetUnitRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -39,6 +42,7 @@ impl GetUnitRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

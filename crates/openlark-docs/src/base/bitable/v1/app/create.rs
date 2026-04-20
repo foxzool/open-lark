@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 use super::models::{App, CreateAppRequest as CreateAppRequestBody};
 use super::AppService;
 
-/// 创建多维表格请求
+/// 创建多维表格请求。
 pub struct CreateAppRequest {
     /// 应用名称
     name: String,
@@ -39,6 +39,7 @@ impl ApiResponseTrait for CreateAppResponse {
 }
 
 impl CreateAppRequest {
+    /// 创建新的多维表格创建请求。
     /// 创建新增多维表格请求
     pub fn new(config: Config) -> Self {
         Self {
@@ -67,12 +68,13 @@ impl CreateAppRequest {
         self
     }
 
-    /// 执行请求（集成现代化enum+builder API端点系统）
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateAppResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -108,7 +110,7 @@ impl CreateAppRequest {
 }
 
 impl AppService {
-    /// 创建新增多维表格请求
+    /// 创建新增多维表格请求 builder。
     pub fn create_builder(&self, name: impl Into<String>) -> CreateAppRequest {
         CreateAppRequest::new(self.config.clone()).name(name)
     }

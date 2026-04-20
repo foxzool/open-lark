@@ -55,6 +55,7 @@ pub struct UpdateRecordRequest {
 }
 
 impl UpdateRecordRequest {
+    /// 创建新的记录更新请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -67,21 +68,25 @@ impl UpdateRecordRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
+    /// 设置记录 ID。
     pub fn record_id(mut self, record_id: String) -> Self {
         self.record_id = record_id;
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: String) -> Self {
         self.user_id_type = Some(user_id_type);
         self
@@ -93,16 +98,19 @@ impl UpdateRecordRequest {
         self
     }
 
+    /// 设置更新字段。
     pub fn fields(mut self, fields: Value) -> Self {
         self.fields = fields;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UpdateRecordResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -138,12 +146,13 @@ impl UpdateRecordRequest {
     }
 }
 
+/// 更新记录请求体（内部使用）。
 #[derive(Serialize)]
 struct UpdateRecordRequestBody {
     fields: Value,
 }
 
-/// 更新记录响应
+/// 更新记录响应。
 ///
 /// 包含更新后记录的完整信息，包括记录ID、更新后的字段值以及更新元数据。
 ///

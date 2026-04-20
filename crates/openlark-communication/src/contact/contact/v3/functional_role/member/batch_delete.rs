@@ -18,15 +18,18 @@ use crate::{
 /// 删除角色下的成员请求体
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchDeleteMembersBody {
+    /// 待删除的成员 ID 列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub members: Option<Vec<String>>,
 }
 
 impl BatchDeleteMembersBody {
+    /// 创建空的批量删除成员请求体。
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// 追加一个待删除成员 ID。
     pub fn member(mut self, member_id: impl Into<String>) -> Self {
         self.members
             .get_or_insert_with(Vec::new)
@@ -61,12 +64,16 @@ impl BatchDeleteMembersBody {
 ///     .execute(body).await?;
 /// ```
 pub struct BatchDeleteRoleMembersRequest {
+    /// 配置信息。
     config: Config,
+    /// 角色 ID。
     role_id: String,
+    /// 用户 ID 类型。
     user_id_type: Option<UserIdType>,
 }
 
 impl BatchDeleteRoleMembersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -98,6 +105,7 @@ impl BatchDeleteRoleMembersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: BatchDeleteMembersBody,

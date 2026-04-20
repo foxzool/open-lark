@@ -16,8 +16,11 @@ use crate::endpoints::cardkit_v1_card_element;
 /// 更新组件属性请求体（结构以官方文档为准）
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct PatchCardElementBody {
+    /// 卡片 ID。
     pub card_id: String,
+    /// 组件 ID。
     pub element_id: String,
+    /// 补丁内容。
     pub patch: serde_json::Value,
 }
 
@@ -31,6 +34,7 @@ pub struct PatchCardElementRequest {
 }
 
 impl PatchCardElementRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,

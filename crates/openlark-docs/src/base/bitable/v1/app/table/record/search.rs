@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 
 use super::models::Record;
 
-/// 查询记录请求
+/// 查询记录请求。
 #[derive(Debug, Clone)]
 pub struct SearchRecordRequest {
     config: Config,
@@ -26,6 +26,7 @@ pub struct SearchRecordRequest {
 }
 
 impl SearchRecordRequest {
+    /// 创建新的记录搜索请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -38,26 +39,31 @@ impl SearchRecordRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: String) -> Self {
         self.user_id_type = Some(user_id_type);
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: String) -> Self {
         self.page_token = Some(page_token);
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size.min(500));
         self
@@ -75,26 +81,31 @@ impl SearchRecordRequest {
         self
     }
 
+    /// 设置排序条件。
     pub fn sort(mut self, sort: Vec<SortCondition>) -> Self {
         self.body.sort = Some(sort);
         self
     }
 
+    /// 设置筛选条件。
     pub fn filter(mut self, filter: FilterInfo) -> Self {
         self.body.filter = Some(filter);
         self
     }
 
+    /// 设置是否返回自动计算字段。
     pub fn automatic_fields(mut self, automatic_fields: bool) -> Self {
         self.body.automatic_fields = Some(automatic_fields);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<SearchRecordResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -123,7 +134,7 @@ impl SearchRecordRequest {
         extract_response_data(response, "查询记录")
     }
 
-    /// 获取所有记录（自动处理分页）
+    /// 获取所有记录（自动处理分页）。
     pub async fn fetch_all(mut self) -> SDKResult<Vec<Record>> {
         let mut all_records = Vec::new();
         let mut has_more = true;
@@ -145,6 +156,7 @@ impl SearchRecordRequest {
     }
 }
 
+/// 查询记录请求体（内部使用）。
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct SearchRecordRequestBody {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -159,34 +171,41 @@ pub struct SearchRecordRequestBody {
     automatic_fields: Option<bool>,
 }
 
-/// 排序条件
+/// 排序条件。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SortCondition {
+    /// 字段名。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub field_name: Option<String>,
+    /// 是否降序。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub desc: Option<bool>,
 }
 
-/// 筛选条件
+/// 筛选条件。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FilterInfo {
+    /// 条件连接符。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conjunction: Option<String>,
+    /// 条件列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conditions: Option<Vec<FilterCondition>>,
 }
 
-/// 单个筛选条件
+/// 单个筛选条件。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FilterCondition {
+    /// 字段名。
     pub field_name: String,
+    /// 操作符。
     pub operator: String,
+    /// 比较值列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<Vec<String>>,
 }
 
-/// 查询记录响应
+/// 查询记录响应。
 ///
 /// 包含查询结果列表以及分页信息。
 ///

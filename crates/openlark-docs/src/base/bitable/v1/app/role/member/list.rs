@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 
 use super::models::RoleMemberInfo;
 
-/// 列出协作者请求
+/// 列出协作者请求。
 #[derive(Debug, Clone)]
 pub struct ListRoleMembersRequest {
     config: Config,
@@ -25,6 +25,7 @@ pub struct ListRoleMembersRequest {
 }
 
 impl ListRoleMembersRequest {
+    /// 创建新的协作者列表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -35,30 +36,36 @@ impl ListRoleMembersRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置角色 ID。
     pub fn role_id(mut self, role_id: String) -> Self {
         self.role_id = role_id;
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: String) -> Self {
         self.page_token = Some(page_token);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListRoleMembersResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -98,7 +105,7 @@ impl ListRoleMembersRequest {
     }
 }
 
-/// 列出协作者响应（data）
+/// 列出协作者响应（data）。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListRoleMembersResponse {
     /// 协作者列表

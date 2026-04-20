@@ -46,6 +46,7 @@ pub struct ListClassificationRequest {
 }
 
 impl ListClassificationRequest {
+    /// 创建新的分类列表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -66,10 +67,12 @@ impl ListClassificationRequest {
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListClassificationResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,
@@ -113,8 +116,10 @@ impl ListClassificationRequest {
 /// - `page_token`: 下一页的分页标记
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ListClassificationResponse {
+    /// 分类列表。
     #[serde(default)]
     pub items: Vec<ClassificationItem>,
+    /// 下一页分页标记。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }

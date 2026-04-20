@@ -16,20 +16,27 @@ use crate::{
 /// 更新人员类型请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateEmployeeTypeEnumBody {
+    /// 展示内容。
     pub content: String,
+    /// 枚举类型。
     pub enum_type: i32,
+    /// 枚举状态。
     pub enum_status: i32,
+    /// 国际化内容。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_content: Option<Vec<I18nContent>>,
 }
 
 /// 更新人员类型请求
 pub struct UpdateEmployeeTypeEnumRequest {
+    /// 配置信息。
     config: Config,
+    /// 枚举 ID。
     enum_id: String,
 }
 
 impl UpdateEmployeeTypeEnumRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -54,6 +61,8 @@ impl UpdateEmployeeTypeEnumRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: UpdateEmployeeTypeEnumBody,

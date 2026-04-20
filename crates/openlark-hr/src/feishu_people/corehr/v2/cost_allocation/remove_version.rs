@@ -31,11 +31,13 @@ impl RemoveVersionRequest {
         }
     }
 
+    /// 设置 `version_id`。
     pub fn version_id(mut self, version_id: impl Into<String>) -> Self {
         self.version_id = Some(version_id.into());
         self
     }
 
+    /// 设置请求体。
     pub fn body(mut self, body: Value) -> Self {
         self.body = Some(body);
         self
@@ -47,6 +49,7 @@ impl RemoveVersionRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

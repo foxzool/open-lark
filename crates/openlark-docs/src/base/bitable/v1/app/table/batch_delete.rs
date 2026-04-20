@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::common::api_endpoints::BitableApiV1;
 
-/// 批量删除数据表请求
+/// 批量删除数据表请求。
 #[derive(Debug, Clone)]
 pub struct BatchDeleteTableRequest {
     config: Config,
@@ -23,6 +23,7 @@ pub struct BatchDeleteTableRequest {
 }
 
 impl BatchDeleteTableRequest {
+    /// 创建新的批量删除数据表请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -33,31 +34,37 @@ impl BatchDeleteTableRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: impl Into<String>) -> Self {
         self.app_token = app_token.into();
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
     }
 
+    /// 设置客户端幂等标识。
     pub fn client_token(mut self, client_token: impl Into<String>) -> Self {
         self.client_token = Some(client_token.into());
         self
     }
 
+    /// 设置待删除数据表 ID 列表。
     pub fn table_ids(mut self, table_ids: Vec<String>) -> Self {
         self.table_ids = table_ids;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchDeleteTableResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -94,12 +101,13 @@ impl BatchDeleteTableRequest {
     }
 }
 
+/// 批量删除数据表请求体（内部使用）。
 #[derive(Debug, Serialize)]
 struct BatchDeleteTableRequestBody {
     table_ids: Vec<String>,
 }
 
-/// 批量删除数据表响应（data 通常为空对象 `{}`）
+/// 批量删除数据表响应（data 通常为空对象 `{}`）。
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchDeleteTableResponse {}
 

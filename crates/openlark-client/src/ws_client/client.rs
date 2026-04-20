@@ -236,6 +236,7 @@ impl EventDispatcherHandler {
 const END_POINT_URL: &str = "/callback/ws/endpoint";
 const HEARTBEAT_TIMEOUT: Duration = Duration::from_secs(120);
 
+/// 飞书 WebSocket 客户端。
 pub struct LarkWsClient {
     frame_tx: mpsc::UnboundedSender<Frame>,
     event_rx: mpsc::UnboundedReceiver<WsEvent>,
@@ -245,6 +246,7 @@ pub struct LarkWsClient {
 
 impl LarkWsClient {
     #[cfg(test)]
+    /// 创建一个仅用于测试的客户端实例。
     pub fn new_for_test() -> Self {
         let (frame_tx, _frame_rx) = mpsc::unbounded_channel();
         let (_event_tx, event_rx) = mpsc::unbounded_channel();
@@ -257,6 +259,7 @@ impl LarkWsClient {
         }
     }
 
+    /// 建立 WebSocket 长连接并启动事件处理循环。
     pub async fn open(
         config: std::sync::Arc<crate::config::Config>,
         event_handler: EventDispatcherHandler,
@@ -476,26 +479,35 @@ impl LarkWsClient {
     }
 }
 
+/// WebSocket 端点查询响应。
 #[derive(Debug, Deserialize)]
 pub struct EndPointResponse {
     #[serde(rename = "URL")]
+    /// WebSocket 连接地址。
     pub url: Option<String>,
     #[serde(rename = "ClientConfig")]
+    /// 服务端下发的客户端配置。
     pub client_config: Option<ClientConfig>,
 }
 
+/// 服务端下发的 WebSocket 客户端配置。
 #[derive(Debug, Deserialize, Clone)]
 pub struct ClientConfig {
     #[serde(rename = "ReconnectCount")]
+    /// 允许的最大重连次数。
     pub reconnect_count: i32,
     #[serde(rename = "ReconnectInterval")]
+    /// 重连间隔（秒）。
     pub reconnect_interval: i32,
     #[serde(rename = "ReconnectNonce")]
+    /// 重连随机因子。
     pub reconnect_nonce: i32,
     #[serde(rename = "PingInterval")]
+    /// Ping 心跳间隔（秒）。
     pub ping_interval: i32,
 }
 
+/// WebSocket 客户端结果类型别名。
 pub type WsClientResult<T> = Result<T, WsClientError>;
 
 #[derive(Debug, thiserror::Error)]
@@ -504,23 +516,41 @@ pub type WsClientResult<T> = Result<T, WsClientError>;
 /// 定义WebSocket连接和通信过程中可能出现的各种错误
 pub enum WsClientError {
     #[error("unexpected response")]
+    /// 返回体缺少预期字段。
     UnexpectedResponse,
     #[error("Request error: {0}")]
+    /// 端点查询 HTTP 请求失败。
     RequestError(#[from] reqwest::Error),
     #[error("Url parse error: {0}")]
+    /// WebSocket 地址解析失败。
     UrlParseError(#[from] url::ParseError),
     #[error("Server error: {code}, {message}")]
-    ServerError { code: i32, message: String },
+    /// 服务端返回业务错误。
+    ServerError {
+        /// 服务端错误码。
+        code: i32,
+        /// 服务端错误描述。
+        message: String,
+    },
     #[error("Client error: {code}, {message}")]
-    ClientError { code: i32, message: String },
+    /// 客户端侧参数或状态错误。
+    ClientError {
+        /// 客户端错误码。
+        code: i32,
+        /// 客户端错误描述。
+        message: String,
+    },
     #[error("connection closed")]
+    /// 连接被关闭。
     ConnectionClosed {
         /// The reason the connection was closed
         reason: Option<WsCloseReason>,
     },
     #[error("WebSocket error: {0}")]
+    /// WebSocket 传输错误。
     WsError(Box<tokio_tungstenite::tungstenite::Error>),
     #[error("Prost error: {0}")]
+    /// Protobuf 解码错误。
     ProstError(#[from] prost::DecodeError),
 }
 
@@ -737,7 +767,9 @@ async fn client_loop(
 ///
 /// 定义WebSocket连接中可能接收到的各种事件
 pub enum WsEvent {
+    /// 错误事件。
     Error(WsClientError),
+    /// 数据帧事件。
     Data(Frame),
 }
 

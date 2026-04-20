@@ -93,6 +93,7 @@ pub struct SearchResponse {
     pub data: Option<SearchResponseData>,
 }
 
+/// `SearchResponseData`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SearchResponseData {
     /// 分页标记
@@ -106,6 +107,7 @@ pub struct SearchResponseData {
     pub items: Option<Vec<EmployeeItem>>,
 }
 
+/// `EmployeeItem`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct EmployeeItem {
     /// 员工 ID

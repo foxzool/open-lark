@@ -51,6 +51,7 @@ pub struct RequestDoc {
 }
 
 impl BatchQueryMetaRequest {
+    /// 创建新的实例。
     pub fn new(request_docs: Vec<RequestDoc>) -> Self {
         Self {
             user_id_type: None,
@@ -61,12 +62,14 @@ impl BatchQueryMetaRequest {
         }
     }
 
+    /// 设置 `user_id_type`。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
 
         self
     }
 
+    /// 设置 `with_url`。
     pub fn with_url(mut self, with_url: bool) -> Self {
         self.with_url = Some(with_url);
 

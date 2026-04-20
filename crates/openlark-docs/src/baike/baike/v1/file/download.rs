@@ -15,10 +15,12 @@ use crate::common::api_endpoints::BaikeApiV1;
 /// 下载图片请求
 pub struct DownloadFileRequest {
     config: Config,
+    /// 文件 token。
     file_token: String,
 }
 
 impl DownloadFileRequest {
+    /// 创建新的图片下载请求。
     pub fn new(config: Config, file_token: impl Into<String>) -> Self {
         Self {
             config,

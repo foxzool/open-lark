@@ -1,5 +1,5 @@
+/// 文件点赞接口模块。
 pub mod like;
 
-// 使用通配符导出所有子模块
-// like 模块显式导出
+/// 重新导出文件点赞相关类型。
 pub use like::{FileLike, ListFileLikesRequest, ListFileLikesResponse};

@@ -6,17 +6,23 @@
 
 mod service;
 
+/// 应用管理模块的通用工具与端点定义。
 pub mod common;
 
 #[cfg(feature = "v1")]
+/// 飞书应用 API。
 pub mod application;
 
+/// Workplace 场景相关 API。
 pub mod workplace;
 
+/// 应用管理模块常用预导出。
 pub mod prelude;
 
+/// 应用管理服务统一入口。
 pub use service::ApplicationService;
 
+/// 当前 crate 版本号。
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[cfg(test)]

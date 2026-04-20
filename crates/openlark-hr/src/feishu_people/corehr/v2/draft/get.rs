@@ -29,6 +29,7 @@ impl GetRequest {
         }
     }
 
+    /// 设置 `draft_id`。
     pub fn draft_id(mut self, draft_id: String) -> Self {
         self.draft_id = Some(draft_id);
         self
@@ -40,6 +41,7 @@ impl GetRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

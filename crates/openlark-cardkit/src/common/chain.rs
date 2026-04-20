@@ -12,10 +12,12 @@ use openlark_core::config::Config;
 #[derive(Debug, Clone)]
 pub struct CardkitClient {
     config: Arc<Config>,
+    /// v1 版本客户端入口。
     pub v1: CardkitV1Client,
 }
 
 impl CardkitClient {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         let config = Arc::new(config);
         Self {
@@ -24,6 +26,7 @@ impl CardkitClient {
         }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -33,6 +36,7 @@ impl CardkitClient {
 #[derive(Debug, Clone)]
 pub struct CardkitV1Client {
     config: Arc<Config>,
+    /// card 资源入口。
     pub card: CardResource,
 }
 
@@ -44,6 +48,7 @@ impl CardkitV1Client {
         }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -53,6 +58,7 @@ impl CardkitV1Client {
 #[derive(Debug, Clone)]
 pub struct CardResource {
     config: Arc<Config>,
+    /// element 资源入口。
     pub element: CardElementResource,
 }
 
@@ -64,6 +70,7 @@ impl CardResource {
         }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -145,10 +152,12 @@ impl CardElementResource {
         Self { config }
     }
 
+    /// 返回配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
 
+    /// 执行创建操作。
     pub async fn create(
         &self,
         body: crate::cardkit::cardkit::v1::card::element::create::CreateCardElementBody,
@@ -162,6 +171,7 @@ impl CardElementResource {
         .await
     }
 
+    /// 执行更新操作。
     pub async fn update(
         &self,
         body: crate::cardkit::cardkit::v1::card::element::update::UpdateCardElementBody,
@@ -175,6 +185,7 @@ impl CardElementResource {
         .await
     }
 
+    /// 执行补丁更新操作。
     pub async fn patch(
         &self,
         body: crate::cardkit::cardkit::v1::card::element::patch::PatchCardElementBody,
@@ -188,6 +199,7 @@ impl CardElementResource {
         .await
     }
 
+    /// 设置内容载荷。
     pub async fn content(
         &self,
         body: crate::cardkit::cardkit::v1::card::element::content::UpdateCardElementContentBody,
@@ -201,6 +213,7 @@ impl CardElementResource {
         .await
     }
 
+    /// 执行删除操作。
     pub async fn delete(
         &self,
         body: crate::cardkit::cardkit::v1::card::element::delete::DeleteCardElementBody,

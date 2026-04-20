@@ -16,22 +16,30 @@ use crate::{
 /// 批量成员信息（请求体 members[] 元素）
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MemberListItem {
+    /// 成员 ID。
     pub member_id: String,
+    /// 成员 ID 类型。
     pub member_id_type: String,
+    /// 成员类型。
     pub member_type: String,
 }
 
 /// 批量添加用户组成员请求体
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchAddGroupMembersBody {
+    /// 成员列表。
     pub members: Vec<MemberListItem>,
 }
 
 impl BatchAddGroupMembersBody {
+    /// 创建空的批量添加请求体。
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// 追加一个成员。
+    /// 追加一个成员。
+    /// 追加一个成员。
     pub fn member(
         mut self,
         member_id: impl Into<String>,
@@ -78,6 +86,7 @@ pub struct BatchAddGroupMembersRequest {
 }
 
 impl BatchAddGroupMembersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -102,6 +111,9 @@ impl BatchAddGroupMembersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: BatchAddGroupMembersBody,

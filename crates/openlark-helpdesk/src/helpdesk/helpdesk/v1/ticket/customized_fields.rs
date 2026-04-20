@@ -11,13 +11,16 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// 获取自定义字段请求。
 #[derive(Debug, Clone)]
 pub struct GetCustomizedFieldsRequest {
     config: Arc<Config>,
 }
 
+/// 获取自定义字段响应。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetCustomizedFieldsResponse {
+    /// 响应数据。
     pub data: Option<GetCustomizedFieldsData>,
 }
 
@@ -27,27 +30,36 @@ impl ApiResponseTrait for GetCustomizedFieldsResponse {
     }
 }
 
+/// 自定义字段响应数据。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetCustomizedFieldsData {
+    /// 自定义字段列表。
     pub fields: Vec<CustomizedField>,
 }
 
+/// 自定义字段条目。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CustomizedField {
+    /// 字段 ID。
     pub field_id: String,
+    /// 字段名称。
     pub field_name: String,
+    /// 字段类型。
     pub field_type: String,
 }
 
 impl GetCustomizedFieldsRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetCustomizedFieldsResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

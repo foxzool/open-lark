@@ -54,6 +54,7 @@ pub struct PatchCommentRequest {
 }
 
 impl PatchCommentRequest {
+    /// 创建新的评论解决/恢复请求。
     pub fn new(
         file_token: impl Into<String>,
 
@@ -76,6 +77,7 @@ impl PatchCommentRequest {
         }
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
 

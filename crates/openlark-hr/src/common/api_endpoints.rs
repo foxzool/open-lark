@@ -2420,19 +2420,31 @@ pub enum FeishuPeopleApiV1 {
     /// 更新工时制度
     WorkingHoursTypePatch(String), // working_hours_type_id
 
+    /// `OffboardingQuery` 变体。
     OffboardingQuery,
+    /// `OffboardingSearch` 变体。
     OffboardingSearch,
+    /// `OffboardingSubmit` 变体。
     OffboardingSubmit,
 
+    /// `PersonCreate` 变体。
     PersonCreate,
+    /// `PersonDelete` 变体。
     PersonDelete(String),
+    /// `PersonGet` 变体。
     PersonGet(String),
+    /// `PersonPatch` 变体。
     PersonPatch(String),
+    /// `PersonUpload` 变体。
     PersonUpload,
 
+    /// `PreHireDelete` 变体。
     PreHireDelete(String),
+    /// `PreHireGet` 变体。
     PreHireGet(String),
+    /// `PreHireList` 变体。
     PreHireList,
+    /// `PreHirePatch` 变体。
     PreHirePatch(String),
     /// 获取流程表单数据
     ProcessFormVariableDataGet,
@@ -3045,45 +3057,78 @@ pub enum FeishuPeopleApiV2 {
     /// 搜索员工信息
     EmployeeSearch,
 
+    /// `EmployeesAdditionalJobBatch` 变体。
     EmployeesAdditionalJobBatch,
+    /// `EmployeesAdditionalJobCreate` 变体。
     EmployeesAdditionalJobCreate,
+    /// `EmployeesAdditionalJobDelete` 变体。
     EmployeesAdditionalJobDelete(String),
+    /// `EmployeesAdditionalJobPatch` 变体。
     EmployeesAdditionalJobPatch(String),
 
+    /// `EmployeesBpBatchGet` 变体。
     EmployeesBpBatchGet,
 
+    /// `EmployeesInternationalAssignmentCreate` 变体。
     EmployeesInternationalAssignmentCreate,
+    /// `EmployeesInternationalAssignmentDelete` 变体。
     EmployeesInternationalAssignmentDelete(String),
+    /// `EmployeesInternationalAssignmentList` 变体。
     EmployeesInternationalAssignmentList,
+    /// `EmployeesInternationalAssignmentPatch` 变体。
     EmployeesInternationalAssignmentPatch(String),
 
+    /// `EmployeesJobDataBatchGet` 变体。
     EmployeesJobDataBatchGet,
+    /// `EmployeesJobDataQuery` 变体。
     EmployeesJobDataQuery,
 
+    /// `PersonCreate` 变体。
     PersonCreate,
+    /// `PersonPatch` 变体。
     PersonPatch(String),
 
+    /// `PreHireComplete` 变体。
     PreHireComplete,
+    /// `PreHireCreate` 变体。
     PreHireCreate,
+    /// `PreHireDelete` 变体。
     PreHireDelete(String),
+    /// `PreHirePatch` 变体。
     PreHirePatch(String),
+    /// `PreHireQuery` 变体。
     PreHireQuery,
+    /// `PreHireRestoreFlowInstance` 变体。
     PreHireRestoreFlowInstance,
+    /// `PreHireSearch` 变体。
     PreHireSearch,
+    /// `PreHireTransformOnboardingTask` 变体。
     PreHireTransformOnboardingTask,
+    /// `PreHireTransitTask` 变体。
     PreHireTransitTask,
+    /// `PreHireWithdrawOnboarding` 变体。
     PreHireWithdrawOnboarding,
 
+    /// `OffboardingEdit` 变体。
     OffboardingEdit,
+    /// `OffboardingRevoke` 变体。
     OffboardingRevoke,
+    /// `OffboardingSubmitV2` 变体。
     OffboardingSubmitV2,
 
+    /// `ProbationEnableDisableAssessment` 变体。
     ProbationEnableDisableAssessment,
+    /// `ProbationSearch` 变体。
     ProbationSearch,
+    /// `ProbationSubmit` 变体。
     ProbationSubmit,
+    /// `ProbationWithdraw` 变体。
     ProbationWithdraw,
+    /// `ProbationAssessmentCreate` 变体。
     ProbationAssessmentCreate,
+    /// `ProbationAssessmentPatch` 变体。
     ProbationAssessmentPatch(String),  // assessment_id
+    /// `ProbationAssessmentDelete` 变体。
     ProbationAssessmentDelete(String), // assessment_id
 
     // === location 资源 (1个) ===
@@ -3319,8 +3364,10 @@ impl FeishuPeopleApiV2 {
     }
 }
 
+/// `CorehrApiV1` 类型别名。
 pub type CorehrApiV1 = FeishuPeopleApiV1;
 
+/// `CorehrApiV2` 类型别名。
 pub type CorehrApiV2 = FeishuPeopleApiV2;
 
 // ============================================================================

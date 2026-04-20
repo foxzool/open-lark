@@ -23,6 +23,7 @@ pub struct DeleteCommentRequest {
 }
 
 impl DeleteCommentRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_guid: String, comment_guid: String) -> Self {
         Self {
             config,

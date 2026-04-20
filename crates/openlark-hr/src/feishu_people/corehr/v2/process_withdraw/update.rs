@@ -31,11 +31,13 @@ impl UpdateRequest {
         }
     }
 
+    /// 设置 `process_withdraw_id`。
     pub fn process_withdraw_id(mut self, process_withdraw_id: impl Into<String>) -> Self {
         self.process_withdraw_id = Some(process_withdraw_id.into());
         self
     }
 
+    /// 设置请求体。
     pub fn body(mut self, body: Value) -> Self {
         self.body = Some(body);
         self
@@ -47,6 +49,7 @@ impl UpdateRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

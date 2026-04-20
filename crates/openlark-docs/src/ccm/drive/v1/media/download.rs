@@ -26,6 +26,7 @@ pub struct DownloadMediaRequest {
 }
 
 impl DownloadMediaRequest {
+    /// 创建新的素材下载请求。
     pub fn new(config: Config, file_token: impl Into<String>) -> Self {
         Self {
             config,
@@ -35,11 +36,13 @@ impl DownloadMediaRequest {
         }
     }
 
+    /// 设置扩展参数。
     pub fn extra(mut self, extra: impl Into<String>) -> Self {
         self.extra = Some(extra.into());
         self
     }
 
+    /// 设置 Range 请求头。
     pub fn range(mut self, range: impl Into<String>) -> Self {
         self.range = Some(range.into());
         self

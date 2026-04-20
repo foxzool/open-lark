@@ -345,24 +345,31 @@ pub use openlark_meeting::MeetingClient;
 pub use openlark_ai::AiClient;
 
 #[cfg(feature = "workflow")]
+/// 工作流服务客户端别名。
 pub type WorkflowClient = openlark_workflow::WorkflowService;
 
 #[cfg(feature = "platform")]
+/// 平台服务客户端别名。
 pub type PlatformClient = openlark_platform::PlatformService;
 
 #[cfg(feature = "application")]
+/// 应用服务客户端别名。
 pub type ApplicationClient = openlark_application::ApplicationService;
 
 #[cfg(feature = "helpdesk")]
+/// 帮助台服务客户端别名。
 pub type HelpdeskClient = openlark_helpdesk::HelpdeskService;
 
 #[cfg(feature = "mail")]
+/// 邮件服务客户端别名。
 pub type MailClient = openlark_mail::MailService;
 
 #[cfg(feature = "analytics")]
+/// 分析服务客户端别名。
 pub type AnalyticsClient = openlark_analytics::AnalyticsService;
 
 #[cfg(feature = "user")]
+/// 用户设置服务客户端别名。
 pub type UserClient = openlark_user::UserService;
 
 #[cfg(feature = "security")]

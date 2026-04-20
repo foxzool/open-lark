@@ -45,6 +45,7 @@ pub struct GetPublicPermissionRequest {
 }
 
 impl GetPublicPermissionRequest {
+    /// 创建新的权限查询请求。
     pub fn new(config: Config, token: impl Into<String>, r#type: impl Into<String>) -> Self {
         Self {
             config,
@@ -53,11 +54,13 @@ impl GetPublicPermissionRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<GetPublicPermissionResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

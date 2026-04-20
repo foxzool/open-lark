@@ -4,9 +4,13 @@
 //! 营业执照识别和增值税发票识别等核心功能。
 
 pub mod bank_card_recognize;
+/// business_license_recognize 模块。
 pub mod business_license_recognize;
+/// id_card_recognize 模块。
 pub mod id_card_recognize;
+/// resume_parse 模块。
 pub mod resume_parse;
+/// vat_invoice_recognize 模块。
 pub mod vat_invoice_recognize;
 
 // 重导出主要类型，方便直接使用

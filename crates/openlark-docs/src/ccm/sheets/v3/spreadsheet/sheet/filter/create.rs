@@ -17,8 +17,11 @@ use crate::common::{api_endpoints::SheetsApiV3, api_utils::*};
 /// 创建筛选请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFilterRequest {
+    /// 筛选范围。
     pub range: String,
+    /// 列标识。
     pub col: String,
+    /// 筛选条件。
     pub condition: Condition,
 }
 
@@ -33,6 +36,8 @@ impl ApiResponseTrait for CreateFilterResponse {
 }
 
 /// 创建筛选
+///
+/// 在指定子表中创建筛选条件。
 pub async fn create_filter(
     config: &Config,
     spreadsheet_token: &str,
@@ -50,6 +55,8 @@ pub async fn create_filter(
 }
 
 /// 创建筛选（带请求选项）
+///
+/// 在指定子表中创建筛选条件，并允许传入自定义请求选项。
 pub async fn create_filter_with_options(
     config: &Config,
     spreadsheet_token: &str,

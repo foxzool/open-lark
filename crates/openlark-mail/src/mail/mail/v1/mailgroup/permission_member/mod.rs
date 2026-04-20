@@ -1,8 +1,14 @@
+/// batch_create 模块。
 pub mod batch_create;
+/// batch_delete 模块。
 pub mod batch_delete;
+/// 创建接口。
 pub mod create;
+/// 删除接口。
 pub mod delete;
+/// 获取接口。
 pub mod get;
+/// 列表接口。
 pub mod list;
 
 use openlark_core::config::Config;
@@ -16,6 +22,7 @@ pub struct PermissionMember {
 }
 
 impl PermissionMember {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailgroup_id: impl Into<String>) -> Self {
         Self {
             config,
@@ -23,6 +30,7 @@ impl PermissionMember {
         }
     }
 
+    /// 创建列表请求。
     pub fn list(&self) -> list::ListMailGroupPermissionMemberRequest {
         list::ListMailGroupPermissionMemberRequest::new(
             self.config.clone(),
@@ -30,6 +38,7 @@ impl PermissionMember {
         )
     }
 
+    /// 创建获取详情请求。
     pub fn get(
         &self,
         permission_member_id: impl Into<String>,
@@ -41,6 +50,7 @@ impl PermissionMember {
         )
     }
 
+    /// 创建新建请求。
     pub fn create(&self) -> create::CreateMailGroupPermissionMemberRequest {
         create::CreateMailGroupPermissionMemberRequest::new(
             self.config.clone(),
@@ -48,6 +58,7 @@ impl PermissionMember {
         )
     }
 
+    /// 创建删除请求。
     pub fn delete(
         &self,
         permission_member_id: impl Into<String>,
@@ -59,6 +70,7 @@ impl PermissionMember {
         )
     }
 
+    /// 创建批量新增请求。
     pub fn batch_create(&self) -> batch_create::BatchCreateMailGroupPermissionMemberRequest {
         batch_create::BatchCreateMailGroupPermissionMemberRequest::new(
             self.config.clone(),
@@ -66,6 +78,7 @@ impl PermissionMember {
         )
     }
 
+    /// 创建批量删除请求。
     pub fn batch_delete(&self) -> batch_delete::BatchDeleteMailGroupPermissionMemberRequest {
         batch_delete::BatchDeleteMailGroupPermissionMemberRequest::new(
             self.config.clone(),

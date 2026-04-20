@@ -1,6 +1,12 @@
+/// channel 子模块。
 pub mod channel;
+/// delivery 子模块。
 pub mod delivery;
+/// delivery_task 子模块。
 pub mod delivery_task;
+/// job_post 子模块。
 pub mod job_post;
+/// list 子模块。
 pub mod list;
+/// site_user 子模块。
 pub mod site_user;

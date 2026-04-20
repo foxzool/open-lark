@@ -12,30 +12,37 @@ use std::sync::Arc;
 
 /// 更新任务请求体（v1）
 #[derive(Debug, Clone, Serialize, Default)]
+/// 更新任务请求体。
 pub struct UpdateTaskBodyV1 {
     /// 任务标题
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 任务标题。
     pub summary: Option<String>,
 
     /// 任务描述
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 任务描述。
     pub description: Option<String>,
 
     /// 任务开始时间
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 任务开始时间。
     pub start: Option<String>,
 
     /// 任务截止时间
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 任务截止时间。
     pub due: Option<String>,
 
     /// 任务优先级（1-5）
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 任务优先级。
     pub priority: Option<i32>,
 }
 
 /// 更新任务响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 更新任务响应。
 pub struct UpdateTaskResponseV1 {
     /// 任务 ID
     pub id: String,
@@ -43,15 +50,19 @@ pub struct UpdateTaskResponseV1 {
     pub summary: String,
     /// 任务描述
     #[serde(default)]
+    /// 任务描述。
     pub description: Option<String>,
     /// 任务开始时间
     #[serde(default)]
+    /// 任务开始时间。
     pub start: Option<String>,
     /// 任务截止时间
     #[serde(default)]
+    /// 任务截止时间。
     pub due: Option<String>,
     /// 任务优先级
     #[serde(default)]
+    /// 任务优先级。
     pub priority: Option<i32>,
     /// 任务是否完成
     pub is_completed: bool,
@@ -63,6 +74,7 @@ pub struct UpdateTaskResponseV1 {
 
 /// 更新任务请求（v1）
 #[derive(Debug, Clone)]
+/// 更新任务请求构建器。
 pub struct UpdateTaskRequestV1 {
     config: Arc<Config>,
     task_id: String,
@@ -70,6 +82,7 @@ pub struct UpdateTaskRequestV1 {
 }
 
 impl UpdateTaskRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_id: impl Into<String>) -> Self {
         Self {
             config,

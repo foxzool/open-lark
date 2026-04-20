@@ -28,6 +28,7 @@ impl DeleteRequest {
         }
     }
 
+    /// 设置 `note_id`。
     pub fn note_id(mut self, note_id: String) -> Self {
         self.note_id = note_id;
         self
@@ -39,6 +40,7 @@ impl DeleteRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

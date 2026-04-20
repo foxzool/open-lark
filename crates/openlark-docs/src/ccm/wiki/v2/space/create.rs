@@ -16,6 +16,8 @@ use super::super::models::WikiSpace;
 use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 创建知识空间请求（流式 Builder 模式）
+///
+/// 用于创建新的知识空间。
 pub struct CreateWikiSpaceRequest {
     config: Config,
     /// 知识空间名称
@@ -73,6 +75,7 @@ impl CreateWikiSpaceRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

@@ -15,6 +15,8 @@ use crate::{
 };
 
 /// 获取群成员发言权限请求
+///
+/// 用于分页查询指定群聊的发言权限配置和成员列表。
 pub struct GetChatModerationRequest {
     config: Config,
     chat_id: String,
@@ -24,6 +26,7 @@ pub struct GetChatModerationRequest {
 }
 
 impl GetChatModerationRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -66,6 +69,7 @@ impl GetChatModerationRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

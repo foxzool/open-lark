@@ -55,6 +55,7 @@ pub struct BatchUpdateRecordRequest {
 }
 
 impl BatchUpdateRecordRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -66,36 +67,43 @@ impl BatchUpdateRecordRequest {
         }
     }
 
+    /// 设置 `app_token`。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置 `table_id`。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
+    /// 设置 `user_id_type`。
     pub fn user_id_type(mut self, user_id_type: String) -> Self {
         self.user_id_type = Some(user_id_type);
         self
     }
 
+    /// 设置 `ignore_consistency_check`。
     pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
         self.ignore_consistency_check = Some(ignore_consistency_check);
         self
     }
 
+    /// 设置 `records`。
     pub fn records(mut self, records: Vec<UpdateRecordItem>) -> Self {
         self.records = records;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BatchUpdateRecordResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

@@ -2,17 +2,13 @@
 //!
 //! 提供飞书电子表格 v3 版本的完整管理功能。
 
-// ============================================================================
-// 统一类型定义
-// ============================================================================
-
-/// 范围类型 - 统一定义避免模块间冲突
+/// 范围类型。
 pub type Range = String;
 
-/// 电子表格令牌类型
+/// 电子表格令牌类型。
 pub type SpreadsheetToken = String;
 
-/// 工作表ID类型
+/// 工作表 ID 类型。
 pub type SheetId = String;
 
 use openlark_core::config::Config;
@@ -25,16 +21,24 @@ use openlark_core::config::Config;
 // pub mod find_replace; // 暂时注释
 // pub mod float_images; // Generated: Module file not found
 // pub mod macros; // Generated: Module file not found
+/// Sheets v3 通用模型模块。
 pub mod models;
 // pub mod move_dimension; // 暂时注释
 // pub mod pivot_tables; // Generated: Module file not found
 // pub mod sheet; // Generated: Module file not found
 // pub mod sheet_protection; // Generated: Module file not found
+/// Sheets v3 电子表格模块。
 pub mod spreadsheet;
 // pub mod spreadsheet_create; // Generated: Module file not found
 // pub mod spreadsheet_info; // Generated: Module file not found
 
-// 重新导出所有服务类型
+/// 重新导出 Sheets v3 通用模型。
+pub use models::{
+    CellPosition, CellReference, FilterCondition, FilterInfo, FilterViewCondition, FilterViewId,
+    FilterViewInfo, FloatImageId, FloatImageInfo, FloatImageToken, Locale, PagedResponse,
+    ReplaceCellsRequest, ReplaceResult, SheetInfo, SheetProperty, SheetsResponse, TimeZone,
+};
+/// 重新导出电子表格相关类型。
 pub use spreadsheet::{
     CreateFilterConditionRequest, CreateFilterConditionResponse, CreateFilterRequest,
     CreateFilterResponse, CreateFilterViewRequest, CreateFilterViewResponse,
@@ -51,27 +55,21 @@ pub use spreadsheet::{
     UpdateFloatImageRequest, UpdateFloatImageResponse, UpdateSpreadsheetParams,
     UpdateSpreadsheetResponse,
 };
-// 重新导出 models 中的类型（排除已在 spreadsheet 中导出的类型，以及模块顶部定义的类型别名）
-pub use models::{
-    CellPosition, CellReference, FilterCondition, FilterInfo, FilterViewCondition, FilterViewId,
-    FilterViewInfo, FloatImageId, FloatImageInfo, FloatImageToken, Locale, PagedResponse,
-    ReplaceCellsRequest, ReplaceResult, SheetInfo, SheetProperty, SheetsResponse, TimeZone,
-};
 
-/// Sheets 服务主结构
+/// Sheets 服务主结构。
 #[derive(Clone, Debug)]
 pub struct SheetsService {
-    /// 配置信息
+    /// 配置信息。
     config: Config,
 }
 
 impl SheetsService {
-    /// 创建新的 Sheets 服务实例
+    /// 创建新的 Sheets 服务实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
-    /// 获取配置引用（避免 `config` 字段被认为未使用）
+    /// 获取配置引用。
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -91,7 +89,6 @@ mod tests {
     fn test_sheets_service_creation() {
         let config = Config::default();
         let service = SheetsService::new(config);
-        // 验证服务实例创建成功
         assert!(!service.config.base_url().is_empty());
     }
 

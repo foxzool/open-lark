@@ -19,15 +19,18 @@ pub struct QueryRequest {
 }
 
 impl QueryRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<QueryResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         _option: openlark_core::req_option::RequestOption,
@@ -50,6 +53,7 @@ impl QueryRequest {
 /// 获取异动原因列表响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryResponse {
+    /// 原始响应数据。
     pub data: Value,
 }
 

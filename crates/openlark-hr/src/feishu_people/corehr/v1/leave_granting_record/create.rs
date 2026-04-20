@@ -29,11 +29,13 @@ impl CreateRequest {
         }
     }
 
+    /// 设置请求体。
     pub fn body(mut self, body: Value) -> Self {
         self.body = body;
         self
     }
 
+    /// 向请求体添加字段。
     pub fn field(mut self, key: impl Into<String>, value: Value) -> Self {
         if !self.body.is_object() {
             self.body = Value::Object(serde_json::Map::new());
@@ -50,6 +52,7 @@ impl CreateRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

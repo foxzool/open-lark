@@ -11,12 +11,15 @@ use crate::{
 };
 
 /// 用户或机器人主动加入群聊请求
+///
+/// 用于让当前身份主动加入指定群聊。
 pub struct MeJoinChatMembersRequest {
     config: Config,
     chat_id: String,
 }
 
 impl MeJoinChatMembersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -38,6 +41,7 @@ impl MeJoinChatMembersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

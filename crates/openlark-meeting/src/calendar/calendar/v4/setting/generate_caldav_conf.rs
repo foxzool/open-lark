@@ -14,6 +14,7 @@ pub struct GenerateCaldavConfRequest {
 }
 
 impl GenerateCaldavConfRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -25,7 +26,7 @@ impl GenerateCaldavConfRequest {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    /// 执行请求（带选项）
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         // url: POST:/open-apis/calendar/v4/settings/generate_caldav_conf
         // 注意：此端点在 CalendarApiV4 中可能不存在，需要添加或使用常量

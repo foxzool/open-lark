@@ -1,27 +1,33 @@
-/// 权限成员管理模块
+/// 校验协作者权限接口。
 pub mod auth;
+/// 批量新增协作者接口。
 pub mod batch_create;
+/// 新增协作者接口。
 pub mod create;
+/// 删除协作者接口。
 pub mod delete;
+/// 列表协作者接口。
 pub mod list;
+/// 协作者权限模型模块。
 pub mod models;
+/// 转移拥有者接口。
 pub mod transfer_owner;
+/// 更新协作者权限接口。
 pub mod update;
 
-// 使用通配符导出所有子模块,避免维护大量重复的导出列表
-// auth 模块显式导出
+/// 重新导出校验协作者权限类型。
 pub use auth::{AuthPermissionMemberRequest, AuthPermissionMemberResponse};
-// batch_create 模块显式导出
+/// 重新导出批量新增协作者类型。
 pub use batch_create::{BatchCreatePermissionMemberRequest, BatchCreatePermissionMemberResponse};
-// create 模块显式导出
+/// 重新导出新增协作者类型。
 pub use create::{CreatePermissionMemberRequest, CreatePermissionMemberResponse};
-// delete 模块显式导出
+/// 重新导出删除协作者类型。
 pub use delete::{DeletePermissionMemberRequest, DeletePermissionMemberResponse};
-// list 模块显式导出
+/// 重新导出列表协作者类型。
 pub use list::{ListPermissionMembersRequest, ListPermissionMembersResponse};
-// models 模块显式导出
+/// 重新导出协作者权限模型。
 pub use models::{PermissionMember, PermissionMemberItem};
-// transfer_owner 模块显式导出
+/// 重新导出转移拥有者类型。
 pub use transfer_owner::{TransferOwnerRequest, TransferOwnerResponse};
-// update 模块显式导出
+/// 重新导出更新协作者权限类型。
 pub use update::{UpdatePermissionMemberRequest, UpdatePermissionMemberResponse};

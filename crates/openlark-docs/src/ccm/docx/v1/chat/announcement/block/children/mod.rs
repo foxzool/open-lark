@@ -2,22 +2,27 @@
 ///
 /// 按照bizTag/project/version/resource/name.rs模式组织
 pub mod batch_delete;
+/// create 子模块。
 pub mod create;
+/// get 子模块。
 pub mod get;
 
 // 使用通配符导出所有子模块
 // batch_delete 模块显式导出
+/// 重新导出相关类型。
 pub use batch_delete::{
     BatchDeleteChatAnnouncementBlockChildrenParams,
     BatchDeleteChatAnnouncementBlockChildrenRequest,
     BatchDeleteChatAnnouncementBlockChildrenResponse,
 };
 // create 模块显式导出
+/// 重新导出相关类型。
 pub use create::{
     CreateChatAnnouncementBlockChildrenParams, CreateChatAnnouncementBlockChildrenRequest,
     CreateChatAnnouncementBlockChildrenResponse,
 };
 // get 模块显式导出
+/// 重新导出相关类型。
 pub use get::{
     GetChatAnnouncementBlockChildrenParams, GetChatAnnouncementBlockChildrenRequest,
     GetChatAnnouncementBlockChildrenResponse,

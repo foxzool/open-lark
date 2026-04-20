@@ -48,6 +48,7 @@ pub struct TreeResponse {
     pub data: Option<TreeResponseData>,
 }
 
+/// `TreeResponseData`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TreeResponseData {
     /// 部门树节点
@@ -55,6 +56,7 @@ pub struct TreeResponseData {
     pub items: Option<Vec<DepartmentNode>>,
 }
 
+/// `DepartmentNode`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DepartmentNode {
     /// 部门 ID

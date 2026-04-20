@@ -11,12 +11,16 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum UserIdType {
+    /// 公开项说明。
     OpenId,
+    /// 公开项说明。
     UnionId,
+    /// 公开项说明。
     UserId,
 }
 
 impl UserIdType {
+    /// 返回对应的字符串表示。
     pub fn as_str(&self) -> &'static str {
         match self {
             UserIdType::OpenId => "open_id",
@@ -30,8 +34,11 @@ impl UserIdType {
 #[derive(Debug, Clone, Copy, Serialize_repr, Deserialize_repr, PartialEq, Eq)]
 #[repr(i32)]
 pub enum Language {
+    /// 公开项说明。
     ZhCn = 1,
+    /// 公开项说明。
     EnUs = 2,
+    /// 公开项说明。
     JaJp = 3,
 }
 
@@ -293,7 +300,9 @@ pub struct Draft {
 /// 分类国际化名称（i18n_cls_name）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct I18nClsName {
+    /// 公开项说明。
     pub language: Language,
+    /// 公开项说明。
     pub name: String,
 }
 
@@ -321,6 +330,7 @@ pub struct Repo {
 
 /// 兼容导出：保留历史类型名（不建议在新代码中使用）
 pub type LingoEntity = Entity;
+/// 公开项说明。
 pub type LingoDraft = Draft;
 
 #[cfg(test)]

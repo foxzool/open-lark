@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 /// 上传图片响应（data）
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct UploadFileResponse {
+    /// 文件 token。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_token: Option<String>,
 }
@@ -27,7 +28,9 @@ impl ApiResponseTrait for UploadFileResponse {
 /// 上传图片请求
 pub struct UploadFileRequest {
     config: Config,
+    /// 文件名。
     name: String,
+    /// 文件二进制内容。
     file: Vec<u8>,
 }
 
@@ -43,10 +46,12 @@ impl UploadFileRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UploadFileResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

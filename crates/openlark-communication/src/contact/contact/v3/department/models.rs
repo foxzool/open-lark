@@ -8,12 +8,16 @@ use serde::{Deserialize, Serialize};
 /// 部门名称国际化配置（字段随文档演进，未显式建模字段使用 `extra` 透传）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DepartmentI18nName {
+    /// 中文名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub zh_cn: Option<String>,
+    /// 英文名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub en_us: Option<String>,
+    /// 日文名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ja_jp: Option<String>,
+    /// 未显式建模的扩展字段。
     #[serde(default, flatten)]
     pub extra: HashMap<String, serde_json::Value>,
 }
@@ -21,24 +25,34 @@ pub struct DepartmentI18nName {
 /// 部门信息（字段随文档演进，未显式建模字段使用 `extra` 透传）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Department {
+    /// 部门名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 国际化名称。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_name: Option<DepartmentI18nName>,
+    /// 父部门 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_department_id: Option<String>,
+    /// 部门 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id: Option<String>,
+    /// 开放平台部门 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_department_id: Option<String>,
+    /// 负责人用户 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub leader_user_id: Option<String>,
+    /// 部门群 ID。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<String>,
+    /// 排序值。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order: Option<String>,
+    /// 单位 ID 列表。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unit_ids: Option<Vec<String>>,
+    /// 未显式建模的扩展字段。
     #[serde(default, flatten)]
     pub extra: HashMap<String, serde_json::Value>,
 }
@@ -46,6 +60,7 @@ pub struct Department {
 /// 部门详情响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DepartmentResponse {
+    /// 单个部门详情。
     pub department: Department,
 }
 
@@ -58,10 +73,13 @@ impl ApiResponseTrait for DepartmentResponse {
 /// 部门列表响应 data（分页）
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DepartmentListResponse {
+    /// 是否还有更多数据。
     #[serde(default)]
     pub has_more: bool,
+    /// 分页标记。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
+    /// 部门列表。
     #[serde(default)]
     pub items: Vec<Department>,
 }
@@ -75,6 +93,7 @@ impl ApiResponseTrait for DepartmentListResponse {
 /// 批量获取部门信息响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchGetDepartmentsResponse {
+    /// 批量查询返回的部门列表。
     #[serde(default)]
     pub items: Vec<Department>,
 }

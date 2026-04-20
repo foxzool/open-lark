@@ -44,6 +44,7 @@ pub struct DeleteRecordRequest {
 }
 
 impl DeleteRecordRequest {
+    /// 创建新的记录删除请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -53,26 +54,31 @@ impl DeleteRecordRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置数据表 ID。
     pub fn table_id(mut self, table_id: String) -> Self {
         self.table_id = table_id;
         self
     }
 
+    /// 设置记录 ID。
     pub fn record_id(mut self, record_id: String) -> Self {
         self.record_id = record_id;
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<DeleteRecordResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -93,7 +99,7 @@ impl DeleteRecordRequest {
     }
 }
 
-/// 删除记录响应
+/// 删除记录响应。
 ///
 /// 表示记录是否成功删除以及被删除记录的ID。
 ///

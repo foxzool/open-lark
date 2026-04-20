@@ -1,5 +1,6 @@
 //! Helpdesk API 模块
 
+/// Helpdesk v1 模块。
 pub mod v1;
 
 use openlark_core::config::Config;
@@ -12,6 +13,7 @@ pub struct Helpdesk {
 }
 
 impl Helpdesk {
+    /// 创建新的 Helpdesk API 入口。
     pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }

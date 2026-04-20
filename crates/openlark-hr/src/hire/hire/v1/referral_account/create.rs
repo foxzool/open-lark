@@ -15,9 +15,12 @@ use std::collections::HashMap;
 
 use crate::hire::hire::common_models::BonusAmount;
 
+/// `Mobile`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Mobile {
+    /// `code` 字段。
     pub code: String,
+    /// 数值。
     pub number: String,
 }
 
@@ -29,6 +32,7 @@ struct CreateRequestBody {
     email: Option<String>,
 }
 
+/// `CreateRequest` 请求。
 #[derive(Debug, Clone)]
 pub struct CreateRequest {
     config: Config,
@@ -37,6 +41,7 @@ pub struct CreateRequest {
 }
 
 impl CreateRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -45,6 +50,7 @@ impl CreateRequest {
         }
     }
 
+    /// 设置 `mobile`。
     pub fn mobile(mut self, code: impl Into<String>, number: impl Into<String>) -> Self {
         self.mobile = Some(Mobile {
             code: code.into(),
@@ -53,16 +59,19 @@ impl CreateRequest {
         self
     }
 
+    /// 设置 `email`。
     pub fn email(mut self, email: impl Into<String>) -> Self {
         self.email = Some(email.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -92,31 +101,42 @@ impl CreateRequest {
     }
 }
 
+/// `ReferralAccountAssets`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ReferralAccountAssets {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `confirmed_bonus` 字段。
     pub confirmed_bonus: Option<BonusAmount>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `ReferralAccount`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ReferralAccount {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `account_id` 字段。
     pub account_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `assets` 字段。
     pub assets: Option<ReferralAccountAssets>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `status` 字段。
     pub status: Option<i32>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `CreateResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct CreateResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `account` 字段。
     pub account: Option<ReferralAccount>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

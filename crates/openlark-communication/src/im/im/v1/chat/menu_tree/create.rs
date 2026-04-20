@@ -12,12 +12,15 @@ use crate::{
 };
 
 /// 添加群菜单请求
+///
+/// 用于创建群聊菜单树。
 pub struct CreateChatMenuTreeRequest {
     config: Config,
     chat_id: String,
 }
 
 impl CreateChatMenuTreeRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -41,6 +44,7 @@ impl CreateChatMenuTreeRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: serde_json::Value,

@@ -10,6 +10,7 @@ use openlark_core::{
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
+/// Patch Mail Contact Request。
 #[derive(Debug, Clone)]
 pub struct PatchMailContactRequest {
     config: Arc<Config>,
@@ -18,8 +19,10 @@ pub struct PatchMailContactRequest {
     patch_id: String,
 }
 
+/// Patch Mail Contact Response。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchMailContactResponse {
+    /// 响应数据。
     pub data: Option<serde_json::Value>,
 }
 
@@ -30,6 +33,7 @@ impl ApiResponseTrait for PatchMailContactResponse {
 }
 
 impl PatchMailContactRequest {
+    /// 创建新的实例。
     pub fn new(
         config: Arc<Config>,
         user_mailbox_id: impl Into<String>,
@@ -43,10 +47,12 @@ impl PatchMailContactRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<PatchMailContactResponse> {
         self.execute_with_options(RequestOption::default()).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

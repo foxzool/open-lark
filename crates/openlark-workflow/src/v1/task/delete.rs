@@ -12,6 +12,7 @@ use std::sync::Arc;
 
 /// 删除任务响应（v1）
 #[derive(Debug, Clone, Deserialize)]
+/// 删除任务响应。
 pub struct DeleteTaskResponseV1 {
     /// 删除结果
     pub success: bool,
@@ -19,12 +20,14 @@ pub struct DeleteTaskResponseV1 {
 
 /// 删除任务请求（v1）
 #[derive(Debug, Clone)]
+/// 删除任务请求构建器。
 pub struct DeleteTaskRequestV1 {
     config: Arc<Config>,
     task_id: String,
 }
 
 impl DeleteTaskRequestV1 {
+    /// 创建新的请求构建器。
     pub fn new(config: Arc<Config>, task_id: impl Into<String>) -> Self {
         Self {
             config,

@@ -18,6 +18,7 @@ use crate::common::{api_endpoints::DriveApi, api_utils::*};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateImportTaskRequest {
     #[serde(skip)]
+    /// SDK 配置。
     config: Config,
     /// 文件扩展名
     pub file_extension: String,
@@ -52,6 +53,7 @@ impl Point {
 }
 
 impl CreateImportTaskRequest {
+    /// 创建新的导入任务请求。
     pub fn new(
         config: Config,
         file_extension: impl Into<String>,
@@ -69,16 +71,19 @@ impl CreateImportTaskRequest {
         }
     }
 
+    /// 设置导入后展示的文件名。
     pub fn file_name(mut self, file_name: impl Into<String>) -> Self {
         self.file_name = Some(file_name.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateImportTaskResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

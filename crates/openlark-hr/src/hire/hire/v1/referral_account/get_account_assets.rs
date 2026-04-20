@@ -36,11 +36,13 @@ impl GetAccountAssetsRequest {
         }
     }
 
+    /// 设置 `account_id`。
     pub fn account_id(mut self, account_id: String) -> Self {
         self.account_id = account_id;
         self
     }
 
+    /// 设置用户 ID 类型。
     pub fn user_id_type(mut self, user_id_type: impl Into<String>) -> Self {
         self.user_id_type = Some(user_id_type.into());
         self
@@ -52,6 +54,7 @@ impl GetAccountAssetsRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -80,44 +83,61 @@ impl GetAccountAssetsRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ReferralAccountAssets {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `confirmed_bonus` 字段。
     pub confirmed_bonus: Option<BonusAmount>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `ReferralAccountWithReferrer`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ReferralAccountWithReferrer {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `account_id` 字段。
     pub account_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `assets` 字段。
     pub assets: Option<ReferralAccountAssets>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `status` 字段。
     pub status: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `referrer` 字段。
     pub referrer: Option<ReferralAccountReferrer>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `ReferralAccountReferrer`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ReferralAccountReferrer {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 标识。
     pub id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 名称。
     pub name: Option<I18nText>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 邮箱地址。
     pub email: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `mobile` 字段。
     pub mobile: Option<String>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `GetAccountAssetsResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct GetAccountAssetsResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `account` 字段。
     pub account: Option<ReferralAccountWithReferrer>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

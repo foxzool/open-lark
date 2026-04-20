@@ -3,9 +3,13 @@
 //! 提供客服知识库分类相关的 API。
 
 pub mod create;
+/// 删除接口。
 pub mod delete;
+/// 获取接口。
 pub mod get;
+/// 列表接口。
 pub mod list;
+/// 更新接口。
 pub mod patch;
 
 use openlark_core::config::Config;

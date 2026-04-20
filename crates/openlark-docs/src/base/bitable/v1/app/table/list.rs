@@ -11,7 +11,7 @@ use openlark_core::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 列出数据表请求
+/// 列出数据表请求。
 #[derive(Debug, Clone)]
 pub struct ListTablesRequest {
     /// 多维表格的 app_token
@@ -25,7 +25,7 @@ pub struct ListTablesRequest {
 }
 
 impl ListTablesRequest {
-    /// 创建列出数据表请求
+    /// 创建新的数据表列表请求。
     pub fn new(config: Config) -> Self {
         Self {
             app_token: String::new(),
@@ -35,30 +35,31 @@ impl ListTablesRequest {
         }
     }
 
-    /// 设置应用token
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
-    /// 设置分页大小
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size.min(100)); // 限制最大100
         self
     }
 
-    /// 设置分页标记
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: String) -> Self {
         self.page_token = Some(page_token);
         self
     }
 
-    /// 执行请求
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListTablesResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -102,7 +103,7 @@ impl ListTablesRequest {
     }
 }
 
-/// 数据表信息
+/// 数据表信息。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TableInfo {
     /// 数据表的ID
@@ -116,7 +117,7 @@ pub struct TableInfo {
     pub name: Option<String>,
 }
 
-/// 列出数据表响应
+/// 列出数据表响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListTablesResponse {
     /// 是否还有更多项

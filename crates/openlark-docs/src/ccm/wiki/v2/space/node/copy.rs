@@ -16,6 +16,8 @@ use crate::ccm::wiki::v2::models::WikiSpaceNode;
 use crate::common::{api_endpoints::WikiApiV2, api_utils::*};
 
 /// 复制知识空间节点请求
+///
+/// 用于在知识空间中复制已有节点。
 pub struct CopyWikiSpaceNodeRequest {
     space_id: String,
     node_token: String,
@@ -77,6 +79,7 @@ impl CopyWikiSpaceNodeRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         params: CopyWikiSpaceNodeParams,

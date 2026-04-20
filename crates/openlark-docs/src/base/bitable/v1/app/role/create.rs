@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 use super::models::{BlockRole, Role, TableRole};
 use crate::common::api_utils::*;
 
-/// 新增自定义角色请求
+/// 新增自定义角色请求。
 #[derive(Debug, Clone)]
 pub struct CreateAppRoleRequest {
     config: Config,
@@ -24,6 +24,7 @@ pub struct CreateAppRoleRequest {
 }
 
 impl CreateAppRoleRequest {
+    /// 创建新的自定义角色请求。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -34,31 +35,37 @@ impl CreateAppRoleRequest {
         }
     }
 
+    /// 设置多维表格 token。
     pub fn app_token(mut self, app_token: String) -> Self {
         self.app_token = app_token;
         self
     }
 
+    /// 设置角色名称。
     pub fn role_name(mut self, role_name: String) -> Self {
         self.role_name = role_name;
         self
     }
 
+    /// 设置表级权限列表。
     pub fn table_roles(mut self, table_roles: Vec<TableRole>) -> Self {
         self.table_roles = table_roles;
         self
     }
 
+    /// 设置仪表盘权限列表。
     pub fn block_roles(mut self, block_roles: Vec<BlockRole>) -> Self {
         self.block_roles = Some(block_roles);
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<CreateAppRoleResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -102,7 +109,7 @@ impl CreateAppRoleRequest {
     }
 }
 
-/// 新增自定义角色请求体（内部使用）
+/// 新增自定义角色请求体（内部使用）。
 #[derive(Serialize)]
 pub struct CreateAppRoleRequestBody {
     role_name: String,
@@ -111,9 +118,10 @@ pub struct CreateAppRoleRequestBody {
     block_roles: Option<Vec<BlockRole>>,
 }
 
-/// 新增自定义角色响应
+/// 新增自定义角色响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateAppRoleResponse {
+    /// 新建后的角色信息。
     pub role: Role,
 }
 

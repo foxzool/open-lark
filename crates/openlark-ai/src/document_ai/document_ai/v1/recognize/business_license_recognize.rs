@@ -22,6 +22,7 @@ pub struct BusinessLicenseRecognizeBody {
 }
 
 impl BusinessLicenseRecognizeBody {
+    /// 校验请求体。
     pub fn validate(&self) -> Result<(), String> {
         if self.file_token.trim().is_empty() {
             return Err("file_token 不能为空".to_string());
@@ -33,6 +34,7 @@ impl BusinessLicenseRecognizeBody {
 /// 营业执照识别响应
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BusinessLicenseRecognizeResponse {
+    /// data 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<BusinessLicenseRecognizeResult>,
 }
@@ -42,6 +44,7 @@ impl openlark_core::api::ApiResponseTrait for BusinessLicenseRecognizeResponse {
 /// 营业执照识别结果
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BusinessLicenseRecognizeResult {
+    /// parsing_result 字段。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parsing_result: Option<ParsingResult>,
 }
@@ -91,10 +94,12 @@ pub struct BusinessLicenseRecognizeRequest {
 }
 
 impl BusinessLicenseRecognizeRequest {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(
         self,
         body: BusinessLicenseRecognizeBody,
@@ -103,6 +108,7 @@ impl BusinessLicenseRecognizeRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         body: BusinessLicenseRecognizeBody,
@@ -129,6 +135,7 @@ pub struct BusinessLicenseRecognizeRequestBuilder {
 }
 
 impl BusinessLicenseRecognizeRequestBuilder {
+    /// 创建新的实例。
     pub fn new(config: Config) -> Self {
         Self {
             request: BusinessLicenseRecognizeRequest::new(config),
@@ -137,16 +144,19 @@ impl BusinessLicenseRecognizeRequestBuilder {
         }
     }
 
+    /// file_token。
     pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
         self.file_token = Some(file_token.into());
         self
     }
 
+    /// 设置 is_async。
     pub fn is_async(mut self, is_async: impl Into<bool>) -> Self {
         self.is_async = Some(is_async.into());
         self
     }
 
+    /// 构建请求体。
     pub fn body(self) -> BusinessLicenseRecognizeBody {
         BusinessLicenseRecognizeBody {
             file_token: self.file_token.unwrap_or_default(),
@@ -154,11 +164,13 @@ impl BusinessLicenseRecognizeRequestBuilder {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<BusinessLicenseRecognizeResponse> {
         let body = self.clone().body();
         self.request.execute(body).await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: RequestOption,

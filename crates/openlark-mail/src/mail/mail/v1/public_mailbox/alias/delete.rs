@@ -18,6 +18,7 @@ pub struct DeletePublicMailboxAliasRequest {
 }
 
 impl DeletePublicMailboxAliasRequest {
+    /// 创建新的实例。
     pub fn new(config: Arc<Config>, mailbox_id: String, alias_id: String) -> Self {
         Self {
             config,
@@ -26,11 +27,13 @@ impl DeletePublicMailboxAliasRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<DeletePublicMailboxAliasResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

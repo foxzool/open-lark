@@ -25,6 +25,7 @@ pub struct UpdatePermissionPublicPasswordRequest {
 }
 
 impl UpdatePermissionPublicPasswordRequest {
+    /// 创建新的密码刷新请求。
     pub fn new(config: Config, token: impl Into<String>, r#type: impl Into<String>) -> Self {
         Self {
             config,
@@ -33,11 +34,13 @@ impl UpdatePermissionPublicPasswordRequest {
         }
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<UpdatePermissionPublicPasswordResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,

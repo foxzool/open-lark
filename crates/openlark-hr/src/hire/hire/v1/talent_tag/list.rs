@@ -15,6 +15,7 @@ use std::collections::HashMap;
 
 use crate::hire::hire::common_models::I18nText;
 
+/// `ListRequest` 请求。
 #[derive(Debug, Clone)]
 pub struct ListRequest {
     config: Config,
@@ -27,6 +28,7 @@ pub struct ListRequest {
 }
 
 impl ListRequest {
+    /// 创建新的请求实例。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -39,41 +41,49 @@ impl ListRequest {
         }
     }
 
+    /// 设置 `keyword`。
     pub fn keyword(mut self, keyword: impl Into<String>) -> Self {
         self.keyword = Some(keyword.into());
         self
     }
 
+    /// 设置 `id_list`。
     pub fn id_list(mut self, id_list: Vec<String>) -> Self {
         self.id_list = Some(id_list);
         self
     }
 
+    /// 设置 `tag_type`。
     pub fn tag_type(mut self, tag_type: i32) -> Self {
         self.tag_type = Some(tag_type);
         self
     }
 
+    /// 设置 `include_inactive`。
     pub fn include_inactive(mut self, include_inactive: bool) -> Self {
         self.include_inactive = Some(include_inactive);
         self
     }
 
+    /// 设置分页大小。
     pub fn page_size(mut self, page_size: i32) -> Self {
         self.page_size = Some(page_size);
         self
     }
 
+    /// 设置分页标记。
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.page_token = Some(page_token.into());
         self
     }
 
+    /// 执行请求。
     pub async fn execute(self) -> SDKResult<ListResponse> {
         self.execute_with_options(openlark_core::req_option::RequestOption::default())
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
@@ -121,31 +131,43 @@ impl ListRequest {
     }
 }
 
+/// `TalentTagItem`。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct TalentTagItem {
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 标识。
     pub id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 名称。
     pub name: Option<I18nText>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `description` 字段。
     pub description: Option<I18nText>,
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    /// `tag_type` 字段。
     pub tag_type: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// `active_status` 字段。
     pub active_status: Option<i32>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 
+/// `ListResponse` 响应。
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct ListResponse {
     #[serde(default)]
+    /// 结果项列表。
     pub items: Vec<TalentTagItem>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 下一页分页标记。
     pub page_token: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    /// 是否还有更多结果。
     pub has_more: Option<bool>,
     #[serde(default, flatten)]
+    /// 扩展字段。
     pub extra: HashMap<String, Value>,
 }
 

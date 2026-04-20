@@ -30,6 +30,7 @@ pub struct GetDocumentBlockParams {
 /// 获取块内容响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDocumentBlockResponse {
+    /// 块内容。
     pub block: DocxBlock,
 }
 
@@ -40,15 +41,19 @@ impl ApiResponseTrait for GetDocumentBlockResponse {
 }
 
 /// 获取块内容请求
+///
+/// 用于根据块 ID 获取单个文档块。
 pub struct GetDocumentBlockRequest {
     config: Config,
 }
 
 impl GetDocumentBlockRequest {
+    /// 创建新的获取块请求。
     pub fn new(config: Config) -> Self {
         Self { config }
     }
 
+    /// 执行请求。
     pub async fn execute(
         self,
         params: GetDocumentBlockParams,
@@ -57,6 +62,7 @@ impl GetDocumentBlockRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         params: GetDocumentBlockParams,

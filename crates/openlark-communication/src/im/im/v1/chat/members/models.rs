@@ -7,13 +7,18 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum MemberIdType {
+    /// open_id。
     OpenId,
+    /// union_id。
     UnionId,
+    /// user_id。
     UserId,
+    /// app_id。
     AppId,
 }
 
 impl MemberIdType {
+    /// 返回请求参数使用的字符串值。
     pub fn as_str(self) -> &'static str {
         match self {
             Self::OpenId => "open_id",
@@ -27,12 +32,16 @@ impl MemberIdType {
 /// 出现不可用 ID 后的处理方式（succeed_type）
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SucceedType {
+    /// 遇到无效成员立即失败。
     Type0,
+    /// 忽略无效成员继续执行。
     Type1,
+    /// 部分成功也返回成功。
     Type2,
 }
 
 impl SucceedType {
+    /// 返回请求参数使用的字符串值。
     pub fn as_str(self) -> &'static str {
         match self {
             Self::Type0 => "0",
@@ -45,16 +54,20 @@ impl SucceedType {
 /// 拉群成员请求体
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateChatMembersBody {
+    /// 待加入群聊的成员 ID 列表。
     pub id_list: Vec<String>,
 }
 
 /// 拉群成员响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateChatMembersResponse {
+    /// 无效成员 ID 列表。
     #[serde(default)]
     pub invalid_id_list: Option<Vec<String>>,
+    /// 不存在的成员 ID 列表。
     #[serde(default)]
     pub not_existed_id_list: Option<Vec<String>>,
+    /// 待审批成员 ID 列表。
     #[serde(default)]
     pub pending_approval_id_list: Option<Vec<String>>,
 }
@@ -68,12 +81,14 @@ impl ApiResponseTrait for CreateChatMembersResponse {
 /// 移除群成员请求体
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteChatMembersBody {
+    /// 待移除的成员 ID 列表。
     pub id_list: Vec<String>,
 }
 
 /// 移除群成员响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteChatMembersResponse {
+    /// 无效成员 ID 列表。
     #[serde(default)]
     pub invalid_id_list: Option<Vec<String>>,
 }
@@ -87,21 +102,29 @@ impl ApiResponseTrait for DeleteChatMembersResponse {
 /// 群成员信息
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ChatMemberItem {
+    /// 成员 ID 类型。
     pub member_id_type: String,
+    /// 成员 ID。
     pub member_id: String,
+    /// 成员名称。
     pub name: String,
+    /// 租户 key。
     pub tenant_key: String,
 }
 
 /// 获取群成员列表响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListChatMembersResponse {
+    /// 成员列表。
     #[serde(default)]
     pub items: Option<Vec<ChatMemberItem>>,
+    /// 下一页分页标记。
     #[serde(default)]
     pub page_token: Option<String>,
+    /// 是否还有更多数据。
     #[serde(default)]
     pub has_more: Option<bool>,
+    /// 群成员总数。
     #[serde(default)]
     pub member_total: Option<i64>,
 }
@@ -115,6 +138,7 @@ impl ApiResponseTrait for ListChatMembersResponse {
 /// 判断用户或机器人是否在群里响应 data
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct IsInChatResponse {
+    /// 当前用户或机器人是否在群中。
     pub is_in_chat: bool,
 }
 

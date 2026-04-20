@@ -13,6 +13,8 @@ use crate::{
 };
 
 /// 获取群成员列表请求
+///
+/// 用于分页拉取指定群聊的成员列表。
 pub struct GetChatMembersRequest {
     config: Config,
     chat_id: String,
@@ -22,6 +24,7 @@ pub struct GetChatMembersRequest {
 }
 
 impl GetChatMembersRequest {
+    /// 创建新的请求构建器。
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -64,6 +67,7 @@ impl GetChatMembersRequest {
             .await
     }
 
+    /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(
         self,
         option: openlark_core::req_option::RequestOption,
