@@ -60,7 +60,27 @@ openlark = { version = "0.15.0", default-features = false, features = ["auth", "
 openlark = { version = "0.15.0", default-features = false, features = ["auth", "docs-full"] }
 ```
 
-### 2.1 选择平台 Endpoint
+### 2.1 Feature 组合矩阵
+
+以下是常用 feature 组合的依赖关系说明：
+
+| Feature 组合 | 隐式依赖 | 说明 |
+|-------------|---------|------|
+| `docs-bitable` | `docs-ccm`, `openlark-docs/bitable` | 多维表格需要 CCM 基础 |
+| `docs-drive` | `docs-ccm`, `openlark-docs/ccm-drive` | 云盘需要 CCM 基础 |
+| `docs-full` | `docs-ccm` + 所有 docs 子模块 | 完整文档能力 |
+| `webhook-card` | `webhook` | 卡片消息需要基础 webhook |
+| `webhook-signature` | `webhook`, `hmac`, `sha2`, `base64` | 签名需要加密依赖 |
+| `webhook-full` | `webhook-card` + `webhook-signature` | 完整 webhook 能力 |
+| `essential` | `auth` + `communication` + `docs` | 核心业务功能 |
+| `enterprise` | `essential` + `security` + `hr` + `workflow` | 企业级功能 |
+
+**重要提示**：
+- `docs-*` 类 feature 都隐式依赖 `auth`（通过 `docs-ccm` 依赖）
+- `webhook-*` 类 feature 默认包含 `robot` 基础功能
+- 推荐使用组合 feature（如 `essential`, `enterprise`）来简化依赖管理
+
+### 2.2 选择平台 Endpoint
 
 OpenLark 默认使用国内飞书开放平台 endpoint：
 
@@ -69,7 +89,7 @@ OpenLark 默认使用国内飞书开放平台 endpoint：
 
 两者的 API 路径结构保持一致，通常都是 `/open-apis/...`，切换时只需要修改 `base_url`。
 
-### 2.2 配置 Endpoint
+### 2.3 配置 Endpoint
 
 可以通过构建器或环境变量切换：
 
