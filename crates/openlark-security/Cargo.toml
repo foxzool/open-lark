@@ -72,8 +72,6 @@ serde_repr = { workspace = true }
 log = { workspace = true }
 tracing = { workspace = true }
 
-# 可选依赖
-parking_lot = { version = "0.12", optional = true }
 
 [dev-dependencies]
 tokio-test = "0.4"
