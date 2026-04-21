@@ -330,14 +330,11 @@ mod tests {
         };
         let response_with_data = IdCardRecognizeResponse { data: Some(result) };
         assert!(response_with_data.data.is_some());
-        assert_eq!(
-            response_with_data
-                .data
-                .unwrap()
-                .parsing_result
-                .unwrap()
-                .name,
-            Some("李四".to_string())
-        );
+        let name = response_with_data
+            .data
+            .as_ref()
+            .and_then(|data| data.parsing_result.as_ref())
+            .and_then(|result| result.name.as_deref());
+        assert_eq!(name, Some("李四"));
     }
 }

@@ -176,10 +176,13 @@ mod tests {
             departments: Some(vec![dept_info]),
             subscription_ids: None,
         };
-        assert_eq!(body.departments.as_ref().unwrap().len(), 1);
+        assert_eq!(body.departments.as_ref().map(Vec::len), Some(1));
         assert_eq!(
-            body.departments.as_ref().unwrap()[0].department_id,
-            "dept_1"
+            body.departments
+                .as_ref()
+                .and_then(|departments| departments.first())
+                .map(|department| department.department_id.as_str()),
+            Some("dept_1")
         );
     }
 

@@ -205,7 +205,9 @@ mod tests {
             .execute_with_options(RequestOption::default())
             .await;
         assert!(result.is_err());
-        let error = result.err().unwrap().to_string();
+        let error = result
+            .expect_err("缺少 user_ids 应该返回错误")
+            .to_string();
         assert!(error.contains("user_ids"));
     }
 
@@ -217,7 +219,9 @@ mod tests {
             .execute_with_options(RequestOption::default())
             .await;
         assert!(result.is_err());
-        let error = result.err().unwrap().to_string();
+        let error = result
+            .expect_err("user_ids 超过 10 个应该返回错误")
+            .to_string();
         assert!(error.contains("10"));
     }
 }
