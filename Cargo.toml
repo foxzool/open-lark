@@ -363,3 +363,6 @@ full = [
 # === 技术特性 (Technical Features) ===
 websocket = ["openlark-client/websocket"]  # WebSocket 支持
 otel = ["openlark-core/otel"]  # OpenTelemetry 支持
+
+[package.metadata.cargo-machete]
+ignored = ["serde_repr"]

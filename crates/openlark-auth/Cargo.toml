@@ -76,3 +76,6 @@ encryption = ["ring", "sha2", "hmac", "pbkdf2"]
 # 高级功能
 advanced-cache = ["cache", "encryption"]
 monitoring = []
+
+[package.metadata.cargo-machete]
+ignored = ["anyhow", "base64", "criterion", "hex", "hmac", "pbkdf2", "rand", "regex", "reqwest", "ring", "sha2", "thiserror", "url"]

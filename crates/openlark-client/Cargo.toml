@@ -55,7 +55,7 @@ openlark-analytics = { workspace = true, optional = true }
 openlark-user = { workspace = true, optional = true }
 
 [features]
-default = ["auth", "communication"]
+default = ["auth", "communication", "url"]
 
 # === 服务功能 ===
 auth = ["dep:openlark-auth"]
