@@ -78,11 +78,17 @@ impl UpdateRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpdateResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// process信息
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub process: Option<Value>,
+    pub process: Option<ProcessInfo>,
+}
+
+/// 流程信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ProcessInfo {
+    /// 兼容保留字段
+    #[serde(flatten)]
+    pub extra: Value,
 }
 
 impl ApiResponseTrait for UpdateResponse {

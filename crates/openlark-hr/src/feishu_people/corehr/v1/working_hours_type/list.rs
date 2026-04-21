@@ -82,17 +82,23 @@ impl ListRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// 数据列表
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<Value>>,
+    pub items: Option<Vec<WorkingHoursTypeItem>>,
     /// 分页令牌
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否还有更多数据
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
+}
+
+/// 工时制度条目
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct WorkingHoursTypeItem {
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for ListResponse {

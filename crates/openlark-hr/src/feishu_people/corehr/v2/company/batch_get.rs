@@ -61,11 +61,17 @@ impl BatchGetRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BatchGetResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// company信息
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub company: Option<Value>,
+    pub company: Option<CompanyItem>,
+}
+
+/// 公司信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CompanyItem {
+    /// 兼容保留字段
+    #[serde(flatten)]
+    pub extra: Value,
 }
 
 impl ApiResponseTrait for BatchGetResponse {

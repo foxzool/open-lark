@@ -76,12 +76,28 @@ impl UpdateRoleAssignRequest {
 /// 更新用户被授权的数据范围响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UpdateRoleAssignResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// authorization信息
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization: Option<Value>,
+    pub authorization: Option<AuthorizationInfo>,
+}
+
+/// 授权信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct AuthorizationInfo {
+    /// 角色授权列表
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_assignments: Option<Vec<RoleAssignmentInfo>>,
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
+}
+
+/// 角色授权条目
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct RoleAssignmentInfo {
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for UpdateRoleAssignResponse {
