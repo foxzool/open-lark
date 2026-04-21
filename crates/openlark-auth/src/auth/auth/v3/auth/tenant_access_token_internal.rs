@@ -135,7 +135,8 @@ mod tests {
     #[test]
     fn test_tenant_access_token_internal_response_deserialization() {
         let json = r#"{"data":{"tenant_access_token":"tenant_token","expires_in":7200}}"#;
-        let response: TenantAccessTokenInternalResponseData = serde_json::from_str(json).expect("JSON 反序列化失败");
+        let response: TenantAccessTokenInternalResponseData =
+            serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(response.data.tenant_access_token, "tenant_token");
         assert_eq!(response.data.expires_in, 7200);
     }

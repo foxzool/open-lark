@@ -195,7 +195,8 @@ mod tests {
     #[test]
     fn test_send_webhook_message_response_serialization() {
         let json = r#"{"code":0,"msg":"ok"}"#;
-        let response: SendWebhookMessageResponse = serde_json::from_str(json).expect("JSON 反序列化失败");
+        let response: SendWebhookMessageResponse =
+            serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(response.code, 0);
         assert_eq!(response.msg, "ok");
     }
