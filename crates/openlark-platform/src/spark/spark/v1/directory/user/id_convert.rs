@@ -173,7 +173,7 @@ mod tests {
             ]
         }"#;
 
-        let response: DirectoryUserIdConvertResponse = serde_json::from_str(json).unwrap();
+        let response: DirectoryUserIdConvertResponse = serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(response.items.len(), 1);
         assert_eq!(response.items[0].source_id, "123445678933432");
         assert_eq!(response.items[0].target_id, "ou_1234cdjhjfedgfhgdhy3884");

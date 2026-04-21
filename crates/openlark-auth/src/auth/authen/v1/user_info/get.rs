@@ -167,7 +167,7 @@ mod tests {
     #[test]
     fn test_user_info_response_data_deserialization() {
         let json = r#"{"data":{"data":{"open_id":"ou_def456","union_id":"on_abc123","name":"张三","en_name":"John Zhang"}}}"#;
-        let response: UserInfoResponseData = serde_json::from_str(json).unwrap();
+        let response: UserInfoResponseData = serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(response.data.data.open_id, "ou_def456");
         assert_eq!(response.data.data.union_id, Some("on_abc123".to_string()));
         assert_eq!(response.data.data.name, Some("张三".to_string()));

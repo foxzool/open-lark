@@ -560,7 +560,7 @@ mod tests {
         };
 
         let json = serde_json::to_string(&error_info).unwrap();
-        let deserialized: ErrorInfo = serde_json::from_str(&json).unwrap();
+        let deserialized: ErrorInfo = serde_json::from_str(&json).expect("JSON 反序列化失败");
 
         assert_eq!(deserialized.log_id, error_info.log_id);
         assert_eq!(deserialized.details.len(), 2);
@@ -577,7 +577,7 @@ mod tests {
         };
 
         let json = serde_json::to_string(&detail).unwrap();
-        let deserialized: ErrorDetail = serde_json::from_str(&json).unwrap();
+        let deserialized: ErrorDetail = serde_json::from_str(&json).expect("JSON 反序列化失败");
 
         assert_eq!(deserialized.key, None);
         assert_eq!(deserialized.value, Some("test_value".to_string()));
@@ -665,7 +665,7 @@ mod tests {
 
         // 测试双重解析（原始方法）
         let start = std::time::Instant::now();
-        let _value: Value = serde_json::from_str(json_data).unwrap();
+        let _value: Value = serde_json::from_str(json_data).expect("JSON 反序列化失败");
         let _result: Result<OptimizedBaseResponse<TestData>, _> = serde_json::from_value(_value);
         let double_parse_time = start.elapsed();
 
@@ -846,7 +846,7 @@ mod tests {
         let json = serde_json::to_string(&original).unwrap();
 
         // Deserialize back
-        let deserialized: OptimizedBaseResponse<TestData> = serde_json::from_str(&json).unwrap();
+        let deserialized: OptimizedBaseResponse<TestData> = serde_json::from_str(&json).expect("JSON 反序列化失败");
 
         // Verify all fields are preserved
         assert_eq!(deserialized.code, original.code);
@@ -908,7 +908,7 @@ mod tests {
         };
 
         let json = serde_json::to_string(&detail).unwrap();
-        let deserialized: ErrorDetail = serde_json::from_str(&json).unwrap();
+        let deserialized: ErrorDetail = serde_json::from_str(&json).expect("JSON 反序列化失败");
 
         assert_eq!(deserialized.key, Some("".to_string()));
         assert_eq!(deserialized.value, Some("".to_string()));
@@ -976,7 +976,7 @@ mod tests {
             }
         }"#;
 
-        let parsed: Value = serde_json::from_str(complex_error).unwrap();
+        let parsed: Value = serde_json::from_str(complex_error).expect("JSON 反序列化失败");
         assert_eq!(parsed["code"], 400);
         assert_eq!(parsed["msg"], "Validation failed");
         assert!(parsed["error"]["log_id"].is_string());
@@ -984,13 +984,13 @@ mod tests {
 
         // Test error response with missing msg
         let error_missing_msg = r#"{"code": 500}"#;
-        let parsed_missing: Value = serde_json::from_str(error_missing_msg).unwrap();
+        let parsed_missing: Value = serde_json::from_str(error_missing_msg).expect("JSON 反序列化失败");
         assert_eq!(parsed_missing["code"], 500);
         assert!(!parsed_missing["msg"].is_string());
 
         // Test error response with non-integer code
         let invalid_code = r#"{"code": "400", "msg": "Invalid code type"}"#;
-        let parsed_invalid: Value = serde_json::from_str(invalid_code).unwrap();
+        let parsed_invalid: Value = serde_json::from_str(invalid_code).expect("JSON 反序列化失败");
         assert!(parsed_invalid["code"].is_string());
     }
 
@@ -1018,7 +1018,7 @@ mod tests {
         assert!(json_str.len() > 10000); // Should be reasonably large
 
         // Test parsing large response
-        let parsed: Value = serde_json::from_str(&json_str).unwrap();
+        let parsed: Value = serde_json::from_str(&json_str).expect("JSON 反序列化失败");
         assert_eq!(parsed["code"], 0);
         assert_eq!(parsed["data"]["items"].as_array().unwrap().len(), 1000);
     }
@@ -1039,7 +1039,7 @@ mod tests {
         });
 
         let json_str = serde_json::to_string(&unicode_response).unwrap();
-        let parsed: Value = serde_json::from_str(&json_str).unwrap();
+        let parsed: Value = serde_json::from_str(&json_str).expect("JSON 反序列化失败");
 
         assert_eq!(parsed["msg"], "操作成功");
         assert_eq!(parsed["data"]["title"], "测试标题");
@@ -1103,7 +1103,7 @@ mod tests {
         let start = Instant::now();
 
         for _ in 0..iterations {
-            let value: Value = serde_json::from_str(test_json).unwrap();
+            let value: Value = serde_json::from_str(test_json).expect("JSON 反序列化失败");
             let _: Result<Response<TestData>, _> = serde_json::from_value(value);
         }
 
@@ -1296,7 +1296,7 @@ mod tests {
 
         // Test serialization and deserialization
         let json = serde_json::to_string(&complex_error).unwrap();
-        let deserialized: ErrorInfo = serde_json::from_str(&json).unwrap();
+        let deserialized: ErrorInfo = serde_json::from_str(&json).expect("JSON 反序列化失败");
 
         assert_eq!(deserialized.log_id, complex_error.log_id);
         assert_eq!(deserialized.details.len(), 3);

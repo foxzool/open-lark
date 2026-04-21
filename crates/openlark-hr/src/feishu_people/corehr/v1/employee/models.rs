@@ -231,7 +231,7 @@ mod tests {
         };
 
         let json = serde_json::to_string(&employee).unwrap();
-        let parsed: Employee = serde_json::from_str(&json).unwrap();
+        let parsed: Employee = serde_json::from_str(&json).expect("JSON 反序列化失败");
         assert_eq!(employee.employee_id, parsed.employee_id);
         assert_eq!(employee.name, parsed.name);
         assert_eq!(employee.status, parsed.status);
@@ -250,7 +250,7 @@ mod tests {
             "hire_date": "2024-02-01"
         }"#;
 
-        let roster: EmployeeRoster = serde_json::from_str(json).unwrap();
+        let roster: EmployeeRoster = serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(roster.employee_id, "emp_002");
         assert_eq!(roster.name, "李四");
         assert_eq!(roster.department_name, Some("研发部".to_string()));
@@ -269,7 +269,7 @@ mod tests {
         };
 
         let json = serde_json::to_string(&request).unwrap();
-        let parsed: CreateRequestBody = serde_json::from_str(&json).unwrap();
+        let parsed: CreateRequestBody = serde_json::from_str(&json).expect("JSON 反序列化失败");
         assert_eq!(request.name, parsed.name);
         assert_eq!(request.email, parsed.email);
     }
@@ -281,7 +281,7 @@ mod tests {
         };
 
         let json = serde_json::to_string(&response).unwrap();
-        let parsed: CreateResponse = serde_json::from_str(&json).unwrap();
+        let parsed: CreateResponse = serde_json::from_str(&json).expect("JSON 反序列化失败");
         assert_eq!(response.employee_id, parsed.employee_id);
     }
 
@@ -290,7 +290,7 @@ mod tests {
         let response = DeleteResponse { result: true };
 
         let json = serde_json::to_string(&response).unwrap();
-        let parsed: DeleteResponse = serde_json::from_str(&json).unwrap();
+        let parsed: DeleteResponse = serde_json::from_str(&json).expect("JSON 反序列化失败");
         assert_eq!(response.result, parsed.result);
     }
 
@@ -313,7 +313,7 @@ mod tests {
         };
 
         let json = serde_json::to_string(&response).unwrap();
-        let parsed: ListResponse = serde_json::from_str(&json).unwrap();
+        let parsed: ListResponse = serde_json::from_str(&json).expect("JSON 反序列化失败");
         assert_eq!(response.items.len(), parsed.items.len());
         assert_eq!(response.has_more, parsed.has_more);
     }
@@ -327,7 +327,7 @@ mod tests {
         };
 
         let json = serde_json::to_string(&request).unwrap();
-        let parsed: SearchRequestBody = serde_json::from_str(&json).unwrap();
+        let parsed: SearchRequestBody = serde_json::from_str(&json).expect("JSON 反序列化失败");
         assert_eq!(request.query, parsed.query);
         assert_eq!(request.page_size, parsed.page_size);
     }
@@ -339,7 +339,7 @@ mod tests {
         };
 
         let json = serde_json::to_string(&request).unwrap();
-        let parsed: BatchGetRequestBody = serde_json::from_str(&json).unwrap();
+        let parsed: BatchGetRequestBody = serde_json::from_str(&json).expect("JSON 反序列化失败");
         assert_eq!(request.employee_ids.len(), parsed.employee_ids.len());
     }
 
@@ -363,7 +363,7 @@ mod tests {
         };
 
         let json = serde_json::to_string(&response).unwrap();
-        let parsed: BatchGetResponse = serde_json::from_str(&json).unwrap();
+        let parsed: BatchGetResponse = serde_json::from_str(&json).expect("JSON 反序列化失败");
         assert_eq!(response.items.len(), parsed.items.len());
     }
 }

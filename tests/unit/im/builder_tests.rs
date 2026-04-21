@@ -687,7 +687,7 @@ mod builder_edge_cases_tests {
         
         // 确保可以正确序列化
         let serialized = serde_json::to_string(&body).unwrap();
-        let deserialized: CreateMessageRequestBody = serde_json::from_str(&serialized).unwrap();
+        let deserialized: CreateMessageRequestBody = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(deserialized.content, unicode_content);
     }
 
@@ -770,7 +770,7 @@ mod builder_integration_tests {
         assert!(!body.msg_type.is_empty());
         
         // 验证JSON内容格式
-        let content_json: serde_json::Value = serde_json::from_str(&body.content).unwrap();
+        let content_json: serde_json::Value = serde_json::from_str(&body.content).expect("JSON 反序列化失败");
         assert!(content_json.is_object());
     }
 

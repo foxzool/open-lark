@@ -99,7 +99,7 @@ mod message_text_tests {
     #[test]
     fn test_message_text_special_characters() {
         let msg = MessageText::new("Special chars: 😀🎉💯\n\t\"'\\");
-        let content_json: Value = serde_json::from_str(&msg.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&msg.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["text"], "Special chars: 😀🎉💯\n\t\"'\\");
     }
 
@@ -123,7 +123,7 @@ mod message_text_tests {
     fn test_message_text_very_long() {
         let long_text = "A".repeat(10000);
         let msg = MessageText::new(&long_text);
-        let content_json: Value = serde_json::from_str(&msg.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&msg.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["text"], long_text);
     }
 }
@@ -140,7 +140,7 @@ mod message_post_tests {
         
         assert_eq!(post.msg_type(), "post");
         let content = post.content();
-        let content_json: Value = serde_json::from_str(&content).unwrap();
+        let content_json: Value = serde_json::from_str(&content).expect("JSON 反序列化失败");
         assert_eq!(content_json["post"]["zh_cn"]["title"], "测试标题");
     }
 
@@ -153,7 +153,7 @@ mod message_post_tests {
                 MessagePostNode::A(ANode::new("链接文本", "https://example.com")),
             ]);
 
-        let content_json: Value = serde_json::from_str(&post.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&post.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["post"]["zh_cn"]["title"], "富文本消息");
         
         let content_array = &content_json["post"]["zh_cn"]["content"][0];
@@ -176,7 +176,7 @@ mod message_post_tests {
                 MessagePostNode::At(AtNode::new("ou_user123")),
             ]);
 
-        let content_json: Value = serde_json::from_str(&post.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&post.content()).expect("JSON 反序列化失败");
         let content_array = &content_json["post"]["zh_cn"]["content"];
         assert_eq!(content_array.as_array().unwrap().len(), 2);
         assert_eq!(content_array[0][0]["text"], "第一段");
@@ -197,7 +197,7 @@ mod message_post_tests {
                 MessagePostNode::Emotion(EmotionNode::new("SMILE")),
             ]);
 
-        let content_json: Value = serde_json::from_str(&post.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&post.content()).expect("JSON 反序列化失败");
         let content_array = &content_json["post"]["en_us"]["content"][0];
         
         assert_eq!(content_array[0]["tag"], "text");
@@ -219,7 +219,7 @@ mod message_post_tests {
     #[case("ja_jp", "日本語タイトル")]
     fn test_message_post_different_languages(#[case] lang: &str, #[case] title: &str) {
         let post = MessagePost::new(lang).title(title);
-        let content_json: Value = serde_json::from_str(&post.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&post.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["post"][lang]["title"], title);
     }
 }
@@ -233,7 +233,7 @@ mod post_node_tests {
     fn test_text_node_basic() {
         let node = TextNode::new("测试文本");
         let serialized = serde_json::to_string(&MessagePostNode::Text(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["tag"], "text");
         assert_eq!(parsed["text"], "测试文本");
@@ -248,7 +248,7 @@ mod post_node_tests {
             .un_escape(true);
         
         let serialized = serde_json::to_string(&MessagePostNode::Text(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["text"], "样式文本");
         assert_eq!(parsed["un_escape"], true);
@@ -261,7 +261,7 @@ mod post_node_tests {
     fn test_a_node_basic() {
         let node = ANode::new("飞书官网", "https://www.feishu.cn");
         let serialized = serde_json::to_string(&MessagePostNode::A(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["tag"], "a");
         assert_eq!(parsed["text"], "飞书官网");
@@ -275,7 +275,7 @@ mod post_node_tests {
             .style(vec!["bold", "lineThrough"]);
         
         let serialized = serde_json::to_string(&MessagePostNode::A(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["style"][0], "bold");
         assert_eq!(parsed["style"][1], "lineThrough");
@@ -285,7 +285,7 @@ mod post_node_tests {
     fn test_at_node_user() {
         let node = AtNode::new("ou_user123");
         let serialized = serde_json::to_string(&MessagePostNode::At(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["tag"], "at");
         assert_eq!(parsed["user_id"], "ou_user123");
@@ -298,7 +298,7 @@ mod post_node_tests {
             .style(vec!["bold"]);
         
         let serialized = serde_json::to_string(&MessagePostNode::At(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["user_id"], "all");
         assert_eq!(parsed["style"][0], "bold");
@@ -308,7 +308,7 @@ mod post_node_tests {
     fn test_img_node() {
         let node = ImgNode::new("img_v2_test_key");
         let serialized = serde_json::to_string(&MessagePostNode::Img(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["tag"], "img");
         assert_eq!(parsed["image_key"], "img_v2_test_key");
@@ -318,7 +318,7 @@ mod post_node_tests {
     fn test_media_node_with_thumbnail() {
         let node = MediaNode::new("file_v2_video_key", Some("thumb_key_123"));
         let serialized = serde_json::to_string(&MessagePostNode::Media(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["tag"], "media");
         assert_eq!(parsed["file_key"], "file_v2_video_key");
@@ -329,7 +329,7 @@ mod post_node_tests {
     fn test_media_node_without_thumbnail() {
         let node = MediaNode::new("file_v2_video_key", None);
         let serialized = serde_json::to_string(&MessagePostNode::Media(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["file_key"], "file_v2_video_key");
         assert!(parsed.get("image_key").is_none());
@@ -339,7 +339,7 @@ mod post_node_tests {
     fn test_emotion_node() {
         let node = EmotionNode::new("LAUGH");
         let serialized = serde_json::to_string(&MessagePostNode::Emotion(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["tag"], "emotion");
         assert_eq!(parsed["emoji_type"], "LAUGH");
@@ -354,7 +354,7 @@ mod post_node_tests {
     fn test_emotion_node_different_types(#[case] emoji_type: &str) {
         let node = EmotionNode::new(emoji_type);
         let serialized = serde_json::to_string(&MessagePostNode::Emotion(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["emoji_type"], emoji_type);
     }
@@ -367,7 +367,7 @@ mod post_node_tests {
     fn test_text_node_individual_styles(#[case] style: &str) {
         let node = TextNode::new("样式文本").style(vec![style]);
         let serialized = serde_json::to_string(&MessagePostNode::Text(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["style"][0], style);
     }
@@ -394,7 +394,7 @@ mod message_image_tests {
             image_key: "img_complex_key_456".to_string(),
         };
         
-        let content_json: Value = serde_json::from_str(&img.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&img.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["image_key"], "img_complex_key_456");
     }
 
@@ -438,7 +438,7 @@ mod message_card_template_tests {
         
         assert_eq!(card.msg_type(), "interactive");
         
-        let content_json: Value = serde_json::from_str(&card.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&card.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["type"], "template");
         assert_eq!(content_json["data"]["template_id"], "ctp_test_123");
         assert_eq!(content_json["data"]["template_variable"]["title"], "测试卡片");
@@ -463,7 +463,7 @@ mod message_card_template_tests {
         });
         
         let card = MessageCardTemplate::new("ctp_complex_456", template_vars);
-        let content_json: Value = serde_json::from_str(&card.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&card.content()).expect("JSON 反序列化失败");
         
         assert_eq!(content_json["data"]["template_variable"]["header"]["title"], "复杂卡片");
         assert_eq!(content_json["data"]["template_variable"]["body"][0]["content"], "第一行");
@@ -475,7 +475,7 @@ mod message_card_template_tests {
         let empty_vars = json!({});
         let card = MessageCardTemplate::new("ctp_empty_789", empty_vars);
         
-        let content_json: Value = serde_json::from_str(&card.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&card.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["data"]["template_variable"], json!({}));
     }
 
@@ -487,7 +487,7 @@ mod message_card_template_tests {
         let vars = json!({"test": "value"});
         let card = MessageCardTemplate::new(template_id, vars);
         
-        let content_json: Value = serde_json::from_str(&card.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&card.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["data"]["template_id"], template_id);
     }
 
@@ -497,7 +497,7 @@ mod message_card_template_tests {
         let vars = json!({"key": "value"});
         let card = MessageCardTemplate::new(template_id.clone(), vars);
         
-        let content_json: Value = serde_json::from_str(&card.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&card.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["data"]["template_id"], template_id);
     }
 }
@@ -567,7 +567,7 @@ mod edge_cases_tests {
     fn test_text_message_very_long_content() {
         let long_text = "A".repeat(100000);
         let msg = MessageText::new(&long_text);
-        let content_json: Value = serde_json::from_str(&msg.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&msg.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["text"].as_str().unwrap().len(), 100000);
     }
 
@@ -575,7 +575,7 @@ mod edge_cases_tests {
     fn test_text_message_special_characters() {
         let special_text = "🚀 Hello\n\tWorld \"quotes\" 'single' \\ backslash 中文 😀";
         let msg = MessageText::new(special_text);
-        let content_json: Value = serde_json::from_str(&msg.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&msg.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["text"], special_text);
     }
 
@@ -590,14 +590,14 @@ mod edge_cases_tests {
     #[test]
     fn test_post_message_empty_title() {
         let post = MessagePost::new("zh_cn").title("");
-        let content_json: Value = serde_json::from_str(&post.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&post.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["post"]["zh_cn"]["title"], "");
     }
 
     #[test]
     fn test_post_message_no_content_nodes() {
         let post = MessagePost::new("en_us").title("Empty content");
-        let content_json: Value = serde_json::from_str(&post.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&post.content()).expect("JSON 反序列化失败");
         assert_eq!(content_json["post"]["en_us"]["content"].as_array().unwrap().len(), 0);
     }
 
@@ -612,7 +612,7 @@ mod edge_cases_tests {
     #[test]
     fn test_card_template_null_variables() {
         let card = MessageCardTemplate::new("template_null", json!(null));
-        let content_json: Value = serde_json::from_str(&card.content()).unwrap();
+        let content_json: Value = serde_json::from_str(&card.content()).expect("JSON 反序列化失败");
         assert!(content_json["data"]["template_variable"].is_null());
     }
 
@@ -620,7 +620,7 @@ mod edge_cases_tests {
     fn test_text_node_empty_text() {
         let node = TextNode::new("");
         let serialized = serde_json::to_string(&MessagePostNode::Text(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(parsed["text"], "");
     }
 
@@ -628,7 +628,7 @@ mod edge_cases_tests {
     fn test_a_node_invalid_url() {
         let node = ANode::new("Invalid Link", "not-a-url");
         let serialized = serde_json::to_string(&MessagePostNode::A(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(parsed["href"], "not-a-url");
     }
 
@@ -636,7 +636,7 @@ mod edge_cases_tests {
     fn test_at_node_empty_user_id() {
         let node = AtNode::new("");
         let serialized = serde_json::to_string(&MessagePostNode::At(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(parsed["user_id"], "");
     }
 
@@ -644,7 +644,7 @@ mod edge_cases_tests {
     fn test_style_array_empty() {
         let node = TextNode::new("Test").style(vec![]);
         let serialized = serde_json::to_string(&MessagePostNode::Text(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(parsed["style"].as_array().unwrap().len(), 0);
     }
 
@@ -653,7 +653,7 @@ mod edge_cases_tests {
         let long_url = format!("https://example.com/{}", "a".repeat(2000));
         let node = ANode::new("Long URL", &long_url);
         let serialized = serde_json::to_string(&MessagePostNode::A(node)).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(parsed["href"], long_url);
     }
 }
@@ -732,7 +732,7 @@ mod property_tests {
             let msg = MessageText::new(&text);
             let content = msg.content();
             // 确保总能成功序列化
-            let _: Value = serde_json::from_str(&content).unwrap();
+            let _: Value = serde_json::from_str(&content).expect("JSON 反序列化失败");
         }
 
         #[test] 
@@ -741,7 +741,7 @@ mod property_tests {
                 image_key: key.clone(),
             };
             let content = img.content();
-            let parsed: Value = serde_json::from_str(&content).unwrap();
+            let parsed: Value = serde_json::from_str(&content).expect("JSON 反序列化失败");
             prop_assert_eq!(parsed["image_key"], key);
         }
 
@@ -752,7 +752,7 @@ mod property_tests {
         ) {
             let node = TextNode::new(&text).style(styles.clone());
             let serialized = serde_json::to_string(&MessagePostNode::Text(node)).unwrap();
-            let parsed: Value = serde_json::from_str(&serialized).unwrap();
+            let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
             
             prop_assert_eq!(parsed["text"], text);
             if !styles.is_empty() {
@@ -764,7 +764,7 @@ mod property_tests {
         fn test_at_node_user_ids(user_id in "\\PC{1,50}") {
             let node = AtNode::new(&user_id);
             let serialized = serde_json::to_string(&MessagePostNode::At(node)).unwrap();
-            let parsed: Value = serde_json::from_str(&serialized).unwrap();
+            let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
             
             prop_assert_eq!(parsed["user_id"], user_id);
         }

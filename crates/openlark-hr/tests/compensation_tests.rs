@@ -757,7 +757,7 @@ mod serialization_tests {
             fn $name() {
                 let origin: $ty = $value;
                 let raw = serde_json::to_string(&origin).unwrap();
-                let decoded: $ty = serde_json::from_str(&raw).unwrap();
+                let decoded: $ty = serde_json::from_str(&raw).expect("JSON 反序列化失败");
                 assert_eq!(origin, decoded);
             }
         };

@@ -187,7 +187,7 @@ mod tests {
                 }
             }]
         }"#;
-        let response: BasicBatchUsersResponse = serde_json::from_str(json).unwrap();
+        let response: BasicBatchUsersResponse = serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(response.users.len(), 1);
         assert_eq!(response.users[0].name.as_deref(), Some("张三"));
         assert_eq!(
