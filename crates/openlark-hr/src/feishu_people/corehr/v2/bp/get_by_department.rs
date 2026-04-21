@@ -62,11 +62,17 @@ impl GetByDepartmentRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetByDepartmentResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// bp信息
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub bp: Option<Value>,
+    pub bp: Option<BusinessPartnerInfo>,
+}
+
+/// 业务伙伴信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct BusinessPartnerInfo {
+    /// 兼容保留字段
+    #[serde(flatten)]
+    pub extra: Value,
 }
 
 impl ApiResponseTrait for GetByDepartmentResponse {

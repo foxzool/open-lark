@@ -171,12 +171,10 @@ fn schema_data_roundtrip() {
     let original = SchemaData {
         schema_id: "sch_roundtrip".to_string(),
         name: "测试范式".to_string(),
-        fields: vec![
-            SchemaField {
-                field_name: "url".to_string(),
-                field_type: "URL".to_string(),
-            },
-        ],
+        fields: vec![SchemaField {
+            field_name: "url".to_string(),
+            field_type: "URL".to_string(),
+        }],
     };
     let json_val = to_value(&original).unwrap();
     let restored: SchemaData = from_value(json_val.clone()).unwrap();

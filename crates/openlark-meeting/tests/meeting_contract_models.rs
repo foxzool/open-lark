@@ -5,10 +5,9 @@ use openlark_meeting::calendar::calendar::v4::calendar::models::{
     Calendar, CalendarPermissions, CreateCalendarResponse, GetCalendarResponse,
 };
 use openlark_meeting::calendar::calendar::v4::responses::{
-    BatchGetFreebusyResponse, CalendarInfo, CreateExchangeBindingResponse,
-    DeleteCalendarResponse, DeleteExchangeBindingResponse, ExchangeBindingInfo,
-    FreebusyItem, GetExchangeBindingResponse, ListCalendarResponse, ListFreebusyResponse,
-    TimeRange,
+    BatchGetFreebusyResponse, CalendarInfo, CreateExchangeBindingResponse, DeleteCalendarResponse,
+    DeleteExchangeBindingResponse, ExchangeBindingInfo, FreebusyItem, GetExchangeBindingResponse,
+    ListCalendarResponse, ListFreebusyResponse, TimeRange,
 };
 use openlark_meeting::vc::vc::v1::reserve::apply::ApplyReserveResponse;
 use openlark_meeting::vc::vc::v1::responses::{
@@ -173,10 +172,13 @@ fn vc_apply_reserve_response_contract() {
 
     let parsed: ApplyReserveResponse =
         parse_contract(json!({ "meeting_id": "mtg_002", "reserve_id": "res_002" }));
-    assert_eq!(parsed, ApplyReserveResponse {
-        meeting_id: "mtg_002".to_string(),
-        reserve_id: "res_002".to_string(),
-    });
+    assert_eq!(
+        parsed,
+        ApplyReserveResponse {
+            meeting_id: "mtg_002".to_string(),
+            reserve_id: "res_002".to_string(),
+        }
+    );
 }
 
 // ── Calendar: 日历模型（models.rs）────────────────────────
@@ -189,7 +191,8 @@ fn calendar_permissions_contract() {
     };
     assert_json_contract(&perms, json!({ "is_readable": true, "is_writable": false }));
 
-    let parsed: CalendarPermissions = parse_contract(json!({ "is_readable": null, "is_writable": null }));
+    let parsed: CalendarPermissions =
+        parse_contract(json!({ "is_readable": null, "is_writable": null }));
     assert!(parsed.is_readable.is_none());
 }
 
@@ -281,14 +284,12 @@ fn calendar_get_and_create_response_roundtrip() {
 #[test]
 fn calendar_list_response_contract() {
     let resp = ListCalendarResponse {
-        calendars: vec![
-            CalendarInfo {
-                calendar_id: "c1".to_string(),
-                name: "日历1".to_string(),
-                calendar_type: "primary".to_string(),
-                description: None,
-            },
-        ],
+        calendars: vec![CalendarInfo {
+            calendar_id: "c1".to_string(),
+            name: "日历1".to_string(),
+            calendar_type: "primary".to_string(),
+            description: None,
+        }],
         has_more: Some(false),
         page_token: None,
     };
@@ -331,9 +332,7 @@ fn calendar_freebusy_response_contracts() {
     };
     assert_eq!(list_resp.data.len(), 1);
 
-    let batch_resp = BatchGetFreebusyResponse {
-        data: vec![item],
-    };
+    let batch_resp = BatchGetFreebusyResponse { data: vec![item] };
     let roundtrip: BatchGetFreebusyResponse = from_value(to_value(&batch_resp).unwrap()).unwrap();
     assert_eq!(roundtrip.data.len(), 1);
     assert_eq!(roundtrip.data[0].user_id, "ou_001");

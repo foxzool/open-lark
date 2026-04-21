@@ -213,10 +213,7 @@ fn frame_log_id_new_field() {
     };
     let bytes = frame.encode_to_vec();
     let decoded: Frame = decode_contract(&bytes);
-    assert_eq!(
-        decoded.log_id_new.as_deref(),
-        Some("log-id-new-uuid-xxx")
-    );
+    assert_eq!(decoded.log_id_new.as_deref(), Some("log-id-new-uuid-xxx"));
 }
 
 #[test]

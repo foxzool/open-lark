@@ -76,11 +76,33 @@ impl QueryRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    /// 响应数据
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<Value>,
+    pub data: Option<AuthorizationInfo>,
+}
+
+/// 授权信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct AuthorizationInfo {
+    /// 角色授权列表
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_assignments: Option<Vec<RoleAssignmentInfo>>,
+    /// 分页令牌
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 是否还有更多数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_more: Option<bool>,
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
+}
+
+/// 角色授权条目
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct RoleAssignmentInfo {
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for QueryResponse {
