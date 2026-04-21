@@ -246,7 +246,10 @@ impl RecordFieldValue {
     /// 这是用于与现有 API 兼容的辅助方法。
     /// 新代码建议使用 `RecordFieldValue` 枚举类型。
     #[deprecated(note = "新代码应直接使用 RecordFieldValue 类型")]
-    pub fn to_json_value(&self) -> Value {
+    #[deprecated(
+        since = "0.15.0",
+        note = "新代码应直接使用 RecordFieldValue 类型"
+    )]
         json!(self)
     }
 }
