@@ -27,3 +27,6 @@ default = ["v1"]
 full = ["v1"]
 
 v1 = []
+
+[package.metadata.cargo-machete]
+ignored = ["anyhow", "async-trait"]

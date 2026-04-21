@@ -37,3 +37,6 @@ board = []
 
 # 完整功能集
 full = ["v1", "v2", "async", "board"]
+
+[package.metadata.cargo-machete]
+ignored = ["reqwest", "tokio", "tracing"]

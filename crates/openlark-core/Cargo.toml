@@ -82,3 +82,6 @@ rstest = { workspace = true }
 tracing-test = { workspace = true }
 tracing-subscriber = { workspace = true }
 wiremock = { workspace = true }
+
+[package.metadata.cargo-machete]
+ignored = ["base64", "futures-util", "hmac", "prost", "quick_cache", "tokio-tungstenite"]
