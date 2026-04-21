@@ -29,7 +29,7 @@ tokio = { workspace = true }
 wiremock = { workspace = true }
 
 [features]
-default = ["robot"]
+default = ["robot", "signature"]
 robot = []
 signature = ["hmac", "sha2", "base64"]
 card = []

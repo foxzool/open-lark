@@ -33,3 +33,6 @@ im = []
 contact = []
 moments = []
 aily = []
+
+[package.metadata.cargo-machete]
+ignored = ["reqwest", "tracing"]
