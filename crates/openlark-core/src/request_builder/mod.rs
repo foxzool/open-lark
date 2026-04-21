@@ -277,7 +277,7 @@ mod tests {
 
         assert!(result.is_ok());
         let url = result.map_err(|e| {
-            crate::error::request_builder_error(format!("构建URL失败: {}", e))
+            crate::error::configuration_error(format!("构建URL失败: {}", e))
         })?;
         // May have trailing ? due to parse_with_params implementation
         assert!(url
@@ -297,7 +297,7 @@ mod tests {
 
         assert!(result.is_ok());
         let url = result.map_err(|e| {
-            crate::error::request_builder_error(format!("构建URL失败: {}", e))
+            crate::error::configuration_error(format!("构建URL失败: {}", e))
         })?;
         let url_str = url.as_str();
         assert!(url_str.starts_with("https://open.feishu.cn/open-apis/test"));
@@ -321,7 +321,7 @@ mod tests {
 
         assert!(result.is_ok());
         let url = result.map_err(|e| {
-            crate::error::request_builder_error(format!("构建URL失败: {}", e))
+            crate::error::configuration_error(format!("构建URL失败: {}", e))
         })?;
         // URL encoding should be handled properly
         assert!(url.as_str().contains("query="));
@@ -339,7 +339,7 @@ mod tests {
 
         assert!(result.is_ok());
         let url = result.map_err(|e| {
-            crate::error::request_builder_error(format!("构建URL失败: {}", e))
+            crate::error::configuration_error(format!("构建URL失败: {}", e))
         })?;
         assert!(url.as_str().contains("empty="));
         Ok(())
@@ -489,7 +489,7 @@ mod tests {
 
         assert!(result.is_ok());
         let url = result.map_err(|e| {
-            crate::error::request_builder_error(format!("构建URL失败: {}", e))
+            crate::error::configuration_error(format!("构建URL失败: {}", e))
         })?;
         // May have trailing ? due to parse_with_params implementation
         assert!(url

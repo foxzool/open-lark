@@ -266,17 +266,17 @@ fn visitor_info_contract() {
 
 #[test]
 fn visitor_status_roundtrip() {
-    assert_eq!(to_value(&VisitorStatus::Pending).unwrap(), json!("pending"));
+    assert_eq!(to_value(VisitorStatus::Pending).unwrap(), json!("pending"));
     assert_eq!(
-        to_value(&VisitorStatus::Approved).unwrap(),
+        to_value(VisitorStatus::Approved).unwrap(),
         json!("approved")
     );
     assert_eq!(
-        to_value(&VisitorStatus::Rejected).unwrap(),
+        to_value(VisitorStatus::Rejected).unwrap(),
         json!("rejected")
     );
-    assert_eq!(to_value(&VisitorStatus::Expired).unwrap(), json!("expired"));
-    assert_eq!(to_value(&VisitorStatus::Revoked).unwrap(), json!("revoked"));
+    assert_eq!(to_value(VisitorStatus::Expired).unwrap(), json!("expired"));
+    assert_eq!(to_value(VisitorStatus::Revoked).unwrap(), json!("revoked"));
 }
 
 #[test]
@@ -628,13 +628,13 @@ fn compliance_check_result_contract() {
 
 #[test]
 fn compliance_result_roundtrip() {
-    assert_eq!(to_value(&ComplianceResult::Pass).unwrap(), json!("pass"));
-    assert_eq!(to_value(&ComplianceResult::Fail).unwrap(), json!("fail"));
+    assert_eq!(to_value(ComplianceResult::Pass).unwrap(), json!("pass"));
+    assert_eq!(to_value(ComplianceResult::Fail).unwrap(), json!("fail"));
     assert_eq!(
-        to_value(&ComplianceResult::Warning).unwrap(),
+        to_value(ComplianceResult::Warning).unwrap(),
         json!("warning")
     );
-    assert_eq!(to_value(&ComplianceResult::Skip).unwrap(), json!("skip"));
+    assert_eq!(to_value(ComplianceResult::Skip).unwrap(), json!("skip"));
 }
 
 // ---------------------------------------------------------------------------
@@ -653,7 +653,7 @@ fn status_enum_roundtrip() {
     for (json_val, expected) in &variants {
         let parsed: Status = from_value(json_val.clone()).unwrap();
         assert_eq!(parsed, *expected);
-        assert_eq!(to_value(&parsed).unwrap(), *json_val);
+        assert_eq!(to_value(parsed).unwrap(), *json_val);
     }
 }
 
@@ -721,12 +721,12 @@ fn geo_location_contract() {
 
 #[test]
 fn sort_direction_roundtrip() {
-    assert_eq!(to_value(&SortDirection::Asc).unwrap(), json!("asc"));
-    assert_eq!(to_value(&SortDirection::Desc).unwrap(), json!("desc"));
+    assert_eq!(to_value(SortDirection::Asc).unwrap(), json!("asc"));
+    assert_eq!(to_value(SortDirection::Desc).unwrap(), json!("desc"));
     let asc: SortDirection = from_value(json!("asc")).unwrap();
     let desc: SortDirection = from_value(json!("desc")).unwrap();
-    assert_eq!(to_value(&asc).unwrap(), json!("asc"));
-    assert_eq!(to_value(&desc).unwrap(), json!("desc"));
+    assert_eq!(to_value(asc).unwrap(), json!("asc"));
+    assert_eq!(to_value(desc).unwrap(), json!("desc"));
 }
 
 #[test]
@@ -753,9 +753,9 @@ fn key_value_contract() {
 
 #[test]
 fn access_result_roundtrip() {
-    assert_eq!(to_value(&AccessResult::Success).unwrap(), json!("success"));
-    assert_eq!(to_value(&AccessResult::Failed).unwrap(), json!("failed"));
-    assert_eq!(to_value(&AccessResult::Timeout).unwrap(), json!("timeout"));
+    assert_eq!(to_value(AccessResult::Success).unwrap(), json!("success"));
+    assert_eq!(to_value(AccessResult::Failed).unwrap(), json!("failed"));
+    assert_eq!(to_value(AccessResult::Timeout).unwrap(), json!("timeout"));
 }
 
 #[test]
@@ -785,7 +785,7 @@ fn extension_map_handles_arbitrary_json() {
     ext.insert("key2".to_string(), json!({"nested": true}));
     ext.insert("key3".to_string(), json!([1, 2, 3]));
 
-    let serialized = to_value(&ext).unwrap();
+    let serialized = to_value(ext).unwrap();
     let deserialized: ExtensionMap = from_value(serialized.clone()).unwrap();
     assert_eq!(deserialized.len(), 3);
     assert_eq!(deserialized["key1"], json!("string_value"));

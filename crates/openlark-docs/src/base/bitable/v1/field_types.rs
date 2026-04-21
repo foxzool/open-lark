@@ -245,11 +245,11 @@ impl RecordFieldValue {
     ///
     /// 这是用于与现有 API 兼容的辅助方法。
     /// 新代码建议使用 `RecordFieldValue` 枚举类型。
-    #[deprecated(note = "新代码应直接使用 RecordFieldValue 类型")]
     #[deprecated(
         since = "0.15.0",
         note = "新代码应直接使用 RecordFieldValue 类型"
     )]
+    pub fn to_value(&self) -> serde_json::Value {
         json!(self)
     }
 }
