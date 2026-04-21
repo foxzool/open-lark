@@ -272,7 +272,7 @@ mod list_chat_response_tests {
         };
 
         let serialized = serde_json::to_string(&resp_data).unwrap();
-        let parsed: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["has_more"], true);
         assert_eq!(parsed["page_token"], "next_page_token_123");
@@ -322,7 +322,7 @@ mod list_chat_response_tests {
         };
 
         let serialized = serde_json::to_string(&resp_data).unwrap();
-        let parsed: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["items"].as_array().unwrap().len(), 0);
         assert_eq!(parsed["has_more"], false);
@@ -363,7 +363,7 @@ mod list_chat_response_tests {
         };
 
         let serialized = serde_json::to_string(&resp_data).unwrap();
-        let parsed: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["items"].as_array().unwrap().len(), 2);
         assert_eq!(parsed["items"][0]["name"], "群组1");
@@ -393,7 +393,7 @@ mod list_chat_tests {
         };
 
         let serialized = serde_json::to_string(&chat).unwrap();
-        let parsed: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["chat_id"], "oc_serialization_test");
         assert_eq!(parsed["avatar"], "https://avatar.example.com/test.png");
@@ -448,7 +448,7 @@ mod list_chat_tests {
         };
 
         let serialized = serde_json::to_string(&chat).unwrap();
-        let parsed: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["external"], true);
         assert_eq!(parsed["name"], "外部群组");
@@ -469,7 +469,7 @@ mod list_chat_tests {
         };
 
         let serialized = serde_json::to_string(&chat).unwrap();
-        let parsed: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["avatar"], "");
         assert_eq!(parsed["name"], "");
@@ -499,7 +499,7 @@ mod list_chat_tests {
         };
 
         let serialized = serde_json::to_string(&chat).unwrap();
-        let parsed: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["chat_status"], status);
         assert_eq!(parsed["chat_id"], format!("oc_status_{}", status));
@@ -523,7 +523,7 @@ mod list_chat_tests {
         };
 
         let serialized = serde_json::to_string(&chat).unwrap();
-        let parsed: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["owner_id_type"], id_type);
         assert_eq!(parsed["owner_id"], format!("owner_{}", id_type));
@@ -544,7 +544,7 @@ mod list_chat_tests {
         };
 
         let serialized = serde_json::to_string(&chat).unwrap();
-        let deserialized: ListChat = serde_json::from_str(&serialized).unwrap();
+        let deserialized: ListChat = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(deserialized.name, "特殊字符群组 😀🎉 \"引号\" '单引号'");
         assert_eq!(deserialized.description, "包含特殊字符的群组描述\n换行符\t制表符");
@@ -569,7 +569,7 @@ mod list_chat_tests {
         };
 
         let serialized = serde_json::to_string(&chat).unwrap();
-        let deserialized: ListChat = serde_json::from_str(&serialized).unwrap();
+        let deserialized: ListChat = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(deserialized.name, long_name);
         assert_eq!(deserialized.description, long_description);
@@ -875,7 +875,7 @@ mod edge_cases_tests {
 
         // 验证可以正确序列化和反序列化大量数据
         let serialized = serde_json::to_string(&resp_data).unwrap();
-        let deserialized: ListChatRespData = serde_json::from_str(&serialized).unwrap();
+        let deserialized: ListChatRespData = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(deserialized.items.len(), 1000);
         assert_eq!(deserialized.items[0].chat_id, "oc_max_test_0");
@@ -959,7 +959,7 @@ mod performance_tests {
         
         for _ in 0..100 {
             let serialized = serde_json::to_string(&resp_data).unwrap();
-            let _deserialized: ListChatRespData = serde_json::from_str(&serialized).unwrap();
+            let _deserialized: ListChatRespData = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         }
         
         let duration = start.elapsed();

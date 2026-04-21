@@ -821,9 +821,9 @@ mod tests {
         let tenant_json = serde_json::to_string(&tenant).unwrap();
         let user_json = serde_json::to_string(&user).unwrap();
 
-        let app_de: TokenType = serde_json::from_str(&app_json).unwrap();
-        let tenant_de: TokenType = serde_json::from_str(&tenant_json).unwrap();
-        let user_de: TokenType = serde_json::from_str(&user_json).unwrap();
+        let app_de: TokenType = serde_json::from_str(&app_json).expect("JSON 反序列化失败");
+        let tenant_de: TokenType = serde_json::from_str(&tenant_json).expect("JSON 反序列化失败");
+        let user_de: TokenType = serde_json::from_str(&user_json).expect("JSON 反序列化失败");
 
         assert_eq!(app, app_de);
         assert_eq!(tenant, tenant_de);

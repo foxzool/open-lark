@@ -152,7 +152,7 @@ mod json_parsing_properties {
         for special_str in special_strings {
             let json_value = json!({"text": special_str});
             let serialized = serde_json::to_string(&json_value).unwrap();
-            let deserialized: Value = serde_json::from_str(&serialized).unwrap();
+            let deserialized: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
             
             if let Some(text) = deserialized["text"].as_str() {
                 assert_eq!(text, special_str);
@@ -230,7 +230,7 @@ mod json_parsing_properties {
             if num.is_finite() {
                 let json_value = json!(num);
                 let serialized = serde_json::to_string(&json_value).unwrap();
-                let deserialized: Value = serde_json::from_str(&serialized).unwrap();
+                let deserialized: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
                 
                 if let Some(parsed_num) = deserialized.as_f64() {
                     // 允许一定的精度误差

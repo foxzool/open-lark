@@ -452,7 +452,7 @@ mod tests {
     #[test]
     fn test_api_response_data_deserialize() {
         let json = r#"{"data":42,"success":true,"message":null,"request_id":"req-123","timestamp":1234567890,"extra":{}}"#;
-        let response: ApiResponseData<i32> = serde_json::from_str(json).unwrap();
+        let response: ApiResponseData<i32> = serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(response.data, 42);
         assert!(response.success);
     }

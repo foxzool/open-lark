@@ -269,7 +269,7 @@ mod tests {
     fn test_raw_response_serialization() {
         let response = RawResponse::success_with_data(serde_json::json!({"test": 123}));
         let json = serde_json::to_string(&response).unwrap();
-        let parsed: RawResponse = serde_json::from_str(&json).unwrap();
+        let parsed: RawResponse = serde_json::from_str(&json).expect("JSON 反序列化失败");
         assert!(parsed.is_success());
     }
 
@@ -310,7 +310,7 @@ mod tests {
     #[test]
     fn test_response_deserialize_with_raw_response_error_keeps_code_and_msg() {
         let payload = r#"{"raw_response":{"code":400,"msg":"Bad Request","request_id":null,"data":null,"error":null},"data":null}"#;
-        let parsed = serde_json::from_str::<Response<serde_json::Value>>(payload).unwrap();
+        let parsed = serde_json::from_str::<Response<serde_json::Value>>(payload).expect("JSON 反序列化失败");
         assert_eq!(parsed.raw_response.code, 400);
         assert_eq!(parsed.raw_response.msg, "Bad Request");
         assert!(!parsed.is_success());

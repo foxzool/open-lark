@@ -1033,7 +1033,7 @@ mod performance_integration_tests {
         // 测试序列化/反序列化性能
         let serialize_start = Instant::now();
         let serialized = serde_json::to_string(&body).unwrap();
-        let deserialized: CreateMessageRequestBody = serde_json::from_str(&serialized).unwrap();
+        let deserialized: CreateMessageRequestBody = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         let serialize_duration = serialize_start.elapsed();
         
         assert!(serialize_duration.as_millis() < 100);

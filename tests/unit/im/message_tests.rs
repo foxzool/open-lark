@@ -170,7 +170,7 @@ mod create_message_request_body_tests {
             "uuid": "uuid-123"
         });
 
-        let actual: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let actual: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(actual, expected);
     }
 
@@ -183,7 +183,7 @@ mod create_message_request_body_tests {
             "uuid": "uuid-456"
         }"#;
 
-        let body: CreateMessageRequestBody = serde_json::from_str(json_str).unwrap();
+        let body: CreateMessageRequestBody = serde_json::from_str(json_str).expect("JSON 反序列化失败");
         assert_eq!(body.receive_id, "ou_456");
         assert_eq!(body.msg_type, "post");
         assert!(body.content.contains("Test"));
@@ -378,7 +378,7 @@ mod message_content_tests {
             "tenant_key": "tenant_key_123"
         });
 
-        let actual: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let actual: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(actual, expected);
     }
 
@@ -393,7 +393,7 @@ mod message_content_tests {
             "content": r#"{"text":"Test message content"}"#
         });
 
-        let actual: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let actual: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(actual, expected);
     }
 
@@ -418,7 +418,7 @@ mod message_content_tests {
             "upper_message_id": "om_parent"
         });
 
-        let actual: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let actual: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(actual, expected);
     }
 }
@@ -460,7 +460,7 @@ mod list_message_response_tests {
         };
 
         let serialized = serde_json::to_string(&resp_data).unwrap();
-        let parsed: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["has_more"], true);
         assert_eq!(parsed["page_token"], "next_token_123");
@@ -477,7 +477,7 @@ mod list_message_response_tests {
         };
 
         let serialized = serde_json::to_string(&resp_data).unwrap();
-        let parsed: serde_json::Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["has_more"], false);
         assert!(parsed["page_token"].is_null());

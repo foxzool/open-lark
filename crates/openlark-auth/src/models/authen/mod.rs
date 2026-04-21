@@ -425,7 +425,7 @@ mod tests {
         assert!(json.contains("test@company.com"));
 
         // 反序列化
-        let deserialized: UserInfo = serde_json::from_str(&json).unwrap();
+        let deserialized: UserInfo = serde_json::from_str(&json).expect("JSON 反序列化失败");
         assert_eq!(
             deserialized.enterprise_email,
             Some("test@company.com".to_string())
@@ -439,7 +439,7 @@ mod tests {
 
         let json_no_enterprise = serde_json::to_string(&user_info_no_enterprise_email).unwrap();
         let deserialized_no_enterprise: UserInfo =
-            serde_json::from_str(&json_no_enterprise).unwrap();
+            serde_json::from_str(&json_no_enterprise).expect("JSON 反序列化失败");
         assert!(deserialized_no_enterprise.enterprise_email.is_none());
     }
 }

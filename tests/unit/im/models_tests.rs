@@ -40,7 +40,7 @@ mod message_type_tests {
     #[case(r#""share_user""#, MessageType::ShareUser)]
     #[case(r#""system""#, MessageType::System)]
     fn test_message_type_deserialization(#[case] json_str: &str, #[case] expected: MessageType) {
-        let deserialized: MessageType = serde_json::from_str(json_str).unwrap();
+        let deserialized: MessageType = serde_json::from_str(json_str).expect("JSON 反序列化失败");
         assert_eq!(deserialized, expected);
     }
 
@@ -134,7 +134,7 @@ mod batch_message_status_tests {
     #[case("2", BatchMessageStatus::Success)]
     #[case("3", BatchMessageStatus::Failed)]
     fn test_batch_message_status_deserialization(#[case] json_str: &str, #[case] expected: BatchMessageStatus) {
-        let deserialized: BatchMessageStatus = serde_json::from_str(json_str).unwrap();
+        let deserialized: BatchMessageStatus = serde_json::from_str(json_str).expect("JSON 反序列化失败");
         assert_eq!(deserialized, expected);
     }
 }
@@ -173,7 +173,7 @@ mod emoji_type_tests {
         let emoji = EmojiType::new().with_emoji_type("LAUGH");
         let serialized = serde_json::to_string(&emoji).unwrap();
         let expected = json!({"emoji_type": "LAUGH"});
-        let actual: Value = serde_json::from_str(&serialized).unwrap();
+        let actual: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(actual, expected);
     }
 
@@ -182,7 +182,7 @@ mod emoji_type_tests {
         let emoji = EmojiType::new();
         let serialized = serde_json::to_string(&emoji).unwrap();
         let expected = json!({});
-        let actual: Value = serde_json::from_str(&serialized).unwrap();
+        let actual: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(actual, expected);
     }
 }
@@ -227,7 +227,7 @@ mod message_reaction_tests {
         };
 
         let serialized = serde_json::to_string(&reaction).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(parsed, json!({}));
     }
 }
@@ -246,7 +246,7 @@ mod reaction_user_tests {
         };
 
         let serialized = serde_json::to_string(&user).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["user_id"], "user456");
         assert_eq!(parsed["name"], "Jane Smith");
@@ -264,7 +264,7 @@ mod reaction_user_tests {
         };
 
         let serialized = serde_json::to_string(&user).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         
         assert_eq!(parsed["user_id"], "user789");
         assert_eq!(parsed["reaction_time"], "1640995400");
@@ -289,7 +289,7 @@ mod pin_tests {
         };
 
         let serialized = serde_json::to_string(&pin).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
 
         assert_eq!(parsed["pin_id"], "pin123");
         assert_eq!(parsed["message_id"], "msg456");
@@ -317,7 +317,7 @@ mod batch_message_tests {
         };
 
         let serialized = serde_json::to_string(&batch_msg).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
 
         assert_eq!(parsed["batch_message_id"], "batch123");
         assert_eq!(parsed["status"], 1); // PartialSuccess = 1
@@ -343,7 +343,7 @@ mod image_info_tests {
         };
 
         let serialized = serde_json::to_string(&image_info).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
 
         assert_eq!(parsed["image_key"], "img_key_123");
         assert_eq!(parsed["image_type"], "png");
@@ -363,7 +363,7 @@ mod image_info_tests {
         };
 
         let serialized = serde_json::to_string(&image_info).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
 
         assert_eq!(parsed["image_key"], "img_key_456");
         assert!(parsed.get("image_type").is_none());
@@ -388,7 +388,7 @@ mod file_info_tests {
         };
 
         let serialized = serde_json::to_string(&file_info).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
 
         assert_eq!(parsed["file_key"], "file_key_789");
         assert_eq!(parsed["file_name"], "document.pdf");
@@ -416,7 +416,7 @@ mod urgent_type_tests {
     #[case(r#""sms""#, UrgentType::Sms)]
     #[case(r#""phone""#, UrgentType::Phone)]
     fn test_urgent_type_deserialization(#[case] json_str: &str, #[case] expected: UrgentType) {
-        let deserialized: UrgentType = serde_json::from_str(json_str).unwrap();
+        let deserialized: UrgentType = serde_json::from_str(json_str).expect("JSON 反序列化失败");
         assert_eq!(deserialized, expected);
     }
 }
@@ -434,7 +434,7 @@ mod urgent_info_tests {
         };
 
         let serialized = serde_json::to_string(&urgent_info).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
 
         assert_eq!(parsed["urgent_type"], "sms");
         assert_eq!(parsed["user_id_list"][0], "user1");
@@ -458,7 +458,7 @@ mod url_preview_tests {
         };
 
         let serialized = serde_json::to_string(&url_preview).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
 
         assert_eq!(parsed["url"], "https://example.com");
         assert_eq!(parsed["title"], "Example Website");
@@ -480,7 +480,7 @@ mod page_info_tests {
         };
 
         let serialized = serde_json::to_string(&page_info).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
 
         assert_eq!(parsed["page_token"], "token_next_page");
         assert_eq!(parsed["has_more"], true);
@@ -494,7 +494,7 @@ mod page_info_tests {
         };
 
         let serialized = serde_json::to_string(&page_info).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
 
         assert_eq!(parsed["has_more"], false);
         assert!(parsed.get("page_token").is_none());
@@ -523,7 +523,7 @@ mod property_tests {
             MessageType::System,
         ])) {
             let serialized = serde_json::to_string(&msg_type).unwrap();
-            let deserialized: MessageType = serde_json::from_str(&serialized).unwrap();
+        let deserialized: MessageType = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
             prop_assert_eq!(msg_type, deserialized);
         }
 
@@ -544,7 +544,7 @@ mod property_tests {
             BatchMessageStatus::Failed,
         ])) {
             let serialized = serde_json::to_string(&status).unwrap();
-            let deserialized: BatchMessageStatus = serde_json::from_str(&serialized).unwrap();
+        let deserialized: BatchMessageStatus = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
             prop_assert_eq!(status, deserialized);
         }
 
@@ -610,7 +610,7 @@ mod edge_cases_tests {
         };
 
         let serialized = serde_json::to_string(&reaction).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(parsed["reaction_count"], i32::MAX);
     }
 
@@ -625,7 +625,7 @@ mod edge_cases_tests {
         };
 
         let serialized = serde_json::to_string(&image_info).unwrap();
-        let parsed: Value = serde_json::from_str(&serialized).unwrap();
+        let parsed: Value = serde_json::from_str(&serialized).expect("JSON 反序列化失败");
         assert_eq!(parsed["width"], 0);
         assert_eq!(parsed["height"], 0);
         assert_eq!(parsed["image_size"], 0);

@@ -340,7 +340,7 @@ mod tests {
 
         // 测试序列化
         let json_str = serde_json::to_string(&token).unwrap();
-        let parsed: AccessToken = serde_json::from_str(&json_str).unwrap();
+        let parsed: AccessToken = serde_json::from_str(&json_str).expect("JSON 反序列化失败");
 
         assert_eq!(parsed.access_token, token.access_token);
         assert_eq!(parsed.token_type, token.token_type);
@@ -360,7 +360,7 @@ mod tests {
 
         // 测试序列化
         let json_str = serde_json::to_string(&user_token).unwrap();
-        let parsed: UserAccessToken = serde_json::from_str(&json_str).unwrap();
+        let parsed: UserAccessToken = serde_json::from_str(&json_str).expect("JSON 反序列化失败");
 
         assert_eq!(parsed.access_token, user_token.access_token);
         assert_eq!(parsed.refresh_token, user_token.refresh_token);

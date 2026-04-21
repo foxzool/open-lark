@@ -729,7 +729,7 @@ mod tests {
     fn test_new_ws_response_serialization() {
         let response = NewWsResponse::ok();
         let json = serde_json::to_string(&response).unwrap();
-        let deserialized: NewWsResponse = serde_json::from_str(&json).unwrap();
+        let deserialized: NewWsResponse = serde_json::from_str(&json).expect("JSON 反序列化失败");
 
         assert_eq!(response.code, deserialized.code);
         assert_eq!(response.headers, deserialized.headers);

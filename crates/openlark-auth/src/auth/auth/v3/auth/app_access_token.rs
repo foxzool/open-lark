@@ -141,7 +141,7 @@ mod tests {
     #[test]
     fn test_app_access_token_response_data_deserialization() {
         let json = r#"{"data":{"app_access_token":"token123","expires_in":7200,"tenant_key":"test_tenant"}}"#;
-        let response: AppAccessTokenResponseData = serde_json::from_str(json).unwrap();
+        let response: AppAccessTokenResponseData = serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(response.data.app_access_token, "token123");
         assert_eq!(response.data.expires_in, 7200);
         assert_eq!(response.data.tenant_key, "test_tenant");

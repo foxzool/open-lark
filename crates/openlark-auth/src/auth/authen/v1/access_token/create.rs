@@ -160,7 +160,7 @@ mod tests {
     #[test]
     fn test_user_access_token_v1_response_data_deserialization() {
         let json = r#"{"data":{"user_access_token":"token123","expires_in":7200,"refresh_token":"refresh456"}}"#;
-        let response: UserAccessTokenV1ResponseData = serde_json::from_str(json).unwrap();
+        let response: UserAccessTokenV1ResponseData = serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(response.data.user_access_token, "token123");
         assert_eq!(response.data.expires_in, 7200);
         assert_eq!(response.data.refresh_token, Some("refresh456".to_string()));
