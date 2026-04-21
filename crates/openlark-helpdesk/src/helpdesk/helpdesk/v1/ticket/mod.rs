@@ -1,3 +1,5 @@
+//! Helpdesk 工单 API 模块
+
 /// 回复用户提问接口。
 pub mod answer_user_query;
 /// 创建工单接口。

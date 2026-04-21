@@ -1,11 +1,11 @@
-//! Authen API实现模块 (meta.project=authen)
+//! 用户身份认证模块
 //!
-//! 包含用户认证相关的API实现：
-//! - user_info.get: 获取用户信息
-//! - access_token.create: 获取user_access_token (v1版本)
-//! - refresh_access_token.create: 刷新user_access_token (v1版本)
-//! - oidc.access_token.create: 获取user_access_token (OIDC)
-//! - oidc.refresh_access_token.create: 刷新user_access_token (OIDC)
+//! 提供用户身份认证相关 API 的版本化入口，聚合用户信息、访问令牌与 OIDC 认证能力。
+//!
+//! ## 主要功能
+//! - `v1`: 用户认证 v1 版本接口入口
+//! - 用户访问令牌申请与刷新
+//! - OIDC 访问令牌相关接口
 
 // v1 模块显式导出
 pub use v1::{
