@@ -75,10 +75,9 @@ impl GetByParamRequest {
 /// 查询单个用户授权响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetByParamResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// 授权信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Value>,
 }
 
 impl ApiResponseTrait for GetByParamResponse {

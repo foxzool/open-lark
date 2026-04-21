@@ -51,6 +51,7 @@ security = ["full"]
 [dependencies]
 # 核心依赖
 openlark-core = { workspace = true }
+openlark-auth = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 reqwest = { workspace = true }

@@ -64,7 +64,9 @@ pub struct GetByDepartmentResponse {
     /// 响应数据
     ///
     /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// bp信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bp: Option<Value>,
 }
 
 impl ApiResponseTrait for GetByDepartmentResponse {

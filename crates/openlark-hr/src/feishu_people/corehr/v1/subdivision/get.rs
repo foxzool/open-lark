@@ -70,10 +70,9 @@ impl GetRequest {
 /// 查询单条省份/行政区信息响应
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetResponse {
-    /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    pub data: Value,
+    /// 行政区划信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subdivision: Option<Value>,
 }
 
 impl ApiResponseTrait for GetResponse {

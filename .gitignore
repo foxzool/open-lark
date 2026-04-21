@@ -158,3 +158,6 @@ crates/openlark-meeting/*_PLAN.md
 crates/openlark-meeting/*_PROGRESS.md
 crates/openlark-meeting/API_LIST.md
 crates/openlark-meeting/report.md
+
+# Git worktrees (isolated development workspaces)
+.worktrees/
