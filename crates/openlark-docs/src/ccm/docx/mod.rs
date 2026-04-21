@@ -1,3 +1,5 @@
+//! Docx 文档块能力模块，提供文档内容、模型与 v1 API 聚合导出。
+
 /// ccm/docx模块 - 文档块内容管理
 ///
 /// 按照bizTag/project/version/resource/name.rs模式组织
