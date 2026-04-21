@@ -70,11 +70,35 @@ impl EditRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct EditResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// 响应数据
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<Value>,
+    pub data: Option<OffboardingItem>,
+}
+
+/// 离职信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct OffboardingItem {
+    /// 离职 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offboarding_id: Option<String>,
+    /// 雇佣 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub employment_id: Option<String>,
+    /// 用户 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    /// 离职日期
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offboarding_date: Option<String>,
+    /// 离职状态
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<String>,
+    /// 预留扩展字段
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra: Option<Value>,
 }
 
 impl ApiResponseTrait for EditResponse {

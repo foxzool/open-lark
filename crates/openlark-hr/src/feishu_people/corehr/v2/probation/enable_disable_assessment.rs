@@ -71,11 +71,32 @@ impl EnableDisableAssessmentRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct EnableDisableAssessmentResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// 响应数据
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<Value>,
+    pub data: Option<EnableDisableAssessmentInfo>,
+}
+
+/// 启用/停用试用期考核返回信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct EnableDisableAssessmentInfo {
+    /// 试用期 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub probation_id: Option<String>,
+    /// 雇佣 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub employment_id: Option<String>,
+    /// 是否启用考核
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assessment_enabled: Option<bool>,
+    /// 操作状态
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<String>,
+    /// 预留扩展字段
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra: Option<Value>,
 }
 
 impl ApiResponseTrait for EnableDisableAssessmentResponse {

@@ -76,11 +76,16 @@ impl QueryRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    /// 响应数据
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<Value>,
+    pub data: Option<SecurityGroupItem>,
+}
+
+/// 角色（安全组）条目
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct SecurityGroupItem {
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for QueryResponse {

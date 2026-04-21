@@ -43,9 +43,8 @@ impl PatchSchemaRequest {
         let req: ApiRequest<PatchSchemaResponse> = ApiRequest::patch(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("修改数据范式", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("修改数据范式", "响应数据为空"))
     }
 }
 
