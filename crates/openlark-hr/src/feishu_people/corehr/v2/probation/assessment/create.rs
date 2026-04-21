@@ -70,11 +70,49 @@ impl CreateRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// probation信息
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub probation: Option<Value>,
+    pub probation: Option<ProbationAssessmentProbation>,
+}
+
+/// 试用期对象（含考核信息）
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ProbationAssessmentProbation {
+    /// 试用期 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub probation_id: Option<String>,
+    /// 雇佣 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub employment_id: Option<String>,
+    /// 考核项列表
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assessments: Option<Vec<ProbationAssessmentItem>>,
+    /// 预留扩展字段
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra: Option<Value>,
+}
+
+/// 试用期考核项
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ProbationAssessmentItem {
+    /// 考核 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assessment_id: Option<String>,
+    /// 考核名称
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// 考核状态
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// 分数
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f64>,
+    /// 结果
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<String>,
+    /// 预留扩展字段
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra: Option<Value>,
 }
 
 impl ApiResponseTrait for CreateResponse {

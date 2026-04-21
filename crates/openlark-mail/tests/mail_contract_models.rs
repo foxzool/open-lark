@@ -1,15 +1,12 @@
 #![cfg(feature = "v1")]
 //! 邮件模块代表性契约测试，覆盖核心 request/response 模型的序列化/反序列化双向一致性。
 
+use openlark_mail::mail::mail::v1::mailgroup::alias::list::{
+    ListMailGroupAliasData, MailGroupAlias,
+};
 use openlark_mail::mail::mail::v1::mailgroup::models::{
     CreateMailGroupBody, DeleteMailGroupResponse, GetMailGroupResponse, MailGroupItem,
     MailGroupListResponse, UpdateMailGroupBody,
-};
-use openlark_mail::mail::mail::v1::public_mailbox::models::{
-    CreatePublicMailboxBody, CreatePublicMailboxResponse, DeletePublicMailboxResponse,
-    GetPublicMailboxResponse, PatchPublicMailboxBody, PatchPublicMailboxResponse,
-    PublicMailboxItem, PublicMailboxListResponse, UpdatePublicMailboxBody,
-    UpdatePublicMailboxResponse,
 };
 use openlark_mail::mail::mail::v1::public_mailbox::alias::models::{
     CreatePublicMailboxAliasBody, CreatePublicMailboxAliasResponse,
@@ -21,8 +18,11 @@ use openlark_mail::mail::mail::v1::public_mailbox::member::models::{
     CreatePublicMailboxMemberResponse, DeletePublicMailboxMemberResponse,
     GetPublicMailboxMemberResponse, PublicMailboxMemberItem, PublicMailboxMemberListResponse,
 };
-use openlark_mail::mail::mail::v1::mailgroup::alias::list::{
-    ListMailGroupAliasData, MailGroupAlias,
+use openlark_mail::mail::mail::v1::public_mailbox::models::{
+    CreatePublicMailboxBody, CreatePublicMailboxResponse, DeletePublicMailboxResponse,
+    GetPublicMailboxResponse, PatchPublicMailboxBody, PatchPublicMailboxResponse,
+    PublicMailboxItem, PublicMailboxListResponse, UpdatePublicMailboxBody,
+    UpdatePublicMailboxResponse,
 };
 use openlark_mail::mail::mail::v1::user_mailbox::message::get::MessageData;
 use serde::de::DeserializeOwned;
@@ -51,7 +51,10 @@ fn mailgroup_create_body_contract() {
         mail_group_id: "eng@example.com".to_string(),
         description: Some("工程团队".to_string()),
         owner: Some("ou_owner".to_string()),
-        members: Some(vec!["a@example.com".to_string(), "b@example.com".to_string()]),
+        members: Some(vec![
+            "a@example.com".to_string(),
+            "b@example.com".to_string(),
+        ]),
         only_admins_send: Some(true),
     };
     assert_json_contract(
@@ -257,10 +260,7 @@ fn public_mailbox_patch_body_and_response_contract() {
         name: Some("patched@example.com".to_string()),
         description: None,
     };
-    assert_json_contract(
-        &body,
-        json!({"name": "patched@example.com"}),
-    );
+    assert_json_contract(&body, json!({"name": "patched@example.com"}));
 
     let resp: PatchPublicMailboxResponse = parse_contract(json!({
         "public_mailbox_id": "pm_004",
@@ -433,18 +433,12 @@ fn public_mailbox_member_batch_bodies_contract() {
     let batch_create = BatchCreatePublicMailboxMemberBody {
         emails: vec!["a@x.com".to_string(), "b@x.com".to_string()],
     };
-    assert_json_contract(
-        &batch_create,
-        json!({"emails": ["a@x.com", "b@x.com"]}),
-    );
+    assert_json_contract(&batch_create, json!({"emails": ["a@x.com", "b@x.com"]}));
 
     let batch_delete = BatchDeletePublicMailboxMemberBody {
         member_ids: vec!["id1".to_string(), "id2".to_string()],
     };
-    assert_json_contract(
-        &batch_delete,
-        json!({"member_ids": ["id1", "id2"]}),
-    );
+    assert_json_contract(&batch_delete, json!({"member_ids": ["id1", "id2"]}));
 }
 
 #[test]

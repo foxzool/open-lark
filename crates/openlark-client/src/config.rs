@@ -109,16 +109,8 @@ impl Config {
 
     fn apply_env_var(&mut self, key: &str, value: &str) {
         match key {
-            "OPENLARK_APP_ID" => {
-                if !value.is_empty() {
-                    self.app_id = value.to_string();
-                }
-            }
-            "OPENLARK_APP_SECRET" => {
-                if !value.is_empty() {
-                    self.app_secret = value.to_string();
-                }
-            }
+            "OPENLARK_APP_ID" if !value.is_empty() => self.app_id = value.to_string(),
+            "OPENLARK_APP_SECRET" if !value.is_empty() => self.app_secret = value.to_string(),
             "OPENLARK_APP_TYPE" => {
                 let v = value.trim().to_lowercase();
                 match v.as_str() {
@@ -127,11 +119,7 @@ impl Config {
                     _ => {}
                 }
             }
-            "OPENLARK_BASE_URL" => {
-                if !value.is_empty() {
-                    self.base_url = value.to_string();
-                }
-            }
+            "OPENLARK_BASE_URL" if !value.is_empty() => self.base_url = value.to_string(),
             "OPENLARK_ENABLE_TOKEN_CACHE" => {
                 let s = value.trim().to_lowercase();
                 if !s.is_empty() {
