@@ -1,6 +1,6 @@
-//! 视频会议（vc）项目
+//! 视频会议模块
 //!
-//! meta.project = vc
+//! 提供 VC 服务入口与版本化视频会议 API 聚合。
 
 #![allow(clippy::module_inception)]
 

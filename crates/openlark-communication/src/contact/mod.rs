@@ -1,6 +1,6 @@
-//! 通讯录（contact）
+//! 通讯录模块
 //!
-//! 按 bizTag=contact 组织的 API 实现。
+//! 提供通讯录检索、用户与联系人相关 API 入口。
 
 #![allow(clippy::module_inception)]
 
