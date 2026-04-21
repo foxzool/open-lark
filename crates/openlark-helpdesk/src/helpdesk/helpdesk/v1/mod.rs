@@ -1,3 +1,5 @@
+//! Helpdesk v1 API 模块
+
 /// 坐席接口。
 pub mod agent;
 /// 坐席排班接口。

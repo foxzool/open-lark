@@ -64,11 +64,17 @@ impl GetRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// draft信息
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub draft: Option<Value>,
+    pub draft: Option<DraftInfo>,
+}
+
+/// 草稿信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct DraftInfo {
+    /// 兼容保留字段
+    #[serde(flatten)]
+    pub extra: Value,
 }
 
 impl ApiResponseTrait for GetResponse {

@@ -723,7 +723,10 @@ mod tests {
                         "Fallback parsing should succeed for: {}",
                         json
                     );
-                    let value = fallback_result.unwrap();
+                    let value = match fallback_result {
+                        Ok(value) => value,
+                        Err(err) => panic!("Fallback parsing unexpectedly failed: {err}"),
+                    };
                     assert!(value["code"].is_i64());
                     assert!(value["msg"].is_string());
                 }
@@ -759,7 +762,10 @@ mod tests {
             let value_result = serde_json::from_str::<Value>(json);
             assert!(value_result.is_ok(), "Valid JSON should parse as Value");
 
-            let value = value_result.unwrap();
+            let value = match value_result {
+                Ok(value) => value,
+                Err(err) => panic!("Value parsing unexpectedly failed: {err}"),
+            };
             let raw_response_result = serde_json::from_value::<RawResponse>(value.clone());
 
             if expected_code >= 0 {
@@ -768,7 +774,10 @@ mod tests {
                     "Should parse RawResponse for: {}",
                     json
                 );
-                let raw_response = raw_response_result.unwrap();
+                let raw_response = match raw_response_result {
+                    Ok(raw_response) => raw_response,
+                    Err(err) => panic!("RawResponse parsing unexpectedly failed: {err}"),
+                };
                 assert_eq!(raw_response.code, expected_code);
 
                 if should_have_data && raw_response.code == 0 {

@@ -79,11 +79,17 @@ impl FlowVariableDataRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FlowVariableDataResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// 响应数据
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<Value>,
+    pub data: Option<FlowVariableData>,
+}
+
+/// 流程变量数据
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct FlowVariableData {
+    /// 兼容保留字段
+    #[serde(flatten)]
+    pub extra: Value,
 }
 
 impl ApiResponseTrait for FlowVariableDataResponse {

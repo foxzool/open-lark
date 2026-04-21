@@ -1140,14 +1140,21 @@ mod serialization_tests {
         test_ser_country_region_get,
         country_region::get::GetResponse,
         country_region::get::GetResponse {
-            data: json!({"country_region_id":"cn"})
+            country_region: Some(json!({"country_region_id":"cn"}))
         }
     );
     roundtrip_eq!(
         test_ser_country_region_list,
         country_region::list::ListResponse,
         country_region::list::ListResponse {
-            data: json!({"items":[{"country_region_id":"cn"}]})
+            items: Some(vec![country_region::list::CountryRegionItem {
+                extra: std::collections::HashMap::from([(
+                    "country_region_id".to_string(),
+                    json!("cn"),
+                )]),
+            }]),
+            page_token: None,
+            has_more: None,
         }
     );
 }

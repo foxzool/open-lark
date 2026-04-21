@@ -12,6 +12,7 @@ tools/*/target/
 # Rust lock file (keep workspace lock, ignore individual crates)
 Cargo.lock
 examples/Cargo.lock
+!.github/msrv/Cargo.lock
 
 # Rust backup files
 **/*.rs.bk

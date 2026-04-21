@@ -81,12 +81,12 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_repr = "0.1.19"
 chrono = { version = "0.4.38", features = ["serde"] }
-uuid = { version = "1.6", features = ["v4", "serde"] }
-url = { version = "2.5.0", features = ["serde"] }
+uuid = { version = "=1.6.1", features = ["v4", "serde"] }
+url = { version = "=2.5.0", features = ["serde"] }
 prost = { version = "0.13" }
 
 # === 网络与HTTP (Networking & HTTP) ===
-reqwest = { version = "0.12.7", default-features = false, features = ["json", "multipart", "rustls-tls"] }
+reqwest = { version = "=0.12.7", default-features = false, features = ["json", "multipart", "rustls-tls"] }
 tokio-tungstenite = { version = "0.23", features = ["rustls-tls-native-roots"] }
 lark-websocket-protobuf = "0.1"
 http = "1.0"
@@ -110,13 +110,14 @@ anyhow = "1.0.86"
 thiserror = "2.0"
 rand = "0.8"
 regex = "1.10"
+indexmap = "=2.2.6"
 strum = "0.27"
 strum_macros = "0.27"
 urlencoding = "2.1"
 quick_cache = { version = "0.6.3", features = [] }
 walkdir = "2.4"
 num_cpus = "1.16"
-serde_with = "3"
+serde_with = { version = "=3.4.0", default-features = false, features = ["macros"] }
 
 # === 工作空间内部依赖 (Internal Workspace Dependencies) ===
 # 核心基础设施模块
@@ -145,15 +146,15 @@ openlark-analytics = { path = "crates/openlark-analytics", version = "0.15.0" }
 openlark-user = { path = "crates/openlark-user", version = "0.15.0" }
 
 # Test dependencies shared across workspace
-rstest = "0.19"
-proptest = "1.0"
-tempfile = "3.8"
+rstest = "=0.19.0"
+proptest = "=1.5.0"
+tempfile = "=3.10.1"
 test-log = "0.2"
 tracing-test = "0.2"
 wiremock = "0.6"
 once_cell = "1.19"
 mockall = "0.12"
-insta = { version = "1.39", features = ["json"] }
+insta = { version = "=1.39.0", features = ["json"] }
 
 # Examples需要的依赖
 dotenvy = "0.15"
@@ -224,7 +225,7 @@ wiremock = { workspace = true }
 once_cell = { workspace = true }
 mockall = { workspace = true }
 colored = "2.1"
-clap = { version = "4.4", features = ["derive"] }
+clap = { version = "=4.5.50", features = ["derive"] }
 tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
 reqwest = { workspace = true }
 lark-websocket-protobuf = { workspace = true }
