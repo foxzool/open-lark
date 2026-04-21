@@ -1,3 +1,5 @@
+//! Baike v1 模块，提供分类、草稿、词条与文件等 API 能力。
+
 /// Baike v1 分类模块。
 pub mod classification;
 /// Baike v1 草稿模块。

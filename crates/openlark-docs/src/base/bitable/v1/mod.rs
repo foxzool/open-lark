@@ -1,3 +1,5 @@
+//! 多维表格 v1 接口模块，聚合 app 与字段类型定义及导出。
+
 /// app 子模块。
 pub mod app;
 mod field_types;

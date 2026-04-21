@@ -1,5 +1,7 @@
 #![allow(clippy::module_inception)]
 
+//! 知识库模块入口，聚合 baike、lingo 与共享模型能力。
+
 /// Baike 模块
 pub mod baike;
 /// Lingo 模块。
