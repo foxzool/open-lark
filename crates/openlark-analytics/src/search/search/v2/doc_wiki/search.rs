@@ -43,9 +43,8 @@ impl SearchDocWikiRequest {
         let req: ApiRequest<SearchDocWikiResponse> = ApiRequest::post(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("搜索文档", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("搜索文档", "响应数据为空"))
     }
 }
 

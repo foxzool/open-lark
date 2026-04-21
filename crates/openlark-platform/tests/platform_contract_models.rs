@@ -1,4 +1,12 @@
-#![cfg(all(feature = "admin", feature = "directory", feature = "app-engine", feature = "mdm", feature = "tenant", feature = "trust_party", feature = "spark"))]
+#![cfg(all(
+    feature = "admin",
+    feature = "directory",
+    feature = "app-engine",
+    feature = "mdm",
+    feature = "tenant",
+    feature = "trust_party",
+    feature = "spark"
+))]
 //! 各业务域 request/response 数据模型的代表性契约测试。
 
 use openlark_platform::common::{AppInfo, DirectoryItem, SystemSettings};
@@ -123,8 +131,7 @@ fn admin_badge_contracts() {
     }));
     assert_eq!(list_resp.items.len(), 1);
     assert!(list_resp.has_more);
-    let rt: ListBadgeResponse =
-        parse_contract(to_value(&list_resp).unwrap());
+    let rt: ListBadgeResponse = parse_contract(to_value(&list_resp).unwrap());
     assert_eq!(rt.items[0].badge_id, "b_001");
 
     let img: CreateBadgeImageResponse = parse_contract(json!({
@@ -154,7 +161,6 @@ fn admin_badge_grant_contracts() {
     assert_eq!(resp.items[0].grant_id, "g_001");
     assert!(!resp.has_more);
 }
-
 
 // ── directory: department / employee (私有字段，仅测试 roundtrip) ──────
 
@@ -381,7 +387,6 @@ fn spark_id_convert_contracts() {
         ]
     }));
     assert_eq!(resp.items.len(), 2);
-    let rt: DirectoryUserIdConvertResponse =
-        parse_contract(to_value(&resp).unwrap());
+    let rt: DirectoryUserIdConvertResponse = parse_contract(to_value(&resp).unwrap());
     assert_eq!(rt.items[0].source_id, "spark_user_001");
 }

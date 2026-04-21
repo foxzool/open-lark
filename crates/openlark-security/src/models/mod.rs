@@ -36,7 +36,10 @@ impl SecurityConfig {
     /// 使用 openlark-auth 的 AuthTokenProvider 获取真实的 app_access_token
     pub async fn get_app_access_token(&self) -> crate::SecurityResult<String> {
         use openlark_auth::AuthTokenProvider;
-        use openlark_core::{auth::{TokenProvider, TokenRequest}, config::Config};
+        use openlark_core::{
+            auth::{TokenProvider, TokenRequest},
+            config::Config,
+        };
 
         // 从 SecurityConfig 创建 Config
         let config = Config::builder()
@@ -50,7 +53,9 @@ impl SecurityConfig {
         let token: String = token_provider
             .get_token(TokenRequest::app())
             .await
-            .map_err(|e: openlark_core::CoreError| openlark_core::error::authentication_error(e.to_string()))?;
+            .map_err(|e: openlark_core::CoreError| {
+                openlark_core::error::authentication_error(e.to_string())
+            })?;
 
         Ok(token)
     }

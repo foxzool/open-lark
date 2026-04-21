@@ -37,10 +37,7 @@ fn get_app_response_contract() {
     assert_eq!(response.app_id, "cli_a5xxxxxxxx");
     assert_eq!(response.app_name, "测试应用");
     assert_eq!(response.app_type, "market");
-    assert_eq!(
-        response.description.as_deref(),
-        Some("用于集成测试的应用")
-    );
+    assert_eq!(response.description.as_deref(), Some("用于集成测试的应用"));
 
     let response_no_desc: GetAppResponse = parse_contract(json!({
         "app_id": "cli_b3xxxxxxxx",

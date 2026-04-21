@@ -12,8 +12,9 @@ pub fn sign(timestamp: i64, secret: &str) -> String {
     let content = format!("{}\n{}", timestamp, secret);
     // SAFETY: HMAC-SHA256 的 new_from_slice 只有在密钥长度超过 128GB 时才会失败，
     // 这在实际使用中是不可能的。secret 是用户配置的 webhook 密钥，通常为几十字节。
-    let mut mac = HmacSha256::new_from_slice(secret.as_bytes())
-        .expect("HMAC can accept keys of any size up to 128GB, which is impossible for webhook secrets");
+    let mut mac = HmacSha256::new_from_slice(secret.as_bytes()).expect(
+        "HMAC can accept keys of any size up to 128GB, which is impossible for webhook secrets",
+    );
     mac.update(content.as_bytes());
     base64::engine::general_purpose::STANDARD.encode(mac.finalize().into_bytes())
 }
