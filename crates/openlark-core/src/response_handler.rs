@@ -80,7 +80,7 @@ impl ImprovedResponseHandler {
         let tracker = ResponseTracker::start("json_data", response.content_length());
 
         let response_text = response.text().await?;
-        debug!("Raw response: {response_text}");
+        // Don't log raw response to prevent token/PII leakage
 
         // 记录解析阶段开始
         tracker.parsing_complete();
