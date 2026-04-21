@@ -66,17 +66,32 @@ impl SearchRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SearchResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// 数据列表
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<Value>>,
+    pub items: Option<Vec<LanguageItem>>,
     /// 分页令牌
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否还有更多数据
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
+}
+
+/// 语言条目信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct LanguageItem {
+    /// 语言 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// 语言名称
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// 语言编码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// 兼容保留字段
+    #[serde(flatten)]
+    pub extra: Value,
 }
 
 impl ApiResponseTrait for SearchResponse {

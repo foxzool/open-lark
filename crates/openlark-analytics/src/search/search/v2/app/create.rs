@@ -35,17 +35,13 @@ impl SearchAppRequest {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(
-        self,
-        option: RequestOption,
-    ) -> SDKResult<SearchAppResponse> {
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<SearchAppResponse> {
         let path = "/open-apis/search/v2/app".to_string();
         let req: ApiRequest<SearchAppResponse> = ApiRequest::post(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("搜索应用", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("搜索应用", "响应数据为空"))
     }
 }
 

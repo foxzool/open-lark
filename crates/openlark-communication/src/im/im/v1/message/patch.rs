@@ -142,6 +142,6 @@ mod tests {
     #[test]
     fn test_patch_body_empty() {
         let body = json!({});
-        assert_eq!(body.as_object().unwrap().len(), 0);
+        assert_eq!(body.as_object().map(|object| object.len()), Some(0));
     }
 }

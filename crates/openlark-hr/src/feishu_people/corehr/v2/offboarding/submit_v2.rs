@@ -70,11 +70,35 @@ impl SubmitV2Request {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SubmitV2Response {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// 响应数据
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<Value>,
+    pub data: Option<OffboardingInfo>,
+}
+
+/// 操作离职返回信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct OffboardingInfo {
+    /// 离职 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offboarding_id: Option<String>,
+    /// 雇佣 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub employment_id: Option<String>,
+    /// 用户 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    /// 离职日期
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offboarding_date: Option<String>,
+    /// 操作状态
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// 操作时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operated_at: Option<String>,
+    /// 预留扩展字段
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra: Option<Value>,
 }
 
 impl ApiResponseTrait for SubmitV2Response {

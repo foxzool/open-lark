@@ -8,10 +8,9 @@ use openlark_security::models::{
     ComplianceRuleType, ComplianceStatus, DeviceApplyRecord, DeviceApplyRecordApproveRequest,
     DeviceComplianceRule, DeviceInfo, DeviceRecord, DeviceRecordRequest, DeviceRecordStatus,
     DeviceRecordUpdateRequest, DeviceStatus, DeviceType, ExtensionMap, FaceImageInfo, GeoLocation,
-    KeyValue, OpenApiLog, OpenApiLogQueryRequest, OperationResponse, PageRequest,
-    PageResponse, PermissionRuleInfo, SortDirection, Status,
-    TimeRange, UserInfo, UserListResponse, UserRequest, VerificationMethod, VisitorInfo,
-    VisitorStatus,
+    KeyValue, OpenApiLog, OpenApiLogQueryRequest, OperationResponse, PageRequest, PageResponse,
+    PermissionRuleInfo, SortDirection, Status, TimeRange, UserInfo, UserListResponse, UserRequest,
+    VerificationMethod, VisitorInfo, VisitorStatus,
 };
 use serde::de::DeserializeOwned;
 use serde::Serialize;
@@ -195,11 +194,26 @@ fn device_type_variants() {
 
 #[test]
 fn device_status_variants() {
-    assert_eq!(from_value::<DeviceStatus>(json!("normal")).unwrap(), DeviceStatus::Normal);
-    assert_eq!(from_value::<DeviceStatus>(json!("offline")).unwrap(), DeviceStatus::Offline);
-    assert_eq!(from_value::<DeviceStatus>(json!("fault")).unwrap(), DeviceStatus::Fault);
-    assert_eq!(from_value::<DeviceStatus>(json!("maintenance")).unwrap(), DeviceStatus::Maintenance);
-    assert_eq!(from_value::<DeviceStatus>(json!("disabled")).unwrap(), DeviceStatus::Disabled);
+    assert_eq!(
+        from_value::<DeviceStatus>(json!("normal")).unwrap(),
+        DeviceStatus::Normal
+    );
+    assert_eq!(
+        from_value::<DeviceStatus>(json!("offline")).unwrap(),
+        DeviceStatus::Offline
+    );
+    assert_eq!(
+        from_value::<DeviceStatus>(json!("fault")).unwrap(),
+        DeviceStatus::Fault
+    );
+    assert_eq!(
+        from_value::<DeviceStatus>(json!("maintenance")).unwrap(),
+        DeviceStatus::Maintenance
+    );
+    assert_eq!(
+        from_value::<DeviceStatus>(json!("disabled")).unwrap(),
+        DeviceStatus::Disabled
+    );
 }
 
 #[test]
@@ -253,8 +267,14 @@ fn visitor_info_contract() {
 #[test]
 fn visitor_status_roundtrip() {
     assert_eq!(to_value(&VisitorStatus::Pending).unwrap(), json!("pending"));
-    assert_eq!(to_value(&VisitorStatus::Approved).unwrap(), json!("approved"));
-    assert_eq!(to_value(&VisitorStatus::Rejected).unwrap(), json!("rejected"));
+    assert_eq!(
+        to_value(&VisitorStatus::Approved).unwrap(),
+        json!("approved")
+    );
+    assert_eq!(
+        to_value(&VisitorStatus::Rejected).unwrap(),
+        json!("rejected")
+    );
     assert_eq!(to_value(&VisitorStatus::Expired).unwrap(), json!("expired"));
     assert_eq!(to_value(&VisitorStatus::Revoked).unwrap(), json!("revoked"));
 }
@@ -404,20 +424,50 @@ fn device_record_update_request_contract() {
 
 #[test]
 fn device_record_status_variants() {
-    assert_eq!(from_value::<DeviceRecordStatus>(json!("pending")).unwrap(), DeviceRecordStatus::Pending);
-    assert_eq!(from_value::<DeviceRecordStatus>(json!("approved")).unwrap(), DeviceRecordStatus::Approved);
-    assert_eq!(from_value::<DeviceRecordStatus>(json!("rejected")).unwrap(), DeviceRecordStatus::Rejected);
-    assert_eq!(from_value::<DeviceRecordStatus>(json!("expired")).unwrap(), DeviceRecordStatus::Expired);
-    assert_eq!(from_value::<DeviceRecordStatus>(json!("revoked")).unwrap(), DeviceRecordStatus::Revoked);
-    assert_eq!(from_value::<DeviceRecordStatus>(json!("non_compliant")).unwrap(), DeviceRecordStatus::NonCompliant);
+    assert_eq!(
+        from_value::<DeviceRecordStatus>(json!("pending")).unwrap(),
+        DeviceRecordStatus::Pending
+    );
+    assert_eq!(
+        from_value::<DeviceRecordStatus>(json!("approved")).unwrap(),
+        DeviceRecordStatus::Approved
+    );
+    assert_eq!(
+        from_value::<DeviceRecordStatus>(json!("rejected")).unwrap(),
+        DeviceRecordStatus::Rejected
+    );
+    assert_eq!(
+        from_value::<DeviceRecordStatus>(json!("expired")).unwrap(),
+        DeviceRecordStatus::Expired
+    );
+    assert_eq!(
+        from_value::<DeviceRecordStatus>(json!("revoked")).unwrap(),
+        DeviceRecordStatus::Revoked
+    );
+    assert_eq!(
+        from_value::<DeviceRecordStatus>(json!("non_compliant")).unwrap(),
+        DeviceRecordStatus::NonCompliant
+    );
 }
 
 #[test]
 fn compliance_status_variants() {
-    assert_eq!(from_value::<ComplianceStatus>(json!("compliant")).unwrap(), ComplianceStatus::Compliant);
-    assert_eq!(from_value::<ComplianceStatus>(json!("non_compliant")).unwrap(), ComplianceStatus::NonCompliant);
-    assert_eq!(from_value::<ComplianceStatus>(json!("pending")).unwrap(), ComplianceStatus::Pending);
-    assert_eq!(from_value::<ComplianceStatus>(json!("unknown")).unwrap(), ComplianceStatus::Unknown);
+    assert_eq!(
+        from_value::<ComplianceStatus>(json!("compliant")).unwrap(),
+        ComplianceStatus::Compliant
+    );
+    assert_eq!(
+        from_value::<ComplianceStatus>(json!("non_compliant")).unwrap(),
+        ComplianceStatus::NonCompliant
+    );
+    assert_eq!(
+        from_value::<ComplianceStatus>(json!("pending")).unwrap(),
+        ComplianceStatus::Pending
+    );
+    assert_eq!(
+        from_value::<ComplianceStatus>(json!("unknown")).unwrap(),
+        ComplianceStatus::Unknown
+    );
 }
 
 #[test]
@@ -533,12 +583,30 @@ fn device_compliance_rule_contract() {
 
 #[test]
 fn compliance_rule_type_variants() {
-    assert_eq!(from_value::<ComplianceRuleType>(json!("device_type_check")).unwrap(), ComplianceRuleType::DeviceTypeCheck);
-    assert_eq!(from_value::<ComplianceRuleType>(json!("os_check")).unwrap(), ComplianceRuleType::OsCheck);
-    assert_eq!(from_value::<ComplianceRuleType>(json!("security_software_check")).unwrap(), ComplianceRuleType::SecuritySoftwareCheck);
-    assert_eq!(from_value::<ComplianceRuleType>(json!("encryption_check")).unwrap(), ComplianceRuleType::EncryptionCheck);
-    assert_eq!(from_value::<ComplianceRuleType>(json!("network_access_check")).unwrap(), ComplianceRuleType::NetworkAccessCheck);
-    assert_eq!(from_value::<ComplianceRuleType>(json!("custom")).unwrap(), ComplianceRuleType::Custom);
+    assert_eq!(
+        from_value::<ComplianceRuleType>(json!("device_type_check")).unwrap(),
+        ComplianceRuleType::DeviceTypeCheck
+    );
+    assert_eq!(
+        from_value::<ComplianceRuleType>(json!("os_check")).unwrap(),
+        ComplianceRuleType::OsCheck
+    );
+    assert_eq!(
+        from_value::<ComplianceRuleType>(json!("security_software_check")).unwrap(),
+        ComplianceRuleType::SecuritySoftwareCheck
+    );
+    assert_eq!(
+        from_value::<ComplianceRuleType>(json!("encryption_check")).unwrap(),
+        ComplianceRuleType::EncryptionCheck
+    );
+    assert_eq!(
+        from_value::<ComplianceRuleType>(json!("network_access_check")).unwrap(),
+        ComplianceRuleType::NetworkAccessCheck
+    );
+    assert_eq!(
+        from_value::<ComplianceRuleType>(json!("custom")).unwrap(),
+        ComplianceRuleType::Custom
+    );
 }
 
 #[test]
@@ -562,7 +630,10 @@ fn compliance_check_result_contract() {
 fn compliance_result_roundtrip() {
     assert_eq!(to_value(&ComplianceResult::Pass).unwrap(), json!("pass"));
     assert_eq!(to_value(&ComplianceResult::Fail).unwrap(), json!("fail"));
-    assert_eq!(to_value(&ComplianceResult::Warning).unwrap(), json!("warning"));
+    assert_eq!(
+        to_value(&ComplianceResult::Warning).unwrap(),
+        json!("warning")
+    );
     assert_eq!(to_value(&ComplianceResult::Skip).unwrap(), json!("skip"));
 }
 
@@ -689,10 +760,22 @@ fn access_result_roundtrip() {
 
 #[test]
 fn apply_status_variants() {
-    assert_eq!(from_value::<ApplyStatus>(json!("pending")).unwrap(), ApplyStatus::Pending);
-    assert_eq!(from_value::<ApplyStatus>(json!("approved")).unwrap(), ApplyStatus::Approved);
-    assert_eq!(from_value::<ApplyStatus>(json!("rejected")).unwrap(), ApplyStatus::Rejected);
-    assert_eq!(from_value::<ApplyStatus>(json!("revoked")).unwrap(), ApplyStatus::Revoked);
+    assert_eq!(
+        from_value::<ApplyStatus>(json!("pending")).unwrap(),
+        ApplyStatus::Pending
+    );
+    assert_eq!(
+        from_value::<ApplyStatus>(json!("approved")).unwrap(),
+        ApplyStatus::Approved
+    );
+    assert_eq!(
+        from_value::<ApplyStatus>(json!("rejected")).unwrap(),
+        ApplyStatus::Rejected
+    );
+    assert_eq!(
+        from_value::<ApplyStatus>(json!("revoked")).unwrap(),
+        ApplyStatus::Revoked
+    );
 }
 
 #[test]

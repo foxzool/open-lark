@@ -81,11 +81,29 @@ impl DeleteRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct DeleteResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// 操作结果
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub result: Option<Value>,
+    pub result: Option<ProbationAssessmentDeleteResult>,
+}
+
+/// 删除试用期考核操作结果
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ProbationAssessmentDeleteResult {
+    /// 考核 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assessment_id: Option<String>,
+    /// 是否删除成功
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deleted: Option<bool>,
+    /// 操作状态
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// 提示信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// 预留扩展字段
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra: Option<Value>,
 }
 
 impl ApiResponseTrait for DeleteResponse {

@@ -76,11 +76,33 @@ impl QueryRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    /// 响应数据
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<Value>,
+    pub data: Option<CustomFieldInfo>,
+}
+
+/// 自定义字段信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct CustomFieldInfo {
+    /// 自定义字段列表
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<CustomFieldItem>>,
+    /// 分页令牌
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 是否还有更多数据
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_more: Option<bool>,
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
+}
+
+/// 自定义字段条目
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct CustomFieldItem {
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for QueryResponse {

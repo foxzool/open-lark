@@ -304,14 +304,11 @@ mod tests {
         };
         let response_with_data = BankCardRecognizeResponse { data: Some(result) };
         assert!(response_with_data.data.is_some());
-        assert_eq!(
-            response_with_data
-                .data
-                .unwrap()
-                .parsing_result
-                .unwrap()
-                .bank_name,
-            Some("建设银行".to_string())
-        );
+        let bank_name = response_with_data
+            .data
+            .as_ref()
+            .and_then(|data| data.parsing_result.as_ref())
+            .and_then(|result| result.bank_name.as_deref());
+        assert_eq!(bank_name, Some("建设银行"));
     }
 }

@@ -1,4 +1,11 @@
-//! Authen v1 API实现
+//! 用户身份认证 v1 模块
+//!
+//! 提供用户认证 v1 版本 API，包括用户信息获取、访问令牌申请与刷新、OIDC 认证能力。
+//!
+//! ## 主要功能
+//! - `user_info`: 获取用户身份信息
+//! - `access_token` / `refresh_access_token`: 访问令牌申请与刷新
+//! - `oidc`: 基于 OIDC 的访问令牌接口
 
 pub mod access_token;
 pub mod oidc;

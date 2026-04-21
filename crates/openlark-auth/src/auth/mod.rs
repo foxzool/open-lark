@@ -1,11 +1,11 @@
-//! Auth API实现模块 (meta.project=auth)
+//! 认证主模块
 //!
-//! 包含企业认证相关的API实现：
-//! - app_access_token: 商店应用获取app_access_token
-//! - app_access_token_internal: 自建应用获取app_access_token
-//! - tenant_access_token: 商店应用获取tenant_access_token
-//! - tenant_access_token_internal: 自建应用获取tenant_access_token
-//! - app_ticket: 重新获取app_ticket
+//! 提供飞书开放平台认证能力的统一入口，聚合应用认证、用户认证与 OAuth 授权相关子模块。
+//!
+//! ## 主要功能
+//! - `auth`: 企业应用令牌与票据相关接口
+//! - `authen`: 用户身份认证与 OIDC 相关接口
+//! - `oauth`: OAuth 授权流程相关接口
 
 #![allow(clippy::module_inception)]
 

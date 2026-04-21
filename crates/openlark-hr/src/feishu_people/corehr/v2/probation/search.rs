@@ -76,17 +76,47 @@ impl SearchRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SearchResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// 数据列表
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<Value>>,
+    pub items: Option<Vec<ProbationItem>>,
     /// 分页令牌
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否还有更多数据
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
+}
+
+/// 试用期信息条目
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ProbationItem {
+    /// 试用期 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub probation_id: Option<String>,
+    /// 雇佣 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub employment_id: Option<String>,
+    /// 用户 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    /// 试用期状态
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// 试用期开始日期
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub probation_start_date: Option<String>,
+    /// 试用期结束日期
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub probation_end_date: Option<String>,
+    /// 转正日期
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regularization_date: Option<String>,
+    /// 是否启用考核
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assessment_enabled: Option<bool>,
+    /// 预留扩展字段
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra: Option<Value>,
 }
 
 impl ApiResponseTrait for SearchResponse {

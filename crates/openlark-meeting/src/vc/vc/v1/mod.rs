@@ -1,6 +1,6 @@
-//! VC V1 API 模块
+//! 视频会议 v1 模块
 //!
-//! 包含所有 vc v1 API 端点。
+//! 提供 VC v1 版本下会议、会议室与预约配置相关接口。
 
 pub mod alert;
 pub mod export;

@@ -43,9 +43,8 @@ impl DeleteDataSourceRequest {
         let req: ApiRequest<DeleteDataSourceResponse> = ApiRequest::delete(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("删除数据源", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("删除数据源", "响应数据为空"))
     }
 }
 

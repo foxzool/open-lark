@@ -52,17 +52,13 @@ impl GetSchemaRequest {
         self.execute_with_options(RequestOption::default()).await
     }
 
-    pub async fn execute_with_options(
-        self,
-        option: RequestOption,
-    ) -> SDKResult<GetSchemaResponse> {
+    pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<GetSchemaResponse> {
         let path = format!("/open-apis/search/v2/schemas/{}", self.schema_id);
         let req: ApiRequest<GetSchemaResponse> = ApiRequest::get(&path);
 
         let resp = Transport::request(req, &self.config, Some(option)).await?;
-        resp.data.ok_or_else(|| {
-            openlark_core::error::validation_error("获取数据范式", "响应数据为空")
-        })
+        resp.data
+            .ok_or_else(|| openlark_core::error::validation_error("获取数据范式", "响应数据为空"))
     }
 }
 

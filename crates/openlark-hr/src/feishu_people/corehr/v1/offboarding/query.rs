@@ -76,11 +76,27 @@ impl QueryRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    /// 响应数据
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<Value>,
+    pub data: Option<OffboardingInfo>,
+}
+
+/// 离职信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OffboardingInfo {
+    /// 离职条目列表
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<OffboardingItem>>,
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
+}
+
+/// 离职条目
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct OffboardingItem {
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for QueryResponse {

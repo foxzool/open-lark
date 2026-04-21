@@ -128,7 +128,7 @@ mod tests {
         };
         let result = serialize_params(&params, "查询任务");
         assert!(result.is_ok());
-        let json = result.unwrap();
+        let json = result.expect("序列化参数应成功");
         assert_eq!(json["name"], "test");
         assert_eq!(json["value"], 42);
     }

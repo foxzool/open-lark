@@ -269,22 +269,25 @@ mod tests {
     }
 
     #[test]
-    fn test_build_url_basic() {
+    fn test_build_url_basic() -> Result<(), CoreError> {
         let config = create_test_config();
         let api_req = create_test_api_request();
 
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
         assert!(result.is_ok());
-        let url = result.unwrap();
+        let url = result.map_err(|e| {
+            crate::error::request_builder_error(format!("构建URL失败: {}", e))
+        })?;
         // May have trailing ? due to parse_with_params implementation
         assert!(url
             .as_str()
             .starts_with("https://open.feishu.cn/open-apis/test"));
+        Ok(())
     }
 
     #[test]
-    fn test_build_url_with_query() {
+    fn test_build_url_with_query() -> Result<(), CoreError> {
         let config = create_test_config();
         let mut api_req = create_test_api_request();
         api_req.query.insert("page".to_string(), "1".to_string());
@@ -293,15 +296,18 @@ mod tests {
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
         assert!(result.is_ok());
-        let url = result.unwrap();
+        let url = result.map_err(|e| {
+            crate::error::request_builder_error(format!("构建URL失败: {}", e))
+        })?;
         let url_str = url.as_str();
         assert!(url_str.starts_with("https://open.feishu.cn/open-apis/test"));
         assert!(url_str.contains("page=1"));
         assert!(url_str.contains("size=20"));
+        Ok(())
     }
 
     #[test]
-    fn test_build_url_with_special_characters() {
+    fn test_build_url_with_special_characters() -> Result<(), CoreError> {
         let config = create_test_config();
         let mut api_req = create_test_api_request();
         api_req
@@ -314,14 +320,17 @@ mod tests {
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
         assert!(result.is_ok());
-        let url = result.unwrap();
+        let url = result.map_err(|e| {
+            crate::error::request_builder_error(format!("构建URL失败: {}", e))
+        })?;
         // URL encoding should be handled properly
         assert!(url.as_str().contains("query="));
         assert!(url.as_str().contains("filter="));
+        Ok(())
     }
 
     #[test]
-    fn test_build_url_with_empty_query() {
+    fn test_build_url_with_empty_query() -> Result<(), CoreError> {
         let config = create_test_config();
         let mut api_req = create_test_api_request();
         api_req.query.insert("empty".to_string(), "".to_string());
@@ -329,8 +338,11 @@ mod tests {
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
         assert!(result.is_ok());
-        let url = result.unwrap();
+        let url = result.map_err(|e| {
+            crate::error::request_builder_error(format!("构建URL失败: {}", e))
+        })?;
         assert!(url.as_str().contains("empty="));
+        Ok(())
     }
 
     #[test]
@@ -468,7 +480,7 @@ mod tests {
     }
 
     #[test]
-    fn test_build_url_with_path_segments() {
+    fn test_build_url_with_path_segments() -> Result<(), CoreError> {
         let config = create_test_config();
         let api_req =
             ApiRequest::<()>::get("https://open.feishu.cn/open-apis/v1/users/123/messages");
@@ -476,10 +488,13 @@ mod tests {
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
         assert!(result.is_ok());
-        let url = result.unwrap();
+        let url = result.map_err(|e| {
+            crate::error::request_builder_error(format!("构建URL失败: {}", e))
+        })?;
         // May have trailing ? due to parse_with_params implementation
         assert!(url
             .as_str()
             .starts_with("https://open.feishu.cn/open-apis/v1/users/123/messages"));
+        Ok(())
     }
 }

@@ -3127,7 +3127,7 @@ pub enum FeishuPeopleApiV2 {
     /// `ProbationAssessmentCreate` 变体。
     ProbationAssessmentCreate,
     /// `ProbationAssessmentPatch` 变体。
-    ProbationAssessmentPatch(String),  // assessment_id
+    ProbationAssessmentPatch(String), // assessment_id
     /// `ProbationAssessmentDelete` 变体。
     ProbationAssessmentDelete(String), // assessment_id
 

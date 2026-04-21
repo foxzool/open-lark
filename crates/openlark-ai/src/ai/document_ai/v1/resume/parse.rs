@@ -501,14 +501,11 @@ mod tests {
         };
         let response_with_data = ResumeParseResponse { data: Some(result) };
         assert!(response_with_data.data.is_some());
-        assert_eq!(
-            response_with_data
-                .data
-                .unwrap()
-                .parsing_result
-                .unwrap()
-                .candidate_name,
-            Some("王五".to_string())
-        );
+        let candidate_name = response_with_data
+            .data
+            .as_ref()
+            .and_then(|data| data.parsing_result.as_ref())
+            .and_then(|result| result.candidate_name.as_deref());
+        assert_eq!(candidate_name, Some("王五"));
     }
 }

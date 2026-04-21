@@ -1,3 +1,5 @@
+//! Mail v1 API 模块
+
 /// 邮件组模块。
 pub mod mailgroup;
 /// 公共邮箱模块。

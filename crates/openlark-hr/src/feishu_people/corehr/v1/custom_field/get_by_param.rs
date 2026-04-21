@@ -76,11 +76,17 @@ impl GetByParamRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetByParamResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
     /// custom_field信息
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub custom_field: Option<Value>,
+    pub custom_field: Option<CustomFieldItem>,
+}
+
+/// 自定义字段条目
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct CustomFieldItem {
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for GetByParamResponse {

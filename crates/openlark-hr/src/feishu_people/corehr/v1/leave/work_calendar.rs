@@ -68,11 +68,27 @@ impl WorkCalendarRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct WorkCalendarResponse {
     /// 响应数据
-    ///
-    /// TODO: 根据官方文档添加具体字段
-    /// 响应数据
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<Value>,
+    pub data: Option<WorkCalendarInfo>,
+}
+
+/// 工作日历信息
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct WorkCalendarInfo {
+    /// 工作日历条目
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<WorkCalendarItem>>,
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
+}
+
+/// 工作日历条目
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
+pub struct WorkCalendarItem {
+    /// 透传的扩展字段
+    #[serde(flatten)]
+    pub extra: std::collections::HashMap<String, Value>,
 }
 
 impl ApiResponseTrait for WorkCalendarResponse {
