@@ -77,7 +77,7 @@ mod tests {
                 .app_id("test_app_id")
                 .app_secret("test_app_secret")
                 .build()
-                .unwrap(),
+                .expect("测试配置构建失败"),
             "test_instance_id".to_string(),
         );
         // Just verify it doesn't panic

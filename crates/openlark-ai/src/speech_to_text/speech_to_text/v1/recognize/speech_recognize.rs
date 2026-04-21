@@ -389,10 +389,11 @@ mod tests {
         };
         let response_with_data = SpeechRecognizeResponse { data: Some(result) };
         assert!(response_with_data.data.is_some());
-        assert_eq!(
-            response_with_data.data.unwrap().text,
-            Some("你好世界".to_string())
-        );
+        let text = response_with_data
+            .data
+            .as_ref()
+            .and_then(|data| data.text.as_deref());
+        assert_eq!(text, Some("你好世界"));
     }
 
     #[test]
