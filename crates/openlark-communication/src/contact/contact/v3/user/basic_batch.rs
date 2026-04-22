@@ -187,7 +187,8 @@ mod tests {
                 }
             }]
         }"#;
-        let response: BasicBatchUsersResponse = serde_json::from_str(json).expect("JSON 反序列化失败");
+        let response: BasicBatchUsersResponse =
+            serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(response.users.len(), 1);
         assert_eq!(response.users[0].name.as_deref(), Some("张三"));
         assert_eq!(
@@ -205,9 +206,7 @@ mod tests {
             .execute_with_options(RequestOption::default())
             .await;
         assert!(result.is_err());
-        let error = result
-            .expect_err("缺少 user_ids 应该返回错误")
-            .to_string();
+        let error = result.expect_err("缺少 user_ids 应该返回错误").to_string();
         assert!(error.contains("user_ids"));
     }
 
