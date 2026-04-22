@@ -80,7 +80,6 @@ impl ImprovedResponseHandler {
         let tracker = ResponseTracker::start("json_data", response.content_length());
 
         let response_text = response.text().await?;
-        debug!("Raw response: {response_text}");
 
         // 记录解析阶段开始
         tracker.parsing_complete();
@@ -164,7 +163,6 @@ impl ImprovedResponseHandler {
         let tracker = ResponseTracker::start("json_flatten", response.content_length());
 
         let response_text = response.text().await?;
-        debug!("Raw response: {response_text}");
 
         // 解析阶段
         let raw_value: Value = match serde_json::from_str(&response_text) {
@@ -855,7 +853,8 @@ mod tests {
         let json = serde_json::to_string(&original).unwrap();
 
         // Deserialize back
-        let deserialized: OptimizedBaseResponse<TestData> = serde_json::from_str(&json).expect("JSON 反序列化失败");
+        let deserialized: OptimizedBaseResponse<TestData> =
+            serde_json::from_str(&json).expect("JSON 反序列化失败");
 
         // Verify all fields are preserved
         assert_eq!(deserialized.code, original.code);
@@ -993,7 +992,8 @@ mod tests {
 
         // Test error response with missing msg
         let error_missing_msg = r#"{"code": 500}"#;
-        let parsed_missing: Value = serde_json::from_str(error_missing_msg).expect("JSON 反序列化失败");
+        let parsed_missing: Value =
+            serde_json::from_str(error_missing_msg).expect("JSON 反序列化失败");
         assert_eq!(parsed_missing["code"], 500);
         assert!(!parsed_missing["msg"].is_string());
 

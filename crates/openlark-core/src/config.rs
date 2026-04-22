@@ -4,6 +4,7 @@ use crate::{
     auth::token_provider::{NoOpTokenProvider, TokenProvider},
     constants::{AppType, FEISHU_BASE_URL},
     performance::OptimizedHttpConfig,
+    security::mask_sensitive,
 };
 
 /// # 零拷贝配置共享实现
@@ -35,7 +36,7 @@ use crate::{
 /// - 克隆速度: ~10-20纳秒
 /// - 内存开销: 每个克隆仅8字节
 /// - 引用计数: 自动维护
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Config {
     /// 包装在 Arc 中的共享配置数据
     ///
@@ -45,7 +46,6 @@ pub struct Config {
 }
 
 /// 内部配置数据，被多个服务共享
-#[derive(Debug)]
 pub struct ConfigInner {
     pub(crate) app_id: String,
     pub(crate) app_secret: String,
@@ -61,6 +61,30 @@ pub struct ConfigInner {
     pub(crate) header: HashMap<String, String>,
     /// Token 获取抽象（由业务 crate 实现，例如 openlark-auth）
     pub(crate) token_provider: Arc<dyn TokenProvider>,
+}
+
+impl std::fmt::Debug for Config {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Config")
+            .field("inner", &self.inner)
+            .finish()
+    }
+}
+
+impl std::fmt::Debug for ConfigInner {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ConfigInner")
+            .field("app_id", &self.app_id)
+            .field("app_secret", &mask_sensitive(&self.app_secret))
+            .field("base_url", &self.base_url)
+            .field("enable_token_cache", &self.enable_token_cache)
+            .field("app_type", &self.app_type)
+            .field("http_client", &self.http_client)
+            .field("req_timeout", &self.req_timeout)
+            .field("header", &self.header)
+            .field("token_provider", &"<dyn TokenProvider>")
+            .finish()
+    }
 }
 
 impl Default for ConfigInner {
@@ -380,13 +404,18 @@ mod tests {
 
     #[test]
     fn test_config_debug() {
-        let config = Config::default();
+        let config = Config::new(ConfigInner {
+            app_secret: "test_app_secret".to_string(),
+            ..ConfigInner::default()
+        });
         let debug_str = format!("{:?}", config);
 
         assert!(debug_str.contains("Config"));
         assert!(debug_str.contains("app_id"));
         assert!(debug_str.contains("app_secret"));
         assert!(debug_str.contains("base_url"));
+        assert!(debug_str.contains("***"));
+        assert!(!debug_str.contains("test_app_secret"));
     }
 
     #[test]

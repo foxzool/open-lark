@@ -8,6 +8,7 @@ use openlark_core::{
     config::Config,
     constants::{AccessTokenType, AppType},
     error::{api_error, configuration_error},
+    security::mask_sensitive,
     SDKResult,
 };
 use serde_json::{json, Value};
@@ -19,12 +20,21 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use tokio::sync::RwLock;
 
 /// 缓存的 token 信息
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 struct CachedToken {
     /// token 值
     token: String,
     /// 过期时间戳（Unix 时间戳，秒）
     expires_at: i64,
+}
+
+impl std::fmt::Debug for CachedToken {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("CachedToken")
+            .field("token", &mask_sensitive(&self.token))
+            .field("expires_at", &self.expires_at)
+            .finish()
+    }
 }
 
 impl CachedToken {
@@ -255,7 +265,7 @@ impl TokenProvider for AuthTokenProvider {
 #[cfg(test)]
 #[allow(unused_imports)]
 mod tests {
-    use super::AuthTokenProvider;
+    use super::{AuthTokenProvider, CachedToken};
     use openlark_core::{
         auth::{TokenProvider, TokenRequest},
         config::Config,
@@ -276,5 +286,13 @@ mod tests {
             .expect_err("should fail on unreachable test endpoint");
 
         assert!(!err.to_string().contains("NoOpTokenProvider"));
+    }
+
+    #[test]
+    fn cached_token_debug_masks_token_value() {
+        let token = CachedToken::new("token_secret_value".to_string(), 3600);
+        let debug_str = format!("{:?}", token);
+        assert!(debug_str.contains("***"));
+        assert!(!debug_str.contains("token_secret_value"));
     }
 }

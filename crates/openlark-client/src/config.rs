@@ -7,14 +7,11 @@ use std::time::Duration;
 
 use openlark_core::config::Config as CoreConfig;
 use openlark_core::constants::AppType;
+use openlark_core::security::mask_sensitive;
 
 /// Check if the base_url points to a known Lark/Feishu domain
 fn is_known_base_url(url: &str) -> bool {
-    let allowed_suffixes = [
-        "feishu.cn",
-        "larksuite.com",
-        "larkoffice.com",
-    ];
+    let allowed_suffixes = ["feishu.cn", "larksuite.com", "larkoffice.com"];
     // Parse URL, extract host, check suffix
     if let Ok(parsed) = url::Url::parse(url) {
         if let Some(host) = parsed.host_str() {
@@ -51,7 +48,7 @@ fn is_known_base_url(url: &str) -> bool {
 ///     .base_url("https://open.feishu.cn")  // 默认值，国际版 Lark 使用 https://open.larksuite.com
 ///     .build();
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Config {
     /// 🆔 飞书应用ID
     pub app_id: String,
@@ -75,6 +72,24 @@ pub struct Config {
     /// 🔧 底层 core 配置（按需生成）
     #[doc(hidden)]
     pub(crate) core_config: Option<CoreConfig>,
+}
+
+impl std::fmt::Debug for Config {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Config")
+            .field("app_id", &self.app_id)
+            .field("app_secret", &mask_sensitive(&self.app_secret))
+            .field("app_type", &self.app_type)
+            .field("enable_token_cache", &self.enable_token_cache)
+            .field("base_url", &self.base_url)
+            .field("allow_custom_base_url", &self.allow_custom_base_url)
+            .field("timeout", &self.timeout)
+            .field("retry_count", &self.retry_count)
+            .field("enable_log", &self.enable_log)
+            .field("headers", &self.headers)
+            .field("core_config", &self.core_config)
+            .finish()
+    }
 }
 
 impl Default for Config {
@@ -692,6 +707,19 @@ mod tests {
     }
 
     #[test]
+    fn test_config_debug_masks_app_secret() {
+        let config = Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            ..Default::default()
+        };
+
+        let debug_str = format!("{:?}", config);
+        assert!(debug_str.contains("***"));
+        assert!(!debug_str.contains("test_app_secret"));
+    }
+
+    #[test]
     fn test_config_is_complete() {
         let mut config = Config::default();
         assert!(!config.is_complete());
@@ -704,86 +732,82 @@ mod tests {
     }
 }
 
-    #[test]
-    fn test_config_validation_known_base_url() {
-        // 测试已知的 Feishu/Lark 域名
-        let known_urls = vec![
-            "https://open.feishu.cn",
-            "https://api.feishu.cn",
-            "https://custom.feishu.cn",
-            "https://open.larksuite.com",
-            "https://api.larksuite.com",
-            "https://custom.larksuite.com",
-            "https://open.larkoffice.com",
-            "https://custom.larkoffice.com",
-        ];
+#[test]
+fn test_config_validation_known_base_url() {
+    // 测试已知的 Feishu/Lark 域名
+    let known_urls = vec![
+        "https://open.feishu.cn",
+        "https://api.feishu.cn",
+        "https://custom.feishu.cn",
+        "https://open.larksuite.com",
+        "https://api.larksuite.com",
+        "https://custom.larksuite.com",
+        "https://open.larkoffice.com",
+        "https://custom.larkoffice.com",
+    ];
 
-        for url in known_urls {
-            let config = Config {
-                app_id: "test_app_id".to_string(),
-                app_secret: "test_app_secret".to_string(),
-                app_type: AppType::SelfBuild,
-                enable_token_cache: true,
-                base_url: url.to_string(),
-                allow_custom_base_url: false,
-                timeout: Duration::from_secs(30),
-                retry_count: 3,
-                enable_log: true,
-                headers: std::collections::HashMap::new(),
-                core_config: None,
-            };
-            assert!(config.validate().is_ok(), "URL {} should be valid", url);
-        }
-    }
-
-    #[test]
-    fn test_config_validation_unknown_base_url_rejected() {
-        // 测试未知域名被拒绝
-        let unknown_urls = vec![
-            "https://evil.com",
-            "https://malicious-site.com",
-            "https://example.com",
-            "https://not-feishu.cn",
-            "https://fake-larksuite.com",
-        ];
-
-        for url in unknown_urls {
-            let config = Config {
-                app_id: "test_app_id".to_string(),
-                app_secret: "test_app_secret".to_string(),
-                app_type: AppType::SelfBuild,
-                enable_token_cache: true,
-                base_url: url.to_string(),
-                allow_custom_base_url: false,
-                timeout: Duration::from_secs(30),
-                retry_count: 3,
-                enable_log: true,
-                headers: std::collections::HashMap::new(),
-                core_config: None,
-            };
-            assert!(
-                config.validate().is_err(),
-                "URL {} should be rejected",
-                url
-            );
-        }
-    }
-
-    #[test]
-    fn test_config_validation_custom_base_url_allowed() {
-        // 测试 allow_custom_base_url 允许使用自定义域名
+    for url in known_urls {
         let config = Config {
             app_id: "test_app_id".to_string(),
             app_secret: "test_app_secret".to_string(),
             app_type: AppType::SelfBuild,
             enable_token_cache: true,
-            base_url: "https://open.feishu.cn".to_string(),
-            allow_custom_base_url: true,
+            base_url: url.to_string(),
+            allow_custom_base_url: false,
             timeout: Duration::from_secs(30),
             retry_count: 3,
             enable_log: true,
             headers: std::collections::HashMap::new(),
             core_config: None,
         };
-        assert!(config.validate().is_ok());
+        assert!(config.validate().is_ok(), "URL {} should be valid", url);
     }
+}
+
+#[test]
+fn test_config_validation_unknown_base_url_rejected() {
+    // 测试未知域名被拒绝
+    let unknown_urls = vec![
+        "https://evil.com",
+        "https://malicious-site.com",
+        "https://example.com",
+        "https://not-feishu.cn",
+        "https://fake-larksuite.com",
+    ];
+
+    for url in unknown_urls {
+        let config = Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            app_type: AppType::SelfBuild,
+            enable_token_cache: true,
+            base_url: url.to_string(),
+            allow_custom_base_url: false,
+            timeout: Duration::from_secs(30),
+            retry_count: 3,
+            enable_log: true,
+            headers: std::collections::HashMap::new(),
+            core_config: None,
+        };
+        assert!(config.validate().is_err(), "URL {} should be rejected", url);
+    }
+}
+
+#[test]
+fn test_config_validation_custom_base_url_allowed() {
+    // 测试 allow_custom_base_url 允许使用自定义域名
+    let config = Config {
+        app_id: "test_app_id".to_string(),
+        app_secret: "test_app_secret".to_string(),
+        app_type: AppType::SelfBuild,
+        enable_token_cache: true,
+        base_url: "https://open.feishu.cn".to_string(),
+        allow_custom_base_url: true,
+        timeout: Duration::from_secs(30),
+        retry_count: 3,
+        enable_log: true,
+        headers: std::collections::HashMap::new(),
+        core_config: None,
+    };
+    assert!(config.validate().is_ok());
+}
