@@ -81,6 +81,7 @@ mod tests {
             app_type: openlark_core::constants::AppType::SelfBuild,
             enable_token_cache: true,
             base_url: "https://test.feishu.cn".to_string(),
+            allow_custom_base_url: false,
             timeout: Duration::from_secs(30),
             retry_count: 3,
             enable_log: true,
