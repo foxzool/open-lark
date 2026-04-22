@@ -90,8 +90,6 @@ impl std::fmt::Debug for Config {
     }
 }
 
-
-
 impl Default for Config {
     fn default() -> Self {
         Self {

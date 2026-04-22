@@ -36,7 +36,6 @@ impl std::fmt::Debug for CachedToken {
     }
 }
 
-
 impl CachedToken {
     fn now_epoch_secs() -> i64 {
         SystemTime::now()
