@@ -13,12 +13,17 @@ use openlark_core::{
     SDKResult,
 };
 
+/// 默认最大下载大小限制（100MB）
+const DEFAULT_MAX_DOWNLOAD_SIZE: usize = 100 * 1024 * 1024;
+
 /// 下载导出文件请求
 #[derive(Debug, Clone)]
 pub struct DownloadExportRequest {
     config: Config,
     /// 文件token
     pub file_token: String,
+    /// 最大允许下载大小（字节）
+    max_size: usize,
 }
 
 impl DownloadExportRequest {
@@ -27,7 +32,14 @@ impl DownloadExportRequest {
         Self {
             config,
             file_token: file_token.into(),
+            max_size: DEFAULT_MAX_DOWNLOAD_SIZE,
         }
+    }
+
+    /// 设置最大下载大小（字节）
+    pub fn max_size(mut self, max_size: usize) -> Self {
+        self.max_size = max_size;
+        self
     }
 
     /// 执行下载请求，返回二进制内容
@@ -48,7 +60,24 @@ impl DownloadExportRequest {
 
         let api_request = ApiRequest::<Vec<u8>>::get(&api_endpoint.to_url());
 
-        Transport::request(api_request, &self.config, Some(option)).await
+        let result = Transport::request(api_request, &self.config, Some(option)).await;
+        match result {
+            Ok(response) => {
+                // 检查下载大小是否超过限制
+                if response.data.len() > self.max_size {
+                    return Err(openlark_core::error::validation_error(
+                        "max_size",
+                        &format!(
+                            "下载文件大小 {} 超过限制 {}",
+                            response.data.len(),
+                            self.max_size
+                        ),
+                    ));
+                }
+                Ok(response)
+            }
+            Err(e) => Err(e),
+        }
     }
 }
 
@@ -95,5 +124,19 @@ mod tests {
         let long_token = "a".repeat(100);
         let request2 = DownloadExportRequest::new(config, long_token);
         assert_eq!(request2.file_token.len(), 100);
+    }
+
+    #[test]
+    fn test_download_export_default_max_size() {
+        let config = Config::default();
+        let request = DownloadExportRequest::new(config, "file_token");
+        assert_eq!(request.max_size, 100 * 1024 * 1024);
+    }
+
+    #[test]
+    fn test_download_export_custom_max_size() {
+        let config = Config::default();
+        let request = DownloadExportRequest::new(config, "file_token").max_size(2048);
+        assert_eq!(request.max_size, 2048);
     }
 }

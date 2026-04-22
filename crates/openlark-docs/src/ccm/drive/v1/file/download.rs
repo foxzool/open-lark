@@ -230,4 +230,18 @@ mod tests {
         assert_eq!(request.range, None);
         // 不设置 range 也可以正常下载整个文件
     }
+
+    #[test]
+    fn test_download_file_default_max_size() {
+        let config = Config::default();
+        let request = DownloadFileRequest::new(config, "file_token");
+        assert_eq!(request.max_size, 100 * 1024 * 1024);
+    }
+
+    #[test]
+    fn test_download_file_custom_max_size() {
+        let config = Config::default();
+        let request = DownloadFileRequest::new(config, "file_token").max_size(1024);
+        assert_eq!(request.max_size, 1024);
+    }
 }
