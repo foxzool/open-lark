@@ -61,6 +61,7 @@ pub struct Config {
     pub base_url: String,
     /// 🔓 是否允许自定义 base_url 域名
     pub allow_custom_base_url: bool,
+    /// ⏱️ 请求超时时间
     pub timeout: Duration,
     /// 🔄 默认重试次数
     pub retry_count: u32,
@@ -206,9 +207,7 @@ impl Config {
             );
             return Err(crate::error::validation_error(
                 "base_url",
-                &format!(
-                    "base_url 域名不在白名单中，已知域名: *.feishu.cn, *.larksuite.com, *.larkoffice.com。如需使用自定义域名，请设置 allow_custom_base_url(true)"
-                ),
+                "base_url 域名不在白名单中，已知域名: *.feishu.cn, *.larksuite.com, *.larkoffice.com。如需使用自定义域名，请设置 allow_custom_base_url(true)",
             ));
         }
 
