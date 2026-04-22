@@ -53,8 +53,6 @@ api_check_output.txt
 flycheck0/
 
 # Temporary development files
-/tmp/
-/temp/
 
 # POC and experimental files
 *_poc.toml
@@ -108,7 +106,6 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
-*~
 
 # ============================================================================
 # Claude Code Assistant and AI Analysis
@@ -148,10 +145,8 @@ API_VALIDATION_REPORT*.md
 # Temporary files
 *.tmp
 *.temp
-/temp/
-/tmp/
- /.playwright-browsers/
- /.claude/
+/.playwright-browsers/
+/.claude/
 
 # OpenLark Meeting crate - temporary reports
 crates/openlark-meeting/*_REPORT.md
