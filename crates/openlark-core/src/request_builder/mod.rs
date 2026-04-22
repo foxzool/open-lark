@@ -276,9 +276,8 @@ mod tests {
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
         assert!(result.is_ok());
-        let url = result.map_err(|e| {
-            crate::error::configuration_error(format!("构建URL失败: {}", e))
-        })?;
+        let url =
+            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {}", e)))?;
         // May have trailing ? due to parse_with_params implementation
         assert!(url
             .as_str()
@@ -296,9 +295,8 @@ mod tests {
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
         assert!(result.is_ok());
-        let url = result.map_err(|e| {
-            crate::error::configuration_error(format!("构建URL失败: {}", e))
-        })?;
+        let url =
+            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {}", e)))?;
         let url_str = url.as_str();
         assert!(url_str.starts_with("https://open.feishu.cn/open-apis/test"));
         assert!(url_str.contains("page=1"));
@@ -320,9 +318,8 @@ mod tests {
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
         assert!(result.is_ok());
-        let url = result.map_err(|e| {
-            crate::error::configuration_error(format!("构建URL失败: {}", e))
-        })?;
+        let url =
+            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {}", e)))?;
         // URL encoding should be handled properly
         assert!(url.as_str().contains("query="));
         assert!(url.as_str().contains("filter="));
@@ -338,9 +335,8 @@ mod tests {
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
         assert!(result.is_ok());
-        let url = result.map_err(|e| {
-            crate::error::configuration_error(format!("构建URL失败: {}", e))
-        })?;
+        let url =
+            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {}", e)))?;
         assert!(url.as_str().contains("empty="));
         Ok(())
     }
@@ -488,9 +484,8 @@ mod tests {
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
         assert!(result.is_ok());
-        let url = result.map_err(|e| {
-            crate::error::configuration_error(format!("构建URL失败: {}", e))
-        })?;
+        let url =
+            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {}", e)))?;
         // May have trailing ? due to parse_with_params implementation
         assert!(url
             .as_str()

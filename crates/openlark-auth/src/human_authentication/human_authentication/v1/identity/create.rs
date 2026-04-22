@@ -209,7 +209,8 @@ mod tests {
     #[test]
     fn test_identity_create_response_deserialization() {
         let json = r#"{"verify_uid":"ou_2eb5483cb377daa5054bc6f86e2089a5"}"#;
-        let response: IdentityCreateResponse = serde_json::from_str(json).expect("JSON 反序列化失败");
+        let response: IdentityCreateResponse =
+            serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(response.verify_uid, "ou_2eb5483cb377daa5054bc6f86e2089a5");
         assert_eq!(response.identity_id, "ou_2eb5483cb377daa5054bc6f86e2089a5");
     }
@@ -220,7 +221,8 @@ mod tests {
             "verify_uid":"ou_verify",
             "identity_id":"legacy_identity"
         }"#;
-        let response: IdentityCreateResponse = serde_json::from_str(json).expect("JSON 反序列化失败");
+        let response: IdentityCreateResponse =
+            serde_json::from_str(json).expect("JSON 反序列化失败");
         assert_eq!(response.verify_uid, "ou_verify");
         assert_eq!(response.identity_id, "legacy_identity");
     }

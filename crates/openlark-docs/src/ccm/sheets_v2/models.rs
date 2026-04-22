@@ -829,7 +829,8 @@ mod tests {
             },
             "spreadsheetId": "spreadsheet_id_123"
         }"#;
-        let response: ReadSingleRangeResponse = serde_json::from_str(json).expect("JSON 反序列化失败");
+        let response: ReadSingleRangeResponse =
+            serde_json::from_str(json).expect("JSON 反序列化失败");
         assert!(response.value_range.is_some());
         assert_eq!(
             response.spreadsheet_id,
