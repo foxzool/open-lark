@@ -19,6 +19,8 @@ pub(crate) mod query_params;
 /// 请求选项模块（RequestOption、自定义头部、租户键等）
 pub mod req_option;
 pub(crate) mod request_builder;
+/// Security utilities for handling sensitive data
+pub mod security;
 #[cfg(feature = "testing")]
 pub mod testing;
 pub mod trait_system;
