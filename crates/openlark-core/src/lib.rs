@@ -15,6 +15,8 @@ pub mod error;
 /// HTTP 客户端模块（Transport、请求构建等）
 pub mod http;
 pub(crate) mod observability;
+/// Security utilities for handling sensitive data
+pub mod security;
 pub(crate) mod query_params;
 /// 请求选项模块（RequestOption、自定义头部、租户键等）
 pub mod req_option;

@@ -45,7 +45,6 @@ pub struct Config {
 }
 
 /// 内部配置数据，被多个服务共享
-#[derive(Debug)]
 pub struct ConfigInner {
     pub(crate) app_id: String,
     pub(crate) app_secret: String,
@@ -76,6 +75,20 @@ impl Default for ConfigInner {
             header: Default::default(),
             token_provider: Arc::new(NoOpTokenProvider),
         }
+    }
+}
+
+impl std::fmt::Debug for ConfigInner {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ConfigInner")
+            .field("app_id", &self.app_id)
+            .field("app_secret", &"***")
+            .field("base_url", &self.base_url)
+            .field("enable_token_cache", &self.enable_token_cache)
+            .field("app_type", &self.app_type)
+            .field("req_timeout", &self.req_timeout)
+            .field("header", &format!("{} headers", self.header.len()))
+            .finish()
     }
 }
 

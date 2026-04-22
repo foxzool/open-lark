@@ -51,7 +51,7 @@ fn is_known_base_url(url: &str) -> bool {
 ///     .base_url("https://open.feishu.cn")  // 默认值，国际版 Lark 使用 https://open.larksuite.com
 ///     .build();
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Config {
     /// 🆔 飞书应用ID
     pub app_id: String,
@@ -65,6 +65,7 @@ pub struct Config {
     pub base_url: String,
     /// 🔓 是否允许自定义 base_url 域名
     pub allow_custom_base_url: bool,
+    /// ⏱️ 请求超时时间
     pub timeout: Duration,
     /// 🔄 默认重试次数
     pub retry_count: u32,
@@ -76,6 +77,24 @@ pub struct Config {
     #[doc(hidden)]
     pub(crate) core_config: Option<CoreConfig>,
 }
+
+impl std::fmt::Debug for Config {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Config")
+            .field("app_id", &self.app_id)
+            .field("app_secret", &"***")
+            .field("app_type", &self.app_type)
+            .field("enable_token_cache", &self.enable_token_cache)
+            .field("base_url", &self.base_url)
+            .field("timeout", &self.timeout)
+            .field("retry_count", &self.retry_count)
+            .field("enable_log", &self.enable_log)
+            .field("headers", &format!("{} headers", self.headers.len()))
+            .finish()
+    }
+}
+
+
 
 impl Default for Config {
     fn default() -> Self {

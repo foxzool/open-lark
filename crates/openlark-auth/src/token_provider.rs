@@ -19,13 +19,23 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use tokio::sync::RwLock;
 
 /// 缓存的 token 信息
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 struct CachedToken {
     /// token 值
     token: String,
     /// 过期时间戳（Unix 时间戳，秒）
     expires_at: i64,
 }
+
+impl std::fmt::Debug for CachedToken {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("CachedToken")
+            .field("token", &"***")
+            .field("expires_at", &self.expires_at)
+            .finish()
+    }
+}
+
 
 impl CachedToken {
     fn now_epoch_secs() -> i64 {
