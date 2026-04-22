@@ -39,6 +39,8 @@ pub struct DownloadFileRequest {
     pub file_token: String,
     /// Range HTTP header，用于分片下载（可选），格式如 "bytes=0-100"
     pub range: Option<String>,
+    /// 最大允许下载大小（字节）
+    max_size: usize,
 }
 
 impl DownloadFileRequest {
@@ -59,6 +61,7 @@ impl DownloadFileRequest {
             config,
             file_token: file_token.into(),
             range: None,
+            max_size: 100 * 1024 * 1024,
         }
     }
 
@@ -71,6 +74,12 @@ impl DownloadFileRequest {
     /// - `range`: Range 头值，例如 "bytes=0-100" 或 "bytes=0-"
     pub fn range(mut self, range: impl Into<String>) -> Self {
         self.range = Some(range.into());
+        self
+    }
+
+    /// 设置最大下载大小（字节）
+    pub fn max_size(mut self, max_size: usize) -> Self {
+        self.max_size = max_size;
         self
     }
 
@@ -144,7 +153,20 @@ impl DownloadFileRequest {
             request = request.header("Range", r);
         }
 
-        Transport::request(request, &self.config, Some(option)).await
+        let result = Transport::request(request, &self.config, Some(option)).await;
+        match result {
+            Ok(response) => {
+                let data_len = response.data.as_ref().map_or(0, <Vec<u8>>::len);
+                if data_len > self.max_size {
+                    return Err(openlark_core::error::validation_error(
+                        "max_size",
+                        &format!("下载文件大小 {} 超过限制 {}", data_len, self.max_size),
+                    ));
+                }
+                Ok(response)
+            }
+            Err(e) => Err(e),
+        }
     }
 }
 

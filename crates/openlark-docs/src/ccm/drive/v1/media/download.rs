@@ -13,6 +13,9 @@ use openlark_core::{
     SDKResult,
 };
 
+/// 默认最大下载大小限制（100MB）
+const DEFAULT_MAX_DOWNLOAD_SIZE: usize = 100 * 1024 * 1024;
+
 /// 下载素材请求
 #[derive(Debug)]
 pub struct DownloadMediaRequest {
@@ -23,6 +26,8 @@ pub struct DownloadMediaRequest {
     pub extra: Option<String>,
     /// Range HTTP header（可选），示例：bytes=0-1024
     pub range: Option<String>,
+    /// 最大允许下载大小（字节）
+    max_size: usize,
 }
 
 impl DownloadMediaRequest {
@@ -33,6 +38,7 @@ impl DownloadMediaRequest {
             file_token: file_token.into(),
             extra: None,
             range: None,
+            max_size: DEFAULT_MAX_DOWNLOAD_SIZE,
         }
     }
 
@@ -45,6 +51,12 @@ impl DownloadMediaRequest {
     /// 设置 Range 请求头。
     pub fn range(mut self, range: impl Into<String>) -> Self {
         self.range = Some(range.into());
+        self
+    }
+
+    /// 设置最大下载大小（字节）
+    pub fn max_size(mut self, max_size: usize) -> Self {
+        self.max_size = max_size;
         self
     }
 
@@ -80,7 +92,21 @@ impl DownloadMediaRequest {
             request = request.header("Range", &r);
         }
 
-        Transport::request(request, &self.config, Some(option)).await
+        let result = Transport::request(request, &self.config, Some(option)).await;
+        match result {
+            Ok(response) => {
+                // 检查下载大小是否超过限制
+                let data_len = response.data.as_ref().map_or(0, <Vec<u8>>::len);
+                if data_len > self.max_size {
+                    return Err(openlark_core::error::validation_error(
+                        "max_size",
+                        &format!("下载文件大小 {} 超过限制 {}", data_len, self.max_size),
+                    ));
+                }
+                Ok(response)
+            }
+            Err(e) => Err(e),
+        }
     }
 }
 
@@ -186,5 +212,19 @@ mod tests {
         // 带 range
         let request3 = DownloadMediaRequest::new(config, "token").range("bytes=0-100");
         assert_eq!(request3.range, Some("bytes=0-100".to_string()));
+    }
+
+    #[test]
+    fn test_download_media_default_max_size() {
+        let config = Config::default();
+        let request = DownloadMediaRequest::new(config, "media_token");
+        assert_eq!(request.max_size, 100 * 1024 * 1024);
+    }
+
+    #[test]
+    fn test_download_media_custom_max_size() {
+        let config = Config::default();
+        let request = DownloadMediaRequest::new(config, "media_token").max_size(512);
+        assert_eq!(request.max_size, 512);
     }
 }
