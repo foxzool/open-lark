@@ -12,7 +12,13 @@ fn attach_standard_error_context(
     resource: &str,
     request_id: Option<String>,
 ) -> openlark_core::error::CoreError {
-    err.with_standard_context(operation, ERROR_COMPONENT, resource, request_id)
+    err.with_operation(operation, ERROR_COMPONENT)
+        .map_context(|ctx| {
+            ctx.add_context("resource", resource);
+            if let Some(request_id) = request_id.filter(|value| !value.trim().is_empty()) {
+                ctx.set_request_id(request_id);
+            }
+        })
 }
 
 /// 创建“响应 data 为空”的标准错误。
