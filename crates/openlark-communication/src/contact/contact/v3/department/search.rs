@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/contact-v3/department/search
 
 use openlark_core::{
-    api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, error, http::Transport, validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -123,13 +123,13 @@ impl SearchDepartmentsRequest {
                 "搜索关键词不可为空字符串".to_string(),
             ));
         }
-        if let Some(page_size) = self.page_size {
-            if !(1..=50).contains(&page_size) {
-                return Err(error::validation_error(
-                    "page_size 不合法".to_string(),
-                    "page_size 取值范围为 1~50".to_string(),
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && !(1..=50).contains(&page_size)
+        {
+            return Err(error::validation_error(
+                "page_size 不合法".to_string(),
+                "page_size 取值范围为 1~50".to_string(),
+            ));
         }
 
         // url: POST:/open-apis/contact/v3/departments/search

@@ -3,10 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/job_requirement/create
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -56,7 +56,7 @@ impl CreateRequest {
         let request = request.body(serde_json::to_value(&self.request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {e}"),
             )
         })?);
         let response = Transport::request(request, &self.config, Some(option)).await?;

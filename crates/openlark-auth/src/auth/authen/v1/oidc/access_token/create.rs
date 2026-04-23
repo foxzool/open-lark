@@ -5,11 +5,12 @@ use crate::models::authen::UserAccessTokenResponse;
 ///
 /// 通过 OIDC 授权码获取用户访问令牌
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

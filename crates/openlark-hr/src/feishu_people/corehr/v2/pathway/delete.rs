@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/pathway/delete
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -50,8 +51,7 @@ impl DeleteRequest {
         validate_required!(pathway_id.trim(), "pathway_id 不能为空");
 
         let request = ApiRequest::<DeleteResponse>::delete(format!(
-            "/open-apis/corehr/v2/pathways/{}",
-            pathway_id
+            "/open-apis/corehr/v2/pathways/{pathway_id}"
         ));
 
         let response = Transport::request(request, &self.config, Some(option)).await?;

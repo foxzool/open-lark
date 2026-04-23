@@ -1,8 +1,8 @@
 //! 删除邮件组权限成员
 
 use openlark_core::{
-    api::ApiRequest, api::Response, config::Config, http::Transport, req_option::RequestOption,
-    SDKResult,
+    SDKResult, api::ApiRequest, api::Response, config::Config, http::Transport,
+    req_option::RequestOption,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

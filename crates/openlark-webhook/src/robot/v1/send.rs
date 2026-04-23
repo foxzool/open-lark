@@ -117,7 +117,7 @@ impl SendWebhookMessageRequest {
 
         let status = response.status();
         if !status.is_success() {
-            return Err(WebhookError::Http(format!("HTTP error: {}", status)));
+            return Err(WebhookError::Http(format!("HTTP error: {status}")));
         }
 
         let body = response

@@ -4,7 +4,7 @@
 
 use std::collections::HashMap;
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{SDKResult, api::ApiRequest, config::Config, http::Transport};
 
 use crate::{common::api_utils::extract_response_data, endpoints::CONTACT_V2_TASK_GET};
 

@@ -6,7 +6,7 @@
 //! 而不再伪装成成功返回占位 JSON。
 
 use crate::AnalyticsConfig;
-use openlark_core::{error::business_error, req_option::RequestOption, SDKResult};
+use openlark_core::{SDKResult, error::business_error, req_option::RequestOption};
 use std::sync::Arc;
 
 /// 用户搜索 API

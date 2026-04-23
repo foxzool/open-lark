@@ -4,13 +4,13 @@
 #![allow(dead_code)]
 
 use std::time::{Duration, Instant};
-use tracing::{span, Level, Span};
+use tracing::{Level, Span, span};
 #[cfg(feature = "tracing-init")]
 use tracing_subscriber::{
+    EnvFilter, Registry,
     fmt::{self, format::FmtSpan},
     layer::SubscriberExt,
     util::SubscriberInitExt,
-    EnvFilter, Registry,
 };
 
 #[cfg(feature = "otel")]
@@ -18,7 +18,7 @@ use opentelemetry::trace::TracerProvider;
 #[cfg(feature = "otel")]
 use opentelemetry_otlp::WithExportConfig;
 #[cfg(feature = "otel")]
-use opentelemetry_sdk::{runtime, Resource};
+use opentelemetry_sdk::{Resource, runtime};
 #[cfg(feature = "otel")]
 use tracing_opentelemetry::OpenTelemetryLayer;
 
@@ -1094,7 +1094,7 @@ mod tests {
         assert_eq!(config.endpoint, cloned_config.endpoint);
         assert_eq!(config.service_name, cloned_config.service_name);
 
-        let debug_str = format!("{:?}", config);
+        let debug_str = format!("{config:?}");
         assert!(debug_str.contains("OtelConfig"));
         assert!(debug_str.contains("endpoint"));
         assert!(debug_str.contains("service_name"));

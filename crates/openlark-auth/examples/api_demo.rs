@@ -20,9 +20,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth_service = OAuthService::new(config.clone());
 
     println!("✅ 服务创建成功！");
-    println!("  Auth Service: {:?}", auth_service);
-    println!("  Authen Service: {:?}", authen_service);
-    println!("  OAuth Service: {:?}", oauth_service);
+    println!("  Auth Service: {auth_service:?}");
+    println!("  Authen Service: {authen_service:?}");
+    println!("  OAuth Service: {oauth_service:?}");
 
     // 演示API构建器创建（不实际发送请求）
     println!("\n🔧 API 构建器演示：");

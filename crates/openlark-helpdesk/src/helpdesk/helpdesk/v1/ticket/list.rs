@@ -3,9 +3,9 @@
 use crate::common::{api_endpoints::HelpdeskApiV1, api_utils::*};
 use crate::helpdesk::helpdesk::v1::ticket::models::TicketListResponse;
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    SDKResult,
 };
 use std::sync::Arc;
 

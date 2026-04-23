@@ -6,11 +6,12 @@
 /// - update_float_image: 更新浮图
 /// - delete_float_image: 删除浮图
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 
 use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};

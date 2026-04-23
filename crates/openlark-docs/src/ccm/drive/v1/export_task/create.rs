@@ -5,10 +5,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/export_task/create
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -80,7 +80,7 @@ impl CreateExportTaskRequest {
                 return Err(openlark_core::error::validation_error(
                     "file_extension",
                     "file_extension 仅支持 docx/pdf/xlsx/csv",
-                ))
+                ));
             }
         }
         match self.r#type.as_str() {
@@ -89,7 +89,7 @@ impl CreateExportTaskRequest {
                 return Err(openlark_core::error::validation_error(
                     "type",
                     "type 仅支持 doc/docx/sheet/bitable",
-                ))
+                ));
             }
         }
         // ===== 验证字段关联约束 =====
@@ -101,7 +101,7 @@ impl CreateExportTaskRequest {
                 return Err(openlark_core::error::validation_error(
                     "file_extension",
                     "file_extension 与 type 不匹配：doc/docx 仅支持 docx/pdf；sheet/bitable 仅支持 xlsx/csv",
-                ))
+                ));
             }
         }
         // CSV 导出需要 sub_id

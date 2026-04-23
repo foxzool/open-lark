@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/contact-v3/department/update_department_id
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, validate_required,
 };
 use serde::{Deserialize, Serialize};
 

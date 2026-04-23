@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/process_revoke/update
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -58,8 +59,7 @@ impl UpdateRequest {
         validate_required!(process_revoke_id.trim(), "process_revoke_id 不能为空");
 
         let mut request = ApiRequest::<UpdateResponse>::put(format!(
-            "/open-apis/corehr/v2/process_revoke/{}",
-            process_revoke_id
+            "/open-apis/corehr/v2/process_revoke/{process_revoke_id}"
         ));
 
         if let Some(body) = self.body {

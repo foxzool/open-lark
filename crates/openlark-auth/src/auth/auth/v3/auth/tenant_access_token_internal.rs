@@ -3,11 +3,12 @@ use crate::models::auth::{TenantAccessTokenInternalRequest, TenantAccessTokenRes
 ///
 /// API文档: https://open.feishu.cn/document/server-docs/authentication-management/access-token/tenant_access_token_internal
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

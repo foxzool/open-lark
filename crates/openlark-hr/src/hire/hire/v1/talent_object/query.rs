@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/talent_object/query
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;

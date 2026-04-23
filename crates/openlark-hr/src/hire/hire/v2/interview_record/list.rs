@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v2/interview_record/list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -72,19 +72,19 @@ impl ListRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResponse> {
-        if let Some(page_size) = self.page_size {
-            if !(0..=100).contains(&page_size) {
-                return Err(error::validation_error(
-                    "page_size",
-                    "page_size 必须在 0-100 之间",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && !(0..=100).contains(&page_size)
+        {
+            return Err(error::validation_error(
+                "page_size",
+                "page_size 必须在 0-100 之间",
+            ));
         }
 
-        if let Some(ref ids) = self.ids {
-            if ids.len() > 100 {
-                return Err(error::validation_error("ids", "ids 不能超过 100 个"));
-            }
+        if let Some(ref ids) = self.ids
+            && ids.len() > 100
+        {
+            return Err(error::validation_error("ids", "ids 不能超过 100 个"));
         }
 
         let mut request = ApiRequest::<ListResponse>::get("/open-apis/hire/v2/interview_records");
@@ -92,7 +92,7 @@ impl ListRequest {
             request = request.query(
                 "ids",
                 serde_json::to_string(&ids).map_err(|e| {
-                    error::validation_error("ids", format!("无法序列化数组查询参数: {}", e))
+                    error::validation_error("ids", format!("无法序列化数组查询参数: {e}"))
                 })?,
             );
         }

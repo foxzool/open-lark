@@ -5,10 +5,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-function/agent-schedules/get
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -30,10 +30,10 @@ pub struct GetAgentScheduleQuery {
 impl GetAgentScheduleQuery {
     /// 验证查询参数
     pub fn validate(&self) -> Result<(), String> {
-        if let Some(page_size) = self.page_size {
-            if page_size <= 0 {
-                return Err("page_size must be greater than 0".to_string());
-            }
+        if let Some(page_size) = self.page_size
+            && page_size <= 0
+        {
+            return Err("page_size must be greater than 0".to_string());
         }
         Ok(())
     }

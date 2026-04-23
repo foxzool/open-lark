@@ -5,9 +5,10 @@
 use crate::common::{api_endpoints::MailApiV1, api_utils::*};
 use crate::mail::mail::v1::mailgroup::models::{CreateMailGroupBody, CreateMailGroupResponse};
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required, SDKResult,
+    validate_required,
 };
 use std::sync::Arc;
 

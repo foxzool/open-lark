@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/attendance-v1/user_stats_data/query
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 
 use super::models::{QueryRequestBody, QueryResponse};
@@ -132,13 +133,13 @@ impl QueryRequest {
         }
 
         // 验证分页大小
-        if let Some(page_size) = self.page_size {
-            if !(1..=200).contains(&page_size) {
-                return Err(openlark_core::error::validation_error(
-                    "分页大小超出范围",
-                    "分页大小必须在 1-200 之间",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && !(1..=200).contains(&page_size)
+        {
+            return Err(openlark_core::error::validation_error(
+                "分页大小超出范围",
+                "分页大小必须在 1-200 之间",
+            ));
         }
 
         // 2. 构建端点
@@ -172,7 +173,7 @@ impl QueryRequest {
         request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {e}"),
             )
         })?);
 

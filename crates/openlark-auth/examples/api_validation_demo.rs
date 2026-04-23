@@ -103,7 +103,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .state("random_state")
         .build_url();
 
-    println!("   授权URL: {}", auth_url);
+    println!("   授权URL: {auth_url}");
 
     // 总结
     println!("\n🎯 API验证总结:");

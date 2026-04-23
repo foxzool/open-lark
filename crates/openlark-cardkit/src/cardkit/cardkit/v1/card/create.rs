@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card/create
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 use serde::{Deserialize, Serialize};
 
@@ -45,10 +45,10 @@ impl CreateCardBody {
             return Err("card_content 必须是 JSON 对象".to_string());
         }
 
-        if let Some(temp_expire_time) = self.temp_expire_time {
-            if temp_expire_time <= 0 || temp_expire_time > 86_400 {
-                return Err("temp_expire_time 取值范围为 1~86400（秒）".to_string());
-            }
+        if let Some(temp_expire_time) = self.temp_expire_time
+            && (temp_expire_time <= 0 || temp_expire_time > 86_400)
+        {
+            return Err("temp_expire_time 取值范围为 1~86400（秒）".to_string());
         }
 
         Ok(())

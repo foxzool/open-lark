@@ -75,13 +75,13 @@ impl ListRoleMembersRequest {
         validate_required!(self.role_id.trim(), "role_id");
 
         // === 边界值验证 ===
-        if let Some(page_size) = self.page_size {
-            if page_size < 1 || page_size > 100 {
-                return Err(openlark_core::error::validation_error(
-                    "page_size",
-                    "page_size 必须在 1~100 之间",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && (page_size < 1 || page_size > 100)
+        {
+            return Err(openlark_core::error::validation_error(
+                "page_size",
+                "page_size 必须在 1~100 之间",
+            ));
         }
 
         use crate::common::api_endpoints::BitableApiV1;

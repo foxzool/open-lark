@@ -70,7 +70,7 @@ mod endpoints;
 
 /// 常用类型预导出模块。
 pub mod prelude {
-    pub use openlark_core::{config::Config, SDKResult};
+    pub use openlark_core::{SDKResult, config::Config};
 }
 
 use openlark_core::config::Config;

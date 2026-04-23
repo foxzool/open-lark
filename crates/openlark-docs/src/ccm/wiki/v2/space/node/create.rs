@@ -5,10 +5,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/create
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -145,12 +146,10 @@ impl CreateWikiSpaceNodeRequest {
             "doc", "docx", "sheet", "slide", "mindnote", "bitable", "file",
         ];
         if !valid_types.contains(&params.obj_type.as_str()) {
-            return Err(openlark_core::error::CoreError::validation_msg(
-                &format!(
-                    "obj_type 参数无效: '{}'. 支持的类型为: doc, docx, sheet, slide, mindnote, bitable, file",
-                    params.obj_type
-                )
-            ));
+            return Err(openlark_core::error::CoreError::validation_msg(&format!(
+                "obj_type 参数无效: '{}'. 支持的类型为: doc, docx, sheet, slide, mindnote, bitable, file",
+                params.obj_type
+            )));
         }
 
         validate_required!(params.obj_type, "obj_type不能为空");

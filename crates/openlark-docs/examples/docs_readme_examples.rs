@@ -1,11 +1,11 @@
 //! Compile-check companion for the public `openlark-docs` README snippets.
 
-use openlark_core::{config::Config, SDKResult};
+use openlark_core::{SDKResult, config::Config};
+use openlark_docs::DocsClient;
 use openlark_docs::baike::baike::v1::GetEntityRequest;
 use openlark_docs::base::bitable::v1::GetAppRequest;
 use openlark_docs::ccm::docs::v1::GetDocsContentRequest;
 use openlark_docs::ccm::drive::v1::file::DownloadFileRequest;
-use openlark_docs::DocsClient;
 
 #[tokio::main]
 async fn main() -> SDKResult<()> {

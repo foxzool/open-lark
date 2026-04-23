@@ -3,10 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/job_data/list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 
 use super::models::{ListRequestBody, ListResponse};
@@ -78,13 +78,13 @@ impl ListRequest {
         use crate::common::api_endpoints::FeishuPeopleApiV1;
 
         // 1. 验证分页参数
-        if let Some(size) = self.page_size {
-            if !(1..=100).contains(&size) {
-                return Err(openlark_core::error::validation_error(
-                    "分页参数无效",
-                    format!("分页大小必须在 1-100 之间，当前值为: {}", size),
-                ));
-            }
+        if let Some(size) = self.page_size
+            && !(1..=100).contains(&size)
+        {
+            return Err(openlark_core::error::validation_error(
+                "分页参数无效",
+                format!("分页大小必须在 1-100 之间，当前值为: {size}"),
+            ));
         }
 
         // 2. 构建端点
@@ -101,7 +101,7 @@ impl ListRequest {
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {e}"),
             )
         })?);
 

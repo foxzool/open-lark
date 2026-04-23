@@ -20,7 +20,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/patch
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{SDKResult, api::ApiRequest, config::Config, http::Transport};
 
 use serde::{Deserialize, Serialize};
 

@@ -5,7 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file-version/get
 
 use crate::common::{api_endpoints::DriveApi, api_utils::*};
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{SDKResult, api::ApiRequest, config::Config, http::Transport};
 
 use super::models::FileVersionInfo;
 
@@ -77,7 +77,7 @@ impl GetFileVersionRequest {
                 return Err(openlark_core::error::validation_error(
                     "obj_type",
                     "obj_type 仅支持 docx/sheet",
-                ))
+                ));
             }
         }
 

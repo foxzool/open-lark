@@ -47,8 +47,8 @@ members = [
 
 [workspace.package]
 version = "0.15.0"
-edition = "2021"
-rust-version = "1.75"
+edition = "2024"
+rust-version = "1.88"
 authors = ["ZoOL <zhooul@gmail.com>"]
 license = "Apache-2.0"
 repository = "https://github.com/foxzool/openlark"
@@ -166,6 +166,7 @@ criterion = "0.5"
 name = "openlark"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 authors.workspace = true
 readme = "README.md"
 description = "飞书开放平台 Rust SDK - 企业级高覆盖率 API 客户端，极简依赖一条命令"

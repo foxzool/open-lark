@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/signature_file/download
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -59,8 +60,7 @@ impl DownloadRequest {
         validate_required!(signature_file_id.trim(), "signature_file_id 不能为空");
 
         let mut request = ApiRequest::<DownloadResponse>::post(format!(
-            "/open-apis/corehr/v2/signature_files/{}/download",
-            signature_file_id
+            "/open-apis/corehr/v2/signature_files/{signature_file_id}/download"
         ));
 
         if let Some(body) = self.body {

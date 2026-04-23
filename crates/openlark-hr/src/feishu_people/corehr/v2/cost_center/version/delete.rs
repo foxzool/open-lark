@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/cost_center.version/delete
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -60,8 +61,7 @@ impl DeleteRequest {
         validate_required!(version_id.trim(), "version_id 不能为空");
 
         let request = ApiRequest::<DeleteResponse>::delete(format!(
-            "/open-apis/corehr/v2/cost_centers/{}/versions/{}",
-            cost_center_id, version_id
+            "/open-apis/corehr/v2/cost_centers/{cost_center_id}/versions/{version_id}"
         ));
 
         let response = Transport::request(request, &self.config, Some(option)).await?;

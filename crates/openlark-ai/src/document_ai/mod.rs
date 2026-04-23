@@ -6,16 +6,15 @@ pub mod document_ai;
 
 // 重导出 document_ai 模块的主要类型
 pub use document_ai::{
-    create_bank_card_recognize, create_bank_card_recognize_with_options,
-    create_business_license_recognize, create_business_license_recognize_with_options,
-    create_id_card_recognize, create_id_card_recognize_with_options, create_resume_parse,
-    create_resume_parse_with_options, create_vat_invoice_recognize,
-    create_vat_invoice_recognize_with_options, recognize, v1, BankCardRecognizeBody,
-    BankCardRecognizeRequest, BankCardRecognizeRequestBuilder, BankCardRecognizeResponse,
-    BusinessLicenseRecognizeBody, BusinessLicenseRecognizeRequest,
+    BankCardRecognizeBody, BankCardRecognizeRequest, BankCardRecognizeRequestBuilder,
+    BankCardRecognizeResponse, BusinessLicenseRecognizeBody, BusinessLicenseRecognizeRequest,
     BusinessLicenseRecognizeRequestBuilder, BusinessLicenseRecognizeResponse, IdCardRecognizeBody,
     IdCardRecognizeRequest, IdCardRecognizeRequestBuilder, IdCardRecognizeResponse,
     ResumeParseBody, ResumeParseRequest, ResumeParseRequestBuilder, ResumeParseResponse,
     VatInvoiceRecognizeBody, VatInvoiceRecognizeRequest, VatInvoiceRecognizeRequestBuilder,
-    VatInvoiceRecognizeResponse,
+    VatInvoiceRecognizeResponse, create_bank_card_recognize,
+    create_bank_card_recognize_with_options, create_business_license_recognize,
+    create_business_license_recognize_with_options, create_id_card_recognize,
+    create_id_card_recognize_with_options, create_resume_parse, create_resume_parse_with_options,
+    create_vat_invoice_recognize, create_vat_invoice_recognize_with_options, recognize, v1,
 };

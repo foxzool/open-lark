@@ -3,11 +3,12 @@
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/buzz-messages/urgent_app
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

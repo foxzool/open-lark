@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card-element/create
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 
 use super::models::CreateCardElementResponse;

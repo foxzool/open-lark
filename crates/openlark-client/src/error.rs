@@ -150,7 +150,7 @@ pub fn internal_error(message: impl Into<String>) -> Error {
 
 /// 创建注册表错误
 pub fn registry_error(err: RegistryError) -> Error {
-    internal_error(format!("服务注册表错误: {}", err))
+    internal_error(format!("服务注册表错误: {err}"))
 }
 
 // ============================================================================
@@ -346,7 +346,7 @@ impl<'a> ErrorAnalyzer<'a> {
         report.push_str(&format!("  可重试: {}\n", self.error.is_retryable()));
 
         if let Some(request_id) = self.error.context().request_id() {
-            report.push_str(&format!("  请求ID: {}\n", request_id));
+            report.push_str(&format!("  请求ID: {request_id}\n"));
         }
 
         report.push('\n');
@@ -376,14 +376,14 @@ impl<'a> ErrorAnalyzer<'a> {
         if self.error.context().context_len() > 0 {
             report.push_str("📊 上下文信息:\n");
             for (key, value) in self.error.context().all_context() {
-                report.push_str(&format!("  {}: {}\n", key, value));
+                report.push_str(&format!("  {key}: {value}\n"));
             }
             report.push('\n');
         }
 
         // 时间戳
         if let Some(timestamp) = self.error.context().timestamp() {
-            report.push_str(&format!("⏰ 发生时间: {:?}\n", timestamp));
+            report.push_str(&format!("⏰ 发生时间: {timestamp:?}\n"));
         }
         report
     }

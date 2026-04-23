@@ -12,12 +12,12 @@ use openlark_core::constants::AppType;
 fn is_known_base_url(url: &str) -> bool {
     let allowed_suffixes = ["feishu.cn", "larksuite.com", "larkoffice.com"];
     // Parse URL, extract host, check suffix
-    if let Ok(parsed) = url::Url::parse(url) {
-        if let Some(host) = parsed.host_str() {
-            return allowed_suffixes
-                .iter()
-                .any(|suffix| host == *suffix || host.ends_with(&format!(".{}", suffix)));
-        }
+    if let Ok(parsed) = url::Url::parse(url)
+        && let Some(host) = parsed.host_str()
+    {
+        return allowed_suffixes
+            .iter()
+            .any(|suffix| host == *suffix || host.ends_with(&format!(".{suffix}")));
     }
     false
 }
@@ -743,7 +743,7 @@ fn test_config_validation_known_base_url() {
             headers: std::collections::HashMap::new(),
             core_config: None,
         };
-        assert!(config.validate().is_ok(), "URL {} should be valid", url);
+        assert!(config.validate().is_ok(), "URL {url} should be valid");
     }
 }
 
@@ -772,7 +772,7 @@ fn test_config_validation_unknown_base_url_rejected() {
             headers: std::collections::HashMap::new(),
             core_config: None,
         };
-        assert!(config.validate().is_err(), "URL {} should be rejected", url);
+        assert!(config.validate().is_err(), "URL {url} should be rejected");
     }
 }
 

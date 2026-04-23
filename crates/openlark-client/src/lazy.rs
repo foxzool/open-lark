@@ -168,12 +168,12 @@ mod tests {
         });
 
         // 未初始化时的 debug 输出
-        let debug_uninit = format!("{:?}", lazy);
+        let debug_uninit = format!("{lazy:?}");
         assert!(debug_uninit.contains("uninitialized"));
 
         // 初始化后的 debug 输出
         let _ = lazy.get();
-        let debug_init = format!("{:?}", lazy);
+        let debug_init = format!("{lazy:?}");
         assert!(debug_init.contains("debug_test"));
     }
 }

@@ -1,7 +1,7 @@
 //! 识别语音文件
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 use serde::{Deserialize, Serialize};
 

@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/minutes-v1/minute-transcript/get
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, Response},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 
 use crate::common::api_endpoints::MinutesApiV1;

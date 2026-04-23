@@ -3,10 +3,10 @@
 //! docPath: https://open.feishu.cn/document/minutes-v1/minute-media/get
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

@@ -10,9 +10,9 @@ use openlark_workflow::v2::tasklist::{CreateTasklistBody, ListTasklistsResponse,
 use openlark_workflow::{
     ApprovalTaskAction, ApprovalTaskQuery, WorkflowTaskListQuery, WorkflowTaskMutation,
 };
-use serde::de::DeserializeOwned;
 use serde::Serialize;
-use serde_json::{from_value, json, to_value, Value};
+use serde::de::DeserializeOwned;
+use serde_json::{Value, from_value, json, to_value};
 
 fn assert_json_contract<T>(value: &T, expected: Value)
 where

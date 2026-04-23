@@ -3,11 +3,12 @@
 //! API文档: https://open.feishu.cn/document/server-docs/apaas-v1/flow/user-task/add_assignee
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

@@ -3,8 +3,8 @@
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/meeting-recording/get
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, validate_required,
-    SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
+    validate_required,
 };
 
 use crate::common::api_utils::extract_response_data;

@@ -112,13 +112,13 @@ impl ListViewsRequest {
 
         // === 业务规则验证 ===
         // 验证分页大小
-        if let Some(page_size) = self.page_size {
-            if page_size <= 0 {
-                return Err(openlark_core::error::validation_error(
-                    "page_size",
-                    "分页大小必须大于0",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && page_size <= 0
+        {
+            return Err(openlark_core::error::validation_error(
+                "page_size",
+                "分页大小必须大于0",
+            ));
         }
 
         // 🚀 使用新的enum+builder系统生成API端点

@@ -4,8 +4,8 @@ use openlark_core::{config::Config, req_option::RequestOption};
 use openlark_hr::ehr::ehr::v1::{attachment, employee};
 use serde_json::json;
 use wiremock::{
-    matchers::{header, method, path, query_param},
     Mock, MockServer, ResponseTemplate,
+    matchers::{header, method, path, query_param},
 };
 
 fn test_config(base_url: &str) -> Config {

@@ -6,11 +6,11 @@
 
 use crate::common::api_endpoints::DriveApi;
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, Response},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 
 /// 默认最大下载大小限制（100MB）
@@ -75,13 +75,13 @@ impl DownloadMediaRequest {
             ));
         }
         // ===== 验证字段格式 =====
-        if let Some(range) = &self.range {
-            if !range.starts_with("bytes=") || !range.contains('-') {
-                return Err(openlark_core::error::validation_error(
-                    "range",
-                    "range 格式必须为 bytes=start-end（例如 bytes=0-1024）",
-                ));
-            }
+        if let Some(range) = &self.range
+            && (!range.starts_with("bytes=") || !range.contains('-'))
+        {
+            return Err(openlark_core::error::validation_error(
+                "range",
+                "range 格式必须为 bytes=start-end（例如 bytes=0-1024）",
+            ));
         }
 
         let api_endpoint = DriveApi::DownloadMedia(self.file_token.clone());

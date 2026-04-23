@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/job_change/revoke
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -60,8 +61,7 @@ impl RevokeRequest {
         validate_required!(job_change_id.trim(), "job_change_id 不能为空");
 
         let mut request = ApiRequest::<RevokeResponse>::post(format!(
-            "/open-apis/corehr/v2/job_changes/{}/revoke",
-            job_change_id
+            "/open-apis/corehr/v2/job_changes/{job_change_id}/revoke"
         ));
 
         if let Some(body) = self.body {

@@ -4,7 +4,7 @@
 
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_UPLOAD_FILE};
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, validate_required,
 };
 
 /// 上传文件用于数据知识管理请求

@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/offer_custom_field/update
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -63,8 +64,7 @@ impl UpdateRequest {
         );
 
         let mut request = ApiRequest::<UpdateResponse>::put(format!(
-            "/open-apis/hire/v1/offer_custom_fields/{}",
-            offer_custom_field_id
+            "/open-apis/hire/v1/offer_custom_fields/{offer_custom_field_id}"
         ));
         if let Some(request_body) = self.request_body {
             request = request.body(request_body);

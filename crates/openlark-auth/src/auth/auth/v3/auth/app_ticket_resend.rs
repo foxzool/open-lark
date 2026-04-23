@@ -6,11 +6,12 @@ use crate::models::auth::{AppTicketResendRequest, AppTicketResponse};
 /// 飞书每隔 1 小时会给应用推送一次最新的 app_ticket，应用也可以主动调用此接口，
 /// 触发飞书进行及时的重新推送。（该接口并不能直接获取app_ticket，而是触发事件推送）
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

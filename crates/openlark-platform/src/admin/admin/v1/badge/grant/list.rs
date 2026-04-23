@@ -3,11 +3,11 @@
 //! API文档: https://open.feishu.cn/document/server-docs/admin-v1/badge/badge-grant/list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -62,10 +62,10 @@ impl ListBadgeGrantBuilder {
         let mut params = Vec::new();
 
         if let Some(size) = self.page_size {
-            params.push(format!("page_size={}", size));
+            params.push(format!("page_size={size}"));
         }
         if let Some(token) = self.page_token {
-            params.push(format!("page_token={}", token));
+            params.push(format!("page_token={token}"));
         }
 
         if !params.is_empty() {

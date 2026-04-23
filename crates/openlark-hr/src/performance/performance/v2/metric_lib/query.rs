@@ -3,10 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/performance-v2/metric_lib/query
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

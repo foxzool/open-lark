@@ -5,7 +5,7 @@ use crate::models::oauth::*;
 ///
 /// 应用请求用户身份验证时，需构造登录链接，并引导用户跳转至此链接。
 /// 用户登录成功后会生成登录预授权码 code，并作为参数追加到重定向URL。
-use openlark_core::{config::Config, req_option::RequestOption, validate_required, SDKResult};
+use openlark_core::{SDKResult, config::Config, req_option::RequestOption, validate_required};
 use serde::{Deserialize, Serialize};
 
 /// 授权码请求构建器

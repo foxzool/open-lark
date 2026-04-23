@@ -25,10 +25,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/list-2
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 
 use serde::{Deserialize, Serialize};
@@ -159,13 +159,13 @@ pub async fn list_comment_reply(
 
     super::super::validate_comment_file_type_for_list_like(&request.file_type)?;
 
-    if let Some(page_size) = request.page_size {
-        if !(1..=100).contains(&page_size) {
-            return Err(openlark_core::error::validation_error(
-                "page_size",
-                "page_size 必须在 1~100 之间",
-            ));
-        }
+    if let Some(page_size) = request.page_size
+        && !(1..=100).contains(&page_size)
+    {
+        return Err(openlark_core::error::validation_error(
+            "page_size",
+            "page_size 必须在 1~100 之间",
+        ));
     }
 
     // ========== 构建 API 请求 ==========

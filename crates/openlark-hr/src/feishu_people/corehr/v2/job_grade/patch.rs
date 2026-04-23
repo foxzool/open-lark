@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/job_grade/patch
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -59,8 +60,7 @@ impl PatchRequest {
         validate_required!(job_grade_id.trim(), "job_grade_id 不能为空");
 
         let mut request = ApiRequest::<PatchResponse>::patch(format!(
-            "/open-apis/corehr/v2/job_grades/{}",
-            job_grade_id
+            "/open-apis/corehr/v2/job_grades/{job_grade_id}"
         ));
 
         if let Some(body) = self.body {

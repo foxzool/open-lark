@@ -6,11 +6,12 @@ use crate::models::auth::{AccessTokenResponse, AppAccessTokenRequest};
 /// 应用商店应用通过此接口获取 app_access_token，调用接口获取应用资源时，
 /// 需要使用 app_access_token 作为授权凭证。
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

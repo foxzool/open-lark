@@ -389,7 +389,7 @@ mod tests {
 
         for strategy in &strategies {
             let cloned = strategy.clone();
-            let _debug = format!("{:?}", cloned);
+            let _debug = format!("{cloned:?}");
         }
 
         assert_eq!(strategies.len(), 6);
@@ -409,7 +409,7 @@ mod tests {
         let original = RecoveryStrategy::RetryWithBackoff;
         let cloned = original.clone();
 
-        assert_eq!(format!("{:?}", original), format!("{:?}", cloned));
+        assert_eq!(format!("{original:?}"), format!("{:?}", cloned));
     }
 
     #[test]

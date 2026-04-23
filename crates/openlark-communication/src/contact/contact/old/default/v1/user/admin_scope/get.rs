@@ -2,7 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/application-v6/admin/obtain-an-app-admin%E2%80%99s-management-permissions
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{SDKResult, api::ApiRequest, config::Config, http::Transport};
 
 use crate::{common::api_utils::extract_response_data, endpoints::CONTACT_V1_USER_ADMIN_SCOPE_GET};
 

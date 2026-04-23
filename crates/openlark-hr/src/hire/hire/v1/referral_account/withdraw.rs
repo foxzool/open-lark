@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/referral_account/withdraw
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -51,8 +52,7 @@ impl WithdrawRequest {
         validate_required!(account_id.trim(), "内推账户 ID 不能为空");
 
         let request = ApiRequest::<WithdrawResponse>::post(format!(
-            "/open-apis/hire/v1/referral_account/{}/withdraw",
-            account_id
+            "/open-apis/hire/v1/referral_account/{account_id}/withdraw"
         ));
         let response = Transport::request(request, &self.config, Some(option)).await?;
 

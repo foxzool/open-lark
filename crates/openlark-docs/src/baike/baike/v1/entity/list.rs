@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/baike-v1/entity/list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -84,13 +84,13 @@ impl ListEntityRequest {
     /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<ListEntityResp> {
         // ===== 参数校验 =====
-        if let Some(page_size) = self.page_size {
-            if !(1..=100).contains(&page_size) {
-                return Err(openlark_core::error::validation_error(
-                    "page_size",
-                    "page_size 取值范围必须为 1~100",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && !(1..=100).contains(&page_size)
+        {
+            return Err(openlark_core::error::validation_error(
+                "page_size",
+                "page_size 取值范围必须为 1~100",
+            ));
         }
         if let Some(provider) = &self.provider {
             let len = provider.chars().count();
@@ -162,30 +162,38 @@ mod tests {
 
         // 测试 page_size 超出范围
         let request = ListEntityRequest::new(config.clone()).page_size(0);
-        assert!(request
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
 
         let request2 = ListEntityRequest::new(config.clone()).page_size(101);
-        assert!(request2
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request2
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
 
         // 测试 provider 过短
         let request3 = ListEntityRequest::new(config.clone()).provider("a");
-        assert!(request3
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request3
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
 
         // 测试 provider 过长
         let request4 = ListEntityRequest::new(config.clone()).provider("a".repeat(33));
-        assert!(request4
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request4
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
     }
 
     #[test]

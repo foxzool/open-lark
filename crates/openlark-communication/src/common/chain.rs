@@ -14,7 +14,7 @@ use openlark_core::error::business_error;
 #[cfg(feature = "im")]
 use openlark_core::validate_required;
 #[cfg(any(feature = "im", feature = "contact"))]
-use openlark_core::{error::validation_error, SDKResult};
+use openlark_core::{SDKResult, error::validation_error};
 
 #[cfg(feature = "contact")]
 use crate::contact::contact::v3::user::{
@@ -839,7 +839,7 @@ mod tests {
     fn test_communication_client_debug() {
         let config = create_test_config();
         let client = CommunicationClient::new(config);
-        let debug_str = format!("{:?}", client);
+        let debug_str = format!("{client:?}");
         assert!(debug_str.contains("CommunicationClient"));
     }
 

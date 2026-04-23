@@ -1116,7 +1116,7 @@ impl From<reqwest::Error> for CoreError {
 impl From<serde_json::Error> for CoreError {
     fn from(source: serde_json::Error) -> Self {
         Self::Serialization {
-            message: format!("JSON序列化错误: {}", source),
+            message: format!("JSON序列化错误: {source}"),
             source: Some(Box::new(source)),
             code: ErrorCode::SerializationError,
             ctx: Box::new(ErrorContext::new()),

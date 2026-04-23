@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/tenant-tag/get
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, validate_required,
 };
 
 use crate::{common::api_utils::extract_response_data, endpoints::IM_V2_BIZ_ENTITY_TAG_RELATION};

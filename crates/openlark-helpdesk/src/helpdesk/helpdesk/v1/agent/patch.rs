@@ -5,7 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-function/agent/patch
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -24,10 +24,10 @@ pub struct PatchAgentBody {
 impl PatchAgentBody {
     /// 验证请求参数
     pub fn validate(&self) -> Result<(), String> {
-        if let Some(status) = &self.status {
-            if !["offline", "online", "busy"].contains(&status.as_str()) {
-                return Err("status must be offline, online, or busy".to_string());
-            }
+        if let Some(status) = &self.status
+            && !["offline", "online", "busy"].contains(&status.as_str())
+        {
+            return Err("status must be offline, online, or busy".to_string());
         }
         Ok(())
     }

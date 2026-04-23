@@ -2,7 +2,7 @@ use crate::{
     auth::TokenRequest,
     config::Config,
     constants::AccessTokenType,
-    error::{authentication_error, CoreError},
+    error::{CoreError, authentication_error},
     req_option::RequestOption,
 };
 use reqwest::RequestBuilder;
@@ -89,9 +89,9 @@ impl AuthHandler {
 mod tests {
     use super::*;
     use crate::constants::AppType;
-    use crate::error::traits::ErrorTrait;
     use crate::error::ErrorType;
-    use crate::{auth::TokenProvider, SDKResult};
+    use crate::error::traits::ErrorTrait;
+    use crate::{SDKResult, auth::TokenProvider};
     use reqwest::Client;
     use std::{future::Future, pin::Pin};
 
@@ -272,7 +272,7 @@ mod tests {
 
         // Can't easily test the actual header, but should not panic
         // and should return a RequestBuilder
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -284,7 +284,7 @@ mod tests {
 
         // Can't easily inspect headers without building request
         // but should not panic and should return RequestBuilder
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -295,7 +295,7 @@ mod tests {
         let result = AuthHandler::add_auth_header(req_builder, token);
 
         // Should handle empty token without panicking
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[tokio::test]

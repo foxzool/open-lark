@@ -5,11 +5,12 @@ use crate::models::authen::UserInfoResponse;
 ///
 /// 通过 `user_access_token` 获取登录用户的信息。
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

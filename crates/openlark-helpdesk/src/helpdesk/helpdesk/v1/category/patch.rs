@@ -5,7 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/category/patch
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -33,10 +33,10 @@ pub struct PatchCategoryBody {
 impl PatchCategoryBody {
     /// 验证请求参数
     pub fn validate(&self) -> Result<(), String> {
-        if let Some(name) = &self.name {
-            if name.is_empty() {
-                return Err("name cannot be empty".to_string());
-            }
+        if let Some(name) = &self.name
+            && name.is_empty()
+        {
+            return Err("name cannot be empty".to_string());
         }
         Ok(())
     }

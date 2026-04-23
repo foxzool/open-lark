@@ -3,9 +3,9 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/task-v1/taskcollaborator/batch_delete
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

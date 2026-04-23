@@ -3,11 +3,12 @@
 //! docPath: https://open.feishu.cn/document/lingo-v1/entity/match
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};

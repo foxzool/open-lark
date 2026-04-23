@@ -5,10 +5,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/search_wiki
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

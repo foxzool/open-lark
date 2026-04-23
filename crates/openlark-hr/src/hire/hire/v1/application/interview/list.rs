@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/application.interview/list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -77,13 +78,13 @@ impl ListRequest {
         use crate::common::api_endpoints::HireApiV1;
 
         validate_required!(self.application_id.trim(), "投递 ID 不能为空");
-        if let Some(size) = self.page_size {
-            if !(1..=100).contains(&size) {
-                return Err(openlark_core::error::validation_error(
-                    "分页大小超出范围",
-                    "page_size 必须在 1-100 之间",
-                ));
-            }
+        if let Some(size) = self.page_size
+            && !(1..=100).contains(&size)
+        {
+            return Err(openlark_core::error::validation_error(
+                "分页大小超出范围",
+                "page_size 必须在 1-100 之间",
+            ));
         }
 
         let api_endpoint = HireApiV1::ApplicationInterviewList(self.application_id.clone());
@@ -95,7 +96,7 @@ impl ListRequest {
         let request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {e}"),
             )
         })?);
         let response = Transport::request(request, &self.config, Some(option)).await?;

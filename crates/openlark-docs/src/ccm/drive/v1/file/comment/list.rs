@@ -5,10 +5,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 
 use serde::{Deserialize, Serialize};
@@ -277,12 +277,16 @@ mod tests {
                 .expect("user_id_type should be set when .user_id_type() is called"),
             "open_id"
         );
-        assert!(request
-            .is_whole
-            .expect("is_whole should be set when .is_whole() is called"));
-        assert!(!request
-            .is_solved
-            .expect("is_solved should be set when .is_solved() is called"));
+        assert!(
+            request
+                .is_whole
+                .expect("is_whole should be set when .is_whole() is called")
+        );
+        assert!(
+            !request
+                .is_solved
+                .expect("is_solved should be set when .is_solved() is called")
+        );
     }
 
     #[test]

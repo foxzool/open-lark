@@ -1,8 +1,8 @@
 //! API特征定义 - 独立版本
 #![allow(async_fn_in_trait)]
 
-pub use super::responses::RawResponse;
 use super::ApiRequest;
+pub use super::responses::RawResponse;
 use crate::error::SDKResult;
 
 /// 异步API客户端特征

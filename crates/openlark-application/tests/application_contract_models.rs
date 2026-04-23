@@ -8,9 +8,9 @@ use openlark_application::workplace::workplace::v1::workplace_access_data::searc
 use openlark_application::workplace::workplace::v1::workplace_block_access_data::search::{
     AccessDataSearchBlockResponse, BlockAccessData,
 };
-use serde::de::DeserializeOwned;
 use serde::Serialize;
-use serde_json::{from_value, json, to_value, Value};
+use serde::de::DeserializeOwned;
+use serde_json::{Value, from_value, json, to_value};
 
 fn assert_json_contract<T>(value: &T, expected: Value)
 where

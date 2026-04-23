@@ -2,6 +2,7 @@
 name = "openlark-protocol"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 authors.workspace = true
 license.workspace = true
 description = "Lark/Feishu websocket client protobuf definitions."
@@ -24,4 +25,3 @@ prost-build = "0.12.6"
 
 [package.metadata.cargo-machete]
 ignored = ["bytes"]
-

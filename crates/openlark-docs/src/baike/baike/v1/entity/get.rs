@@ -3,11 +3,12 @@
 //! docPath: https://open.feishu.cn/document/server-docs/baike-v1/entity/get
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -166,44 +167,54 @@ mod tests {
 
         // 测试 entity_id 为空
         let request = GetEntityRequest::new(config.clone(), "");
-        assert!(request
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
 
         // 测试 provider 过短
         let request2 = GetEntityRequest::new(config.clone(), "enterprise_0")
             .provider("a")
             .outer_id("outer_123");
-        assert!(request2
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request2
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
 
         // 测试 provider 过长
         let request3 = GetEntityRequest::new(config.clone(), "enterprise_0")
             .provider("a".repeat(33))
             .outer_id("outer_123");
-        assert!(request3
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request3
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
 
         // 测试 outer_id 过长
         let request4 = GetEntityRequest::new(config.clone(), "enterprise_0")
             .provider("my_system")
             .outer_id("a".repeat(65));
-        assert!(request4
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request4
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
 
         // 测试缺少 outer_id
         let request5 = GetEntityRequest::new(config.clone(), "enterprise_0").provider("my_system");
-        assert!(request5
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request5
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
     }
 
     #[test]

@@ -9,7 +9,7 @@ type HmacSha256 = Hmac<Sha256>;
 /// 算法为 `base64(hmac_sha256("{timestamp}\n{secret}"))`。
 pub fn sign(timestamp: i64, secret: &str) -> String {
     use base64::engine::Engine;
-    let content = format!("{}\n{}", timestamp, secret);
+    let content = format!("{timestamp}\n{secret}");
     // SAFETY: HMAC-SHA256 的 new_from_slice 只有在密钥长度超过 128GB 时才会失败，
     // 这在实际使用中是不可能的。secret 是用户配置的 webhook 密钥，通常为几十字节。
     let mut mac = HmacSha256::new_from_slice(secret.as_bytes()).expect(

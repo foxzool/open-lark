@@ -107,7 +107,7 @@ just release VERSION  # 发布新版本
 
 ## NOTES
 
-- **MSRV**: Rust 1.75+
+- **MSRV**: Rust 1.88+
 - **默认 Features**: `auth`
 - **WebSocket**: 需要单独启用 `websocket` feature
 - **测试**: 使用 `.env` 文件管理测试凭证（不要提交到 git）

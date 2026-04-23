@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/attendance-v1/file/download
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

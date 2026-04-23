@@ -7,7 +7,7 @@
 //! 为避免继续返回占位 JSON，本模块现在会显式返回未接线错误。
 
 use crate::PlatformConfig;
-use openlark_core::{error::business_error, req_option::RequestOption, SDKResult};
+use openlark_core::{SDKResult, error::business_error, req_option::RequestOption};
 use std::sync::Arc;
 
 /// 审计日志 facade。

@@ -5,10 +5,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/copy
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -189,13 +189,13 @@ impl CopyFileRequest {
             for (idx, prop) in extra.iter().enumerate() {
                 if prop.key.trim().is_empty() {
                     return Err(openlark_core::error::validation_error(
-                        &format!("extra[{}].key", idx),
+                        &format!("extra[{idx}].key"),
                         "key 不能为空",
                     ));
                 }
                 if prop.value.trim().is_empty() {
                     return Err(openlark_core::error::validation_error(
-                        &format!("extra[{}].value", idx),
+                        &format!("extra[{idx}].value"),
                         "value 不能为空",
                     ));
                 }

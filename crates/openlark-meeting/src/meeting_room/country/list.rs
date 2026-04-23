@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/api-reference/obtain-country/region-list
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 
 use crate::{common::api_utils::extract_response_data, endpoints::MEETING_ROOM};
@@ -40,7 +40,7 @@ impl ListCountryRequest {
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/meeting_room/country/list
         let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::get(format!("{}/country/list", MEETING_ROOM));
+            ApiRequest::get(format!("{MEETING_ROOM}/country/list"));
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }

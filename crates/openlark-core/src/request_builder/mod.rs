@@ -264,7 +264,7 @@ mod tests {
                 UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
                     .await;
 
-            assert!(result.is_ok(), "Failed for method: {:?}", method);
+            assert!(result.is_ok(), "Failed for method: {method:?}");
         }
     }
 
@@ -277,11 +277,12 @@ mod tests {
 
         assert!(result.is_ok());
         let url =
-            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {}", e)))?;
+            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {e}")))?;
         // May have trailing ? due to parse_with_params implementation
-        assert!(url
-            .as_str()
-            .starts_with("https://open.feishu.cn/open-apis/test"));
+        assert!(
+            url.as_str()
+                .starts_with("https://open.feishu.cn/open-apis/test")
+        );
         Ok(())
     }
 
@@ -296,7 +297,7 @@ mod tests {
 
         assert!(result.is_ok());
         let url =
-            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {}", e)))?;
+            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {e}")))?;
         let url_str = url.as_str();
         assert!(url_str.starts_with("https://open.feishu.cn/open-apis/test"));
         assert!(url_str.contains("page=1"));
@@ -319,7 +320,7 @@ mod tests {
 
         assert!(result.is_ok());
         let url =
-            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {}", e)))?;
+            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {e}")))?;
         // URL encoding should be handled properly
         assert!(url.as_str().contains("query="));
         assert!(url.as_str().contains("filter="));
@@ -336,7 +337,7 @@ mod tests {
 
         assert!(result.is_ok());
         let url =
-            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {}", e)))?;
+            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {e}")))?;
         assert!(url.as_str().contains("empty="));
         Ok(())
     }
@@ -485,11 +486,12 @@ mod tests {
 
         assert!(result.is_ok());
         let url =
-            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {}", e)))?;
+            result.map_err(|e| crate::error::configuration_error(format!("构建URL失败: {e}")))?;
         // May have trailing ? due to parse_with_params implementation
-        assert!(url
-            .as_str()
-            .starts_with("https://open.feishu.cn/open-apis/v1/users/123/messages"));
+        assert!(
+            url.as_str()
+                .starts_with("https://open.feishu.cn/open-apis/v1/users/123/messages")
+        );
         Ok(())
     }
 }

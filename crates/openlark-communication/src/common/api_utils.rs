@@ -2,7 +2,7 @@
 //!
 //! 提供 API 实现的通用工具和辅助函数，减少重复代码，提高一致性。
 
-use openlark_core::{error, SDKResult};
+use openlark_core::{SDKResult, error};
 
 const ERROR_COMPONENT: &str = "openlark-communication";
 
@@ -34,7 +34,7 @@ pub fn request_serialization_error(
     source: impl std::fmt::Display,
 ) -> openlark_core::error::CoreError {
     attach_standard_error_context(
-        error::validation_error("request.params", format!("无法序列化请求参数: {}", source)),
+        error::validation_error("request.params", format!("无法序列化请求参数: {source}")),
         "serialize_params",
         resource,
         None,

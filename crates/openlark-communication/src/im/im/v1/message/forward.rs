@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/message/forward
 
 use openlark_core::{
-    api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, error, http::Transport, validate_required,
 };
 use serde::{Deserialize, Serialize};
 

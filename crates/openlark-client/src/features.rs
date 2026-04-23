@@ -33,7 +33,7 @@ mod tests {
     #[test]
     fn test_feature_loader_debug() {
         let loader = FeatureLoader;
-        let debug_str = format!("{:?}", loader);
+        let debug_str = format!("{loader:?}");
         assert!(debug_str.contains("FeatureLoader"));
     }
 }

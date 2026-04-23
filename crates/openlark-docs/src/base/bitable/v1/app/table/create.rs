@@ -140,13 +140,13 @@ impl CreateTableRequest {
         }
 
         // default_view_name 名称中不允许包含 [ ]
-        if let Some(ref default_view_name) = self.table.default_view_name {
-            if default_view_name.contains('[') || default_view_name.contains(']') {
-                return Err(openlark_core::error::validation_error(
-                    "default_view_name",
-                    "默认视图名称不能包含 '[' 或 ']'",
-                ));
-            }
+        if let Some(ref default_view_name) = self.table.default_view_name
+            && (default_view_name.contains('[') || default_view_name.contains(']'))
+        {
+            return Err(openlark_core::error::validation_error(
+                "default_view_name",
+                "默认视图名称不能包含 '[' 或 ']'",
+            ));
         }
 
         // 🚀 使用新的enum+builder系统生成API端点

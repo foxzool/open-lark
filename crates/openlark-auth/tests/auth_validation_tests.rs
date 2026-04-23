@@ -6,7 +6,7 @@ use openlark_auth::auth::auth::v3::*;
 use openlark_core::{
     api::responses::{RawResponse, Response},
     config::Config,
-    error::{timeout_error, CoreError, ErrorTrait},
+    error::{CoreError, ErrorTrait, timeout_error},
 };
 
 fn create_test_config(base_url: &str, timeout_ms: u64) -> Config {

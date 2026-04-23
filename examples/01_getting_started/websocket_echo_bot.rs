@@ -134,16 +134,16 @@ fn resolve_receive_target(
         return Ok((open_id, "open_id"));
     }
 
-    if let Some(chat) = &event.chat {
-        if !chat.chat_id.is_empty() {
-            return Ok((chat.chat_id.clone(), "chat_id"));
-        }
+    if let Some(chat) = &event.chat
+        && !chat.chat_id.is_empty()
+    {
+        return Ok((chat.chat_id.clone(), "chat_id"));
     }
 
-    if let Some(chat_id) = &event.message.chat_id {
-        if !chat_id.is_empty() {
-            return Ok((chat_id.clone(), "chat_id"));
-        }
+    if let Some(chat_id) = &event.message.chat_id
+        && !chat_id.is_empty()
+    {
+        return Ok((chat_id.clone(), "chat_id"));
     }
 
     Err("群聊消息缺少 chat_id".into())

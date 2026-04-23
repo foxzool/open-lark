@@ -1,5 +1,5 @@
 use crate::config::ConfigSummary;
-use crate::{configuration_error, validation_error, with_context, Config, Result};
+use crate::{Config, Result, configuration_error, validation_error, with_context};
 use openlark_core::error::ErrorTrait;
 use std::env;
 
@@ -57,31 +57,32 @@ pub fn check_env_config() -> Result<()> {
     }
 
     // 检查可选的环境变量
-    if let Ok(base_url) = env::var("OPENLARK_BASE_URL") {
-        if !base_url.starts_with("http://") && !base_url.starts_with("https://") {
-            return with_context(
-                Err(validation_error(
-                    "OPENLARK_BASE_URL",
-                    "基础URL必须以http://或https://开头",
-                )),
-                "validation",
-                "env_config",
-            );
-        }
+    if let Ok(base_url) = env::var("OPENLARK_BASE_URL")
+        && !base_url.starts_with("http://")
+        && !base_url.starts_with("https://")
+    {
+        return with_context(
+            Err(validation_error(
+                "OPENLARK_BASE_URL",
+                "基础URL必须以http://或https://开头",
+            )),
+            "validation",
+            "env_config",
+        );
     }
 
     // 检查超时设置
-    if let Ok(timeout_str) = env::var("OPENLARK_TIMEOUT") {
-        if timeout_str.parse::<u64>().is_err() {
-            return with_context(
-                Err(validation_error(
-                    "OPENLARK_TIMEOUT",
-                    "超时设置必须是有效的数字（秒数）",
-                )),
-                "validation",
-                "env_config",
-            );
-        }
+    if let Ok(timeout_str) = env::var("OPENLARK_TIMEOUT")
+        && timeout_str.parse::<u64>().is_err()
+    {
+        return with_context(
+            Err(validation_error(
+                "OPENLARK_TIMEOUT",
+                "超时设置必须是有效的数字（秒数）",
+            )),
+            "validation",
+            "env_config",
+        );
     }
 
     Ok(())
@@ -289,7 +290,7 @@ impl SystemDiagnostics {
         if healthy_count == 0 {
             "🟢 系统配置健康".to_string()
         } else {
-            format!("🟡 发现 {} 个配置问题", healthy_count)
+            format!("🟡 发现 {healthy_count} 个配置问题")
         }
     }
 

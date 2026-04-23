@@ -5,10 +5,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -78,13 +78,13 @@ impl ListWikiSpacesRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListWikiSpacesResponse> {
         // ===== 参数校验 =====
-        if let Some(page_size) = self.page_size {
-            if page_size < 1 || page_size > 50 {
-                return Err(openlark_core::error::validation_error(
-                    "page_size",
-                    "page_size 必须在 1~50 之间",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && (page_size < 1 || page_size > 50)
+        {
+            return Err(openlark_core::error::validation_error(
+                "page_size",
+                "page_size 必须在 1~50 之间",
+            ));
         }
 
         // ===== 构建请求 =====

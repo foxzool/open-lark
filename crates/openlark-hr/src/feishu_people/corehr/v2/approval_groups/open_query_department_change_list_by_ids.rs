@@ -3,10 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/approval_groups/open_query_department_change_list_by_ids
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;

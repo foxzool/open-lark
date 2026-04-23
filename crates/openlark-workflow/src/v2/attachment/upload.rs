@@ -5,9 +5,10 @@
 use crate::common::{api_endpoints::TaskApiV2, api_utils::*};
 use crate::v2::attachment::models::UploadAttachmentResponse;
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, RequestData, ResponseFormat},
     config::Config,
-    validate_required, SDKResult,
+    validate_required,
 };
 use std::sync::Arc;
 

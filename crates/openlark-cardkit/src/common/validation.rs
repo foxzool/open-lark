@@ -84,8 +84,8 @@ pub fn validate_element_id(element_id: &str) -> Result<(), error::CoreError> {
 pub fn validate_id_type(id_type: &str, field_name: &str) -> Result<(), error::CoreError> {
     if id_type.trim().is_empty() {
         Err(error::validation_error(
-            format!("{} 不能为空", field_name),
-            format!("{} 不能为空或仅包含空白字符", field_name),
+            format!("{field_name} 不能为空"),
+            format!("{field_name} 不能为空或仅包含空白字符"),
         ))
     } else {
         Ok(())
@@ -114,8 +114,8 @@ pub fn validate_id_type(id_type: &str, field_name: &str) -> Result<(), error::Co
 pub fn validate_id_list(ids: &[String], field_name: &str) -> Result<(), error::CoreError> {
     if ids.is_empty() {
         Err(error::validation_error(
-            format!("{} 不能为空", field_name),
-            format!("{} 必须包含至少一个 ID", field_name),
+            format!("{field_name} 不能为空"),
+            format!("{field_name} 必须包含至少一个 ID"),
         ))
     } else {
         Ok(())

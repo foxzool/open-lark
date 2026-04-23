@@ -1,11 +1,11 @@
 //! 获取人工任务列表 API
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -60,13 +60,13 @@ impl ListInstanceBuilder {
         let mut params = Vec::new();
 
         if let Some(size) = self.page_size {
-            params.push(format!("page_size={}", size));
+            params.push(format!("page_size={size}"));
         }
         if let Some(token) = self.page_token {
-            params.push(format!("page_token={}", token));
+            params.push(format!("page_token={token}"));
         }
         if let Some(uid) = self.user_id {
-            params.push(format!("user_id={}", uid));
+            params.push(format!("user_id={uid}"));
         }
 
         if !params.is_empty() {

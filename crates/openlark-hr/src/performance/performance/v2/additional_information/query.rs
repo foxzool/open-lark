@@ -4,10 +4,10 @@
 
 use openlark_core::validate_required;
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -67,7 +67,7 @@ impl QueryRequest {
         let request_body_json = serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {e}"),
             )
         })?;
         let request = request.body(request_body_json);

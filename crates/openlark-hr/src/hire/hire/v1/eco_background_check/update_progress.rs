@@ -3,10 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/eco_background_check/update_progress
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;

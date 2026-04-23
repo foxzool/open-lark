@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/historic-version/meeting_room-v1/room_config/set
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 
 use crate::common::api_utils::{extract_response_data, serialize_params};

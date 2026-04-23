@@ -346,7 +346,7 @@ let error_context = create_error_context(
 
 ## 版本要求
 
-- Rust 2021 或更高版本
+- Rust 1.88 或更高版本
 - Tokio 1.0 或更高版本
 
 ## 许可证

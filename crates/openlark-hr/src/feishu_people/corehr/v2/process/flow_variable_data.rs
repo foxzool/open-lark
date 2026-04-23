@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/process/flow_variable_data
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -59,8 +60,7 @@ impl FlowVariableDataRequest {
         validate_required!(process_id.trim(), "process_id 不能为空");
 
         let mut request = ApiRequest::<FlowVariableDataResponse>::get(format!(
-            "/open-apis/corehr/v2/processes/{}/flow_variable_data",
-            process_id
+            "/open-apis/corehr/v2/processes/{process_id}/flow_variable_data"
         ));
 
         if let Some(body) = self.body {

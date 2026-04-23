@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat-member/me_join
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, validate_required,
 };
 
 use crate::{

@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/attendance-v1/file/upload
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, validate_required_list, validation_error, SDKResult,
+    validate_required, validate_required_list, validation_error,
 };
 use rand::Rng;
 use serde::{Deserialize, Serialize};
@@ -78,7 +79,7 @@ impl UploadRequest {
         // 3. 构建请求体（multipart/form-data）
         // 生成随机 boundary 后缀避免冲突
         let random_suffix: u32 = rand::thread_rng().gen_range(0..1000000);
-        let boundary = format!("----OpenLarkBoundary{:06}", random_suffix);
+        let boundary = format!("----OpenLarkBoundary{random_suffix:06}");
         let mime_type = detect_mime_type(file_name);
         let body = build_multipart_body(
             &self.user_id,
@@ -91,7 +92,7 @@ impl UploadRequest {
         let request = request
             .header(
                 "Content-Type",
-                format!("multipart/form-data; boundary={}", boundary),
+                format!("multipart/form-data; boundary={boundary}"),
             )
             .body(body);
 
@@ -135,26 +136,23 @@ fn build_multipart_body(
     let mut body = Vec::new();
 
     // 用户 ID 部分
-    body.extend_from_slice(format!("--{}\r\n", boundary).as_bytes());
+    body.extend_from_slice(format!("--{boundary}\r\n").as_bytes());
     body.extend_from_slice(b"Content-Disposition: form-data; name=\"user_id\"\r\n\r\n");
     body.extend_from_slice(user_id.as_bytes());
     body.extend_from_slice(b"\r\n");
 
     // 文件部分
-    body.extend_from_slice(format!("--{}\r\n", boundary).as_bytes());
+    body.extend_from_slice(format!("--{boundary}\r\n").as_bytes());
     body.extend_from_slice(
-        format!(
-            "Content-Disposition: form-data; name=\"file\"; filename=\"{}\"\r\n",
-            file_name
-        )
-        .as_bytes(),
+        format!("Content-Disposition: form-data; name=\"file\"; filename=\"{file_name}\"\r\n")
+            .as_bytes(),
     );
-    body.extend_from_slice(format!("Content-Type: {}\r\n\r\n", mime_type).as_bytes());
+    body.extend_from_slice(format!("Content-Type: {mime_type}\r\n\r\n").as_bytes());
     body.extend_from_slice(image_data);
     body.extend_from_slice(b"\r\n");
 
     // 结束边界
-    body.extend_from_slice(format!("--{}--\r\n", boundary).as_bytes());
+    body.extend_from_slice(format!("--{boundary}--\r\n").as_bytes());
 
     body
 }

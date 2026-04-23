@@ -5,7 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-function/agent-schedules/patch
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -33,10 +33,10 @@ pub struct PatchAgentScheduleBody {
 impl PatchAgentScheduleBody {
     /// 验证请求参数
     pub fn validate(&self) -> Result<(), String> {
-        if let (Some(start_time), Some(end_time)) = (&self.start_time, &self.end_time) {
-            if start_time >= end_time {
-                return Err("start_time must be less than end_time".to_string());
-            }
+        if let (Some(start_time), Some(end_time)) = (&self.start_time, &self.end_time)
+            && start_time >= end_time
+        {
+            return Err("start_time must be less than end_time".to_string());
         }
         Ok(())
     }

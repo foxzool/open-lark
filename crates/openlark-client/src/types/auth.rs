@@ -390,7 +390,7 @@ mod tests {
     fn test_debug_formatting() {
         let token = AccessToken::new("debug_token".to_string(), "Bearer".to_string(), 3600);
 
-        let debug_str = format!("{:?}", token);
+        let debug_str = format!("{token:?}");
         assert!(debug_str.contains("AccessToken"));
         assert!(debug_str.contains("debug_token"));
         // 注意：由于安全原因，我们不应该在debug输出中显示完整的令牌

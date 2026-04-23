@@ -3,11 +3,11 @@
 //! URL: PATCH:/open-apis/apaas/v1/workspaces/:workspace_id/tables/:table_name/records
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

@@ -236,7 +236,7 @@
 //! ```
 
 //#![deny(missing_docs)]  // 暂时禁用以完成基本编译
-// async_fn_in_trait: 保留以兼容 MSRV 1.75（该 lint 在 Rust 1.80+ 才稳定）
+// async_fn_in_trait: 当前 crate 仍显式保留该 allow，避免对使用者暴露额外 lint 噪声。
 #![allow(async_fn_in_trait)]
 
 // 核心模块
@@ -281,10 +281,10 @@ pub use error::{Error, Result};
 
 // 错误扩展功能
 pub use error::{
-    with_context,           // 上下文错误处理
-    with_operation_context, // 操作上下文错误处理
     ClientErrorExt,         // 客户端错误扩展特征
     ErrorAnalyzer,          // 错误分析器
+    with_context,           // 上下文错误处理
+    with_operation_context, // 操作上下文错误处理
 };
 
 // 错误创建便利函数
@@ -382,7 +382,7 @@ pub type SecurityClient = std::sync::Arc<openlark_security::SecurityServices>;
 // ============================================================================
 
 // 重新导出 openlark-core 核心类型
-pub use openlark_core::{config::Config as CoreConfig, SDKResult as CoreResult};
+pub use openlark_core::{SDKResult as CoreResult, config::Config as CoreConfig};
 
 // 错误系统核心类型
 pub use openlark_core::error::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType};
@@ -429,10 +429,10 @@ pub mod prelude {
 
     // 错误扩展特征和分析器
     pub use crate::{
-        with_context,           // 上下文错误处理
-        with_operation_context, // 操作上下文错误处理
         ClientErrorExt,         // 客户端错误扩展特征
         ErrorAnalyzer,          // 错误分析器
+        with_context,           // 上下文错误处理
+        with_operation_context, // 操作上下文错误处理
     };
 
     // 错误创建便利函数
@@ -538,7 +538,7 @@ pub mod prelude {
     // 常用宏和便利导入
     // ============================================================================
 
-    pub use openlark_core::{config::Config as CoreConfig, SDKResult as CoreResult};
+    pub use openlark_core::{SDKResult as CoreResult, config::Config as CoreConfig};
 }
 
 /// 🏷️ 库信息
@@ -563,9 +563,9 @@ mod tests {
 
     #[test]
     fn test_library_info() {
-        assert!(!info::NAME.is_empty());
-        assert!(!info::VERSION.is_empty());
-        assert!(!info::DESCRIPTION.is_empty());
+        assert_ne!(info::NAME, "");
+        assert_ne!(info::VERSION, "");
+        assert_ne!(info::DESCRIPTION, "");
     }
 
     #[test]

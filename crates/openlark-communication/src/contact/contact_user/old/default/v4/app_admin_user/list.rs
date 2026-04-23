@@ -2,7 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/application-v6/admin/query-app-administrator-list
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{SDKResult, api::ApiRequest, config::Config, http::Transport};
 
 use crate::{common::api_utils::extract_response_data, endpoints::USER_V4_APP_ADMIN_USER_LIST};
 

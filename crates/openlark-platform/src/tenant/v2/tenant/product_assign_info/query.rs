@@ -3,11 +3,11 @@
 //! 文档: https://open.feishu.cn/document/server-docs/tenant-v2/tenant-product_assign_info/query
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -56,10 +56,10 @@ impl AssignInfoListQueryBuilder {
         // 添加查询参数
         let mut params = Vec::new();
         if let Some(page_size) = self.page_size {
-            params.push(format!("page_size={}", page_size));
+            params.push(format!("page_size={page_size}"));
         }
         if let Some(ref page_token) = self.page_token {
-            params.push(format!("page_token={}", page_token));
+            params.push(format!("page_token={page_token}"));
         }
         if !params.is_empty() {
             url.push('?');

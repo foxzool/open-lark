@@ -9,10 +9,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/file/get
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 
 use serde::{Deserialize, Serialize};

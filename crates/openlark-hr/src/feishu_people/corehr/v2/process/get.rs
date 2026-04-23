@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/process/get
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -58,10 +59,8 @@ impl GetRequest {
         let process_id = self.process_id.unwrap_or_default();
         validate_required!(process_id.trim(), "process_id 不能为空");
 
-        let mut request = ApiRequest::<GetResponse>::get(format!(
-            "/open-apis/corehr/v2/processes/{}",
-            process_id
-        ));
+        let mut request =
+            ApiRequest::<GetResponse>::get(format!("/open-apis/corehr/v2/processes/{process_id}"));
 
         if let Some(body) = self.body {
             request = request.body(body);

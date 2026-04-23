@@ -46,13 +46,13 @@ impl BaseApiV2 {
     pub fn to_url(&self) -> String {
         match self {
             BaseApiV2::RoleCreate(app_token) => {
-                format!("/open-apis/base/v2/apps/{}/roles", app_token)
+                format!("/open-apis/base/v2/apps/{app_token}/roles")
             }
             BaseApiV2::RoleUpdate(app_token, role_id) => {
-                format!("/open-apis/base/v2/apps/{}/roles/{}", app_token, role_id)
+                format!("/open-apis/base/v2/apps/{app_token}/roles/{role_id}")
             }
             BaseApiV2::RoleList(app_token) => {
-                format!("/open-apis/base/v2/apps/{}/roles", app_token)
+                format!("/open-apis/base/v2/apps/{app_token}/roles")
             }
         }
     }
@@ -180,286 +180,199 @@ impl BitableApiV1 {
             // App管理
             BitableApiV1::AppCreate => "/open-apis/bitable/v1/apps".to_string(),
             BitableApiV1::AppCopy(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}/copy", app_token)
+                format!("/open-apis/bitable/v1/apps/{app_token}/copy")
             }
             BitableApiV1::AppGet(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}", app_token)
+                format!("/open-apis/bitable/v1/apps/{app_token}")
             }
             BitableApiV1::AppUpdate(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}", app_token)
+                format!("/open-apis/bitable/v1/apps/{app_token}")
             }
             BitableApiV1::DashboardList(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}/dashboards", app_token)
+                format!("/open-apis/bitable/v1/apps/{app_token}/dashboards")
             }
             BitableApiV1::DashboardCopy(app_token, block_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/dashboards/{}/copy",
-                    app_token, block_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/dashboards/{block_id}/copy")
             }
             BitableApiV1::BlockWorkflowList(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}/block_workflows", app_token)
+                format!("/open-apis/bitable/v1/apps/{app_token}/block_workflows")
             }
             BitableApiV1::WorkflowList(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}/workflows", app_token)
+                format!("/open-apis/bitable/v1/apps/{app_token}/workflows")
             }
             BitableApiV1::WorkflowUpdate(app_token, workflow_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/workflows/{}",
-                    app_token, workflow_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/workflows/{workflow_id}")
             }
 
             // 表格管理
             BitableApiV1::TableCreate(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables", app_token)
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables")
             }
             BitableApiV1::TableBatchCreate(app_token) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/batch_create",
-                    app_token
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/batch_create")
             }
             BitableApiV1::TableUpdate(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}")
             }
             BitableApiV1::TableDelete(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}")
             }
             BitableApiV1::TableBatchDelete(app_token) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/batch_delete",
-                    app_token
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/batch_delete")
             }
             BitableApiV1::TableGet(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}")
             }
             BitableApiV1::TableList(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}/tables", app_token)
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables")
             }
             BitableApiV1::TablePatch(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}")
             }
 
             // 字段管理
             BitableApiV1::FieldCreate(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/fields",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields")
             }
             BitableApiV1::FieldGroupCreate(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/field_groups",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/field_groups")
             }
             BitableApiV1::FieldUpdate(app_token, table_id, field_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}",
-                    app_token, table_id, field_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields/{field_id}"
                 )
             }
             BitableApiV1::FieldDelete(app_token, table_id, field_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/fields/{}",
-                    app_token, table_id, field_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields/{field_id}"
                 )
             }
             BitableApiV1::FieldList(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/fields",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields")
             }
 
             // 视图管理
             BitableApiV1::ViewCreate(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/views",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views")
             }
             BitableApiV1::ViewUpdate(app_token, table_id, view_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
-                    app_token, table_id, view_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views/{view_id}")
             }
             BitableApiV1::ViewDelete(app_token, table_id, view_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
-                    app_token, table_id, view_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views/{view_id}")
             }
             BitableApiV1::ViewGet(app_token, table_id, view_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
-                    app_token, table_id, view_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views/{view_id}")
             }
             BitableApiV1::ViewList(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/views",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views")
             }
             BitableApiV1::ViewPatch(app_token, table_id, view_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
-                    app_token, table_id, view_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views/{view_id}")
             }
 
             // 记录管理
             BitableApiV1::RecordCreate(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/records",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records")
             }
             BitableApiV1::RecordBatchCreate(app_token, table_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_create",
-                    app_token, table_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/batch_create"
                 )
             }
             BitableApiV1::RecordGet(app_token, table_id, record_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
-                    app_token, table_id, record_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/{record_id}"
                 )
             }
             BitableApiV1::RecordBatchGet(app_token, table_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_get",
-                    app_token, table_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/batch_get"
                 )
             }
             BitableApiV1::RecordUpdate(app_token, table_id, record_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
-                    app_token, table_id, record_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/{record_id}"
                 )
             }
             BitableApiV1::RecordBatchUpdate(app_token, table_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_update",
-                    app_token, table_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/batch_update"
                 )
             }
             BitableApiV1::RecordDelete(app_token, table_id, record_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/{}",
-                    app_token, table_id, record_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/{record_id}"
                 )
             }
             BitableApiV1::RecordBatchDelete(app_token, table_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/batch_delete",
-                    app_token, table_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/batch_delete"
                 )
             }
             BitableApiV1::RecordList(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/records",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records")
             }
             BitableApiV1::RecordSearch(app_token, table_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/records/search",
-                    app_token, table_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/search")
             }
 
             // 表单管理
             BitableApiV1::FormGet(app_token, table_id, form_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
-                    app_token, table_id, form_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/forms/{form_id}")
             }
             BitableApiV1::FormPatch(app_token, table_id, form_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}",
-                    app_token, table_id, form_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/forms/{form_id}")
             }
             BitableApiV1::FormUpgrade(app_token, table_id, form_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/upgrade",
-                    app_token, table_id, form_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/forms/{form_id}/upgrade"
                 )
             }
             BitableApiV1::FormFieldList(app_token, table_id, form_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/fields",
-                    app_token, table_id, form_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/forms/{form_id}/fields"
                 )
             }
             BitableApiV1::FormFieldPatch(app_token, table_id, form_id, field_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/tables/{}/forms/{}/fields/{}",
-                    app_token, table_id, form_id, field_id
+                    "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/forms/{form_id}/fields/{field_id}"
                 )
             }
 
             // 权限管理
             BitableApiV1::RoleCreate(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}/roles", app_token)
+                format!("/open-apis/bitable/v1/apps/{app_token}/roles")
             }
             BitableApiV1::RoleUpdate(app_token, role_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/roles/{}", app_token, role_id)
+                format!("/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}")
             }
             BitableApiV1::RoleDelete(app_token, role_id) => {
-                format!("/open-apis/bitable/v1/apps/{}/roles/{}", app_token, role_id)
+                format!("/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}")
             }
             BitableApiV1::RoleList(app_token) => {
-                format!("/open-apis/bitable/v1/apps/{}/roles", app_token)
+                format!("/open-apis/bitable/v1/apps/{app_token}/roles")
             }
             BitableApiV1::RoleMemberCreate(app_token, role_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/roles/{}/members",
-                    app_token, role_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members")
             }
             BitableApiV1::RoleMemberBatchCreate(app_token, role_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_create",
-                    app_token, role_id
+                    "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members/batch_create"
                 )
             }
             BitableApiV1::RoleMemberDelete(app_token, role_id, member_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/roles/{}/members/{}",
-                    app_token, role_id, member_id
+                    "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members/{member_id}"
                 )
             }
             BitableApiV1::RoleMemberBatchDelete(app_token, role_id) => {
                 format!(
-                    "/open-apis/bitable/v1/apps/{}/roles/{}/members/batch_delete",
-                    app_token, role_id
+                    "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members/batch_delete"
                 )
             }
             BitableApiV1::RoleMemberList(app_token, role_id) => {
-                format!(
-                    "/open-apis/bitable/v1/apps/{}/roles/{}/members",
-                    app_token, role_id
-                )
+                format!("/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members")
             }
         }
     }
@@ -483,16 +396,16 @@ impl MinutesApiV1 {
     pub fn to_url(&self) -> String {
         match self {
             MinutesApiV1::Get(minute_token) => {
-                format!("/open-apis/minutes/v1/minutes/{}", minute_token)
+                format!("/open-apis/minutes/v1/minutes/{minute_token}")
             }
             MinutesApiV1::MediaGet(minute_token) => {
-                format!("/open-apis/minutes/v1/minutes/{}/media", minute_token)
+                format!("/open-apis/minutes/v1/minutes/{minute_token}/media")
             }
             MinutesApiV1::TranscriptGet(minute_token) => {
-                format!("/open-apis/minutes/v1/minutes/{}/transcript", minute_token)
+                format!("/open-apis/minutes/v1/minutes/{minute_token}/transcript")
             }
             MinutesApiV1::StatisticsGet(minute_token) => {
-                format!("/open-apis/minutes/v1/minutes/{}/statistics", minute_token)
+                format!("/open-apis/minutes/v1/minutes/{minute_token}/statistics")
             }
         }
     }
@@ -582,93 +495,65 @@ impl DocxApiV1 {
         match self {
             // 群公告相关API (7个)
             DocxApiV1::ChatAnnouncementGet(chat_id) => {
-                format!("/open-apis/docx/v1/chats/{}/announcement", chat_id)
+                format!("/open-apis/docx/v1/chats/{chat_id}/announcement")
             }
             DocxApiV1::ChatAnnouncementBlockList(chat_id) => {
-                format!("/open-apis/docx/v1/chats/{}/announcement/blocks", chat_id)
+                format!("/open-apis/docx/v1/chats/{chat_id}/announcement/blocks")
             }
             DocxApiV1::ChatAnnouncementBlockChildrenCreate(chat_id, block_id) => {
                 format!(
-                    "/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children",
-                    chat_id, block_id
+                    "/open-apis/docx/v1/chats/{chat_id}/announcement/blocks/{block_id}/children"
                 )
             }
             DocxApiV1::ChatAnnouncementBlockBatchUpdate(chat_id) => {
-                format!(
-                    "/open-apis/docx/v1/chats/{}/announcement/blocks/batch_update",
-                    chat_id
-                )
+                format!("/open-apis/docx/v1/chats/{chat_id}/announcement/blocks/batch_update")
             }
             DocxApiV1::ChatAnnouncementBlockGet(chat_id, block_id) => {
-                format!(
-                    "/open-apis/docx/v1/chats/{}/announcement/blocks/{}",
-                    chat_id, block_id
-                )
+                format!("/open-apis/docx/v1/chats/{chat_id}/announcement/blocks/{block_id}")
             }
             DocxApiV1::ChatAnnouncementBlockChildrenGet(chat_id, block_id) => {
                 format!(
-                    "/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children",
-                    chat_id, block_id
+                    "/open-apis/docx/v1/chats/{chat_id}/announcement/blocks/{block_id}/children"
                 )
             }
             DocxApiV1::ChatAnnouncementBlockChildrenBatchDelete(chat_id, block_id) => {
                 format!(
-                    "/open-apis/docx/v1/chats/{}/announcement/blocks/{}/children/batch_delete",
-                    chat_id, block_id
+                    "/open-apis/docx/v1/chats/{chat_id}/announcement/blocks/{block_id}/children/batch_delete"
                 )
             }
 
             // 文档相关API (12个)
             DocxApiV1::DocumentCreate => "/open-apis/docx/v1/documents".to_string(),
             DocxApiV1::DocumentGet(document_id) => {
-                format!("/open-apis/docx/v1/documents/{}", document_id)
+                format!("/open-apis/docx/v1/documents/{document_id}")
             }
             DocxApiV1::DocumentRawContent(document_id) => {
-                format!("/open-apis/docx/v1/documents/{}/raw_content", document_id)
+                format!("/open-apis/docx/v1/documents/{document_id}/raw_content")
             }
             DocxApiV1::DocumentBlockList(document_id) => {
-                format!("/open-apis/docx/v1/documents/{}/blocks", document_id)
+                format!("/open-apis/docx/v1/documents/{document_id}/blocks")
             }
             DocxApiV1::DocumentBlockChildrenCreate(document_id, block_id) => {
-                format!(
-                    "/open-apis/docx/v1/documents/{}/blocks/{}/children",
-                    document_id, block_id
-                )
+                format!("/open-apis/docx/v1/documents/{document_id}/blocks/{block_id}/children")
             }
             DocxApiV1::DocumentBlockDescendantCreate(document_id, block_id) => {
-                format!(
-                    "/open-apis/docx/v1/documents/{}/blocks/{}/descendant",
-                    document_id, block_id
-                )
+                format!("/open-apis/docx/v1/documents/{document_id}/blocks/{block_id}/descendant")
             }
             DocxApiV1::DocumentBlockPatch(document_id, block_id) => {
-                format!(
-                    "/open-apis/docx/v1/documents/{}/blocks/{}",
-                    document_id, block_id
-                )
+                format!("/open-apis/docx/v1/documents/{document_id}/blocks/{block_id}")
             }
             DocxApiV1::DocumentBlockGet(document_id, block_id) => {
-                format!(
-                    "/open-apis/docx/v1/documents/{}/blocks/{}",
-                    document_id, block_id
-                )
+                format!("/open-apis/docx/v1/documents/{document_id}/blocks/{block_id}")
             }
             DocxApiV1::DocumentBlockBatchUpdate(document_id) => {
-                format!(
-                    "/open-apis/docx/v1/documents/{}/blocks/batch_update",
-                    document_id
-                )
+                format!("/open-apis/docx/v1/documents/{document_id}/blocks/batch_update")
             }
             DocxApiV1::DocumentBlockChildrenGet(document_id, block_id) => {
-                format!(
-                    "/open-apis/docx/v1/documents/{}/blocks/{}/children",
-                    document_id, block_id
-                )
+                format!("/open-apis/docx/v1/documents/{document_id}/blocks/{block_id}/children")
             }
             DocxApiV1::DocumentBlockChildrenBatchDelete(document_id, block_id) => {
                 format!(
-                    "/open-apis/docx/v1/documents/{}/blocks/{}/children/batch_delete",
-                    document_id, block_id
+                    "/open-apis/docx/v1/documents/{document_id}/blocks/{block_id}/children/batch_delete"
                 )
             }
             // 注意：该接口虽然归类在 docx-v1 文档下，但实际 HTTP URL 不包含 /v1
@@ -718,57 +603,42 @@ impl WikiApiV2 {
         match self {
             WikiApiV2::SpaceList => "/open-apis/wiki/v2/spaces".to_string(),
             WikiApiV2::SpaceGet(space_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}", space_id)
+                format!("/open-apis/wiki/v2/spaces/{space_id}")
             }
             WikiApiV2::SpaceCreate => "/open-apis/wiki/v2/spaces".to_string(),
             WikiApiV2::SpaceSettingUpdate(space_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}/setting", space_id)
+                format!("/open-apis/wiki/v2/spaces/{space_id}/setting")
             }
             WikiApiV2::SpaceGetNode => "/open-apis/wiki/v2/spaces/get_node".to_string(),
             WikiApiV2::SpaceNodeList(space_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}/nodes", space_id)
+                format!("/open-apis/wiki/v2/spaces/{space_id}/nodes")
             }
             WikiApiV2::SpaceNodeCreate(space_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}/nodes", space_id)
+                format!("/open-apis/wiki/v2/spaces/{space_id}/nodes")
             }
             WikiApiV2::SpaceMemberList(space_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}/members", space_id)
+                format!("/open-apis/wiki/v2/spaces/{space_id}/members")
             }
             WikiApiV2::SpaceMemberCreate(space_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}/members", space_id)
+                format!("/open-apis/wiki/v2/spaces/{space_id}/members")
             }
             WikiApiV2::SpaceMemberDelete(space_id, member_id) => {
-                format!(
-                    "/open-apis/wiki/v2/spaces/{}/members/{}",
-                    space_id, member_id
-                )
+                format!("/open-apis/wiki/v2/spaces/{space_id}/members/{member_id}")
             }
             WikiApiV2::SpaceNodeMove(space_id, node_token) => {
-                format!(
-                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/move",
-                    space_id, node_token
-                )
+                format!("/open-apis/wiki/v2/spaces/{space_id}/nodes/{node_token}/move")
             }
             WikiApiV2::SpaceNodeUpdateTitle(space_id, node_token) => {
-                format!(
-                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/update_title",
-                    space_id, node_token
-                )
+                format!("/open-apis/wiki/v2/spaces/{space_id}/nodes/{node_token}/update_title")
             }
             WikiApiV2::SpaceNodeCopy(space_id, node_token) => {
-                format!(
-                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/copy",
-                    space_id, node_token
-                )
+                format!("/open-apis/wiki/v2/spaces/{space_id}/nodes/{node_token}/copy")
             }
             WikiApiV2::SpaceNodeMoveDocsToWiki(space_id) => {
-                format!(
-                    "/open-apis/wiki/v2/spaces/{}/nodes/move_docs_to_wiki",
-                    space_id
-                )
+                format!("/open-apis/wiki/v2/spaces/{space_id}/nodes/move_docs_to_wiki")
             }
             WikiApiV2::TaskGet(task_id) => {
-                format!("/open-apis/wiki/v2/tasks/{}", task_id)
+                format!("/open-apis/wiki/v2/tasks/{task_id}")
             }
         }
     }
@@ -798,19 +668,19 @@ impl CcmDocApiOld {
         match self {
             CcmDocApiOld::Create => "/open-apis/doc/v2/create".to_string(),
             CcmDocApiOld::Meta(doc_token) => {
-                format!("/open-apis/doc/v2/meta/{}", doc_token)
+                format!("/open-apis/doc/v2/meta/{doc_token}")
             }
             CcmDocApiOld::SheetMeta(doc_token) => {
-                format!("/open-apis/doc/v2/{}/sheet_meta", doc_token)
+                format!("/open-apis/doc/v2/{doc_token}/sheet_meta")
             }
             CcmDocApiOld::RawContent(doc_token) => {
-                format!("/open-apis/doc/v2/{}/raw_content", doc_token)
+                format!("/open-apis/doc/v2/{doc_token}/raw_content")
             }
             CcmDocApiOld::Content(doc_token) => {
-                format!("/open-apis/doc/v2/{}/content", doc_token)
+                format!("/open-apis/doc/v2/{doc_token}/content")
             }
             CcmDocApiOld::BatchUpdate(doc_token) => {
-                format!("/open-apis/doc/v2/{}/batch_update", doc_token)
+                format!("/open-apis/doc/v2/{doc_token}/batch_update")
             }
         }
     }
@@ -866,34 +736,25 @@ impl CcmDriveExplorerApiOld {
                 "/open-apis/drive/explorer/v2/root_folder/meta".to_string()
             }
             CcmDriveExplorerApiOld::FolderMeta(folder_token) => {
-                format!("/open-apis/drive/explorer/v2/folder/{}/meta", folder_token)
+                format!("/open-apis/drive/explorer/v2/folder/{folder_token}/meta")
             }
             CcmDriveExplorerApiOld::File(folder_token) => {
-                format!("/open-apis/drive/explorer/v2/file/{}", folder_token)
+                format!("/open-apis/drive/explorer/v2/file/{folder_token}")
             }
             CcmDriveExplorerApiOld::FileSpreadsheets(spreadsheet_token) => {
-                format!(
-                    "/open-apis/drive/explorer/v2/file/spreadsheets/{}",
-                    spreadsheet_token
-                )
+                format!("/open-apis/drive/explorer/v2/file/spreadsheets/{spreadsheet_token}")
             }
             CcmDriveExplorerApiOld::FileCopy(file_token) => {
-                format!(
-                    "/open-apis/drive/explorer/v2/file/copy/files/{}",
-                    file_token
-                )
+                format!("/open-apis/drive/explorer/v2/file/copy/files/{file_token}")
             }
             CcmDriveExplorerApiOld::FileDocs(doc_token) => {
-                format!("/open-apis/drive/explorer/v2/file/docs/{}", doc_token)
+                format!("/open-apis/drive/explorer/v2/file/docs/{doc_token}")
             }
             CcmDriveExplorerApiOld::FolderChildren(folder_token) => {
-                format!(
-                    "/open-apis/drive/explorer/v2/folder/{}/children",
-                    folder_token
-                )
+                format!("/open-apis/drive/explorer/v2/folder/{folder_token}/children")
             }
             CcmDriveExplorerApiOld::Folder(folder_token) => {
-                format!("/open-apis/drive/explorer/v2/folder/{}", folder_token)
+                format!("/open-apis/drive/explorer/v2/folder/{folder_token}")
             }
         }
     }
@@ -929,31 +790,22 @@ impl CcmDriveExplorerApi {
                 "/open-apis/drive/v1/explorer/root_folder/meta".to_string()
             }
             CcmDriveExplorerApi::FolderMeta(folder_token) => {
-                format!("/open-apis/drive/v1/explorer/folder/{}/meta", folder_token)
+                format!("/open-apis/drive/v1/explorer/folder/{folder_token}/meta")
             }
             CcmDriveExplorerApi::File(file_token) => {
-                format!("/open-apis/drive/v1/explorer/file/{}", file_token)
+                format!("/open-apis/drive/v1/explorer/file/{file_token}")
             }
             CcmDriveExplorerApi::FileCopy(file_token) => {
-                format!(
-                    "/open-apis/drive/v1/explorer/file/copy/files/{}",
-                    file_token
-                )
+                format!("/open-apis/drive/v1/explorer/file/copy/files/{file_token}")
             }
             CcmDriveExplorerApi::FileDocs(file_token) => {
-                format!("/open-apis/drive/v1/explorer/file/docs/{}", file_token)
+                format!("/open-apis/drive/v1/explorer/file/docs/{file_token}")
             }
             CcmDriveExplorerApi::FileSpreadsheets(file_token) => {
-                format!(
-                    "/open-apis/drive/v1/explorer/file/spreadsheets/{}",
-                    file_token
-                )
+                format!("/open-apis/drive/v1/explorer/file/spreadsheets/{file_token}")
             }
             CcmDriveExplorerApi::FolderChildren(folder_token) => {
-                format!(
-                    "/open-apis/drive/v1/explorer/folder/{}/children",
-                    folder_token
-                )
+                format!("/open-apis/drive/v1/explorer/folder/{folder_token}/children")
             }
             CcmDriveExplorerApi::Folder => "/open-apis/drive/v1/explorer/folder".to_string(),
         }
@@ -972,7 +824,7 @@ impl CcmDriveExplorerApi {
             .collect::<Vec<_>>()
             .join("&");
 
-        format!("{}?{}", base_url, query_string)
+        format!("{base_url}?{query_string}")
     }
 }
 
@@ -1192,318 +1044,193 @@ impl CcmSheetApiOld {
     pub fn to_url(&self) -> String {
         match self {
             CcmSheetApiOld::OperateSheets(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/sheets_batch_update")
             }
             CcmSheetApiOld::UpdateSheetProperties(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/sheets_batch_update")
             }
             CcmSheetApiOld::Style(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/style",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/style")
             }
             CcmSheetApiOld::StylesBatchUpdate(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/styles_batch_update",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/styles_batch_update")
             }
             CcmSheetApiOld::ValuesPrepend(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values_prepend",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_prepend")
             }
             CcmSheetApiOld::ValuesAppend(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values_append",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_append")
             }
             CcmSheetApiOld::ValuesImage(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values_image",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_image")
             }
             CcmSheetApiOld::ValuesRange(spreadsheet_token, range) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values/{}",
-                    spreadsheet_token, range
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values/{range}")
             }
             CcmSheetApiOld::ValuesBatchGet(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values_batch_get",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_batch_get")
             }
             CcmSheetApiOld::Values(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values")
             }
             CcmSheetApiOld::ValuesBatchUpdate(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values_batch_update",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_batch_update")
             }
             CcmSheetApiOld::DimensionRange(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dimension_range",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/dimension_range")
             }
             CcmSheetApiOld::InsertDimensionRange(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/insert_dimension_range",
-                    spreadsheet_token
+                    "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/insert_dimension_range"
                 )
             }
             CcmSheetApiOld::DimensionRangeUpdate(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dimension_range",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/dimension_range")
             }
             CcmSheetApiOld::DimensionRangeDelete(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dimension_range",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/dimension_range")
             }
             CcmSheetApiOld::MergeCells(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/merge_cells",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/merge_cells")
             }
             CcmSheetApiOld::UnmergeCells(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/unmerge_cells",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/unmerge_cells")
             }
             CcmSheetApiOld::ProtectedDimension(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/protected_dimension",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/protected_dimension")
             }
             CcmSheetApiOld::ProtectedRangeBatchUpdate(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/protected_range_batch_update",
-                    spreadsheet_token
+                    "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/protected_range_batch_update"
                 )
             }
             CcmSheetApiOld::ProtectedRangeBatchGet(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/protected_range_batch_get",
-                    spreadsheet_token
+                    "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/protected_range_batch_get"
                 )
             }
             CcmSheetApiOld::ProtectedRangeBatchDel(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/protected_range_batch_del",
-                    spreadsheet_token
+                    "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/protected_range_batch_del"
                 )
             }
             CcmSheetApiOld::Metainfo(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/metainfo",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/metainfo")
             }
             CcmSheetApiOld::Properties(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/properties",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/properties")
             }
             CcmSheetApiOld::Import => "/open-apis/sheets/v2/import".to_string(),
             CcmSheetApiOld::ImportResult => "/open-apis/sheets/v2/import/result".to_string(),
             CcmSheetApiOld::ConditionFormats(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/condition_formats",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/condition_formats")
             }
             CcmSheetApiOld::ConditionFormatsBatchCreate(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/condition_formats/batch_create",
-                    spreadsheet_token
+                    "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/condition_formats/batch_create"
                 )
             }
             CcmSheetApiOld::ConditionFormatsBatchDelete(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/condition_formats/batch_delete",
-                    spreadsheet_token
+                    "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/condition_formats/batch_delete"
                 )
             }
             CcmSheetApiOld::ConditionFormatsBatchUpdate(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/condition_formats/batch_update",
-                    spreadsheet_token
+                    "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/condition_formats/batch_update"
                 )
             }
             CcmSheetApiOld::DataValidation(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/dataValidation")
             }
             CcmSheetApiOld::DataValidationCreate(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/dataValidation")
             }
             CcmSheetApiOld::DataValidationUpdate(spreadsheet_token, sheet_id) => {
                 format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation/{}",
-                    spreadsheet_token, sheet_id
+                    "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/dataValidation/{sheet_id}"
                 )
             }
             CcmSheetApiOld::DataValidationDelete(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/dataValidation",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/dataValidation")
             }
             CcmSheetApiOld::ReadSingleRange(spreadsheet_token, range) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values/{}",
-                    spreadsheet_token, range
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values/{range}")
             }
             CcmSheetApiOld::ReadMultipleRanges(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values_batch_get",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_batch_get")
             }
             CcmSheetApiOld::WriteSingleRange(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values")
             }
             CcmSheetApiOld::BatchWriteRanges(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values_batch_update",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_batch_update")
             }
             CcmSheetApiOld::AppendValues(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values_append",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_append")
             }
             CcmSheetApiOld::InsertValues(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/values_prepend",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_prepend")
             }
             CcmSheetApiOld::GetSpreadsheet(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}", spreadsheet_token)
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}")
             }
             CcmSheetApiOld::CreateSpreadsheet => "/open-apis/sheets/v3/spreadsheets".to_string(),
             CcmSheetApiOld::UpdateSpreadsheet(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}", spreadsheet_token)
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}")
             }
             CcmSheetApiOld::AddSheet(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/sheets_batch_update")
             }
             CcmSheetApiOld::GetSheet(spreadsheet_token, sheet_id) => {
-                format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}",
-                    spreadsheet_token, sheet_id
-                )
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}")
             }
             CcmSheetApiOld::UpdateSheet(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/sheets_batch_update")
             }
             CcmSheetApiOld::DeleteSheet(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v2/spreadsheets/{}/sheets_batch_update",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/sheets_batch_update")
             }
             CcmSheetApiOld::CreateFilter(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/filterViews",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/filterViews")
             }
             CcmSheetApiOld::GetFilter(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/filterViews/query",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/filterViews/query")
             }
             CcmSheetApiOld::UpdateFilter(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/filterViews",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/filterViews")
             }
             CcmSheetApiOld::DeleteFilter(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/filterViews",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/filterViews")
             }
             CcmSheetApiOld::CreateFilterView(spreadsheet_token, sheet_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views",
-                    spreadsheet_token, sheet_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views"
                 )
             }
             CcmSheetApiOld::UpdateFilterView(spreadsheet_token, sheet_id, filter_view_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
-                    spreadsheet_token, sheet_id, filter_view_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}"
                 )
             }
             CcmSheetApiOld::QueryFilterViews(spreadsheet_token, sheet_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/query",
-                    spreadsheet_token, sheet_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/query"
                 )
             }
             CcmSheetApiOld::GetFilterView(spreadsheet_token, sheet_id, filter_view_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
-                    spreadsheet_token, sheet_id, filter_view_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}"
                 )
             }
             CcmSheetApiOld::DeleteFilterView(spreadsheet_token, sheet_id, filter_view_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
-                    spreadsheet_token, sheet_id, filter_view_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}"
                 )
             }
             CcmSheetApiOld::CreateFilterCondition(spreadsheet_token, sheet_id, filter_view_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions",
-                    spreadsheet_token, sheet_id, filter_view_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}/conditions"
                 )
             }
             CcmSheetApiOld::UpdateFilterCondition(
@@ -1513,12 +1240,13 @@ impl CcmSheetApiOld {
                 condition_id,
             ) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/{}",
-                    spreadsheet_token, sheet_id, filter_view_id, condition_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}/conditions/{condition_id}"
                 )
             }
             CcmSheetApiOld::QueryFilterConditions(spreadsheet_token, sheet_id, filter_view_id) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/query", spreadsheet_token, sheet_id, filter_view_id)
+                format!(
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}/conditions/query"
+                )
             }
             CcmSheetApiOld::GetFilterCondition(
                 spreadsheet_token,
@@ -1527,8 +1255,7 @@ impl CcmSheetApiOld {
                 condition_id,
             ) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/{}",
-                    spreadsheet_token, sheet_id, filter_view_id, condition_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}/conditions/{condition_id}"
                 )
             }
             CcmSheetApiOld::DeleteFilterCondition(
@@ -1538,68 +1265,53 @@ impl CcmSheetApiOld {
                 condition_id,
             ) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/{}",
-                    spreadsheet_token, sheet_id, filter_view_id, condition_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}/conditions/{condition_id}"
                 )
             }
             CcmSheetApiOld::CreateFloatImage(spreadsheet_token, sheet_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images",
-                    spreadsheet_token, sheet_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/float_images"
                 )
             }
             CcmSheetApiOld::UpdateFloatImage(spreadsheet_token, sheet_id, float_image_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
-                    spreadsheet_token, sheet_id, float_image_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/float_images/{float_image_id}"
                 )
             }
             CcmSheetApiOld::GetFloatImage(spreadsheet_token, sheet_id, float_image_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
-                    spreadsheet_token, sheet_id, float_image_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/float_images/{float_image_id}"
                 )
             }
             CcmSheetApiOld::QueryFloatImages(spreadsheet_token, sheet_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/query",
-                    spreadsheet_token, sheet_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/float_images/query"
                 )
             }
             CcmSheetApiOld::DeleteFloatImage(spreadsheet_token, sheet_id, float_image_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
-                    spreadsheet_token, sheet_id, float_image_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/float_images/{float_image_id}"
                 )
             }
             CcmSheetApiOld::DeleteRange(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/dimensionRange/delete",
-                    spreadsheet_token
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/dimensionRange/delete"
                 )
             }
             CcmSheetApiOld::InsertDimension(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/dimensionRange/insert",
-                    spreadsheet_token
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/dimensionRange/insert"
                 )
             }
             CcmSheetApiOld::MoveDimension(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/dimensionRange/move",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/dimensionRange/move")
             }
             CcmSheetApiOld::ReplaceRange(spreadsheet_token) => {
-                format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/values/batchReplace",
-                    spreadsheet_token
-                )
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/values/batchReplace")
             }
             CcmSheetApiOld::FindReplace(spreadsheet_token) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/values/batchFindReplace",
-                    spreadsheet_token
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/values/batchFindReplace"
                 )
             }
         }
@@ -1752,19 +1464,19 @@ impl DriveApi {
             DriveApi::TaskCheck => "/open-apis/drive/v1/files/task_check".to_string(),
             DriveApi::BatchQueryMetas => "/open-apis/drive/v1/metas/batch_query".to_string(),
             DriveApi::GetFileStatistics(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/statistics", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/statistics")
             }
             DriveApi::ListFileViewRecords(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/view_records", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/view_records")
             }
             DriveApi::CopyFile(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/copy", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/copy")
             }
             DriveApi::MoveFile(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/move", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/move")
             }
             DriveApi::DeleteFile(file_token) => {
-                format!("/open-apis/drive/v1/files/{}", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}")
             }
             DriveApi::CreateShortcut => "/open-apis/drive/v1/files/create_shortcut".to_string(),
             DriveApi::UploadFile => "/open-apis/drive/v1/files/upload_all".to_string(),
@@ -1772,23 +1484,20 @@ impl DriveApi {
             DriveApi::UploadPart => "/open-apis/drive/v1/files/upload_part".to_string(),
             DriveApi::UploadFinish => "/open-apis/drive/v1/files/upload_finish".to_string(),
             DriveApi::DownloadFile(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/download", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/download")
             }
 
             // Import/Export Task APIs
             DriveApi::CreateImportTask => "/open-apis/drive/v1/import_tasks".to_string(),
             DriveApi::GetImportTask(ticket) => {
-                format!("/open-apis/drive/v1/import_tasks/{}", ticket)
+                format!("/open-apis/drive/v1/import_tasks/{ticket}")
             }
             DriveApi::CreateExportTask => "/open-apis/drive/v1/export_tasks".to_string(),
             DriveApi::GetExportTask(ticket) => {
-                format!("/open-apis/drive/v1/export_tasks/{}", ticket)
+                format!("/open-apis/drive/v1/export_tasks/{ticket}")
             }
             DriveApi::DownloadExportFile(file_token) => {
-                format!(
-                    "/open-apis/drive/v1/export_tasks/file/{}/download",
-                    file_token
-                )
+                format!("/open-apis/drive/v1/export_tasks/file/{file_token}/download")
             }
 
             // Media APIs
@@ -1797,7 +1506,7 @@ impl DriveApi {
             DriveApi::UploadMediaPart => "/open-apis/drive/v1/medias/upload_part".to_string(),
             DriveApi::UploadMediaFinish => "/open-apis/drive/v1/medias/upload_finish".to_string(),
             DriveApi::DownloadMedia(file_token) => {
-                format!("/open-apis/drive/v1/medias/{}/download", file_token)
+                format!("/open-apis/drive/v1/medias/{file_token}/download")
             }
             DriveApi::GetMediaTempDownloadUrls => {
                 "/open-apis/drive/v1/medias/batch_get_tmp_download_url".to_string()
@@ -1805,169 +1514,131 @@ impl DriveApi {
 
             // File Version APIs
             DriveApi::CreateFileVersion(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/versions", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/versions")
             }
             DriveApi::ListFileVersions(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/versions", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/versions")
             }
             DriveApi::GetFileVersion(file_token, version_id) => {
-                format!(
-                    "/open-apis/drive/v1/files/{}/versions/{}",
-                    file_token, version_id
-                )
+                format!("/open-apis/drive/v1/files/{file_token}/versions/{version_id}")
             }
             DriveApi::DeleteFileVersion(file_token, version_id) => {
-                format!(
-                    "/open-apis/drive/v1/files/{}/versions/{}",
-                    file_token, version_id
-                )
+                format!("/open-apis/drive/v1/files/{file_token}/versions/{version_id}")
             }
 
             // Subscription APIs
             DriveApi::SubscribeFile(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/subscribe", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/subscribe")
             }
             DriveApi::GetFileSubscribe(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/get_subscribe", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/get_subscribe")
             }
             DriveApi::DeleteFileSubscribe(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/delete_subscribe", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/delete_subscribe")
             }
 
             // Permission Member APIs
             DriveApi::CreatePermissionMember(token) => {
-                format!("/open-apis/drive/v1/permissions/{}/members", token)
+                format!("/open-apis/drive/v1/permissions/{token}/members")
             }
             DriveApi::BatchCreatePermissionMember(token) => {
-                format!(
-                    "/open-apis/drive/v1/permissions/{}/members/batch_create",
-                    token
-                )
+                format!("/open-apis/drive/v1/permissions/{token}/members/batch_create")
             }
             DriveApi::UpdatePermissionMember(token, member_id) => {
-                format!(
-                    "/open-apis/drive/v1/permissions/{}/members/{}",
-                    token, member_id
-                )
+                format!("/open-apis/drive/v1/permissions/{token}/members/{member_id}")
             }
             DriveApi::ListPermissionMembers(token) => {
-                format!("/open-apis/drive/v1/permissions/{}/members", token)
+                format!("/open-apis/drive/v1/permissions/{token}/members")
             }
             DriveApi::DeletePermissionMember(token, member_id) => {
-                format!(
-                    "/open-apis/drive/v1/permissions/{}/members/{}",
-                    token, member_id
-                )
+                format!("/open-apis/drive/v1/permissions/{token}/members/{member_id}")
             }
             DriveApi::TransferOwner(token) => {
-                format!(
-                    "/open-apis/drive/v1/permissions/{}/members/transfer_owner",
-                    token
-                )
+                format!("/open-apis/drive/v1/permissions/{token}/members/transfer_owner")
             }
             DriveApi::AuthPermissionMember(token) => {
-                format!("/open-apis/drive/v1/permissions/{}/members/auth", token)
+                format!("/open-apis/drive/v1/permissions/{token}/members/auth")
             }
 
             // Permission Public APIs
             DriveApi::UpdatePublicPermission(token) => {
-                format!("/open-apis/drive/v1/permissions/{}/public", token)
+                format!("/open-apis/drive/v1/permissions/{token}/public")
             }
             DriveApi::GetPublicPermission(token) => {
-                format!("/open-apis/drive/v1/permissions/{}/public", token)
+                format!("/open-apis/drive/v1/permissions/{token}/public")
             }
             DriveApi::CreatePublicPassword(token) => {
-                format!("/open-apis/drive/v1/permissions/{}/public/password", token)
+                format!("/open-apis/drive/v1/permissions/{token}/public/password")
             }
             DriveApi::UpdatePublicPassword(token) => {
-                format!("/open-apis/drive/v1/permissions/{}/public/password", token)
+                format!("/open-apis/drive/v1/permissions/{token}/public/password")
             }
             DriveApi::DeletePublicPassword(token) => {
-                format!("/open-apis/drive/v1/permissions/{}/public/password", token)
+                format!("/open-apis/drive/v1/permissions/{token}/public/password")
             }
 
             // Comment APIs
             DriveApi::ListFileComments(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/comments", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/comments")
             }
             DriveApi::BatchQueryComments(file_token) => {
-                format!(
-                    "/open-apis/drive/v1/files/{}/comments/batch_query",
-                    file_token
-                )
+                format!("/open-apis/drive/v1/files/{file_token}/comments/batch_query")
             }
             DriveApi::PatchComment(file_token, comment_id) => {
-                format!(
-                    "/open-apis/drive/v1/files/{}/comments/{}",
-                    file_token, comment_id
-                )
+                format!("/open-apis/drive/v1/files/{file_token}/comments/{comment_id}")
             }
             DriveApi::CreateComment(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/comments", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/comments")
             }
             DriveApi::GetComment(file_token, comment_id) => {
-                format!(
-                    "/open-apis/drive/v1/files/{}/comments/{}",
-                    file_token, comment_id
-                )
+                format!("/open-apis/drive/v1/files/{file_token}/comments/{comment_id}")
             }
             DriveApi::ListCommentReplies(file_token, comment_id) => {
-                format!(
-                    "/open-apis/drive/v1/files/{}/comments/{}/replies",
-                    file_token, comment_id
-                )
+                format!("/open-apis/drive/v1/files/{file_token}/comments/{comment_id}/replies")
             }
             DriveApi::UpdateCommentReply(file_token, comment_id, reply_id) => {
                 format!(
-                    "/open-apis/drive/v1/files/{}/comments/{}/replies/{}",
-                    file_token, comment_id, reply_id
+                    "/open-apis/drive/v1/files/{file_token}/comments/{comment_id}/replies/{reply_id}"
                 )
             }
             DriveApi::DeleteCommentReply(file_token, comment_id, reply_id) => {
                 format!(
-                    "/open-apis/drive/v1/files/{}/comments/{}/replies/{}",
-                    file_token, comment_id, reply_id
+                    "/open-apis/drive/v1/files/{file_token}/comments/{comment_id}/replies/{reply_id}"
                 )
             }
 
             // File Subscription APIs
             DriveApi::GetFileSubscription(file_token, subscription_id) => {
-                format!(
-                    "/open-apis/drive/v1/files/{}/subscriptions/{}",
-                    file_token, subscription_id
-                )
+                format!("/open-apis/drive/v1/files/{file_token}/subscriptions/{subscription_id}")
             }
             DriveApi::CreateFileSubscription(file_token) => {
-                format!("/open-apis/drive/v1/files/{}/subscriptions", file_token)
+                format!("/open-apis/drive/v1/files/{file_token}/subscriptions")
             }
             DriveApi::UpdateFileSubscription(file_token, subscription_id) => {
-                format!(
-                    "/open-apis/drive/v1/files/{}/subscriptions/{}",
-                    file_token, subscription_id
-                )
+                format!("/open-apis/drive/v1/files/{file_token}/subscriptions/{subscription_id}")
             }
 
             // V2 APIs
             DriveApi::ListFileLikes(file_token) => {
-                format!("/open-apis/drive/v2/files/{}/likes", file_token)
+                format!("/open-apis/drive/v2/files/{file_token}/likes")
             }
             DriveApi::GetPublicPermissionV2(token) => {
-                format!("/open-apis/drive/v2/permissions/{}/public", token)
+                format!("/open-apis/drive/v2/permissions/{token}/public")
             }
             DriveApi::UpdatePublicPermissionV2(token) => {
-                format!("/open-apis/drive/v2/permissions/{}/public", token)
+                format!("/open-apis/drive/v2/permissions/{token}/public")
             }
 
             // Media Upload Task APIs
             DriveApi::MediaUploadTasks => "/open-apis/drive/v1/medias/upload_tasks".to_string(),
             DriveApi::MediaUploadTask(task_id) => {
-                format!("/open-apis/drive/v1/medias/upload_tasks/{}", task_id)
+                format!("/open-apis/drive/v1/medias/upload_tasks/{task_id}")
             }
             DriveApi::CreateMediaShareLink(file_token) => {
-                format!("/open-apis/drive/v1/medias/{}/share_link", file_token)
+                format!("/open-apis/drive/v1/medias/{file_token}/share_link")
             }
             DriveApi::GetPublicPassword(file_token) => {
-                format!("/open-apis/drive/v1/publics/{}/password", file_token)
+                format!("/open-apis/drive/v1/publics/{file_token}/password")
             }
         }
     }
@@ -2032,57 +1703,42 @@ impl WikiApi {
 
             // Space Member APIs
             WikiApi::ListSpaceMembers(space_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}/members", space_id)
+                format!("/open-apis/wiki/v2/spaces/{space_id}/members")
             }
             WikiApi::CreateSpaceMember(space_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}/members", space_id)
+                format!("/open-apis/wiki/v2/spaces/{space_id}/members")
             }
             WikiApi::DeleteSpaceMember(space_id, member_id) => {
-                format!(
-                    "/open-apis/wiki/v2/spaces/{}/members/{}",
-                    space_id, member_id
-                )
+                format!("/open-apis/wiki/v2/spaces/{space_id}/members/{member_id}")
             }
 
             // Space Setting APIs
             WikiApi::UpdateSpaceSetting(space_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}/setting", space_id)
+                format!("/open-apis/wiki/v2/spaces/{space_id}/setting")
             }
 
             // Space Node APIs
             WikiApi::CreateSpaceNode(space_id) => {
-                format!("/open-apis/wiki/v2/spaces/{}/nodes", space_id)
+                format!("/open-apis/wiki/v2/spaces/{space_id}/nodes")
             }
             WikiApi::GetSpaceNode => "/open-apis/wiki/v2/spaces/get_node".to_string(),
             WikiApi::ListSpaceNodes => "/open-apis/wiki/v2/space.node/list".to_string(),
             WikiApi::MoveSpaceNode(space_id, node_token) => {
-                format!(
-                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/move",
-                    space_id, node_token
-                )
+                format!("/open-apis/wiki/v2/spaces/{space_id}/nodes/{node_token}/move")
             }
             WikiApi::UpdateSpaceNodeTitle(space_id, node_token) => {
-                format!(
-                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/update_title",
-                    space_id, node_token
-                )
+                format!("/open-apis/wiki/v2/spaces/{space_id}/nodes/{node_token}/update_title")
             }
             WikiApi::CopySpaceNode(space_id, node_token) => {
-                format!(
-                    "/open-apis/wiki/v2/spaces/{}/nodes/{}/copy",
-                    space_id, node_token
-                )
+                format!("/open-apis/wiki/v2/spaces/{space_id}/nodes/{node_token}/copy")
             }
             WikiApi::MoveDocsToWiki(space_id) => {
-                format!(
-                    "/open-apis/wiki/v2/spaces/{}/nodes/move_docs_to_wiki",
-                    space_id
-                )
+                format!("/open-apis/wiki/v2/spaces/{space_id}/nodes/move_docs_to_wiki")
             }
 
             // Task APIs
             WikiApi::GetTask(task_id) => {
-                format!("/open-apis/wiki/v2/tasks/{}", task_id)
+                format!("/open-apis/wiki/v2/tasks/{task_id}")
             }
 
             // Node Search API (V1)
@@ -2180,69 +1836,58 @@ impl SheetsApiV3 {
         match self {
             SheetsApiV3::CreateSpreadsheet => "/open-apis/sheets/v3/spreadsheets".to_string(),
             SheetsApiV3::GetSpreadsheet(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}", spreadsheet_token)
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}")
             }
             SheetsApiV3::PatchSpreadsheet(spreadsheet_token) => {
-                format!("/open-apis/sheets/v3/spreadsheets/{}", spreadsheet_token)
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}")
             }
 
-            SheetsApiV3::QuerySheets(spreadsheet_token) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/query",
-                spreadsheet_token
-            ),
-            SheetsApiV3::GetSheet(spreadsheet_token, sheet_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}",
-                spreadsheet_token, sheet_id
-            ),
+            SheetsApiV3::QuerySheets(spreadsheet_token) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/query")
+            }
+            SheetsApiV3::GetSheet(spreadsheet_token, sheet_id) => {
+                format!("/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}")
+            }
             SheetsApiV3::MoveDimension(spreadsheet_token, sheet_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/move_dimension",
-                spreadsheet_token, sheet_id
+                "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/move_dimension"
             ),
             SheetsApiV3::FindCells(spreadsheet_token, sheet_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/find",
-                spreadsheet_token, sheet_id
+                "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/find"
             ),
             SheetsApiV3::ReplaceCells(spreadsheet_token, sheet_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/replace",
-                spreadsheet_token, sheet_id
+                "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/replace"
             ),
 
             SheetsApiV3::CreateFilter(spreadsheet_token, sheet_id)
             | SheetsApiV3::UpdateFilter(spreadsheet_token, sheet_id)
             | SheetsApiV3::GetFilter(spreadsheet_token, sheet_id)
             | SheetsApiV3::DeleteFilter(spreadsheet_token, sheet_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter",
-                spreadsheet_token, sheet_id
+                "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter"
             ),
 
             SheetsApiV3::CreateFilterView(spreadsheet_token, sheet_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views",
-                spreadsheet_token, sheet_id
+                "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views"
             ),
             SheetsApiV3::QueryFilterViews(spreadsheet_token, sheet_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/query",
-                spreadsheet_token, sheet_id
+                "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/query"
             ),
             SheetsApiV3::GetFilterView(spreadsheet_token, sheet_id, filter_view_id)
             | SheetsApiV3::PatchFilterView(spreadsheet_token, sheet_id, filter_view_id)
             | SheetsApiV3::DeleteFilterView(spreadsheet_token, sheet_id, filter_view_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
-                    spreadsheet_token, sheet_id, filter_view_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}"
                 )
             }
 
             SheetsApiV3::CreateFilterCondition(spreadsheet_token, sheet_id, filter_view_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions",
-                    spreadsheet_token, sheet_id, filter_view_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}/conditions"
                 )
             }
             SheetsApiV3::QueryFilterConditions(spreadsheet_token, sheet_id, filter_view_id) => {
                 format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/query",
-                spreadsheet_token, sheet_id, filter_view_id
-            )
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}/conditions/query"
+                )
             }
             SheetsApiV3::GetFilterCondition(
                 spreadsheet_token,
@@ -2262,24 +1907,20 @@ impl SheetsApiV3 {
                 filter_view_id,
                 condition_id,
             ) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/{}",
-                spreadsheet_token, sheet_id, filter_view_id, condition_id
+                "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter_views/{filter_view_id}/conditions/{condition_id}"
             ),
 
             SheetsApiV3::CreateFloatImage(spreadsheet_token, sheet_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images",
-                spreadsheet_token, sheet_id
+                "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/float_images"
             ),
             SheetsApiV3::QueryFloatImages(spreadsheet_token, sheet_id) => format!(
-                "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/query",
-                spreadsheet_token, sheet_id
+                "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/float_images/query"
             ),
             SheetsApiV3::GetFloatImage(spreadsheet_token, sheet_id, float_image_id)
             | SheetsApiV3::PatchFloatImage(spreadsheet_token, sheet_id, float_image_id)
             | SheetsApiV3::DeleteFloatImage(spreadsheet_token, sheet_id, float_image_id) => {
                 format!(
-                    "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}",
-                    spreadsheet_token, sheet_id, float_image_id
+                    "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/float_images/{float_image_id}"
                 )
             }
         }
@@ -2336,17 +1977,17 @@ impl BaikeApiV1 {
         match self {
             BaikeApiV1::DraftCreate => "/open-apis/baike/v1/drafts".to_string(),
             BaikeApiV1::DraftUpdate(draft_id) => {
-                format!("/open-apis/baike/v1/drafts/{}", draft_id)
+                format!("/open-apis/baike/v1/drafts/{draft_id}")
             }
             BaikeApiV1::EntityCreate => "/open-apis/baike/v1/entities".to_string(),
             BaikeApiV1::EntityUpdate(entity_id) => {
-                format!("/open-apis/baike/v1/entities/{}", entity_id)
+                format!("/open-apis/baike/v1/entities/{entity_id}")
             }
             BaikeApiV1::EntityGet(entity_id) => {
-                format!("/open-apis/baike/v1/entities/{}", entity_id)
+                format!("/open-apis/baike/v1/entities/{entity_id}")
             }
             BaikeApiV1::EntityDelete(entity_id) => {
-                format!("/open-apis/baike/v1/entities/{}", entity_id)
+                format!("/open-apis/baike/v1/entities/{entity_id}")
             }
             BaikeApiV1::EntityList => "/open-apis/baike/v1/entities".to_string(),
             BaikeApiV1::EntityMatch => "/open-apis/baike/v1/entities/match".to_string(),
@@ -2356,7 +1997,7 @@ impl BaikeApiV1 {
             BaikeApiV1::ClassificationList => "/open-apis/baike/v1/classifications".to_string(),
             BaikeApiV1::FileUpload => "/open-apis/baike/v1/files/upload".to_string(),
             BaikeApiV1::FileDownload(file_token) => {
-                format!("/open-apis/baike/v1/files/{}/download", file_token)
+                format!("/open-apis/baike/v1/files/{file_token}/download")
             }
         }
     }
@@ -2430,17 +2071,17 @@ impl LingoApiV1 {
         match self {
             LingoApiV1::DraftCreate => "/open-apis/lingo/v1/drafts".to_string(),
             LingoApiV1::DraftUpdate(draft_id) => {
-                format!("/open-apis/lingo/v1/drafts/{}", draft_id)
+                format!("/open-apis/lingo/v1/drafts/{draft_id}")
             }
             LingoApiV1::EntityCreate => "/open-apis/lingo/v1/entities".to_string(),
             LingoApiV1::EntityUpdate(entity_id) => {
-                format!("/open-apis/lingo/v1/entities/{}", entity_id)
+                format!("/open-apis/lingo/v1/entities/{entity_id}")
             }
             LingoApiV1::EntityDelete(entity_id) => {
-                format!("/open-apis/lingo/v1/entities/{}", entity_id)
+                format!("/open-apis/lingo/v1/entities/{entity_id}")
             }
             LingoApiV1::EntityGet(entity_id) => {
-                format!("/open-apis/lingo/v1/entities/{}", entity_id)
+                format!("/open-apis/lingo/v1/entities/{entity_id}")
             }
             LingoApiV1::EntityList => "/open-apis/lingo/v1/entities".to_string(),
             LingoApiV1::EntityMatch => "/open-apis/lingo/v1/entities/match".to_string(),
@@ -2452,14 +2093,14 @@ impl LingoApiV1 {
                 "/open-apis/lingo/v1/entities:searchRecommend".to_string()
             }
             LingoApiV1::EntityHistoryGet(entity_id) => {
-                format!("/open-apis/lingo/v1/entities/{}/history", entity_id)
+                format!("/open-apis/lingo/v1/entities/{entity_id}/history")
             }
             LingoApiV1::EntityHistoryList => "/open-apis/lingo/v1/entityHistory".to_string(),
             LingoApiV1::ClassificationList => "/open-apis/lingo/v1/classifications".to_string(),
             LingoApiV1::RepoList => "/open-apis/lingo/v1/repos".to_string(),
             LingoApiV1::FileUpload => "/open-apis/lingo/v1/files/upload".to_string(),
             LingoApiV1::FileDownload(file_token) => {
-                format!("/open-apis/lingo/v1/files/{}/download", file_token)
+                format!("/open-apis/lingo/v1/files/{file_token}/download")
             }
             LingoApiV1::GenerateSummary => "/open-apis/lingo/v1/text:generateSummary".to_string(),
             LingoApiV1::ExtractKeywords => "/open-apis/lingo/v1/text:extractKeywords".to_string(),

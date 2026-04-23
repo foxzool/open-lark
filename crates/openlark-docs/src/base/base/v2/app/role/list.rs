@@ -4,10 +4,11 @@
 
 use crate::base::base::v2::models::AppRole;
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -91,13 +92,13 @@ impl List {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResp> {
         validate_required!(self.app_token, "app_token 不能为空");
-        if let Some(page_size) = self.req.page_size {
-            if page_size <= 0 {
-                return Err(openlark_core::error::validation_error(
-                    "page_size",
-                    "page_size 必须为正整数",
-                ));
-            }
+        if let Some(page_size) = self.req.page_size
+            && page_size <= 0
+        {
+            return Err(openlark_core::error::validation_error(
+                "page_size",
+                "page_size 必须为正整数",
+            ));
         }
 
         use crate::common::api_endpoints::BaseApiV2;

@@ -5,11 +5,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/ticket-management/ticket-message/create-2
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

@@ -4,7 +4,7 @@
 
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_SKILL};
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, validate_required,
 };
 
 /// 获取技能信息请求

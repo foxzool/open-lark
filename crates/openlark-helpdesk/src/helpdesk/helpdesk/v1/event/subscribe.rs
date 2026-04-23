@@ -5,10 +5,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/event/subscribe
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

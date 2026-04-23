@@ -9,11 +9,12 @@
 /// - merge_cells: 合并单元格
 /// - unmerge_cells: 取消合并单元格
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 
 use crate::common::{api_endpoints::CcmSheetApiOld, api_utils::*};

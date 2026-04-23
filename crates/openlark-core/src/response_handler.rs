@@ -1,13 +1,13 @@
 use serde_json::Value;
 use tracing::debug;
-use tracing::{info_span, Instrument};
+use tracing::{Instrument, info_span};
 
 use crate::{
+    SDKResult,
     api::{ApiResponseTrait, BaseResponse, RawResponse, Response, ResponseFormat},
     content_disposition,
     error::{network_error, validation_error},
     observability::ResponseTracker,
-    SDKResult,
 };
 use serde::Deserialize;
 use std::any::Any;
@@ -145,8 +145,7 @@ impl ImprovedResponseHandler {
                     }
                     Err(fallback_err) => {
                         let error_msg = format!(
-                            "Failed to parse response. Direct parse error: {}. Fallback parse error: {}",
-                            direct_parse_err, fallback_err
+                            "Failed to parse response. Direct parse error: {direct_parse_err}. Fallback parse error: {fallback_err}"
                         );
                         tracker.error(&error_msg);
                         Err(validation_error("api_response", error_msg))
@@ -173,7 +172,7 @@ impl ImprovedResponseHandler {
                 value
             }
             Err(e) => {
-                let error_msg = format!("Failed to parse JSON: {}", e);
+                let error_msg = format!("Failed to parse JSON: {e}");
                 tracker.error(&error_msg);
                 return Err(validation_error("base_response", error_msg));
             }
@@ -183,7 +182,7 @@ impl ImprovedResponseHandler {
         let raw_response: RawResponse = match serde_json::from_value(raw_value.clone()) {
             Ok(response) => response,
             Err(e) => {
-                let error_msg = format!("Failed to parse raw response: {}", e);
+                let error_msg = format!("Failed to parse raw response: {e}");
                 tracker.error(&error_msg);
                 return Err(validation_error("response", error_msg));
             }
@@ -236,7 +235,7 @@ impl ImprovedResponseHandler {
                 byte_vec
             }
             Err(e) => {
-                let error_msg = format!("Failed to read binary response: {}", e);
+                let error_msg = format!("Failed to read binary response: {e}");
                 tracker.error(&error_msg);
                 return Err(network_error(error_msg));
             }
@@ -720,8 +719,7 @@ mod tests {
                 if should_succeed {
                     assert!(
                         fallback_result.is_ok(),
-                        "Fallback parsing should succeed for: {}",
-                        json
+                        "Fallback parsing should succeed for: {json}"
                     );
                     let value = match fallback_result {
                         Ok(value) => value,
@@ -771,8 +769,7 @@ mod tests {
             if expected_code >= 0 {
                 assert!(
                     raw_response_result.is_ok(),
-                    "Should parse RawResponse for: {}",
-                    json
+                    "Should parse RawResponse for: {json}"
                 );
                 let raw_response = match raw_response_result {
                     Ok(raw_response) => raw_response,
@@ -955,7 +952,7 @@ mod tests {
 
         for (input, expected) in edge_cases {
             let result = crate::content_disposition::extract_filename(input);
-            assert_eq!(result, expected, "Failed for input: {}", input);
+            assert_eq!(result, expected, "Failed for input: {input}");
         }
     }
 
@@ -1011,7 +1008,7 @@ mod tests {
         use serde_json::Value;
 
         // Test large JSON response
-        let large_data_list: Vec<String> = (0..1000).map(|i| format!("item_{}", i)).collect();
+        let large_data_list: Vec<String> = (0..1000).map(|i| format!("item_{i}")).collect();
 
         let large_response = serde_json::json!({
             "code": 0,
@@ -1054,10 +1051,12 @@ mod tests {
 
         assert_eq!(parsed["msg"], "操作成功");
         assert_eq!(parsed["data"]["title"], "测试标题");
-        assert!(parsed["data"]["description"]
-            .as_str()
-            .unwrap()
-            .contains("中文"));
+        assert!(
+            parsed["data"]["description"]
+                .as_str()
+                .unwrap()
+                .contains("中文")
+        );
         assert!(parsed["data"]["tags"].as_array().unwrap()[3] == "🚀");
     }
 
@@ -1121,10 +1120,7 @@ mod tests {
         let fallback_time = start.elapsed();
 
         // Performance test is informational - timing can vary
-        println!(
-            "Direct parsing: {:?}, Fallback parsing: {:?}",
-            direct_time, fallback_time
-        );
+        println!("Direct parsing: {direct_time:?}, Fallback parsing: {fallback_time:?}");
 
         // Only assert that both completed successfully and within reasonable time
         assert!(direct_time.as_millis() < 1000); // Should complete within 1 second
@@ -1133,7 +1129,7 @@ mod tests {
         // Performance characteristics check - direct parsing should be competitive
         // We don't assert strict ordering since timing can be non-deterministic
         let ratio = fallback_time.as_nanos() as f64 / direct_time.as_nanos() as f64;
-        println!("Performance ratio (fallback/direct): {:.2}x", ratio);
+        println!("Performance ratio (fallback/direct): {ratio:.2}x");
     }
 
     // Concurrent response processing tests
@@ -1202,10 +1198,12 @@ mod tests {
         // This would fail to parse as TestData, but we can test the JSON structure
         let parsed_value: Value = serde_json::from_value(empty_response).unwrap();
         assert_eq!(parsed_value["data"]["items"].as_array().unwrap().len(), 0);
-        assert!(parsed_value["data"]["metadata"]
-            .as_object()
-            .unwrap()
-            .is_empty());
+        assert!(
+            parsed_value["data"]["metadata"]
+                .as_object()
+                .unwrap()
+                .is_empty()
+        );
 
         // Test with unexpected additional fields
         let extra_fields_response = json!({
@@ -1417,10 +1415,12 @@ mod tests {
 
         let validation_parsed: Value = serde_json::from_value(validation_error_response).unwrap();
         assert_eq!(validation_parsed["code"], 400);
-        assert!(!validation_parsed["error"]["details"]
-            .as_array()
-            .unwrap()
-            .is_empty());
+        assert!(
+            !validation_parsed["error"]["details"]
+                .as_array()
+                .unwrap()
+                .is_empty()
+        );
     }
 
     // OptimizedBaseResponse performance characteristics
@@ -1442,7 +1442,7 @@ mod tests {
                 },
                 error: if i % 10 == 0 {
                     Some(ErrorInfo {
-                        log_id: Some(format!("log_{}", i)),
+                        log_id: Some(format!("log_{i}")),
                         details: vec![],
                     })
                 } else {
@@ -1451,7 +1451,7 @@ mod tests {
                 data: if i % 10 != 0 {
                     Some(TestData {
                         id: i,
-                        name: format!("test_{}", i),
+                        name: format!("test_{i}"),
                     })
                 } else {
                     None

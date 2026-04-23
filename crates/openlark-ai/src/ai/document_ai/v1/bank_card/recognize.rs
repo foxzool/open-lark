@@ -5,7 +5,7 @@
 //! docPath: https://open.feishu.cn/document/document_ai-v1/bank_card_recognize
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 use serde::{Deserialize, Serialize};
 

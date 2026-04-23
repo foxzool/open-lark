@@ -12,9 +12,9 @@ use openlark_security::models::{
     PermissionRuleInfo, SortDirection, Status, TimeRange, UserInfo, UserListResponse, UserRequest,
     VerificationMethod, VisitorInfo, VisitorStatus,
 };
-use serde::de::DeserializeOwned;
 use serde::Serialize;
-use serde_json::{from_value, json, to_value, Value};
+use serde::de::DeserializeOwned;
+use serde_json::{Value, from_value, json, to_value};
 
 fn assert_json_contract<T>(value: &T, expected: Value)
 where
@@ -188,7 +188,7 @@ fn device_type_variants() {
     ];
     for (json_val, expected_name) in cases {
         let dt: DeviceType = from_value(json_val).unwrap();
-        assert!(format!("{:?}", dt).contains(expected_name));
+        assert!(format!("{dt:?}").contains(expected_name));
     }
 }
 
@@ -311,7 +311,7 @@ fn verification_method_variants() {
     ];
     for (json_val, expected_name) in cases {
         let vm: VerificationMethod = from_value(json_val).unwrap();
-        assert!(format!("{:?}", vm).contains(expected_name));
+        assert!(format!("{vm:?}").contains(expected_name));
     }
 }
 

@@ -2,7 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/ukTMukTMukTM/uIDOwUjLygDM14iM4ATN
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{SDKResult, api::ApiRequest, config::Config, http::Transport};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},

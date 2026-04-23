@@ -57,10 +57,10 @@ pub use openlark_core;
 )]
 #[doc(hidden)]
 pub use openlark_core as core;
+pub use openlark_core::SDKResult;
 pub use openlark_core::config::Config as CoreConfig;
 pub use openlark_core::error::{CoreError, ErrorCode, ErrorSeverity, ErrorTrait, ErrorType};
 pub use openlark_core::req_option::RequestOption;
-pub use openlark_core::SDKResult;
 
 #[cfg(feature = "websocket")]
 /// WebSocket 客户端相关类型导出。

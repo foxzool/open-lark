@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/calendar-v4/meeting-room-event/query-room-availability
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 
 use crate::common::api_utils::extract_response_data;
@@ -41,7 +41,7 @@ impl BatchGetFreebusyRequest {
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<serde_json::Value> {
         // url: GET:/open-apis/meeting_room/freebusy/batch_get
         let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::get(format!("{}/freebusy/batch_get", MEETING_ROOM));
+            ApiRequest::get(format!("{MEETING_ROOM}/freebusy/batch_get"));
         for (k, v) in self.query_params {
             req = req.query(k, v);
         }

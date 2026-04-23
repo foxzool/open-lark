@@ -16,9 +16,9 @@ use openlark_helpdesk::helpdesk::helpdesk::v1::ticket::models::{
     CreateTicketBody, CreateTicketResponse, GetTicketResponse, TicketItem, TicketListResponse,
     UpdateTicketBody, UpdateTicketResponse,
 };
-use serde::de::DeserializeOwned;
 use serde::Serialize;
-use serde_json::{from_value, json, to_value, Value};
+use serde::de::DeserializeOwned;
+use serde_json::{Value, from_value, json, to_value};
 
 fn assert_json_contract<T>(value: &T, expected: Value)
 where

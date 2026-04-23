@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_DATA_ASSET_TAGS};
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, validate_required,
 };
 
 /// 获取数据知识分类列表请求

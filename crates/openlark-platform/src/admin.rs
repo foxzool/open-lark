@@ -37,7 +37,7 @@ pub mod admin;
 
 #[cfg(test)]
 mod tests {
-    use crate::{admin::AdminService, PlatformConfig};
+    use crate::{PlatformConfig, admin::AdminService};
 
     #[test]
     fn test_service_creation() {

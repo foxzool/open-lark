@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/referral_account/reconciliation
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -127,7 +127,7 @@ impl ReconciliationRequest {
                 trade_details: self.trade_details,
             })
             .map_err(|e| {
-                error::validation_error("request_body", format!("无法序列化请求体: {}", e))
+                error::validation_error("request_body", format!("无法序列化请求体: {e}"))
             })?,
         );
 

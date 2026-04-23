@@ -1,6 +1,6 @@
 //! API 通用工具函数
 
-use openlark_core::{error, SDKResult};
+use openlark_core::{SDKResult, error};
 
 /// 标准化 API 响应数据提取
 pub fn extract_response_data<T>(

@@ -2,11 +2,11 @@
 //!
 //! 此示例展示如何通过 openlark 根 crate 使用任务型 workflow / approval helper。
 
+use open_lark::CoreConfig;
 use open_lark::workflow::{
     ApprovalTaskAction, ApprovalTaskQuery, WorkflowService, WorkflowTaskListQuery,
     WorkflowTaskMutation,
 };
-use open_lark::CoreConfig;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

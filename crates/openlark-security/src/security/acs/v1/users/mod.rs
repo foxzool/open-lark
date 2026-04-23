@@ -146,13 +146,13 @@ impl ListUsersBuilder {
         let mut query_params = Vec::new();
 
         if let Some(page_size) = self.page_size {
-            query_params.push(format!("page_size={}", page_size));
+            query_params.push(format!("page_size={page_size}"));
         }
         if let Some(page_token) = &self.page_token {
-            query_params.push(format!("page_token={}", page_token));
+            query_params.push(format!("page_token={page_token}"));
         }
         if let Some(department_id) = &self.department_id {
-            query_params.push(format!("department_id={}", department_id));
+            query_params.push(format!("department_id={department_id}"));
         }
         if let Some(status) = &self.status {
             query_params.push(format!(

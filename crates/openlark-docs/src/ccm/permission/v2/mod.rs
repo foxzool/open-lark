@@ -5,11 +5,12 @@
 /// - member_transfer: 转移拥有者
 /// - public: 获取云文档权限设置V2
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 
 use crate::common::{api_endpoints::PermissionApiOld, api_utils::*};

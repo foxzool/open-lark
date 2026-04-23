@@ -3,11 +3,11 @@
 //! 文档: https://open.feishu.cn/document/apaas-v1/application-object-record/delete
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

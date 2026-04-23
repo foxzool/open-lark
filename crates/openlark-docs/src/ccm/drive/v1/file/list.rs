@@ -6,10 +6,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -174,13 +174,13 @@ impl ListFilesRequest {
             }
         }
 
-        if let Some(page_size) = self.page_size {
-            if !(1..=200).contains(&page_size) {
-                return Err(openlark_core::error::validation_error(
-                    "page_size",
-                    "page_size 必须在 1~200 之间",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && !(1..=200).contains(&page_size)
+        {
+            return Err(openlark_core::error::validation_error(
+                "page_size",
+                "page_size 必须在 1~200 之间",
+            ));
         }
 
         if let Some(order_by) = &self.order_by {

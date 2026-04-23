@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/pre_hire/complete
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -55,8 +56,7 @@ impl CompleteRequest {
         let pre_hire_id = self.pre_hire_id.unwrap_or_default();
         validate_required!(pre_hire_id.trim(), "pre_hire_id 不能为空");
         let mut request = ApiRequest::<CompleteResponse>::post(format!(
-            "/open-apis/corehr/v2/pre_hires/{}/complete",
-            pre_hire_id
+            "/open-apis/corehr/v2/pre_hires/{pre_hire_id}/complete"
         ));
 
         if let Some(request_body) = self.request_body {

@@ -6,4 +6,4 @@ pub use crate::{
     ApprovalTaskAction, ApprovalTaskQuery, WorkflowService, WorkflowTaskListQuery,
     WorkflowTaskMutation,
 };
-pub use openlark_core::{config::Config, SDKResult};
+pub use openlark_core::{SDKResult, config::Config};

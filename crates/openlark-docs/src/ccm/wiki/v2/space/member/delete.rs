@@ -5,11 +5,12 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/delete
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

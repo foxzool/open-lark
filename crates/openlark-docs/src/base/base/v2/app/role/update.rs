@@ -4,10 +4,11 @@
 
 use crate::base::base::v2::models::AppRole;
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -118,13 +119,13 @@ impl Update {
                 "role_name 长度不能超过 100 字符",
             ));
         }
-        if let Some(table_roles) = &self.req.table_roles {
-            if table_roles.len() > 100 {
-                return Err(openlark_core::error::validation_error(
-                    "table_roles",
-                    "table_roles 长度不能超过 100",
-                ));
-            }
+        if let Some(table_roles) = &self.req.table_roles
+            && table_roles.len() > 100
+        {
+            return Err(openlark_core::error::validation_error(
+                "table_roles",
+                "table_roles 长度不能超过 100",
+            ));
         }
 
         use crate::common::api_endpoints::BaseApiV2;

@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/todo/list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -78,13 +78,13 @@ impl ListRequest {
         self,
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<ListResponse> {
-        if let Some(page_size) = self.page_size {
-            if !(1..=100).contains(&page_size) {
-                return Err(error::validation_error(
-                    "page_size",
-                    "page_size 必须在 1-100 之间",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && !(1..=100).contains(&page_size)
+        {
+            return Err(error::validation_error(
+                "page_size",
+                "page_size 必须在 1-100 之间",
+            ));
         }
 
         if self.todo_type.trim().is_empty() {

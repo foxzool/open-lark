@@ -227,8 +227,8 @@ mod tests {
     use super::*;
     use crate::ws_client::EventHandler;
     use lark_websocket_protobuf::pbbp2::Header;
-    use std::sync::atomic::{AtomicUsize, Ordering};
     use std::sync::Arc;
+    use std::sync::atomic::{AtomicUsize, Ordering};
     use tokio::sync::mpsc;
 
     struct CountingHandler {
@@ -751,7 +751,7 @@ mod tests {
     #[test]
     fn test_new_ws_response_debug_format() {
         let response = NewWsResponse::error();
-        let debug_str = format!("{:?}", response);
+        let debug_str = format!("{response:?}");
         assert!(debug_str.contains("NewWsResponse"));
         assert!(debug_str.contains("500"));
     }
@@ -767,7 +767,7 @@ mod tests {
             let handler_clone = event_handler.clone();
             let tx_clone = event_tx.clone();
 
-            let payload = format!("test data {}", i).into_bytes();
+            let payload = format!("test data {i}").into_bytes();
             let frame = create_data_frame("event", Some(payload));
 
             let handle = tokio::spawn(async move {

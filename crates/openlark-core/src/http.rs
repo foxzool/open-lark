@@ -2,9 +2,10 @@ use std::{collections::HashSet, marker::PhantomData};
 
 use reqwest::RequestBuilder;
 use tracing::debug;
-use tracing::{info_span, Instrument};
+use tracing::{Instrument, info_span};
 
 use crate::{
+    SDKResult,
     api::ApiResponseTrait,
     api::{ApiRequest, Response},
     auth::app_ticket::apply_app_ticket,
@@ -14,7 +15,6 @@ use crate::{
     req_option::RequestOption,
     req_translator::ReqTranslator,
     response_handler::ImprovedResponseHandler,
-    SDKResult,
 };
 
 /// HTTP 传输层

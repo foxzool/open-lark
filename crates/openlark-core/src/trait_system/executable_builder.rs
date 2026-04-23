@@ -4,8 +4,8 @@
 //! 为“Builder → Request → execute”模式提供统一的 trait 约束，
 //! 以便在各业务 crate 里通过宏批量实现。
 
-use crate::req_option::RequestOption;
 use crate::SDKResult;
+use crate::req_option::RequestOption;
 
 /// Builder 可执行抽象
 pub trait ExecutableBuilder<S: Sync, Req, Resp>: Sized {

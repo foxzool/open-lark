@@ -4,7 +4,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::{config::Config, constants::APPLY_APP_TICKET_PATH, SDKResult};
+use crate::{SDKResult, config::Config, constants::APPLY_APP_TICKET_PATH};
 
 /// 触发“重新推送 app_ticket”
 ///

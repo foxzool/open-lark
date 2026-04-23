@@ -108,7 +108,7 @@ mod tests {
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
 
         // Should not panic and return a RequestBuilder
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -121,7 +121,7 @@ mod tests {
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
 
         // Should not panic even with empty request ID
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -140,7 +140,7 @@ mod tests {
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
 
         // Should still work with no custom headers
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -152,7 +152,7 @@ mod tests {
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
 
         // User-Agent should always be added
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -178,7 +178,7 @@ mod tests {
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
 
         // Should handle duplicate headers (option headers added after config headers)
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -190,7 +190,7 @@ mod tests {
         let result = HeaderBuilder::add_header(req_builder, key, value);
 
         // Should add single header successfully
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -200,7 +200,7 @@ mod tests {
         let result = HeaderBuilder::add_header(req_builder, "", "");
 
         // Should handle empty key/value without panicking
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -211,7 +211,7 @@ mod tests {
         let result = HeaderBuilder::add_headers(req_builder, headers);
 
         // Should handle empty header list
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -226,7 +226,7 @@ mod tests {
         let result = HeaderBuilder::add_headers(req_builder, headers);
 
         // Should add multiple headers successfully
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -241,7 +241,7 @@ mod tests {
         let result = HeaderBuilder::add_headers(req_builder, headers);
 
         // Should handle duplicate header keys
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -284,7 +284,7 @@ mod tests {
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
 
         // Should handle large number of headers
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -314,7 +314,7 @@ mod tests {
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
 
         // Should handle special characters in header values
-        assert!(format!("{:?}", result).contains("RequestBuilder"));
+        assert!(format!("{result:?}").contains("RequestBuilder"));
     }
 
     #[test]
@@ -327,6 +327,6 @@ mod tests {
 
         // Result should still be a RequestBuilder that can be further modified
         let final_result = result.header("Additional-Header", "additional-value");
-        assert!(format!("{:?}", final_result).contains("RequestBuilder"));
+        assert!(format!("{final_result:?}").contains("RequestBuilder"));
     }
 }

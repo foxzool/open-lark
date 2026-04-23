@@ -5,10 +5,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/media/multipart-upload-media/upload_prepare
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -133,7 +133,7 @@ impl UploadPrepareMediaRequest {
                 return Err(openlark_core::error::validation_error(
                     "parent_type",
                     "parent_type 不在支持的取值范围内",
-                ))
+                ));
             }
         }
 

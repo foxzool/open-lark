@@ -2,6 +2,7 @@
 name = "openlark-core"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 authors.workspace = true
 license.workspace = true
 description = "OpenLark 核心基础设施 crate - HTTP 客户端、错误处理、认证和核心工具"

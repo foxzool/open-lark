@@ -255,7 +255,7 @@ mod tests {
         let config = Config::default();
         let records: Vec<UpdateRecordItem> = (0..501)
             .map(|i| UpdateRecordItem {
-                record_id: format!("rec{}", i),
+                record_id: format!("rec{i}"),
                 fields: json!({}),
             })
             .collect();
@@ -271,7 +271,7 @@ mod tests {
         let config = Config::default();
         let records: Vec<UpdateRecordItem> = (0..500)
             .map(|i| UpdateRecordItem {
-                record_id: format!("rec{}", i),
+                record_id: format!("rec{i}"),
                 fields: json!({}),
             })
             .collect();

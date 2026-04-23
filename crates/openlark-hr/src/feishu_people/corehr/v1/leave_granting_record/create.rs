@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/leave_granting_record/create
 
 use openlark_core::{
+    SDKResult,
     api::ApiRequest,
     api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;

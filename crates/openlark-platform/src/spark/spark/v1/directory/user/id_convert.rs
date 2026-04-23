@@ -7,11 +7,11 @@ use crate::common::{
     constants::endpoints::SPARK_V1_DIRECTORY_USER_ID_CONVERT,
 };
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};

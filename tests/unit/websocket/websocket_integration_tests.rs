@@ -18,8 +18,8 @@ use open_lark::ws_client::{
 };
 use serde_json::Value;
 use std::error::Error;
-use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use tokio::sync::mpsc;
 
 fn create_data_frame(payload: Vec<u8>) -> Frame {

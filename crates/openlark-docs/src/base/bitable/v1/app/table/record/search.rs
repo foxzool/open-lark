@@ -5,7 +5,7 @@
 use openlark_core::{
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    error::{validation_error, SDKResult},
+    error::{SDKResult, validation_error},
     http::Transport,
     validate_required,
 };
@@ -115,10 +115,10 @@ impl SearchRecordRequest {
         validate_required!(self.app_token.trim(), "app_token 不能为空");
         validate_required!(self.table_id.trim(), "table_id 不能为空");
 
-        if let Some(page_size) = self.page_size {
-            if page_size <= 0 {
-                return Err(validation_error("page_size", "page_size 必须大于 0"));
-            }
+        if let Some(page_size) = self.page_size
+            && page_size <= 0
+        {
+            return Err(validation_error("page_size", "page_size 必须大于 0"));
         }
 
         let api_endpoint =

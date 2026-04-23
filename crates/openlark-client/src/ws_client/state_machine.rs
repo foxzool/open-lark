@@ -165,9 +165,10 @@ mod tests {
         assert_eq!(sm.current_state(), &ConnectionState::Connecting);
 
         // 连接成功
-        assert!(sm
-            .handle_event(StateMachineEvent::ConnectionEstablished)
-            .is_ok());
+        assert!(
+            sm.handle_event(StateMachineEvent::ConnectionEstablished)
+                .is_ok()
+        );
         assert_eq!(sm.current_state(), &ConnectionState::Connected);
         assert!(sm.can_send_data());
 
@@ -176,9 +177,10 @@ mod tests {
         assert_eq!(sm.current_state(), &ConnectionState::Connected);
 
         // 断开连接
-        assert!(sm
-            .handle_event(StateMachineEvent::RequestDisconnect)
-            .is_ok());
+        assert!(
+            sm.handle_event(StateMachineEvent::RequestDisconnect)
+                .is_ok()
+        );
         assert_eq!(sm.current_state(), &ConnectionState::Disconnecting);
 
         // 连接关闭
@@ -186,9 +188,10 @@ mod tests {
             code: 1000,
             reason: "Normal closure".to_string(),
         });
-        assert!(sm
-            .handle_event(StateMachineEvent::ConnectionClosed(close_reason.clone()))
-            .is_ok());
+        assert!(
+            sm.handle_event(StateMachineEvent::ConnectionClosed(close_reason.clone()))
+                .is_ok()
+        );
         assert_eq!(
             sm.current_state(),
             &ConnectionState::Disconnected {

@@ -66,6 +66,6 @@ mod tests {
 
     #[test]
     fn test_version() {
-        assert!(!VERSION.is_empty());
+        assert_ne!(VERSION, "");
     }
 }

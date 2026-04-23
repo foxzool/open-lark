@@ -3,8 +3,8 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use futures_util::{
-    stream::{SplitSink, SplitStream},
     SinkExt, StreamExt,
+    stream::{SplitSink, SplitStream},
 };
 use lark_websocket_protobuf::pbbp2::{Frame, Header};
 use log::{debug, error, info, trace};
@@ -15,13 +15,12 @@ use serde_json::json;
 use tokio::{net::TcpStream, sync::mpsc, time::Instant, time::Interval};
 use tokio_tungstenite::tungstenite::protocol::Message as WsMessage;
 use tokio_tungstenite::{
-    connect_async,
-    tungstenite::protocol::{frame::coding::CloseCode, Message},
-    MaybeTlsStream, WebSocketStream,
+    MaybeTlsStream, WebSocketStream, connect_async,
+    tungstenite::protocol::{Message, frame::coding::CloseCode},
 };
 use url::Url;
 
-use super::{state_machine::StateMachineEvent, FrameHandler, WebSocketStateMachine};
+use super::{FrameHandler, WebSocketStateMachine, state_machine::StateMachineEvent};
 
 type EventHandlerResult = Result<(), Box<dyn std::error::Error + Send + Sync>>;
 
@@ -343,10 +342,9 @@ impl LarkWsClient {
                 let (temp_tx, mut temp_rx) = mpsc::unbounded_channel::<WsEvent>();
                 if let Some(response_frame) =
                     FrameHandler::handle_frame(frame, &event_handler, &temp_tx).await
+                    && let Err(e) = self.frame_tx.send(response_frame)
                 {
-                    if let Err(e) = self.frame_tx.send(response_frame) {
-                        error!("Failed to send response frame: {e:?}");
-                    }
+                    error!("Failed to send response frame: {e:?}");
                 }
 
                 // 处理临时接收器中的任何事件 - 目前FrameHandler不会发送事件到这里，保留以备未来使用
@@ -414,7 +412,9 @@ impl LarkWsClient {
         }
 
         if seq >= sum {
-            debug!("收到分包帧但 seq 越界，降级为单包处理（sum={sum}, seq={seq}, message_id={msg_id}）");
+            debug!(
+                "收到分包帧但 seq 越界，降级为单包处理（sum={sum}, seq={seq}, message_id={msg_id}）"
+            );
             frame.payload = Some(payload);
             return Some(frame);
         }
@@ -787,7 +787,7 @@ pub struct WsCloseReason {
 #[allow(unused_imports)]
 mod tests {
     use super::{
-        extract_endpoint_response, map_ws_api_error, WsClientError, WsEndpointApiResponse,
+        WsClientError, WsEndpointApiResponse, extract_endpoint_response, map_ws_api_error,
     };
 
     #[test]

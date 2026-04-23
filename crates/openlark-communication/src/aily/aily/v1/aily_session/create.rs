@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/aily-v1/aily_session/create
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, validate_required,
 };
 use serde::{Deserialize, Serialize};
 

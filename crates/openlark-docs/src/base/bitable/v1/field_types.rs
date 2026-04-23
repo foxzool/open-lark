@@ -2,7 +2,7 @@
 ///
 /// 提供更精确的字段值类型定义，替代通用的 `serde_json::Value`。
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 
 /// 记录字段值枚举
 ///

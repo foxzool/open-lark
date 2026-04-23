@@ -73,5 +73,5 @@ pub use common::chain::DocumentAiClient;
 
 /// Re-exports from openlark-core for convenience.
 pub mod prelude {
-    pub use openlark_core::{config::Config, SDKResult};
+    pub use openlark_core::{SDKResult, config::Config};
 }

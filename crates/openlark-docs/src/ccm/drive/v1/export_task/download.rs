@@ -6,11 +6,11 @@
 
 use crate::common::api_endpoints::DriveApi;
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, Response},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 
 /// 默认最大下载大小限制（100MB）

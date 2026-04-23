@@ -10,9 +10,9 @@
 //! 各业务域 request/response 数据模型的代表性契约测试。
 
 use openlark_platform::common::{AppInfo, DirectoryItem, SystemSettings};
-use serde::de::DeserializeOwned;
 use serde::Serialize;
-use serde_json::{from_value, json, to_value, Value};
+use serde::de::DeserializeOwned;
+use serde_json::{Value, from_value, json, to_value};
 
 fn assert_json_contract<T>(value: &T, expected: Value)
 where

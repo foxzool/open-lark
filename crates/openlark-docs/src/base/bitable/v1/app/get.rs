@@ -3,15 +3,16 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::App;
 use super::AppService;
+use super::models::App;
 use crate::common::api_utils::missing_response_data_error;
 
 /// 获取多维表格请求。

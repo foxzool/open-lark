@@ -5,10 +5,10 @@
 //! docPath: https://open.feishu.cn/document/docs/permission/permission-member/batch_create
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

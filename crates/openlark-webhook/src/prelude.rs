@@ -1,7 +1,7 @@
 //! `openlark-webhook` 常用类型预导出。
 
 /// 核心错误与结果类型。
-pub use openlark_core::{error::CoreError, SDKResult};
+pub use openlark_core::{SDKResult, error::CoreError};
 
 #[cfg(feature = "robot")]
 /// 自定义机器人客户端。

@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/website.delivery_task/get
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -61,8 +62,7 @@ impl GetRequest {
         validate_required!(delivery_task_id.trim(), "delivery_task_id 不能为空");
 
         let request = ApiRequest::<GetResponse>::get(format!(
-            "/open-apis/hire/v1/websites/{}/delivery_tasks/{}",
-            website_id, delivery_task_id
+            "/open-apis/hire/v1/websites/{website_id}/delivery_tasks/{delivery_task_id}"
         ));
         let response = Transport::request(request, &self.config, Some(option)).await?;
 

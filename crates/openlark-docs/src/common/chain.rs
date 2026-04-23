@@ -38,11 +38,11 @@
 //! // let node = CreateNodeRequest::new(config, ...).execute().await?;
 //! ```
 
-use openlark_core::config::Config;
-#[cfg(feature = "ccm-core")]
-use openlark_core::error::{business_error, validation_error, CoreError};
 #[cfg(any(feature = "ccm-core", feature = "bitable"))]
 use openlark_core::SDKResult;
+use openlark_core::config::Config;
+#[cfg(feature = "ccm-core")]
+use openlark_core::error::{CoreError, business_error, validation_error};
 use std::sync::Arc;
 
 /// 统一的 typed pagination 返回页。
@@ -555,7 +555,7 @@ impl FolderChildrenPager {
 
     /// 读取下一页结果。
     pub async fn fetch_next_page(&mut self) -> SDKResult<FolderChildrenPage> {
-        use crate::ccm::explorer::v2::{get_folder_children, GetFolderChildrenParams};
+        use crate::ccm::explorer::v2::{GetFolderChildrenParams, get_folder_children};
 
         if self.exhausted {
             return Ok(TypedPage::empty());
@@ -722,7 +722,7 @@ impl DocsClient {
         ranges: Vec<String>,
     ) -> SDKResult<crate::ccm::sheets_v2::v2::data_io::models::MultipleRangeData> {
         use crate::ccm::sheets_v2::v2::data_io::{
-            read_multiple_ranges as read_multiple_ranges_api, ReadMultipleRangesParams,
+            ReadMultipleRangesParams, read_multiple_ranges as read_multiple_ranges_api,
         };
 
         let response = read_multiple_ranges_api(
@@ -762,7 +762,7 @@ impl DocsClient {
         spreadsheet_token: &str,
         data: Vec<crate::ccm::sheets_v2::v2::data_io::models::BatchWriteData>,
     ) -> SDKResult<crate::ccm::sheets_v2::v2::data_io::models::BatchUpdateResult> {
-        use crate::ccm::sheets_v2::v2::data_io::{batch_write_ranges, BatchWriteRangesParams};
+        use crate::ccm::sheets_v2::v2::data_io::{BatchWriteRangesParams, batch_write_ranges};
 
         let response = batch_write_ranges(
             self.config(),
@@ -801,7 +801,7 @@ impl DocsClient {
         range: SheetRange,
         values: Vec<Vec<serde_json::Value>>,
     ) -> SDKResult<crate::ccm::sheets_v2::v2::data_io::models::AppendResult> {
-        use crate::ccm::sheets_v2::v2::data_io::{append_values, AppendValuesParams};
+        use crate::ccm::sheets_v2::v2::data_io::{AppendValuesParams, append_values};
 
         let response = append_values(
             self.config(),
@@ -927,7 +927,7 @@ impl DocsClient {
             current_node = Some(node);
         }
 
-        current_node.ok_or_else(|| business_error(format!("未找到 Wiki 路径: {}", path)))
+        current_node.ok_or_else(|| business_error(format!("未找到 Wiki 路径: {path}")))
     }
 
     /// 根据工作表标题查找工作表。
@@ -964,10 +964,7 @@ impl DocsClient {
         use crate::ccm::sheets::v3::spreadsheet::sheet::query::query_sheets;
         use crate::ccm::sheets_v2::v2::spreadsheet::models::SpreadsheetSheetInfo;
 
-        log::info!(
-            "[OPENLARK DEBUG] list_sheet_infos called with token: {}",
-            spreadsheet_token
-        );
+        log::info!("[OPENLARK DEBUG] list_sheet_infos called with token: {spreadsheet_token}");
 
         let response = query_sheets(self.config(), spreadsheet_token).await?;
 

@@ -5,11 +5,12 @@ use crate::models::authen::{UserAccessTokenResponse, UserAccessTokenV1Request};
 ///
 /// 根据登录预授权码获取 user_access_token
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

@@ -2,11 +2,12 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-dashboard/list
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -61,13 +62,13 @@ impl ListDashboardsRequest {
         option: RequestOption,
     ) -> SDKResult<ListDashboardsResponse> {
         validate_required!(self.app_token, "app_token 不能为空");
-        if let Some(page_size) = self.page_size {
-            if !(1..=500).contains(&page_size) {
-                return Err(openlark_core::error::validation_error(
-                    "page_size",
-                    "page_size 必须在 1~500 之间",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && !(1..=500).contains(&page_size)
+        {
+            return Err(openlark_core::error::validation_error(
+                "page_size",
+                "page_size 必须在 1~500 之间",
+            ));
         }
 
         let api_endpoint = BitableApiV1::DashboardList(self.app_token);

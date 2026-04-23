@@ -2,7 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/im-v1/image/create
 
-use openlark_core::{api::ApiRequest, config::Config, error, http::Transport, SDKResult};
+use openlark_core::{SDKResult, api::ApiRequest, config::Config, error, http::Transport};
 
 use crate::{
     common::api_utils::extract_response_data,

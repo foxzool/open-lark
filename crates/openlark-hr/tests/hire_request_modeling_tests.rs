@@ -7,8 +7,8 @@ use openlark_hr::hire::hire::{
 };
 use serde_json::json;
 use wiremock::{
-    matchers::{body_json, header, method, path, query_param},
     Mock, MockServer, ResponseTemplate,
+    matchers::{body_json, header, method, path, query_param},
 };
 
 fn test_config(base_url: &str) -> Config {

@@ -3,10 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/pre_hire/query
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;

@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/contact-v3/user/batch
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     error,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

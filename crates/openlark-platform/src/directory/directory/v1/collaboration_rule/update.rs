@@ -3,11 +3,11 @@
 //! 文档: https://open.feishu.cn/document/trust_party-v1/searchable-and-visible-rules/update
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

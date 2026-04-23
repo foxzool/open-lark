@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/report/get_daily
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

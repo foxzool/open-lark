@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/vc-v1/export/resource_reservation_list
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 
 use crate::common::api_endpoints::VcApiV1;

@@ -1159,7 +1159,7 @@ mod tests {
     #[test]
     fn test_error_code_display() {
         let error = ErrorCode::AccessTokenInvalid;
-        let display = format!("{}", error);
+        let display = format!("{error}");
         assert!(display.contains("访问令牌无效"));
         assert!(display.contains("99991671"));
     }

@@ -178,24 +178,24 @@ impl AttendanceApiV1 {
             // group
             AttendanceApiV1::GroupCreate => "/open-apis/attendance/v1/groups".to_string(),
             AttendanceApiV1::GroupDelete(group_id) => {
-                format!("/open-apis/attendance/v1/groups/{}", group_id)
+                format!("/open-apis/attendance/v1/groups/{group_id}")
             }
             AttendanceApiV1::GroupGet(group_id) => {
-                format!("/open-apis/attendance/v1/groups/{}", group_id)
+                format!("/open-apis/attendance/v1/groups/{group_id}")
             }
             AttendanceApiV1::GroupList => "/open-apis/attendance/v1/groups".to_string(),
             AttendanceApiV1::GroupListUser(group_id) => {
-                format!("/open-apis/attendance/v1/groups/{}/list_user", group_id)
+                format!("/open-apis/attendance/v1/groups/{group_id}/list_user")
             }
             AttendanceApiV1::GroupSearch => "/open-apis/attendance/v1/groups/search".to_string(),
 
             // shift
             AttendanceApiV1::ShiftCreate => "/open-apis/attendance/v1/shifts".to_string(),
             AttendanceApiV1::ShiftDelete(shift_id) => {
-                format!("/open-apis/attendance/v1/shifts/{}", shift_id)
+                format!("/open-apis/attendance/v1/shifts/{shift_id}")
             }
             AttendanceApiV1::ShiftGet(shift_id) => {
-                format!("/open-apis/attendance/v1/shifts/{}", shift_id)
+                format!("/open-apis/attendance/v1/shifts/{shift_id}")
             }
             AttendanceApiV1::ShiftList => "/open-apis/attendance/v1/shifts".to_string(),
             AttendanceApiV1::ShiftQuery => "/open-apis/attendance/v1/shifts/query".to_string(),
@@ -805,27 +805,27 @@ impl HireApiV1 {
             HireApiV1::TalentCombinedUpdate => {
                 "/open-apis/hire/v1/talents/combined_update".to_string()
             }
-            HireApiV1::TalentGet(talent_id) => format!("/open-apis/hire/v1/talents/{}", talent_id),
+            HireApiV1::TalentGet(talent_id) => format!("/open-apis/hire/v1/talents/{talent_id}"),
             HireApiV1::TalentList => "/open-apis/hire/v1/talents".to_string(),
             HireApiV1::TalentBatchGetId => "/open-apis/hire/v1/talents/batch_get_id".to_string(),
             HireApiV1::TalentAddToFolder(talent_id) => {
-                format!("/open-apis/hire/v1/talents/{}/add_to_folder", talent_id)
+                format!("/open-apis/hire/v1/talents/{talent_id}/add_to_folder")
             }
             HireApiV1::TalentRemoveToFolder(talent_id) => {
-                format!("/open-apis/hire/v1/talents/{}/remove_to_folder", talent_id)
+                format!("/open-apis/hire/v1/talents/{talent_id}/remove_to_folder")
             }
             HireApiV1::TalentExternalInfoCreate(talent_id) => {
-                format!("/open-apis/hire/v1/talents/{}/external_info", talent_id)
+                format!("/open-apis/hire/v1/talents/{talent_id}/external_info")
             }
             HireApiV1::TalentExternalInfoUpdate(talent_id) => {
-                format!("/open-apis/hire/v1/talents/{}/external_info", talent_id)
+                format!("/open-apis/hire/v1/talents/{talent_id}/external_info")
             }
             HireApiV1::TalentTag(talent_id) => {
-                format!("/open-apis/hire/v1/talents/{}/tags", talent_id)
+                format!("/open-apis/hire/v1/talents/{talent_id}/tags")
             }
             HireApiV1::TalentObjectQuery => "/open-apis/hire/v1/talent_object/query".to_string(),
             HireApiV1::TalentOnboardStatus(talent_id) => {
-                format!("/open-apis/hire/v1/talents/{}/onboard_status", talent_id)
+                format!("/open-apis/hire/v1/talents/{talent_id}/onboard_status")
             }
 
             // talent_folder
@@ -856,38 +856,26 @@ impl HireApiV1 {
             // application
             HireApiV1::ApplicationCreate => "/open-apis/hire/v1/applications".to_string(),
             HireApiV1::ApplicationGet(application_id) => {
-                format!("/open-apis/hire/v1/applications/{}", application_id)
+                format!("/open-apis/hire/v1/applications/{application_id}")
             }
             HireApiV1::ApplicationList => "/open-apis/hire/v1/applications".to_string(),
             HireApiV1::ApplicationGetDetail(application_id) => {
-                format!("/open-apis/hire/v1/applications/{}/detail", application_id)
+                format!("/open-apis/hire/v1/applications/{application_id}/detail")
             }
             HireApiV1::ApplicationTransferStage(application_id) => {
-                format!(
-                    "/open-apis/hire/v1/applications/{}/transfer_stage",
-                    application_id
-                )
+                format!("/open-apis/hire/v1/applications/{application_id}/transfer_stage")
             }
             HireApiV1::ApplicationTerminate(application_id) => {
-                format!(
-                    "/open-apis/hire/v1/applications/{}/terminate",
-                    application_id
-                )
+                format!("/open-apis/hire/v1/applications/{application_id}/terminate")
             }
             HireApiV1::ApplicationRecover(application_id) => {
-                format!("/open-apis/hire/v1/applications/{}/recover", application_id)
+                format!("/open-apis/hire/v1/applications/{application_id}/recover")
             }
             HireApiV1::ApplicationCancelOnboard(application_id) => {
-                format!(
-                    "/open-apis/hire/v1/applications/{}/cancel_onboard",
-                    application_id
-                )
+                format!("/open-apis/hire/v1/applications/{application_id}/cancel_onboard")
             }
             HireApiV1::ApplicationTransferOnboard(application_id) => {
-                format!(
-                    "/open-apis/hire/v1/applications/{}/transfer_onboard",
-                    application_id
-                )
+                format!("/open-apis/hire/v1/applications/{application_id}/transfer_onboard")
             }
 
             // interview
@@ -904,17 +892,11 @@ impl HireApiV1 {
 
             // interview_record
             HireApiV1::InterviewRecordGet(interview_record_id) => {
-                format!(
-                    "/open-apis/hire/v1/interview_records/{}",
-                    interview_record_id
-                )
+                format!("/open-apis/hire/v1/interview_records/{interview_record_id}")
             }
             HireApiV1::InterviewRecordList => "/open-apis/hire/v1/interview_records".to_string(),
             HireApiV1::InterviewRecordAttachmentGet(interview_record_id) => {
-                format!(
-                    "/open-apis/hire/v1/interview_records/{}/attachment",
-                    interview_record_id
-                )
+                format!("/open-apis/hire/v1/interview_records/{interview_record_id}/attachment")
             }
 
             // interview_registration_schema
@@ -930,39 +912,39 @@ impl HireApiV1 {
             // interviewer
             HireApiV1::InterviewerList => "/open-apis/hire/v1/interviewers".to_string(),
             HireApiV1::InterviewerPatch(interviewer_id) => {
-                format!("/open-apis/hire/v1/interviewers/{}", interviewer_id)
+                format!("/open-apis/hire/v1/interviewers/{interviewer_id}")
             }
 
             // employee
             HireApiV1::EmployeeGet(employee_id) => {
-                format!("/open-apis/hire/v1/employees/{}", employee_id)
+                format!("/open-apis/hire/v1/employees/{employee_id}")
             }
             HireApiV1::EmployeeGetByApplication(_) => {
                 "/open-apis/hire/v1/employees/get_by_application".to_string()
             }
             HireApiV1::EmployeePatch(employee_id) => {
-                format!("/open-apis/hire/v1/employees/{}", employee_id)
+                format!("/open-apis/hire/v1/employees/{employee_id}")
             }
 
             // job
             HireApiV1::JobCombinedCreate => "/open-apis/hire/v1/jobs/combined_create".to_string(),
             HireApiV1::JobCombinedUpdate => "/open-apis/hire/v1/jobs/combined_update".to_string(),
-            HireApiV1::JobGet(job_id) => format!("/open-apis/hire/v1/jobs/{}", job_id),
+            HireApiV1::JobGet(job_id) => format!("/open-apis/hire/v1/jobs/{job_id}"),
             HireApiV1::JobList => "/open-apis/hire/v1/jobs".to_string(),
             HireApiV1::JobGetDetail(job_id) => {
-                format!("/open-apis/hire/v1/jobs/{}/detail", job_id)
+                format!("/open-apis/hire/v1/jobs/{job_id}/detail")
             }
             HireApiV1::JobClose(job_id) => {
-                format!("/open-apis/hire/v1/jobs/{}/close", job_id)
+                format!("/open-apis/hire/v1/jobs/{job_id}/close")
             }
             HireApiV1::JobOpen(job_id) => {
-                format!("/open-apis/hire/v1/jobs/{}/open", job_id)
+                format!("/open-apis/hire/v1/jobs/{job_id}/open")
             }
             HireApiV1::JobUpdateConfig(job_id) => {
-                format!("/open-apis/hire/v1/jobs/{}/update_config", job_id)
+                format!("/open-apis/hire/v1/jobs/{job_id}/update_config")
             }
             HireApiV1::JobConfig(job_id) => {
-                format!("/open-apis/hire/v1/jobs/{}/config", job_id)
+                format!("/open-apis/hire/v1/jobs/{job_id}/config")
             }
             HireApiV1::JobManagerBatchUpdate => {
                 "/open-apis/hire/v1/jobs/managers/batch_update".to_string()
@@ -970,7 +952,7 @@ impl HireApiV1 {
 
             // job_manager
             HireApiV1::JobManagerGet(job_id) => {
-                format!("/open-apis/hire/v1/jobs/{}/managers", job_id)
+                format!("/open-apis/hire/v1/jobs/{job_id}/managers")
             }
 
             // job_function
@@ -989,7 +971,7 @@ impl HireApiV1 {
                 "/open-apis/hire/v1/job_requirements/update".to_string()
             }
             HireApiV1::JobRequirementDelete(requirement_id) => {
-                format!("/open-apis/hire/v1/job_requirements/{}", requirement_id)
+                format!("/open-apis/hire/v1/job_requirements/{requirement_id}")
             }
 
             // job_requirement_schema
@@ -1011,39 +993,39 @@ impl HireApiV1 {
             // attachment
             HireApiV1::AttachmentCreate => "/open-apis/hire/v1/attachments".to_string(),
             HireApiV1::AttachmentGet(attachment_id) => {
-                format!("/open-apis/hire/v1/attachments/{}", attachment_id)
+                format!("/open-apis/hire/v1/attachments/{attachment_id}")
             }
             HireApiV1::AttachmentPreview(attachment_id) => {
-                format!("/open-apis/hire/v1/attachments/{}/preview", attachment_id)
+                format!("/open-apis/hire/v1/attachments/{attachment_id}/preview")
             }
 
             // note
             HireApiV1::NoteCreate => "/open-apis/hire/v1/notes".to_string(),
             HireApiV1::NoteDelete(note_id) => {
-                format!("/open-apis/hire/v1/notes/{}", note_id)
+                format!("/open-apis/hire/v1/notes/{note_id}")
             }
             HireApiV1::NoteGet(note_id) => {
-                format!("/open-apis/hire/v1/notes/{}", note_id)
+                format!("/open-apis/hire/v1/notes/{note_id}")
             }
             HireApiV1::NoteList => "/open-apis/hire/v1/notes".to_string(),
             HireApiV1::NotePatch(note_id) => {
-                format!("/open-apis/hire/v1/notes/{}", note_id)
+                format!("/open-apis/hire/v1/notes/{note_id}")
             }
 
             // offer
             HireApiV1::OfferCreate => "/open-apis/hire/v1/offers".to_string(),
             HireApiV1::OfferGet(offer_id) => {
-                format!("/open-apis/hire/v1/offers/{}", offer_id)
+                format!("/open-apis/hire/v1/offers/{offer_id}")
             }
             HireApiV1::OfferList => "/open-apis/hire/v1/offers".to_string(),
             HireApiV1::OfferUpdate(offer_id) => {
-                format!("/open-apis/hire/v1/offers/{}", offer_id)
+                format!("/open-apis/hire/v1/offers/{offer_id}")
             }
             HireApiV1::OfferOfferStatus(offer_id) => {
-                format!("/open-apis/hire/v1/offers/{}/offer_status", offer_id)
+                format!("/open-apis/hire/v1/offers/{offer_id}/offer_status")
             }
             HireApiV1::OfferInternOfferStatus(offer_id) => {
-                format!("/open-apis/hire/v1/offers/{}/intern_offer_status", offer_id)
+                format!("/open-apis/hire/v1/offers/{offer_id}/intern_offer_status")
             }
 
             // offer_approval_template
@@ -1053,10 +1035,7 @@ impl HireApiV1 {
 
             // offer_application_form
             HireApiV1::OfferApplicationFormGet(application_form_id) => {
-                format!(
-                    "/open-apis/hire/v1/offer_application_forms/{}",
-                    application_form_id
-                )
+                format!("/open-apis/hire/v1/offer_application_forms/{application_form_id}")
             }
             HireApiV1::OfferApplicationFormList => {
                 "/open-apis/hire/v1/offer_application_forms".to_string()
@@ -1064,7 +1043,7 @@ impl HireApiV1 {
 
             // offer_schema
             HireApiV1::OfferSchemaGet(schema_id) => {
-                format!("/open-apis/hire/v1/offer_schemas/{}", schema_id)
+                format!("/open-apis/hire/v1/offer_schemas/{schema_id}")
             }
 
             // offer_custom_field
@@ -1074,23 +1053,17 @@ impl HireApiV1 {
 
             // referral
             HireApiV1::ReferralGetByApplication(application_id) => {
-                format!(
-                    "/open-apis/hire/v1/applications/{}/referral",
-                    application_id
-                )
+                format!("/open-apis/hire/v1/applications/{application_id}/referral")
             }
             HireApiV1::ReferralSearch => "/open-apis/hire/v1/referrals/search".to_string(),
 
             // referral_account
             HireApiV1::ReferralAccountCreate => "/open-apis/hire/v1/referral_accounts".to_string(),
             HireApiV1::ReferralAccountEnable(account_id) => {
-                format!("/open-apis/hire/v1/referral_accounts/{}/enable", account_id)
+                format!("/open-apis/hire/v1/referral_accounts/{account_id}/enable")
             }
             HireApiV1::ReferralAccountDeactivate(account_id) => {
-                format!(
-                    "/open-apis/hire/v1/referral_accounts/{}/deactivate",
-                    account_id
-                )
+                format!("/open-apis/hire/v1/referral_accounts/{account_id}/deactivate")
             }
             HireApiV1::ReferralAccountReconciliation => {
                 "/open-apis/hire/v1/referral_accounts/reconciliation".to_string()
@@ -1099,7 +1072,7 @@ impl HireApiV1 {
                 "/open-apis/hire/v1/referral_accounts/withdraw".to_string()
             }
             HireApiV1::ReferralAccountGetAccountAssets(account_id) => {
-                format!("/open-apis/hire/v1/referral_accounts/{}/assets", account_id)
+                format!("/open-apis/hire/v1/referral_accounts/{account_id}/assets")
             }
 
             // referral_website
@@ -1107,10 +1080,7 @@ impl HireApiV1 {
                 "/open-apis/hire/v1/referral_websites/job_posts".to_string()
             }
             HireApiV1::ReferralWebsiteJobPostGet(job_post_id) => {
-                format!(
-                    "/open-apis/hire/v1/referral_websites/job_posts/{}",
-                    job_post_id
-                )
+                format!("/open-apis/hire/v1/referral_websites/job_posts/{job_post_id}")
             }
 
             // website
@@ -1120,10 +1090,10 @@ impl HireApiV1 {
             HireApiV1::WebsiteChannelCreate => "/open-apis/hire/v1/website_channels".to_string(),
             HireApiV1::WebsiteChannelList => "/open-apis/hire/v1/website_channels".to_string(),
             HireApiV1::WebsiteChannelUpdate(channel_id) => {
-                format!("/open-apis/hire/v1/website_channels/{}", channel_id)
+                format!("/open-apis/hire/v1/website_channels/{channel_id}")
             }
             HireApiV1::WebsiteChannelDelete(channel_id) => {
-                format!("/open-apis/hire/v1/website_channels/{}", channel_id)
+                format!("/open-apis/hire/v1/website_channels/{channel_id}")
             }
 
             // website_delivery
@@ -1147,7 +1117,7 @@ impl HireApiV1 {
                 "/open-apis/hire/v1/website_job_posts/search".to_string()
             }
             HireApiV1::WebsiteJobPostGet(job_post_id) => {
-                format!("/open-apis/hire/v1/website_job_posts/{}", job_post_id)
+                format!("/open-apis/hire/v1/website_job_posts/{job_post_id}")
             }
 
             // website_site_user
@@ -1159,7 +1129,7 @@ impl HireApiV1 {
             // role
             HireApiV1::RoleList => "/open-apis/hire/v1/roles".to_string(),
             HireApiV1::RoleGet(role_id) => {
-                format!("/open-apis/hire/v1/roles/{}", role_id)
+                format!("/open-apis/hire/v1/roles/{role_id}")
             }
 
             // subject
@@ -1185,7 +1155,7 @@ impl HireApiV1 {
 
             // test
             HireApiV1::ExamCreate => "/open-apis/hire/v1/exams".to_string(),
-            HireApiV1::ExamGet(exam_id) => format!("/open-apis/hire/v1/exams/{}", exam_id),
+            HireApiV1::ExamGet(exam_id) => format!("/open-apis/hire/v1/exams/{exam_id}"),
             HireApiV1::TestSearch => "/open-apis/hire/v1/tests/search".to_string(),
 
             // todo
@@ -1195,16 +1165,16 @@ impl HireApiV1 {
             HireApiV1::AgencyBatchQuery => "/open-apis/hire/v1/agencies/batch_query".to_string(),
             HireApiV1::AgencyQuery => "/open-apis/hire/v1/agencies/query".to_string(),
             HireApiV1::AgencyGet(agency_id) => {
-                format!("/open-apis/hire/v1/agencies/{}", agency_id)
+                format!("/open-apis/hire/v1/agencies/{agency_id}")
             }
             HireApiV1::AgencyGetAgencyAccount(agency_id) => {
-                format!("/open-apis/hire/v1/agencies/{}/account", agency_id)
+                format!("/open-apis/hire/v1/agencies/{agency_id}/account")
             }
             HireApiV1::AgencyOperateAgencyAccount(agency_id) => {
-                format!("/open-apis/hire/v1/agencies/{}/account/operate", agency_id)
+                format!("/open-apis/hire/v1/agencies/{agency_id}/account/operate")
             }
             HireApiV1::AgencyProtect(agency_id) => {
-                format!("/open-apis/hire/v1/agencies/{}/protect", agency_id)
+                format!("/open-apis/hire/v1/agencies/{agency_id}/protect")
             }
             HireApiV1::AgencyProtectSearch => {
                 "/open-apis/hire/v1/agencies/protect_search".to_string()
@@ -1223,16 +1193,10 @@ impl HireApiV1 {
                 "/open-apis/hire/v1/eco_background_checks/cancel".to_string()
             }
             HireApiV1::EcoBackgroundCheckUpdateResult(order_id) => {
-                format!(
-                    "/open-apis/hire/v1/eco_background_checks/{}/update_result",
-                    order_id
-                )
+                format!("/open-apis/hire/v1/eco_background_checks/{order_id}/update_result")
             }
             HireApiV1::EcoBackgroundCheckUpdateProgress(order_id) => {
-                format!(
-                    "/open-apis/hire/v1/eco_background_checks/{}/update_progress",
-                    order_id
-                )
+                format!("/open-apis/hire/v1/eco_background_checks/{order_id}/update_progress")
             }
 
             // eco_background_check_package
@@ -1259,10 +1223,10 @@ impl HireApiV1 {
 
             // eco_exam
             HireApiV1::EcoExamLoginInfo(exam_id) => {
-                format!("/open-apis/hire/v1/eco_exams/{}/login_info", exam_id)
+                format!("/open-apis/hire/v1/eco_exams/{exam_id}/login_info")
             }
             HireApiV1::EcoExamUpdateResult(exam_id) => {
-                format!("/open-apis/hire/v1/eco_exams/{}/update_result", exam_id)
+                format!("/open-apis/hire/v1/eco_exams/{exam_id}/update_result")
             }
 
             // eco_exam_paper
@@ -1295,19 +1259,13 @@ impl HireApiV1 {
                 "/open-apis/hire/v1/external_applications".to_string()
             }
             HireApiV1::ExternalApplicationDelete(application_id) => {
-                format!(
-                    "/open-apis/hire/v1/external_applications/{}",
-                    application_id
-                )
+                format!("/open-apis/hire/v1/external_applications/{application_id}")
             }
             HireApiV1::ExternalApplicationList => {
                 "/open-apis/hire/v1/external_applications".to_string()
             }
             HireApiV1::ExternalApplicationUpdate(application_id) => {
-                format!(
-                    "/open-apis/hire/v1/external_applications/{}",
-                    application_id
-                )
+                format!("/open-apis/hire/v1/external_applications/{application_id}")
             }
 
             // external_interview
@@ -1315,13 +1273,13 @@ impl HireApiV1 {
                 "/open-apis/hire/v1/external_interviews".to_string()
             }
             HireApiV1::ExternalInterviewDelete(interview_id) => {
-                format!("/open-apis/hire/v1/external_interviews/{}", interview_id)
+                format!("/open-apis/hire/v1/external_interviews/{interview_id}")
             }
             HireApiV1::ExternalInterviewBatchQuery => {
                 "/open-apis/hire/v1/external_interviews/batch_query".to_string()
             }
             HireApiV1::ExternalInterviewUpdate(interview_id) => {
-                format!("/open-apis/hire/v1/external_interviews/{}", interview_id)
+                format!("/open-apis/hire/v1/external_interviews/{interview_id}")
             }
 
             // external_interview_assessment
@@ -1329,10 +1287,7 @@ impl HireApiV1 {
                 "/open-apis/hire/v1/external_interview_assessments".to_string()
             }
             HireApiV1::ExternalInterviewAssessmentPatch(assessment_id) => {
-                format!(
-                    "/open-apis/hire/v1/external_interview_assessments/{}",
-                    assessment_id
-                )
+                format!("/open-apis/hire/v1/external_interview_assessments/{assessment_id}")
             }
 
             // external_background_check
@@ -1340,25 +1295,25 @@ impl HireApiV1 {
                 "/open-apis/hire/v1/external_background_checks".to_string()
             }
             HireApiV1::ExternalBackgroundCheckDelete(check_id) => {
-                format!("/open-apis/hire/v1/external_background_checks/{}", check_id)
+                format!("/open-apis/hire/v1/external_background_checks/{check_id}")
             }
             HireApiV1::ExternalBackgroundCheckBatchQuery => {
                 "/open-apis/hire/v1/external_background_checks/batch_query".to_string()
             }
             HireApiV1::ExternalBackgroundCheckUpdate(check_id) => {
-                format!("/open-apis/hire/v1/external_background_checks/{}", check_id)
+                format!("/open-apis/hire/v1/external_background_checks/{check_id}")
             }
 
             // external_offer
             HireApiV1::ExternalOfferCreate => "/open-apis/hire/v1/external_offers".to_string(),
             HireApiV1::ExternalOfferDelete(offer_id) => {
-                format!("/open-apis/hire/v1/external_offers/{}", offer_id)
+                format!("/open-apis/hire/v1/external_offers/{offer_id}")
             }
             HireApiV1::ExternalOfferBatchQuery => {
                 "/open-apis/hire/v1/external_offers/batch_query".to_string()
             }
             HireApiV1::ExternalOfferUpdate(offer_id) => {
-                format!("/open-apis/hire/v1/external_offers/{}", offer_id)
+                format!("/open-apis/hire/v1/external_offers/{offer_id}")
             }
 
             // external_referral_reward
@@ -1366,7 +1321,7 @@ impl HireApiV1 {
                 "/open-apis/hire/v1/external_referral_rewards".to_string()
             }
             HireApiV1::ExternalReferralRewardDelete(reward_id) => {
-                format!("/open-apis/hire/v1/external_referral_rewards/{}", reward_id)
+                format!("/open-apis/hire/v1/external_referral_rewards/{reward_id}")
             }
 
             // tripartite_agreement
@@ -1374,18 +1329,18 @@ impl HireApiV1 {
                 "/open-apis/hire/v1/tripartite_agreements".to_string()
             }
             HireApiV1::TripartiteAgreementDelete(agreement_id) => {
-                format!("/open-apis/hire/v1/tripartite_agreements/{}", agreement_id)
+                format!("/open-apis/hire/v1/tripartite_agreements/{agreement_id}")
             }
             HireApiV1::TripartiteAgreementList => {
                 "/open-apis/hire/v1/tripartite_agreements".to_string()
             }
             HireApiV1::TripartiteAgreementUpdate(agreement_id) => {
-                format!("/open-apis/hire/v1/tripartite_agreements/{}", agreement_id)
+                format!("/open-apis/hire/v1/tripartite_agreements/{agreement_id}")
             }
 
             // minutes
             HireApiV1::MinutesGet(minutes_id) => {
-                format!("/open-apis/hire/v1/minutes/{}", minutes_id)
+                format!("/open-apis/hire/v1/minutes/{minutes_id}")
             }
 
             // diversity_inclusion
@@ -1395,33 +1350,27 @@ impl HireApiV1 {
 
             // job.recruiter
             HireApiV1::JobRecruiter(job_id) => {
-                format!("/open-apis/hire/v1/jobs/{}/recruiter", job_id)
+                format!("/open-apis/hire/v1/jobs/{job_id}/recruiter")
             }
 
             // application.offer
             HireApiV1::ApplicationOffer(application_id) => {
-                format!("/open-apis/hire/v1/applications/{}/offer", application_id)
+                format!("/open-apis/hire/v1/applications/{application_id}/offer")
             }
 
             // application.interview
             HireApiV1::ApplicationInterviewList(application_id) => {
-                format!(
-                    "/open-apis/hire/v1/applications/{}/interviews",
-                    application_id
-                )
+                format!("/open-apis/hire/v1/applications/{application_id}/interviews")
             }
 
             // external_interview_assessment (duplicate variant, using get variant)
             HireApiV1::ExternalInterviewAssessmentGet(assessment_id) => {
-                format!(
-                    "/open-apis/hire/v1/external_interview_assessments/{}",
-                    assessment_id
-                )
+                format!("/open-apis/hire/v1/external_interview_assessments/{assessment_id}")
             }
 
             // advertisement
             HireApiV1::AdvertisementPublish(job_id) => {
-                format!("/open-apis/hire/v1/jobs/{}/advertisement/publish", job_id)
+                format!("/open-apis/hire/v1/jobs/{job_id}/advertisement/publish")
             }
         }
     }
@@ -1447,16 +1396,13 @@ impl HireApiV2 {
         match self {
             // interview_record
             HireApiV2::InterviewRecordGet(interview_record_id) => {
-                format!(
-                    "/open-apis/hire/v2/interview_records/{}",
-                    interview_record_id
-                )
+                format!("/open-apis/hire/v2/interview_records/{interview_record_id}")
             }
             HireApiV2::InterviewRecordList => "/open-apis/hire/v2/interview_records".to_string(),
 
             // talent
             HireApiV2::TalentGet(talent_id) => {
-                format!("/open-apis/hire/v2/talents/{}", talent_id)
+                format!("/open-apis/hire/v2/talents/{talent_id}")
             }
         }
     }
@@ -1973,7 +1919,7 @@ impl OkrApiV1 {
             OkrApiV1::PeriodCreate => "/open-apis/okr/v1/periods".to_string(),
             OkrApiV1::PeriodList => "/open-apis/okr/v1/periods".to_string(),
             OkrApiV1::PeriodPatch(period_id) => {
-                format!("/open-apis/okr/v1/periods/{}", period_id)
+                format!("/open-apis/okr/v1/periods/{period_id}")
             }
 
             // period_rule
@@ -1982,13 +1928,13 @@ impl OkrApiV1 {
             // progress_record
             OkrApiV1::ProgressRecordCreate => "/open-apis/okr/v1/progress_records".to_string(),
             OkrApiV1::ProgressRecordDelete(record_id) => {
-                format!("/open-apis/okr/v1/progress_records/{}", record_id)
+                format!("/open-apis/okr/v1/progress_records/{record_id}")
             }
             OkrApiV1::ProgressRecordGet(record_id) => {
-                format!("/open-apis/okr/v1/progress_records/{}", record_id)
+                format!("/open-apis/okr/v1/progress_records/{record_id}")
             }
             OkrApiV1::ProgressRecordUpdate(record_id) => {
-                format!("/open-apis/okr/v1/progress_records/{}", record_id)
+                format!("/open-apis/okr/v1/progress_records/{record_id}")
             }
 
             // review
@@ -2022,7 +1968,7 @@ impl EhrApiV1 {
         match self {
             // attachment
             EhrApiV1::AttachmentGet(attachment_id) => {
-                format!("/open-apis/ehr/v1/attachments/{}", attachment_id)
+                format!("/open-apis/ehr/v1/attachments/{attachment_id}")
             }
 
             // employee
@@ -2570,20 +2516,20 @@ impl FeishuPeopleApiV1 {
             // company
             FeishuPeopleApiV1::CompanyCreate => "/open-apis/corehr/v1/companies".to_string(),
             FeishuPeopleApiV1::CompanyDelete(company_id) => {
-                format!("/open-apis/corehr/v1/companies/{}", company_id)
+                format!("/open-apis/corehr/v1/companies/{company_id}")
             }
             FeishuPeopleApiV1::CompanyGet(company_id) => {
-                format!("/open-apis/corehr/v1/companies/{}", company_id)
+                format!("/open-apis/corehr/v1/companies/{company_id}")
             }
             FeishuPeopleApiV1::CompanyList => "/open-apis/corehr/v1/companies".to_string(),
             FeishuPeopleApiV1::CompanyPatch(company_id) => {
-                format!("/open-apis/corehr/v1/companies/{}", company_id)
+                format!("/open-apis/corehr/v1/companies/{company_id}")
             }
             FeishuPeopleApiV1::CompanyBatchGet => {
                 "/open-apis/corehr/v1/companies/batch_get".to_string()
             }
             FeishuPeopleApiV1::CompanyActive(company_id) => {
-                format!("/open-apis/corehr/v1/companies/{}/active", company_id)
+                format!("/open-apis/corehr/v1/companies/{company_id}/active")
             }
             FeishuPeopleApiV1::CompanyQueryRecentChange => {
                 "/open-apis/corehr/v1/companies/query_recent_change".to_string()
@@ -2597,14 +2543,14 @@ impl FeishuPeopleApiV1 {
             // contract
             FeishuPeopleApiV1::ContractCreate => "/open-apis/corehr/v1/contracts".to_string(),
             FeishuPeopleApiV1::ContractDelete(contract_id) => {
-                format!("/open-apis/corehr/v1/contracts/{}", contract_id)
+                format!("/open-apis/corehr/v1/contracts/{contract_id}")
             }
             FeishuPeopleApiV1::ContractGet(contract_id) => {
-                format!("/open-apis/corehr/v1/contracts/{}", contract_id)
+                format!("/open-apis/corehr/v1/contracts/{contract_id}")
             }
             FeishuPeopleApiV1::ContractList => "/open-apis/corehr/v1/contracts".to_string(),
             FeishuPeopleApiV1::ContractPatch(contract_id) => {
-                format!("/open-apis/corehr/v1/contracts/{}", contract_id)
+                format!("/open-apis/corehr/v1/contracts/{contract_id}")
             }
             FeishuPeopleApiV1::ContractSearch => {
                 "/open-apis/corehr/v1/contracts/search".to_string()
@@ -2613,10 +2559,10 @@ impl FeishuPeopleApiV1 {
             // cost_center
             FeishuPeopleApiV1::CostCenterCreate => "/open-apis/corehr/v1/cost_centers".to_string(),
             FeishuPeopleApiV1::CostCenterDelete(cost_center_id) => {
-                format!("/open-apis/corehr/v1/cost_centers/{}", cost_center_id)
+                format!("/open-apis/corehr/v1/cost_centers/{cost_center_id}")
             }
             FeishuPeopleApiV1::CostCenterPatch(cost_center_id) => {
-                format!("/open-apis/corehr/v1/cost_centers/{}", cost_center_id)
+                format!("/open-apis/corehr/v1/cost_centers/{cost_center_id}")
             }
             FeishuPeopleApiV1::CostCenterSearch => {
                 "/open-apis/corehr/v1/cost_centers/search".to_string()
@@ -2628,10 +2574,10 @@ impl FeishuPeopleApiV1 {
                 "/open-apis/corehr/v1/cost_center_versions".to_string()
             }
             FeishuPeopleApiV1::CostCenterVersionDelete(version_id) => {
-                format!("/open-apis/corehr/v1/cost_center_versions/{}", version_id)
+                format!("/open-apis/corehr/v1/cost_center_versions/{version_id}")
             }
             FeishuPeopleApiV1::CostCenterVersionPatch(version_id) => {
-                format!("/open-apis/corehr/v1/cost_center_versions/{}", version_id)
+                format!("/open-apis/corehr/v1/cost_center_versions/{version_id}")
             }
             FeishuPeopleApiV1::CostCenterBatchQuery => {
                 "/open-apis/corehr/v1/cost_centers/batch_query".to_string()
@@ -2639,7 +2585,7 @@ impl FeishuPeopleApiV1 {
 
             // country_region
             FeishuPeopleApiV1::CountryRegionGet(country_region_id) => {
-                format!("/open-apis/corehr/v1/country_regions/{}", country_region_id)
+                format!("/open-apis/corehr/v1/country_regions/{country_region_id}")
             }
             FeishuPeopleApiV1::CountryRegionList => {
                 "/open-apis/corehr/v1/country_regions".to_string()
@@ -2647,7 +2593,7 @@ impl FeishuPeopleApiV1 {
 
             // currency
             FeishuPeopleApiV1::CurrencyGet(currency_id) => {
-                format!("/open-apis/corehr/v1/currencies/{}", currency_id)
+                format!("/open-apis/corehr/v1/currencies/{currency_id}")
             }
             FeishuPeopleApiV1::CurrencyList => "/open-apis/corehr/v1/currencies".to_string(),
 
@@ -2665,16 +2611,16 @@ impl FeishuPeopleApiV1 {
             // custom_org
             FeishuPeopleApiV1::CustomOrgCreate => "/open-apis/corehr/v1/custom_orgs".to_string(),
             FeishuPeopleApiV1::CustomOrgDeleteOrg(org_id) => {
-                format!("/open-apis/corehr/v1/custom_orgs/{}", org_id)
+                format!("/open-apis/corehr/v1/custom_orgs/{org_id}")
             }
             FeishuPeopleApiV1::CustomOrgPatch(org_id) => {
-                format!("/open-apis/corehr/v1/custom_orgs/{}", org_id)
+                format!("/open-apis/corehr/v1/custom_orgs/{org_id}")
             }
             FeishuPeopleApiV1::CustomOrgQuery => {
                 "/open-apis/corehr/v1/custom_orgs/query".to_string()
             }
             FeishuPeopleApiV1::CustomOrgActive(org_id) => {
-                format!("/open-apis/corehr/v1/custom_orgs/{}/active", org_id)
+                format!("/open-apis/corehr/v1/custom_orgs/{org_id}/active")
             }
             FeishuPeopleApiV1::CustomOrgQueryRecentChange => {
                 "/open-apis/corehr/v1/custom_orgs/query_recent_change".to_string()
@@ -2688,10 +2634,10 @@ impl FeishuPeopleApiV1 {
                 "/open-apis/corehr/v1/default_cost_centers/create_version".to_string()
             }
             FeishuPeopleApiV1::DefaultCostCenterRemoveVersion(version_id) => {
-                format!("/open-apis/corehr/v1/default_cost_centers/{}", version_id)
+                format!("/open-apis/corehr/v1/default_cost_centers/{version_id}")
             }
             FeishuPeopleApiV1::DefaultCostCenterUpdateVersion(version_id) => {
-                format!("/open-apis/corehr/v1/default_cost_centers/{}", version_id)
+                format!("/open-apis/corehr/v1/default_cost_centers/{version_id}")
             }
             FeishuPeopleApiV1::DefaultCostCenterBatchQuery => {
                 "/open-apis/corehr/v1/default_cost_centers/batch_query".to_string()
@@ -2700,14 +2646,14 @@ impl FeishuPeopleApiV1 {
             // department
             FeishuPeopleApiV1::DepartmentCreate => "/open-apis/corehr/v1/departments".to_string(),
             FeishuPeopleApiV1::DepartmentDelete(department_id) => {
-                format!("/open-apis/corehr/v1/departments/{}", department_id)
+                format!("/open-apis/corehr/v1/departments/{department_id}")
             }
             FeishuPeopleApiV1::DepartmentGet(department_id) => {
-                format!("/open-apis/corehr/v1/departments/{}", department_id)
+                format!("/open-apis/corehr/v1/departments/{department_id}")
             }
             FeishuPeopleApiV1::DepartmentList => "/open-apis/corehr/v1/departments".to_string(),
             FeishuPeopleApiV1::DepartmentPatch(department_id) => {
-                format!("/open-apis/corehr/v1/departments/{}", department_id)
+                format!("/open-apis/corehr/v1/departments/{department_id}")
             }
             FeishuPeopleApiV1::DepartmentSearch => {
                 "/open-apis/corehr/v1/departments/search".to_string()
@@ -2716,7 +2662,7 @@ impl FeishuPeopleApiV1 {
                 "/open-apis/corehr/v1/departments/batch_get".to_string()
             }
             FeishuPeopleApiV1::DepartmentParents(department_id) => {
-                format!("/open-apis/corehr/v1/departments/{}/parents", department_id)
+                format!("/open-apis/corehr/v1/departments/{department_id}/parents")
             }
             FeishuPeopleApiV1::DepartmentTree => {
                 "/open-apis/corehr/v1/departments/tree".to_string()
@@ -2736,13 +2682,13 @@ impl FeishuPeopleApiV1 {
 
             // draft
             FeishuPeopleApiV1::DraftGet(draft_id) => {
-                format!("/open-apis/corehr/v1/drafts/{}", draft_id)
+                format!("/open-apis/corehr/v1/drafts/{draft_id}")
             }
 
             // employee
             FeishuPeopleApiV1::EmployeeCreate => "/open-apis/corehr/v1/employees".to_string(),
             FeishuPeopleApiV1::EmployeeDelete(employee_id) => {
-                format!("/open-apis/corehr/v1/employees/{}", employee_id)
+                format!("/open-apis/corehr/v1/employees/{employee_id}")
             }
             FeishuPeopleApiV1::EmployeeBatchGet => {
                 "/open-apis/corehr/v1/employees/batch_get".to_string()
@@ -2757,16 +2703,16 @@ impl FeishuPeopleApiV1 {
                 "/open-apis/corehr/v1/employee_types".to_string()
             }
             FeishuPeopleApiV1::EmployeeTypeDelete(employee_type_id) => {
-                format!("/open-apis/corehr/v1/employee_types/{}", employee_type_id)
+                format!("/open-apis/corehr/v1/employee_types/{employee_type_id}")
             }
             FeishuPeopleApiV1::EmployeeTypeGet(employee_type_id) => {
-                format!("/open-apis/corehr/v1/employee_types/{}", employee_type_id)
+                format!("/open-apis/corehr/v1/employee_types/{employee_type_id}")
             }
             FeishuPeopleApiV1::EmployeeTypeList => {
                 "/open-apis/corehr/v1/employee_types".to_string()
             }
             FeishuPeopleApiV1::EmployeeTypePatch(employee_type_id) => {
-                format!("/open-apis/corehr/v1/employee_types/{}", employee_type_id)
+                format!("/open-apis/corehr/v1/employee_types/{employee_type_id}")
             }
 
             // employees.additional_job
@@ -2774,16 +2720,10 @@ impl FeishuPeopleApiV1 {
                 "/open-apis/corehr/v1/employees.additional_jobs".to_string()
             }
             FeishuPeopleApiV1::EmployeesAdditionalJobDelete(additional_job_id) => {
-                format!(
-                    "/open-apis/corehr/v1/employees.additional_jobs/{}",
-                    additional_job_id
-                )
+                format!("/open-apis/corehr/v1/employees.additional_jobs/{additional_job_id}")
             }
             FeishuPeopleApiV1::EmployeesAdditionalJobPatch(additional_job_id) => {
-                format!(
-                    "/open-apis/corehr/v1/employees.additional_jobs/{}",
-                    additional_job_id
-                )
+                format!("/open-apis/corehr/v1/employees.additional_jobs/{additional_job_id}")
             }
             FeishuPeopleApiV1::EmployeesAdditionalJobBatch => {
                 "/open-apis/corehr/v1/employees.additional_jobs/batch".to_string()
@@ -2797,28 +2737,28 @@ impl FeishuPeopleApiV1 {
             // employment
             FeishuPeopleApiV1::EmploymentCreate => "/open-apis/corehr/v1/employments".to_string(),
             FeishuPeopleApiV1::EmploymentDelete(employment_id) => {
-                format!("/open-apis/corehr/v1/employments/{}", employment_id)
+                format!("/open-apis/corehr/v1/employments/{employment_id}")
             }
             FeishuPeopleApiV1::EmploymentPatch(employment_id) => {
-                format!("/open-apis/corehr/v1/employments/{}", employment_id)
+                format!("/open-apis/corehr/v1/employments/{employment_id}")
             }
 
             // file
             FeishuPeopleApiV1::FileGet(file_id) => {
-                format!("/open-apis/corehr/v1/files/{}", file_id)
+                format!("/open-apis/corehr/v1/files/{file_id}")
             }
 
             // job
             FeishuPeopleApiV1::JobCreate => "/open-apis/corehr/v1/jobs".to_string(),
             FeishuPeopleApiV1::JobDelete(job_id) => {
-                format!("/open-apis/corehr/v1/jobs/{}", job_id)
+                format!("/open-apis/corehr/v1/jobs/{job_id}")
             }
             FeishuPeopleApiV1::JobGet(job_id) => {
-                format!("/open-apis/corehr/v1/jobs/{}", job_id)
+                format!("/open-apis/corehr/v1/jobs/{job_id}")
             }
             FeishuPeopleApiV1::JobList => "/open-apis/corehr/v1/jobs".to_string(),
             FeishuPeopleApiV1::JobPatch(job_id) => {
-                format!("/open-apis/corehr/v1/jobs/{}", job_id)
+                format!("/open-apis/corehr/v1/jobs/{job_id}")
             }
 
             // job_change
@@ -2827,40 +2767,40 @@ impl FeishuPeopleApiV1 {
             // job_data
             FeishuPeopleApiV1::JobDataCreate => "/open-apis/corehr/v1/job_datas".to_string(),
             FeishuPeopleApiV1::JobDataDelete(job_data_id) => {
-                format!("/open-apis/corehr/v1/job_datas/{}", job_data_id)
+                format!("/open-apis/corehr/v1/job_datas/{job_data_id}")
             }
             FeishuPeopleApiV1::JobDataGet(job_data_id) => {
-                format!("/open-apis/corehr/v1/job_datas/{}", job_data_id)
+                format!("/open-apis/corehr/v1/job_datas/{job_data_id}")
             }
             FeishuPeopleApiV1::JobDataList => "/open-apis/corehr/v1/job_datas".to_string(),
             FeishuPeopleApiV1::JobDataPatch(job_data_id) => {
-                format!("/open-apis/corehr/v1/job_datas/{}", job_data_id)
+                format!("/open-apis/corehr/v1/job_datas/{job_data_id}")
             }
 
             // job_family
             FeishuPeopleApiV1::JobFamilyCreate => "/open-apis/corehr/v1/job_families".to_string(),
             FeishuPeopleApiV1::JobFamilyDelete(job_family_id) => {
-                format!("/open-apis/corehr/v1/job_families/{}", job_family_id)
+                format!("/open-apis/corehr/v1/job_families/{job_family_id}")
             }
             FeishuPeopleApiV1::JobFamilyGet(job_family_id) => {
-                format!("/open-apis/corehr/v1/job_families/{}", job_family_id)
+                format!("/open-apis/corehr/v1/job_families/{job_family_id}")
             }
             FeishuPeopleApiV1::JobFamilyList => "/open-apis/corehr/v1/job_families".to_string(),
             FeishuPeopleApiV1::JobFamilyPatch(job_family_id) => {
-                format!("/open-apis/corehr/v1/job_families/{}", job_family_id)
+                format!("/open-apis/corehr/v1/job_families/{job_family_id}")
             }
 
             // job_level
             FeishuPeopleApiV1::JobLevelCreate => "/open-apis/corehr/v1/job_levels".to_string(),
             FeishuPeopleApiV1::JobLevelDelete(job_level_id) => {
-                format!("/open-apis/corehr/v1/job_levels/{}", job_level_id)
+                format!("/open-apis/corehr/v1/job_levels/{job_level_id}")
             }
             FeishuPeopleApiV1::JobLevelGet(job_level_id) => {
-                format!("/open-apis/corehr/v1/job_levels/{}", job_level_id)
+                format!("/open-apis/corehr/v1/job_levels/{job_level_id}")
             }
             FeishuPeopleApiV1::JobLevelList => "/open-apis/corehr/v1/job_levels".to_string(),
             FeishuPeopleApiV1::JobLevelPatch(job_level_id) => {
-                format!("/open-apis/corehr/v1/job_levels/{}", job_level_id)
+                format!("/open-apis/corehr/v1/job_levels/{job_level_id}")
             }
 
             // leave
@@ -2884,7 +2824,7 @@ impl FeishuPeopleApiV1 {
             }
             FeishuPeopleApiV1::LeaveRequest => "/open-apis/corehr/v1/leave_requests".to_string(),
             FeishuPeopleApiV1::LeaveRequestDelete(request_id) => {
-                format!("/open-apis/corehr/v1/leave_requests/{}", request_id)
+                format!("/open-apis/corehr/v1/leave_requests/{request_id}")
             }
 
             // leave_granting_record
@@ -2892,20 +2832,20 @@ impl FeishuPeopleApiV1 {
                 "/open-apis/corehr/v1/leave_granting_records".to_string()
             }
             FeishuPeopleApiV1::LeaveGrantingRecordDelete(record_id) => {
-                format!("/open-apis/corehr/v1/leave_granting_records/{}", record_id)
+                format!("/open-apis/corehr/v1/leave_granting_records/{record_id}")
             }
 
             // location
             FeishuPeopleApiV1::LocationCreate => "/open-apis/corehr/v1/locations".to_string(),
             FeishuPeopleApiV1::LocationDelete(location_id) => {
-                format!("/open-apis/corehr/v1/locations/{}", location_id)
+                format!("/open-apis/corehr/v1/locations/{location_id}")
             }
             FeishuPeopleApiV1::LocationGet(location_id) => {
-                format!("/open-apis/corehr/v1/locations/{}", location_id)
+                format!("/open-apis/corehr/v1/locations/{location_id}")
             }
             FeishuPeopleApiV1::LocationList => "/open-apis/corehr/v1/locations".to_string(),
             FeishuPeopleApiV1::LocationPatch(location_id) => {
-                format!("/open-apis/corehr/v1/locations/{}", location_id)
+                format!("/open-apis/corehr/v1/locations/{location_id}")
             }
 
             // national_id_type
@@ -2913,36 +2853,27 @@ impl FeishuPeopleApiV1 {
                 "/open-apis/corehr/v1/national_id_types".to_string()
             }
             FeishuPeopleApiV1::NationalIdTypeDelete(national_id_type_id) => {
-                format!(
-                    "/open-apis/corehr/v1/national_id_types/{}",
-                    national_id_type_id
-                )
+                format!("/open-apis/corehr/v1/national_id_types/{national_id_type_id}")
             }
             FeishuPeopleApiV1::NationalIdTypeGet(national_id_type_id) => {
-                format!(
-                    "/open-apis/corehr/v1/national_id_types/{}",
-                    national_id_type_id
-                )
+                format!("/open-apis/corehr/v1/national_id_types/{national_id_type_id}")
             }
             FeishuPeopleApiV1::NationalIdTypeList => {
                 "/open-apis/corehr/v1/national_id_types".to_string()
             }
             FeishuPeopleApiV1::NationalIdTypePatch(national_id_type_id) => {
-                format!(
-                    "/open-apis/corehr/v1/national_id_types/{}",
-                    national_id_type_id
-                )
+                format!("/open-apis/corehr/v1/national_id_types/{national_id_type_id}")
             }
 
             // subdivision
             FeishuPeopleApiV1::SubdivisionGet(subdivision_id) => {
-                format!("/open-apis/corehr/v1/subdivisions/{}", subdivision_id)
+                format!("/open-apis/corehr/v1/subdivisions/{subdivision_id}")
             }
             FeishuPeopleApiV1::SubdivisionList => "/open-apis/corehr/v1/subdivisions".to_string(),
 
             // subregion
             FeishuPeopleApiV1::SubregionGet(subregion_id) => {
-                format!("/open-apis/corehr/v1/subregions/{}", subregion_id)
+                format!("/open-apis/corehr/v1/subregions/{subregion_id}")
             }
             FeishuPeopleApiV1::SubregionList => "/open-apis/corehr/v1/subregions".to_string(),
 
@@ -2951,25 +2882,16 @@ impl FeishuPeopleApiV1 {
                 "/open-apis/corehr/v1/working_hours_types".to_string()
             }
             FeishuPeopleApiV1::WorkingHoursTypeDelete(working_hours_type_id) => {
-                format!(
-                    "/open-apis/corehr/v1/working_hours_types/{}",
-                    working_hours_type_id
-                )
+                format!("/open-apis/corehr/v1/working_hours_types/{working_hours_type_id}")
             }
             FeishuPeopleApiV1::WorkingHoursTypeGet(working_hours_type_id) => {
-                format!(
-                    "/open-apis/corehr/v1/working_hours_types/{}",
-                    working_hours_type_id
-                )
+                format!("/open-apis/corehr/v1/working_hours_types/{working_hours_type_id}")
             }
             FeishuPeopleApiV1::WorkingHoursTypeList => {
                 "/open-apis/corehr/v1/working_hours_types".to_string()
             }
             FeishuPeopleApiV1::WorkingHoursTypePatch(working_hours_type_id) => {
-                format!(
-                    "/open-apis/corehr/v1/working_hours_types/{}",
-                    working_hours_type_id
-                )
+                format!("/open-apis/corehr/v1/working_hours_types/{working_hours_type_id}")
             }
 
             // offboarding
@@ -2985,25 +2907,25 @@ impl FeishuPeopleApiV1 {
 
             FeishuPeopleApiV1::PersonCreate => "/open-apis/corehr/v1/persons".to_string(),
             FeishuPeopleApiV1::PersonDelete(person_id) => {
-                format!("/open-apis/corehr/v1/persons/{}", person_id)
+                format!("/open-apis/corehr/v1/persons/{person_id}")
             }
             FeishuPeopleApiV1::PersonGet(person_id) => {
-                format!("/open-apis/corehr/v1/persons/{}", person_id)
+                format!("/open-apis/corehr/v1/persons/{person_id}")
             }
             FeishuPeopleApiV1::PersonPatch(person_id) => {
-                format!("/open-apis/corehr/v1/persons/{}", person_id)
+                format!("/open-apis/corehr/v1/persons/{person_id}")
             }
             FeishuPeopleApiV1::PersonUpload => "/open-apis/corehr/v1/persons/upload".to_string(),
 
             FeishuPeopleApiV1::PreHireDelete(pre_hire_id) => {
-                format!("/open-apis/corehr/v1/pre_hires/{}", pre_hire_id)
+                format!("/open-apis/corehr/v1/pre_hires/{pre_hire_id}")
             }
             FeishuPeopleApiV1::PreHireGet(pre_hire_id) => {
-                format!("/open-apis/corehr/v1/pre_hires/{}", pre_hire_id)
+                format!("/open-apis/corehr/v1/pre_hires/{pre_hire_id}")
             }
             FeishuPeopleApiV1::PreHireList => "/open-apis/corehr/v1/pre_hires".to_string(),
             FeishuPeopleApiV1::PreHirePatch(pre_hire_id) => {
-                format!("/open-apis/corehr/v1/pre_hires/{}", pre_hire_id)
+                format!("/open-apis/corehr/v1/pre_hires/{pre_hire_id}")
             }
             FeishuPeopleApiV1::ProcessFormVariableDataGet => {
                 "/open-apis/corehr/v1/processes/{}/form_variable_data".to_string()
@@ -3164,7 +3086,7 @@ impl FeishuPeopleApiV2 {
         match self {
             // company
             FeishuPeopleApiV2::CompanyActive(company_id) => {
-                format!("/open-apis/corehr/v2/companies/{}/active", company_id)
+                format!("/open-apis/corehr/v2/companies/{company_id}/active")
             }
 
             // contract
@@ -3211,16 +3133,10 @@ impl FeishuPeopleApiV2 {
                 "/open-apis/corehr/v2/employees/additional_jobs".to_string()
             }
             FeishuPeopleApiV2::EmployeesAdditionalJobDelete(additional_job_id) => {
-                format!(
-                    "/open-apis/corehr/v2/employees/additional_jobs/{}",
-                    additional_job_id
-                )
+                format!("/open-apis/corehr/v2/employees/additional_jobs/{additional_job_id}")
             }
             FeishuPeopleApiV2::EmployeesAdditionalJobPatch(additional_job_id) => {
-                format!(
-                    "/open-apis/corehr/v2/employees/additional_jobs/{}",
-                    additional_job_id
-                )
+                format!("/open-apis/corehr/v2/employees/additional_jobs/{additional_job_id}")
             }
 
             FeishuPeopleApiV2::EmployeesBpBatchGet => {
@@ -3234,8 +3150,7 @@ impl FeishuPeopleApiV2 {
                 international_assignment_id,
             ) => {
                 format!(
-                    "/open-apis/corehr/v2/employees/international_assignments/{}",
-                    international_assignment_id
+                    "/open-apis/corehr/v2/employees/international_assignments/{international_assignment_id}"
                 )
             }
             FeishuPeopleApiV2::EmployeesInternationalAssignmentList => {
@@ -3245,8 +3160,7 @@ impl FeishuPeopleApiV2 {
                 international_assignment_id,
             ) => {
                 format!(
-                    "/open-apis/corehr/v2/employees/international_assignments/{}",
-                    international_assignment_id
+                    "/open-apis/corehr/v2/employees/international_assignments/{international_assignment_id}"
                 )
             }
 
@@ -3259,7 +3173,7 @@ impl FeishuPeopleApiV2 {
 
             FeishuPeopleApiV2::PersonCreate => "/open-apis/corehr/v2/persons".to_string(),
             FeishuPeopleApiV2::PersonPatch(person_id) => {
-                format!("/open-apis/corehr/v2/persons/{}", person_id)
+                format!("/open-apis/corehr/v2/persons/{person_id}")
             }
 
             FeishuPeopleApiV2::PreHireComplete => {
@@ -3267,10 +3181,10 @@ impl FeishuPeopleApiV2 {
             }
             FeishuPeopleApiV2::PreHireCreate => "/open-apis/corehr/v2/pre_hires".to_string(),
             FeishuPeopleApiV2::PreHireDelete(pre_hire_id) => {
-                format!("/open-apis/corehr/v2/pre_hires/{}", pre_hire_id)
+                format!("/open-apis/corehr/v2/pre_hires/{pre_hire_id}")
             }
             FeishuPeopleApiV2::PreHirePatch(pre_hire_id) => {
-                format!("/open-apis/corehr/v2/pre_hires/{}", pre_hire_id)
+                format!("/open-apis/corehr/v2/pre_hires/{pre_hire_id}")
             }
             FeishuPeopleApiV2::PreHireQuery => "/open-apis/corehr/v2/pre_hires/query".to_string(),
             FeishuPeopleApiV2::PreHireRestoreFlowInstance => {
@@ -3289,7 +3203,7 @@ impl FeishuPeopleApiV2 {
 
             // location
             FeishuPeopleApiV2::LocationPatch(location_id) => {
-                format!("/open-apis/corehr/v2/locations/{}", location_id)
+                format!("/open-apis/corehr/v2/locations/{location_id}")
             }
 
             FeishuPeopleApiV2::BasicInfoBankSearch => {
@@ -3349,16 +3263,10 @@ impl FeishuPeopleApiV2 {
                 "/open-apis/corehr/v2/probation/assessments".to_string()
             }
             FeishuPeopleApiV2::ProbationAssessmentPatch(assessment_id) => {
-                format!(
-                    "/open-apis/corehr/v2/probation/assessments/{}",
-                    assessment_id
-                )
+                format!("/open-apis/corehr/v2/probation/assessments/{assessment_id}")
             }
             FeishuPeopleApiV2::ProbationAssessmentDelete(assessment_id) => {
-                format!(
-                    "/open-apis/corehr/v2/probation/assessments/{}",
-                    assessment_id
-                )
+                format!("/open-apis/corehr/v2/probation/assessments/{assessment_id}")
             }
         }
     }

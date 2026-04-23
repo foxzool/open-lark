@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get
 
 use openlark_core::{
-    api::ApiRequest, config::Config, error, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, error, http::Transport, validate_required,
 };
 
 use crate::{common::api_utils::extract_response_data, endpoints::IM_V1_MESSAGES};

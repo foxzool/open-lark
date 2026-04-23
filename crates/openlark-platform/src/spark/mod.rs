@@ -34,7 +34,7 @@ pub mod spark;
 
 #[cfg(test)]
 mod tests {
-    use crate::{spark::SparkService, PlatformConfig};
+    use crate::{PlatformConfig, spark::SparkService};
 
     #[test]
     fn test_service_creation() {

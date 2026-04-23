@@ -213,7 +213,7 @@ impl ServiceRegistry for DefaultServiceRegistry {
             .as_ref()
             .and_then(|instance| instance.downcast_ref::<T>())
             .ok_or_else(|| RegistryError::ServiceNotFound {
-                name: format!("类型转换失败: {}", name),
+                name: format!("类型转换失败: {name}"),
             })
     }
 

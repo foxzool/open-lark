@@ -4,13 +4,13 @@
 //! 这里提供一个带缓存的实现：缓存 token 并在过期前复用。
 
 use openlark_core::{
+    SDKResult,
     auth::{TokenProvider, TokenRequest},
     config::Config,
     constants::{AccessTokenType, AppType},
     error::{api_error, configuration_error},
-    SDKResult,
 };
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::collections::HashMap;
 use std::future::Future;
 use std::pin::Pin;
@@ -90,7 +90,7 @@ impl AuthTokenProvider {
 
     /// 生成缓存键
     fn cache_key(token_type: &AccessTokenType, app_type: &AppType) -> String {
-        format!("{:?}_{:?}", token_type, app_type)
+        format!("{token_type:?}_{app_type:?}")
     }
 
     async fn get_cached(&self, cache_key: &str) -> Option<String> {
@@ -181,40 +181,41 @@ impl TokenProvider for AuthTokenProvider {
     ) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
         Box::pin(async move {
             match request.token_type {
-            AccessTokenType::App => {
-                let cache_key = Self::cache_key(&AccessTokenType::App, &self.config.app_type());
-                self.get_or_fetch(cache_key, || async {
-                    let (token, expires_in) = match self.config.app_type() {
-                        AppType::SelfBuild => {
-                            self.fetch_token_via_http(
-                                "/open-apis/auth/v3/app_access_token/internal",
-                                json!({
-                                    "app_id": self.config.app_id(),
-                                    "app_secret": self.config.app_secret(),
-                                }),
-                                "app_access_token",
-                            )
-                            .await?
-                        }
-                        AppType::Marketplace => {
-                            self.fetch_token_via_http(
-                                "/open-apis/auth/v3/app_access_token",
-                                json!({
-                                    "app_id": self.config.app_id(),
-                                    "app_secret": self.config.app_secret(),
-                                }),
-                                "app_access_token",
-                            )
-                            .await?
-                        }
-                    };
-                    Ok((token, expires_in))
-                })
-                .await
-            }
-            AccessTokenType::Tenant => {
-                let cache_key = Self::cache_key(&AccessTokenType::Tenant, &self.config.app_type());
-                self.get_or_fetch(cache_key, || async {
+                AccessTokenType::App => {
+                    let cache_key = Self::cache_key(&AccessTokenType::App, &self.config.app_type());
+                    self.get_or_fetch(cache_key, || async {
+                        let (token, expires_in) = match self.config.app_type() {
+                            AppType::SelfBuild => {
+                                self.fetch_token_via_http(
+                                    "/open-apis/auth/v3/app_access_token/internal",
+                                    json!({
+                                        "app_id": self.config.app_id(),
+                                        "app_secret": self.config.app_secret(),
+                                    }),
+                                    "app_access_token",
+                                )
+                                .await?
+                            }
+                            AppType::Marketplace => {
+                                self.fetch_token_via_http(
+                                    "/open-apis/auth/v3/app_access_token",
+                                    json!({
+                                        "app_id": self.config.app_id(),
+                                        "app_secret": self.config.app_secret(),
+                                    }),
+                                    "app_access_token",
+                                )
+                                .await?
+                            }
+                        };
+                        Ok((token, expires_in))
+                    })
+                    .await
+                }
+                AccessTokenType::Tenant => {
+                    let cache_key =
+                        Self::cache_key(&AccessTokenType::Tenant, &self.config.app_type());
+                    self.get_or_fetch(cache_key, || async {
                     let (token, expires_in) = match self.config.app_type() {
                         AppType::SelfBuild => {
                             self.fetch_token_via_http(
@@ -249,14 +250,14 @@ impl TokenProvider for AuthTokenProvider {
                     Ok((token, expires_in))
                 })
                 .await
+                }
+                AccessTokenType::User => Err(configuration_error(
+                    "token_provider: user token 不应由 core 自动获取，请在 RequestOption 中显式传入 user_access_token（或由上层自行实现 TokenProvider 扩展）。",
+                )),
+                AccessTokenType::None => Err(configuration_error(
+                    "token_provider: AccessTokenType::None 不应触发 token 获取",
+                )),
             }
-            AccessTokenType::User => Err(configuration_error(
-                "token_provider: user token 不应由 core 自动获取，请在 RequestOption 中显式传入 user_access_token（或由上层自行实现 TokenProvider 扩展）。",
-            )),
-            AccessTokenType::None => Err(configuration_error(
-                "token_provider: AccessTokenType::None 不应触发 token 获取",
-            )),
-        }
         })
     }
 }

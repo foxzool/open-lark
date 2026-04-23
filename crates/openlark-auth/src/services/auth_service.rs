@@ -115,12 +115,12 @@ mod tests {
         let v3_service = service.v3();
 
         // 验证返回的是有效的服务实例
-        let _ = format!("{:?}", v3_service);
+        let _ = format!("{v3_service:?}");
     }
 
     #[test]
     fn test_default() {
         let service = AuthService::default();
-        let _ = format!("{:?}", service);
+        let _ = format!("{service:?}");
     }
 }

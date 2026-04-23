@@ -6,11 +6,12 @@
 use crate::ccm::docx::models::common_types::DocxBlock;
 use crate::common::api_endpoints::DocxApiV1;
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

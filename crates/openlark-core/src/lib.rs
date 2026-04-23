@@ -35,7 +35,7 @@ mod response_handler;
 mod utils;
 
 // Re-export commonly used types from crate root
-pub use error::{validation_error, CoreError, SDKResult};
+pub use error::{CoreError, SDKResult, validation_error};
 pub use validation::Validatable;
 
 // Re-export validate_required macro for docs module
@@ -89,7 +89,7 @@ pub mod prelude {
     // Re-export commonly used core modules directly（最小集合）
     pub use crate::config::Config;
     pub use crate::constants::*;
-    pub use crate::error::{validation_error, CoreError, SDKResult};
+    pub use crate::error::{CoreError, SDKResult, validation_error};
     pub use crate::http::Transport;
     pub use crate::req_option::*;
     pub use crate::validate_required;

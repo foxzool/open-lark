@@ -5,10 +5,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/drive-v1/import_task/create
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -110,7 +110,7 @@ impl CreateImportTaskRequest {
                 return Err(openlark_core::error::validation_error(
                     "type",
                     "type 仅支持 docx/sheet/bitable",
-                ))
+                ));
             }
         }
         // ===== 验证固定值 =====

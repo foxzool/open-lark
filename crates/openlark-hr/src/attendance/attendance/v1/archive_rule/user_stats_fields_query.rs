@@ -3,10 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/attendance-v1/archive_rule/user_stats_fields_query
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

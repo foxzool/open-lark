@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/cardkit-v1/card/settings
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 use serde::{Deserialize, Serialize};
 

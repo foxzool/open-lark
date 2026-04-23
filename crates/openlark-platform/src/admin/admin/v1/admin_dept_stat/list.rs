@@ -1,11 +1,11 @@
 //! 获取部门维度的用户活跃和功能使用数据 API
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -70,10 +70,10 @@ impl ListAdminDeptStatBuilder {
         );
 
         if let Some(size) = self.page_size {
-            url.push_str(&format!("&page_size={}", size));
+            url.push_str(&format!("&page_size={size}"));
         }
         if let Some(token) = self.page_token {
-            url.push_str(&format!("&page_token={}", token));
+            url.push_str(&format!("&page_token={token}"));
         }
 
         let api_request: ApiRequest<ListAdminDeptStatResponse> = ApiRequest::get(url);

@@ -8,8 +8,8 @@ use openlark_hr::attendance::attendance::v1::{
 use rstest::rstest;
 use serde_json::json;
 use wiremock::{
-    matchers::{body_json, header, method, path, query_param},
     Mock, MockServer, ResponseTemplate,
+    matchers::{body_json, header, method, path, query_param},
 };
 
 fn test_config(base_url: &str) -> Config {

@@ -3,11 +3,11 @@
 //! 文档: https://open.feishu.cn/document/server-docs/mdm-v1/user_auth_data_relation/unbind
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

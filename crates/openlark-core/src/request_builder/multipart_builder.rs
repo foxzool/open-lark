@@ -1,5 +1,5 @@
-use crate::error::{validation_error, CoreError};
-use reqwest::{multipart, RequestBuilder};
+use crate::error::{CoreError, validation_error};
+use reqwest::{RequestBuilder, multipart};
 use serde_json::Value;
 
 /// 专门构建 multipart/form-data 请求
@@ -437,6 +437,6 @@ mod tests {
 
         // We can't easily inspect the multipart form without building the request,
         // but we can verify it's still a valid RequestBuilder
-        assert!(format!("{:?}", request_builder).contains("RequestBuilder"));
+        assert!(format!("{request_builder:?}").contains("RequestBuilder"));
     }
 }

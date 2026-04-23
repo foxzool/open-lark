@@ -137,10 +137,10 @@ impl GetMyDeviceRecordsBuilder {
         let mut query_params = Vec::new();
 
         if let Some(page_size) = self.page_size {
-            query_params.push(format!("page_size={}", page_size));
+            query_params.push(format!("page_size={page_size}"));
         }
         if let Some(page_token) = &self.page_token {
-            query_params.push(format!("page_token={}", page_token));
+            query_params.push(format!("page_token={page_token}"));
         }
         if let Some(status) = &self.status {
             let status_str = match status {
@@ -153,7 +153,7 @@ impl GetMyDeviceRecordsBuilder {
                     "non_compliant"
                 }
             };
-            query_params.push(format!("status={}", status_str));
+            query_params.push(format!("status={status_str}"));
         }
 
         let url_with_params = if !query_params.is_empty() {
@@ -414,16 +414,16 @@ impl ListDeviceRecordsBuilder {
         let mut query_params = Vec::new();
 
         if let Some(page_size) = self.page_size {
-            query_params.push(format!("page_size={}", page_size));
+            query_params.push(format!("page_size={page_size}"));
         }
         if let Some(page_token) = &self.page_token {
-            query_params.push(format!("page_token={}", page_token));
+            query_params.push(format!("page_token={page_token}"));
         }
         if let Some(user_id) = &self.user_id {
-            query_params.push(format!("user_id={}", user_id));
+            query_params.push(format!("user_id={user_id}"));
         }
         if let Some(device_type) = &self.device_type {
-            query_params.push(format!("device_type={}", device_type));
+            query_params.push(format!("device_type={device_type}"));
         }
         if let Some(status) = &self.status {
             let status_str = match status {
@@ -436,7 +436,7 @@ impl ListDeviceRecordsBuilder {
                     "non_compliant"
                 }
             };
-            query_params.push(format!("status={}", status_str));
+            query_params.push(format!("status={status_str}"));
         }
         if let Some(personal_device) = self.personal_device {
             query_params.push(format!(
@@ -453,7 +453,7 @@ impl ListDeviceRecordsBuilder {
                 crate::models::security_and_compliance::ComplianceStatus::Pending => "pending",
                 crate::models::security_and_compliance::ComplianceStatus::Unknown => "unknown",
             };
-            query_params.push(format!("compliance_status={}", status_str));
+            query_params.push(format!("compliance_status={status_str}"));
         }
 
         let url_with_params = if !query_params.is_empty() {

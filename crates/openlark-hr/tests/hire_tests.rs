@@ -5,8 +5,8 @@ use openlark_hr::hire::hire::v1::*;
 use rstest::rstest;
 use serde_json::json;
 use wiremock::{
-    matchers::{body_json, header, method, path},
     Mock, MockServer, ResponseTemplate,
+    matchers::{body_json, header, method, path},
 };
 
 fn test_config(base_url: &str) -> Config {
@@ -191,11 +191,13 @@ mod validation_tests {
             .await;
 
         assert!(result.is_err());
-        assert!(result
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("候选人姓名不能为空"));
+        assert!(
+            result
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("候选人姓名不能为空")
+        );
     }
 
     #[tokio::test]
@@ -206,11 +208,13 @@ mod validation_tests {
             .await;
 
         assert!(result.is_err());
-        assert!(result
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("至少需要提供邮箱或手机号"));
+        assert!(
+            result
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("至少需要提供邮箱或手机号")
+        );
     }
 
     #[rstest]
@@ -224,11 +228,13 @@ mod validation_tests {
             .await;
 
         assert!(result.is_err());
-        assert!(result
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("page_size 必须在 1-100 之间"));
+        assert!(
+            result
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("page_size 必须在 1-100 之间")
+        );
     }
 
     #[tokio::test]
@@ -249,11 +255,13 @@ mod validation_tests {
             .await;
 
         assert!(result.is_err());
-        assert!(result
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("至少需要提供一个更新字段"));
+        assert!(
+            result
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("至少需要提供一个更新字段")
+        );
     }
 }
 

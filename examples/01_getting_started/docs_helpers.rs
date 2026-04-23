@@ -37,7 +37,7 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         println!("第一页子项数量: {}", first_page.items.len());
         println!("第一页是否还有更多: {}", first_page.has_more);
         if let Some(next_page_token) = &first_page.next_page_token {
-            println!("下一页 token: {}", next_page_token);
+            println!("下一页 token: {next_page_token}");
         }
 
         let items = client

@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/calendar-v4/calendar/batch
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 
 use crate::{

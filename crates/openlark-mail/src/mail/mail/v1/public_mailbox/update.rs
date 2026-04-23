@@ -5,9 +5,9 @@ use crate::mail::mail::v1::public_mailbox::models::{
     UpdatePublicMailboxBody, UpdatePublicMailboxResponse,
 };
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    SDKResult,
 };
 use std::sync::Arc;
 

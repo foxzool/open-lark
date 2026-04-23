@@ -700,7 +700,7 @@ async fn test_api_with_user_access_token() {
 
 - [ ] **向后兼容**: 不破坏现有公开 API
 - [ ] **Feature gating**: 使用 `#[cfg(feature = "...")]` 控制编译
-- [ ] **MSRV**: 使用 Rust 1.75+ 兼容语法
+- [ ] **MSRV**: 使用 Rust 1.88+ 兼容语法
 
 ---
 

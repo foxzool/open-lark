@@ -147,9 +147,11 @@ mod create_card_body_validation_tests {
 
         let result = body.validate();
         assert!(result.is_err());
-        assert!(result
-            .unwrap_err()
-            .contains("card_content 必须是 JSON 对象"));
+        assert!(
+            result
+                .unwrap_err()
+                .contains("card_content 必须是 JSON 对象")
+        );
     }
 
     #[test]

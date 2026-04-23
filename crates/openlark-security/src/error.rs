@@ -4,9 +4,9 @@
 //! 直接集成统一错误体系，提供类型安全和可观测性
 
 use openlark_core::error::{
-    authentication_error, business_error, configuration_error, network_error_with_details,
-    permission_missing_error, rate_limit_error, token_expired_error, validation_error, CoreError,
-    ErrorCode, ErrorContext, ErrorTrait,
+    CoreError, ErrorCode, ErrorContext, ErrorTrait, authentication_error, business_error,
+    configuration_error, network_error_with_details, permission_missing_error, rate_limit_error,
+    token_expired_error, validation_error,
 };
 use serde::Serialize;
 use std::time::Duration;
@@ -188,7 +188,7 @@ impl SecurityErrorBuilder {
         ctx.add_context("operation", "compliance_check");
 
         CoreError::Business {
-            message: format!("合规检查失败: {}", reason_str),
+            message: format!("合规检查失败: {reason_str}"),
             code: ErrorCode::BusinessError,
             ctx: Box::new(ctx),
         }
@@ -224,10 +224,7 @@ impl SecurityErrorBuilder {
         ctx.add_context("error_reason", reason_str.clone());
         ctx.add_context("operation", "security_config");
 
-        configuration_error(format!(
-            "安全配置参数 {} 无效: {}",
-            config_key_str, reason_str
-        ))
+        configuration_error(format!("安全配置参数 {config_key_str} 无效: {reason_str}"))
     }
 
     /// 时间同步错误
@@ -315,13 +312,13 @@ pub fn map_feishu_security_error(
     match ErrorCode::from_feishu_code(feishu_code) {
         // 权限相关错误
         Some(ErrorCode::PermissionMissing) => CoreError::Authentication {
-            message: format!("安全权限不足: {}", message),
+            message: format!("安全权限不足: {message}"),
             code: ErrorCode::PermissionMissing,
             ctx: Box::new(ctx),
         },
         // 令牌相关错误
         Some(ErrorCode::AccessTokenExpiredV2) => {
-            token_expired_error(format!("安全访问令牌已过期: {}", message))
+            token_expired_error(format!("安全访问令牌已过期: {message}"))
         }
         // 参数验证错误
         Some(ErrorCode::ValidationError) => validation_error("security_parameter", message),

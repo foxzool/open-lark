@@ -3,11 +3,11 @@
 //! docPath: https://open.feishu.cn/document/lingo-v1/entity/search
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -140,13 +140,13 @@ impl SearchEntityRequest {
     /// 使用指定请求选项执行请求。
     pub async fn execute_with_options(self, option: RequestOption) -> SDKResult<SearchEntityResp> {
         // ===== 参数校验 =====
-        if let Some(page_size) = self.page_size {
-            if page_size < 1 || page_size > 100 {
-                return Err(openlark_core::error::validation_error(
-                    "page_size",
-                    "page_size 必须在 1~100 之间",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && (page_size < 1 || page_size > 100)
+        {
+            return Err(openlark_core::error::validation_error(
+                "page_size",
+                "page_size 必须在 1~100 之间",
+            ));
         }
 
         // ===== 构建请求 =====

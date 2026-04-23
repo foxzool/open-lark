@@ -84,7 +84,6 @@ impl Ticket {
     }
 
     /// 访问工单消息 API。
-    #[allow(mismatched_lifetime_syntaxes)]
     pub fn message(&self) -> message::TicketMessage<'_> {
         message::TicketMessage::new(self)
     }

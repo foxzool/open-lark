@@ -3,11 +3,12 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v1/leave_granting_record/delete
 
 use openlark_core::{
+    SDKResult,
     api::ApiRequest,
     api::{ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;

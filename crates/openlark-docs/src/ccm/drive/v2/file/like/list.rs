@@ -1,8 +1,8 @@
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 
 /// 获取云文档的点赞者列表
@@ -87,16 +87,16 @@ impl ListFileLikesRequest {
                 return Err(openlark_core::error::validation_error(
                     "file_type",
                     "file_type 仅支持 doc/docx/file",
-                ))
-            }
-        }
-        if let Some(page_size) = self.page_size {
-            if !(1..=50).contains(&page_size) {
-                return Err(openlark_core::error::validation_error(
-                    "page_size",
-                    "page_size 必须在 1~50 之间",
                 ));
             }
+        }
+        if let Some(page_size) = self.page_size
+            && !(1..=50).contains(&page_size)
+        {
+            return Err(openlark_core::error::validation_error(
+                "page_size",
+                "page_size 必须在 1~50 之间",
+            ));
         }
 
         let api_endpoint = DriveApi::ListFileLikes(self.file_token);

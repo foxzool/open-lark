@@ -3,11 +3,12 @@
 //! docPath: https://open.feishu.cn/document/lingo-v1/entity/get
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -131,10 +132,12 @@ mod tests {
 
         // 测试 entity_id 为空
         let request = GetEntityRequest::new(config, "");
-        assert!(request
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
     }
 
     #[test]

@@ -88,13 +88,13 @@ impl UpdateAppRoleRequest {
                 "table_roles 最多 100 项",
             ));
         }
-        if let Some(ref block_roles) = self.block_roles {
-            if block_roles.len() > 100 {
-                return Err(openlark_core::error::validation_error(
-                    "block_roles",
-                    "block_roles 最多 100 项",
-                ));
-            }
+        if let Some(ref block_roles) = self.block_roles
+            && block_roles.len() > 100
+        {
+            return Err(openlark_core::error::validation_error(
+                "block_roles",
+                "block_roles 最多 100 项",
+            ));
         }
 
         use crate::common::api_endpoints::BitableApiV1;

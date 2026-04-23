@@ -3,11 +3,11 @@
 //! 文档: https://open.feishu.cn/document/apaas-v1/application-audit_log/data_change_logs_list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

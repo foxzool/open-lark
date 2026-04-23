@@ -139,11 +139,13 @@ mod validate_id_list_tests {
     fn test_validate_id_list_valid() {
         // 有效的 ID 列表
         assert!(validate_id_list(&["id1".to_string()], "ID列表").is_ok());
-        assert!(validate_id_list(
-            &["id1".to_string(), "id2".to_string(), "id3".to_string()],
-            "ID列表"
-        )
-        .is_ok());
+        assert!(
+            validate_id_list(
+                &["id1".to_string(), "id2".to_string(), "id3".to_string()],
+                "ID列表"
+            )
+            .is_ok()
+        );
     }
 
     #[test]
@@ -172,7 +174,7 @@ mod validate_id_list_tests {
     #[test]
     fn test_validate_id_list_many_elements() {
         // 多个元素的列表
-        let ids: Vec<String> = (0..100).map(|i| format!("id_{}", i)).collect();
+        let ids: Vec<String> = (0..100).map(|i| format!("id_{i}")).collect();
         assert!(validate_id_list(&ids, "ID列表").is_ok());
     }
 }

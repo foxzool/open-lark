@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 use crate::{common::api_utils::extract_response_data, endpoints::AILY_V1_MESSAGES};
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, validate_required,
 };
 
 /// 列出 Aily 消息请求

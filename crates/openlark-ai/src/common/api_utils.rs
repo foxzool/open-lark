@@ -2,7 +2,7 @@
 //!
 //! 提供 API 相关的通用工具函数，包括响应数据提取、参数序列化等。
 
-use openlark_core::{api::Response, error, SDKResult};
+use openlark_core::{SDKResult, api::Response, error};
 use serde::Serialize;
 
 /// 标准化 API 响应数据提取

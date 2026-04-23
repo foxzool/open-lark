@@ -66,13 +66,13 @@ impl ListAppRoleRequest {
         validate_required!(self.app_token.trim(), "app_token");
 
         // === 边界值验证 ===
-        if let Some(page_size) = self.page_size {
-            if page_size <= 0 {
-                return Err(openlark_core::error::validation_error(
-                    "page_size",
-                    "page_size 必须大于 0",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && page_size <= 0
+        {
+            return Err(openlark_core::error::validation_error(
+                "page_size",
+                "page_size 必须大于 0",
+            ));
         }
 
         use crate::common::api_endpoints::BitableApiV1;

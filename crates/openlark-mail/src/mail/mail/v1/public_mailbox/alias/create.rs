@@ -5,9 +5,10 @@ use crate::mail::mail::v1::public_mailbox::alias::models::{
     CreatePublicMailboxAliasBody, CreatePublicMailboxAliasResponse,
 };
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required, SDKResult,
+    validate_required,
 };
 use std::sync::Arc;
 

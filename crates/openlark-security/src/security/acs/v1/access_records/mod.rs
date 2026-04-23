@@ -166,16 +166,16 @@ impl ListAccessRecordsBuilder {
         let mut query_params = Vec::new();
 
         if let Some(user_id_filter) = &self.user_id_filter {
-            query_params.push(format!("user_id_filter={}", user_id_filter));
+            query_params.push(format!("user_id_filter={user_id_filter}"));
         }
         if let Some(device_id_filter) = &self.device_id_filter {
-            query_params.push(format!("device_id_filter={}", device_id_filter));
+            query_params.push(format!("device_id_filter={device_id_filter}"));
         }
         if let Some(start_time) = self.start_time {
-            query_params.push(format!("start_time={}", start_time));
+            query_params.push(format!("start_time={start_time}"));
         }
         if let Some(end_time) = self.end_time {
-            query_params.push(format!("end_time={}", end_time));
+            query_params.push(format!("end_time={end_time}"));
         }
         if let Some(access_result_filter) = &self.access_result_filter {
             let result_str = match access_result_filter {
@@ -183,19 +183,19 @@ impl ListAccessRecordsBuilder {
                 crate::models::acs::AccessResult::Failed => "failed",
                 crate::models::acs::AccessResult::Timeout => "timeout",
             };
-            query_params.push(format!("access_result_filter={}", result_str));
+            query_params.push(format!("access_result_filter={result_str}"));
         }
         if let Some(page_size) = self.page_size {
-            query_params.push(format!("page_size={}", page_size));
+            query_params.push(format!("page_size={page_size}"));
         }
         if let Some(page_token) = &self.page_token {
-            query_params.push(format!("page_token={}", page_token));
+            query_params.push(format!("page_token={page_token}"));
         }
         if let Some(sort_field) = &self.sort_field {
-            query_params.push(format!("sort_field={}", sort_field));
+            query_params.push(format!("sort_field={sort_field}"));
         }
         if let Some(sort_direction) = &self.sort_direction {
-            query_params.push(format!("sort_direction={}", sort_direction));
+            query_params.push(format!("sort_direction={sort_direction}"));
         }
 
         if !query_params.is_empty() {

@@ -7,7 +7,7 @@ mod approval_task_reject;
 #[path = "approval/approval/v4/task/resubmit.rs"]
 mod approval_task_resubmit;
 
-use openlark_core::{config::Config, SDKResult};
+use openlark_core::{SDKResult, config::Config};
 use std::sync::Arc;
 
 use crate::common::constants::MAX_PAGE_SIZE;

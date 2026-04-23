@@ -5,8 +5,8 @@ use openlark_hr::okr::okr::v1;
 use rstest::rstest;
 use serde_json::json;
 use wiremock::{
-    matchers::{body_json, header, method, path, query_param},
     Mock, MockServer, ResponseTemplate,
+    matchers::{body_json, header, method, path, query_param},
 };
 
 fn test_config(base_url: &str) -> Config {
@@ -161,11 +161,13 @@ mod validation_tests {
         .await;
 
         assert!(result.is_err());
-        assert!(result
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("周期名称不能为空"));
+        assert!(
+            result
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("周期名称不能为空")
+        );
     }
 
     #[rstest]
@@ -183,11 +185,13 @@ mod validation_tests {
         .await;
 
         assert!(result.is_err());
-        assert!(result
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("OKR ID 不能为空"));
+        assert!(
+            result
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("OKR ID 不能为空")
+        );
     }
 
     #[rstest]
@@ -203,11 +207,13 @@ mod validation_tests {
         .await;
 
         assert!(result.is_err());
-        assert!(result
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("进展记录 ID 不能为空"));
+        assert!(
+            result
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("进展记录 ID 不能为空")
+        );
     }
 
     #[tokio::test]
@@ -218,29 +224,31 @@ mod validation_tests {
                 .await;
 
         assert!(result.is_err());
-        assert!(result
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("OKR ID 列表不能为空且不能超过 50 个"));
+        assert!(
+            result
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("OKR ID 列表不能为空且不能超过 50 个")
+        );
     }
 
     #[tokio::test]
     async fn test_okr_batch_get_too_many_validation() {
-        let ids = (0..51)
-            .map(|idx| format!("okr_{}", idx))
-            .collect::<Vec<_>>();
+        let ids = (0..51).map(|idx| format!("okr_{idx}")).collect::<Vec<_>>();
         let result =
             v1::okr::batch_get::BatchGetRequest::new(test_config("https://127.0.0.1:9"), ids)
                 .execute_with_options(auth_option())
                 .await;
 
         assert!(result.is_err());
-        assert!(result
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("OKR ID 列表不能为空且不能超过 50 个"));
+        assert!(
+            result
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("OKR ID 列表不能为空且不能超过 50 个")
+        );
     }
 }
 

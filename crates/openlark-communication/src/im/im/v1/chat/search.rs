@@ -2,7 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat/search
 
-use openlark_core::{api::ApiRequest, config::Config, http::Transport, SDKResult};
+use openlark_core::{SDKResult, api::ApiRequest, config::Config, http::Transport};
 
 use crate::{
     common::api_utils::extract_response_data, endpoints::IM_V1_CHATS,
@@ -93,7 +93,7 @@ impl SearchChatsRequest {
         option: openlark_core::req_option::RequestOption,
     ) -> SDKResult<serde_json::Value> {
         let mut req: ApiRequest<serde_json::Value> =
-            ApiRequest::get(format!("{}/search", IM_V1_CHATS));
+            ApiRequest::get(format!("{IM_V1_CHATS}/search"));
 
         if let Some(user_id_type) = self.user_id_type {
             req = req.query("user_id_type", user_id_type.as_str());

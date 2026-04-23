@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/tenant-tag/update
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, validate_required,
 };
 
 use crate::{

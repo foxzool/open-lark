@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/website.job_post/search
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -53,8 +54,7 @@ impl SearchRequest {
         validate_required!(website_id.trim(), "website_id 不能为空");
 
         let request = ApiRequest::<SearchResponse>::post(format!(
-            "/open-apis/hire/v1/websites/{}/job_posts/search",
-            website_id
+            "/open-apis/hire/v1/websites/{website_id}/job_posts/search"
         ));
         let response = Transport::request(request, &self.config, Some(option)).await?;
 

@@ -2,6 +2,7 @@
 name = "openlark-hr"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 authors.workspace = true
 license.workspace = true
 description = "OpenLark 人力资源模块 - 招聘、CoreHR、考勤、薪酬等 562 个 API"

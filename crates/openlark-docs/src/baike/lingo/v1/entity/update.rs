@@ -3,11 +3,12 @@
 //! docPath: https://open.feishu.cn/document/lingo-v1/entity/update
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -166,20 +167,24 @@ mod tests {
             ..Default::default()
         };
         let request = UpdateEntityRequest::new(config.clone(), "", body);
-        assert!(request
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
 
         // 测试 main_keys 为空
         let body2 = EntityInput {
             ..Default::default()
         };
         let request2 = UpdateEntityRequest::new(config.clone(), "entity_123", body2);
-        assert!(request2
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request2
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
 
         // 测试 description 和 rich_text 都为空
         let body3 = EntityInput {
@@ -195,10 +200,12 @@ mod tests {
             ..Default::default()
         };
         let request3 = UpdateEntityRequest::new(config, "entity_123", body3);
-        assert!(request3
-            .execute_with_options(RequestOption::default())
-            .await
-            .is_err());
+        assert!(
+            request3
+                .execute_with_options(RequestOption::default())
+                .await
+                .is_err()
+        );
     }
 
     #[test]

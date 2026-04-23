@@ -2,7 +2,7 @@
 //!
 //! docPath: https://open.feishu.cn/document/im-v2/groups-bots/bot_time_sentive
 
-use openlark_core::{api::ApiRequest, config::Config, error, http::Transport, SDKResult};
+use openlark_core::{SDKResult, api::ApiRequest, config::Config, error, http::Transport};
 
 use crate::{
     common::api_utils::{extract_response_data, serialize_params},
@@ -66,7 +66,7 @@ impl BotTimeSentiveRequest {
 
         // url: PATCH:/open-apis/im/v2/feed_cards/bot_time_sentive
         let req: ApiRequest<FeedCardActionResponse> =
-            ApiRequest::patch(format!("{}/bot_time_sentive", IM_V2_FEED_CARDS))
+            ApiRequest::patch(format!("{IM_V2_FEED_CARDS}/bot_time_sentive"))
                 .query("user_id_type", user_id_type.as_str())
                 .body(serialize_params(&body, "机器人单聊即时提醒")?);
 

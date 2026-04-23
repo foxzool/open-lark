@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/hire-v1/job.manager/batch_update
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -61,13 +62,12 @@ impl BatchUpdateRequest {
         validate_required!(job_id.trim(), "job_id 不能为空");
 
         let request = ApiRequest::<BatchUpdateResponse>::post(format!(
-            "/open-apis/hire/v1/jobs/{}/managers/batch_update",
-            job_id
+            "/open-apis/hire/v1/jobs/{job_id}/managers/batch_update"
         ));
         let request = request.body(serde_json::to_value(&self.request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {e}"),
             )
         })?);
         let response = Transport::request(request, &self.config, Some(option)).await?;

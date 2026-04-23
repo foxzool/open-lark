@@ -24,7 +24,7 @@
 ))]
 use super::ServiceStatus;
 use super::{DefaultServiceRegistry, ServiceMetadata, ServiceRegistry};
-use crate::{error, Result};
+use crate::{Result, error};
 
 #[allow(unused_variables, dead_code, unused_imports)]
 pub(crate) fn register_compiled_services(registry: &mut DefaultServiceRegistry) -> Result<()> {
@@ -336,7 +336,7 @@ mod tests {
     #[test]
     fn test_service_status_debug() {
         let status = ServiceStatus::Uninitialized;
-        let debug_str = format!("{:?}", status);
+        let debug_str = format!("{status:?}");
         assert!(debug_str.contains("Uninitialized"));
     }
 

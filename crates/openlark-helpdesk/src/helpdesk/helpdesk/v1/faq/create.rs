@@ -5,7 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/create
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

@@ -5,10 +5,10 @@
 //! docPath: https://open.feishu.cn/document/docs/drive-v1/event/get_subscribe
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

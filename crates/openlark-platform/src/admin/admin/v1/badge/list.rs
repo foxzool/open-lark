@@ -4,11 +4,11 @@
 
 use crate::common::api_endpoints::AdminApiV1;
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -52,10 +52,10 @@ impl ListBadgeBuilder {
         let mut params = Vec::new();
 
         if let Some(size) = self.page_size {
-            params.push(format!("page_size={}", size));
+            params.push(format!("page_size={size}"));
         }
         if let Some(token) = self.page_token {
-            params.push(format!("page_token={}", token));
+            params.push(format!("page_token={token}"));
         }
 
         if !params.is_empty() {

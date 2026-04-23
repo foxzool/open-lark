@@ -3,11 +3,11 @@
 //! 文档: https://open.feishu.cn/document/directory-v1/employee/to_be_resigned
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

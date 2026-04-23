@@ -8,9 +8,10 @@ use crate::v2::tasklist::activity_subscription::models::{
     UpdateActivitySubscriptionResponse,
 };
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    validate_required, SDKResult,
+    validate_required,
 };
 use std::sync::Arc;
 

@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/attendance-v1/user_flow/query
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, validate_required_list, SDKResult,
+    validate_required, validate_required_list,
 };
 
 use super::models::{QueryUserFlowRequestBody, QueryUserFlowResponse};
@@ -109,7 +110,7 @@ impl QueryUserFlowRequest {
         request = request.body(serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {e}"),
             )
         })?);
 

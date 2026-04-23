@@ -5,11 +5,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/baike-v1/classification/list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, Response, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 
@@ -78,13 +78,13 @@ impl ListClassificationRequest {
         option: RequestOption,
     ) -> SDKResult<ListClassificationResponse> {
         // ===== 参数校验 =====
-        if let Some(page_size) = self.page_size {
-            if !(1..=500).contains(&page_size) {
-                return Err(openlark_core::error::validation_error(
-                    "page_size",
-                    "page_size 取值范围必须为 1~500",
-                ));
-            }
+        if let Some(page_size) = self.page_size
+            && !(1..=500).contains(&page_size)
+        {
+            return Err(openlark_core::error::validation_error(
+                "page_size",
+                "page_size 取值范围必须为 1~500",
+            ));
         }
 
         // ===== 构建请求 =====

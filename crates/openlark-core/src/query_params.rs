@@ -521,7 +521,7 @@ mod tests {
     fn test_builder_debug_trait() {
         let builder = QueryParamsBuilder::new().page_size(10).user_id("test123");
 
-        let debug_str = format!("{:?}", builder);
+        let debug_str = format!("{builder:?}");
         assert!(debug_str.contains("QueryParamsBuilder"));
         assert!(debug_str.contains("params"));
     }

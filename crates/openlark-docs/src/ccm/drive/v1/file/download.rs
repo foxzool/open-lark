@@ -6,10 +6,10 @@
 
 use crate::common::api_endpoints::DriveApi;
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, Response},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 
 /// 下载文件请求

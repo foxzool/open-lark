@@ -290,10 +290,10 @@ impl SearchDocsRequest {
             return Err("搜索关键字长度不能超过1000个字符".to_string());
         }
 
-        if let Some(page_size) = self.page_size {
-            if page_size < 1 || page_size > 100 {
-                return Err("每页数量必须在1-100之间".to_string());
-            }
+        if let Some(page_size) = self.page_size
+            && (page_size < 1 || page_size > 100)
+        {
+            return Err("每页数量必须在1-100之间".to_string());
         }
 
         if let Some(ref doc_types) = self.doc_types {
@@ -303,7 +303,7 @@ impl SearchDocsRequest {
 
             for doc_type in doc_types {
                 if !Self::is_valid_doc_type(doc_type) {
-                    return Err(format!("不支持的文档类型: {}", doc_type));
+                    return Err(format!("不支持的文档类型: {doc_type}"));
                 }
             }
         }

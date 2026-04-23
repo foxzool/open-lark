@@ -3,9 +3,9 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/task-v1/taskcollaborator/list
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
-    SDKResult,
 };
 use serde::Deserialize;
 use std::sync::Arc;

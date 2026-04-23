@@ -6,11 +6,12 @@ use crate::models::authen::{RefreshUserAccessTokenV1Request, UserAccessTokenResp
 /// user_access_token 的最大有效期是 6900 秒。当 user_access_token 过期时，
 /// 可以调用本接口获取新的 user_access_token
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

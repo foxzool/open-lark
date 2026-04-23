@@ -216,8 +216,10 @@ mod tests {
     #[test]
     fn test_ocr_endpoints() {
         // 验证OCR端点
-        assert!(OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE
-            .starts_with("/open-apis/optical_char_recognition/"));
+        assert!(
+            OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE
+                .starts_with("/open-apis/optical_char_recognition/")
+        );
         assert!(OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE.contains("recognize"));
         assert!(OPTICAL_CHAR_RECOGNITION_V1_IMAGE_BASIC_RECOGNIZE.contains("image"));
     }
@@ -252,8 +254,7 @@ mod tests {
         for endpoint in document_ai_endpoints {
             assert!(
                 endpoint.contains("/document_ai/"),
-                "{} 应该包含 /document_ai/",
-                endpoint
+                "{endpoint} 应该包含 /document_ai/"
             );
         }
 
@@ -264,8 +265,7 @@ mod tests {
         for endpoint in ocr_endpoints {
             assert!(
                 endpoint.contains("/optical_char_recognition/"),
-                "{} 应该包含 /optical_char_recognition/",
-                endpoint
+                "{endpoint} 应该包含 /optical_char_recognition/"
             );
         }
 
@@ -279,8 +279,7 @@ mod tests {
         for endpoint in speech_endpoints {
             assert!(
                 endpoint.contains("/speech_to_text/"),
-                "{} 应该包含 /speech_to_text/",
-                endpoint
+                "{endpoint} 应该包含 /speech_to_text/"
             );
         }
 
@@ -288,8 +287,7 @@ mod tests {
         for endpoint in translation_endpoints {
             assert!(
                 endpoint.contains("/translation/"),
-                "{} 应该包含 /translation/",
-                endpoint
+                "{endpoint} 应该包含 /translation/"
             );
         }
     }
@@ -318,7 +316,7 @@ mod tests {
             TRANSLATION_V1_TEXT_DETECT,
         ];
         for endpoint in v1_endpoints {
-            assert!(endpoint.contains("/v1/"), "{} 应该包含 /v1/", endpoint);
+            assert!(endpoint.contains("/v1/"), "{endpoint} 应该包含 /v1/");
         }
     }
 } // Endpoints and EndpointBuilder are now available directly from openlark_core::endpoints

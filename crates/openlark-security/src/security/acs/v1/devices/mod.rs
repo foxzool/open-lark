@@ -80,10 +80,10 @@ impl ListDevicesBuilder {
         let mut query_params = Vec::new();
 
         if let Some(page_size) = self.page_size {
-            query_params.push(format!("page_size={}", page_size));
+            query_params.push(format!("page_size={page_size}"));
         }
         if let Some(page_token) = &self.page_token {
-            query_params.push(format!("page_token={}", page_token));
+            query_params.push(format!("page_token={page_token}"));
         }
         if let Some(device_type) = &self.device_type {
             let type_str = match device_type {
@@ -92,9 +92,9 @@ impl ListDevicesBuilder {
                 crate::models::acs::DeviceType::FingerprintReader => "fingerprint_reader",
                 crate::models::acs::DeviceType::DoorLock => "door_lock",
                 crate::models::acs::DeviceType::Turnstile => "turnstile",
-                crate::models::acs::DeviceType::Other(ref s) => s,
+                crate::models::acs::DeviceType::Other(s) => s,
             };
-            query_params.push(format!("device_type={}", type_str));
+            query_params.push(format!("device_type={type_str}"));
         }
         if let Some(status) = &self.status {
             let status_str = match status {
@@ -104,7 +104,7 @@ impl ListDevicesBuilder {
                 crate::models::acs::DeviceStatus::Maintenance => "maintenance",
                 crate::models::acs::DeviceStatus::Disabled => "disabled",
             };
-            query_params.push(format!("status={}", status_str));
+            query_params.push(format!("status={status_str}"));
         }
         if let Some(online) = self.online {
             query_params.push(format!("online={}", if online { "true" } else { "false" }));

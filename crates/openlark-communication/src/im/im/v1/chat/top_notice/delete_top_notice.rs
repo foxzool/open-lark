@@ -3,7 +3,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/group/chat/delete_top_notice
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, validate_required, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, validate_required,
 };
 
 use crate::{

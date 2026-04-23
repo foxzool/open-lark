@@ -1,4 +1,4 @@
-use openlark_core::{error, SDKResult};
+use openlark_core::{SDKResult, error};
 
 /// extract response data。
 pub fn extract_response_data<T>(
@@ -7,7 +7,7 @@ pub fn extract_response_data<T>(
 ) -> SDKResult<T> {
     response.data.ok_or_else(|| {
         error::validation_error(
-            format!("{}响应数据为空", context).as_str(),
+            format!("{context}响应数据为空").as_str(),
             "服务器没有返回有效的数据",
         )
     })
@@ -20,8 +20,8 @@ pub fn serialize_params<T: serde::Serialize>(
 ) -> SDKResult<serde_json::Value> {
     serde_json::to_value(params).map_err(|e| {
         error::validation_error(
-            format!("{}参数序列化失败", context).as_str(),
-            format!("无法序列化请求参数: {}", e).as_str(),
+            format!("{context}参数序列化失败").as_str(),
+            format!("无法序列化请求参数: {e}").as_str(),
         )
     })
 }

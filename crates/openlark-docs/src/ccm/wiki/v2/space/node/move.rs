@@ -7,10 +7,11 @@
 //! 注意：该 API 的 meta.name 为 move（Rust 关键字），模块通过 `r#move` 暴露。
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 

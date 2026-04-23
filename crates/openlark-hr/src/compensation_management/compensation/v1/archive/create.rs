@@ -3,10 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/compensation-v1/archive/create
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

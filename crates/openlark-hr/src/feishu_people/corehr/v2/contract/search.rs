@@ -3,10 +3,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/corehr-v2/contract/search
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 
 use serde::{Deserialize, Serialize};
@@ -163,7 +163,7 @@ impl SearchRequestBuilder {
         let request = request.body(serde_json::to_value(&self.request).map_err(|e| {
             openlark_core::error::validation_error(
                 "请求体序列化失败",
-                format!("无法序列化请求参数: {}", e),
+                format!("无法序列化请求参数: {e}"),
             )
         })?);
 

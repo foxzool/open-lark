@@ -24,10 +24,10 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/CommentAPI/update
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    SDKResult,
 };
 
 use serde::{Deserialize, Serialize};

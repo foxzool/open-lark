@@ -3,10 +3,11 @@
 //! docPath: https://open.feishu.cn/document/server-docs/attendance-v1/user_daily_shift/batch_create_temp
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
@@ -52,7 +53,7 @@ impl BatchCreateTempRequest {
         let request_body_json = serde_json::to_value(&request_body).map_err(|e| {
             openlark_core::error::validation_error(
                 "构建请求体失败",
-                format!("序列化请求体失败: {}", e),
+                format!("序列化请求体失败: {e}"),
             )
         })?;
         let request = request.body(request_body_json);

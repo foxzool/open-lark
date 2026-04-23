@@ -5,7 +5,7 @@
 //! docPath: https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/patch
 
 use openlark_core::{
-    api::ApiRequest, config::Config, http::Transport, req_option::RequestOption, SDKResult,
+    SDKResult, api::ApiRequest, config::Config, http::Transport, req_option::RequestOption,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -27,15 +27,15 @@ pub struct PatchNotificationBody {
 impl PatchNotificationBody {
     /// 验证请求参数
     pub fn validate(&self) -> Result<(), String> {
-        if let Some(title) = &self.title {
-            if title.is_empty() {
-                return Err("title cannot be empty".to_string());
-            }
+        if let Some(title) = &self.title
+            && title.is_empty()
+        {
+            return Err("title cannot be empty".to_string());
         }
-        if let Some(content) = &self.content {
-            if content.is_empty() {
-                return Err("content cannot be empty".to_string());
-            }
+        if let Some(content) = &self.content
+            && content.is_empty()
+        {
+            return Err("content cannot be empty".to_string());
         }
         Ok(())
     }

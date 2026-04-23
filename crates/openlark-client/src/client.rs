@@ -3,9 +3,9 @@
 //! 极简设计：仅保留 meta 链式字段访问（单入口，KISS）
 
 use crate::{
+    Config, DefaultServiceRegistry, Result,
     error::{with_context, with_operation_context},
     traits::LarkClient,
-    Config, DefaultServiceRegistry, Result,
 };
 use openlark_core::error::ErrorTrait;
 use std::sync::Arc;

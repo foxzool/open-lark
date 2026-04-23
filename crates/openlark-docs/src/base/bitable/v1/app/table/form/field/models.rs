@@ -46,10 +46,10 @@ impl PatchFormFieldRequest {
         }
 
         // 如果提供了标题，不能为空
-        if let Some(ref title) = self.title {
-            if title.trim().is_empty() {
-                return Err("问题标题不能为空".to_string());
-            }
+        if let Some(ref title) = self.title
+            && title.trim().is_empty()
+        {
+            return Err("问题标题不能为空".to_string());
         }
 
         Ok(())

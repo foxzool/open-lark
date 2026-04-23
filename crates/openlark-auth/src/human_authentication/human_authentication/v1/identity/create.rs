@@ -3,11 +3,12 @@
 //! 文档: https://open.feishu.cn/document/server-docs/human_authentication-v1/create
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Deserializer, Serialize};
 

@@ -3,11 +3,11 @@
 //! 文档: https://open.feishu.cn/document/trust_party-v1/-collaboraiton-organization/get
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
 };
 use serde::{Deserialize, Serialize};
 

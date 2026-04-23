@@ -3,15 +3,16 @@
 //! docPath: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/update
 
 use openlark_core::{
+    SDKResult,
     api::{ApiRequest, ApiResponseTrait, ResponseFormat},
     config::Config,
     http::Transport,
-    validate_required, SDKResult,
+    validate_required,
 };
 use serde::{Deserialize, Serialize};
 
-use super::models::{App, AppSettings, UpdateAppRequest as UpdateAppRequestBody};
 use super::AppService;
+use super::models::{App, AppSettings, UpdateAppRequest as UpdateAppRequestBody};
 
 /// 更新多维表格请求。
 pub struct UpdateAppRequest {

@@ -208,7 +208,7 @@ mod tests {
     #[test]
     fn test_record_ids_exceeds_limit() {
         let config = Config::default();
-        let record_ids: Vec<String> = (0..501).map(|i| format!("rec{}", i)).collect();
+        let record_ids: Vec<String> = (0..501).map(|i| format!("rec{i}")).collect();
         let request = BatchDeleteRecordRequest::new(config)
             .app_token("app_token".to_string())
             .table_id("table_id".to_string())
@@ -219,7 +219,7 @@ mod tests {
     #[test]
     fn test_record_ids_at_limit() {
         let config = Config::default();
-        let record_ids: Vec<String> = (0..500).map(|i| format!("rec{}", i)).collect();
+        let record_ids: Vec<String> = (0..500).map(|i| format!("rec{i}")).collect();
         let request = BatchDeleteRecordRequest::new(config)
             .app_token("app_token".to_string())
             .table_id("table_id".to_string())
