@@ -24,3 +24,7 @@ pub use statistics::{
 };
 /// 重新导出会议纪要转写请求类型。
 pub use transcript::GetMinuteTranscriptRequest;
+/// artifacts 模块。
+pub mod artifacts;
+/// search 模块。
+pub mod search;
