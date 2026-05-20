@@ -82,3 +82,15 @@ mod tests {
         assert_eq!(value["field"], "data");
     }
 }
+/// accessible_mailboxes 模块。
+pub mod accessible_mailboxes;
+/// draft 模块。
+pub mod draft;
+/// label 模块。
+pub mod label;
+/// setting 模块。
+pub mod setting;
+/// template 模块。
+pub mod template;
+/// thread 模块。
+pub mod thread;

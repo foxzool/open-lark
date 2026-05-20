@@ -3,6 +3,9 @@
 use crate::PlatformConfig;
 use std::sync::Arc;
 
+/// app 模块。
+pub mod app;
+/// directory 模块。
 pub mod directory;
 
 /// Spark V1 API

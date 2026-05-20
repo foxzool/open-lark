@@ -2,6 +2,8 @@
 
 /// 应用管理 v1 版本 API。
 pub mod v1;
+/// 应用管理 v7 版本 API。
+pub mod v7;
 
 use openlark_core::config::Config;
 use std::sync::Arc;
