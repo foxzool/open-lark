@@ -25,6 +25,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [0.16.1] - 2026-05-20
+
+### Added
+
+- **feat(api)**: 同步 70 个新增飞书 API catalog 条目，并补齐 application v7、docs drive/minutes、HR corehr v2、IM reaction、mail v1、meeting v1、spark v1 等 typed SDK 模块。
+- **coverage(api)**: 将 application、communication、docs、hr、mail、meeting、platform 等相关 crate 的 strict API 覆盖率恢复到 0 missing APIs。
+
+### Changed
+
+- **build(deps)**: 放宽 `uuid` 与 `serde_with` 的精确版本锁定，降低下游依赖解析冲突风险。
+
 ## [0.16.0] - 2026-05-10
 
 ### 🔄 变更
