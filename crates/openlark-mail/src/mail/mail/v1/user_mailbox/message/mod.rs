@@ -69,3 +69,15 @@ mod tests {
         assert_eq!(value["field"], "data");
     }
 }
+/// batch_get 模块。
+pub mod batch_get;
+/// batch_modify 模块。
+pub mod batch_modify;
+/// batch_trash 模块。
+pub mod batch_trash;
+/// list_thread_message 模块。
+pub mod list_thread_message;
+/// modify 模块。
+pub mod modify;
+/// trash 模块。
+pub mod trash;
