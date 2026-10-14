@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Post-0.21 work goes here. -->
 
+### Added
+
+- **catalog：同步 2026-10-12 飞书 API 目录（#688）**：
+  live 目录 1751 → 1754（新增 3 / 删除 0 / 字段变化 0）。
+  - `GET /open-apis/security_and_compliance/v2/device_records/mine`
+    （通过授权获取设备信息）。
+  - `POST /open-apis/spark/v1/apps/export`（导出妙搭应用代码包，成功体为 zip 二进制）。
+  - `PUT /open-apis/spark/v1/apps/:app_id/releases/:release_id`
+    （回写发布节点状态，仅 `tenant_access_token`）。
+
+### Changed (Breaking)
+
+- **security：`device_records.mine` 对齐重新上架的官方合同**：
+  2026-09-21 下架时冻结保留的分页查询（`page_size` / `page_token` / `status`，
+  响应 `items`）已不在现行文档中。请求类型改为 `MineDeviceRecordRequest`，
+  响应为单台授权设备的 `device_record_id` / `device_ownership` / `device_status`。
+  旧名 `GetMyDeviceRecordsRequest` 保留为 deprecated 别名。
+
 ## [0.21.0] - 2026-10-09
 
 > Content freeze for the 0.21 release window. Package identity and this dated

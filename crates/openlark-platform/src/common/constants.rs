@@ -31,6 +31,15 @@ pub mod endpoints {
 
     /// 妙搭产品使用权限
     pub const SPARK_V1_AVAILABLE_SCOPE: &str = "/open-apis/spark/v1/available_scope";
+
+    /// 导出妙搭应用代码包。
+    /// POST /open-apis/spark/v1/apps/export
+    pub const SPARK_V1_APPS_EXPORT: &str = "/open-apis/spark/v1/apps/export";
+
+    /// 回写发布节点状态。
+    /// PUT /open-apis/spark/v1/apps/{app_id}/releases/{release_id}
+    pub const SPARK_V1_APP_RELEASE: &str =
+        "/open-apis/spark/v1/apps/{app_id}/releases/{release_id}";
 }
 
 /// 应用状态常量

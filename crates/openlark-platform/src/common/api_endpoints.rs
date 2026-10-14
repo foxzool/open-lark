@@ -36,6 +36,12 @@ pub enum SparkApiV1 {
     /// 妙搭产品使用权限。
     /// GET/PUT /open-apis/spark/v1/available_scope
     AvailableScope,
+    /// 导出妙搭应用代码包。
+    /// POST /open-apis/spark/v1/apps/export
+    AppsExport,
+    /// 回写发布节点状态。
+    /// PUT /open-apis/spark/v1/apps/:app_id/releases/:release_id
+    AppRelease(String, String),
 }
 
 impl SparkApiV1 {
@@ -52,6 +58,10 @@ impl SparkApiV1 {
                 format!("/open-apis/spark/v1/apps/{app_id}/query_analytics_data")
             }
             Self::AvailableScope => "/open-apis/spark/v1/available_scope".to_string(),
+            Self::AppsExport => "/open-apis/spark/v1/apps/export".to_string(),
+            Self::AppRelease(app_id, release_id) => {
+                format!("/open-apis/spark/v1/apps/{app_id}/releases/{release_id}")
+            }
         }
     }
 }
@@ -88,6 +98,16 @@ mod tests {
         assert_eq!(
             SparkApiV1::AvailableScope.to_url(),
             "/open-apis/spark/v1/available_scope"
+        );
+        assert_eq!(
+            SparkApiV1::AppsExport.to_url(),
+            crate::common::constants::endpoints::SPARK_V1_APPS_EXPORT
+        );
+        assert_eq!(
+            SparkApiV1::AppRelease("app_1".into(), "rel_1".into()).to_url(),
+            crate::common::constants::endpoints::SPARK_V1_APP_RELEASE
+                .replace("{app_id}", "app_1")
+                .replace("{release_id}", "rel_1")
         );
     }
 }

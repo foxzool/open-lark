@@ -87,13 +87,15 @@ biz_tags = ["auth", "passport", "verification_information", "human_authenticatio
 [crates.openlark-platform]
 src = "crates/openlark-platform/src"
 biz_tags = ["admin", "directory", "app_engine", "trust_party", "tenant", "mdm", "spark"]
-# 新 5 条落在既有 spark/v1/ 单层布局；按文件 alias 解析，避免 spark/ 前缀 rewrite 波及既有 24 条。
+# 妙搭新接口落在既有 spark/v1/ 单层布局；按文件 alias 解析，避免 spark/ 前缀 rewrite 波及既有条目。
 [crates.openlark-platform.implementation_path_aliases]
 "spark/spark/v1/app/open_api_analytics_overview.rs" = "spark/v1/app/analytics_overview.rs"
 "spark/spark/v1/app/open_api_credit_usage.rs" = "spark/v1/app/credit_usage.rs"
 "spark/spark/v1/app/query_analytics_data.rs" = "spark/v1/app/query_analytics_data.rs"
 "spark/spark/v1/app/available_scope/open_api_get_miaoda_available_scope.rs" = "spark/v1/app/available_scope/get.rs"
 "spark/spark/v1/app/available_scope/open_api_update_miaoda_available_scope.rs" = "spark/v1/app/available_scope/update.rs"
+"spark/spark/v1/app/export.rs" = "spark/v1/app/export.rs"
+"spark/spark/v1/app/release/update.rs" = "spark/v1/app/release/update.rs"
 
 [crates.openlark-workflow]
 src = "crates/openlark-workflow/src"
