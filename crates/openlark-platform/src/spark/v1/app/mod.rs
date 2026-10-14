@@ -8,6 +8,8 @@ pub mod create;
 pub mod credit_usage;
 /// enum 模块。
 pub mod r#enum;
+/// export 模块。
+pub mod export;
 /// get_app_visibility 模块。
 pub mod get_app_visibility;
 /// icon 模块。
@@ -18,6 +20,8 @@ pub mod list;
 pub mod patch;
 /// query_analytics_data 模块。
 pub mod query_analytics_data;
+/// release 模块。
+pub mod release;
 /// sql_commands 模块。
 pub mod sql_commands;
 /// storage 模块。
@@ -38,11 +42,13 @@ pub use analytics_overview::GetSparkAppAnalyticsOverviewRequest;
 pub use available_scope::{GetMiaodaAvailableScopeRequest, UpdateMiaodaAvailableScopeRequest};
 pub use create::CreateSparkAppRequest;
 pub use credit_usage::GetSparkAppCreditUsageRequest;
+pub use export::ExportSparkAppRequest;
 pub use get_app_visibility::GetSparkAppVisibilityRequest;
 pub use icon::UploadSparkAppIconRequest;
 pub use list::ListSparkAppsRequest;
 pub use patch::PatchSparkAppRequest;
 pub use query_analytics_data::QuerySparkAppAnalyticsDataRequest;
+pub use release::UpdateSparkAppReleaseRequest;
 pub use update_app_visibility::UpdateSparkAppVisibilityRequest;
 pub use upload_html_code_and_release::UploadHtmlCodeAndReleaseRequest;
 
@@ -128,5 +134,19 @@ impl SparkAppService {
     /// 修改妙搭产品使用权限。
     pub fn update_available_scope(&self) -> UpdateMiaodaAvailableScopeRequest {
         UpdateMiaodaAvailableScopeRequest::new(self.config.clone())
+    }
+
+    /// 导出妙搭应用代码包。
+    pub fn export(&self) -> ExportSparkAppRequest {
+        ExportSparkAppRequest::new(self.config.clone())
+    }
+
+    /// 回写发布节点状态。
+    pub fn update_release(
+        &self,
+        app_id: impl Into<String>,
+        release_id: impl Into<String>,
+    ) -> UpdateSparkAppReleaseRequest {
+        UpdateSparkAppReleaseRequest::new(self.config.clone(), app_id, release_id)
     }
 }

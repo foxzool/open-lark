@@ -1,7 +1,7 @@
 //! 设备记录管理 API（门面）
 //!
 //! [`DeviceRecordsService`] 是轻量门面，返回 `mine|create|list|get|update|delete` 子模块
-//! 下的端点构建器。
+//! 下的端点构建器。`mine` 为通过用户授权获取当前设备信息。
 
 pub mod create;
 pub mod delete;
@@ -26,9 +26,9 @@ impl DeviceRecordsService {
         Self { config }
     }
 
-    /// 获取我的设备认证信息（GET `/device_records/mine`）。
-    pub fn mine(&self) -> mine::GetMyDeviceRecordsRequest {
-        mine::GetMyDeviceRecordsRequest::new(self.config.clone())
+    /// 通过授权获取设备信息（GET `/device_records/mine`）。
+    pub fn mine(&self) -> mine::MineDeviceRecordRequest {
+        mine::MineDeviceRecordRequest::new(self.config.clone())
     }
 
     /// 新增设备记录（POST `/device_records`）。
