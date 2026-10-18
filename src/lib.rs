@@ -40,6 +40,12 @@ pub mod ws_client {
     pub use openlark_client::ws_client::*;
 }
 
+#[cfg(feature = "channel")]
+/// 会话层。需要 feature `channel`。
+pub mod channel {
+    pub use openlark_client::channel::*;
+}
+
 #[cfg(feature = "event-http")]
 /// HTTP 事件入站（需启用 `event-http` feature）。
 ///

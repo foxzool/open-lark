@@ -238,6 +238,12 @@ mod test_utils;
 #[cfg(feature = "websocket")]
 pub mod ws_client;
 
+/// 会话层：归一化入站消息、入站策略、回复和流式更新卡片。
+///
+/// 不进入 [`crate::prelude`]。已经直接调用 [`crate::ws_client::LarkWsClient::open`] 的代码不经过这里。
+#[cfg(feature = "channel")]
+pub mod channel;
+
 /// HTTP 事件入站适配器（平台推送到开发者服务器）。
 ///
 /// 与根 crate / `openlark-webhook` 的**出站**自定义机器人 HMAC 不同：本模块做
