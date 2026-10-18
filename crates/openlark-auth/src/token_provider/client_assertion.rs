@@ -2,6 +2,7 @@
 //!
 //! 只由 `AuthTokenProvider::get_token` 的断言分支调用。不经过 `Transport`，
 //! 因此没有 SDK `User-Agent`，也不走统一重试和 flatten 解码。
+//! 请求超时仍取 `Config::req_timeout`，响应体仍按 `Config::max_response_size` 截断。
 
 use openlark_core::{
     SDKResult,
@@ -144,14 +145,17 @@ async fn post_json(
     token_url: &str,
     body: &JwtBearerTokenRequest<'_>,
 ) -> SDKResult<RawHttpResponse> {
-    let response = config
-        .http_client()
-        .post(token_url)
-        .json(body)
-        .send()
-        .await?;
+    let mut request = config.http_client().post(token_url).json(body);
+    if let Some(timeout) = config.req_timeout() {
+        request = request.timeout(timeout);
+    }
+    let response = request.send().await?;
     let status = response.status().as_u16();
-    let body = response.text().await?;
+    let bytes =
+        openlark_core::http::read_body_with_limit(response, config.max_response_size()).await?;
+    let body = String::from_utf8(bytes).map_err(|err| {
+        openlark_core::error::network_error(format!("oauth token 响应不是 UTF-8: {err}"))
+    })?;
     Ok(RawHttpResponse { status, body })
 }
 

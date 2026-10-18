@@ -789,6 +789,8 @@ mod client_assertion_build {
     use openlark_core::auth::CLIENT_ASSERTION_NEEDS_AUTH_FEATURE;
     use openlark_core::auth::ClientAssertionProvider;
     #[cfg(feature = "auth")]
+    use openlark_core::auth::TokenRequest;
+    #[cfg(feature = "auth")]
     use openlark_core::auth::{
         CLIENT_ASSERTION_CUSTOM_BASE_URL, CLIENT_ASSERTION_MARKETPLACE_UNSUPPORTED,
     };
@@ -978,6 +980,69 @@ mod client_assertion_build {
                 .filter(|request| request.url.path() == "/oauth/v3/token")
                 .count(),
             1
+        );
+    }
+
+    #[cfg(feature = "auth")]
+    #[tokio::test]
+    async fn client_timeout_covers_assertion_exchange() {
+        let server = wiremock::MockServer::start().await;
+        wiremock::Mock::given(wiremock::matchers::method("POST"))
+            .and(wiremock::matchers::path("/oauth/v3/token"))
+            .respond_with(
+                wiremock::ResponseTemplate::new(200)
+                    .set_delay(std::time::Duration::from_secs(3))
+                    .set_body_json(serde_json::json!({
+                        "access_token": "tat_late",
+                        "expires_in": 7200
+                    })),
+            )
+            .mount(&server)
+            .await;
+
+        let (provider, _) = FixedAssertion::new();
+        let client = Client::builder()
+            .app_id("cli_demo")
+            .client_assertion_provider(provider)
+            .base_url(server.uri())
+            .oauth_base_url(server.uri())
+            .allow_custom_base_url(true)
+            .timeout(std::time::Duration::from_millis(200))
+            .build()
+            .expect("ClientBuilder::timeout 应写入 Config::req_timeout");
+        assert_eq!(
+            client.config().req_timeout(),
+            Some(std::time::Duration::from_millis(200))
+        );
+
+        let started = std::time::Instant::now();
+        let err = client
+            .config()
+            .token_provider()
+            .get_token(TokenRequest::tenant())
+            .await
+            .expect_err("客户端超时应覆盖 assertion 换票");
+        assert!(
+            started.elapsed() < std::time::Duration::from_secs(2),
+            "换票不应无限等待，实际 {:?}",
+            started.elapsed()
+        );
+        let mut message = err.to_string();
+        if let openlark_core::error::CoreError::Network(net) = &err {
+            let mut source = net
+                .source
+                .as_ref()
+                .map(|item| item.as_ref() as &dyn std::error::Error);
+            while let Some(inner) = source {
+                message.push(' ');
+                message.push_str(&inner.to_string());
+                source = inner.source();
+            }
+        }
+        let message = message.to_ascii_lowercase();
+        assert!(
+            message.contains("timed out") || message.contains("timeout"),
+            "应是请求超时，实际 {message}"
         );
     }
 

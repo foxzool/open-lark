@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   自建应用的 tenant token 走 `POST {oauth}/oauth/v3/token` 的 jwt-bearer 换票，
   并进入现有 token 缓存。未设置供给时，原有 app/tenant grant 不变。
   该模式下可以不填 `app_secret`；marketplace 与 app access token 会被拒绝。
+  换票请求遵守 `Config::req_timeout` 与 `Config::max_response_size`。
 
 - **catalog：同步 2026-10-12 飞书 API 目录（#688）**：
   live 目录 1751 → 1754（新增 3 / 删除 0 / 字段变化 0）。

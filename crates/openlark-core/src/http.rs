@@ -1,5 +1,6 @@
 use std::marker::PhantomData;
 
+use futures_util::StreamExt;
 use reqwest::RequestBuilder;
 use tracing::debug;
 use tracing::{Instrument, info_span};
@@ -10,7 +11,7 @@ use crate::{
     api::{ApiRequest, Response},
     config::Config,
     constants::*,
-    error::CoreError,
+    error::{CoreError, network_error},
     req_option::RequestOption,
     request_execution::{ResponseDecoder, UnifiedRequestBuilder},
 };
@@ -210,6 +211,36 @@ impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> T
         .instrument(span)
         .await
     }
+}
+
+/// 按上限读取 HTTP 响应体。
+///
+/// `Content-Length` 已经超过 `max_size` 时不读取 body。
+/// 流式累计超过上限时立刻返回，超出的分块不会进入内存。
+pub async fn read_body_with_limit(
+    response: reqwest::Response,
+    max_size: u64,
+) -> Result<Vec<u8>, CoreError> {
+    if let Some(content_length) = response.content_length()
+        && content_length > max_size
+    {
+        return Err(CoreError::response_too_large(max_size, content_length));
+    }
+
+    let mut total_size: u64 = 0;
+    let mut body = Vec::new();
+    let mut stream = response.bytes_stream();
+
+    while let Some(chunk_result) = stream.next().await {
+        let chunk = chunk_result.map_err(|e| network_error(e.to_string()))?;
+        total_size += chunk.len() as u64;
+        if total_size > max_size {
+            return Err(CoreError::response_too_large(max_size, total_size));
+        }
+        body.extend_from_slice(&chunk);
+    }
+
+    Ok(body)
 }
 
 fn validate(

@@ -4,7 +4,6 @@
 //! 缺 `data` 时只认 [`ApiResponseTrait::empty_success`]，不做 `{}` 探测。
 //! raw 路径先识别 HTTP / 业务错误 envelope，再调用 `from_*`（Codex #451 review）。
 
-use futures_util::StreamExt;
 use serde::Deserialize;
 use serde_json::Value;
 use tracing::debug;
@@ -15,41 +14,10 @@ use crate::{
     api::{ApiResponseTrait, BaseResponse, ErrorInfo, RawResponse, Response, ResponseFormat},
     constants::{CUSTOM_REQUEST_ID, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID},
     content_disposition,
-    error::{network_error, validation_error},
+    error::validation_error,
+    http::read_body_with_limit,
     observability::ResponseTracker,
 };
-
-/// 读取响应体，带大小限制保护。
-async fn read_body_with_limit(
-    response: reqwest::Response,
-    max_size: u64,
-) -> Result<Vec<u8>, crate::error::CoreError> {
-    if let Some(content_length) = response.content_length()
-        && content_length > max_size
-    {
-        return Err(crate::error::CoreError::response_too_large(
-            max_size,
-            content_length,
-        ));
-    }
-
-    let mut total_size: u64 = 0;
-    let mut body = Vec::new();
-    let mut stream = response.bytes_stream();
-
-    while let Some(chunk_result) = stream.next().await {
-        let chunk = chunk_result.map_err(|e| network_error(e.to_string()))?;
-        total_size += chunk.len() as u64;
-        if total_size > max_size {
-            return Err(crate::error::CoreError::response_too_large(
-                max_size, total_size,
-            ));
-        }
-        body.extend_from_slice(&chunk);
-    }
-
-    Ok(body)
-}
 
 /// 从响应头提取请求标识（多键兼容）。
 fn request_id_from_headers(headers: &reqwest::header::HeaderMap) -> Option<String> {

@@ -297,6 +297,7 @@ mod client_assertion_exchange {
     use std::pin::Pin;
     use std::sync::atomic::{AtomicUsize, Ordering};
     use std::sync::{Arc, Mutex};
+    use std::time::{Duration, Instant};
     use wiremock::matchers::{body_json, method, path};
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
@@ -413,6 +414,23 @@ mod client_assertion_exchange {
             .expect(times)
             .mount(server)
             .await;
+    }
+
+    fn error_chain(err: &CoreError) -> String {
+        let mut text = err.to_string();
+        let mut source = match err {
+            CoreError::Network(net) => net
+                .source
+                .as_ref()
+                .map(|item| item.as_ref() as &dyn std::error::Error),
+            _ => None,
+        };
+        while let Some(inner) = source {
+            text.push(' ');
+            text.push_str(&inner.to_string());
+            source = inner.source();
+        }
+        text
     }
 
     fn assert_configuration(err: &CoreError, sentence: &str) {
@@ -876,6 +894,189 @@ mod client_assertion_exchange {
                     assert_ne!(assertion_key, grant_key);
                 }
             }
+        }
+    }
+
+    fn limited_config(
+        uri: &str,
+        provider: FixedAssertion,
+        timeout: Option<Duration>,
+        max_response_size: u64,
+    ) -> Config {
+        let mut builder = Config::builder()
+            .app_id("cli_demo")
+            .app_type(AppType::SelfBuild)
+            .base_url(uri)
+            .oauth_base_url(uri)
+            .allow_custom_base_url(true)
+            .max_response_size(max_response_size)
+            .client_assertion_provider(provider);
+        if let Some(timeout) = timeout {
+            builder = builder.req_timeout(timeout);
+        }
+        builder.build()
+    }
+
+    #[tokio::test]
+    async fn exchange_applies_req_timeout_and_still_returns_token() {
+        let server = MockServer::start().await;
+        mount_absent_grants(&server).await;
+        Mock::given(method("POST"))
+            .and(path("/oauth/v3/token"))
+            .respond_with(
+                ResponseTemplate::new(200)
+                    .set_delay(Duration::from_secs(3))
+                    .set_body_json(json!({"access_token": "tat_late", "expires_in": 7200})),
+            )
+            .mount(&server)
+            .await;
+
+        let (provider, _, _) = FixedAssertion::ok("fake-assertion");
+        let started = Instant::now();
+        let err = AuthTokenProvider::new(limited_config(
+            &server.uri(),
+            provider,
+            Some(Duration::from_millis(200)),
+            1024,
+        ))
+        .get_token(TokenRequest::tenant())
+        .await
+        .expect_err("短于响应延迟的 req_timeout 应失败");
+        assert!(
+            started.elapsed() < Duration::from_secs(2),
+            "换票不应等到延迟结束，实际 {:?}",
+            started.elapsed()
+        );
+        let message = error_chain(&err).to_ascii_lowercase();
+        assert!(
+            matches!(err, CoreError::Network(_))
+                && (message.contains("timed out") || message.contains("timeout")),
+            "应是请求超时，实际 {message}"
+        );
+
+        let fast = MockServer::start().await;
+        mount_absent_grants(&fast).await;
+        mount_oauth(
+            &fast,
+            200,
+            json!({"access_token": "tat_fake", "expires_in": 7200}),
+            1,
+        )
+        .await;
+        let (provider, _, _) = FixedAssertion::ok("fake-assertion");
+        let token = AuthTokenProvider::new(limited_config(
+            &fast.uri(),
+            provider,
+            Some(Duration::from_secs(2)),
+            1024,
+        ))
+        .get_token(TokenRequest::tenant())
+        .await
+        .expect("未超时且 body 未超限时应换到 token");
+        assert_eq!(token, "tat_fake");
+    }
+
+    #[tokio::test]
+    async fn exchange_rejects_body_over_max_response_size() {
+        let server = MockServer::start().await;
+        mount_absent_grants(&server).await;
+        let payload = "x".repeat(256);
+        Mock::given(method("POST"))
+            .and(path("/oauth/v3/token"))
+            .respond_with(ResponseTemplate::new(200).set_body_string(&payload))
+            .expect(1)
+            .mount(&server)
+            .await;
+
+        let (provider, _, _) = FixedAssertion::ok("fake-assertion");
+        let err = AuthTokenProvider::new(limited_config(
+            &server.uri(),
+            provider,
+            Some(Duration::from_secs(2)),
+            32,
+        ))
+        .get_token(TokenRequest::tenant())
+        .await
+        .expect_err("超过 max_response_size 的换票响应应被拒绝");
+        assert!(
+            matches!(
+                err,
+                CoreError::ResponseTooLarge {
+                    limit: 32,
+                    actual: 256,
+                    ..
+                }
+            ),
+            "应按 Content-Length 提前拒绝，实际 {err:?}"
+        );
+    }
+
+    #[tokio::test]
+    async fn exchange_stops_chunked_body_before_reading_the_rest() {
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
+            .await
+            .expect("bind");
+        let origin = format!("http://{}", listener.local_addr().expect("addr"));
+        let server = tokio::spawn(async move {
+            let (mut socket, _) = listener.accept().await.expect("accept");
+            let mut received = Vec::new();
+            let mut buf = [0_u8; 2048];
+            loop {
+                let n = tokio::io::AsyncReadExt::read(&mut socket, &mut buf)
+                    .await
+                    .expect("read headers");
+                if n == 0 {
+                    return;
+                }
+                received.extend_from_slice(&buf[..n]);
+                if received.windows(4).any(|window| window == b"\r\n\r\n") {
+                    break;
+                }
+            }
+            let chunk = "x".repeat(128);
+            let head = format!(
+                "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\nConnection: close\r\n\r\n80\r\n{chunk}\r\n"
+            );
+            tokio::io::AsyncWriteExt::write_all(&mut socket, head.as_bytes())
+                .await
+                .expect("write chunk");
+            tokio::io::AsyncWriteExt::flush(&mut socket)
+                .await
+                .expect("flush");
+            tokio::time::sleep(Duration::from_secs(30)).await;
+        });
+
+        let (provider, _, _) = FixedAssertion::ok("fake-assertion");
+        let token_provider = AuthTokenProvider::new(limited_config(
+            &origin,
+            provider,
+            Some(Duration::from_secs(10)),
+            32,
+        ));
+        let started = Instant::now();
+        let result = tokio::time::timeout(
+            Duration::from_secs(2),
+            token_provider.get_token(TokenRequest::tenant()),
+        )
+        .await;
+        server.abort();
+        let err = result
+            .expect("超限后应立刻返回，而不是把剩余 body 读完")
+            .expect_err("分块超过上限应失败");
+        assert!(
+            started.elapsed() < Duration::from_secs(2),
+            "实际 {:?}",
+            started.elapsed()
+        );
+        match err {
+            CoreError::ResponseTooLarge { limit, actual, .. } => {
+                assert_eq!(limit, 32);
+                assert!(
+                    actual > 32 && actual <= 128,
+                    "应停在第一块，actual={actual}"
+                );
+            }
+            other => panic!("应是 ResponseTooLarge，实际 {other:?}"),
         }
     }
 }
