@@ -1,5 +1,6 @@
 use super::Client;
 use crate::Result;
+use openlark_core::auth::ClientAssertionProvider;
 use openlark_core::config::{Config, ConfigBuilder};
 use openlark_core::error::ErrorTrait;
 use std::fmt;
@@ -61,6 +62,23 @@ impl ClientBuilder {
     pub fn app_secret<S: Into<String>>(self, app_secret: S) -> Self {
         Self {
             config: self.config.app_secret(app_secret),
+        }
+    }
+
+    /// 设置外部 client assertion 供给。装上之后可以不填应用密钥。
+    pub fn client_assertion_provider(
+        self,
+        provider: impl ClientAssertionProvider + 'static,
+    ) -> Self {
+        Self {
+            config: self.config.client_assertion_provider(provider),
+        }
+    }
+
+    /// 设置 OAuth 原点，例如 `https://accounts.example.test`。不要带 token 路径。
+    pub fn oauth_base_url<S: Into<String>>(self, oauth_base_url: S) -> Self {
+        Self {
+            config: self.config.oauth_base_url(oauth_base_url),
         }
     }
 

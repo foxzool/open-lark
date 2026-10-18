@@ -66,8 +66,9 @@ pub mod verification;
 pub mod verification_information;
 
 // 重新导出核心类型，方便用户使用
+pub use openlark_core::auth::ClientAssertionProvider;
 pub use services::{AuthService, AuthenService, OAuthService};
-pub use token_provider::AuthTokenProvider;
+pub use token_provider::{AuthTokenProvider, ensure_client_assertion_endpoint};
 
 /// 认证模块的预导入，包含最常用的类型和特征
 pub mod prelude {

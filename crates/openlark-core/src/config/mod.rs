@@ -1,9 +1,12 @@
 use std::{collections::HashMap, ops::Deref, sync::Arc, time::Duration};
 
 use crate::{
-    auth::token_provider::{NoOpTokenProvider, TokenProvider},
+    auth::{
+        CLIENT_ASSERTION_MARKETPLACE_UNSUPPORTED, ClientAssertionProvider, NoOpTokenProvider,
+        TokenProvider,
+    },
     constants::{AppType, FEISHU_BASE_URL},
-    error::CoreError,
+    error::{CoreError, configuration_error},
     performance::OptimizedHttpConfig,
 };
 
@@ -103,6 +106,10 @@ pub struct ConfigInner {
     pub(crate) enable_log: bool,
     /// 是否允许自定义 base_url 域名（绕过飞书白名单 SSRF 防护），默认 false
     pub(crate) allow_custom_base_url: bool,
+    /// 外部签名的 client assertion。`Some` 时 tenant token 走 OAuth 换票，不再要求 `app_secret`。
+    pub(crate) client_assertion_provider: Option<Arc<dyn ClientAssertionProvider>>,
+    /// OAuth 原点，例如 `https://accounts.example.test`。不含 `/oauth/v3/token`。
+    pub(crate) oauth_base_url: Option<String>,
 }
 
 impl Default for ConfigInner {
@@ -121,6 +128,8 @@ impl Default for ConfigInner {
             retry_count: 3,
             enable_log: true,
             allow_custom_base_url: false,
+            client_assertion_provider: None,
+            oauth_base_url: None,
         }
     }
 }
@@ -139,6 +148,11 @@ impl std::fmt::Debug for ConfigInner {
             .field("enable_log", &self.enable_log)
             .field("allow_custom_base_url", &self.allow_custom_base_url)
             .field("header", &format!("{} headers", self.header.len()))
+            .field(
+                "client_assertion_provider",
+                &self.client_assertion_provider.as_ref().map(|_| "<set>"),
+            )
+            .field("oauth_base_url", &self.oauth_base_url)
             .finish()
     }
 }
@@ -254,10 +268,27 @@ impl Config {
         self.inner.allow_custom_base_url
     }
 
+    /// 外部 client assertion 供给。`None` 表示仍走 app_secret grant。
+    pub fn client_assertion_provider(&self) -> Option<&Arc<dyn ClientAssertionProvider>> {
+        self.inner.client_assertion_provider.as_ref()
+    }
+
+    /// OAuth 原点。空白与未设置都是 `None`。不含 `/oauth/v3/token`。
+    pub fn oauth_base_url(&self) -> Option<&str> {
+        self.inner.oauth_base_url.as_deref()
+    }
+
+    /// 供给为 `None` 时才要求非空 `app_secret`。
+    ///
+    /// [`Config::validate`]、`http::validate` 和 `Client::is_configured` 都调用它。
+    pub fn requires_app_secret(&self) -> bool {
+        self.inner.client_assertion_provider.is_none()
+    }
+
     /// 校验配置有效性
     ///
     /// # 校验规则
-    /// - `app_id` / `app_secret` 非空
+    /// - `app_id` 非空。`app_secret` 仅在没有 client assertion 供给时必填
     /// - `base_url` 非空且以 `<http://>` / `<https://>` 开头
     /// - `base_url` 域名在飞书/Lark 白名单内（`*.feishu.cn` / `*.larksuite.com` /
     ///   `*.larkoffice.com`）；`allow_custom_base_url` 为 true 时豁免（SSRF 防护）
@@ -273,7 +304,12 @@ impl Config {
                 .message("app_id 不能为空")
                 .build());
         }
-        if self.app_secret.is_empty() {
+        if self.client_assertion_provider.is_some() && self.app_type == AppType::Marketplace {
+            return Err(configuration_error(
+                CLIENT_ASSERTION_MARKETPLACE_UNSUPPORTED,
+            ));
+        }
+        if self.requires_app_secret() && self.app_secret.is_empty() {
             return Err(CoreError::validation_builder()
                 .field("app_secret")
                 .message("app_secret 不能为空")
@@ -554,6 +590,29 @@ impl ConfigBuilder {
     /// 设置是否允许自定义 base_url 域名（绕过白名单 SSRF 防护），默认 false
     pub fn allow_custom_base_url(mut self, allow: bool) -> Self {
         self.inner.allow_custom_base_url = allow;
+        self
+    }
+
+    /// 设置外部 client assertion 供给。装上之后可以不填 `app_secret`。
+    pub fn client_assertion_provider(
+        mut self,
+        provider: impl ClientAssertionProvider + 'static,
+    ) -> Self {
+        self.inner.client_assertion_provider = Some(Arc::new(provider));
+        self
+    }
+
+    /// 设置 OAuth 原点，例如 `https://accounts.example.test`。
+    ///
+    /// 不要带 `/oauth/v3/token`。空白与未设置相同。
+    pub fn oauth_base_url(mut self, oauth_base_url: impl Into<String>) -> Self {
+        let value = oauth_base_url.into();
+        let trimmed = value.trim();
+        self.inner.oauth_base_url = if trimmed.is_empty() {
+            None
+        } else {
+            Some(trimmed.to_string())
+        };
         self
     }
 

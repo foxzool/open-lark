@@ -38,6 +38,9 @@ tracing = { workspace = true }
 # UUID
 uuid = { workspace = true, features = ["v4", "serde"] }
 
+# OAuth 原点解析（aud / token URL）。不引入 reqwest：换票复用 core 的 HTTP 客户端。
+url = { workspace = true }
+
 # 验证工具
 regex = "1.10"
 base64 = "0.22"

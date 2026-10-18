@@ -221,7 +221,7 @@ fn validate(
         return Err(crate::error::validation_error("app_id", "AppId is empty"));
     }
 
-    if config.app_secret.is_empty() {
+    if config.requires_app_secret() && config.app_secret.is_empty() {
         return Err(crate::error::validation_error(
             "app_secret",
             "AppSecret is empty",
@@ -657,6 +657,41 @@ mod test {
             assert_eq!(message, "AppSecret is empty");
         } else {
             panic!("Expected IllegalParamError for empty app_secret");
+        }
+    }
+
+    #[derive(Debug)]
+    struct PresentAssertion;
+
+    impl crate::auth::ClientAssertionProvider for PresentAssertion {
+        fn retrieve_assertion<'a>(
+            &'a self,
+            _aud: &'a str,
+        ) -> std::pin::Pin<
+            Box<dyn std::future::Future<Output = crate::SDKResult<String>> + Send + 'a>,
+        > {
+            Box::pin(async { Ok("fake-assertion".to_string()) })
+        }
+    }
+
+    #[test]
+    fn test_validate_assertion_provider_allows_empty_secret() {
+        let config = Config::builder()
+            .app_id("cli_demo")
+            .client_assertion_provider(PresentAssertion)
+            .build();
+        let option = RequestOption::default();
+        assert!(validate(&config, &option, AccessTokenType::Tenant).is_ok());
+
+        let empty_id = Config::builder()
+            .client_assertion_provider(PresentAssertion)
+            .build();
+        if let Err(crate::error::CoreError::Validation { message, .. }) =
+            validate(&empty_id, &option, AccessTokenType::None)
+        {
+            assert_eq!(message, "AppId is empty");
+        } else {
+            panic!("有供给时 app_id 仍不能为空");
         }
     }
 }

@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **auth：client assertion 换取 tenant access token（#692）**：
+  `ClientBuilder::client_assertion_provider` 接受外部签发的 RFC 7523 assertion。
+  自建应用的 tenant token 走 `POST {oauth}/oauth/v3/token` 的 jwt-bearer 换票，
+  并进入现有 token 缓存。未设置供给时，原有 app/tenant grant 不变。
+  该模式下可以不填 `app_secret`；marketplace 与 app access token 会被拒绝。
+
 - **catalog：同步 2026-10-12 飞书 API 目录（#688）**：
   live 目录 1751 → 1754（新增 3 / 删除 0 / 字段变化 0）。
   - `GET /open-apis/security_and_compliance/v2/device_records/mine`
