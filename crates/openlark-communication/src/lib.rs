@@ -97,6 +97,6 @@ pub use common::chain::{
 };
 #[cfg(feature = "im")]
 pub use common::message_card::{
-    Button, ButtonKind, CardElement, Column, FormAction, MessageCard, TableColumn, button, chart,
-    column, column_set, div_md, div_plain, form, table,
+    Button, ButtonKind, CardElement, Column, FormAction, Input, MessageCard, TableColumn, button,
+    chart, column, column_set, div_md, div_plain, form, input, table,
 };

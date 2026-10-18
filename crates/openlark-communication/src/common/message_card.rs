@@ -2,6 +2,8 @@
 //!
 //! 只负责把标题和组件序列化成 interactive JSON。发送仍走 `ImClient::send_card`。
 
+use std::collections::HashSet;
+
 use openlark_core::{SDKResult, error::validation_error, validate_required};
 use serde_json::{Map, Value};
 
@@ -78,7 +80,7 @@ impl Button {
         self
     }
 
-    /// 回传给卡片回调的 JSON 对象。
+    /// 回传给卡片回调的 JSON 对象。序列化成 `behaviors` 里的 `callback`。
     pub fn value(mut self, value: Value) -> Self {
         self.value = Some(value);
         self
@@ -110,6 +112,42 @@ impl Button {
     }
 }
 
+/// 输入框。链式设置之后用 `element` 放进卡片。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Input {
+    name: String,
+    placeholder: Option<String>,
+    default_value: Option<String>,
+    required: bool,
+}
+
+impl Input {
+    /// 占位提示。
+    pub fn placeholder(mut self, placeholder: impl Into<String>) -> Self {
+        self.placeholder = Some(placeholder.into());
+        self
+    }
+
+    /// 预填内容。
+    pub fn default_value(mut self, default_value: impl Into<String>) -> Self {
+        self.default_value = Some(default_value.into());
+        self
+    }
+
+    /// 是否必填。只有 `true` 会写进 JSON。
+    pub fn required(mut self, required: bool) -> Self {
+        self.required = required;
+        self
+    }
+
+    /// 放进 `MessageCard::elements` 或容器的元素列表。
+    pub fn element(self) -> CardElement {
+        CardElement {
+            kind: ElementKind::Input(self),
+        }
+    }
+}
+
 /// 分栏里的一列。只能交给 `column_set`。
 #[derive(Debug, Clone, PartialEq)]
 pub struct Column {
@@ -118,7 +156,7 @@ pub struct Column {
 
 /// 消息卡片上的一个组件。
 ///
-/// 调用方通过 `div_plain`、`button`、`column_set`、`form`、`chart`、`table` 构造。
+/// 调用方通过 `div_plain`、`div_md`、`button`、`input`、`column_set`、`form`、`chart`、`table` 构造。
 #[derive(Debug, Clone, PartialEq)]
 pub struct CardElement {
     kind: ElementKind,
@@ -128,6 +166,7 @@ pub struct CardElement {
 enum ElementKind {
     Div(Div),
     Button(Button),
+    Input(Input),
     ColumnSet(ColumnSet),
     Form(Form),
     Chart(Chart),
@@ -138,15 +177,6 @@ enum ElementKind {
 enum TextKind {
     Plain,
     LarkMd,
-}
-
-impl TextKind {
-    fn as_str(self) -> &'static str {
-        match self {
-            Self::Plain => "plain_text",
-            Self::LarkMd => "lark_md",
-        }
-    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -187,13 +217,23 @@ pub fn div_plain(text: impl Into<String>) -> CardElement {
     }
 }
 
-/// Markdown 内容块。
+/// Markdown 内容块。序列化成 `tag=markdown`。
 pub fn div_md(text: impl Into<String>) -> CardElement {
     CardElement {
         kind: ElementKind::Div(Div {
             kind: TextKind::LarkMd,
             content: text.into(),
         }),
+    }
+}
+
+/// 输入框。`name` 在整张卡片里必须唯一。
+pub fn input(name: impl Into<String>) -> Input {
+    Input {
+        name: name.into(),
+        placeholder: None,
+        default_value: None,
+        required: false,
     }
 }
 
@@ -293,6 +333,10 @@ impl MessageCard {
         for element in &self.elements {
             validate_element(element, Place::Root)?;
         }
+        let mut names = HashSet::new();
+        for element in &self.elements {
+            remember_names(element, &mut names)?;
+        }
         let mut elements = Vec::with_capacity(self.elements.len());
         for element in &self.elements {
             elements.push(write_element(element, Place::Root)?);
@@ -341,6 +385,7 @@ fn validate_element(element: &CardElement, place: Place) -> SDKResult<()> {
             validate_required!(div.content, "text 不能为空");
         }
         ElementKind::Button(button) => validate_button(button)?,
+        ElementKind::Input(input) => validate_input(input)?,
         ElementKind::ColumnSet(set) => {
             let child_place = column_child_place(place);
             for column in &set.columns {
@@ -376,6 +421,14 @@ fn validate_element(element: &CardElement, place: Place) -> SDKResult<()> {
     Ok(())
 }
 
+fn validate_input(input: &Input) -> SDKResult<()> {
+    validate_required!(input.name, "name 不能为空");
+    if let Some(placeholder) = &input.placeholder {
+        validate_required!(placeholder, "placeholder 不能为空");
+    }
+    Ok(())
+}
+
 fn validate_button(button: &Button) -> SDKResult<()> {
     validate_required!(button.text, "text 不能为空");
     if let Some(url) = &button.url {
@@ -407,6 +460,40 @@ fn validate_form(form: &Form) -> SDKResult<()> {
     Ok(())
 }
 
+fn remember_names(element: &CardElement, seen: &mut HashSet<String>) -> SDKResult<()> {
+    match &element.kind {
+        ElementKind::Button(button) => {
+            if let Some(name) = &button.name {
+                remember_name(seen, name)?;
+            }
+        }
+        ElementKind::Input(input) => remember_name(seen, &input.name)?,
+        ElementKind::Form(form) => {
+            remember_name(seen, &form.name)?;
+            for child in &form.elements {
+                remember_names(child, seen)?;
+            }
+        }
+        ElementKind::ColumnSet(set) => {
+            for column in &set.columns {
+                for child in &column.elements {
+                    remember_names(child, seen)?;
+                }
+            }
+        }
+        ElementKind::Div(_) | ElementKind::Chart(_) | ElementKind::Table(_) => {}
+    }
+    Ok(())
+}
+
+fn remember_name(seen: &mut HashSet<String>, name: &str) -> SDKResult<()> {
+    let name = name.trim();
+    if name.is_empty() || seen.insert(name.to_string()) {
+        return Ok(());
+    }
+    Err(validation_error("name", "name 在卡片内必须唯一"))
+}
+
 fn is_submit(button: &Button) -> bool {
     let named = button
         .name
@@ -423,6 +510,7 @@ fn contains_submit(element: &CardElement) -> bool {
             .iter()
             .any(|column| column.elements.iter().any(contains_submit)),
         ElementKind::Div(_)
+        | ElementKind::Input(_)
         | ElementKind::Form(_)
         | ElementKind::Chart(_)
         | ElementKind::Table(_) => false,
@@ -448,14 +536,9 @@ fn validate_table(table: &Table) -> SDKResult<()> {
 
 fn write_element(element: &CardElement, place: Place) -> SDKResult<Value> {
     match &element.kind {
-        ElementKind::Div(div) => Ok(serde_json::json!({
-            "tag": "div",
-            "text": {
-                "tag": div.kind.as_str(),
-                "content": div.content.trim(),
-            }
-        })),
+        ElementKind::Div(div) => Ok(write_div(div)),
         ElementKind::Button(button) => write_button(button),
+        ElementKind::Input(input) => Ok(write_input(input)),
         ElementKind::ColumnSet(set) => {
             let child_place = column_child_place(place);
             let mut columns = Vec::with_capacity(set.columns.len());
@@ -536,9 +619,58 @@ fn write_button(button: &Button) -> SDKResult<Value> {
         );
     }
     if let Some(value) = &button.value {
-        object.insert("value".to_string(), value.clone());
+        object.insert(
+            "behaviors".to_string(),
+            serde_json::json!([
+                { "type": "callback", "value": value }
+            ]),
+        );
     }
     Ok(Value::Object(object))
+}
+
+fn write_div(div: &Div) -> Value {
+    match div.kind {
+        TextKind::Plain => serde_json::json!({
+            "tag": "div",
+            "text": {
+                "tag": "plain_text",
+                "content": div.content.trim(),
+            }
+        }),
+        TextKind::LarkMd => serde_json::json!({
+            "tag": "markdown",
+            "content": div.content.trim(),
+        }),
+    }
+}
+
+fn write_input(input: &Input) -> Value {
+    let mut object = Map::new();
+    object.insert("tag".to_string(), Value::String("input".to_string()));
+    object.insert(
+        "name".to_string(),
+        Value::String(input.name.trim().to_string()),
+    );
+    if let Some(placeholder) = &input.placeholder {
+        object.insert(
+            "placeholder".to_string(),
+            serde_json::json!({
+                "tag": "plain_text",
+                "content": placeholder.trim(),
+            }),
+        );
+    }
+    if let Some(default_value) = &input.default_value {
+        object.insert(
+            "default_value".to_string(),
+            Value::String(default_value.trim().to_string()),
+        );
+    }
+    if input.required {
+        object.insert("required".to_string(), Value::Bool(true));
+    }
+    Value::Object(object)
 }
 
 #[cfg(test)]
@@ -786,13 +918,141 @@ mod tests {
     }
 
     #[test]
-    fn div_md_uses_lark_md_text() {
+    fn div_md_uses_markdown_tag() {
         let value = MessageCard::new()
             .title("标题")
             .elements([div_md("**完成**"), button("查看").element()])
             .to_value()
             .expect("markdown 内容块应该能序列化");
-        assert_eq!(value["body"]["elements"][0]["text"]["tag"], "lark_md");
-        assert_eq!(value["body"]["elements"][0]["text"]["content"], "**完成**");
+        assert_eq!(
+            value["body"]["elements"][0],
+            serde_json::json!({
+                "tag": "markdown",
+                "content": "**完成**"
+            })
+        );
+    }
+
+    #[test]
+    fn button_value_is_callback_behavior() {
+        let payload = serde_json::json!({ "key": "value" });
+        let expected = serde_json::json!({
+            "tag": "button",
+            "text": { "tag": "plain_text", "content": "回调" },
+            "behaviors": [
+                { "type": "callback", "value": { "key": "value" } }
+            ]
+        });
+        let value = MessageCard::new()
+            .title("标题")
+            .elements([
+                button("回调").value(payload.clone()).element(),
+                column_set([column([button("回调").value(payload.clone()).element()])]),
+                form(
+                    "approve",
+                    [button("回调")
+                        .name("submit")
+                        .action_type(FormAction::Submit)
+                        .value(payload)
+                        .element()],
+                ),
+            ])
+            .to_value()
+            .expect("三处按钮都应该能序列化");
+        let elements = value["body"]["elements"].as_array().expect("正文是数组");
+        assert_eq!(elements[0], expected);
+        assert!(elements[0].get("value").is_none());
+        assert_eq!(elements[1]["columns"][0]["elements"][0], expected);
+        assert!(
+            elements[1]["columns"][0]["elements"][0]
+                .get("value")
+                .is_none()
+        );
+        let mut form_button = expected.clone();
+        form_button["name"] = serde_json::json!("submit");
+        form_button["form_action_type"] = serde_json::json!("submit");
+        assert_eq!(elements[2]["elements"][0], form_button);
+        assert!(elements[2]["elements"][0].get("value").is_none());
+    }
+
+    #[test]
+    fn input_json_and_unique_names() {
+        let value = MessageCard::new()
+            .title("标题")
+            .elements([form(
+                "approve",
+                [
+                    input("reason")
+                        .placeholder("请填写")
+                        .default_value("无")
+                        .required(true)
+                        .element(),
+                    button("提交")
+                        .name("submit")
+                        .action_type(FormAction::Submit)
+                        .element(),
+                ],
+            )])
+            .to_value()
+            .expect("输入框应该能序列化");
+        assert_eq!(
+            value["body"]["elements"][0]["elements"][0],
+            serde_json::json!({
+                "tag": "input",
+                "name": "reason",
+                "placeholder": { "tag": "plain_text", "content": "请填写" },
+                "default_value": "无",
+                "required": true
+            })
+        );
+
+        let duplicate_input = MessageCard::new()
+            .title("标题")
+            .elements([form(
+                "approve",
+                [
+                    input("reason").element(),
+                    input("reason").element(),
+                    button("提交")
+                        .name("submit")
+                        .action_type(FormAction::Submit)
+                        .element(),
+                ],
+            )])
+            .to_value()
+            .expect_err("重复的输入框名");
+        assert!(duplicate_input.to_string().contains("name"));
+
+        let button_clash = MessageCard::new()
+            .title("标题")
+            .elements([form(
+                "approve",
+                [
+                    input("submit").element(),
+                    button("提交")
+                        .name("submit")
+                        .action_type(FormAction::Submit)
+                        .element(),
+                ],
+            )])
+            .to_value()
+            .expect_err("按钮名与输入框名相同");
+        assert!(button_clash.to_string().contains("name"));
+
+        let form_clash = MessageCard::new()
+            .title("标题")
+            .elements([form(
+                "reason",
+                [
+                    input("reason").element(),
+                    button("提交")
+                        .name("submit")
+                        .action_type(FormAction::Submit)
+                        .element(),
+                ],
+            )])
+            .to_value()
+            .expect_err("表单名与输入框名相同");
+        assert!(form_clash.to_string().contains("name"));
     }
 }

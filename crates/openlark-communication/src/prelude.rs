@@ -15,7 +15,7 @@ pub use crate::common::chain::{
 };
 #[cfg(feature = "im")]
 pub use crate::common::message_card::{
-    Button, ButtonKind, CardElement, FormAction, MessageCard, TableColumn,
+    Button, ButtonKind, CardElement, FormAction, Input, MessageCard, TableColumn,
 };
 
 // 重新导出端点常量
