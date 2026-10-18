@@ -383,6 +383,8 @@ full = [
 
 # === 技术特性 (Technical Features) ===
 websocket = ["openlark-client/websocket"]  # WebSocket 支持
+# 会话层：归一化、入站策略、回复与流式卡片。
+channel = ["communication", "websocket", "openlark-client/channel"]
 # HTTP 事件入站（encrypt_key / url_verification / 入站签名）。复用 WS 分发器类型，故依赖 websocket。
 # 与 `webhook`（自定义机器人出站 HMAC）不同。
 event-http = ["openlark-client/event-http", "websocket"]

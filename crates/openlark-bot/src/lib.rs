@@ -1,16 +1,17 @@
 #![allow(clippy::module_inception)]
 //! # OpenLark 机器人模块
 //!
-//! OpenLark SDK 的机器人模块，提供飞书机器人搜索 API。
+//! OpenLark SDK 的机器人模块，提供获取机器人信息和搜索机器人 API。
 //!
 //! ## 功能特性
 //!
+//! - **机器人信息**: 读取当前应用机器人的 `open_id`
 //! - **机器人搜索**: 按关键词搜索当前用户可见的机器人
 
 mod service;
 
 // bot 模块
-#[cfg(feature = "v4")]
+#[cfg(any(feature = "v3", feature = "v4"))]
 /// 机器人 API 模块。
 pub mod bot;
 

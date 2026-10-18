@@ -97,6 +97,8 @@ websocket = [
 # 平台 HTTP 事件入站。复用 `ws_client::EventDispatcherHandler`，因此依赖 `websocket`。
 # 与根 crate `webhook` feature（出站自定义机器人）无关。
 event-http = ["websocket", "dep:aes", "dep:cbc", "dep:sha2", "dep:base64"]
+# 会话层。拉上长连接、communication，以及机器人信息 API。不改变默认 feature，也不打开 client 的 `bot` 字段。
+channel = ["websocket", "communication", "tokio/time", "tokio/sync", "dep:openlark-bot", "openlark-bot/v3"]
 
 # === 功能组合 ===
 core-layer = ["communication", "docs", "security"]

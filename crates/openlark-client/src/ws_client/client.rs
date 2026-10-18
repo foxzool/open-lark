@@ -5,7 +5,6 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use log::info;
 use openlark_core::api::{ApiRequest, ApiResponseTrait};
 use openlark_core::constants::AccessTokenType;
 use openlark_core::http::Transport;
@@ -67,7 +66,7 @@ impl LarkWsClient {
             .max_frame_size(Some(config.max_response_size() as usize));
 
         let (conn, _response) = connect_async_with_config(conn_url, Some(ws_config), false).await?;
-        info!("connected to {url}");
+        log_connected(&url);
 
         Session::new(service_id, client_config, conn, event_handler, options)
             .run()
@@ -96,6 +95,57 @@ impl LarkWsClient {
     }
 }
 
+const SENSITIVE_WS_QUERY: &[&str] = &["access_key", "ticket"];
+
+/// 连接日志用的 URL。`access_key` 和 `ticket` 换成 `***`，其余查询参数保留。
+pub(crate) fn redact_ws_url(url: &Url) -> String {
+    let pairs: Vec<(String, String)> = url
+        .query_pairs()
+        .map(|(key, value)| {
+            let key = key.into_owned();
+            let value = if is_sensitive_ws_query(&key) {
+                "***".to_string()
+            } else {
+                value.into_owned()
+            };
+            (key, value)
+        })
+        .collect();
+    if pairs.is_empty() {
+        return url.to_string();
+    }
+    let mut redacted = url.clone();
+    redacted.set_query(None);
+    {
+        let mut query = redacted.query_pairs_mut();
+        for (key, value) in &pairs {
+            query.append_pair(key, value);
+        }
+    }
+    redacted.to_string()
+}
+
+fn is_sensitive_ws_query(key: &str) -> bool {
+    SENSITIVE_WS_QUERY
+        .iter()
+        .any(|name| key.eq_ignore_ascii_case(name))
+}
+
+fn log_connected(url: &Url) {
+    log_connected_to(url, log::logger());
+}
+
+fn log_connected_to(url: &Url, logger: &dyn log::Log) {
+    let line = format!("connected to {}", redact_ws_url(url));
+    logger.log(
+        &log::Record::builder()
+            .level(log::Level::Info)
+            .target(module_path!())
+            .args(format_args!("{line}"))
+            .build(),
+    );
+}
+
 /// WebSocket 端点查询响应（crate 内部）。
 #[derive(Debug, Deserialize)]
 pub(crate) struct EndPointResponse {
@@ -116,4 +166,60 @@ impl ApiResponseTrait for EndPointResponse {}
 pub(crate) struct ClientConfig {
     #[serde(rename = "PingInterval")]
     pub(crate) ping_interval: i32,
+}
+
+#[cfg(test)]
+mod tests {
+    use std::sync::Mutex;
+
+    use super::*;
+
+    struct Capture(Mutex<Vec<String>>);
+
+    impl log::Log for Capture {
+        fn enabled(&self, metadata: &log::Metadata<'_>) -> bool {
+            metadata.level() <= log::Level::Info
+        }
+
+        fn log(&self, record: &log::Record<'_>) {
+            if self.enabled(record.metadata()) {
+                self.0.lock().expect("log").push(record.args().to_string());
+            }
+        }
+
+        fn flush(&self) {}
+    }
+
+    #[test]
+    fn ws_connected_log_redacts_access_key_and_ticket() {
+        let access_key = "ak_super_secret_value";
+        let ticket = "tk_super_secret_value";
+        let url = Url::parse(&format!(
+            "wss://msg-frontier.feishu.cn/ws/v2?service_id=33554678&access_key={access_key}&ticket={ticket}&device_id=dev-keep"
+        ))
+        .expect("url");
+        let capture = Capture(Mutex::new(Vec::new()));
+        log_connected_to(&url, &capture);
+        let lines = capture.0.lock().expect("log").clone();
+        assert_eq!(lines.len(), 1);
+        let line = &lines[0];
+        assert!(line.starts_with("connected to "), "{line}");
+        assert!(line.contains("service_id=33554678"), "{line}");
+        assert!(line.contains("device_id=dev-keep"), "{line}");
+        assert!(line.contains("access_key=***"), "{line}");
+        assert!(line.contains("ticket=***"), "{line}");
+        assert!(!line.contains(access_key), "{line}");
+        assert!(!line.contains(ticket), "{line}");
+
+        let mixed = Url::parse(
+            "wss://msg-frontier.feishu.cn/ws/v2?Access_Key=AK_CASE&Ticket=TK_CASE&service_id=1",
+        )
+        .expect("url");
+        log_connected_to(&mixed, &capture);
+        let lines = capture.0.lock().expect("log").clone();
+        let second = &lines[1];
+        assert!(!second.contains("AK_CASE"), "{second}");
+        assert!(!second.contains("TK_CASE"), "{second}");
+        assert!(second.contains("service_id=1"), "{second}");
+    }
 }
