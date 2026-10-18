@@ -26,7 +26,7 @@ impl ButtonKind {
     }
 }
 
-/// 表单按钮动作。JSON 1.0 的键是 `action_type`。
+/// 表单按钮动作。schema 2.0 的键是 `form_action_type`。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum FormAction {
     /// 提交表单。
@@ -36,7 +36,7 @@ pub enum FormAction {
 impl FormAction {
     fn as_str(self) -> &'static str {
         match self {
-            Self::Submit => "form_submit",
+            Self::Submit => "submit",
         }
     }
 }
@@ -225,7 +225,7 @@ pub fn column_set(columns: impl IntoIterator<Item = Column>) -> CardElement {
     }
 }
 
-/// 表单。直接子节点不能是内容块，提交按钮要带名称和 `FormAction::Submit`。
+/// 表单。只能放在卡片根上，提交按钮要带名称和 `FormAction::Submit`。
 pub fn form(
     name: impl Into<String>,
     elements: impl IntoIterator<Item = CardElement>,
@@ -298,13 +298,16 @@ impl MessageCard {
             elements.push(write_element(element, Place::Root)?);
         }
         Ok(serde_json::json!({
+            "schema": "2.0",
             "header": {
                 "title": {
                     "tag": "plain_text",
                     "content": title.trim(),
                 }
             },
-            "elements": elements,
+            "body": {
+                "elements": elements,
+            },
         }))
     }
 }
@@ -335,9 +338,6 @@ fn column_child_place(place: Place) -> Place {
 fn validate_element(element: &CardElement, place: Place) -> SDKResult<()> {
     match &element.kind {
         ElementKind::Div(div) => {
-            if place == Place::Form {
-                return Err(validation_error("div", "表单不能直接包含 div"));
-            }
             validate_required!(div.content, "text 不能为空");
         }
         ElementKind::Button(button) => validate_button(button)?,
@@ -400,8 +400,8 @@ fn validate_form(form: &Form) -> SDKResult<()> {
     let has_submit = form.elements.iter().any(contains_submit);
     if !has_submit {
         return Err(validation_error(
-            "action_type",
-            "表单必须包含 action_type 为 form_submit 的按钮",
+            "form_action_type",
+            "表单必须包含 form_action_type 为 submit 的按钮",
         ));
     }
     Ok(())
@@ -455,17 +455,7 @@ fn write_element(element: &CardElement, place: Place) -> SDKResult<Value> {
                 "content": div.content.trim(),
             }
         })),
-        ElementKind::Button(button) => {
-            let written = write_button(button)?;
-            if place == Place::Root {
-                Ok(serde_json::json!({
-                    "tag": "action",
-                    "actions": [written],
-                }))
-            } else {
-                Ok(written)
-            }
-        }
+        ElementKind::Button(button) => write_button(button),
         ElementKind::ColumnSet(set) => {
             let child_place = column_child_place(place);
             let mut columns = Vec::with_capacity(set.columns.len());
@@ -541,7 +531,7 @@ fn write_button(button: &Button) -> SDKResult<Value> {
     }
     if let Some(action_type) = button.action_type {
         object.insert(
-            "action_type".to_string(),
+            "form_action_type".to_string(),
             Value::String(action_type.as_str().to_string()),
         );
     }
@@ -564,7 +554,10 @@ mod tests {
                 .url("https://example.com")
                 .kind(ButtonKind::Primary)
                 .element(),
-            column_set([column([div_plain("左")]), column([div_plain("右")])]),
+            column_set([
+                column([div_plain("左"), button("详情").element()]),
+                column([div_plain("右")]),
+            ]),
             form(
                 "approve",
                 [
@@ -594,29 +587,28 @@ mod tests {
         ]);
         let value = card.to_value().expect("卡片应该能序列化");
         let expected = serde_json::json!({
+            "schema": "2.0",
             "header": {
                 "title": { "tag": "plain_text", "content": "发布完成" }
             },
-            "elements": [
-                {
-                    "tag": "div",
-                    "text": { "tag": "plain_text", "content": "今天已上线" }
-                },
-                {
-                    "tag": "action",
-                    "actions": [
-                        {
-                            "tag": "button",
-                            "text": { "tag": "plain_text", "content": "查看" },
-                            "type": "primary",
-                            "url": "https://example.com"
-                        }
-                    ]
-                }
-            ]
+            "body": {
+                "elements": [
+                    {
+                        "tag": "div",
+                        "text": { "tag": "plain_text", "content": "今天已上线" }
+                    },
+                    {
+                        "tag": "button",
+                        "text": { "tag": "plain_text", "content": "查看" },
+                        "type": "primary",
+                        "url": "https://example.com"
+                    }
+                ]
+            }
         });
         assert_eq!(value, expected);
-        assert!(value.get("schema").is_none());
+        assert!(value.get("elements").is_none());
+        assert!(!value.to_string().contains("\"action\""));
 
         let body = interactive_message_body(MessageRecipient::open_id("ou_xxx"), value.clone())
             .expect("消息体应该能组装");
@@ -628,7 +620,8 @@ mod tests {
     #[test]
     fn card_elements_one_list() {
         let value = sample_card().to_value().expect("整张卡片应该能序列化");
-        let elements = value["elements"].as_array().expect("正文是数组");
+        let elements = value["body"]["elements"].as_array().expect("正文是数组");
+        assert_eq!(value["schema"], "2.0");
         assert_eq!(
             elements[2],
             serde_json::json!({
@@ -640,6 +633,10 @@ mod tests {
                             {
                                 "tag": "div",
                                 "text": { "tag": "plain_text", "content": "左" }
+                            },
+                            {
+                                "tag": "button",
+                                "text": { "tag": "plain_text", "content": "详情" }
                             }
                         ]
                     },
@@ -679,7 +676,7 @@ mod tests {
                         "tag": "button",
                         "text": { "tag": "plain_text", "content": "提交" },
                         "name": "submit",
-                        "action_type": "form_submit"
+                        "form_action_type": "submit"
                     }
                 ]
             })
@@ -742,12 +739,12 @@ mod tests {
 
     #[test]
     fn card_rejects_placement() {
-        let direct_div = MessageCard::new()
+        let chart_in_form = MessageCard::new()
             .title("标题")
             .elements([form(
                 "approve",
                 [
-                    div_plain("请填写原因"),
+                    chart(serde_json::json!({ "type": "bar" })),
                     button("提交")
                         .name("submit")
                         .action_type(FormAction::Submit)
@@ -755,7 +752,7 @@ mod tests {
                 ],
             )])
             .to_value();
-        assert!(direct_div.is_err());
+        assert!(chart_in_form.is_err());
 
         let missing_submit = MessageCard::new()
             .title("标题")
@@ -795,7 +792,7 @@ mod tests {
             .elements([div_md("**完成**"), button("查看").element()])
             .to_value()
             .expect("markdown 内容块应该能序列化");
-        assert_eq!(value["elements"][0]["text"]["tag"], "lark_md");
-        assert_eq!(value["elements"][0]["text"]["content"], "**完成**");
+        assert_eq!(value["body"]["elements"][0]["text"]["tag"], "lark_md");
+        assert_eq!(value["body"]["elements"][0]["text"]["content"], "**完成**");
     }
 }

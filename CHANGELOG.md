@@ -13,8 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **communication：类型化消息卡片 `MessageCard`（#690）**：
   调用方用标题、内容块、按钮以及 `column_set` / `form` / `chart` / `table`
-  拼出 interactive JSON，再交给现有 `ImClient::send_card`。
-  `send_card(serde_json::Value)` 的签名不变，CardKit 创建和更新也不变。
+  拼出 schema 2.0 的 interactive JSON，再交给现有 `ImClient::send_card`。
+  根上和列里的按钮都是 `tag=button`，不再包 `action`。
+  `send_card(serde_json::Value)` 的签名不变，旧的原始 JSON 仍可直接发送，CardKit 也不变。
 
 - **catalog：同步 2026-10-12 飞书 API 目录（#688）**：
   live 目录 1751 → 1754（新增 3 / 删除 0 / 字段变化 0）。
