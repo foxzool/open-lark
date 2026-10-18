@@ -15,6 +15,7 @@ use std::sync::atomic::{AtomicBool, AtomicU8, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard, OnceLock};
 use std::time::{Duration, Instant};
 
+use openlark_auth::AuthTokenProvider;
 use openlark_bot::BotService;
 use openlark_communication::im::v1::message::patch::PatchMessageCardRequest;
 use openlark_communication::im::v1::message::reply::{ReplyMessageBody, ReplyMessageRequest};
@@ -921,15 +922,16 @@ impl LarkChannelBuilder {
         if self.on_message.is_none() && self.on_card.is_none() {
             return Err(ChannelError::NoHandler);
         }
+        let config = install_auth_provider(self.config);
         #[cfg(test)]
         let outbound = self
             .outbound
-            .unwrap_or_else(|| Arc::new(LiveOutbound::new(Arc::clone(&self.config))));
+            .unwrap_or_else(|| Arc::new(LiveOutbound::new(Arc::clone(&config))));
         #[cfg(not(test))]
-        let outbound = Arc::new(LiveOutbound::new(Arc::clone(&self.config)));
+        let outbound = Arc::new(LiveOutbound::new(Arc::clone(&config)));
         Ok(LarkChannel {
             inner: Arc::new(Inner {
-                config: self.config,
+                config,
                 policy: self.policy,
                 outbound,
                 on_message: self.on_message,
@@ -1142,6 +1144,18 @@ impl Outbound for LiveOutbound {
             Ok(())
         })
     }
+}
+
+/// `Config::builder()` 装的是 `NoOpTokenProvider`。Client 会换成 auth 实现，
+/// Channel 不经过 Client，所以在这里按同样的顺序补上：provider 持有基础配置，
+/// 工作配置持有 provider。调用方已经装过 provider 时保持原样。
+fn install_auth_provider(config: Arc<Config>) -> Arc<Config> {
+    if !config.token_provider().is_noop() {
+        return config;
+    }
+    let base = (*config).clone();
+    let provider = AuthTokenProvider::new(base);
+    Arc::new(config.with_token_provider(provider))
 }
 
 fn reply_target(message_id: String, in_thread: bool) -> ReplyTarget {

@@ -95,6 +95,14 @@ pub trait TokenProvider: Send + Sync + std::fmt::Debug {
     fn get_user_token(&self) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
         Box::pin(async move { self.get_token(TokenRequest::user()).await })
     }
+
+    /// 是否为不会取 token 的默认实现。
+    ///
+    /// `NoOpTokenProvider` 返回 true。业务 provider 使用默认的 false，
+    /// 这样 Channel 可以在调用方没装 provider 时补上 auth 实现，又不会覆盖已有实现。
+    fn is_noop(&self) -> bool {
+        false
+    }
 }
 
 /// Default implementation that does not cache tokens
@@ -113,6 +121,10 @@ impl TokenProvider for NoOpTokenProvider {
                 "token_provider: NoOpTokenProvider 未实现 token 获取逻辑（请求：{request:?}），请在 Config 中设置 TokenProvider（建议使用 openlark-auth 提供的实现）。"
             )))
         })
+    }
+
+    fn is_noop(&self) -> bool {
+        true
     }
 }
 
@@ -177,5 +189,6 @@ mod tests {
         let provider = NoOpTokenProvider;
         let debug_str = format!("{provider:?}");
         assert!(debug_str.contains("NoOpTokenProvider"));
+        assert!(provider.is_noop());
     }
 }

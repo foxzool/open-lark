@@ -5,6 +5,8 @@ use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
+use openlark_core::SDKResult;
+use openlark_core::auth::{TokenProvider, TokenRequest};
 use openlark_core::config::Config;
 use serde_json::{Value, json};
 use tokio::sync::oneshot;
@@ -671,16 +673,20 @@ async fn channel_card_callback_e2e() {
                 ],
             ),
         ]);
+    let wait_secs = e2e_wait_secs(
+        std::env::var("OPENLARK_CHANNEL_E2E_TIMEOUT_SECS")
+            .ok()
+            .as_deref(),
+    );
     channel
         .send(MessageRecipient::chat_id(&chat_id))
         .card(CardDocument::from_message_card(card).expect("card"))
         .await
         .expect("send card");
     eprintln!(
-        "在该群点击「确认」；在 reason 里填写这个 nonce 并提交。nonce={nonce} chat_id={chat_id}"
+        "在该群点击「确认」；在 reason 里填写这个 nonce 并提交。nonce={nonce} chat_id={chat_id} 等待={wait_secs}秒（OPENLARK_CHANNEL_E2E_TIMEOUT_SECS）"
     );
-
-    let deadline = tokio::time::Instant::now() + Duration::from_secs(180);
+    let deadline = tokio::time::Instant::now() + Duration::from_secs(wait_secs);
     let mut saw_button = false;
     let mut saw_form = false;
     let mut connect_done = false;
@@ -732,6 +738,59 @@ async fn channel_card_callback_e2e() {
     }
     channel.shutdown();
     connect_task.abort();
+}
+
+fn e2e_wait_secs(raw: Option<&str>) -> u64 {
+    raw.and_then(|value| value.trim().parse::<u64>().ok())
+        .filter(|secs| *secs > 0)
+        .unwrap_or(180)
+}
+
+#[test]
+fn channel_e2e_wait_secs_is_configurable() {
+    assert_eq!(e2e_wait_secs(None), 180);
+    assert_eq!(e2e_wait_secs(Some("")), 180);
+    assert_eq!(e2e_wait_secs(Some("0")), 180);
+    assert_eq!(e2e_wait_secs(Some("abc")), 180);
+    assert_eq!(e2e_wait_secs(Some(" 45 ")), 45);
+}
+
+#[derive(Debug)]
+struct MarkerProvider;
+
+impl TokenProvider for MarkerProvider {
+    fn get_token(
+        &self,
+        _request: TokenRequest,
+    ) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
+        Box::pin(async { Ok("tenant-token-marker".to_string()) })
+    }
+}
+
+#[tokio::test(flavor = "current_thread")]
+async fn channel_installs_auth_token_provider() {
+    let channel = LarkChannel::builder(config())
+        .on_message(|_message, _channel| async { Ok(()) })
+        .build()
+        .expect("channel");
+    let provider = channel.inner.config.token_provider();
+    assert!(!provider.is_noop());
+    let rendered = format!("{provider:?}");
+    assert!(rendered.contains("AuthTokenProvider"), "{rendered}");
+
+    let custom = Arc::new(config().with_token_provider(MarkerProvider));
+    let channel = LarkChannel::builder(custom)
+        .on_message(|_message, _channel| async { Ok(()) })
+        .build()
+        .expect("channel");
+    let token = channel
+        .inner
+        .config
+        .token_provider()
+        .get_tenant_token(None)
+        .await
+        .expect("marker");
+    assert_eq!(token, "tenant-token-marker");
 }
 
 async fn wait_until(mut pred: impl FnMut() -> bool) {
