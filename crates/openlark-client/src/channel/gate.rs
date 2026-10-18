@@ -20,8 +20,7 @@ pub(super) fn normalize_message(
         .iter()
         .map(mention_from)
         .collect::<Vec<_>>();
-    let mention_all = mentions.iter().any(|item| is_mention_all_key(&item.key))
-        || content_has_mention_all(&message.content);
+    let mention_all = mentions.iter().any(|item| is_mention_all_key(&item.key));
     let mentioned_bot =
         !bot_open_id.is_empty() && mentions.iter().any(|item| item.open_id == bot_open_id);
     let sender = event
@@ -155,10 +154,6 @@ fn mention_from(mention: &ImMention) -> Mention {
 
 fn is_mention_all_key(key: &str) -> bool {
     key == "@_all" || key == "@all"
-}
-
-fn content_has_mention_all(raw: &str) -> bool {
-    raw.contains("@_all") || raw.contains("@all")
 }
 
 fn chat_kind(chat_type: &str) -> ChatKind {

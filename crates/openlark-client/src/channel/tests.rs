@@ -10,8 +10,8 @@ use serde_json::{Value, json};
 use tokio::sync::oneshot;
 
 use super::{
-    CardDocument, ChannelError, ChatKind, DmMode, GroupAllowlist, InboundContent, LarkChannel,
-    MessageId, MessageRecipient, Outbound, RejectReason, SentMessage,
+    CardDocument, ChannelError, ChatKind, DmMode, GroupAllowlist, InboundContent, InboundPolicy,
+    LarkChannel, MessageId, MessageRecipient, Outbound, RejectReason, SentMessage,
 };
 use crate::ws_client::{
     CardAction, CardActionTrigger, EventHeader, ImMention, ImMessageReceiveV1,
@@ -155,6 +155,16 @@ fn text_message(
     chat_id: &str,
     mentions: Vec<ImMention>,
 ) -> ImMessageReceiveV1 {
+    text_with(message_id, chat_type, chat_id, r#"{"text":"hi"}"#, mentions)
+}
+
+fn text_with(
+    message_id: &str,
+    chat_type: &str,
+    chat_id: &str,
+    content: &str,
+    mentions: Vec<ImMention>,
+) -> ImMessageReceiveV1 {
     ImMessageReceiveV1 {
         schema: "2.0".to_string(),
         header: EventHeader {
@@ -185,7 +195,7 @@ fn text_message(
                 thread_id: "omt_thread".to_string(),
                 chat_type: chat_type.to_string(),
                 message_type: "text".to_string(),
-                content: r#"{"text":"hi"}"#.to_string(),
+                content: content.to_string(),
                 mentions,
             },
         },
@@ -233,6 +243,106 @@ fn channel_normalizes_text() {
     );
     assert!(matches!(message.chat_kind, ChatKind::P2p));
     assert_eq!(message.chat_id, "user-dm");
+}
+
+#[test]
+fn channel_mention_all_uses_parsed_tokens() {
+    let policy = InboundPolicy::default();
+    let cases = [
+        (
+            r#"{"text":"user@all.example"}"#,
+            vec![mention("@_user_1", "ou_bot")],
+            false,
+            Ok(()),
+        ),
+        (
+            r#"{"text":"@allergy"}"#,
+            vec![mention("@_user_1", "ou_bot")],
+            false,
+            Ok(()),
+        ),
+        (
+            r#"{"text":"hi @_all"}"#,
+            vec![mention("@_user_1", "ou_bot")],
+            false,
+            Ok(()),
+        ),
+        (
+            r#"{"text":"hi"}"#,
+            vec![mention("@_all", ""), mention("@_user_1", "ou_bot")],
+            true,
+            Err(RejectReason::MentionAllBlocked),
+        ),
+        (
+            r#"{"text":"hi"}"#,
+            vec![mention("@all", "")],
+            true,
+            Err(RejectReason::MentionAllBlocked),
+        ),
+        (
+            r#"{"text":"@allergy"}"#,
+            vec![mention("@allergy", "ou_other")],
+            false,
+            Err(RejectReason::NoMention),
+        ),
+    ];
+
+    for (index, (content, mentions, mention_all, decision)) in cases.into_iter().enumerate() {
+        let event = text_with(
+            &format!("om_mention_{index}"),
+            "group",
+            "oc_room",
+            content,
+            mentions,
+        );
+        let message = super::gate::normalize_message(&event, "ou_bot").expect("normalized");
+        assert_eq!(message.mention_all, mention_all, "{content}");
+        assert_eq!(
+            super::gate::decide(&policy, &message),
+            decision,
+            "{content}"
+        );
+    }
+}
+
+#[test]
+fn channel_connect_outside_runtime_keeps_messages() {
+    let seen = Arc::new(AtomicUsize::new(0));
+    let seen_handler = Arc::clone(&seen);
+    let fake = FakeOutbound::recording();
+    let outbound: Arc<dyn Outbound> = fake;
+    let channel = LarkChannel::builder(config())
+        .with_outbound(outbound)
+        .on_message(move |_message, _channel| {
+            seen_handler.fetch_add(1, Ordering::SeqCst);
+            async { Ok(()) }
+        })
+        .build()
+        .expect("channel");
+    let _ = channel.inner.bot.set("ou_bot".to_string());
+
+    {
+        let mut connect = std::pin::pin!(channel.connect());
+        let mut context = std::task::Context::from_waker(std::task::Waker::noop());
+        let polled = connect.as_mut().poll(&mut context);
+        assert!(matches!(
+            polled,
+            std::task::Poll::Ready(Err(ChannelError::NoRuntime))
+        ));
+    }
+
+    let runtime = tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()
+        .expect("runtime");
+    runtime.block_on(async {
+        channel.ensure_workers().expect("retry inside runtime");
+        channel
+            .on_im(text_message("om_retry", "p2p", "user-dm", Vec::new()))
+            .expect("dispatch");
+        wait_until(|| seen.load(Ordering::SeqCst) == 1).await;
+    });
+    assert_eq!(seen.load(Ordering::SeqCst), 1);
 }
 
 #[tokio::test(flavor = "current_thread")]

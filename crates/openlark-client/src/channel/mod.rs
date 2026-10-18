@@ -15,15 +15,12 @@ use std::sync::atomic::{AtomicBool, AtomicU8, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard, OnceLock};
 use std::time::{Duration, Instant};
 
+use openlark_bot::BotService;
 use openlark_communication::im::v1::message::patch::PatchMessageCardRequest;
 use openlark_communication::im::v1::message::reply::{ReplyMessageBody, ReplyMessageRequest};
 use openlark_communication::{CommunicationClient, MessageCard, ReplyTarget};
-use openlark_core::api::{ApiRequest, ApiResponseTrait, ResponseFormat};
 use openlark_core::config::Config;
-use openlark_core::constants::AccessTokenType;
 use openlark_core::error::CoreError;
-use openlark_core::http::Transport;
-use serde::Deserialize;
 use serde_json::Value;
 use tokio::runtime::Handle;
 use tokio::sync::{Notify, mpsc, oneshot};
@@ -149,7 +146,7 @@ pub struct InboundMessage {
     pub content: InboundContent,
     /// 消息里的 mention。
     pub mentions: Vec<Mention>,
-    /// mention key 或原文里出现了 @所有人。
+    /// 某条 mention 的 key 是 `@_all` 或 `@all`。正文里的同形文字不算。
     pub mention_all: bool,
     /// 某个 mention 的 `open_id` 等于机器人。
     pub mentioned_bot: bool,
@@ -702,10 +699,14 @@ impl LarkChannel {
     }
 
     fn ensure_workers(&self) -> Result<(), ChannelError> {
+        if self.inner.workers_started.load(Ordering::Acquire) {
+            return Ok(());
+        }
+        // 先确认当前线程有 runtime。失败时闩保持关闭，之后在 runtime 里重试还能建 worker。
+        let handle = Handle::try_current().map_err(|_| ChannelError::NoRuntime)?;
         if self.inner.workers_started.swap(true, Ordering::AcqRel) {
             return Ok(());
         }
-        let handle = Handle::try_current().map_err(|_| ChannelError::NoRuntime)?;
         *lock(&self.inner.runtime) = Some(handle.clone());
         if let Some(handler) = self.inner.on_message.clone() {
             let (tx, mut rx) = mpsc::channel(MESSAGE_QUEUE);
@@ -1059,14 +1060,14 @@ impl Outbound for LiveOutbound {
     fn bot_open_id(&self) -> BoxFut<'_, Result<String, ChannelError>> {
         let config = (*self.config).clone();
         Box::pin(async move {
-            let request = ApiRequest::<BotInfoResponse>::get("/open-apis/bot/v3/info")
-                .with_supported_access_token_types(vec![AccessTokenType::Tenant]);
-            let body: BotInfoResponse =
-                Transport::request_typed(request, &config, None, "获取机器人信息")
-                    .await
-                    .map_err(|_| ChannelError::BotIdentity)?;
-            bot_open_id_from(&body.bot)
-                .or_else(|| bot_open_id_from(&body.data))
+            let response = BotService::new(config)
+                .bot_info()
+                .execute()
+                .await
+                .map_err(|_| ChannelError::BotIdentity)?;
+            response
+                .open_id()
+                .map(str::to_string)
                 .ok_or(ChannelError::BotIdentity)
         })
     }
@@ -1141,32 +1142,6 @@ impl Outbound for LiveOutbound {
             Ok(())
         })
     }
-}
-
-#[derive(Debug, Deserialize)]
-struct BotInfoResponse {
-    #[serde(default)]
-    bot: Option<BotOpenId>,
-    #[serde(default)]
-    data: Option<BotOpenId>,
-}
-
-#[derive(Debug, Deserialize)]
-struct BotOpenId {
-    #[serde(default)]
-    open_id: String,
-}
-
-impl ApiResponseTrait for BotInfoResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Flatten
-    }
-}
-
-fn bot_open_id_from(slot: &Option<BotOpenId>) -> Option<String> {
-    slot.as_ref()
-        .map(|bot| bot.open_id.trim().to_string())
-        .filter(|id| !id.is_empty())
 }
 
 fn reply_target(message_id: String, in_thread: bool) -> ReplyTarget {

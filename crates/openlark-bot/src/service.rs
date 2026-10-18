@@ -3,11 +3,11 @@ use std::sync::Arc;
 
 /// BotService：机器人服务的统一入口
 ///
-/// 提供对机器人搜索 API（v4）的访问能力。
+/// 提供获取机器人信息（v3）和搜索机器人（v4）。
 #[derive(Clone)]
 pub struct BotService {
-    // config 仅在 v4 feature 开启时被 search_bot() accessor 读取；feature 关闭时受控标注为预期死代码。
-    #[cfg_attr(not(feature = "v4"), expect(dead_code))]
+    // config 只在 v3/v4 入口读取；两个 feature 都关闭时这里是预期死代码。
+    #[cfg_attr(not(any(feature = "v3", feature = "v4")), expect(dead_code))]
     config: Arc<Config>,
 }
 
@@ -17,6 +17,14 @@ impl BotService {
         Self {
             config: Arc::new(config),
         }
+    }
+
+    /// 获取当前应用机器人信息。
+    ///
+    /// 端点、租户 token 和响应模型都在这个请求上。
+    #[cfg(feature = "v3")]
+    pub fn bot_info(&self) -> crate::bot::bot::v3::info::GetBotInfoRequest {
+        crate::bot::bot::v3::info::GetBotInfoRequest::new(Arc::clone(&self.config))
     }
 
     /// 搜索机器人请求构建器（直达 leaf）。
