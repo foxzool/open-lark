@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **communication：类型化消息卡片 `MessageCard`（#690）**：
+  调用方用标题、内容块、按钮以及 `column_set` / `form` / `chart` / `table`
+  拼出 schema 2.0 的 interactive JSON，再交给现有 `ImClient::send_card`。
+  根上和列里的按钮都是 `tag=button`，不再包 `action`。
+  按钮回调写成 `behaviors` 里的 `callback`，不再写裸 `value`。
+  增加 `input`，交互组件的 `name` 在整张卡片里唯一。
+  `div_md` 序列化成 `tag=markdown`。
+  `send_card(serde_json::Value)` 的签名不变，旧的原始 JSON 仍可直接发送，CardKit 也不变。
+
 - **auth：client assertion 换取 tenant access token（#692）**：
   `ClientBuilder::client_assertion_provider` 接受外部签发的 RFC 7523 assertion。
   自建应用的 tenant token 走 `POST {oauth}/oauth/v3/token` 的 jwt-bearer 换票，
