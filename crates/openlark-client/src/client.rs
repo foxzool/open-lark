@@ -122,7 +122,8 @@ impl Client {
 
     /// ✅ 检查客户端是否已正确配置
     pub fn is_configured(&self) -> bool {
-        !self.config.app_id().is_empty() && !self.config.app_secret().is_empty()
+        !self.config.app_id().is_empty()
+            && (!self.config.requires_app_secret() || !self.config.app_secret().is_empty())
     }
 
     /// 🆕 使用统一 CoreConfig 创建客户端
@@ -162,11 +163,30 @@ impl Client {
         #[cfg(feature = "auth")]
         let core_config = {
             use openlark_auth::AuthTokenProvider;
+            if base_core_config.client_assertion_provider().is_some()
+                && let Err(err) = openlark_auth::ensure_client_assertion_endpoint(
+                    base_core_config.base_url(),
+                    base_core_config.oauth_base_url(),
+                )
+            {
+                return with_context(Err(err), "operation", operation);
+            }
             let provider = AuthTokenProvider::new(base_core_config.clone());
             base_core_config.with_token_provider(provider)
         };
         #[cfg(not(feature = "auth"))]
-        let core_config = base_core_config.clone();
+        let core_config = {
+            if base_core_config.client_assertion_provider().is_some() {
+                return with_context(
+                    Err(openlark_core::error::configuration_error(
+                        openlark_core::auth::CLIENT_ASSERTION_NEEDS_AUTH_FEATURE,
+                    )),
+                    "operation",
+                    operation,
+                );
+            }
+            base_core_config.clone()
+        };
 
         Self::from_parts(base_core_config, core_config)
     }

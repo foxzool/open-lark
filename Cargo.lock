@@ -1604,6 +1604,7 @@ dependencies = [
  "tokio",
  "tokio-test",
  "tracing",
+ "url",
  "urlencoding",
  "uuid",
  "wiremock",

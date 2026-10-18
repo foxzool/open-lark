@@ -9,7 +9,11 @@ use crate::auth::auth::v3::auth::{
 };
 use openlark_core::{
     SDKResult,
-    auth::{TokenProvider, TokenRequest},
+    auth::{
+        CLIENT_ASSERTION_APP_TOKEN_UNAVAILABLE, CLIENT_ASSERTION_EMPTY,
+        CLIENT_ASSERTION_MARKETPLACE_UNSUPPORTED, CLIENT_ASSERTION_PROVIDER_FAILED_PREFIX,
+        ClientAssertionProvider, TokenProvider, TokenRequest,
+    },
     config::Config,
     constants::{AccessTokenType, AppType},
     error::configuration_error,
@@ -149,6 +153,35 @@ impl AuthTokenProvider {
             .await;
         Ok(token)
     }
+
+    async fn fetch_tenant_by_client_assertion(
+        &self,
+        provider: Arc<dyn ClientAssertionProvider>,
+    ) -> SDKResult<String> {
+        let endpoint = client_assertion::resolve_oauth_endpoint(
+            self.config.base_url(),
+            self.config.oauth_base_url(),
+        )?;
+        let cache_key = client_assertion::assertion_cache_key(&endpoint.aud);
+        let aud = endpoint.aud;
+        let token_url = endpoint.token_url;
+        self.get_or_fetch(cache_key, || async move {
+            let assertion = match provider.retrieve_assertion(&aud).await {
+                Ok(value) => value,
+                Err(err) => {
+                    return Err(configuration_error(format!(
+                        "{CLIENT_ASSERTION_PROVIDER_FAILED_PREFIX}{err}"
+                    )));
+                }
+            };
+            let assertion = assertion.trim();
+            if assertion.is_empty() {
+                return Err(configuration_error(CLIENT_ASSERTION_EMPTY));
+            }
+            client_assertion::exchange_tenant_token(&self.config, &token_url, assertion).await
+        })
+        .await
+    }
 }
 
 impl TokenProvider for AuthTokenProvider {
@@ -159,6 +192,9 @@ impl TokenProvider for AuthTokenProvider {
         Box::pin(async move {
             match request.token_type {
                 AccessTokenType::App => {
+                    if self.config.client_assertion_provider().is_some() {
+                        return Err(configuration_error(CLIENT_ASSERTION_APP_TOKEN_UNAVAILABLE));
+                    }
                     let cache_key =
                         Self::cache_key(&AccessTokenType::App, &self.config.app_type(), &request);
                     self.get_or_fetch(cache_key, || async {
@@ -194,6 +230,16 @@ impl TokenProvider for AuthTokenProvider {
                     .await
                 }
                 AccessTokenType::Tenant => {
+                    if let Some(provider) = self.config.client_assertion_provider().cloned() {
+                        return match self.config.app_type() {
+                            AppType::Marketplace => Err(configuration_error(
+                                CLIENT_ASSERTION_MARKETPLACE_UNSUPPORTED,
+                            )),
+                            AppType::SelfBuild => {
+                                self.fetch_tenant_by_client_assertion(provider).await
+                            }
+                        };
+                    }
                     let cache_key = Self::cache_key(
                         &AccessTokenType::Tenant,
                         &self.config.app_type(),
@@ -249,6 +295,10 @@ impl TokenProvider for AuthTokenProvider {
         })
     }
 }
+
+mod client_assertion;
+
+pub use client_assertion::ensure_client_assertion_endpoint;
 
 #[cfg(test)]
 mod tests;

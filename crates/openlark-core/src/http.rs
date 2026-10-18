@@ -1,5 +1,6 @@
 use std::marker::PhantomData;
 
+use futures_util::StreamExt;
 use reqwest::RequestBuilder;
 use tracing::debug;
 use tracing::{Instrument, info_span};
@@ -10,7 +11,7 @@ use crate::{
     api::{ApiRequest, Response},
     config::Config,
     constants::*,
-    error::CoreError,
+    error::{CoreError, network_error},
     req_option::RequestOption,
     request_execution::{ResponseDecoder, UnifiedRequestBuilder},
 };
@@ -212,6 +213,36 @@ impl<T: ApiResponseTrait + std::fmt::Debug + for<'de> serde::Deserialize<'de>> T
     }
 }
 
+/// 按上限读取 HTTP 响应体。
+///
+/// `Content-Length` 已经超过 `max_size` 时不读取 body。
+/// 流式累计超过上限时立刻返回，超出的分块不会进入内存。
+pub async fn read_body_with_limit(
+    response: reqwest::Response,
+    max_size: u64,
+) -> Result<Vec<u8>, CoreError> {
+    if let Some(content_length) = response.content_length()
+        && content_length > max_size
+    {
+        return Err(CoreError::response_too_large(max_size, content_length));
+    }
+
+    let mut total_size: u64 = 0;
+    let mut body = Vec::new();
+    let mut stream = response.bytes_stream();
+
+    while let Some(chunk_result) = stream.next().await {
+        let chunk = chunk_result.map_err(|e| network_error(e.to_string()))?;
+        total_size += chunk.len() as u64;
+        if total_size > max_size {
+            return Err(CoreError::response_too_large(max_size, total_size));
+        }
+        body.extend_from_slice(&chunk);
+    }
+
+    Ok(body)
+}
+
 fn validate(
     config: &Config,
     option: &RequestOption,
@@ -221,7 +252,7 @@ fn validate(
         return Err(crate::error::validation_error("app_id", "AppId is empty"));
     }
 
-    if config.app_secret.is_empty() {
+    if config.requires_app_secret() && config.app_secret.is_empty() {
         return Err(crate::error::validation_error(
             "app_secret",
             "AppSecret is empty",
@@ -657,6 +688,41 @@ mod test {
             assert_eq!(message, "AppSecret is empty");
         } else {
             panic!("Expected IllegalParamError for empty app_secret");
+        }
+    }
+
+    #[derive(Debug)]
+    struct PresentAssertion;
+
+    impl crate::auth::ClientAssertionProvider for PresentAssertion {
+        fn retrieve_assertion<'a>(
+            &'a self,
+            _aud: &'a str,
+        ) -> std::pin::Pin<
+            Box<dyn std::future::Future<Output = crate::SDKResult<String>> + Send + 'a>,
+        > {
+            Box::pin(async { Ok("fake-assertion".to_string()) })
+        }
+    }
+
+    #[test]
+    fn test_validate_assertion_provider_allows_empty_secret() {
+        let config = Config::builder()
+            .app_id("cli_demo")
+            .client_assertion_provider(PresentAssertion)
+            .build();
+        let option = RequestOption::default();
+        assert!(validate(&config, &option, AccessTokenType::Tenant).is_ok());
+
+        let empty_id = Config::builder()
+            .client_assertion_provider(PresentAssertion)
+            .build();
+        if let Err(crate::error::CoreError::Validation { message, .. }) =
+            validate(&empty_id, &option, AccessTokenType::None)
+        {
+            assert_eq!(message, "AppId is empty");
+        } else {
+            panic!("有供给时 app_id 仍不能为空");
         }
     }
 }

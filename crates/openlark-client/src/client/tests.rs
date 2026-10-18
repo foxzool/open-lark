@@ -782,3 +782,282 @@ mod security_propagation_tests {
         assert!(err.to_string().contains("security service unavailable"));
     }
 }
+
+mod client_assertion_build {
+    use super::Client;
+    #[cfg(not(feature = "auth"))]
+    use openlark_core::auth::CLIENT_ASSERTION_NEEDS_AUTH_FEATURE;
+    use openlark_core::auth::ClientAssertionProvider;
+    #[cfg(feature = "auth")]
+    use openlark_core::auth::TokenRequest;
+    #[cfg(feature = "auth")]
+    use openlark_core::auth::{
+        CLIENT_ASSERTION_CUSTOM_BASE_URL, CLIENT_ASSERTION_MARKETPLACE_UNSUPPORTED,
+    };
+    #[cfg(feature = "auth")]
+    use openlark_core::constants::AppType;
+    use std::future::Future;
+    use std::pin::Pin;
+    use std::sync::Arc;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+
+    #[derive(Debug)]
+    struct FixedAssertion {
+        calls: Arc<AtomicUsize>,
+    }
+
+    impl FixedAssertion {
+        fn new() -> (Self, Arc<AtomicUsize>) {
+            let calls = Arc::new(AtomicUsize::new(0));
+            (
+                Self {
+                    calls: Arc::clone(&calls),
+                },
+                calls,
+            )
+        }
+    }
+
+    impl ClientAssertionProvider for FixedAssertion {
+        fn retrieve_assertion<'a>(
+            &'a self,
+            aud: &'a str,
+        ) -> Pin<Box<dyn Future<Output = openlark_core::SDKResult<String>> + Send + 'a>> {
+            let _ = aud;
+            Box::pin(async move {
+                self.calls.fetch_add(1, Ordering::SeqCst);
+                Ok("fake-assertion".to_string())
+            })
+        }
+    }
+
+    #[test]
+    fn missing_secret_without_provider_keeps_old_message() {
+        let err = Client::builder()
+            .app_id("cli_demo")
+            .build()
+            .expect_err("没有供给时 secret 仍必填");
+        assert!(err.to_string().contains("app_secret 不能为空"));
+    }
+
+    #[test]
+    fn empty_app_id_still_fails_with_provider() {
+        let (provider, _) = FixedAssertion::new();
+        let err = Client::builder()
+            .app_id("")
+            .client_assertion_provider(provider)
+            .build()
+            .expect_err("app_id 仍必填");
+        assert!(err.to_string().contains("app_id 不能为空"));
+    }
+
+    #[cfg(feature = "auth")]
+    #[test]
+    fn assertion_only_client_is_configured() {
+        let (provider, _) = FixedAssertion::new();
+        let client = Client::builder()
+            .app_id("cli_demo")
+            .client_assertion_provider(provider)
+            .build()
+            .expect("官方 base_url 可推导 OAuth 端点");
+        assert!(client.is_configured());
+        assert!(client.config().app_secret().is_empty());
+        assert!(!client.config().requires_app_secret());
+    }
+
+    #[cfg(feature = "auth")]
+    #[tokio::test]
+    async fn marketplace_and_custom_base_fail_before_http() {
+        let server = wiremock::MockServer::start().await;
+        let (provider, _) = FixedAssertion::new();
+        let err = Client::builder()
+            .app_id("cli_demo")
+            .app_secret("secret_demo")
+            .app_type(AppType::Marketplace)
+            .base_url(server.uri())
+            .oauth_base_url(server.uri())
+            .allow_custom_base_url(true)
+            .client_assertion_provider(provider)
+            .build()
+            .expect_err("marketplace 不能装供给");
+        assert!(
+            err.to_string()
+                .contains(CLIENT_ASSERTION_MARKETPLACE_UNSUPPORTED)
+        );
+
+        let (provider, _) = FixedAssertion::new();
+        let err = Client::builder()
+            .app_id("cli_demo")
+            .base_url(server.uri())
+            .allow_custom_base_url(true)
+            .client_assertion_provider(provider)
+            .build()
+            .expect_err("自定义域必须有 oauth_base_url");
+        assert!(err.to_string().contains(CLIENT_ASSERTION_CUSTOM_BASE_URL));
+        assert!(
+            server
+                .received_requests()
+                .await
+                .unwrap_or_default()
+                .is_empty()
+        );
+    }
+
+    #[cfg(feature = "auth")]
+    #[tokio::test]
+    async fn transport_request_uses_exchanged_tenant_token() {
+        let server = wiremock::MockServer::start().await;
+        wiremock::Mock::given(wiremock::matchers::method("POST"))
+            .and(wiremock::matchers::path("/oauth/v3/token"))
+            .respond_with(
+                wiremock::ResponseTemplate::new(200).set_body_json(serde_json::json!({
+                    "access_token": "tat_fake",
+                    "expires_in": 7200
+                })),
+            )
+            .expect(1)
+            .mount(&server)
+            .await;
+        wiremock::Mock::given(wiremock::matchers::method("GET"))
+            .and(wiremock::matchers::path("/open-apis/probe"))
+            .and(wiremock::matchers::header(
+                "Authorization",
+                "Bearer tat_fake",
+            ))
+            .respond_with(
+                wiremock::ResponseTemplate::new(200).set_body_json(serde_json::json!({
+                    "code": 0,
+                    "msg": "ok",
+                    "data": {}
+                })),
+            )
+            .expect(1)
+            .mount(&server)
+            .await;
+        for grant_path in [
+            "/open-apis/auth/v3/tenant_access_token/internal",
+            "/open-apis/auth/v3/app_access_token/internal",
+            "/open-apis/auth/v3/tenant_access_token",
+            "/open-apis/auth/v3/app_access_token",
+        ] {
+            wiremock::Mock::given(wiremock::matchers::method("POST"))
+                .and(wiremock::matchers::path(grant_path))
+                .respond_with(wiremock::ResponseTemplate::new(500))
+                .expect(0)
+                .mount(&server)
+                .await;
+        }
+
+        let (provider, calls) = FixedAssertion::new();
+        let client = Client::builder()
+            .app_id("cli_demo")
+            .client_assertion_provider(provider)
+            .base_url(server.uri())
+            .oauth_base_url(server.uri())
+            .allow_custom_base_url(true)
+            .build()
+            .expect("注入前的 Config 上带着供给");
+
+        let response = openlark_core::http::Transport::<serde_json::Value>::request(
+            openlark_core::api::ApiRequest::<serde_json::Value>::get("/open-apis/probe"),
+            client.config(),
+            None,
+        )
+        .await
+        .expect("业务请求应带上换到的 tenant token");
+        assert!(response.is_success());
+        assert_eq!(calls.load(Ordering::SeqCst), 1);
+
+        let received = server.received_requests().await.unwrap_or_default();
+        assert!(
+            received
+                .iter()
+                .any(|request| request.url.path() == "/open-apis/probe")
+        );
+        assert_eq!(
+            received
+                .iter()
+                .filter(|request| request.url.path() == "/oauth/v3/token")
+                .count(),
+            1
+        );
+    }
+
+    #[cfg(feature = "auth")]
+    #[tokio::test]
+    async fn client_timeout_covers_assertion_exchange() {
+        let server = wiremock::MockServer::start().await;
+        wiremock::Mock::given(wiremock::matchers::method("POST"))
+            .and(wiremock::matchers::path("/oauth/v3/token"))
+            .respond_with(
+                wiremock::ResponseTemplate::new(200)
+                    .set_delay(std::time::Duration::from_secs(3))
+                    .set_body_json(serde_json::json!({
+                        "access_token": "tat_late",
+                        "expires_in": 7200
+                    })),
+            )
+            .mount(&server)
+            .await;
+
+        let (provider, _) = FixedAssertion::new();
+        let client = Client::builder()
+            .app_id("cli_demo")
+            .client_assertion_provider(provider)
+            .base_url(server.uri())
+            .oauth_base_url(server.uri())
+            .allow_custom_base_url(true)
+            .timeout(std::time::Duration::from_millis(200))
+            .build()
+            .expect("ClientBuilder::timeout 应写入 Config::req_timeout");
+        assert_eq!(
+            client.config().req_timeout(),
+            Some(std::time::Duration::from_millis(200))
+        );
+
+        let started = std::time::Instant::now();
+        let err = client
+            .config()
+            .token_provider()
+            .get_token(TokenRequest::tenant())
+            .await
+            .expect_err("客户端超时应覆盖 assertion 换票");
+        assert!(
+            started.elapsed() < std::time::Duration::from_secs(2),
+            "换票不应无限等待，实际 {:?}",
+            started.elapsed()
+        );
+        let mut message = err.to_string();
+        if let openlark_core::error::CoreError::Network(net) = &err {
+            let mut source = net
+                .source
+                .as_ref()
+                .map(|item| item.as_ref() as &dyn std::error::Error);
+            while let Some(inner) = source {
+                message.push(' ');
+                message.push_str(&inner.to_string());
+                source = inner.source();
+            }
+        }
+        let message = message.to_ascii_lowercase();
+        assert!(
+            message.contains("timed out") || message.contains("timeout"),
+            "应是请求超时，实际 {message}"
+        );
+    }
+
+    #[cfg(not(feature = "auth"))]
+    #[test]
+    fn provider_without_auth_feature_fails_build() {
+        let (provider, _) = FixedAssertion::new();
+        let err = Client::builder()
+            .app_id("cli_demo")
+            .client_assertion_provider(provider)
+            .build()
+            .expect_err("没有 auth feature 不能换票");
+        assert!(
+            err.to_string()
+                .contains(CLIENT_ASSERTION_NEEDS_AUTH_FEATURE)
+        );
+    }
+}

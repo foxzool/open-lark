@@ -22,6 +22,8 @@ fn test_config_creation() {
         retry_count: 3,
         enable_log: true,
         allow_custom_base_url: false,
+        client_assertion_provider: None,
+        oauth_base_url: None,
     });
 
     assert_eq!(config.app_id, "test_app_id");
@@ -64,6 +66,8 @@ fn test_config_clone() {
         retry_count: 3,
         enable_log: true,
         allow_custom_base_url: false,
+        client_assertion_provider: None,
+        oauth_base_url: None,
     });
 
     let cloned_config = config.clone();
@@ -721,4 +725,63 @@ fn test_config_builder_load_from_env_bool_zero_is_false() {
             assert!(!config.enable_token_cache());
         },
     );
+}
+
+struct LeakyAssertion;
+
+impl std::fmt::Debug for LeakyAssertion {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("ASSERTION_LEAK_sentinel")
+    }
+}
+
+impl crate::auth::ClientAssertionProvider for LeakyAssertion {
+    fn retrieve_assertion<'a>(
+        &'a self,
+        _aud: &'a str,
+    ) -> Pin<Box<dyn Future<Output = crate::SDKResult<String>> + Send + 'a>> {
+        Box::pin(async { Ok("assertion-secret-value".to_string()) })
+    }
+}
+
+#[test]
+fn assertion_provider_relaxes_secret_and_rejects_marketplace() {
+    let config = Config::builder()
+        .app_id("cli_demo")
+        .client_assertion_provider(LeakyAssertion)
+        .oauth_base_url("   ")
+        .build();
+    assert!(config.oauth_base_url().is_none());
+    assert!(!config.requires_app_secret());
+    config.validate().expect("有供给时可以没有 app_secret");
+
+    let debug = format!("{config:?}");
+    assert!(debug.contains("client_assertion_provider"));
+    assert!(!debug.contains("ASSERTION_LEAK_sentinel"));
+    assert!(!debug.contains("assertion-secret-value"));
+
+    let marketplace = Config::builder()
+        .app_id("cli_demo")
+        .app_secret("secret_demo")
+        .app_type(AppType::Marketplace)
+        .client_assertion_provider(LeakyAssertion)
+        .build()
+        .validate()
+        .expect_err("marketplace 不能装供给");
+    assert!(matches!(
+        marketplace,
+        crate::error::CoreError::Configuration { .. }
+    ));
+    assert!(
+        marketplace
+            .to_string()
+            .contains(crate::auth::CLIENT_ASSERTION_MARKETPLACE_UNSUPPORTED)
+    );
+
+    let missing_id = Config::builder()
+        .client_assertion_provider(LeakyAssertion)
+        .build()
+        .validate()
+        .expect_err("app_id 仍必填");
+    assert!(missing_id.to_string().contains("app_id 不能为空"));
 }
