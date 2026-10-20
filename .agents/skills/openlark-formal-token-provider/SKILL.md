@@ -92,7 +92,7 @@ Indivisible in both: one `get_cached` call; one `fetch` await; one `set_cached` 
 
 Last confirmed that this verification describes the code:
 
-- **sync commit:** `6d150864d` (`AuthTokenProvider` / `get_or_fetch` at this commit; advance after reconfirming the model)
+- **sync commit:** `8bbbfc4c1` (model + `AuthTokenProvider::get_or_fetch` confirmed together; advance only after reconfirming)
 - **covered functions:** `CachedToken::new`, `CachedToken::is_expired`, `AuthTokenProvider::get_cached`, `set_cached`, `get_or_fetch`
 
 Move the sync commit forward only after you confirm the model still matches those functions at the new commit (re-read the Rust, update the `.tla` if steps changed, re-run `./formal/token_provider/run_tlc.sh`).
