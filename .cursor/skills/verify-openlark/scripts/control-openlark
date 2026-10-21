@@ -24,7 +24,11 @@ Usage:
   control-openlark example check
   control-openlark api-coverage [--crate NAME|--all-crates]
   control-openlark field-verify --crate NAME [--fetch-docs] [--api-id ID]
+  control-openlark fmt
   control-openlark lint
+  control-openlark features [FEATURE_STRING]
+  control-openlark protobuf
+  control-openlark e2e channel|ws-typed|oauth
   control-openlark evidence-init [RUN_ID]
   control-openlark evidence-path
   control-openlark cleanup [--purge-target]
@@ -33,7 +37,10 @@ Environment:
   VERIFY_OPENLARK_ARTIFACTS  Evidence root (default: skill artifacts/)
   VERIFY_OPENLARK_RUN_ID     Fixed run id (default: generated)
   CARGO_TARGET_DIR           Optional isolated target dir for this run
-  OPENLARK_APP_ID / OPENLARK_APP_SECRET  Optional; examples fall back to placeholders
+
+Offline drives unset live Feishu switches. They do not read or print secret values.
+Live channel / WebSocket / HTTP calls are documented in features/feishu-live-e2e.md
+and are not subcommands of this harness.
 EOF
 }
 
@@ -65,7 +72,9 @@ log_cmd() {
   local log_file="$1"
   shift
   {
-    echo "\$ $*"
+    printf '$'
+    printf ' %q' "$@"
+    printf '\n'
     "$@"
   } 2>&1 | tee -a "${log_file}"
   return "${PIPESTATUS[0]}"
@@ -101,6 +110,11 @@ cmd_doctor() {
       echo "live_lookup_env=SET (examples may call Feishu; unset for dry-run proofs)"
     else
       echo "live_lookup_env=unset (client_setup stays offline)"
+    fi
+    if [[ -n "${OPENLARK_CHANNEL_E2E:-}" ]] || [[ -n "${OPENLARK_WS_CONNECT:-}" ]] || [[ -n "${OPENLARK_LIVE_USER_CALL:-}" ]]; then
+      echo "live_e2e_env=SET (names only: OPENLARK_CHANNEL_E2E / OPENLARK_WS_CONNECT / OPENLARK_LIVE_USER_CALL; harness offline drives unset them)"
+    else
+      echo "live_e2e_env=unset"
     fi
     # Smoke: metadata parses
     (cd "${REPO_ROOT}" && cargo metadata --no-deps --format-version 1 >/dev/null)
@@ -174,7 +188,8 @@ cmd_test() {
   done
   local out="${EVIDENCE_DIR}/test.txt"
   cd "${REPO_ROOT}"
-  local -a cmd=(cargo test)
+  # CI test job: cargo test --workspace --all-features --no-fail-fast
+  local -a cmd=(cargo test --no-fail-fast)
   if [[ -n "${pkg}" ]]; then
     cmd+=(-p "${pkg}")
   else
@@ -210,12 +225,16 @@ cmd_example_run() {
         ;;
     esac
   done
+  case "${name}" in
+    first_api_call|websocket_echo_bot)
+      die "example ${name} contacts Feishu. Follow features/feishu-live-e2e.md; this harness does not run it"
+      ;;
+  esac
   local out="${EVIDENCE_DIR}/example-${name}.txt"
   cd "${REPO_ROOT}"
-  # Prefer placeholders; do not invent live credentials
-  export OPENLARK_APP_ID="${OPENLARK_APP_ID:-cli_demo}"
-  export OPENLARK_APP_SECRET="${OPENLARK_APP_SECRET:-demo_secret}"
+  # Offline proof. Do not inject or print credentials. client_setup falls back to placeholders itself.
   unset OPENLARK_USER_SEARCH_NAME OPENLARK_CHAT_SEARCH_NAME || true
+  unset OPENLARK_WS_CONNECT OPENLARK_LIVE_USER_CALL OPENLARK_CHANNEL_E2E || true
   log_cmd "${out}" cargo run --example "${name}" --features "${features}"
 }
 
@@ -298,20 +317,104 @@ cmd_field_verify() {
   log_cmd "${out}" "${cmd[@]}"
 }
 
-cmd_lint() {
-  require_repo
-  ensure_run_id
+use_isolated_target() {
   if [[ -f "${STATE_DIR}/cargo_target_dir" ]]; then
     export CARGO_TARGET_DIR="$(cat "${STATE_DIR}/cargo_target_dir")"
   fi
+}
+
+cmd_fmt() {
+  require_repo
+  ensure_run_id
+  use_isolated_target
+  local out="${EVIDENCE_DIR}/fmt.txt"
+  cd "${REPO_ROOT}"
+  # CI lint job env RUSTFLAGS="-D warnings" wraps this step. fmt ignores RUSTFLAGS.
+  log_cmd "${out}" env RUSTFLAGS="-D warnings" cargo fmt --all -- --check
+}
+
+cmd_lint() {
+  require_repo
+  ensure_run_id
+  use_isolated_target
   local out="${EVIDENCE_DIR}/lint.txt"
   cd "${REPO_ROOT}"
-  {
-    echo "\$ cargo clippy --workspace --all-targets --all-features -- -Dwarnings"
-    cargo clippy --workspace --all-targets --all-features -- -Dwarnings
-    echo "\$ cargo clippy --workspace --all-targets --no-default-features -- -Dwarnings"
-    cargo clippy --workspace --all-targets --no-default-features -- -Dwarnings
-  } 2>&1 | tee "${out}"
+  : >"${out}"
+  # .github/workflows/ci.yml job lint. Clippy flag is "-D warnings" (with a space).
+  log_cmd "${out}" env RUSTFLAGS="-D warnings" cargo fmt --all -- --check
+  log_cmd "${out}" env RUSTFLAGS="-D warnings" cargo clippy --workspace --all-targets --all-features -- -D warnings
+  log_cmd "${out}" env RUSTFLAGS="-D warnings" cargo clippy --workspace --all-targets --no-default-features -- -D warnings
+}
+
+cmd_features() {
+  require_repo
+  ensure_run_id
+  use_isolated_target
+  local features="${1:-}"
+  if [[ $# -gt 1 ]]; then
+    die "features takes at most one FEATURE_STRING (empty means --no-default-features)"
+  fi
+  if [[ -n "${features}" ]] && [[ ! "${features}" =~ ^[A-Za-z0-9,-]+$ ]]; then
+    die "FEATURE_STRING must be a CI matrix token (letters, digits, comma, hyphen)"
+  fi
+  local slug="empty"
+  if [[ -n "${features}" ]]; then
+    slug="${features//,/-}"
+  fi
+  local out="${EVIDENCE_DIR}/features-${slug}.txt"
+  cd "${REPO_ROOT}"
+  : >"${out}"
+  # .github/workflows/ci.yml job feature-combinations. No RUSTFLAGS on this job.
+  if [[ -z "${features}" ]]; then
+    log_cmd "${out}" timeout 20m cargo build --no-default-features
+    log_cmd "${out}" timeout 15m cargo test -p openlark -p openlark-client --no-default-features --lib
+    log_cmd "${out}" cargo clippy --no-default-features --all-targets -- -D warnings
+  else
+    log_cmd "${out}" timeout 20m cargo build --no-default-features --features "${features}"
+    log_cmd "${out}" timeout 15m cargo test -p openlark -p openlark-client --no-default-features --features "${features}" --lib
+    log_cmd "${out}" cargo clippy --no-default-features --features "${features}" --all-targets -- -D warnings
+  fi
+}
+
+cmd_protobuf() {
+  require_repo
+  ensure_run_id
+  local out="${EVIDENCE_DIR}/protobuf-unittest.txt"
+  cd "${REPO_ROOT}"
+  # CI test job runs this after cargo test. The test itself uses cargo package --offline.
+  log_cmd "${out}" python3 -m unittest tools.tests.test_lark_websocket_protobuf_package
+}
+
+cmd_e2e() {
+  require_repo
+  ensure_run_id
+  use_isolated_target
+  local kind="${1:-}"
+  if [[ "${2:-}" == "--live" ]] || [[ "${kind}" == "--live" ]]; then
+    die "refusing --live: this harness does not send Feishu requests. See features/feishu-live-e2e.md"
+  fi
+  cd "${REPO_ROOT}"
+  case "${kind}" in
+    channel)
+      local out="${EVIDENCE_DIR}/e2e-channel.txt"
+      # Unset live names so a dirty shell cannot send a card or open a socket.
+      log_cmd "${out}" env -u OPENLARK_CHANNEL_E2E -u OPENLARK_APP_ID -u OPENLARK_APP_SECRET -u OPENLARK_CHANNEL_CHAT_ID -u OPENLARK_CHANNEL_E2E_TIMEOUT_SECS \
+        cargo test -p openlark-client --no-default-features --features channel --lib channel_card_callback_e2e -- --ignored --nocapture
+      ;;
+    ws-typed)
+      local out="${EVIDENCE_DIR}/e2e-ws-typed.txt"
+      log_cmd "${out}" env -u OPENLARK_WS_CONNECT -u OPENLARK_APP_ID -u OPENLARK_APP_SECRET \
+        cargo run --example websocket_typed_handler --no-default-features --features communication,websocket
+      ;;
+    oauth)
+      local out="${EVIDENCE_DIR}/e2e-oauth.txt"
+      log_cmd "${out}" env -u OPENLARK_LIVE_USER_CALL \
+        cargo run --example oauth_user_token --no-default-features --features auth,communication
+      ;;
+    *)
+      die "e2e target must be channel, ws-typed, or oauth"
+      ;;
+  esac
 }
 
 cmd_evidence_init() {
@@ -386,7 +489,11 @@ main() {
       ;;
     api-coverage) cmd_api_coverage "$@" ;;
     field-verify) cmd_field_verify "$@" ;;
+    fmt) cmd_fmt "$@" ;;
     lint) cmd_lint "$@" ;;
+    features) cmd_features "$@" ;;
+    protobuf) cmd_protobuf "$@" ;;
+    e2e) cmd_e2e "$@" ;;
     evidence-init) cmd_evidence_init "$@" ;;
     evidence-path) cmd_evidence_path "$@" ;;
     cleanup) cmd_cleanup "$@" ;;
