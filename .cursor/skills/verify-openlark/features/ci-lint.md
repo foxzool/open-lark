@@ -1,29 +1,33 @@
-# CI lint dual-mode
+# CI lint job
 
-CI lint dual-mode is the clippy gate that must pass both with all features enabled and with default features disabled, matching `.github/workflows` / `just lint`.
+The CI lint job in `.github/workflows/ci.yml` checks formatting and runs clippy twice. The job sets `RUSTFLAGS: "-D warnings"`. Clippy's own flag is `-- -D warnings` (space after `-D`).
 
 ## Sub-features
 
-- `clippy-all-features` runs clippy on the workspace with `--all-features -- -Dwarnings`.
-- `clippy-no-default-features` runs clippy with `--no-default-features -- -Dwarnings`.
+- `fmt-check` runs `cargo fmt --all -- --check` under that `RUSTFLAGS` value.
+- `clippy-all-features` runs workspace clippy with `--all-targets --all-features`.
+- `clippy-no-default-features` runs workspace clippy with `--all-targets --no-default-features`.
 
 ## How to get to it (user POV)
 
-- Run `cargo clippy --workspace --all-targets --all-features -- -Dwarnings`.
-- Run `cargo clippy --workspace --all-targets --no-default-features -- -Dwarnings`.
+- From the repo root, run `env RUSTFLAGS="-D warnings" cargo fmt --all -- --check`.
+- From the repo root, run `env RUSTFLAGS="-D warnings" cargo clippy --workspace --all-targets --all-features -- -D warnings`.
+- From the repo root, run `env RUSTFLAGS="-D warnings" cargo clippy --workspace --all-targets --no-default-features -- -D warnings`.
 
 ## Driving it with control-openlark
 
 Preconditions:
 
 - `control-openlark doctor` printed `doctor=PASS`.
-- Prefer after `control-openlark launch` so dependencies are warm.
+- `rustfmt` and `clippy` are installed on the active toolchain (`rustup component add rustfmt clippy` when they are missing).
 
-- **Dual clippy.** Run the CI lint pair. Run `control-openlark lint`. Exit code `0` and `lint.txt` contains both clippy invocations finishing without warnings-as-errors failures.
-- **Proof.** Retain `lint.txt`. One mode passing while the other fails is not a pass — both must succeed.
+- **Format.** Run the fmt step alone. Run `control-openlark fmt`. Exit code `0` and `fmt.txt` records `cargo fmt --all -- --check`.
+- **Full lint job.** Run fmt and both clippy modes. Run `control-openlark lint`. Exit code `0` and `lint.txt` contains all three commands. One mode passing while another fails is not a pass.
+- **Proof.** Retain `fmt.txt` or `lint.txt`. A transcript that shows `-Dwarnings` without the space is the justfile spelling, not this CI job.
 
 ## Gotchas
 
-- Feature-gated code can be clippy-clean under default features and dirty under `--all-features` (and the reverse for `cfg` exclusions). Always run both.
-- This is a static analysis proof; it does not replace `cargo test` for behavioral changes.
-- Full-workspace clippy is slow; do not kill the process by name if it appears hung — wait or stop the specific PID you started.
+- `just lint` is `cargo clippy ... -- -Dwarnings` and does not export `RUSTFLAGS`. Do not record that spelling as the CI gate.
+- Feature-gated code can be clippy-clean in one mode and dirty in the other. Both clippy lines must succeed.
+- This is a static analysis proof. It does not replace `cargo test` for behavioral changes.
+- Full-workspace clippy is slow. Do not kill it by process name. Stop the PID this run started, or wait.

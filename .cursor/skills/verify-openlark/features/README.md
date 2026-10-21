@@ -40,8 +40,10 @@ Keep implementation details out of the map. Name only maintainer paths, stable h
 
 ## Features
 
-- [Workspace build and test](./workspace-build-test.md) covers warm build and `cargo test` as the primary proof path.
+- [Workspace build and test](./workspace-build-test.md) covers warm build, `cargo test --no-fail-fast`, and the protobuf package unittest from the CI test job.
 - [Public examples](./public-examples.md) covers CI compile-check and the offline `client_setup` run.
 - [API coverage harness](./api-coverage.md) covers `tools/validate_apis.py` against `api_list_export.csv`.
 - [API field verify](./api-field-verify.md) covers offline and live-doc field checks via `tools/verify_api_fields.py`.
-- [CI lint dual-mode](./ci-lint.md) covers the all-features / no-default-features clippy gate.
+- [CI lint job](./ci-lint.md) covers `cargo fmt --all -- --check` and the all-features / no-default-features clippy gate.
+- [CI feature combinations](./feature-combinations.md) covers the `feature-combinations` job in `.github/workflows/ci.yml`.
+- [Feishu live HTTP and long connection](./feishu-live-e2e.md) covers offline skip gates and the live channel, WebSocket, and HTTP commands.

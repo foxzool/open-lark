@@ -31,5 +31,6 @@ Preconditions:
 
 - Placeholder `cli_demo` / `demo_secret` values are enough for Client construction; they are not enough for live API calls.
 - `control-openlark example run` unsets lookup env vars on purpose for the offline path — use a raw `cargo run` only when you intentionally need live lookup.
-- Websocket and docs examples need different `--features` lists; copy them from `examples/README.md`, do not reuse `auth,communication`.
+- Websocket and docs examples need different `--features` lists; copy them from `scripts/check-public-examples.sh`, do not reuse `auth,communication`.
+- `control-openlark example run` refuses `first_api_call` and `websocket_echo_bot`. Those contact Feishu. Use [feishu-live-e2e.md](./feishu-live-e2e.md).
 - Compile-check success does not prove runtime behavior; pair it with at least one `example run` when the change touches example or Client prelude code.
