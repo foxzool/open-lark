@@ -1,0 +1,6 @@
+states/
+*.bin
+TokenProvider_TTrace_*.tla
+last-pass.log
+last-singleflight.log
+tla2tools*.jar
