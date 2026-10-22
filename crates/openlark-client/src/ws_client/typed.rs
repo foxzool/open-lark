@@ -19,11 +19,14 @@ mod macros;
 pub mod approval;
 pub mod calendar;
 pub mod contact;
+pub mod corehr_v1;
+pub mod corehr_v2;
 pub mod drive;
 pub mod hire;
 pub mod im;
 pub mod mail;
 pub mod task;
+pub mod vc;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
