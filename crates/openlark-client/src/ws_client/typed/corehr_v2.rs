@@ -9,6 +9,9 @@ use serde::{Deserialize, Serialize};
 use super::EventHeader;
 
 /// `corehr.approval_groups.updated_v2` 完整 envelope。
+///
+/// 官方没有替代事件。不推荐的是字段 `approval_group_status`，推荐同事件字段
+/// `approval_group_status_v2`。本类型与 `register_corehr_approval_groups_updated_v2` 保留。
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct CorehrApprovalGroupsUpdatedV2 {
     /// schema，通常为 `2.0`。
@@ -330,7 +333,7 @@ pub struct CorehrEmployeeDomainEventV2Event {
     #[serde(default)]
     pub opt_desc: Option<String>,
     /// 操作时间戳，单位：秒
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub opt_time: Option<String>,
     /// 操作 ID
     #[serde(default)]
@@ -427,7 +430,7 @@ pub struct CorehrJobChangeUpdatedV2Event {
     #[serde(default)]
     pub operator: Option<String>,
     /// 更新时间毫秒时间戳;- 示例：1714985958000
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub updated_time: Option<String>,
     /// 异动记录ID，可通过接口;[搜索异动信息;](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/job_change/search)获取详细信息
     #[serde(default)]
@@ -811,7 +814,7 @@ pub struct CorehrOffboardingUpdatedV2Event {
     #[serde(default)]
     pub checklist_status: Option<i64>,
     /// 更新时间毫秒时间戳
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub updated_time: Option<String>,
     /// 变更离职信息字段的唯一标识列表
     #[serde(default)]
@@ -1344,6 +1347,9 @@ pub struct I18nV2 {
 
 typed_events! {
     /// `corehr.approval_groups.updated_v2` typed 处理器。
+    ///
+    /// 官方没有替代事件。字段 `approval_group_status` 不推荐，请读 `approval_group_status_v2`。
+    /// 本处理器保留。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
     "corehr.approval_groups.updated_v2" | COREHR_APPROVAL_GROUPS_UPDATED_V2 | CorehrApprovalGroupsUpdatedV2 | CorehrApprovalGroupsUpdatedV2Handler | register_corehr_approval_groups_updated_v2;

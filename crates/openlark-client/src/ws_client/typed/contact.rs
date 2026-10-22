@@ -497,7 +497,7 @@ pub struct UserEvent {
     #[serde(default)]
     pub work_station: Option<String>,
     /// 入职时间，秒级时间戳。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_i64")]
     pub join_time: Option<i64>,
     /// 是否是租户管理员。
     #[serde(default)]
@@ -653,7 +653,7 @@ pub struct User {
     #[serde(default)]
     pub work_station: Option<String>,
     /// 入职时间，秒级时间戳。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_i64")]
     pub join_time: Option<i64>,
     /// 是否是租户超级管理员。
     #[serde(default)]
@@ -912,10 +912,10 @@ pub struct UserAssignInfo {
     #[serde(default)]
     pub i18n_name: Option<ProductI18nName>,
     /// 席位起始时间。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub start_time: Option<String>,
     /// 席位结束时间。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub end_time: Option<String>,
 }
 

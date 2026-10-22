@@ -130,6 +130,10 @@ pub struct CorehrContractUpdatedV1Event {
 }
 
 /// `corehr.department.created_v1` 完整 envelope。
+///
+/// 官方说明：本事件无序；依赖上下级部门事件顺序时请改订
+/// [`super::corehr_v2::CorehrDepartmentCreatedV2`]（`corehr.department.created_v2`）。
+/// 本类型与 `register_corehr_department_created_v1` 保留。
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct CorehrDepartmentCreatedV1 {
     /// schema，通常为 `2.0`。
@@ -173,6 +177,10 @@ pub struct CorehrDepartmentDeletedV1Event {
 }
 
 /// `corehr.department.updated_v1` 完整 envelope。
+///
+/// 官方说明：本事件无序；依赖上下级部门事件顺序时请改订
+/// [`super::corehr_v2::CorehrDepartmentUpdatedV2`]（`corehr.department.updated_v2`）。
+/// 本类型与 `register_corehr_department_updated_v1` 保留。
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct CorehrDepartmentUpdatedV1 {
     /// schema，通常为 `2.0`。
@@ -368,6 +376,10 @@ pub struct CorehrJobUpdatedV1Event {
 }
 
 /// `corehr.job_change.updated_v1` 完整 envelope。
+///
+/// 官方写明本事件不再推荐使用，请改订新版本异动状态变更事件
+/// [`super::corehr_v2::CorehrJobChangeStatusUpdatedV2`]（`corehr.job_change.status_updated_v2`）。
+/// 不是 `corehr.job_change.updated_v2`（异动信息变更）。本类型与注册方法保留。
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct CorehrJobChangeUpdatedV1 {
     /// schema，通常为 `2.0`。
@@ -530,6 +542,10 @@ pub struct CorehrJobDataUpdatedV1Event {
 }
 
 /// `corehr.offboarding.updated_v1` 完整 envelope。
+///
+/// 官方写明不推荐使用本事件，优先改订离职申请状态变更（新）
+/// [`super::corehr_v2::CorehrOffboardingStatusUpdatedV2`]（`corehr.offboarding.status_updated_v2`）。
+/// 本类型与 `register_corehr_offboarding_updated_v1` 保留。
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct CorehrOffboardingUpdatedV1 {
     /// schema，通常为 `2.0`。
@@ -721,6 +737,8 @@ typed_events! {
     "corehr.contract.updated_v1" | COREHR_CONTRACT_UPDATED_V1 | CorehrContractUpdatedV1 | CorehrContractUpdatedV1Handler | register_corehr_contract_updated_v1;
     /// `corehr.department.created_v1` typed 处理器。
     ///
+    /// 依赖上下级部门事件顺序时请改订 `corehr.department.created_v2`。本处理器保留。
+    ///
     /// 闭包只要签名匹配也会自动实现本 trait。
     "corehr.department.created_v1" | COREHR_DEPARTMENT_CREATED_V1 | CorehrDepartmentCreatedV1 | CorehrDepartmentCreatedV1Handler | register_corehr_department_created_v1;
     /// `corehr.department.deleted_v1` typed 处理器。
@@ -728,6 +746,8 @@ typed_events! {
     /// 闭包只要签名匹配也会自动实现本 trait。
     "corehr.department.deleted_v1" | COREHR_DEPARTMENT_DELETED_V1 | CorehrDepartmentDeletedV1 | CorehrDepartmentDeletedV1Handler | register_corehr_department_deleted_v1;
     /// `corehr.department.updated_v1` typed 处理器。
+    ///
+    /// 依赖上下级部门事件顺序时请改订 `corehr.department.updated_v2`。本处理器保留。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
     "corehr.department.updated_v1" | COREHR_DEPARTMENT_UPDATED_V1 | CorehrDepartmentUpdatedV1 | CorehrDepartmentUpdatedV1Handler | register_corehr_department_updated_v1;
@@ -765,6 +785,8 @@ typed_events! {
     "corehr.job.updated_v1" | COREHR_JOB_UPDATED_V1 | CorehrJobUpdatedV1 | CorehrJobUpdatedV1Handler | register_corehr_job_updated_v1;
     /// `corehr.job_change.updated_v1` typed 处理器。
     ///
+    /// 官方不再推荐本事件，请改订 `corehr.job_change.status_updated_v2`。本处理器保留。
+    ///
     /// 闭包只要签名匹配也会自动实现本 trait。
     "corehr.job_change.updated_v1" | COREHR_JOB_CHANGE_UPDATED_V1 | CorehrJobChangeUpdatedV1 | CorehrJobChangeUpdatedV1Handler | register_corehr_job_change_updated_v1;
     /// `corehr.job_data.changed_v1` typed 处理器。
@@ -788,6 +810,8 @@ typed_events! {
     /// 闭包只要签名匹配也会自动实现本 trait。
     "corehr.job_data.updated_v1" | COREHR_JOB_DATA_UPDATED_V1 | CorehrJobDataUpdatedV1 | CorehrJobDataUpdatedV1Handler | register_corehr_job_data_updated_v1;
     /// `corehr.offboarding.updated_v1` typed 处理器。
+    ///
+    /// 官方不推荐本事件，请改订 `corehr.offboarding.status_updated_v2`。本处理器保留。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
     "corehr.offboarding.updated_v1" | COREHR_OFFBOARDING_UPDATED_V1 | CorehrOffboardingUpdatedV1 | CorehrOffboardingUpdatedV1Handler | register_corehr_offboarding_updated_v1;

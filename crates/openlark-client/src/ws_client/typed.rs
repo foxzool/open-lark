@@ -1,10 +1,11 @@
 //! typed 事件 payload（schema 2.0）与按域子模块。
 //!
-//! 覆盖 11 个业务域共 159 个事件：`im`、`contact`、`drive`、`mail`、`hire`、
-//! `approval`、`calendar`、`task`、`vc`、`corehr_v1`、`corehr_v2` 按域子模块组织，
-//! handler trait、闭包 blanket impl 与 `register_*` 方法由 `macros` 的 `typed_events!`
-//! 样板宏批量生成。`im.message.receive_v1` 与卡片回调 `card.action.trigger`
-//! 为 main 既有手写实现，保留在本文件。
+//! typed 事件共 159 个，含 main 原有的 `im.message.receive_v1`，其中 158 个是新增。
+//! 新增分布：im 12、contact 13、approval 3、calendar 4、task 4、drive 12、mail 1、
+//! hire 12、vc 24、corehr v1 28、corehr v2 45（相加为 158）。
+//! `im.message.receive_v1` 与卡片回调 `card.action.trigger` 为 main 既有手写实现，
+//! 保留在本文件。卡片回调不计入这 159 个。158 个新增事件的 handler trait、闭包
+//! blanket impl 与 `register_*` 方法由 `macros` 的 `typed_events!` 样板宏批量生成。
 //!
 //! envelope 类型名按事件串全段 `CamelCase` 机械生成，如
 //! `im.chat.disbanded_v1` → [`im::ImChatDisbandedV1`]、
@@ -14,9 +15,179 @@
 //! `event_type` key，重复注册返回 Err；卡片回调写入 callback map，ACK 业务 JSON
 //! 走 [`CallbackEventHandler`]。未覆盖的事件继续用
 //! [`EventDispatcherHandler::register_raw`] 手动反序列化。
+//!
+//! 事件串与 `EventDispatcherHandler` 注册方法对照：
+//!
+//! <!-- typed-event-index-start -->
+//!
+//! | 事件串 | 注册方法 |
+//! | --- | --- |
+//! | `im.message.receive_v1` | `register_im_message_receive_v1` |
+//! | `im.chat.disbanded_v1` | `register_im_chat_disbanded_v1` |
+//! | `im.chat.updated_v1` | `register_im_chat_updated_v1` |
+//! | `im.chat.access_event.bot_p2p_chat_entered_v1` | `register_im_chat_access_event_bot_p2p_chat_entered_v1` |
+//! | `im.chat.member.bot.added_v1` | `register_im_chat_member_bot_added_v1` |
+//! | `im.chat.member.bot.deleted_v1` | `register_im_chat_member_bot_deleted_v1` |
+//! | `im.chat.member.user.added_v1` | `register_im_chat_member_user_added_v1` |
+//! | `im.chat.member.user.deleted_v1` | `register_im_chat_member_user_deleted_v1` |
+//! | `im.chat.member.user.withdrawn_v1` | `register_im_chat_member_user_withdrawn_v1` |
+//! | `im.message.message_read_v1` | `register_im_message_message_read_v1` |
+//! | `im.message.recalled_v1` | `register_im_message_recalled_v1` |
+//! | `im.message.reaction.created_v1` | `register_im_message_reaction_created_v1` |
+//! | `im.message.reaction.deleted_v1` | `register_im_message_reaction_deleted_v1` |
+//! | `contact.user.created_v3` | `register_contact_user_created_v3` |
+//! | `contact.user.updated_v3` | `register_contact_user_updated_v3` |
+//! | `contact.user.deleted_v3` | `register_contact_user_deleted_v3` |
+//! | `contact.department.created_v3` | `register_contact_department_created_v3` |
+//! | `contact.department.updated_v3` | `register_contact_department_updated_v3` |
+//! | `contact.department.deleted_v3` | `register_contact_department_deleted_v3` |
+//! | `contact.custom_attr_event.updated_v3` | `register_contact_custom_attr_event_updated_v3` |
+//! | `contact.scope.updated_v3` | `register_contact_scope_updated_v3` |
+//! | `contact.employee_type_enum.created_v3` | `register_contact_employee_type_enum_created_v3` |
+//! | `contact.employee_type_enum.updated_v3` | `register_contact_employee_type_enum_updated_v3` |
+//! | `contact.employee_type_enum.deleted_v3` | `register_contact_employee_type_enum_deleted_v3` |
+//! | `contact.employee_type_enum.actived_v3` | `register_contact_employee_type_enum_actived_v3` |
+//! | `contact.employee_type_enum.deactivated_v3` | `register_contact_employee_type_enum_deactivated_v3` |
+//! | `approval.approval.updated_v4` | `register_approval_approval_updated_v4` |
+//! | `approval.instance.status_changed_v4` | `register_approval_instance_status_changed_v4` |
+//! | `approval.task.status_changed_v4` | `register_approval_task_status_changed_v4` |
+//! | `calendar.calendar.changed_v4` | `register_calendar_calendar_changed_v4` |
+//! | `calendar.calendar.acl.created_v4` | `register_calendar_calendar_acl_created_v4` |
+//! | `calendar.calendar.acl.deleted_v4` | `register_calendar_calendar_acl_deleted_v4` |
+//! | `calendar.calendar.event.changed_v4` | `register_calendar_calendar_event_changed_v4` |
+//! | `task.task.updated_v1` | `register_task_task_updated_v1` |
+//! | `task.task.update_tenant_v1` | `register_task_task_update_tenant_v1` |
+//! | `task.task.comment.updated_v1` | `register_task_task_comment_updated_v1` |
+//! | `task.task.update_user_access_v2` | `register_task_task_update_user_access_v2` |
+//! | `drive.file.created_in_folder_v1` | `register_drive_file_created_in_folder_v1` |
+//! | `drive.file.deleted_v1` | `register_drive_file_deleted_v1` |
+//! | `drive.file.edit_v1` | `register_drive_file_edit_v1` |
+//! | `drive.file.read_v1` | `register_drive_file_read_v1` |
+//! | `drive.file.trashed_v1` | `register_drive_file_trashed_v1` |
+//! | `drive.file.title_updated_v1` | `register_drive_file_title_updated_v1` |
+//! | `drive.file.bitable_field_changed_v1` | `register_drive_file_bitable_field_changed_v1` |
+//! | `drive.file.bitable_record_changed_v1` | `register_drive_file_bitable_record_changed_v1` |
+//! | `drive.file.permission_member_added_v1` | `register_drive_file_permission_member_added_v1` |
+//! | `drive.file.permission_member_applied_v1` | `register_drive_file_permission_member_applied_v1` |
+//! | `drive.file.permission_member_removed_v1` | `register_drive_file_permission_member_removed_v1` |
+//! | `drive.notice.comment_add_v1` | `register_drive_notice_comment_add_v1` |
+//! | `mail.user_mailbox.event.message_received_v1` | `register_mail_user_mailbox_event_message_received_v1` |
+//! | `hire.application.deleted_v1` | `register_hire_application_deleted_v1` |
+//! | `hire.application.stage_changed_v1` | `register_hire_application_stage_changed_v1` |
+//! | `hire.eco_account.created_v1` | `register_hire_eco_account_created_v1` |
+//! | `hire.eco_background_check.canceled_v1` | `register_hire_eco_background_check_canceled_v1` |
+//! | `hire.eco_background_check.created_v1` | `register_hire_eco_background_check_created_v1` |
+//! | `hire.eco_exam.created_v1` | `register_hire_eco_exam_created_v1` |
+//! | `hire.ehr_import_task.imported_v1` | `register_hire_ehr_import_task_imported_v1` |
+//! | `hire.ehr_import_task_for_internship_offer.imported_v1` | `register_hire_ehr_import_task_for_internship_offer_imported_v1` |
+//! | `hire.offer.status_changed_v1` | `register_hire_offer_status_changed_v1` |
+//! | `hire.referral_account.assets_update_v1` | `register_hire_referral_account_assets_update_v1` |
+//! | `hire.talent.deleted_v1` | `register_hire_talent_deleted_v1` |
+//! | `hire.talent.tag_subscription_v1` | `register_hire_talent_tag_subscription_v1` |
+//! | `vc.bot.meeting_activity_v1` | `register_vc_bot_meeting_activity_v1` |
+//! | `vc.bot.meeting_ended_v1` | `register_vc_bot_meeting_ended_v1` |
+//! | `vc.bot.meeting_invited_v1` | `register_vc_bot_meeting_invited_v1` |
+//! | `vc.bot.meeting_started_v1` | `register_vc_bot_meeting_started_v1` |
+//! | `vc.meeting.all_meeting_ended_v1` | `register_vc_meeting_all_meeting_ended_v1` |
+//! | `vc.meeting.all_meeting_started_v1` | `register_vc_meeting_all_meeting_started_v1` |
+//! | `vc.meeting.join_meeting_v1` | `register_vc_meeting_join_meeting_v1` |
+//! | `vc.meeting.leave_meeting_v1` | `register_vc_meeting_leave_meeting_v1` |
+//! | `vc.meeting.meeting_ended_v1` | `register_vc_meeting_meeting_ended_v1` |
+//! | `vc.meeting.meeting_started_v1` | `register_vc_meeting_meeting_started_v1` |
+//! | `vc.meeting.participant_meeting_ended_v1` | `register_vc_meeting_participant_meeting_ended_v1` |
+//! | `vc.meeting.recording_ended_v1` | `register_vc_meeting_recording_ended_v1` |
+//! | `vc.meeting.recording_ready_v1` | `register_vc_meeting_recording_ready_v1` |
+//! | `vc.meeting.recording_started_v1` | `register_vc_meeting_recording_started_v1` |
+//! | `vc.meeting.share_ended_v1` | `register_vc_meeting_share_ended_v1` |
+//! | `vc.meeting.share_started_v1` | `register_vc_meeting_share_started_v1` |
+//! | `vc.note.generated_v1` | `register_vc_note_generated_v1` |
+//! | `vc.reserve_config.updated_v1` | `register_vc_reserve_config_updated_v1` |
+//! | `vc.room.created_v1` | `register_vc_room_created_v1` |
+//! | `vc.room.deleted_v1` | `register_vc_room_deleted_v1` |
+//! | `vc.room.updated_v1` | `register_vc_room_updated_v1` |
+//! | `vc.room_level.created_v1` | `register_vc_room_level_created_v1` |
+//! | `vc.room_level.deleted_v1` | `register_vc_room_level_deleted_v1` |
+//! | `vc.room_level.updated_v1` | `register_vc_room_level_updated_v1` |
+//! | `corehr.common_data.id.user_mapping_changed_v1` | `register_corehr_common_data_id_user_mapping_changed_v1` |
+//! | `corehr.common_data.meta_data.updated_v1` | `register_corehr_common_data_meta_data_updated_v1` |
+//! | `corehr.contract.created_v1` | `register_corehr_contract_created_v1` |
+//! | `corehr.contract.deleted_v1` | `register_corehr_contract_deleted_v1` |
+//! | `corehr.contract.updated_v1` | `register_corehr_contract_updated_v1` |
+//! | `corehr.department.created_v1` | `register_corehr_department_created_v1` |
+//! | `corehr.department.deleted_v1` | `register_corehr_department_deleted_v1` |
+//! | `corehr.department.updated_v1` | `register_corehr_department_updated_v1` |
+//! | `corehr.employment.converted_v1` | `register_corehr_employment_converted_v1` |
+//! | `corehr.employment.created_v1` | `register_corehr_employment_created_v1` |
+//! | `corehr.employment.deleted_v1` | `register_corehr_employment_deleted_v1` |
+//! | `corehr.employment.resigned_v1` | `register_corehr_employment_resigned_v1` |
+//! | `corehr.employment.updated_v1` | `register_corehr_employment_updated_v1` |
+//! | `corehr.job.created_v1` | `register_corehr_job_created_v1` |
+//! | `corehr.job.deleted_v1` | `register_corehr_job_deleted_v1` |
+//! | `corehr.job.updated_v1` | `register_corehr_job_updated_v1` |
+//! | `corehr.job_change.updated_v1` | `register_corehr_job_change_updated_v1` |
+//! | `corehr.job_data.changed_v1` | `register_corehr_job_data_changed_v1` |
+//! | `corehr.job_data.created_v1` | `register_corehr_job_data_created_v1` |
+//! | `corehr.job_data.deleted_v1` | `register_corehr_job_data_deleted_v1` |
+//! | `corehr.job_data.employed_v1` | `register_corehr_job_data_employed_v1` |
+//! | `corehr.job_data.updated_v1` | `register_corehr_job_data_updated_v1` |
+//! | `corehr.offboarding.updated_v1` | `register_corehr_offboarding_updated_v1` |
+//! | `corehr.org_role_authorization.updated_v1` | `register_corehr_org_role_authorization_updated_v1` |
+//! | `corehr.person.created_v1` | `register_corehr_person_created_v1` |
+//! | `corehr.person.deleted_v1` | `register_corehr_person_deleted_v1` |
+//! | `corehr.person.updated_v1` | `register_corehr_person_updated_v1` |
+//! | `corehr.pre_hire.updated_v1` | `register_corehr_pre_hire_updated_v1` |
+//! | `corehr.approval_groups.updated_v2` | `register_corehr_approval_groups_updated_v2` |
+//! | `corehr.company.created_v2` | `register_corehr_company_created_v2` |
+//! | `corehr.company.deleted_v2` | `register_corehr_company_deleted_v2` |
+//! | `corehr.company.updated_v2` | `register_corehr_company_updated_v2` |
+//! | `corehr.cost_center.created_v2` | `register_corehr_cost_center_created_v2` |
+//! | `corehr.cost_center.deleted_v2` | `register_corehr_cost_center_deleted_v2` |
+//! | `corehr.cost_center.updated_v2` | `register_corehr_cost_center_updated_v2` |
+//! | `corehr.custom_org.created_v2` | `register_corehr_custom_org_created_v2` |
+//! | `corehr.custom_org.deleted_v2` | `register_corehr_custom_org_deleted_v2` |
+//! | `corehr.custom_org.updated_v2` | `register_corehr_custom_org_updated_v2` |
+//! | `corehr.department.created_v2` | `register_corehr_department_created_v2` |
+//! | `corehr.department.updated_v2` | `register_corehr_department_updated_v2` |
+//! | `corehr.employee.domain_event_v2` | `register_corehr_employee_domain_event_v2` |
+//! | `corehr.job_change.status_updated_v2` | `register_corehr_job_change_status_updated_v2` |
+//! | `corehr.job_change.updated_v2` | `register_corehr_job_change_updated_v2` |
+//! | `corehr.job_family.created_v2` | `register_corehr_job_family_created_v2` |
+//! | `corehr.job_family.deleted_v2` | `register_corehr_job_family_deleted_v2` |
+//! | `corehr.job_family.updated_v2` | `register_corehr_job_family_updated_v2` |
+//! | `corehr.job_grade.created_v2` | `register_corehr_job_grade_created_v2` |
+//! | `corehr.job_grade.deleted_v2` | `register_corehr_job_grade_deleted_v2` |
+//! | `corehr.job_grade.updated_v2` | `register_corehr_job_grade_updated_v2` |
+//! | `corehr.job_level.created_v2` | `register_corehr_job_level_created_v2` |
+//! | `corehr.job_level.deleted_v2` | `register_corehr_job_level_deleted_v2` |
+//! | `corehr.job_level.updated_v2` | `register_corehr_job_level_updated_v2` |
+//! | `corehr.location.created_v2` | `register_corehr_location_created_v2` |
+//! | `corehr.location.deleted_v2` | `register_corehr_location_deleted_v2` |
+//! | `corehr.location.updated_v2` | `register_corehr_location_updated_v2` |
+//! | `corehr.offboarding.checklist_updated_v2` | `register_corehr_offboarding_checklist_updated_v2` |
+//! | `corehr.offboarding.status_updated_v2` | `register_corehr_offboarding_status_updated_v2` |
+//! | `corehr.offboarding.updated_v2` | `register_corehr_offboarding_updated_v2` |
+//! | `corehr.pathway.created_v2` | `register_corehr_pathway_created_v2` |
+//! | `corehr.pathway.deleted_v2` | `register_corehr_pathway_deleted_v2` |
+//! | `corehr.pathway.updated_v2` | `register_corehr_pathway_updated_v2` |
+//! | `corehr.position.created_v2` | `register_corehr_position_created_v2` |
+//! | `corehr.position.deleted_v2` | `register_corehr_position_deleted_v2` |
+//! | `corehr.position.updated_v2` | `register_corehr_position_updated_v2` |
+//! | `corehr.pre_hire.onboarding_task_changed_v2` | `register_corehr_pre_hire_onboarding_task_changed_v2` |
+//! | `corehr.probation.updated_v2` | `register_corehr_probation_updated_v2` |
+//! | `corehr.process.updated_v2` | `register_corehr_process_updated_v2` |
+//! | `corehr.process.approver.updated_v2` | `register_corehr_process_approver_updated_v2` |
+//! | `corehr.process.cc.updated_v2` | `register_corehr_process_cc_updated_v2` |
+//! | `corehr.process.node.updated_v2` | `register_corehr_process_node_updated_v2` |
+//! | `corehr.process.status.update_v2` | `register_corehr_process_status_update_v2` |
+//! | `corehr.process_comment_info.updated_v2` | `register_corehr_process_comment_info_updated_v2` |
+//! | `corehr.signature_file.status_updated_v2` | `register_corehr_signature_file_status_updated_v2` |
+//!
+//! <!-- typed-event-index-end -->
 
 #[macro_use]
 mod macros;
+
+mod flex_time;
 
 pub mod approval;
 pub mod calendar;
@@ -46,8 +217,8 @@ pub struct EventHeader {
     /// 事件类型。
     #[serde(default)]
     pub event_type: String,
-    /// 创建时间（毫秒字符串）。
-    #[serde(default)]
+    /// 创建时间（毫秒）。JSON 字符串与整数都接受，存成十进制字符串。
+    #[serde(default, deserialize_with = "flex_time::de_string")]
     pub create_time: String,
     /// verification token。
     #[serde(default)]
@@ -122,11 +293,11 @@ pub struct ImReceivedMessage {
     /// 父消息 ID。
     #[serde(default)]
     pub parent_id: String,
-    /// 创建时间。
-    #[serde(default)]
+    /// 创建时间（毫秒）。JSON 字符串与整数都接受，存成十进制字符串。
+    #[serde(default, deserialize_with = "flex_time::de_string")]
     pub create_time: String,
-    /// 更新时间。
-    #[serde(default)]
+    /// 更新时间（毫秒）。JSON 字符串与整数都接受，存成十进制字符串。
+    #[serde(default, deserialize_with = "flex_time::de_string")]
     pub update_time: String,
     /// 聊天 ID。
     #[serde(default)]
@@ -146,6 +317,9 @@ pub struct ImReceivedMessage {
     /// 被 @ 的用户。
     #[serde(default)]
     pub mentions: Vec<ImMention>,
+    /// 发送端 `user_agent`。缺字段时为 `None`。
+    #[serde(default)]
+    pub user_agent: Option<String>,
 }
 
 /// 消息中的 @ 提及。
@@ -712,5 +886,150 @@ mod tests {
             typed_elapsed.as_secs_f64() <= raw_elapsed.as_secs_f64() * 2.0,
             "typed {typed_elapsed:?} exceeds 2x raw {raw_elapsed:?}"
         );
+    }
+}
+
+#[cfg(test)]
+mod followup_tests {
+    use std::sync::{Arc, Mutex};
+
+    use super::*;
+    use crate::ws_client::EventDispatcherHandler;
+
+    const COUNT_SENTENCE: &str =
+        "共 159 个，含 main 原有的 `im.message.receive_v1`，其中 158 个是新增";
+
+    #[test]
+    fn message_user_agent_reaches_typed_handler() {
+        let seen = Arc::new(Mutex::new(None));
+        let seen_h = Arc::clone(&seen);
+        let handler = EventDispatcherHandler::builder()
+            .register_im_message_receive_v1(move |event: ImMessageReceiveV1| {
+                *seen_h.lock().expect("lock") = event.event.message.user_agent.clone();
+                Ok(())
+            })
+            .expect("register")
+            .build();
+        handler
+            .do_without_validation(
+                br#"{
+                  "header":{"event_type":"im.message.receive_v1"},
+                  "event":{"message":{"message_type":"text","user_agent":"Mozilla"}}
+                }"#,
+            )
+            .expect("dispatch");
+        assert_eq!(seen.lock().expect("lock").as_deref(), Some("Mozilla"));
+
+        let missing: ImReceivedMessage = serde_json::from_str("{}").expect("defaults");
+        assert_eq!(missing.user_agent, None);
+    }
+
+    fn doc_table_rows(src: &str) -> Vec<(String, String)> {
+        let start = src
+            .find("<!-- typed-event-index-start -->")
+            .expect("table start");
+        let end = src
+            .find("<!-- typed-event-index-end -->")
+            .expect("table end");
+        let mut rows = Vec::new();
+        for line in src[start..end].lines() {
+            let line = line.trim().trim_start_matches("//!").trim();
+            if !line.starts_with("| `") {
+                continue;
+            }
+            let parts: Vec<&str> = line.split('`').collect();
+            assert!(parts.len() >= 4, "对照表行无法解析: {line}");
+            rows.push((parts[1].to_string(), parts[3].to_string()));
+        }
+        rows
+    }
+
+    fn source_registration_rows() -> Vec<(String, String)> {
+        let mut rows = vec![(
+            "im.message.receive_v1".to_string(),
+            "register_im_message_receive_v1".to_string(),
+        )];
+        let sources = [
+            include_str!("typed/im.rs"),
+            include_str!("typed/contact.rs"),
+            include_str!("typed/approval.rs"),
+            include_str!("typed/calendar.rs"),
+            include_str!("typed/task.rs"),
+            include_str!("typed/drive.rs"),
+            include_str!("typed/mail.rs"),
+            include_str!("typed/hire.rs"),
+            include_str!("typed/vc.rs"),
+            include_str!("typed/corehr_v1.rs"),
+            include_str!("typed/corehr_v2.rs"),
+        ];
+        for src in sources {
+            for line in src.lines() {
+                let parts: Vec<&str> = line.split('|').map(str::trim).collect();
+                if parts.len() != 5 || !parts[4].starts_with("register_") {
+                    continue;
+                }
+                let Some(event) = parts[0].strip_prefix('"').and_then(|s| s.strip_suffix('"'))
+                else {
+                    continue;
+                };
+                let method = parts[4].trim_end_matches(';');
+                rows.push((event.to_string(), method.to_string()));
+            }
+        }
+        rows
+    }
+
+    #[test]
+    fn event_index_matches_all_159_registrations() {
+        let documented = doc_table_rows(include_str!("typed.rs"));
+        let implemented = source_registration_rows();
+        assert_eq!(documented.len(), 159, "对照表行数");
+        assert_eq!(implemented.len(), 159, "源码注册数");
+        assert_eq!(documented, implemented);
+        assert_eq!(
+            documented
+                .iter()
+                .filter(|(event, _)| event == "im.message.receive_v1")
+                .count(),
+            1
+        );
+        assert!(
+            documented
+                .iter()
+                .all(|(event, _)| event != "card.action.trigger")
+        );
+        let events: std::collections::BTreeSet<_> =
+            documented.iter().map(|(event, _)| event.as_str()).collect();
+        assert_eq!(events.len(), 159);
+    }
+
+    #[test]
+    fn event_count_wording_matches_in_typed_and_lib() {
+        let typed = include_str!("typed.rs");
+        let lib = include_str!("../lib.rs");
+        assert!(typed.contains(COUNT_SENTENCE), "typed.rs 计数口径");
+        assert!(lib.contains(COUNT_SENTENCE), "lib.rs 计数口径");
+        let added = [12, 13, 3, 4, 4, 12, 1, 12, 24, 28, 45];
+        assert_eq!(added.iter().sum::<i32>(), 158);
+        assert!(typed.contains("相加为 158"));
+        assert!(lib.contains("相加为 158"));
+    }
+
+    #[test]
+    fn not_recommended_events_document_official_replacements() {
+        let v1 = include_str!("typed/corehr_v1.rs");
+        assert!(v1.contains("corehr.department.created_v2"));
+        assert!(v1.contains("register_corehr_department_created_v1"));
+        assert!(v1.contains("corehr.department.updated_v2"));
+        assert!(v1.contains("register_corehr_department_updated_v1"));
+        assert!(v1.contains("corehr.job_change.status_updated_v2"));
+        assert!(v1.contains("register_corehr_job_change_updated_v1"));
+        assert!(v1.contains("corehr.offboarding.status_updated_v2"));
+        assert!(v1.contains("register_corehr_offboarding_updated_v1"));
+
+        let v2 = include_str!("typed/corehr_v2.rs");
+        assert!(v2.contains("官方没有替代事件"));
+        assert!(v2.contains("approval_group_status_v2"));
+        assert!(v2.contains("register_corehr_approval_groups_updated_v2"));
     }
 }

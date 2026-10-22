@@ -53,7 +53,7 @@ pub struct HireApplicationStageChangedV1Event {
     #[serde(default)]
     pub target_stage_id: Option<String>,
     /// 投递阶段变更时间戳（单位：毫秒）。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_i64")]
     pub update_time: Option<i64>,
 }
 
@@ -315,7 +315,7 @@ pub struct HireReferralAccountAssetsUpdateV1Event {
     #[serde(default)]
     pub assets: Option<Assets>,
     /// 变更时间戳（单位：毫秒）。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub modify_time: Option<String>,
 }
 
