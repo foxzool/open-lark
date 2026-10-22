@@ -13,6 +13,12 @@
 //! `url.preview.get` 本阶段不做 typed 注册，继续用
 //! [`EventDispatcherHandler::register_callback`]。全量约 200 个 `register_p2_*` 不在本模块范围。
 
+#[macro_use]
+mod macros;
+
+pub mod contact;
+pub mod im;
+
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
