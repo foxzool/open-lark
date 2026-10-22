@@ -10,19 +10,19 @@ use super::EventHeader;
 
 /// `corehr.approval_groups.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ApprovalGroupsUpdatedV2 {
+pub struct CorehrApprovalGroupsUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: ApprovalGroupsUpdatedV2Event,
+    pub event: CorehrApprovalGroupsUpdatedV2Event,
 }
 
 /// `corehr.approval_groups.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ApprovalGroupsUpdatedV2Event {
+pub struct CorehrApprovalGroupsUpdatedV2Event {
     /// 组织架构调整审批组 ID
     #[serde(default)]
     pub approval_group_id: Option<String>,
@@ -57,19 +57,19 @@ pub struct ApprovalGroupsUpdatedV2Event {
 
 /// `corehr.company.created_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CompanyCreatedV2 {
+pub struct CorehrCompanyCreatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CompanyCreatedV2Event,
+    pub event: CorehrCompanyCreatedV2Event,
 }
 
 /// `corehr.company.created_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CompanyCreatedV2Event {
+pub struct CorehrCompanyCreatedV2Event {
     /// 公司ID。;- 调用[【查询单个公司】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/company/get)、[【通过 ID 批量查询公司信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/company/batch_get)接口返回公司详细信息
     #[serde(default)]
     pub company_id: Option<String>,
@@ -77,19 +77,19 @@ pub struct CompanyCreatedV2Event {
 
 /// `corehr.company.deleted_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CompanyDeletedV2 {
+pub struct CorehrCompanyDeletedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CompanyDeletedV2Event,
+    pub event: CorehrCompanyDeletedV2Event,
 }
 
 /// `corehr.company.deleted_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CompanyDeletedV2Event {
+pub struct CorehrCompanyDeletedV2Event {
     /// 被删除公司的 ID。
     #[serde(default)]
     pub company_id: Option<String>,
@@ -97,19 +97,19 @@ pub struct CompanyDeletedV2Event {
 
 /// `corehr.company.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CompanyUpdatedV2 {
+pub struct CorehrCompanyUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CompanyUpdatedV2Event,
+    pub event: CorehrCompanyUpdatedV2Event,
 }
 
 /// `corehr.company.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CompanyUpdatedV2Event {
+pub struct CorehrCompanyUpdatedV2Event {
     /// 公司ID。;- 调用[【查询单个公司】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/company/get)、[【通过 ID 批量查询公司信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/company/batch_get)接口返回公司详细信息
     #[serde(default)]
     pub company_id: Option<String>,
@@ -123,19 +123,19 @@ pub struct CompanyUpdatedV2Event {
 
 /// `corehr.cost_center.created_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CostCenterCreatedV2 {
+pub struct CorehrCostCenterCreatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CostCenterCreatedV2Event,
+    pub event: CorehrCostCenterCreatedV2Event,
 }
 
 /// `corehr.cost_center.created_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CostCenterCreatedV2Event {
+pub struct CorehrCostCenterCreatedV2Event {
     /// 成本中心ID。;- 调用[【搜索成本中心信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/cost_center/search)接口返回成本中心详细信息
     #[serde(default)]
     pub cost_center_id: Option<String>,
@@ -143,19 +143,19 @@ pub struct CostCenterCreatedV2Event {
 
 /// `corehr.cost_center.deleted_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CostCenterDeletedV2 {
+pub struct CorehrCostCenterDeletedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CostCenterDeletedV2Event,
+    pub event: CorehrCostCenterDeletedV2Event,
 }
 
 /// `corehr.cost_center.deleted_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CostCenterDeletedV2Event {
+pub struct CorehrCostCenterDeletedV2Event {
     /// 被删除成本中心的 ID。
     #[serde(default)]
     pub cost_center_id: Option<String>,
@@ -163,19 +163,19 @@ pub struct CostCenterDeletedV2Event {
 
 /// `corehr.cost_center.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CostCenterUpdatedV2 {
+pub struct CorehrCostCenterUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CostCenterUpdatedV2Event,
+    pub event: CorehrCostCenterUpdatedV2Event,
 }
 
 /// `corehr.cost_center.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CostCenterUpdatedV2Event {
+pub struct CorehrCostCenterUpdatedV2Event {
     /// 成本中心ID。;- 调用[【搜索成本中心信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/cost_center/search)接口返回成本中心详细信息
     #[serde(default)]
     pub cost_center_id: Option<String>,
@@ -186,19 +186,19 @@ pub struct CostCenterUpdatedV2Event {
 
 /// `corehr.custom_org.created_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CustomOrgCreatedV2 {
+pub struct CorehrCustomOrgCreatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CustomOrgCreatedV2Event,
+    pub event: CorehrCustomOrgCreatedV2Event,
 }
 
 /// `corehr.custom_org.created_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CustomOrgCreatedV2Event {
+pub struct CorehrCustomOrgCreatedV2Event {
     /// 自定义组织ID。;- 调用[【批量查询当前版本的自定义组织信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/custom_org/query)接口返回自定义组织详细信息
     #[serde(default)]
     pub org_id: Option<String>,
@@ -209,19 +209,19 @@ pub struct CustomOrgCreatedV2Event {
 
 /// `corehr.custom_org.deleted_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CustomOrgDeletedV2 {
+pub struct CorehrCustomOrgDeletedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CustomOrgDeletedV2Event,
+    pub event: CorehrCustomOrgDeletedV2Event,
 }
 
 /// `corehr.custom_org.deleted_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CustomOrgDeletedV2Event {
+pub struct CorehrCustomOrgDeletedV2Event {
     /// 被删除自定义组织的 ID
     #[serde(default)]
     pub org_id: Option<String>,
@@ -232,19 +232,19 @@ pub struct CustomOrgDeletedV2Event {
 
 /// `corehr.custom_org.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CustomOrgUpdatedV2 {
+pub struct CorehrCustomOrgUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CustomOrgUpdatedV2Event,
+    pub event: CorehrCustomOrgUpdatedV2Event,
 }
 
 /// `corehr.custom_org.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CustomOrgUpdatedV2Event {
+pub struct CorehrCustomOrgUpdatedV2Event {
     /// 自定义组织ID。;- 调用[【批量查询当前版本的自定义组织信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/custom_org/query)接口返回自定义组织详细信息
     #[serde(default)]
     pub org_id: Option<String>,
@@ -258,19 +258,19 @@ pub struct CustomOrgUpdatedV2Event {
 
 /// `corehr.department.created_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct DepartmentCreatedV2 {
+pub struct CorehrDepartmentCreatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: DepartmentCreatedV2Event,
+    pub event: CorehrDepartmentCreatedV2Event,
 }
 
 /// `corehr.department.created_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct DepartmentCreatedV2Event {
+pub struct CorehrDepartmentCreatedV2Event {
     /// 部门id
     #[serde(default)]
     pub department_id: Option<String>,
@@ -278,19 +278,19 @@ pub struct DepartmentCreatedV2Event {
 
 /// `corehr.department.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct DepartmentUpdatedV2 {
+pub struct CorehrDepartmentUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: DepartmentUpdatedV2Event,
+    pub event: CorehrDepartmentUpdatedV2Event,
 }
 
 /// `corehr.department.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct DepartmentUpdatedV2Event {
+pub struct CorehrDepartmentUpdatedV2Event {
     /// 部门id
     #[serde(default)]
     pub department_id: Option<String>,
@@ -301,19 +301,19 @@ pub struct DepartmentUpdatedV2Event {
 
 /// `corehr.employee.domain_event_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct EmployeeDomainEventV2 {
+pub struct CorehrEmployeeDomainEventV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: EmployeeDomainEventV2Event,
+    pub event: CorehrEmployeeDomainEventV2Event,
 }
 
 /// `corehr.employee.domain_event_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct EmployeeDomainEventV2Event {
+pub struct CorehrEmployeeDomainEventV2Event {
     /// 事件类型
     #[serde(default)]
     pub event_type: Option<i64>,
@@ -345,19 +345,19 @@ pub struct EmployeeDomainEventV2Event {
 
 /// `corehr.job_change.status_updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobChangeStatusUpdatedV2 {
+pub struct CorehrJobChangeStatusUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: JobChangeStatusUpdatedV2Event,
+    pub event: CorehrJobChangeStatusUpdatedV2Event,
 }
 
 /// `corehr.job_change.status_updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobChangeStatusUpdatedV2Event {
+pub struct CorehrJobChangeStatusUpdatedV2Event {
     /// 雇员ID
     #[serde(default)]
     pub employment_id: Option<String>,
@@ -398,19 +398,19 @@ pub struct JobChangeStatusUpdatedV2Event {
 
 /// `corehr.job_change.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobChangeUpdatedV2 {
+pub struct CorehrJobChangeUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: JobChangeUpdatedV2Event,
+    pub event: CorehrJobChangeUpdatedV2Event,
 }
 
 /// `corehr.job_change.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobChangeUpdatedV2Event {
+pub struct CorehrJobChangeUpdatedV2Event {
     /// 异动员工雇员ID，可通过[【搜索员工信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/employee/search)接口获取
     #[serde(default)]
     pub employment_id: Option<String>,
@@ -454,19 +454,19 @@ pub struct JobChangeUpdatedV2Event {
 
 /// `corehr.job_family.created_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobFamilyCreatedV2 {
+pub struct CorehrJobFamilyCreatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: JobFamilyCreatedV2Event,
+    pub event: CorehrJobFamilyCreatedV2Event,
 }
 
 /// `corehr.job_family.created_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobFamilyCreatedV2Event {
+pub struct CorehrJobFamilyCreatedV2Event {
     /// 序列ID。;- 调用[【查询单个序列】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_family/get)、[【通过序列 ID 批量查询序列信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/job_family/batch_get)接口返回序列详细信息
     #[serde(default)]
     pub job_family_id: Option<String>,
@@ -474,19 +474,19 @@ pub struct JobFamilyCreatedV2Event {
 
 /// `corehr.job_family.deleted_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobFamilyDeletedV2 {
+pub struct CorehrJobFamilyDeletedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: JobFamilyDeletedV2Event,
+    pub event: CorehrJobFamilyDeletedV2Event,
 }
 
 /// `corehr.job_family.deleted_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobFamilyDeletedV2Event {
+pub struct CorehrJobFamilyDeletedV2Event {
     /// 被删除序列的 ID。
     #[serde(default)]
     pub job_family_id: Option<String>,
@@ -494,19 +494,19 @@ pub struct JobFamilyDeletedV2Event {
 
 /// `corehr.job_family.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobFamilyUpdatedV2 {
+pub struct CorehrJobFamilyUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: JobFamilyUpdatedV2Event,
+    pub event: CorehrJobFamilyUpdatedV2Event,
 }
 
 /// `corehr.job_family.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobFamilyUpdatedV2Event {
+pub struct CorehrJobFamilyUpdatedV2Event {
     /// 序列ID。;- 调用[【查询单个序列】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_family/get)、[【通过序列 ID 批量查询序列信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/job_family/batch_get)接口返回序列详细信息
     #[serde(default)]
     pub job_family_id: Option<String>,
@@ -517,19 +517,19 @@ pub struct JobFamilyUpdatedV2Event {
 
 /// `corehr.job_grade.created_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobGradeCreatedV2 {
+pub struct CorehrJobGradeCreatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: JobGradeCreatedV2Event,
+    pub event: CorehrJobGradeCreatedV2Event,
 }
 
 /// `corehr.job_grade.created_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobGradeCreatedV2Event {
+pub struct CorehrJobGradeCreatedV2Event {
     /// 职等ID。;- 调用[【批量查询职等信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/job_grade/query)接口返回职等详细信息
     #[serde(default)]
     pub job_grade_id: Option<String>,
@@ -537,19 +537,19 @@ pub struct JobGradeCreatedV2Event {
 
 /// `corehr.job_grade.deleted_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobGradeDeletedV2 {
+pub struct CorehrJobGradeDeletedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: JobGradeDeletedV2Event,
+    pub event: CorehrJobGradeDeletedV2Event,
 }
 
 /// `corehr.job_grade.deleted_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobGradeDeletedV2Event {
+pub struct CorehrJobGradeDeletedV2Event {
     /// 被删除职等的 ID
     #[serde(default)]
     pub job_grade_id: Option<String>,
@@ -557,19 +557,19 @@ pub struct JobGradeDeletedV2Event {
 
 /// `corehr.job_grade.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobGradeUpdatedV2 {
+pub struct CorehrJobGradeUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: JobGradeUpdatedV2Event,
+    pub event: CorehrJobGradeUpdatedV2Event,
 }
 
 /// `corehr.job_grade.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobGradeUpdatedV2Event {
+pub struct CorehrJobGradeUpdatedV2Event {
     /// 职等ID。;- 调用[【批量查询职等信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/job_grade/query)接口返回职等详细信息
     #[serde(default)]
     pub job_grade_id: Option<String>,
@@ -580,19 +580,19 @@ pub struct JobGradeUpdatedV2Event {
 
 /// `corehr.job_level.created_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobLevelCreatedV2 {
+pub struct CorehrJobLevelCreatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: JobLevelCreatedV2Event,
+    pub event: CorehrJobLevelCreatedV2Event,
 }
 
 /// `corehr.job_level.created_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobLevelCreatedV2Event {
+pub struct CorehrJobLevelCreatedV2Event {
     /// 职级ID。;- 调用[【查询单个职级】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_level/get)、[【通过职级 ID 批量获取职级信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/job_level/batch_get)接口返回职级详细信息
     #[serde(default)]
     pub job_level_id: Option<String>,
@@ -600,19 +600,19 @@ pub struct JobLevelCreatedV2Event {
 
 /// `corehr.job_level.deleted_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobLevelDeletedV2 {
+pub struct CorehrJobLevelDeletedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: JobLevelDeletedV2Event,
+    pub event: CorehrJobLevelDeletedV2Event,
 }
 
 /// `corehr.job_level.deleted_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobLevelDeletedV2Event {
+pub struct CorehrJobLevelDeletedV2Event {
     /// 被删除职级的 ID。
     #[serde(default)]
     pub job_level_id: Option<String>,
@@ -620,19 +620,19 @@ pub struct JobLevelDeletedV2Event {
 
 /// `corehr.job_level.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobLevelUpdatedV2 {
+pub struct CorehrJobLevelUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: JobLevelUpdatedV2Event,
+    pub event: CorehrJobLevelUpdatedV2Event,
 }
 
 /// `corehr.job_level.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct JobLevelUpdatedV2Event {
+pub struct CorehrJobLevelUpdatedV2Event {
     /// 职级ID。;- 调用[【查询单个职级】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_level/get)、[【通过职级 ID 批量获取职级信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/job_level/batch_get)接口返回职级详细信息
     #[serde(default)]
     pub job_level_id: Option<String>,
@@ -643,19 +643,19 @@ pub struct JobLevelUpdatedV2Event {
 
 /// `corehr.location.created_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct LocationCreatedV2 {
+pub struct CorehrLocationCreatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: LocationCreatedV2Event,
+    pub event: CorehrLocationCreatedV2Event,
 }
 
 /// `corehr.location.created_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct LocationCreatedV2Event {
+pub struct CorehrLocationCreatedV2Event {
     /// 地点ID。;- 调用[【查询单个地点】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/location/get)、[【通过地点 ID 批量获取地点信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/location/batch_get)接口返回地点详细信息
     #[serde(default)]
     pub location_id: Option<String>,
@@ -663,19 +663,19 @@ pub struct LocationCreatedV2Event {
 
 /// `corehr.location.deleted_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct LocationDeletedV2 {
+pub struct CorehrLocationDeletedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: LocationDeletedV2Event,
+    pub event: CorehrLocationDeletedV2Event,
 }
 
 /// `corehr.location.deleted_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct LocationDeletedV2Event {
+pub struct CorehrLocationDeletedV2Event {
     /// 被删除地点的 ID。
     #[serde(default)]
     pub location_id: Option<String>,
@@ -683,19 +683,19 @@ pub struct LocationDeletedV2Event {
 
 /// `corehr.location.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct LocationUpdatedV2 {
+pub struct CorehrLocationUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: LocationUpdatedV2Event,
+    pub event: CorehrLocationUpdatedV2Event,
 }
 
 /// `corehr.location.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct LocationUpdatedV2Event {
+pub struct CorehrLocationUpdatedV2Event {
     /// 地点ID。;- 调用[【查询单个地点】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/location/get)、[【通过地点 ID 批量获取地点信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/location/batch_get)接口返回地点详细信息
     #[serde(default)]
     pub location_id: Option<String>,
@@ -709,19 +709,19 @@ pub struct LocationUpdatedV2Event {
 
 /// `corehr.offboarding.checklist_updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct OffboardingChecklistUpdatedV2 {
+pub struct CorehrOffboardingChecklistUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: OffboardingChecklistUpdatedV2Event,
+    pub event: CorehrOffboardingChecklistUpdatedV2Event,
 }
 
 /// `corehr.offboarding.checklist_updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct OffboardingChecklistUpdatedV2Event {
+pub struct CorehrOffboardingChecklistUpdatedV2Event {
     /// 离职员工雇佣ID，可通过[批量查询员工信息;](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/employee/batch_get)获取员工信息。
     #[serde(default)]
     pub employment_id: Option<String>,
@@ -741,19 +741,19 @@ pub struct OffboardingChecklistUpdatedV2Event {
 
 /// `corehr.offboarding.status_updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct OffboardingStatusUpdatedV2 {
+pub struct CorehrOffboardingStatusUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: OffboardingStatusUpdatedV2Event,
+    pub event: CorehrOffboardingStatusUpdatedV2Event,
 }
 
 /// `corehr.offboarding.status_updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct OffboardingStatusUpdatedV2Event {
+pub struct CorehrOffboardingStatusUpdatedV2Event {
     /// 离职员工雇佣ID，可通过[批量查询员工信息;](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/employee/batch_get)获取员工信息。
     #[serde(default)]
     pub employment_id: Option<String>,
@@ -773,19 +773,19 @@ pub struct OffboardingStatusUpdatedV2Event {
 
 /// `corehr.offboarding.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct OffboardingUpdatedV2 {
+pub struct CorehrOffboardingUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: OffboardingUpdatedV2Event,
+    pub event: CorehrOffboardingUpdatedV2Event,
 }
 
 /// `corehr.offboarding.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct OffboardingUpdatedV2Event {
+pub struct CorehrOffboardingUpdatedV2Event {
     /// 飞书人事的租户ID
     #[serde(default)]
     pub tenant_id: Option<String>,
@@ -823,19 +823,19 @@ pub struct OffboardingUpdatedV2Event {
 
 /// `corehr.pathway.created_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PathwayCreatedV2 {
+pub struct CorehrPathwayCreatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: PathwayCreatedV2Event,
+    pub event: CorehrPathwayCreatedV2Event,
 }
 
 /// `corehr.pathway.created_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PathwayCreatedV2Event {
+pub struct CorehrPathwayCreatedV2Event {
     /// 通道ID
     #[serde(default)]
     pub pathway_id: Option<String>,
@@ -843,19 +843,19 @@ pub struct PathwayCreatedV2Event {
 
 /// `corehr.pathway.deleted_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PathwayDeletedV2 {
+pub struct CorehrPathwayDeletedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: PathwayDeletedV2Event,
+    pub event: CorehrPathwayDeletedV2Event,
 }
 
 /// `corehr.pathway.deleted_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PathwayDeletedV2Event {
+pub struct CorehrPathwayDeletedV2Event {
     /// 通道ID
     #[serde(default)]
     pub pathway_id: Option<String>,
@@ -863,19 +863,19 @@ pub struct PathwayDeletedV2Event {
 
 /// `corehr.pathway.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PathwayUpdatedV2 {
+pub struct CorehrPathwayUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: PathwayUpdatedV2Event,
+    pub event: CorehrPathwayUpdatedV2Event,
 }
 
 /// `corehr.pathway.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PathwayUpdatedV2Event {
+pub struct CorehrPathwayUpdatedV2Event {
     /// 通道 ID
     #[serde(default)]
     pub pathway_id: Option<String>,
@@ -886,19 +886,19 @@ pub struct PathwayUpdatedV2Event {
 
 /// `corehr.position.created_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PositionCreatedV2 {
+pub struct CorehrPositionCreatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: PositionCreatedV2Event,
+    pub event: CorehrPositionCreatedV2Event,
 }
 
 /// `corehr.position.created_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PositionCreatedV2Event {
+pub struct CorehrPositionCreatedV2Event {
     /// 岗位ID，可通过[查询岗位](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/position/query)接口去获取岗位详细信息
     #[serde(default)]
     pub position_id: Option<String>,
@@ -906,19 +906,19 @@ pub struct PositionCreatedV2Event {
 
 /// `corehr.position.deleted_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PositionDeletedV2 {
+pub struct CorehrPositionDeletedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: PositionDeletedV2Event,
+    pub event: CorehrPositionDeletedV2Event,
 }
 
 /// `corehr.position.deleted_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PositionDeletedV2Event {
+pub struct CorehrPositionDeletedV2Event {
     /// 岗位ID
     #[serde(default)]
     pub position_id: Option<String>,
@@ -926,19 +926,19 @@ pub struct PositionDeletedV2Event {
 
 /// `corehr.position.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PositionUpdatedV2 {
+pub struct CorehrPositionUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: PositionUpdatedV2Event,
+    pub event: CorehrPositionUpdatedV2Event,
 }
 
 /// `corehr.position.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PositionUpdatedV2Event {
+pub struct CorehrPositionUpdatedV2Event {
     /// 岗位ID，可通过[查询岗位](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/position/query)接口去获取岗位详细信息
     #[serde(default)]
     pub position_id: Option<String>,
@@ -949,19 +949,19 @@ pub struct PositionUpdatedV2Event {
 
 /// `corehr.pre_hire.onboarding_task_changed_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PreHireOnboardingTaskChangedV2 {
+pub struct CorehrPreHireOnboardingTaskChangedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: PreHireOnboardingTaskChangedV2Event,
+    pub event: CorehrPreHireOnboardingTaskChangedV2Event,
 }
 
 /// `corehr.pre_hire.onboarding_task_changed_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct PreHireOnboardingTaskChangedV2Event {
+pub struct CorehrPreHireOnboardingTaskChangedV2Event {
     /// 飞书人事租户ID
     #[serde(default)]
     pub tenant_id: Option<String>,
@@ -984,19 +984,19 @@ pub struct PreHireOnboardingTaskChangedV2Event {
 
 /// `corehr.probation.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProbationUpdatedV2 {
+pub struct CorehrProbationUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: ProbationUpdatedV2Event,
+    pub event: CorehrProbationUpdatedV2Event,
 }
 
 /// `corehr.probation.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProbationUpdatedV2Event {
+pub struct CorehrProbationUpdatedV2Event {
     /// 雇佣 ID，可通过[【搜索员工信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/employee/search)接口获取
     #[serde(default)]
     pub employment_id: Option<String>,
@@ -1010,19 +1010,19 @@ pub struct ProbationUpdatedV2Event {
 
 /// `corehr.process.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessUpdatedV2 {
+pub struct CorehrProcessUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: ProcessUpdatedV2Event,
+    pub event: CorehrProcessUpdatedV2Event,
 }
 
 /// `corehr.process.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessUpdatedV2Event {
+pub struct CorehrProcessUpdatedV2Event {
     /// 流程运行实例 id，详细信息可通过[获取单个流程详情](https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/process/get)获取
     #[serde(default)]
     pub process_id: Option<String>,
@@ -1042,19 +1042,19 @@ pub struct ProcessUpdatedV2Event {
 
 /// `corehr.process.approver.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessApproverUpdatedV2 {
+pub struct CorehrProcessApproverUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: ProcessApproverUpdatedV2Event,
+    pub event: CorehrProcessApproverUpdatedV2Event,
 }
 
 /// `corehr.process.approver.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessApproverUpdatedV2Event {
+pub struct CorehrProcessApproverUpdatedV2Event {
     /// 流程运行实例 id，详细信息可通过[获取单个流程详情](https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/process/get)获取
     #[serde(default)]
     pub process_id: Option<String>,
@@ -1086,19 +1086,19 @@ pub struct ProcessApproverUpdatedV2Event {
 
 /// `corehr.process.cc.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessCcUpdatedV2 {
+pub struct CorehrProcessCcUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: ProcessCcUpdatedV2Event,
+    pub event: CorehrProcessCcUpdatedV2Event,
 }
 
 /// `corehr.process.cc.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessCcUpdatedV2Event {
+pub struct CorehrProcessCcUpdatedV2Event {
     /// 流程运行实例 id，详细信息可通过[获取单个流程详情](https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/process/get)获取
     #[serde(default)]
     pub process_id: Option<String>,
@@ -1115,19 +1115,19 @@ pub struct ProcessCcUpdatedV2Event {
 
 /// `corehr.process.node.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessNodeUpdatedV2 {
+pub struct CorehrProcessNodeUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: ProcessNodeUpdatedV2Event,
+    pub event: CorehrProcessNodeUpdatedV2Event,
 }
 
 /// `corehr.process.node.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessNodeUpdatedV2Event {
+pub struct CorehrProcessNodeUpdatedV2Event {
     /// 流程定义 id
     #[serde(default)]
     pub flow_definition_id: Option<String>,
@@ -1153,19 +1153,19 @@ pub struct ProcessNodeUpdatedV2Event {
 
 /// `corehr.process.status.update_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessStatusUpdateV2 {
+pub struct CorehrProcessStatusUpdateV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: ProcessStatusUpdateV2Event,
+    pub event: CorehrProcessStatusUpdateV2Event,
 }
 
 /// `corehr.process.status.update_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessStatusUpdateV2Event {
+pub struct CorehrProcessStatusUpdateV2Event {
     /// 流程运行实例 id，详细信息可通过[获取单个流程详情](https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/process/get)获取
     #[serde(default)]
     pub process_id: Option<String>,
@@ -1185,19 +1185,19 @@ pub struct ProcessStatusUpdateV2Event {
 
 /// `corehr.process_comment_info.updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessCommentInfoUpdatedV2 {
+pub struct CorehrProcessCommentInfoUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: ProcessCommentInfoUpdatedV2Event,
+    pub event: CorehrProcessCommentInfoUpdatedV2Event,
 }
 
 /// `corehr.process_comment_info.updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ProcessCommentInfoUpdatedV2Event {
+pub struct CorehrProcessCommentInfoUpdatedV2Event {
     /// 流程运行实例id
     #[serde(default)]
     pub process_id: Option<String>,
@@ -1211,19 +1211,19 @@ pub struct ProcessCommentInfoUpdatedV2Event {
 
 /// `corehr.signature_file.status_updated_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct SignatureFileStatusUpdatedV2 {
+pub struct CorehrSignatureFileStatusUpdatedV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: SignatureFileStatusUpdatedV2Event,
+    pub event: CorehrSignatureFileStatusUpdatedV2Event,
 }
 
 /// `corehr.signature_file.status_updated_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct SignatureFileStatusUpdatedV2Event {
+pub struct CorehrSignatureFileStatusUpdatedV2Event {
     /// 发生状态变更的电子签文件id，[【查询电子签文件详情】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/signature_file/query)
     #[serde(default)]
     pub signature_file_id: Option<String>,
@@ -1346,183 +1346,183 @@ typed_events! {
     /// `corehr.approval_groups.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.approval_groups.updated_v2" | COREHR_APPROVAL_GROUPS_UPDATED_V2 | ApprovalGroupsUpdatedV2 | ApprovalGroupsUpdatedV2Handler | register_corehr_approval_groups_updated_v2;
+    "corehr.approval_groups.updated_v2" | COREHR_APPROVAL_GROUPS_UPDATED_V2 | CorehrApprovalGroupsUpdatedV2 | CorehrApprovalGroupsUpdatedV2Handler | register_corehr_approval_groups_updated_v2;
     /// `corehr.company.created_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.company.created_v2" | COREHR_COMPANY_CREATED_V2 | CompanyCreatedV2 | CompanyCreatedV2Handler | register_corehr_company_created_v2;
+    "corehr.company.created_v2" | COREHR_COMPANY_CREATED_V2 | CorehrCompanyCreatedV2 | CorehrCompanyCreatedV2Handler | register_corehr_company_created_v2;
     /// `corehr.company.deleted_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.company.deleted_v2" | COREHR_COMPANY_DELETED_V2 | CompanyDeletedV2 | CompanyDeletedV2Handler | register_corehr_company_deleted_v2;
+    "corehr.company.deleted_v2" | COREHR_COMPANY_DELETED_V2 | CorehrCompanyDeletedV2 | CorehrCompanyDeletedV2Handler | register_corehr_company_deleted_v2;
     /// `corehr.company.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.company.updated_v2" | COREHR_COMPANY_UPDATED_V2 | CompanyUpdatedV2 | CompanyUpdatedV2Handler | register_corehr_company_updated_v2;
+    "corehr.company.updated_v2" | COREHR_COMPANY_UPDATED_V2 | CorehrCompanyUpdatedV2 | CorehrCompanyUpdatedV2Handler | register_corehr_company_updated_v2;
     /// `corehr.cost_center.created_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.cost_center.created_v2" | COREHR_COST_CENTER_CREATED_V2 | CostCenterCreatedV2 | CostCenterCreatedV2Handler | register_corehr_cost_center_created_v2;
+    "corehr.cost_center.created_v2" | COREHR_COST_CENTER_CREATED_V2 | CorehrCostCenterCreatedV2 | CorehrCostCenterCreatedV2Handler | register_corehr_cost_center_created_v2;
     /// `corehr.cost_center.deleted_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.cost_center.deleted_v2" | COREHR_COST_CENTER_DELETED_V2 | CostCenterDeletedV2 | CostCenterDeletedV2Handler | register_corehr_cost_center_deleted_v2;
+    "corehr.cost_center.deleted_v2" | COREHR_COST_CENTER_DELETED_V2 | CorehrCostCenterDeletedV2 | CorehrCostCenterDeletedV2Handler | register_corehr_cost_center_deleted_v2;
     /// `corehr.cost_center.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.cost_center.updated_v2" | COREHR_COST_CENTER_UPDATED_V2 | CostCenterUpdatedV2 | CostCenterUpdatedV2Handler | register_corehr_cost_center_updated_v2;
+    "corehr.cost_center.updated_v2" | COREHR_COST_CENTER_UPDATED_V2 | CorehrCostCenterUpdatedV2 | CorehrCostCenterUpdatedV2Handler | register_corehr_cost_center_updated_v2;
     /// `corehr.custom_org.created_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.custom_org.created_v2" | COREHR_CUSTOM_ORG_CREATED_V2 | CustomOrgCreatedV2 | CustomOrgCreatedV2Handler | register_corehr_custom_org_created_v2;
+    "corehr.custom_org.created_v2" | COREHR_CUSTOM_ORG_CREATED_V2 | CorehrCustomOrgCreatedV2 | CorehrCustomOrgCreatedV2Handler | register_corehr_custom_org_created_v2;
     /// `corehr.custom_org.deleted_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.custom_org.deleted_v2" | COREHR_CUSTOM_ORG_DELETED_V2 | CustomOrgDeletedV2 | CustomOrgDeletedV2Handler | register_corehr_custom_org_deleted_v2;
+    "corehr.custom_org.deleted_v2" | COREHR_CUSTOM_ORG_DELETED_V2 | CorehrCustomOrgDeletedV2 | CorehrCustomOrgDeletedV2Handler | register_corehr_custom_org_deleted_v2;
     /// `corehr.custom_org.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.custom_org.updated_v2" | COREHR_CUSTOM_ORG_UPDATED_V2 | CustomOrgUpdatedV2 | CustomOrgUpdatedV2Handler | register_corehr_custom_org_updated_v2;
+    "corehr.custom_org.updated_v2" | COREHR_CUSTOM_ORG_UPDATED_V2 | CorehrCustomOrgUpdatedV2 | CorehrCustomOrgUpdatedV2Handler | register_corehr_custom_org_updated_v2;
     /// `corehr.department.created_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.department.created_v2" | COREHR_DEPARTMENT_CREATED_V2 | DepartmentCreatedV2 | DepartmentCreatedV2Handler | register_corehr_department_created_v2;
+    "corehr.department.created_v2" | COREHR_DEPARTMENT_CREATED_V2 | CorehrDepartmentCreatedV2 | CorehrDepartmentCreatedV2Handler | register_corehr_department_created_v2;
     /// `corehr.department.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.department.updated_v2" | COREHR_DEPARTMENT_UPDATED_V2 | DepartmentUpdatedV2 | DepartmentUpdatedV2Handler | register_corehr_department_updated_v2;
+    "corehr.department.updated_v2" | COREHR_DEPARTMENT_UPDATED_V2 | CorehrDepartmentUpdatedV2 | CorehrDepartmentUpdatedV2Handler | register_corehr_department_updated_v2;
     /// `corehr.employee.domain_event_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.employee.domain_event_v2" | COREHR_EMPLOYEE_DOMAIN_EVENT_V2 | EmployeeDomainEventV2 | EmployeeDomainEventV2Handler | register_corehr_employee_domain_event_v2;
+    "corehr.employee.domain_event_v2" | COREHR_EMPLOYEE_DOMAIN_EVENT_V2 | CorehrEmployeeDomainEventV2 | CorehrEmployeeDomainEventV2Handler | register_corehr_employee_domain_event_v2;
     /// `corehr.job_change.status_updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.job_change.status_updated_v2" | COREHR_JOB_CHANGE_STATUS_UPDATED_V2 | JobChangeStatusUpdatedV2 | JobChangeStatusUpdatedV2Handler | register_corehr_job_change_status_updated_v2;
+    "corehr.job_change.status_updated_v2" | COREHR_JOB_CHANGE_STATUS_UPDATED_V2 | CorehrJobChangeStatusUpdatedV2 | CorehrJobChangeStatusUpdatedV2Handler | register_corehr_job_change_status_updated_v2;
     /// `corehr.job_change.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.job_change.updated_v2" | COREHR_JOB_CHANGE_UPDATED_V2 | JobChangeUpdatedV2 | JobChangeUpdatedV2Handler | register_corehr_job_change_updated_v2;
+    "corehr.job_change.updated_v2" | COREHR_JOB_CHANGE_UPDATED_V2 | CorehrJobChangeUpdatedV2 | CorehrJobChangeUpdatedV2Handler | register_corehr_job_change_updated_v2;
     /// `corehr.job_family.created_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.job_family.created_v2" | COREHR_JOB_FAMILY_CREATED_V2 | JobFamilyCreatedV2 | JobFamilyCreatedV2Handler | register_corehr_job_family_created_v2;
+    "corehr.job_family.created_v2" | COREHR_JOB_FAMILY_CREATED_V2 | CorehrJobFamilyCreatedV2 | CorehrJobFamilyCreatedV2Handler | register_corehr_job_family_created_v2;
     /// `corehr.job_family.deleted_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.job_family.deleted_v2" | COREHR_JOB_FAMILY_DELETED_V2 | JobFamilyDeletedV2 | JobFamilyDeletedV2Handler | register_corehr_job_family_deleted_v2;
+    "corehr.job_family.deleted_v2" | COREHR_JOB_FAMILY_DELETED_V2 | CorehrJobFamilyDeletedV2 | CorehrJobFamilyDeletedV2Handler | register_corehr_job_family_deleted_v2;
     /// `corehr.job_family.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.job_family.updated_v2" | COREHR_JOB_FAMILY_UPDATED_V2 | JobFamilyUpdatedV2 | JobFamilyUpdatedV2Handler | register_corehr_job_family_updated_v2;
+    "corehr.job_family.updated_v2" | COREHR_JOB_FAMILY_UPDATED_V2 | CorehrJobFamilyUpdatedV2 | CorehrJobFamilyUpdatedV2Handler | register_corehr_job_family_updated_v2;
     /// `corehr.job_grade.created_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.job_grade.created_v2" | COREHR_JOB_GRADE_CREATED_V2 | JobGradeCreatedV2 | JobGradeCreatedV2Handler | register_corehr_job_grade_created_v2;
+    "corehr.job_grade.created_v2" | COREHR_JOB_GRADE_CREATED_V2 | CorehrJobGradeCreatedV2 | CorehrJobGradeCreatedV2Handler | register_corehr_job_grade_created_v2;
     /// `corehr.job_grade.deleted_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.job_grade.deleted_v2" | COREHR_JOB_GRADE_DELETED_V2 | JobGradeDeletedV2 | JobGradeDeletedV2Handler | register_corehr_job_grade_deleted_v2;
+    "corehr.job_grade.deleted_v2" | COREHR_JOB_GRADE_DELETED_V2 | CorehrJobGradeDeletedV2 | CorehrJobGradeDeletedV2Handler | register_corehr_job_grade_deleted_v2;
     /// `corehr.job_grade.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.job_grade.updated_v2" | COREHR_JOB_GRADE_UPDATED_V2 | JobGradeUpdatedV2 | JobGradeUpdatedV2Handler | register_corehr_job_grade_updated_v2;
+    "corehr.job_grade.updated_v2" | COREHR_JOB_GRADE_UPDATED_V2 | CorehrJobGradeUpdatedV2 | CorehrJobGradeUpdatedV2Handler | register_corehr_job_grade_updated_v2;
     /// `corehr.job_level.created_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.job_level.created_v2" | COREHR_JOB_LEVEL_CREATED_V2 | JobLevelCreatedV2 | JobLevelCreatedV2Handler | register_corehr_job_level_created_v2;
+    "corehr.job_level.created_v2" | COREHR_JOB_LEVEL_CREATED_V2 | CorehrJobLevelCreatedV2 | CorehrJobLevelCreatedV2Handler | register_corehr_job_level_created_v2;
     /// `corehr.job_level.deleted_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.job_level.deleted_v2" | COREHR_JOB_LEVEL_DELETED_V2 | JobLevelDeletedV2 | JobLevelDeletedV2Handler | register_corehr_job_level_deleted_v2;
+    "corehr.job_level.deleted_v2" | COREHR_JOB_LEVEL_DELETED_V2 | CorehrJobLevelDeletedV2 | CorehrJobLevelDeletedV2Handler | register_corehr_job_level_deleted_v2;
     /// `corehr.job_level.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.job_level.updated_v2" | COREHR_JOB_LEVEL_UPDATED_V2 | JobLevelUpdatedV2 | JobLevelUpdatedV2Handler | register_corehr_job_level_updated_v2;
+    "corehr.job_level.updated_v2" | COREHR_JOB_LEVEL_UPDATED_V2 | CorehrJobLevelUpdatedV2 | CorehrJobLevelUpdatedV2Handler | register_corehr_job_level_updated_v2;
     /// `corehr.location.created_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.location.created_v2" | COREHR_LOCATION_CREATED_V2 | LocationCreatedV2 | LocationCreatedV2Handler | register_corehr_location_created_v2;
+    "corehr.location.created_v2" | COREHR_LOCATION_CREATED_V2 | CorehrLocationCreatedV2 | CorehrLocationCreatedV2Handler | register_corehr_location_created_v2;
     /// `corehr.location.deleted_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.location.deleted_v2" | COREHR_LOCATION_DELETED_V2 | LocationDeletedV2 | LocationDeletedV2Handler | register_corehr_location_deleted_v2;
+    "corehr.location.deleted_v2" | COREHR_LOCATION_DELETED_V2 | CorehrLocationDeletedV2 | CorehrLocationDeletedV2Handler | register_corehr_location_deleted_v2;
     /// `corehr.location.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.location.updated_v2" | COREHR_LOCATION_UPDATED_V2 | LocationUpdatedV2 | LocationUpdatedV2Handler | register_corehr_location_updated_v2;
+    "corehr.location.updated_v2" | COREHR_LOCATION_UPDATED_V2 | CorehrLocationUpdatedV2 | CorehrLocationUpdatedV2Handler | register_corehr_location_updated_v2;
     /// `corehr.offboarding.checklist_updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.offboarding.checklist_updated_v2" | COREHR_OFFBOARDING_CHECKLIST_UPDATED_V2 | OffboardingChecklistUpdatedV2 | OffboardingChecklistUpdatedV2Handler | register_corehr_offboarding_checklist_updated_v2;
+    "corehr.offboarding.checklist_updated_v2" | COREHR_OFFBOARDING_CHECKLIST_UPDATED_V2 | CorehrOffboardingChecklistUpdatedV2 | CorehrOffboardingChecklistUpdatedV2Handler | register_corehr_offboarding_checklist_updated_v2;
     /// `corehr.offboarding.status_updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.offboarding.status_updated_v2" | COREHR_OFFBOARDING_STATUS_UPDATED_V2 | OffboardingStatusUpdatedV2 | OffboardingStatusUpdatedV2Handler | register_corehr_offboarding_status_updated_v2;
+    "corehr.offboarding.status_updated_v2" | COREHR_OFFBOARDING_STATUS_UPDATED_V2 | CorehrOffboardingStatusUpdatedV2 | CorehrOffboardingStatusUpdatedV2Handler | register_corehr_offboarding_status_updated_v2;
     /// `corehr.offboarding.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.offboarding.updated_v2" | COREHR_OFFBOARDING_UPDATED_V2 | OffboardingUpdatedV2 | OffboardingUpdatedV2Handler | register_corehr_offboarding_updated_v2;
+    "corehr.offboarding.updated_v2" | COREHR_OFFBOARDING_UPDATED_V2 | CorehrOffboardingUpdatedV2 | CorehrOffboardingUpdatedV2Handler | register_corehr_offboarding_updated_v2;
     /// `corehr.pathway.created_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.pathway.created_v2" | COREHR_PATHWAY_CREATED_V2 | PathwayCreatedV2 | PathwayCreatedV2Handler | register_corehr_pathway_created_v2;
+    "corehr.pathway.created_v2" | COREHR_PATHWAY_CREATED_V2 | CorehrPathwayCreatedV2 | CorehrPathwayCreatedV2Handler | register_corehr_pathway_created_v2;
     /// `corehr.pathway.deleted_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.pathway.deleted_v2" | COREHR_PATHWAY_DELETED_V2 | PathwayDeletedV2 | PathwayDeletedV2Handler | register_corehr_pathway_deleted_v2;
+    "corehr.pathway.deleted_v2" | COREHR_PATHWAY_DELETED_V2 | CorehrPathwayDeletedV2 | CorehrPathwayDeletedV2Handler | register_corehr_pathway_deleted_v2;
     /// `corehr.pathway.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.pathway.updated_v2" | COREHR_PATHWAY_UPDATED_V2 | PathwayUpdatedV2 | PathwayUpdatedV2Handler | register_corehr_pathway_updated_v2;
+    "corehr.pathway.updated_v2" | COREHR_PATHWAY_UPDATED_V2 | CorehrPathwayUpdatedV2 | CorehrPathwayUpdatedV2Handler | register_corehr_pathway_updated_v2;
     /// `corehr.position.created_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.position.created_v2" | COREHR_POSITION_CREATED_V2 | PositionCreatedV2 | PositionCreatedV2Handler | register_corehr_position_created_v2;
+    "corehr.position.created_v2" | COREHR_POSITION_CREATED_V2 | CorehrPositionCreatedV2 | CorehrPositionCreatedV2Handler | register_corehr_position_created_v2;
     /// `corehr.position.deleted_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.position.deleted_v2" | COREHR_POSITION_DELETED_V2 | PositionDeletedV2 | PositionDeletedV2Handler | register_corehr_position_deleted_v2;
+    "corehr.position.deleted_v2" | COREHR_POSITION_DELETED_V2 | CorehrPositionDeletedV2 | CorehrPositionDeletedV2Handler | register_corehr_position_deleted_v2;
     /// `corehr.position.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.position.updated_v2" | COREHR_POSITION_UPDATED_V2 | PositionUpdatedV2 | PositionUpdatedV2Handler | register_corehr_position_updated_v2;
+    "corehr.position.updated_v2" | COREHR_POSITION_UPDATED_V2 | CorehrPositionUpdatedV2 | CorehrPositionUpdatedV2Handler | register_corehr_position_updated_v2;
     /// `corehr.pre_hire.onboarding_task_changed_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.pre_hire.onboarding_task_changed_v2" | COREHR_PRE_HIRE_ONBOARDING_TASK_CHANGED_V2 | PreHireOnboardingTaskChangedV2 | PreHireOnboardingTaskChangedV2Handler | register_corehr_pre_hire_onboarding_task_changed_v2;
+    "corehr.pre_hire.onboarding_task_changed_v2" | COREHR_PRE_HIRE_ONBOARDING_TASK_CHANGED_V2 | CorehrPreHireOnboardingTaskChangedV2 | CorehrPreHireOnboardingTaskChangedV2Handler | register_corehr_pre_hire_onboarding_task_changed_v2;
     /// `corehr.probation.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.probation.updated_v2" | COREHR_PROBATION_UPDATED_V2 | ProbationUpdatedV2 | ProbationUpdatedV2Handler | register_corehr_probation_updated_v2;
+    "corehr.probation.updated_v2" | COREHR_PROBATION_UPDATED_V2 | CorehrProbationUpdatedV2 | CorehrProbationUpdatedV2Handler | register_corehr_probation_updated_v2;
     /// `corehr.process.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.process.updated_v2" | COREHR_PROCESS_UPDATED_V2 | ProcessUpdatedV2 | ProcessUpdatedV2Handler | register_corehr_process_updated_v2;
+    "corehr.process.updated_v2" | COREHR_PROCESS_UPDATED_V2 | CorehrProcessUpdatedV2 | CorehrProcessUpdatedV2Handler | register_corehr_process_updated_v2;
     /// `corehr.process.approver.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.process.approver.updated_v2" | COREHR_PROCESS_APPROVER_UPDATED_V2 | ProcessApproverUpdatedV2 | ProcessApproverUpdatedV2Handler | register_corehr_process_approver_updated_v2;
+    "corehr.process.approver.updated_v2" | COREHR_PROCESS_APPROVER_UPDATED_V2 | CorehrProcessApproverUpdatedV2 | CorehrProcessApproverUpdatedV2Handler | register_corehr_process_approver_updated_v2;
     /// `corehr.process.cc.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.process.cc.updated_v2" | COREHR_PROCESS_CC_UPDATED_V2 | ProcessCcUpdatedV2 | ProcessCcUpdatedV2Handler | register_corehr_process_cc_updated_v2;
+    "corehr.process.cc.updated_v2" | COREHR_PROCESS_CC_UPDATED_V2 | CorehrProcessCcUpdatedV2 | CorehrProcessCcUpdatedV2Handler | register_corehr_process_cc_updated_v2;
     /// `corehr.process.node.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.process.node.updated_v2" | COREHR_PROCESS_NODE_UPDATED_V2 | ProcessNodeUpdatedV2 | ProcessNodeUpdatedV2Handler | register_corehr_process_node_updated_v2;
+    "corehr.process.node.updated_v2" | COREHR_PROCESS_NODE_UPDATED_V2 | CorehrProcessNodeUpdatedV2 | CorehrProcessNodeUpdatedV2Handler | register_corehr_process_node_updated_v2;
     /// `corehr.process.status.update_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.process.status.update_v2" | COREHR_PROCESS_STATUS_UPDATE_V2 | ProcessStatusUpdateV2 | ProcessStatusUpdateV2Handler | register_corehr_process_status_update_v2;
+    "corehr.process.status.update_v2" | COREHR_PROCESS_STATUS_UPDATE_V2 | CorehrProcessStatusUpdateV2 | CorehrProcessStatusUpdateV2Handler | register_corehr_process_status_update_v2;
     /// `corehr.process_comment_info.updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.process_comment_info.updated_v2" | COREHR_PROCESS_COMMENT_INFO_UPDATED_V2 | ProcessCommentInfoUpdatedV2 | ProcessCommentInfoUpdatedV2Handler | register_corehr_process_comment_info_updated_v2;
+    "corehr.process_comment_info.updated_v2" | COREHR_PROCESS_COMMENT_INFO_UPDATED_V2 | CorehrProcessCommentInfoUpdatedV2 | CorehrProcessCommentInfoUpdatedV2Handler | register_corehr_process_comment_info_updated_v2;
     /// `corehr.signature_file.status_updated_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "corehr.signature_file.status_updated_v2" | COREHR_SIGNATURE_FILE_STATUS_UPDATED_V2 | SignatureFileStatusUpdatedV2 | SignatureFileStatusUpdatedV2Handler | register_corehr_signature_file_status_updated_v2;
+    "corehr.signature_file.status_updated_v2" | COREHR_SIGNATURE_FILE_STATUS_UPDATED_V2 | CorehrSignatureFileStatusUpdatedV2 | CorehrSignatureFileStatusUpdatedV2Handler | register_corehr_signature_file_status_updated_v2;
 }
 
 #[cfg(test)]
@@ -2412,17 +2412,19 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_approval_groups_updated_v2(move |event: ApprovalGroupsUpdatedV2| {
-                assert_eq!(event.header.event_type, "corehr.approval_groups.updated_v2");
-                assert_eq!(
-                    event.event.approval_group_id.as_deref(),
-                    Some("approval_group_id_str")
-                );
-                assert_eq!(event.event.process_id.as_deref(), Some("process_id_str"));
-                assert_eq!(event.event.approval_group_status, Some(42));
-                *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
-                Ok(())
-            })
+            .register_corehr_approval_groups_updated_v2(
+                move |event: CorehrApprovalGroupsUpdatedV2| {
+                    assert_eq!(event.header.event_type, "corehr.approval_groups.updated_v2");
+                    assert_eq!(
+                        event.event.approval_group_id.as_deref(),
+                        Some("approval_group_id_str")
+                    );
+                    assert_eq!(event.event.process_id.as_deref(), Some("process_id_str"));
+                    assert_eq!(event.event.approval_group_status, Some(42));
+                    *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
+                    Ok(())
+                },
+            )
             .expect("register")
             .build();
         handler
@@ -2436,7 +2438,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_company_created_v2(move |event: CompanyCreatedV2| {
+            .register_corehr_company_created_v2(move |event: CorehrCompanyCreatedV2| {
                 assert_eq!(event.header.event_type, "corehr.company.created_v2");
                 assert_eq!(event.event.company_id.as_deref(), Some("company_id_str"));
                 *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
@@ -2455,7 +2457,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_company_deleted_v2(move |event: CompanyDeletedV2| {
+            .register_corehr_company_deleted_v2(move |event: CorehrCompanyDeletedV2| {
                 assert_eq!(event.header.event_type, "corehr.company.deleted_v2");
                 assert_eq!(event.event.company_id.as_deref(), Some("company_id_str"));
                 *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
@@ -2474,7 +2476,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_company_updated_v2(move |event: CompanyUpdatedV2| {
+            .register_corehr_company_updated_v2(move |event: CorehrCompanyUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.company.updated_v2");
                 assert_eq!(event.event.company_id.as_deref(), Some("company_id_str"));
                 assert_eq!(event.event.field_changes[0].as_str(), "field_changes_str");
@@ -2496,7 +2498,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_cost_center_created_v2(move |event: CostCenterCreatedV2| {
+            .register_corehr_cost_center_created_v2(move |event: CorehrCostCenterCreatedV2| {
                 assert_eq!(event.header.event_type, "corehr.cost_center.created_v2");
                 assert_eq!(
                     event.event.cost_center_id.as_deref(),
@@ -2518,7 +2520,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_cost_center_deleted_v2(move |event: CostCenterDeletedV2| {
+            .register_corehr_cost_center_deleted_v2(move |event: CorehrCostCenterDeletedV2| {
                 assert_eq!(event.header.event_type, "corehr.cost_center.deleted_v2");
                 assert_eq!(
                     event.event.cost_center_id.as_deref(),
@@ -2540,7 +2542,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_cost_center_updated_v2(move |event: CostCenterUpdatedV2| {
+            .register_corehr_cost_center_updated_v2(move |event: CorehrCostCenterUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.cost_center.updated_v2");
                 assert_eq!(
                     event.event.cost_center_id.as_deref(),
@@ -2563,7 +2565,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_custom_org_created_v2(move |event: CustomOrgCreatedV2| {
+            .register_corehr_custom_org_created_v2(move |event: CorehrCustomOrgCreatedV2| {
                 assert_eq!(event.header.event_type, "corehr.custom_org.created_v2");
                 assert_eq!(event.event.org_id.as_deref(), Some("org_id_str"));
                 assert_eq!(
@@ -2586,7 +2588,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_custom_org_deleted_v2(move |event: CustomOrgDeletedV2| {
+            .register_corehr_custom_org_deleted_v2(move |event: CorehrCustomOrgDeletedV2| {
                 assert_eq!(event.header.event_type, "corehr.custom_org.deleted_v2");
                 assert_eq!(event.event.org_id.as_deref(), Some("org_id_str"));
                 assert_eq!(
@@ -2609,7 +2611,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_custom_org_updated_v2(move |event: CustomOrgUpdatedV2| {
+            .register_corehr_custom_org_updated_v2(move |event: CorehrCustomOrgUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.custom_org.updated_v2");
                 assert_eq!(event.event.org_id.as_deref(), Some("org_id_str"));
                 assert_eq!(event.event.field_changes[0].as_str(), "field_changes_str");
@@ -2633,7 +2635,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_department_created_v2(move |event: DepartmentCreatedV2| {
+            .register_corehr_department_created_v2(move |event: CorehrDepartmentCreatedV2| {
                 assert_eq!(event.header.event_type, "corehr.department.created_v2");
                 assert_eq!(
                     event.event.department_id.as_deref(),
@@ -2655,7 +2657,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_department_updated_v2(move |event: DepartmentUpdatedV2| {
+            .register_corehr_department_updated_v2(move |event: CorehrDepartmentUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.department.updated_v2");
                 assert_eq!(
                     event.event.department_id.as_deref(),
@@ -2678,7 +2680,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_employee_domain_event_v2(move |event: EmployeeDomainEventV2| {
+            .register_corehr_employee_domain_event_v2(move |event: CorehrEmployeeDomainEventV2| {
                 assert_eq!(event.header.event_type, "corehr.employee.domain_event_v2");
                 assert_eq!(event.event.event_type, Some(42));
                 assert_eq!(event.event.sub_event_type, Some(42));
@@ -2704,25 +2706,28 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_job_change_status_updated_v2(move |event: JobChangeStatusUpdatedV2| {
-                assert_eq!(
-                    event.header.event_type,
-                    "corehr.job_change.status_updated_v2"
-                );
-                assert_eq!(
-                    event.event.employment_id.as_deref(),
-                    Some("employment_id_str")
-                );
-                let target_user_id = event.event.target_user_id.as_ref().expect("target_user_id");
-                assert_eq!(target_user_id.user_id.as_deref(), Some("user_id_str"));
-                assert_eq!(
-                    event.event.job_change_id.as_deref(),
-                    Some("job_change_id_str")
-                );
-                assert_eq!(event.event.transfer_mode, Some(42));
-                *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
-                Ok(())
-            })
+            .register_corehr_job_change_status_updated_v2(
+                move |event: CorehrJobChangeStatusUpdatedV2| {
+                    assert_eq!(
+                        event.header.event_type,
+                        "corehr.job_change.status_updated_v2"
+                    );
+                    assert_eq!(
+                        event.event.employment_id.as_deref(),
+                        Some("employment_id_str")
+                    );
+                    let target_user_id =
+                        event.event.target_user_id.as_ref().expect("target_user_id");
+                    assert_eq!(target_user_id.user_id.as_deref(), Some("user_id_str"));
+                    assert_eq!(
+                        event.event.job_change_id.as_deref(),
+                        Some("job_change_id_str")
+                    );
+                    assert_eq!(event.event.transfer_mode, Some(42));
+                    *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
+                    Ok(())
+                },
+            )
             .expect("register")
             .build();
         handler
@@ -2736,7 +2741,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_job_change_updated_v2(move |event: JobChangeUpdatedV2| {
+            .register_corehr_job_change_updated_v2(move |event: CorehrJobChangeUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.job_change.updated_v2");
                 assert_eq!(
                     event.event.employment_id.as_deref(),
@@ -2760,7 +2765,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_job_family_created_v2(move |event: JobFamilyCreatedV2| {
+            .register_corehr_job_family_created_v2(move |event: CorehrJobFamilyCreatedV2| {
                 assert_eq!(event.header.event_type, "corehr.job_family.created_v2");
                 assert_eq!(
                     event.event.job_family_id.as_deref(),
@@ -2782,7 +2787,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_job_family_deleted_v2(move |event: JobFamilyDeletedV2| {
+            .register_corehr_job_family_deleted_v2(move |event: CorehrJobFamilyDeletedV2| {
                 assert_eq!(event.header.event_type, "corehr.job_family.deleted_v2");
                 assert_eq!(
                     event.event.job_family_id.as_deref(),
@@ -2804,7 +2809,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_job_family_updated_v2(move |event: JobFamilyUpdatedV2| {
+            .register_corehr_job_family_updated_v2(move |event: CorehrJobFamilyUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.job_family.updated_v2");
                 assert_eq!(
                     event.event.job_family_id.as_deref(),
@@ -2827,7 +2832,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_job_grade_created_v2(move |event: JobGradeCreatedV2| {
+            .register_corehr_job_grade_created_v2(move |event: CorehrJobGradeCreatedV2| {
                 assert_eq!(event.header.event_type, "corehr.job_grade.created_v2");
                 assert_eq!(
                     event.event.job_grade_id.as_deref(),
@@ -2849,7 +2854,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_job_grade_deleted_v2(move |event: JobGradeDeletedV2| {
+            .register_corehr_job_grade_deleted_v2(move |event: CorehrJobGradeDeletedV2| {
                 assert_eq!(event.header.event_type, "corehr.job_grade.deleted_v2");
                 assert_eq!(
                     event.event.job_grade_id.as_deref(),
@@ -2871,7 +2876,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_job_grade_updated_v2(move |event: JobGradeUpdatedV2| {
+            .register_corehr_job_grade_updated_v2(move |event: CorehrJobGradeUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.job_grade.updated_v2");
                 assert_eq!(
                     event.event.job_grade_id.as_deref(),
@@ -2894,7 +2899,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_job_level_created_v2(move |event: JobLevelCreatedV2| {
+            .register_corehr_job_level_created_v2(move |event: CorehrJobLevelCreatedV2| {
                 assert_eq!(event.header.event_type, "corehr.job_level.created_v2");
                 assert_eq!(
                     event.event.job_level_id.as_deref(),
@@ -2916,7 +2921,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_job_level_deleted_v2(move |event: JobLevelDeletedV2| {
+            .register_corehr_job_level_deleted_v2(move |event: CorehrJobLevelDeletedV2| {
                 assert_eq!(event.header.event_type, "corehr.job_level.deleted_v2");
                 assert_eq!(
                     event.event.job_level_id.as_deref(),
@@ -2938,7 +2943,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_job_level_updated_v2(move |event: JobLevelUpdatedV2| {
+            .register_corehr_job_level_updated_v2(move |event: CorehrJobLevelUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.job_level.updated_v2");
                 assert_eq!(
                     event.event.job_level_id.as_deref(),
@@ -2961,7 +2966,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_location_created_v2(move |event: LocationCreatedV2| {
+            .register_corehr_location_created_v2(move |event: CorehrLocationCreatedV2| {
                 assert_eq!(event.header.event_type, "corehr.location.created_v2");
                 assert_eq!(event.event.location_id.as_deref(), Some("location_id_str"));
                 *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
@@ -2980,7 +2985,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_location_deleted_v2(move |event: LocationDeletedV2| {
+            .register_corehr_location_deleted_v2(move |event: CorehrLocationDeletedV2| {
                 assert_eq!(event.header.event_type, "corehr.location.deleted_v2");
                 assert_eq!(event.event.location_id.as_deref(), Some("location_id_str"));
                 *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
@@ -2999,7 +3004,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_location_updated_v2(move |event: LocationUpdatedV2| {
+            .register_corehr_location_updated_v2(move |event: CorehrLocationUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.location.updated_v2");
                 assert_eq!(event.event.location_id.as_deref(), Some("location_id_str"));
                 assert_eq!(event.event.field_changes[0].as_str(), "field_changes_str");
@@ -3022,7 +3027,7 @@ mod tests {
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
             .register_corehr_offboarding_checklist_updated_v2(
-                move |event: OffboardingChecklistUpdatedV2| {
+                move |event: CorehrOffboardingChecklistUpdatedV2| {
                     assert_eq!(
                         event.header.event_type,
                         "corehr.offboarding.checklist_updated_v2"
@@ -3060,7 +3065,7 @@ mod tests {
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
             .register_corehr_offboarding_status_updated_v2(
-                move |event: OffboardingStatusUpdatedV2| {
+                move |event: CorehrOffboardingStatusUpdatedV2| {
                     assert_eq!(
                         event.header.event_type,
                         "corehr.offboarding.status_updated_v2"
@@ -3094,7 +3099,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_offboarding_updated_v2(move |event: OffboardingUpdatedV2| {
+            .register_corehr_offboarding_updated_v2(move |event: CorehrOffboardingUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.offboarding.updated_v2");
                 assert_eq!(event.event.tenant_id.as_deref(), Some("tenant_id_str"));
                 assert_eq!(
@@ -3120,7 +3125,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_pathway_created_v2(move |event: PathwayCreatedV2| {
+            .register_corehr_pathway_created_v2(move |event: CorehrPathwayCreatedV2| {
                 assert_eq!(event.header.event_type, "corehr.pathway.created_v2");
                 assert_eq!(event.event.pathway_id.as_deref(), Some("pathway_id_str"));
                 *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
@@ -3139,7 +3144,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_pathway_deleted_v2(move |event: PathwayDeletedV2| {
+            .register_corehr_pathway_deleted_v2(move |event: CorehrPathwayDeletedV2| {
                 assert_eq!(event.header.event_type, "corehr.pathway.deleted_v2");
                 assert_eq!(event.event.pathway_id.as_deref(), Some("pathway_id_str"));
                 *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
@@ -3158,7 +3163,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_pathway_updated_v2(move |event: PathwayUpdatedV2| {
+            .register_corehr_pathway_updated_v2(move |event: CorehrPathwayUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.pathway.updated_v2");
                 assert_eq!(event.event.pathway_id.as_deref(), Some("pathway_id_str"));
                 assert_eq!(event.event.field_changes[0].as_str(), "field_changes_str");
@@ -3178,7 +3183,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_position_created_v2(move |event: PositionCreatedV2| {
+            .register_corehr_position_created_v2(move |event: CorehrPositionCreatedV2| {
                 assert_eq!(event.header.event_type, "corehr.position.created_v2");
                 assert_eq!(event.event.position_id.as_deref(), Some("position_id_str"));
                 *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
@@ -3197,7 +3202,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_position_deleted_v2(move |event: PositionDeletedV2| {
+            .register_corehr_position_deleted_v2(move |event: CorehrPositionDeletedV2| {
                 assert_eq!(event.header.event_type, "corehr.position.deleted_v2");
                 assert_eq!(event.event.position_id.as_deref(), Some("position_id_str"));
                 *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
@@ -3216,7 +3221,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_position_updated_v2(move |event: PositionUpdatedV2| {
+            .register_corehr_position_updated_v2(move |event: CorehrPositionUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.position.updated_v2");
                 assert_eq!(event.event.position_id.as_deref(), Some("position_id_str"));
                 assert_eq!(event.event.field_changes[0].as_str(), "field_changes_str");
@@ -3237,7 +3242,7 @@ mod tests {
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
             .register_corehr_pre_hire_onboarding_task_changed_v2(
-                move |event: PreHireOnboardingTaskChangedV2| {
+                move |event: CorehrPreHireOnboardingTaskChangedV2| {
                     assert_eq!(
                         event.header.event_type,
                         "corehr.pre_hire.onboarding_task_changed_v2"
@@ -3272,7 +3277,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_probation_updated_v2(move |event: ProbationUpdatedV2| {
+            .register_corehr_probation_updated_v2(move |event: CorehrProbationUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.probation.updated_v2");
                 assert_eq!(
                     event.event.employment_id.as_deref(),
@@ -3302,7 +3307,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_process_updated_v2(move |event: ProcessUpdatedV2| {
+            .register_corehr_process_updated_v2(move |event: CorehrProcessUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.process.updated_v2");
                 assert_eq!(event.event.process_id.as_deref(), Some("process_id_str"));
                 assert_eq!(event.event.status, Some(42));
@@ -3323,17 +3328,19 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_process_approver_updated_v2(move |event: ProcessApproverUpdatedV2| {
-                assert_eq!(
-                    event.header.event_type,
-                    "corehr.process.approver.updated_v2"
-                );
-                assert_eq!(event.event.process_id.as_deref(), Some("process_id_str"));
-                assert_eq!(event.event.approver_id.as_deref(), Some("approver_id_str"));
-                assert_eq!(event.event.r#type, Some(42));
-                *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
-                Ok(())
-            })
+            .register_corehr_process_approver_updated_v2(
+                move |event: CorehrProcessApproverUpdatedV2| {
+                    assert_eq!(
+                        event.header.event_type,
+                        "corehr.process.approver.updated_v2"
+                    );
+                    assert_eq!(event.event.process_id.as_deref(), Some("process_id_str"));
+                    assert_eq!(event.event.approver_id.as_deref(), Some("approver_id_str"));
+                    assert_eq!(event.event.r#type, Some(42));
+                    *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
+                    Ok(())
+                },
+            )
             .expect("register")
             .build();
         handler
@@ -3347,7 +3354,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_process_cc_updated_v2(move |event: ProcessCcUpdatedV2| {
+            .register_corehr_process_cc_updated_v2(move |event: CorehrProcessCcUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.process.cc.updated_v2");
                 assert_eq!(event.event.process_id.as_deref(), Some("process_id_str"));
                 assert_eq!(event.event.approver_id.as_deref(), Some("approver_id_str"));
@@ -3368,7 +3375,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_process_node_updated_v2(move |event: ProcessNodeUpdatedV2| {
+            .register_corehr_process_node_updated_v2(move |event: CorehrProcessNodeUpdatedV2| {
                 assert_eq!(event.header.event_type, "corehr.process.node.updated_v2");
                 assert_eq!(
                     event.event.flow_definition_id.as_deref(),
@@ -3395,7 +3402,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_corehr_process_status_update_v2(move |event: ProcessStatusUpdateV2| {
+            .register_corehr_process_status_update_v2(move |event: CorehrProcessStatusUpdateV2| {
                 assert_eq!(event.header.event_type, "corehr.process.status.update_v2");
                 assert_eq!(event.event.process_id.as_deref(), Some("process_id_str"));
                 assert_eq!(event.event.status, Some(42));
@@ -3417,7 +3424,7 @@ mod tests {
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
             .register_corehr_process_comment_info_updated_v2(
-                move |event: ProcessCommentInfoUpdatedV2| {
+                move |event: CorehrProcessCommentInfoUpdatedV2| {
                     assert_eq!(
                         event.header.event_type,
                         "corehr.process_comment_info.updated_v2"
@@ -3443,7 +3450,7 @@ mod tests {
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
             .register_corehr_signature_file_status_updated_v2(
-                move |event: SignatureFileStatusUpdatedV2| {
+                move |event: CorehrSignatureFileStatusUpdatedV2| {
                     assert_eq!(
                         event.header.event_type,
                         "corehr.signature_file.status_updated_v2"
@@ -3670,7 +3677,9 @@ mod tests {
             }
         }
         let err = EventDispatcherHandler::builder()
-            .register_corehr_approval_groups_updated_v2(|_event: ApprovalGroupsUpdatedV2| Ok(()))
+            .register_corehr_approval_groups_updated_v2(|_event: CorehrApprovalGroupsUpdatedV2| {
+                Ok(())
+            })
             .expect("first")
             .register_raw("corehr.approval_groups.updated_v2", Noop)
             .expect_err("dup typed-then-raw");
@@ -3678,7 +3687,9 @@ mod tests {
         let err = EventDispatcherHandler::builder()
             .register_raw("corehr.approval_groups.updated_v2", Noop)
             .expect("raw first")
-            .register_corehr_approval_groups_updated_v2(|_event: ApprovalGroupsUpdatedV2| Ok(()))
+            .register_corehr_approval_groups_updated_v2(|_event: CorehrApprovalGroupsUpdatedV2| {
+                Ok(())
+            })
             .expect_err("dup raw-then-typed");
         assert!(err.contains("already registered"));
     }

@@ -10,19 +10,19 @@ use super::EventHeader;
 
 /// `approval.approval.updated_v4` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ApprovalUpdatedV4 {
+pub struct ApprovalApprovalUpdatedV4 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: ApprovalUpdatedV4Event,
+    pub event: ApprovalApprovalUpdatedV4Event,
 }
 
 /// `approval.approval.updated_v4` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ApprovalUpdatedV4Event {
+pub struct ApprovalApprovalUpdatedV4Event {
     /// 事件详情数据。
     #[serde(default)]
     pub object: Option<ApprovalEvent>,
@@ -59,19 +59,19 @@ pub struct ApprovalEvent {
 
 /// `approval.instance.status_changed_v4` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct InstanceStatusChangedV4 {
+pub struct ApprovalInstanceStatusChangedV4 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: InstanceStatusChangedV4Event,
+    pub event: ApprovalInstanceStatusChangedV4Event,
 }
 
 /// `approval.instance.status_changed_v4` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct InstanceStatusChangedV4Event {
+pub struct ApprovalInstanceStatusChangedV4Event {
     /// 审批定义 code。
     #[serde(default)]
     pub approval_code: Option<String>,
@@ -97,19 +97,19 @@ pub struct InstanceStatusChangedV4Event {
 
 /// `approval.task.status_changed_v4` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct TaskStatusChangedV4 {
+pub struct ApprovalTaskStatusChangedV4 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: TaskStatusChangedV4Event,
+    pub event: ApprovalTaskStatusChangedV4Event,
 }
 
 /// `approval.task.status_changed_v4` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct TaskStatusChangedV4Event {
+pub struct ApprovalTaskStatusChangedV4Event {
     /// 审批定义 code。
     #[serde(default)]
     pub approval_code: Option<String>,
@@ -154,17 +154,17 @@ typed_events! {
     /// `approval.approval.updated_v4` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "approval.approval.updated_v4" | APPROVAL_APPROVAL_UPDATED_V4 | ApprovalUpdatedV4 | ApprovalUpdatedV4Handler | register_approval_approval_updated_v4;
+    "approval.approval.updated_v4" | APPROVAL_APPROVAL_UPDATED_V4 | ApprovalApprovalUpdatedV4 | ApprovalApprovalUpdatedV4Handler | register_approval_approval_updated_v4;
 
     /// `approval.instance.status_changed_v4` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "approval.instance.status_changed_v4" | APPROVAL_INSTANCE_STATUS_CHANGED_V4 | InstanceStatusChangedV4 | InstanceStatusChangedV4Handler | register_approval_instance_status_changed_v4;
+    "approval.instance.status_changed_v4" | APPROVAL_INSTANCE_STATUS_CHANGED_V4 | ApprovalInstanceStatusChangedV4 | ApprovalInstanceStatusChangedV4Handler | register_approval_instance_status_changed_v4;
 
     /// `approval.task.status_changed_v4` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "approval.task.status_changed_v4" | APPROVAL_TASK_STATUS_CHANGED_V4 | TaskStatusChangedV4 | TaskStatusChangedV4Handler | register_approval_task_status_changed_v4;
+    "approval.task.status_changed_v4" | APPROVAL_TASK_STATUS_CHANGED_V4 | ApprovalTaskStatusChangedV4 | ApprovalTaskStatusChangedV4Handler | register_approval_task_status_changed_v4;
 }
 
 #[cfg(test)]
@@ -216,7 +216,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_approval_approval_updated_v4(move |event: ApprovalUpdatedV4| {
+            .register_approval_approval_updated_v4(move |event: ApprovalApprovalUpdatedV4| {
                 assert_eq!(event.header.event_type, "approval.approval.updated_v4");
                 let object = event.event.object.expect("object");
                 assert_eq!(object.approval_code.as_deref(), Some("7a57e3"));
@@ -238,24 +238,26 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_approval_instance_status_changed_v4(move |event: InstanceStatusChangedV4| {
-                assert_eq!(event.event.status.as_deref(), Some("APPROVED"));
-                assert_eq!(
-                    event
-                        .event
-                        .start_user
-                        .as_ref()
-                        .and_then(|u| u.open_id.as_deref()),
-                    Some("on_starter")
-                );
-                assert_eq!(event.event.subscriber_id_list.len(), 2);
-                assert_eq!(
-                    event.event.subscriber_id_list[1].open_id.as_deref(),
-                    Some("on_s2")
-                );
-                *seen_h.lock().expect("lock") = event.event.instance_code.clone();
-                Ok(())
-            })
+            .register_approval_instance_status_changed_v4(
+                move |event: ApprovalInstanceStatusChangedV4| {
+                    assert_eq!(event.event.status.as_deref(), Some("APPROVED"));
+                    assert_eq!(
+                        event
+                            .event
+                            .start_user
+                            .as_ref()
+                            .and_then(|u| u.open_id.as_deref()),
+                        Some("on_starter")
+                    );
+                    assert_eq!(event.event.subscriber_id_list.len(), 2);
+                    assert_eq!(
+                        event.event.subscriber_id_list[1].open_id.as_deref(),
+                        Some("on_s2")
+                    );
+                    *seen_h.lock().expect("lock") = event.event.instance_code.clone();
+                    Ok(())
+                },
+            )
             .expect("register")
             .build();
         handler
@@ -269,7 +271,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_approval_task_status_changed_v4(move |event: TaskStatusChangedV4| {
+            .register_approval_task_status_changed_v4(move |event: ApprovalTaskStatusChangedV4| {
                 assert_eq!(event.event.status.as_deref(), Some("DONE"));
                 assert_eq!(event.event.task_external_id.as_deref(), Some("t_ext"));
                 assert_eq!(
@@ -321,7 +323,7 @@ mod tests {
             }
         }
         let err = EventDispatcherHandler::builder()
-            .register_approval_approval_updated_v4(|_event: ApprovalUpdatedV4| Ok(()))
+            .register_approval_approval_updated_v4(|_event: ApprovalApprovalUpdatedV4| Ok(()))
             .expect("first")
             .register_raw("approval.approval.updated_v4", Noop)
             .expect_err("dup typed-then-raw");
@@ -329,7 +331,7 @@ mod tests {
         let err = EventDispatcherHandler::builder()
             .register_raw("approval.task.status_changed_v4", Noop)
             .expect("raw first")
-            .register_approval_task_status_changed_v4(|_event: TaskStatusChangedV4| Ok(()))
+            .register_approval_task_status_changed_v4(|_event: ApprovalTaskStatusChangedV4| Ok(()))
             .expect_err("dup raw-then-typed");
         assert!(err.contains("already registered"));
     }

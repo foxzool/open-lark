@@ -10,19 +10,19 @@ use super::EventHeader;
 
 /// `calendar.calendar.changed_v4` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CalendarChangedV4 {
+pub struct CalendarCalendarChangedV4 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CalendarChangedV4Event,
+    pub event: CalendarCalendarChangedV4Event,
 }
 
 /// `calendar.calendar.changed_v4` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CalendarChangedV4Event {
+pub struct CalendarCalendarChangedV4Event {
     /// 需要推送事件的用户列表。
     #[serde(default)]
     pub user_id_list: Vec<UserId>,
@@ -30,19 +30,19 @@ pub struct CalendarChangedV4Event {
 
 /// `calendar.calendar.acl.created_v4` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CalendarAclCreatedV4 {
+pub struct CalendarCalendarAclCreatedV4 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CalendarAclCreatedV4Event,
+    pub event: CalendarCalendarAclCreatedV4Event,
 }
 
 /// `calendar.calendar.acl.created_v4` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CalendarAclCreatedV4Event {
+pub struct CalendarCalendarAclCreatedV4Event {
     /// 访问控制 ID。该 ID 在单个日历实体内唯一。
     #[serde(default)]
     pub acl_id: Option<String>,
@@ -59,19 +59,19 @@ pub struct CalendarAclCreatedV4Event {
 
 /// `calendar.calendar.acl.deleted_v4` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CalendarAclDeletedV4 {
+pub struct CalendarCalendarAclDeletedV4 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CalendarAclDeletedV4Event,
+    pub event: CalendarCalendarAclDeletedV4Event,
 }
 
 /// `calendar.calendar.acl.deleted_v4` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CalendarAclDeletedV4Event {
+pub struct CalendarCalendarAclDeletedV4Event {
     /// 访问控制 ID。该 ID 在单个日历实体内唯一。
     #[serde(default)]
     pub acl_id: Option<String>,
@@ -88,19 +88,19 @@ pub struct CalendarAclDeletedV4Event {
 
 /// `calendar.calendar.event.changed_v4` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CalendarEventChangedV4 {
+pub struct CalendarCalendarEventChangedV4 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: CalendarEventChangedV4Event,
+    pub event: CalendarCalendarEventChangedV4Event,
 }
 
 /// `calendar.calendar.event.changed_v4` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct CalendarEventChangedV4Event {
+pub struct CalendarCalendarEventChangedV4Event {
     /// 日程所在的日历 ID。
     #[serde(default)]
     pub calendar_id: Option<String>,
@@ -158,22 +158,22 @@ typed_events! {
     /// `calendar.calendar.changed_v4` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "calendar.calendar.changed_v4" | CALENDAR_CALENDAR_CHANGED_V4 | CalendarChangedV4 | CalendarChangedV4Handler | register_calendar_calendar_changed_v4;
+    "calendar.calendar.changed_v4" | CALENDAR_CALENDAR_CHANGED_V4 | CalendarCalendarChangedV4 | CalendarCalendarChangedV4Handler | register_calendar_calendar_changed_v4;
 
     /// `calendar.calendar.acl.created_v4` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "calendar.calendar.acl.created_v4" | CALENDAR_CALENDAR_ACL_CREATED_V4 | CalendarAclCreatedV4 | CalendarAclCreatedV4Handler | register_calendar_calendar_acl_created_v4;
+    "calendar.calendar.acl.created_v4" | CALENDAR_CALENDAR_ACL_CREATED_V4 | CalendarCalendarAclCreatedV4 | CalendarCalendarAclCreatedV4Handler | register_calendar_calendar_acl_created_v4;
 
     /// `calendar.calendar.acl.deleted_v4` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "calendar.calendar.acl.deleted_v4" | CALENDAR_CALENDAR_ACL_DELETED_V4 | CalendarAclDeletedV4 | CalendarAclDeletedV4Handler | register_calendar_calendar_acl_deleted_v4;
+    "calendar.calendar.acl.deleted_v4" | CALENDAR_CALENDAR_ACL_DELETED_V4 | CalendarCalendarAclDeletedV4 | CalendarCalendarAclDeletedV4Handler | register_calendar_calendar_acl_deleted_v4;
 
     /// `calendar.calendar.event.changed_v4` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "calendar.calendar.event.changed_v4" | CALENDAR_CALENDAR_EVENT_CHANGED_V4 | CalendarEventChangedV4 | CalendarEventChangedV4Handler | register_calendar_calendar_event_changed_v4;
+    "calendar.calendar.event.changed_v4" | CALENDAR_CALENDAR_EVENT_CHANGED_V4 | CalendarCalendarEventChangedV4 | CalendarCalendarEventChangedV4Handler | register_calendar_calendar_event_changed_v4;
 }
 
 #[cfg(test)]
@@ -230,7 +230,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_calendar_calendar_changed_v4(move |event: CalendarChangedV4| {
+            .register_calendar_calendar_changed_v4(move |event: CalendarCalendarChangedV4| {
                 assert_eq!(event.header.event_type, "calendar.calendar.changed_v4");
                 assert_eq!(event.event.user_id_list.len(), 2);
                 assert_eq!(
@@ -253,17 +253,19 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_calendar_calendar_acl_created_v4(move |event: CalendarAclCreatedV4| {
-                assert_eq!(event.event.role.as_deref(), Some("owner"));
-                let scope = event.event.scope.expect("scope");
-                assert_eq!(scope.r#type.as_deref(), Some("user"));
-                assert_eq!(
-                    scope.user_id.as_ref().and_then(|u| u.open_id.as_deref()),
-                    Some("on_scope")
-                );
-                *seen_h.lock().expect("lock") = event.event.acl_id.clone();
-                Ok(())
-            })
+            .register_calendar_calendar_acl_created_v4(
+                move |event: CalendarCalendarAclCreatedV4| {
+                    assert_eq!(event.event.role.as_deref(), Some("owner"));
+                    let scope = event.event.scope.expect("scope");
+                    assert_eq!(scope.r#type.as_deref(), Some("user"));
+                    assert_eq!(
+                        scope.user_id.as_ref().and_then(|u| u.open_id.as_deref()),
+                        Some("on_scope")
+                    );
+                    *seen_h.lock().expect("lock") = event.event.acl_id.clone();
+                    Ok(())
+                },
+            )
             .expect("register")
             .build();
         handler
@@ -277,16 +279,18 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_calendar_calendar_acl_deleted_v4(move |event: CalendarAclDeletedV4| {
-                assert_eq!(event.event.role.as_deref(), Some("reader"));
-                let scope = event.event.scope.expect("scope");
-                assert_eq!(
-                    scope.user_id.as_ref().and_then(|u| u.open_id.as_deref()),
-                    Some("on_scope2")
-                );
-                *seen_h.lock().expect("lock") = event.event.acl_id.clone();
-                Ok(())
-            })
+            .register_calendar_calendar_acl_deleted_v4(
+                move |event: CalendarCalendarAclDeletedV4| {
+                    assert_eq!(event.event.role.as_deref(), Some("reader"));
+                    let scope = event.event.scope.expect("scope");
+                    assert_eq!(
+                        scope.user_id.as_ref().and_then(|u| u.open_id.as_deref()),
+                        Some("on_scope2")
+                    );
+                    *seen_h.lock().expect("lock") = event.event.acl_id.clone();
+                    Ok(())
+                },
+            )
             .expect("register")
             .build();
         handler
@@ -300,23 +304,25 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_calendar_calendar_event_changed_v4(move |event: CalendarEventChangedV4| {
-                assert_eq!(
-                    event.header.event_type,
-                    "calendar.calendar.event.changed_v4"
-                );
-                assert_eq!(event.event.change_type.as_deref(), Some("rsvp"));
-                let rsvp = event.event.rsvp_infos.first().expect("rsvp_infos");
-                assert_eq!(rsvp.rsvp_status.as_deref(), Some("accept"));
-                assert_eq!(
-                    rsvp.from_user_id
-                        .as_ref()
-                        .and_then(|u| u.open_id.as_deref()),
-                    Some("on_rsvp")
-                );
-                *seen_h.lock().expect("lock") = event.event.calendar_event_id.clone();
-                Ok(())
-            })
+            .register_calendar_calendar_event_changed_v4(
+                move |event: CalendarCalendarEventChangedV4| {
+                    assert_eq!(
+                        event.header.event_type,
+                        "calendar.calendar.event.changed_v4"
+                    );
+                    assert_eq!(event.event.change_type.as_deref(), Some("rsvp"));
+                    let rsvp = event.event.rsvp_infos.first().expect("rsvp_infos");
+                    assert_eq!(rsvp.rsvp_status.as_deref(), Some("accept"));
+                    assert_eq!(
+                        rsvp.from_user_id
+                            .as_ref()
+                            .and_then(|u| u.open_id.as_deref()),
+                        Some("on_rsvp")
+                    );
+                    *seen_h.lock().expect("lock") = event.event.calendar_event_id.clone();
+                    Ok(())
+                },
+            )
             .expect("register")
             .build();
         handler
@@ -359,7 +365,7 @@ mod tests {
             }
         }
         let err = EventDispatcherHandler::builder()
-            .register_calendar_calendar_changed_v4(|_event: CalendarChangedV4| Ok(()))
+            .register_calendar_calendar_changed_v4(|_event: CalendarCalendarChangedV4| Ok(()))
             .expect("first")
             .register_raw("calendar.calendar.changed_v4", Noop)
             .expect_err("dup typed-then-raw");
@@ -367,7 +373,9 @@ mod tests {
         let err = EventDispatcherHandler::builder()
             .register_raw("calendar.calendar.event.changed_v4", Noop)
             .expect("raw first")
-            .register_calendar_calendar_event_changed_v4(|_event: CalendarEventChangedV4| Ok(()))
+            .register_calendar_calendar_event_changed_v4(
+                |_event: CalendarCalendarEventChangedV4| Ok(()),
+            )
             .expect_err("dup raw-then-typed");
         assert!(err.contains("already registered"));
     }

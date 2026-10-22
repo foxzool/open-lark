@@ -23,6 +23,20 @@ src/
 │   └── unique.rs            # generation-time 字段去重（#423 / #455 / #471）
 ├── utils.rs                  # env/feature 诊断工具
 └── ws_client/                # WebSocket 客户端（可选 feature）
+    ├── typed.rs             # typed 事件根模块（EventHeader + 手写 im/card 事件）
+    └── typed/               # 按域 typed 事件（handler trait + register_* 宏批量生成）
+        ├── macros.rs       # TypedEventAdapter 与 typed_events! 样板宏
+        ├── approval.rs     # approval.*（3 事件）
+        ├── calendar.rs     # calendar.*（4 事件）
+        ├── contact.rs      # contact.*（13 事件）
+        ├── corehr_v1.rs    # corehr.* v1（28 事件）
+        ├── corehr_v2.rs    # corehr.* v2（45 事件）
+        ├── drive.rs        # drive.*（12 事件）
+        ├── hire.rs         # hire.*（12 事件）
+        ├── im.rs           # im.*（12 事件）
+        ├── mail.rs         # mail.*（1 事件）
+        ├── task.rs         # task.*（4 事件）
+        └── vc.rs           # vc.*（24 事件）
 ```
 
 ## WHERE TO LOOK
