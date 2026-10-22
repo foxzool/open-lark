@@ -108,7 +108,7 @@ just release VERSION  # 发布新版本
 
 ## SKILLS
 
-项目内置 8 个领域技能（位于 `.agents/skills/`），Agent 在对应场景下应优先调用。调用权限如需预授权，在各端本地配置中放行（`.claude/settings.json` 已被 `.gitignore` 忽略，不入库）：
+项目内置 9 个领域技能（位于 `.agents/skills/`），Agent 在对应场景下应优先调用。调用权限如需预授权，在各端本地配置中放行（`.claude/settings.json` 已被 `.gitignore` 忽略，不入库）：
 
 | Skill | 用途 | 触发场景 |
 |-------|------|----------|
@@ -120,6 +120,7 @@ just release VERSION  # 发布新版本
 | `openlark-naming` | Client/Service/Resource/Request/Builder 命名规范 | 重命名、调整模块导出/prelude |
 | `openlark-validation-style` | `validate_required` 函数 vs 宏、空白字符串处理 | 统一 `validate()` 写法 |
 | `openlark-formal-token-provider` | `AuthTokenProvider::get_or_fetch` TLA+/TLC 形式化检查（失败不写缓存；single-flight 已知 finding） | 改 token 缓存/并发刷新、`token_provider.rs`、TokenProvider |
+| `openlark-formal-event-inbound` | `HttpEventInbound::handle` TLA+/TLC 形式化检查（未认证不 dispatch；decrypt-before-verify 已知 finding） | 改 HTTP 事件入站验签/解密/challenge、`event_inbound/` |
 
 ## NOTES
 
