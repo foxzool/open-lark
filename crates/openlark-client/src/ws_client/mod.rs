@@ -22,6 +22,12 @@ pub use typed::{
     ImMessageSender, ImReceivedMessage, ImSenderId,
 };
 
+// 按域发布的 typed 事件模块（envelope + handler + register_*）。
+// 类型在域模块内发布（各域嵌套类型同名，如 `UserId`，按模块隔离）。
+pub use typed::{
+    approval, calendar, contact, corehr_v1, corehr_v2, drive, hire, im, mail, task, vc,
+};
+
 #[cfg(test)]
 mod tests;
 

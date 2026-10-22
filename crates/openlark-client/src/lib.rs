@@ -233,7 +233,13 @@ mod test_utils;
 /// 公开入口：[`ws_client::LarkWsClient`]、[`ws_client::EventDispatcherHandler`]、
 /// [`ws_client::EventHandler`]、[`ws_client::CallbackEventHandler`]。
 /// typed 注册：[`ws_client::EventDispatcherHandler::register_im_message_receive_v1`]、
-/// [`ws_client::EventDispatcherHandler::register_card_action_trigger`]。
+/// [`ws_client::EventDispatcherHandler::register_card_action_trigger`]；
+/// im 域 12 个与 contact 域 13 个 typed 事件见 [`ws_client::im`] / [`ws_client::contact`]；
+/// approval / calendar / task / drive / mail / hire 六域 36 个 typed 事件见
+/// [`ws_client::approval`] / [`ws_client::calendar`] / [`ws_client::task`] /
+/// [`ws_client::drive`] / [`ws_client::mail`] / [`ws_client::hire`]；
+/// vc 域 24 个与 corehr 域 73 个（v1 28 + v2 45）typed 事件见
+/// [`ws_client::vc`] / [`ws_client::corehr_v1`] / [`ws_client::corehr_v2`]。
 /// `url.preview.get` 仍用 [`ws_client::EventDispatcherHandler::register_callback`]。
 #[cfg(feature = "websocket")]
 pub mod ws_client;

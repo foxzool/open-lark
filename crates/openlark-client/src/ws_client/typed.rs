@@ -1,17 +1,34 @@
-//! 高频 typed 事件 payload（schema 2.0）。
+//! typed 事件 payload（schema 2.0）与按域子模块。
 //!
-//! 本阶段只覆盖机器人主路径：
-//! - [`ImMessageReceiveV1`]（`im.message.receive_v1`）
-//! - [`CardActionTrigger`]（`card.action.trigger`）
+//! 覆盖 11 个业务域共 159 个事件：`im`、`contact`、`drive`、`mail`、`hire`、
+//! `approval`、`calendar`、`task`、`vc`、`corehr_v1`、`corehr_v2` 按域子模块组织，
+//! handler trait、闭包 blanket impl 与 `register_*` 方法由 `macros` 的 `typed_events!`
+//! 样板宏批量生成。`im.message.receive_v1` 与卡片回调 `card.action.trigger`
+//! 为 main 既有手写实现，保留在本文件。
 //!
-//! [`EventDispatcherHandler::register_im_message_receive_v1`] 写入 raw map，对齐官方
-//! `OnP2MessageReceiveV1` / `register_p2_im_message_receive_v1`。
-//! [`EventDispatcherHandler::register_card_action_trigger`] 写入 callback map，对齐官方
-//! `OnP2CardActionTrigger` / `register_p2_card_action_trigger`，ACK 业务 JSON 仍走
-//! [`CallbackEventHandler`]。
+//! envelope 类型名按事件串全段 `CamelCase` 机械生成，如
+//! `im.chat.disbanded_v1` → [`im::ImChatDisbandedV1`]、
+//! `vc.meeting.meeting_started_v1` → [`vc::VcMeetingMeetingStartedV1`]。
 //!
-//! `url.preview.get` 本阶段不做 typed 注册，继续用
-//! [`EventDispatcherHandler::register_callback`]。全量约 200 个 `register_p2_*` 不在本模块范围。
+//! typed 注册写入 raw map，与 [`EventDispatcherHandler::register_raw`] 使用同一
+//! `event_type` key，重复注册返回 Err；卡片回调写入 callback map，ACK 业务 JSON
+//! 走 [`CallbackEventHandler`]。未覆盖的事件继续用
+//! [`EventDispatcherHandler::register_raw`] 手动反序列化。
+
+#[macro_use]
+mod macros;
+
+pub mod approval;
+pub mod calendar;
+pub mod contact;
+pub mod corehr_v1;
+pub mod corehr_v2;
+pub mod drive;
+pub mod hire;
+pub mod im;
+pub mod mail;
+pub mod task;
+pub mod vc;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
