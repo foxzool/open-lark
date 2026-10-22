@@ -22,9 +22,9 @@ pub use typed::{
     ImMessageSender, ImReceivedMessage, ImSenderId,
 };
 
-// im / contact 域 typed 事件（envelope + handler + register_*）。
-// 类型在域模块内发布（两域嵌套类型同名，如 `UserId`，按模块隔离）。
-pub use typed::{contact, im};
+// 按域发布的 typed 事件模块（envelope + handler + register_*）。
+// 类型在域模块内发布（各域嵌套类型同名，如 `UserId`，按模块隔离）。
+pub use typed::{approval, calendar, contact, drive, hire, im, mail, task};
 
 #[cfg(test)]
 mod tests;
