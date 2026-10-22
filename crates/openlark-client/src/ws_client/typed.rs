@@ -16,8 +16,14 @@
 #[macro_use]
 mod macros;
 
+pub mod approval;
+pub mod calendar;
 pub mod contact;
+pub mod drive;
+pub mod hire;
 pub mod im;
+pub mod mail;
+pub mod task;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
