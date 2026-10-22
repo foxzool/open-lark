@@ -99,7 +99,7 @@ Indivisible in both: one `extract_payload`; one `decrypt_event`; one parse; one 
 
 Last confirmed that this verification describes the code:
 
-- **sync commit:** `REPLACE_AFTER_COMMIT` (model + `HttpEventInbound::handle` confirmed together; advance only after reconfirming)
+- **sync commit:** `61b28f936` (model + `HttpEventInbound::handle` confirmed together; advance only after reconfirming)
 - **covered functions:** `HttpEventInbound::handle`, `extract_payload`, `verify_sign`, `auth_challenge`, `decrypt_event` (call site / ordering only)
 
 Move the sync commit forward only after you confirm the model still matches those functions at the new commit (re-read the Rust, update the `.tla` if steps changed, re-run `./formal/event_inbound/run_tlc.sh`).
