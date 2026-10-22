@@ -10,19 +10,19 @@ use super::EventHeader;
 
 /// `vc.bot.meeting_activity_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct BotMeetingActivityV1 {
+pub struct VcBotMeetingActivityV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: BotMeetingActivityV1Event,
+    pub event: VcBotMeetingActivityV1Event,
 }
 
 /// `vc.bot.meeting_activity_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct BotMeetingActivityV1Event {
+pub struct VcBotMeetingActivityV1Event {
     /// 会中事件
     #[serde(default)]
     pub meeting_activity_items: Vec<MeetingActivityItem>,
@@ -30,19 +30,19 @@ pub struct BotMeetingActivityV1Event {
 
 /// `vc.bot.meeting_ended_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct BotMeetingEndedV1 {
+pub struct VcBotMeetingEndedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: BotMeetingEndedV1Event,
+    pub event: VcBotMeetingEndedV1Event,
 }
 
 /// `vc.bot.meeting_ended_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct BotMeetingEndedV1Event {
+pub struct VcBotMeetingEndedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingAgentEventMeeting>,
@@ -50,19 +50,19 @@ pub struct BotMeetingEndedV1Event {
 
 /// `vc.bot.meeting_invited_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct BotMeetingInvitedV1 {
+pub struct VcBotMeetingInvitedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: BotMeetingInvitedV1Event,
+    pub event: VcBotMeetingInvitedV1Event,
 }
 
 /// `vc.bot.meeting_invited_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct BotMeetingInvitedV1Event {
+pub struct VcBotMeetingInvitedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingAgentEventMeeting>,
@@ -82,19 +82,19 @@ pub struct BotMeetingInvitedV1Event {
 
 /// `vc.bot.meeting_started_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct BotMeetingStartedV1 {
+pub struct VcBotMeetingStartedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: BotMeetingStartedV1Event,
+    pub event: VcBotMeetingStartedV1Event,
 }
 
 /// `vc.bot.meeting_started_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct BotMeetingStartedV1Event {
+pub struct VcBotMeetingStartedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingAgentEventMeeting>,
@@ -102,19 +102,19 @@ pub struct BotMeetingStartedV1Event {
 
 /// `vc.meeting.all_meeting_ended_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingAllMeetingEndedV1 {
+pub struct VcMeetingAllMeetingEndedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingAllMeetingEndedV1Event,
+    pub event: VcMeetingAllMeetingEndedV1Event,
 }
 
 /// `vc.meeting.all_meeting_ended_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingAllMeetingEndedV1Event {
+pub struct VcMeetingAllMeetingEndedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -125,19 +125,19 @@ pub struct MeetingAllMeetingEndedV1Event {
 
 /// `vc.meeting.all_meeting_started_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingAllMeetingStartedV1 {
+pub struct VcMeetingAllMeetingStartedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingAllMeetingStartedV1Event,
+    pub event: VcMeetingAllMeetingStartedV1Event,
 }
 
 /// `vc.meeting.all_meeting_started_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingAllMeetingStartedV1Event {
+pub struct VcMeetingAllMeetingStartedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -148,19 +148,19 @@ pub struct MeetingAllMeetingStartedV1Event {
 
 /// `vc.meeting.join_meeting_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingJoinMeetingV1 {
+pub struct VcMeetingJoinMeetingV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingJoinMeetingV1Event,
+    pub event: VcMeetingJoinMeetingV1Event,
 }
 
 /// `vc.meeting.join_meeting_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingJoinMeetingV1Event {
+pub struct VcMeetingJoinMeetingV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -171,19 +171,19 @@ pub struct MeetingJoinMeetingV1Event {
 
 /// `vc.meeting.leave_meeting_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingLeaveMeetingV1 {
+pub struct VcMeetingLeaveMeetingV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingLeaveMeetingV1Event,
+    pub event: VcMeetingLeaveMeetingV1Event,
 }
 
 /// `vc.meeting.leave_meeting_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingLeaveMeetingV1Event {
+pub struct VcMeetingLeaveMeetingV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -200,19 +200,19 @@ pub struct MeetingLeaveMeetingV1Event {
 
 /// `vc.meeting.meeting_ended_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingEndedV1 {
+pub struct VcMeetingMeetingEndedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingEndedV1Event,
+    pub event: VcMeetingMeetingEndedV1Event,
 }
 
 /// `vc.meeting.meeting_ended_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingEndedV1Event {
+pub struct VcMeetingMeetingEndedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -223,19 +223,19 @@ pub struct MeetingEndedV1Event {
 
 /// `vc.meeting.meeting_started_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingStartedV1 {
+pub struct VcMeetingMeetingStartedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingStartedV1Event,
+    pub event: VcMeetingMeetingStartedV1Event,
 }
 
 /// `vc.meeting.meeting_started_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingStartedV1Event {
+pub struct VcMeetingMeetingStartedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -246,19 +246,19 @@ pub struct MeetingStartedV1Event {
 
 /// `vc.meeting.participant_meeting_ended_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingParticipantMeetingEndedV1 {
+pub struct VcMeetingParticipantMeetingEndedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingParticipantMeetingEndedV1Event,
+    pub event: VcMeetingParticipantMeetingEndedV1Event,
 }
 
 /// `vc.meeting.participant_meeting_ended_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingParticipantMeetingEndedV1Event {
+pub struct VcMeetingParticipantMeetingEndedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -272,19 +272,19 @@ pub struct MeetingParticipantMeetingEndedV1Event {
 
 /// `vc.meeting.recording_ended_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingRecordingEndedV1 {
+pub struct VcMeetingRecordingEndedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingRecordingEndedV1Event,
+    pub event: VcMeetingRecordingEndedV1Event,
 }
 
 /// `vc.meeting.recording_ended_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingRecordingEndedV1Event {
+pub struct VcMeetingRecordingEndedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -295,19 +295,19 @@ pub struct MeetingRecordingEndedV1Event {
 
 /// `vc.meeting.recording_ready_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingRecordingReadyV1 {
+pub struct VcMeetingRecordingReadyV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingRecordingReadyV1Event,
+    pub event: VcMeetingRecordingReadyV1Event,
 }
 
 /// `vc.meeting.recording_ready_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingRecordingReadyV1Event {
+pub struct VcMeetingRecordingReadyV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -321,19 +321,19 @@ pub struct MeetingRecordingReadyV1Event {
 
 /// `vc.meeting.recording_started_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingRecordingStartedV1 {
+pub struct VcMeetingRecordingStartedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingRecordingStartedV1Event,
+    pub event: VcMeetingRecordingStartedV1Event,
 }
 
 /// `vc.meeting.recording_started_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingRecordingStartedV1Event {
+pub struct VcMeetingRecordingStartedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -344,19 +344,19 @@ pub struct MeetingRecordingStartedV1Event {
 
 /// `vc.meeting.share_ended_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingShareEndedV1 {
+pub struct VcMeetingShareEndedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingShareEndedV1Event,
+    pub event: VcMeetingShareEndedV1Event,
 }
 
 /// `vc.meeting.share_ended_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingShareEndedV1Event {
+pub struct VcMeetingShareEndedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -367,19 +367,19 @@ pub struct MeetingShareEndedV1Event {
 
 /// `vc.meeting.share_started_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingShareStartedV1 {
+pub struct VcMeetingShareStartedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: MeetingShareStartedV1Event,
+    pub event: VcMeetingShareStartedV1Event,
 }
 
 /// `vc.meeting.share_started_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MeetingShareStartedV1Event {
+pub struct VcMeetingShareStartedV1Event {
     /// 会议数据
     #[serde(default)]
     pub meeting: Option<MeetingEventMeeting>,
@@ -390,19 +390,19 @@ pub struct MeetingShareStartedV1Event {
 
 /// `vc.note.generated_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct NoteGeneratedV1 {
+pub struct VcNoteGeneratedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: NoteGeneratedV1Event,
+    pub event: VcNoteGeneratedV1Event,
 }
 
 /// `vc.note.generated_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct NoteGeneratedV1Event {
+pub struct VcNoteGeneratedV1Event {
     /// 纪要ID
     #[serde(default)]
     pub note_id: Option<String>,
@@ -413,19 +413,19 @@ pub struct NoteGeneratedV1Event {
 
 /// `vc.reserve_config.updated_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ReserveConfigUpdatedV1 {
+pub struct VcReserveConfigUpdatedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: ReserveConfigUpdatedV1Event,
+    pub event: VcReserveConfigUpdatedV1Event,
 }
 
 /// `vc.reserve_config.updated_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ReserveConfigUpdatedV1Event {
+pub struct VcReserveConfigUpdatedV1Event {
     /// 会议室或层级id
     #[serde(default)]
     pub scope_id: Option<String>,
@@ -445,19 +445,19 @@ pub struct ReserveConfigUpdatedV1Event {
 
 /// `vc.room.created_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomCreatedV1 {
+pub struct VcRoomCreatedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: RoomCreatedV1Event,
+    pub event: VcRoomCreatedV1Event,
 }
 
 /// `vc.room.created_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomCreatedV1Event {
+pub struct VcRoomCreatedV1Event {
     /// 会议室详情
     #[serde(default)]
     pub room: Option<RoomEvent>,
@@ -465,19 +465,19 @@ pub struct RoomCreatedV1Event {
 
 /// `vc.room.deleted_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomDeletedV1 {
+pub struct VcRoomDeletedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: RoomDeletedV1Event,
+    pub event: VcRoomDeletedV1Event,
 }
 
 /// `vc.room.deleted_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomDeletedV1Event {
+pub struct VcRoomDeletedV1Event {
     /// 会议室详情
     #[serde(default)]
     pub room: Option<RoomEvent>,
@@ -485,19 +485,19 @@ pub struct RoomDeletedV1Event {
 
 /// `vc.room.updated_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomUpdatedV1 {
+pub struct VcRoomUpdatedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: RoomUpdatedV1Event,
+    pub event: VcRoomUpdatedV1Event,
 }
 
 /// `vc.room.updated_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomUpdatedV1Event {
+pub struct VcRoomUpdatedV1Event {
     /// 会议室详情
     #[serde(default)]
     pub room: Option<RoomEvent>,
@@ -505,19 +505,19 @@ pub struct RoomUpdatedV1Event {
 
 /// `vc.room_level.created_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomLevelCreatedV1 {
+pub struct VcRoomLevelCreatedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: RoomLevelCreatedV1Event,
+    pub event: VcRoomLevelCreatedV1Event,
 }
 
 /// `vc.room_level.created_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomLevelCreatedV1Event {
+pub struct VcRoomLevelCreatedV1Event {
     /// 层级信息
     #[serde(default)]
     pub room_level: Option<RoomLevel>,
@@ -525,19 +525,19 @@ pub struct RoomLevelCreatedV1Event {
 
 /// `vc.room_level.deleted_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomLevelDeletedV1 {
+pub struct VcRoomLevelDeletedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: RoomLevelDeletedV1Event,
+    pub event: VcRoomLevelDeletedV1Event,
 }
 
 /// `vc.room_level.deleted_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomLevelDeletedV1Event {
+pub struct VcRoomLevelDeletedV1Event {
     /// 层级ID
     #[serde(default)]
     pub room_level_id: Option<String>,
@@ -548,19 +548,19 @@ pub struct RoomLevelDeletedV1Event {
 
 /// `vc.room_level.updated_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomLevelUpdatedV1 {
+pub struct VcRoomLevelUpdatedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: RoomLevelUpdatedV1Event,
+    pub event: VcRoomLevelUpdatedV1Event,
 }
 
 /// `vc.room_level.updated_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct RoomLevelUpdatedV1Event {
+pub struct VcRoomLevelUpdatedV1Event {
     /// 层级信息
     #[serde(default)]
     pub room_level: Option<RoomLevel>,
@@ -1126,99 +1126,99 @@ typed_events! {
     /// `vc.bot.meeting_activity_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.bot.meeting_activity_v1" | VC_BOT_MEETING_ACTIVITY_V1 | BotMeetingActivityV1 | BotMeetingActivityV1Handler | register_vc_bot_meeting_activity_v1;
+    "vc.bot.meeting_activity_v1" | VC_BOT_MEETING_ACTIVITY_V1 | VcBotMeetingActivityV1 | VcBotMeetingActivityV1Handler | register_vc_bot_meeting_activity_v1;
     /// `vc.bot.meeting_ended_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.bot.meeting_ended_v1" | VC_BOT_MEETING_ENDED_V1 | BotMeetingEndedV1 | BotMeetingEndedV1Handler | register_vc_bot_meeting_ended_v1;
+    "vc.bot.meeting_ended_v1" | VC_BOT_MEETING_ENDED_V1 | VcBotMeetingEndedV1 | VcBotMeetingEndedV1Handler | register_vc_bot_meeting_ended_v1;
     /// `vc.bot.meeting_invited_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.bot.meeting_invited_v1" | VC_BOT_MEETING_INVITED_V1 | BotMeetingInvitedV1 | BotMeetingInvitedV1Handler | register_vc_bot_meeting_invited_v1;
+    "vc.bot.meeting_invited_v1" | VC_BOT_MEETING_INVITED_V1 | VcBotMeetingInvitedV1 | VcBotMeetingInvitedV1Handler | register_vc_bot_meeting_invited_v1;
     /// `vc.bot.meeting_started_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.bot.meeting_started_v1" | VC_BOT_MEETING_STARTED_V1 | BotMeetingStartedV1 | BotMeetingStartedV1Handler | register_vc_bot_meeting_started_v1;
+    "vc.bot.meeting_started_v1" | VC_BOT_MEETING_STARTED_V1 | VcBotMeetingStartedV1 | VcBotMeetingStartedV1Handler | register_vc_bot_meeting_started_v1;
     /// `vc.meeting.all_meeting_ended_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.all_meeting_ended_v1" | VC_MEETING_ALL_MEETING_ENDED_V1 | MeetingAllMeetingEndedV1 | MeetingAllMeetingEndedV1Handler | register_vc_meeting_all_meeting_ended_v1;
+    "vc.meeting.all_meeting_ended_v1" | VC_MEETING_ALL_MEETING_ENDED_V1 | VcMeetingAllMeetingEndedV1 | VcMeetingAllMeetingEndedV1Handler | register_vc_meeting_all_meeting_ended_v1;
     /// `vc.meeting.all_meeting_started_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.all_meeting_started_v1" | VC_MEETING_ALL_MEETING_STARTED_V1 | MeetingAllMeetingStartedV1 | MeetingAllMeetingStartedV1Handler | register_vc_meeting_all_meeting_started_v1;
+    "vc.meeting.all_meeting_started_v1" | VC_MEETING_ALL_MEETING_STARTED_V1 | VcMeetingAllMeetingStartedV1 | VcMeetingAllMeetingStartedV1Handler | register_vc_meeting_all_meeting_started_v1;
     /// `vc.meeting.join_meeting_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.join_meeting_v1" | VC_MEETING_JOIN_MEETING_V1 | MeetingJoinMeetingV1 | MeetingJoinMeetingV1Handler | register_vc_meeting_join_meeting_v1;
+    "vc.meeting.join_meeting_v1" | VC_MEETING_JOIN_MEETING_V1 | VcMeetingJoinMeetingV1 | VcMeetingJoinMeetingV1Handler | register_vc_meeting_join_meeting_v1;
     /// `vc.meeting.leave_meeting_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.leave_meeting_v1" | VC_MEETING_LEAVE_MEETING_V1 | MeetingLeaveMeetingV1 | MeetingLeaveMeetingV1Handler | register_vc_meeting_leave_meeting_v1;
+    "vc.meeting.leave_meeting_v1" | VC_MEETING_LEAVE_MEETING_V1 | VcMeetingLeaveMeetingV1 | VcMeetingLeaveMeetingV1Handler | register_vc_meeting_leave_meeting_v1;
     /// `vc.meeting.meeting_ended_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.meeting_ended_v1" | VC_MEETING_MEETING_ENDED_V1 | MeetingEndedV1 | MeetingEndedV1Handler | register_vc_meeting_meeting_ended_v1;
+    "vc.meeting.meeting_ended_v1" | VC_MEETING_MEETING_ENDED_V1 | VcMeetingMeetingEndedV1 | VcMeetingMeetingEndedV1Handler | register_vc_meeting_meeting_ended_v1;
     /// `vc.meeting.meeting_started_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.meeting_started_v1" | VC_MEETING_MEETING_STARTED_V1 | MeetingStartedV1 | MeetingStartedV1Handler | register_vc_meeting_meeting_started_v1;
+    "vc.meeting.meeting_started_v1" | VC_MEETING_MEETING_STARTED_V1 | VcMeetingMeetingStartedV1 | VcMeetingMeetingStartedV1Handler | register_vc_meeting_meeting_started_v1;
     /// `vc.meeting.participant_meeting_ended_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.participant_meeting_ended_v1" | VC_MEETING_PARTICIPANT_MEETING_ENDED_V1 | MeetingParticipantMeetingEndedV1 | MeetingParticipantMeetingEndedV1Handler | register_vc_meeting_participant_meeting_ended_v1;
+    "vc.meeting.participant_meeting_ended_v1" | VC_MEETING_PARTICIPANT_MEETING_ENDED_V1 | VcMeetingParticipantMeetingEndedV1 | VcMeetingParticipantMeetingEndedV1Handler | register_vc_meeting_participant_meeting_ended_v1;
     /// `vc.meeting.recording_ended_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.recording_ended_v1" | VC_MEETING_RECORDING_ENDED_V1 | MeetingRecordingEndedV1 | MeetingRecordingEndedV1Handler | register_vc_meeting_recording_ended_v1;
+    "vc.meeting.recording_ended_v1" | VC_MEETING_RECORDING_ENDED_V1 | VcMeetingRecordingEndedV1 | VcMeetingRecordingEndedV1Handler | register_vc_meeting_recording_ended_v1;
     /// `vc.meeting.recording_ready_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.recording_ready_v1" | VC_MEETING_RECORDING_READY_V1 | MeetingRecordingReadyV1 | MeetingRecordingReadyV1Handler | register_vc_meeting_recording_ready_v1;
+    "vc.meeting.recording_ready_v1" | VC_MEETING_RECORDING_READY_V1 | VcMeetingRecordingReadyV1 | VcMeetingRecordingReadyV1Handler | register_vc_meeting_recording_ready_v1;
     /// `vc.meeting.recording_started_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.recording_started_v1" | VC_MEETING_RECORDING_STARTED_V1 | MeetingRecordingStartedV1 | MeetingRecordingStartedV1Handler | register_vc_meeting_recording_started_v1;
+    "vc.meeting.recording_started_v1" | VC_MEETING_RECORDING_STARTED_V1 | VcMeetingRecordingStartedV1 | VcMeetingRecordingStartedV1Handler | register_vc_meeting_recording_started_v1;
     /// `vc.meeting.share_ended_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.share_ended_v1" | VC_MEETING_SHARE_ENDED_V1 | MeetingShareEndedV1 | MeetingShareEndedV1Handler | register_vc_meeting_share_ended_v1;
+    "vc.meeting.share_ended_v1" | VC_MEETING_SHARE_ENDED_V1 | VcMeetingShareEndedV1 | VcMeetingShareEndedV1Handler | register_vc_meeting_share_ended_v1;
     /// `vc.meeting.share_started_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.meeting.share_started_v1" | VC_MEETING_SHARE_STARTED_V1 | MeetingShareStartedV1 | MeetingShareStartedV1Handler | register_vc_meeting_share_started_v1;
+    "vc.meeting.share_started_v1" | VC_MEETING_SHARE_STARTED_V1 | VcMeetingShareStartedV1 | VcMeetingShareStartedV1Handler | register_vc_meeting_share_started_v1;
     /// `vc.note.generated_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.note.generated_v1" | VC_NOTE_GENERATED_V1 | NoteGeneratedV1 | NoteGeneratedV1Handler | register_vc_note_generated_v1;
+    "vc.note.generated_v1" | VC_NOTE_GENERATED_V1 | VcNoteGeneratedV1 | VcNoteGeneratedV1Handler | register_vc_note_generated_v1;
     /// `vc.reserve_config.updated_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.reserve_config.updated_v1" | VC_RESERVE_CONFIG_UPDATED_V1 | ReserveConfigUpdatedV1 | ReserveConfigUpdatedV1Handler | register_vc_reserve_config_updated_v1;
+    "vc.reserve_config.updated_v1" | VC_RESERVE_CONFIG_UPDATED_V1 | VcReserveConfigUpdatedV1 | VcReserveConfigUpdatedV1Handler | register_vc_reserve_config_updated_v1;
     /// `vc.room.created_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.room.created_v1" | VC_ROOM_CREATED_V1 | RoomCreatedV1 | RoomCreatedV1Handler | register_vc_room_created_v1;
+    "vc.room.created_v1" | VC_ROOM_CREATED_V1 | VcRoomCreatedV1 | VcRoomCreatedV1Handler | register_vc_room_created_v1;
     /// `vc.room.deleted_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.room.deleted_v1" | VC_ROOM_DELETED_V1 | RoomDeletedV1 | RoomDeletedV1Handler | register_vc_room_deleted_v1;
+    "vc.room.deleted_v1" | VC_ROOM_DELETED_V1 | VcRoomDeletedV1 | VcRoomDeletedV1Handler | register_vc_room_deleted_v1;
     /// `vc.room.updated_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.room.updated_v1" | VC_ROOM_UPDATED_V1 | RoomUpdatedV1 | RoomUpdatedV1Handler | register_vc_room_updated_v1;
+    "vc.room.updated_v1" | VC_ROOM_UPDATED_V1 | VcRoomUpdatedV1 | VcRoomUpdatedV1Handler | register_vc_room_updated_v1;
     /// `vc.room_level.created_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.room_level.created_v1" | VC_ROOM_LEVEL_CREATED_V1 | RoomLevelCreatedV1 | RoomLevelCreatedV1Handler | register_vc_room_level_created_v1;
+    "vc.room_level.created_v1" | VC_ROOM_LEVEL_CREATED_V1 | VcRoomLevelCreatedV1 | VcRoomLevelCreatedV1Handler | register_vc_room_level_created_v1;
     /// `vc.room_level.deleted_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.room_level.deleted_v1" | VC_ROOM_LEVEL_DELETED_V1 | RoomLevelDeletedV1 | RoomLevelDeletedV1Handler | register_vc_room_level_deleted_v1;
+    "vc.room_level.deleted_v1" | VC_ROOM_LEVEL_DELETED_V1 | VcRoomLevelDeletedV1 | VcRoomLevelDeletedV1Handler | register_vc_room_level_deleted_v1;
     /// `vc.room_level.updated_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "vc.room_level.updated_v1" | VC_ROOM_LEVEL_UPDATED_V1 | RoomLevelUpdatedV1 | RoomLevelUpdatedV1Handler | register_vc_room_level_updated_v1;
+    "vc.room_level.updated_v1" | VC_ROOM_LEVEL_UPDATED_V1 | VcRoomLevelUpdatedV1 | VcRoomLevelUpdatedV1Handler | register_vc_room_level_updated_v1;
 }
 
 #[cfg(test)]
@@ -2696,7 +2696,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_bot_meeting_activity_v1(move |event: BotMeetingActivityV1| {
+            .register_vc_bot_meeting_activity_v1(move |event: VcBotMeetingActivityV1| {
                 assert_eq!(event.header.event_type, "vc.bot.meeting_activity_v1");
                 assert_eq!(event.event.meeting_activity_items.len(), 1);
                 assert_eq!(
@@ -2721,7 +2721,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_bot_meeting_ended_v1(move |event: BotMeetingEndedV1| {
+            .register_vc_bot_meeting_ended_v1(move |event: VcBotMeetingEndedV1| {
                 assert_eq!(event.header.event_type, "vc.bot.meeting_ended_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -2741,7 +2741,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_bot_meeting_invited_v1(move |event: BotMeetingInvitedV1| {
+            .register_vc_bot_meeting_invited_v1(move |event: VcBotMeetingInvitedV1| {
                 assert_eq!(event.header.event_type, "vc.bot.meeting_invited_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -2763,7 +2763,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_bot_meeting_started_v1(move |event: BotMeetingStartedV1| {
+            .register_vc_bot_meeting_started_v1(move |event: VcBotMeetingStartedV1| {
                 assert_eq!(event.header.event_type, "vc.bot.meeting_started_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -2783,7 +2783,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_meeting_all_meeting_ended_v1(move |event: MeetingAllMeetingEndedV1| {
+            .register_vc_meeting_all_meeting_ended_v1(move |event: VcMeetingAllMeetingEndedV1| {
                 assert_eq!(event.header.event_type, "vc.meeting.all_meeting_ended_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -2803,13 +2803,15 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_meeting_all_meeting_started_v1(move |event: MeetingAllMeetingStartedV1| {
-                assert_eq!(event.header.event_type, "vc.meeting.all_meeting_started_v1");
-                let meeting = event.event.meeting.as_ref().expect("meeting");
-                assert_eq!(meeting.id.as_deref(), Some("id_str"));
-                *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
-                Ok(())
-            })
+            .register_vc_meeting_all_meeting_started_v1(
+                move |event: VcMeetingAllMeetingStartedV1| {
+                    assert_eq!(event.header.event_type, "vc.meeting.all_meeting_started_v1");
+                    let meeting = event.event.meeting.as_ref().expect("meeting");
+                    assert_eq!(meeting.id.as_deref(), Some("id_str"));
+                    *seen_h.lock().expect("lock") = Some(event.header.event_id.clone());
+                    Ok(())
+                },
+            )
             .expect("register")
             .build();
         handler
@@ -2823,7 +2825,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_meeting_join_meeting_v1(move |event: MeetingJoinMeetingV1| {
+            .register_vc_meeting_join_meeting_v1(move |event: VcMeetingJoinMeetingV1| {
                 assert_eq!(event.header.event_type, "vc.meeting.join_meeting_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -2843,7 +2845,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_meeting_leave_meeting_v1(move |event: MeetingLeaveMeetingV1| {
+            .register_vc_meeting_leave_meeting_v1(move |event: VcMeetingLeaveMeetingV1| {
                 assert_eq!(event.header.event_type, "vc.meeting.leave_meeting_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -2864,7 +2866,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_meeting_meeting_ended_v1(move |event: MeetingEndedV1| {
+            .register_vc_meeting_meeting_ended_v1(move |event: VcMeetingMeetingEndedV1| {
                 assert_eq!(event.header.event_type, "vc.meeting.meeting_ended_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -2884,7 +2886,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_meeting_meeting_started_v1(move |event: MeetingStartedV1| {
+            .register_vc_meeting_meeting_started_v1(move |event: VcMeetingMeetingStartedV1| {
                 assert_eq!(event.header.event_type, "vc.meeting.meeting_started_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -2905,7 +2907,7 @@ mod tests {
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
             .register_vc_meeting_participant_meeting_ended_v1(
-                move |event: MeetingParticipantMeetingEndedV1| {
+                move |event: VcMeetingParticipantMeetingEndedV1| {
                     assert_eq!(
                         event.header.event_type,
                         "vc.meeting.participant_meeting_ended_v1"
@@ -2929,7 +2931,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_meeting_recording_ended_v1(move |event: MeetingRecordingEndedV1| {
+            .register_vc_meeting_recording_ended_v1(move |event: VcMeetingRecordingEndedV1| {
                 assert_eq!(event.header.event_type, "vc.meeting.recording_ended_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -2949,7 +2951,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_meeting_recording_ready_v1(move |event: MeetingRecordingReadyV1| {
+            .register_vc_meeting_recording_ready_v1(move |event: VcMeetingRecordingReadyV1| {
                 assert_eq!(event.header.event_type, "vc.meeting.recording_ready_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -2971,7 +2973,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_meeting_recording_started_v1(move |event: MeetingRecordingStartedV1| {
+            .register_vc_meeting_recording_started_v1(move |event: VcMeetingRecordingStartedV1| {
                 assert_eq!(event.header.event_type, "vc.meeting.recording_started_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -2991,7 +2993,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_meeting_share_ended_v1(move |event: MeetingShareEndedV1| {
+            .register_vc_meeting_share_ended_v1(move |event: VcMeetingShareEndedV1| {
                 assert_eq!(event.header.event_type, "vc.meeting.share_ended_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -3011,7 +3013,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_meeting_share_started_v1(move |event: MeetingShareStartedV1| {
+            .register_vc_meeting_share_started_v1(move |event: VcMeetingShareStartedV1| {
                 assert_eq!(event.header.event_type, "vc.meeting.share_started_v1");
                 let meeting = event.event.meeting.as_ref().expect("meeting");
                 assert_eq!(meeting.id.as_deref(), Some("id_str"));
@@ -3031,7 +3033,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_note_generated_v1(move |event: NoteGeneratedV1| {
+            .register_vc_note_generated_v1(move |event: VcNoteGeneratedV1| {
                 assert_eq!(event.header.event_type, "vc.note.generated_v1");
                 assert_eq!(event.event.note_id.as_deref(), Some("note_id_str"));
                 assert_eq!(event.event.subscriber_ids.len(), 1);
@@ -3055,7 +3057,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_reserve_config_updated_v1(move |event: ReserveConfigUpdatedV1| {
+            .register_vc_reserve_config_updated_v1(move |event: VcReserveConfigUpdatedV1| {
                 assert_eq!(event.header.event_type, "vc.reserve_config.updated_v1");
                 assert_eq!(event.event.scope_id.as_deref(), Some("scope_id_str"));
                 assert_eq!(event.event.scope_type, Some(42));
@@ -3077,7 +3079,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_room_created_v1(move |event: RoomCreatedV1| {
+            .register_vc_room_created_v1(move |event: VcRoomCreatedV1| {
                 assert_eq!(event.header.event_type, "vc.room.created_v1");
                 let room = event.event.room.as_ref().expect("room");
                 assert_eq!(room.room_id.as_deref(), Some("room_id_str"));
@@ -3097,7 +3099,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_room_deleted_v1(move |event: RoomDeletedV1| {
+            .register_vc_room_deleted_v1(move |event: VcRoomDeletedV1| {
                 assert_eq!(event.header.event_type, "vc.room.deleted_v1");
                 let room = event.event.room.as_ref().expect("room");
                 assert_eq!(room.room_id.as_deref(), Some("room_id_str"));
@@ -3117,7 +3119,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_room_updated_v1(move |event: RoomUpdatedV1| {
+            .register_vc_room_updated_v1(move |event: VcRoomUpdatedV1| {
                 assert_eq!(event.header.event_type, "vc.room.updated_v1");
                 let room = event.event.room.as_ref().expect("room");
                 assert_eq!(room.room_id.as_deref(), Some("room_id_str"));
@@ -3137,7 +3139,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_room_level_created_v1(move |event: RoomLevelCreatedV1| {
+            .register_vc_room_level_created_v1(move |event: VcRoomLevelCreatedV1| {
                 assert_eq!(event.header.event_type, "vc.room_level.created_v1");
                 let room_level = event.event.room_level.as_ref().expect("room_level");
                 assert_eq!(
@@ -3160,7 +3162,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_room_level_deleted_v1(move |event: RoomLevelDeletedV1| {
+            .register_vc_room_level_deleted_v1(move |event: VcRoomLevelDeletedV1| {
                 assert_eq!(event.header.event_type, "vc.room_level.deleted_v1");
                 assert_eq!(
                     event.event.room_level_id.as_deref(),
@@ -3182,7 +3184,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_vc_room_level_updated_v1(move |event: RoomLevelUpdatedV1| {
+            .register_vc_room_level_updated_v1(move |event: VcRoomLevelUpdatedV1| {
                 assert_eq!(event.header.event_type, "vc.room_level.updated_v1");
                 let room_level = event.event.room_level.as_ref().expect("room_level");
                 assert_eq!(
@@ -3314,7 +3316,7 @@ mod tests {
             }
         }
         let err = EventDispatcherHandler::builder()
-            .register_vc_bot_meeting_activity_v1(|_event: BotMeetingActivityV1| Ok(()))
+            .register_vc_bot_meeting_activity_v1(|_event: VcBotMeetingActivityV1| Ok(()))
             .expect("first")
             .register_raw("vc.bot.meeting_activity_v1", Noop)
             .expect_err("dup typed-then-raw");
@@ -3322,7 +3324,7 @@ mod tests {
         let err = EventDispatcherHandler::builder()
             .register_raw("vc.bot.meeting_activity_v1", Noop)
             .expect("raw first")
-            .register_vc_bot_meeting_activity_v1(|_event: BotMeetingActivityV1| Ok(()))
+            .register_vc_bot_meeting_activity_v1(|_event: VcBotMeetingActivityV1| Ok(()))
             .expect_err("dup raw-then-typed");
         assert!(err.contains("already registered"));
     }

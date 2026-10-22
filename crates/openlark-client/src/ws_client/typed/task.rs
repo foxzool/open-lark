@@ -10,19 +10,19 @@ use super::EventHeader;
 
 /// `task.task.updated_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct TaskUpdatedV1 {
+pub struct TaskTaskUpdatedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: TaskUpdatedV1Event,
+    pub event: TaskTaskUpdatedV1Event,
 }
 
 /// `task.task.updated_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct TaskUpdatedV1Event {
+pub struct TaskTaskUpdatedV1Event {
     /// 任务 ID。
     #[serde(default)]
     pub task_id: Option<String>,
@@ -33,19 +33,19 @@ pub struct TaskUpdatedV1Event {
 
 /// `task.task.update_tenant_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct TaskUpdateTenantV1 {
+pub struct TaskTaskUpdateTenantV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: TaskUpdateTenantV1Event,
+    pub event: TaskTaskUpdateTenantV1Event,
 }
 
 /// `task.task.update_tenant_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct TaskUpdateTenantV1Event {
+pub struct TaskTaskUpdateTenantV1Event {
     /// 用户 ID 列表。
     #[serde(default)]
     pub user_id_list: Option<UserIdList>,
@@ -62,19 +62,19 @@ pub struct TaskUpdateTenantV1Event {
 
 /// `task.task.comment.updated_v1` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct TaskCommentUpdatedV1 {
+pub struct TaskTaskCommentUpdatedV1 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: TaskCommentUpdatedV1Event,
+    pub event: TaskTaskCommentUpdatedV1Event,
 }
 
 /// `task.task.comment.updated_v1` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct TaskCommentUpdatedV1Event {
+pub struct TaskTaskCommentUpdatedV1Event {
     /// 任务 ID。
     #[serde(default)]
     pub task_id: Option<String>,
@@ -91,19 +91,19 @@ pub struct TaskCommentUpdatedV1Event {
 
 /// `task.task.update_user_access_v2` 完整 envelope。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct TaskUpdateUserAccessV2 {
+pub struct TaskTaskUpdateUserAccessV2 {
     /// schema，通常为 `2.0`。
     #[serde(default)]
     pub schema: String,
     /// 事件头。
     pub header: EventHeader,
     /// 事件体。
-    pub event: TaskUpdateUserAccessV2Event,
+    pub event: TaskTaskUpdateUserAccessV2Event,
 }
 
 /// `task.task.update_user_access_v2` 的 `event` 对象。
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct TaskUpdateUserAccessV2Event {
+pub struct TaskTaskUpdateUserAccessV2Event {
     /// 事件类型列表，如 `task_create` / `task_completed_update` 等。
     #[serde(default)]
     pub event_types: Vec<String>,
@@ -138,22 +138,22 @@ typed_events! {
     /// `task.task.updated_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "task.task.updated_v1" | TASK_TASK_UPDATED_V1 | TaskUpdatedV1 | TaskUpdatedV1Handler | register_task_task_updated_v1;
+    "task.task.updated_v1" | TASK_TASK_UPDATED_V1 | TaskTaskUpdatedV1 | TaskTaskUpdatedV1Handler | register_task_task_updated_v1;
 
     /// `task.task.update_tenant_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "task.task.update_tenant_v1" | TASK_TASK_UPDATE_TENANT_V1 | TaskUpdateTenantV1 | TaskUpdateTenantV1Handler | register_task_task_update_tenant_v1;
+    "task.task.update_tenant_v1" | TASK_TASK_UPDATE_TENANT_V1 | TaskTaskUpdateTenantV1 | TaskTaskUpdateTenantV1Handler | register_task_task_update_tenant_v1;
 
     /// `task.task.comment.updated_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "task.task.comment.updated_v1" | TASK_TASK_COMMENT_UPDATED_V1 | TaskCommentUpdatedV1 | TaskCommentUpdatedV1Handler | register_task_task_comment_updated_v1;
+    "task.task.comment.updated_v1" | TASK_TASK_COMMENT_UPDATED_V1 | TaskTaskCommentUpdatedV1 | TaskTaskCommentUpdatedV1Handler | register_task_task_comment_updated_v1;
 
     /// `task.task.update_user_access_v2` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
-    "task.task.update_user_access_v2" | TASK_TASK_UPDATE_USER_ACCESS_V2 | TaskUpdateUserAccessV2 | TaskUpdateUserAccessV2Handler | register_task_task_update_user_access_v2;
+    "task.task.update_user_access_v2" | TASK_TASK_UPDATE_USER_ACCESS_V2 | TaskTaskUpdateUserAccessV2 | TaskTaskUpdateUserAccessV2Handler | register_task_task_update_user_access_v2;
 }
 
 #[cfg(test)]
@@ -197,7 +197,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_task_task_updated_v1(move |event: TaskUpdatedV1| {
+            .register_task_task_updated_v1(move |event: TaskTaskUpdatedV1| {
                 assert_eq!(event.header.event_type, "task.task.updated_v1");
                 assert_eq!(event.event.obj_type, Some(5));
                 *seen_h.lock().expect("lock") = event.event.task_id.clone();
@@ -216,7 +216,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_task_task_update_tenant_v1(move |event: TaskUpdateTenantV1| {
+            .register_task_task_update_tenant_v1(move |event: TaskTaskUpdateTenantV1| {
                 assert_eq!(event.event.object_type.as_deref(), Some("collaborator"));
                 assert_eq!(event.event.event_type.as_deref(), Some("create"));
                 let list = event.event.user_id_list.expect("user_id_list");
@@ -238,7 +238,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_task_task_comment_updated_v1(move |event: TaskCommentUpdatedV1| {
+            .register_task_task_comment_updated_v1(move |event: TaskTaskCommentUpdatedV1| {
                 assert_eq!(event.event.obj_type, Some(2));
                 assert_eq!(event.event.parent_id.as_deref(), Some("cm_0"));
                 *seen_h.lock().expect("lock") = event.event.comment_id.clone();
@@ -257,7 +257,7 @@ mod tests {
         let seen = Arc::new(Mutex::new(None));
         let seen_h = Arc::clone(&seen);
         let handler = EventDispatcherHandler::builder()
-            .register_task_task_update_user_access_v2(move |event: TaskUpdateUserAccessV2| {
+            .register_task_task_update_user_access_v2(move |event: TaskTaskUpdateUserAccessV2| {
                 assert_eq!(event.header.event_type, "task.task.update_user_access_v2");
                 assert_eq!(
                     event.event.event_types,
@@ -311,7 +311,7 @@ mod tests {
             }
         }
         let err = EventDispatcherHandler::builder()
-            .register_task_task_updated_v1(|_event: TaskUpdatedV1| Ok(()))
+            .register_task_task_updated_v1(|_event: TaskTaskUpdatedV1| Ok(()))
             .expect("first")
             .register_raw("task.task.updated_v1", Noop)
             .expect_err("dup typed-then-raw");
@@ -319,7 +319,7 @@ mod tests {
         let err = EventDispatcherHandler::builder()
             .register_raw("task.task.update_user_access_v2", Noop)
             .expect("raw first")
-            .register_task_task_update_user_access_v2(|_event: TaskUpdateUserAccessV2| Ok(()))
+            .register_task_task_update_user_access_v2(|_event: TaskTaskUpdateUserAccessV2| Ok(()))
             .expect_err("dup raw-then-typed");
         assert!(err.contains("already registered"));
     }
