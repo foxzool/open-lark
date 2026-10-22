@@ -199,6 +199,7 @@ fn text_with(
                 message_type: "text".to_string(),
                 content: content.to_string(),
                 mentions,
+                user_agent: None,
             },
         },
     }

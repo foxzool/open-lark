@@ -9,7 +9,7 @@ mod frame_handler;
 mod headers;
 mod package;
 mod session;
-mod typed;
+pub mod typed;
 
 /// 会话级公开 API。
 pub use client::LarkWsClient;

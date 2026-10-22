@@ -73,7 +73,7 @@ pub struct VcBotMeetingInvitedV1Event {
     #[serde(default)]
     pub inviter: Option<MeetingAgentEventUser>,
     /// 邀请时间（秒级 unix 时间戳，序列化为字符串避免 JS int64 精度丢失）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub invite_time: Option<String>,
     /// 邀请-入会链路的关联标识，由服务端生成。Agent 收到后必须在调用「加入会议」接口时原样回传。
     #[serde(default)]
@@ -614,10 +614,10 @@ pub struct MeetingAgentEventMeeting {
     #[serde(default)]
     pub meeting_no: Option<String>,
     /// 会议开始时间（unix时间，单位sec）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub start_time: Option<String>,
     /// 会议结束时间（unix时间，单位sec）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub end_time: Option<String>,
     /// 邀请人
     #[serde(default)]
@@ -657,10 +657,10 @@ pub struct MeetingEventMeeting {
     #[serde(default)]
     pub meeting_source: Option<i64>,
     /// 会议开始时间（unix时间，单位：秒）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub start_time: Option<String>,
     /// 会议结束时间（unix时间，单位：秒）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub end_time: Option<String>,
     /// 事件操作人
     #[serde(default)]
@@ -708,6 +708,9 @@ pub struct UserId {
     /// 对应 Go json tag `union_id`。
     #[serde(default)]
     pub union_id: Option<String>,
+    /// 用户 key。缺字段时为 `None`。
+    #[serde(default)]
+    pub user_key: Option<String>,
 }
 
 /// 事件嵌套类型（Go `ApprovalConfigEvent`）。
@@ -743,10 +746,10 @@ pub struct TimeConfig {
     #[serde(default)]
     pub opening_hour: Option<String>,
     /// 每日可预定时间范围的开始时间（单位：秒，取值范围\[0,86400\]）;<b>说明</b>：;1. 不填写时，默认更新为 0 ，此时填写的 end_time 不得小于 30。;2. 当 start_time 与; end_time 均填写时，; end_time 至少超过 ; start_time 30 。;3. 如果填写的值不是 60 的倍数，则自动会更新为离其最近的 60 整数倍的值。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub start_time: Option<String>,
     /// 每日可预定时间范围结束时间（单位：秒，取值范围\[0,86400\]）;<b>说明</b>：;1. 不填写时，默认更新为 86400 ，此时填写的; start_time 不得大于等于 86370 。;2. 当 start_time 与; end_time 均填写时，; end_time 至少要超过; start_time 30。;3. 如果填写的值不是 60 的倍数，则自动会更新为离其最近的 60 整数倍的值。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub end_time: Option<String>,
     /// 单次会议室可预定时长上限（单位：小时，取值范围\[1,99\]）;<b>说明</b>：不填写时默认更新为 2
     #[serde(default)]
@@ -832,7 +835,7 @@ pub struct ParticipantJoinedItem {
     #[serde(default)]
     pub participant: Option<MeetingAgentEventUser>,
     /// 入会时间（毫秒级时间戳）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub join_time: Option<String>,
 }
 
@@ -846,7 +849,7 @@ pub struct ParticipantLeftItem {
     #[serde(default)]
     pub leave_reason: Option<i64>,
     /// 离会时间（毫秒级时间戳）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub leave_time: Option<String>,
 }
 
@@ -889,7 +892,7 @@ pub struct ChatMessageItem {
     #[serde(default)]
     pub content: Option<String>,
     /// 发送时间（毫秒级时间戳）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub send_time: Option<String>,
 }
 
@@ -906,7 +909,7 @@ pub struct MagicShareStartedItem {
     #[serde(default)]
     pub share_doc: Option<ShareDoc>,
     /// 妙享开始时间（毫秒级时间戳）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub time: Option<String>,
     /// 共享开始原因。share_started 表示真实共享开始；share_detected 表示开启 Agent 入会能力时发现已有共享。字段缺失按 share_started 处理。
     #[serde(default)]
@@ -923,7 +926,7 @@ pub struct MagicShareEndedItem {
     #[serde(default)]
     pub share_id: Option<String>,
     /// 妙享结束时间（毫秒级时间戳）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub time: Option<String>,
 }
 
@@ -940,7 +943,7 @@ pub struct DocumentContextChangedItem {
     #[serde(default)]
     pub share_doc: Option<ShareDoc>,
     /// 事件发生时间，十进制毫秒级时间戳字符串
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub time: Option<String>,
     /// 评论聚焦变化，仅评论聚焦或取消聚焦时返回
     #[serde(default)]
@@ -963,10 +966,10 @@ pub struct CountdownItem {
     #[serde(default)]
     pub operator: Option<MeetingAgentEventUser>,
     /// 倒计时结束时间（毫秒级时间戳）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub end_time: Option<String>,
     /// 倒计时事件发生时间（毫秒级时间戳）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub event_time: Option<String>,
     /// 倒计时结束时是否播放提示音
     #[serde(default)]
@@ -978,7 +981,7 @@ pub struct CountdownItem {
     #[serde(default)]
     pub seq_id: Option<String>,
     /// 倒计时设置时间（毫秒级时间戳）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub countdown_set_time: Option<String>,
     /// 距离倒计时结束的剩余分钟数；仅 action 为 REMIND 时填充
     #[serde(default)]
@@ -1042,10 +1045,10 @@ pub struct RoomStatusEvent {
     #[serde(default)]
     pub schedule_status: Option<bool>,
     /// 禁用开始时间（unix时间，单位sec）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub disable_start_time: Option<String>,
     /// 禁用结束时间（unix时间，单位sec，数值0表示永久禁用）
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub disable_end_time: Option<String>,
     /// 禁用原因
     #[serde(default)]
@@ -3327,5 +3330,16 @@ mod tests {
             .register_vc_bot_meeting_activity_v1(|_event: VcBotMeetingActivityV1| Ok(()))
             .expect_err("dup raw-then-typed");
         assert!(err.contains("already registered"));
+    }
+
+    #[test]
+    fn user_id_accepts_user_key() {
+        let with_key: UserId =
+            serde_json::from_str(r#"{"user_key":"k1","open_id":"ou_1"}"#).expect("with key");
+        assert_eq!(with_key.user_key.as_deref(), Some("k1"));
+        assert_eq!(with_key.open_id.as_deref(), Some("ou_1"));
+
+        let without_key: UserId = serde_json::from_str(r#"{"open_id":"ou_2"}"#).expect("without");
+        assert_eq!(without_key.user_key, None);
     }
 }

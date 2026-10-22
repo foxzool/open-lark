@@ -122,8 +122,8 @@ pub struct DriveFileReadV1Event {
     /// 文档 token。
     #[serde(default)]
     pub file_token: Option<String>,
-    /// 操作者 ID 列表。
-    #[serde(default)]
+    /// 操作者 ID 列表。官方字段表亦写作 `operator_id`。
+    #[serde(default, alias = "operator_id")]
     pub operator_id_list: Vec<UserId>,
     /// 订阅用户 ID 列表。
     #[serde(default)]
@@ -225,7 +225,7 @@ pub struct DriveFileBitableFieldChangedV1Event {
     #[serde(default)]
     pub subscriber_id_list: Vec<UserId>,
     /// 字段变更时间。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_i64")]
     pub update_time: Option<i64>,
 }
 
@@ -266,7 +266,7 @@ pub struct DriveFileBitableRecordChangedV1Event {
     #[serde(default)]
     pub subscriber_id_list: Vec<UserId>,
     /// 编辑时间（时间戳，单位：秒）。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_i64")]
     pub update_time: Option<i64>,
 }
 
@@ -1305,5 +1305,33 @@ mod tests {
             .register_drive_notice_comment_add_v1(|_event: DriveNoticeCommentAddV1| Ok(()))
             .expect_err("dup raw-then-typed");
         assert!(err.contains("already registered"));
+    }
+
+    #[test]
+    fn file_read_operator_id_alias_fills_operator_id_list() {
+        let from_alias: DriveFileReadV1 = serde_json::from_str(
+            r#"{
+              "header":{"event_type":"drive.file.read_v1"},
+              "event":{"operator_id":[{"open_id":"ou_alias"}]}
+            }"#,
+        )
+        .expect("alias");
+        assert_eq!(from_alias.event.operator_id_list.len(), 1);
+        assert_eq!(
+            from_alias.event.operator_id_list[0].open_id.as_deref(),
+            Some("ou_alias")
+        );
+
+        let from_name: DriveFileReadV1 = serde_json::from_str(
+            r#"{
+              "header":{"event_type":"drive.file.read_v1"},
+              "event":{"operator_id_list":[{"open_id":"ou_list"}]}
+            }"#,
+        )
+        .expect("canonical");
+        assert_eq!(
+            from_name.event.operator_id_list[0].open_id.as_deref(),
+            Some("ou_list")
+        );
     }
 }

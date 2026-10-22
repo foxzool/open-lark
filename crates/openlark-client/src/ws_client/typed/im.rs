@@ -226,7 +226,7 @@ pub struct ImChatAccessEventBotP2pChatEnteredV1Event {
     #[serde(default)]
     pub last_message_id: Option<String>,
     /// 会话内用户可见的最新消息发送时间（毫秒时间戳）。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub last_message_create_time: Option<String>,
 }
 
@@ -458,7 +458,7 @@ pub struct EventMessageReader {
     #[serde(default)]
     pub reader_id: Option<UserId>,
     /// 用户已读的时间，毫秒级时间戳。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub read_time: Option<String>,
     /// 租户 Key。
     #[serde(default)]
@@ -487,7 +487,7 @@ pub struct ImMessageRecalledV1Event {
     #[serde(default)]
     pub chat_id: Option<String>,
     /// 撤回的时间，毫秒级时间戳。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub recall_time: Option<String>,
     /// 撤回类型。
     #[serde(default)]
@@ -525,7 +525,7 @@ pub struct ImMessageReactionCreatedV1Event {
     #[serde(default)]
     pub app_id: Option<String>,
     /// 添加表情回复的时间戳，单位：ms。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub action_time: Option<String>,
 }
 
@@ -560,7 +560,7 @@ pub struct ImMessageReactionDeletedV1Event {
     #[serde(default)]
     pub app_id: Option<String>,
     /// 删除表情回复的时间戳，单位：ms。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub action_time: Option<String>,
 }
 

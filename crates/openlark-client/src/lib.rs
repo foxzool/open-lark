@@ -232,14 +232,16 @@ mod test_utils;
 /// 提供与飞书 WebSocket 服务的实时连接与事件接收。
 /// 公开入口：[`ws_client::LarkWsClient`]、[`ws_client::EventDispatcherHandler`]、
 /// [`ws_client::EventHandler`]、[`ws_client::CallbackEventHandler`]。
-/// typed 注册：[`ws_client::EventDispatcherHandler::register_im_message_receive_v1`]、
+/// typed 事件共 159 个，含 main 原有的 `im.message.receive_v1`，其中 158 个是新增。
+/// 新增分布：im 12、contact 13、approval 3、calendar 4、task 4、drive 12、mail 1、
+/// hire 12、vc 24、corehr v1 28、corehr v2 45（相加为 158）。
+/// 注册入口：[`ws_client::EventDispatcherHandler::register_im_message_receive_v1`]、
 /// [`ws_client::EventDispatcherHandler::register_card_action_trigger`]；
-/// im 域 12 个与 contact 域 13 个 typed 事件见 [`ws_client::im`] / [`ws_client::contact`]；
-/// approval / calendar / task / drive / mail / hire 六域 36 个 typed 事件见
-/// [`ws_client::approval`] / [`ws_client::calendar`] / [`ws_client::task`] /
-/// [`ws_client::drive`] / [`ws_client::mail`] / [`ws_client::hire`]；
-/// vc 域 24 个与 corehr 域 73 个（v1 28 + v2 45）typed 事件见
-/// [`ws_client::vc`] / [`ws_client::corehr_v1`] / [`ws_client::corehr_v2`]。
+/// 域模块见 [`ws_client::im`]、[`ws_client::contact`]、[`ws_client::approval`]、
+/// [`ws_client::calendar`]、[`ws_client::task`]、[`ws_client::drive`]、
+/// [`ws_client::mail`]、[`ws_client::hire`]、[`ws_client::vc`]、
+/// [`ws_client::corehr_v1`]、[`ws_client::corehr_v2`]。
+/// 事件串与注册方法对照见 [`ws_client::typed`] 模块文档。
 /// `url.preview.get` 仍用 [`ws_client::EventDispatcherHandler::register_callback`]。
 #[cfg(feature = "websocket")]
 pub mod ws_client;

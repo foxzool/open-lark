@@ -19,7 +19,10 @@ use open_lark::communication::im::v1::message::{
     create::{CreateMessageBody, CreateMessageRequest},
     models::ReceiveIdType,
 };
-use open_lark::ws_client::{EventDispatcherHandler, EventHandler, LarkWsClient, WsClientError};
+use open_lark::ws_client::{
+    EventDispatcherHandler, EventHandler, EventHeader, ImMessageReceiveV1, ImMessageReceiveV1Event,
+    LarkWsClient, WsClientError,
+};
 use open_lark::{Config, CoreConfig, RequestOption};
 use serde::Deserialize;
 use serde_json::json;
@@ -147,7 +150,7 @@ async fn handle_payload(
     runtime_config: &RuntimeConfig,
     payload: &[u8],
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let envelope: EventEnvelope = match serde_json::from_slice(payload) {
+    let envelope: ImMessageReceiveV1 = match serde_json::from_slice(payload) {
         Ok(v) => v,
         Err(err) => {
             eprintln!("⚠️ 忽略无法解析的事件载荷: {err}");
@@ -204,26 +207,23 @@ fn extract_text(content: &str) -> Result<String, Box<dyn std::error::Error>> {
 }
 
 fn resolve_receive_target(
-    event: &EventBody,
+    event: &ImMessageReceiveV1Event,
 ) -> Result<(String, ReceiveIdType), Box<dyn std::error::Error>> {
     if event.message.chat_type == "p2p" {
-        let open_id = event.sender.sender_id.open_id.clone();
+        let open_id = event
+            .sender
+            .as_ref()
+            .and_then(|sender| sender.sender_id.as_ref())
+            .map(|id| id.open_id.clone())
+            .unwrap_or_default();
         if open_id.is_empty() {
             return Err("p2p 消息缺少 sender.open_id".into());
         }
         return Ok((open_id, ReceiveIdType::OpenId));
     }
 
-    if let Some(chat) = &event.chat
-        && !chat.chat_id.is_empty()
-    {
-        return Ok((chat.chat_id.clone(), ReceiveIdType::ChatId));
-    }
-
-    if let Some(chat_id) = &event.message.chat_id
-        && !chat_id.is_empty()
-    {
-        return Ok((chat_id.clone(), ReceiveIdType::ChatId));
+    if !event.message.chat_id.is_empty() {
+        return Ok((event.message.chat_id.clone(), ReceiveIdType::ChatId));
     }
 
     Err("群聊消息缺少 chat_id".into())
@@ -323,49 +323,6 @@ struct EventHeaderOnlyEnvelope {
 }
 
 #[derive(Debug, Deserialize)]
-struct EventEnvelope {
-    header: EventHeader,
-    event: EventBody,
-}
-
-#[derive(Debug, Deserialize)]
-struct EventHeader {
-    event_type: String,
-}
-
-#[derive(Debug, Deserialize)]
-struct EventBody {
-    sender: Sender,
-    message: Message,
-    #[serde(default)]
-    chat: Option<Chat>,
-}
-
-#[derive(Debug, Deserialize)]
-struct Sender {
-    sender_id: SenderId,
-}
-
-#[derive(Debug, Deserialize)]
-struct SenderId {
-    open_id: String,
-}
-
-#[derive(Debug, Deserialize)]
-struct Message {
-    message_type: String,
-    content: String,
-    chat_type: String,
-    #[serde(default)]
-    chat_id: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
-struct Chat {
-    chat_id: String,
-}
-
-#[derive(Debug, Deserialize)]
 struct TextContent {
     text: String,
 }
@@ -380,22 +337,25 @@ mod tests {
         assert_eq!(text, "hello");
     }
 
+    fn parsed_message_event(body: serde_json::Value) -> ImMessageReceiveV1Event {
+        serde_json::from_value::<ImMessageReceiveV1>(json!({
+            "header": {"event_type": "im.message.receive_v1"},
+            "event": body
+        }))
+        .expect("ImMessageReceiveV1")
+        .event
+    }
+
     #[test]
     fn test_resolve_receive_target_for_p2p() {
-        let event = EventBody {
-            sender: Sender {
-                sender_id: SenderId {
-                    open_id: "ou_test_user".to_string(),
-                },
-            },
-            message: Message {
-                message_type: "text".to_string(),
-                content: "{\"text\":\"hello\"}".to_string(),
-                chat_type: "p2p".to_string(),
-                chat_id: None,
-            },
-            chat: None,
-        };
+        let event = parsed_message_event(json!({
+            "sender": {"sender_id": {"open_id": "ou_test_user"}},
+            "message": {
+                "message_type": "text",
+                "content": "{\"text\":\"hello\"}",
+                "chat_type": "p2p"
+            }
+        }));
 
         let (receive_id, receive_id_type) =
             resolve_receive_target(&event).expect("should resolve p2p receive target");
@@ -404,23 +364,18 @@ mod tests {
     }
 
     #[test]
-    fn test_resolve_receive_target_for_group() {
-        let event = EventBody {
-            sender: Sender {
-                sender_id: SenderId {
-                    open_id: "ou_test_user".to_string(),
-                },
-            },
-            message: Message {
-                message_type: "text".to_string(),
-                content: "{\"text\":\"hello\"}".to_string(),
-                chat_type: "group".to_string(),
-                chat_id: None,
-            },
-            chat: Some(Chat {
-                chat_id: "oc_group_001".to_string(),
-            }),
-        };
+    fn test_resolve_receive_target_for_group_uses_message_chat_id() {
+        let event = parsed_message_event(json!({
+            "sender": {"sender_id": {"open_id": "ou_test_user"}},
+            "message": {
+                "message_type": "text",
+                "content": "{\"text\":\"hello\"}",
+                "chat_type": "group",
+                "chat_id": "oc_group_001",
+                "user_agent": "Mozilla"
+            }
+        }));
+        assert_eq!(event.message.user_agent.as_deref(), Some("Mozilla"));
 
         let (receive_id, receive_id_type) =
             resolve_receive_target(&event).expect("should resolve group receive target");
@@ -435,44 +390,15 @@ mod tests {
     }
 
     #[test]
-    fn test_resolve_receive_target_group_fallback_message_chat_id() {
-        let event = EventBody {
-            sender: Sender {
-                sender_id: SenderId {
-                    open_id: "ou_test_user".to_string(),
-                },
-            },
-            message: Message {
-                message_type: "text".to_string(),
-                content: "{\"text\":\"hello\"}".to_string(),
-                chat_type: "group".to_string(),
-                chat_id: Some("oc_group_from_message".to_string()),
-            },
-            chat: None,
-        };
-
-        let (receive_id, receive_id_type) =
-            resolve_receive_target(&event).expect("should resolve from message.chat_id");
-        assert_eq!(receive_id, "oc_group_from_message");
-        assert_eq!(receive_id_type, ReceiveIdType::ChatId);
-    }
-
-    #[test]
     fn test_resolve_receive_target_p2p_missing_open_id() {
-        let event = EventBody {
-            sender: Sender {
-                sender_id: SenderId {
-                    open_id: String::new(),
-                },
-            },
-            message: Message {
-                message_type: "text".to_string(),
-                content: "{\"text\":\"hello\"}".to_string(),
-                chat_type: "p2p".to_string(),
-                chat_id: None,
-            },
-            chat: None,
-        };
+        let event = parsed_message_event(json!({
+            "sender": {"sender_id": {"open_id": ""}},
+            "message": {
+                "message_type": "text",
+                "content": "{\"text\":\"hello\"}",
+                "chat_type": "p2p"
+            }
+        }));
 
         let result = resolve_receive_target(&event);
         assert!(result.is_err());
@@ -480,20 +406,14 @@ mod tests {
 
     #[test]
     fn test_resolve_receive_target_group_missing_chat_id() {
-        let event = EventBody {
-            sender: Sender {
-                sender_id: SenderId {
-                    open_id: "ou_test_user".to_string(),
-                },
-            },
-            message: Message {
-                message_type: "text".to_string(),
-                content: "{\"text\":\"hello\"}".to_string(),
-                chat_type: "group".to_string(),
-                chat_id: None,
-            },
-            chat: None,
-        };
+        let event = parsed_message_event(json!({
+            "sender": {"sender_id": {"open_id": "ou_test_user"}},
+            "message": {
+                "message_type": "text",
+                "content": "{\"text\":\"hello\"}",
+                "chat_type": "group"
+            }
+        }));
 
         let result = resolve_receive_target(&event);
         assert!(result.is_err());

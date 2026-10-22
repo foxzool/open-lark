@@ -49,9 +49,9 @@ pub struct ApprovalEvent {
     /// 流程对象（JSON 序列化后的字符串）。
     #[serde(default)]
     pub process_obj: Option<String>,
-    /// 时间戳（毫秒）。
-    #[serde(default)]
-    pub timestamp: Option<String>,
+    /// 时间戳（毫秒）。官方类型为 int；JSON 数字与十进制字符串都接受，存成 `i64`。
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_i64")]
+    pub timestamp: Option<i64>,
     /// 扩展信息。
     #[serde(default)]
     pub extra: Option<String>,
@@ -85,7 +85,7 @@ pub struct ApprovalInstanceStatusChangedV4Event {
     #[serde(default)]
     pub status: Option<String>,
     /// 事件发生时间，毫秒时间戳。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub operate_time: Option<String>,
     /// 审批实例发起人。
     #[serde(default)]
@@ -129,7 +129,7 @@ pub struct ApprovalTaskStatusChangedV4Event {
     #[serde(default)]
     pub status: Option<String>,
     /// 事件触发时间，毫秒时间戳。
-    #[serde(default)]
+    #[serde(default, deserialize_with = "super::flex_time::de_opt_string")]
     pub operate_time: Option<String>,
     /// 订阅用户 ID 列表。
     #[serde(default)]
@@ -334,5 +334,54 @@ mod tests {
             .register_approval_task_status_changed_v4(|_event: ApprovalTaskStatusChangedV4| Ok(()))
             .expect_err("dup raw-then-typed");
         assert!(err.contains("already registered"));
+    }
+
+    #[test]
+    fn numeric_timestamp_and_operate_time_reach_typed_handlers() {
+        let seen_ts = Arc::new(Mutex::new(None));
+        let seen_ts_h = Arc::clone(&seen_ts);
+        let seen_op = Arc::new(Mutex::new(None));
+        let seen_op_h = Arc::clone(&seen_op);
+        let handler = EventDispatcherHandler::builder()
+            .register_approval_approval_updated_v4(move |event: ApprovalApprovalUpdatedV4| {
+                *seen_ts_h.lock().expect("lock") = event
+                    .event
+                    .object
+                    .as_ref()
+                    .and_then(|object| object.timestamp);
+                Ok(())
+            })
+            .expect("register updated")
+            .register_approval_instance_status_changed_v4(
+                move |event: ApprovalInstanceStatusChangedV4| {
+                    *seen_op_h.lock().expect("lock") = event.event.operate_time.clone();
+                    Ok(())
+                },
+            )
+            .expect("register instance")
+            .build();
+
+        handler
+            .do_without_validation(
+                br#"{
+                  "header":{"event_type":"approval.approval.updated_v4","create_time":1700000000000},
+                  "event":{"object":{"timestamp":1700000000000}}
+                }"#,
+            )
+            .expect("dispatch timestamp number");
+        handler
+            .do_without_validation(
+                br#"{
+                  "header":{"event_type":"approval.instance.status_changed_v4"},
+                  "event":{"operate_time":1700000000001}
+                }"#,
+            )
+            .expect("dispatch operate_time number");
+
+        assert_eq!(*seen_ts.lock().expect("lock"), Some(1_700_000_000_000));
+        assert_eq!(
+            seen_op.lock().expect("lock").as_deref(),
+            Some("1700000000001")
+        );
     }
 }
