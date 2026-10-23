@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **auth：RFC 8628 设备码注册应用（#695，最小核心）**：
+  `openlark_auth::device_registration::DeviceRegistration` 拆分式 `begin` / `poll`：
+  `begin` 返回扫码 URL（追加 from/tp/source 标识）与轮询句柄；`poll` 返回
+  结果枚举 `Ready{client_id/client_secret/扫码用户信息} | Pending |
+  SlowDown{建议间隔 +5s}`，`access_denied` / `expired_token` /
+  响应不可用为独立的 `RegistrationError` 变体。账号域解析复用
+  `oauth_base_url`（默认 feishu / lark 已知域）。已有应用凭证的路径不受影响；
+  `appPreset` / `addons` / `createOnly` / Lark 域名切换不在本版范围。
+
 - **auth：user access token 自动缓存与刷新（#693）**：
   `Config::user_refresh_token` 设置种子 refresh token 后，user 级请求由
   token 缓存自动续期：命中缓存直接复用，进入提前 60 秒刷新窗口后走现有

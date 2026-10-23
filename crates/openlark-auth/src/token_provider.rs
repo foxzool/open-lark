@@ -385,5 +385,14 @@ mod client_assertion;
 
 pub use client_assertion::ensure_client_assertion_endpoint;
 
+/// 解析账号域 origin（feishu/lark 已知域 + oauth_base_url 显式覆盖），
+/// 设备码注册（#695）等账号域场景复用。
+pub(crate) fn resolve_accounts_origin(
+    base_url: &str,
+    oauth_base_url: Option<&str>,
+) -> SDKResult<String> {
+    Ok(client_assertion::resolve_oauth_endpoint(base_url, oauth_base_url)?.origin)
+}
+
 #[cfg(test)]
 mod tests;

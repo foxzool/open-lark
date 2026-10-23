@@ -26,6 +26,7 @@ const OAUTH_TOKEN_PATH: &str = "/oauth/v3/token";
 pub(crate) struct OauthEndpoint {
     pub(crate) token_url: String,
     pub(crate) aud: String,
+    pub(crate) origin: String,
 }
 
 /// 断言通路的缓存键。不含 `app_id`、`tenant_key`、`app_ticket`。
@@ -74,6 +75,7 @@ fn known_endpoint(origin: &str, aud: &str) -> OauthEndpoint {
     OauthEndpoint {
         token_url: format!("{origin}{OAUTH_TOKEN_PATH}"),
         aud: aud.to_string(),
+        origin: origin.to_string(),
     }
 }
 
@@ -104,6 +106,7 @@ fn endpoint_from_explicit(raw: &str) -> SDKResult<OauthEndpoint> {
     Ok(OauthEndpoint {
         token_url: format!("{origin}{OAUTH_TOKEN_PATH}"),
         aud,
+        origin,
     })
 }
 
