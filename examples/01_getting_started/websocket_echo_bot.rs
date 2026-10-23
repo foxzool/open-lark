@@ -19,9 +19,9 @@ use open_lark::communication::im::v1::message::{
     create::{CreateMessageBody, CreateMessageRequest},
     models::ReceiveIdType,
 };
+use open_lark::ws_client::im::{ImMessageReceiveV1, ImMessageReceiveV1Event};
 use open_lark::ws_client::{
-    EventDispatcherHandler, EventHandler, EventHeader, ImMessageReceiveV1, ImMessageReceiveV1Event,
-    LarkWsClient, WsClientError,
+    EventDispatcherHandler, EventHandler, EventHeader, LarkWsClient, WsClientError,
 };
 use open_lark::{Config, CoreConfig, RequestOption};
 use serde::Deserialize;

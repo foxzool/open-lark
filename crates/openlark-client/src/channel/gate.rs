@@ -6,7 +6,8 @@ use super::{
     CardDocument, ChatKind, DmMode, GroupAllowlist, InboundCardAction, InboundContent,
     InboundMessage, InboundPolicy, Mention, MessageId, RejectReason, Sender,
 };
-use crate::ws_client::{CardActionTrigger, ImMention, ImMessageReceiveV1};
+use crate::ws_client::CardActionTrigger;
+use crate::ws_client::im::{ImMention, ImMessageReceiveV1};
 
 pub(super) fn normalize_message(
     event: &ImMessageReceiveV1,

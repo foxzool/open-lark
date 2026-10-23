@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Post-0.21 work goes here. -->
 
+### Deprecated
+
+- **ws：im 域 typed 事件 flat 再导出（#709）**：
+  `ws_client::{ImMessageReceiveV1, ImMessageReceiveV1Event, ImMessageReceiveV1Handler,
+  ImMessageSender, ImReceivedMessage, ImSenderId, ImMention}` 标记 `#[deprecated(since = "0.22.0")]`。
+  正典入口为模块式路径 `ws_client::im::*`（类型与原 flat 再导出同型，直接换 use 即可）。
+  `im.message.receive_v1` 的 handler trait / adapter / `register_im_message_receive_v1`
+  改由 `typed_events!` 宏生成，行为与原手写链等价（错误信息、重复注册语义不变）。
+  依据 `docs/DEPRECATED_API_SUPPORT_POLICY.md`：flat 再导出至少保留到 0.22.x 结束，
+  最早于 0.23.0 起评估移除。深路径 `ws_client::typed::ImMessageReceiveV1` 随家族
+  迁入 `ws_client::typed::im` 而移除（全仓无使用者）。
+
 ### Added
 
 - **communication：类型化消息卡片 `MessageCard`（#690）**：

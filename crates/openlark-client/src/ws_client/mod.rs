@@ -18,7 +18,17 @@ pub use session::{InvalidStateKind, WsClientError, WsClientResult, WsCloseReason
 pub use typed::{
     CardAction, CardActionCard, CardActionTrigger, CardActionTriggerEvent,
     CardActionTriggerHandler, CardActionTriggerResponse, CardContext, CardOperator, CardToast,
-    EventHeader, ImMention, ImMessageReceiveV1, ImMessageReceiveV1Event, ImMessageReceiveV1Handler,
+    EventHeader,
+};
+
+// #709：im 域 flat 再导出已废弃，正典入口为 `typed::im` 模块式路径。
+// 按 DEPRECATED_API_SUPPORT_POLICY：至少保留到 0.22.x 结束，最早 0.23.0 起评估移除。
+#[deprecated(
+    since = "0.22.0",
+    note = "改用模块式入口 `ws_client::im::*`，如 `ws_client::im::ImMessageReceiveV1`"
+)]
+pub use typed::im::{
+    ImMention, ImMessageReceiveV1, ImMessageReceiveV1Event, ImMessageReceiveV1Handler,
     ImMessageSender, ImReceivedMessage, ImSenderId,
 };
 

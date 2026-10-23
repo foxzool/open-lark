@@ -186,7 +186,7 @@ mod tests {
     use serde::Deserialize;
 
     use super::super::corehr_v2;
-    use super::super::{EventHeader, ImReceivedMessage, approval, contact, drive, hire, im, vc};
+    use super::super::{EventHeader, approval, contact, drive, hire, im, vc};
 
     macro_rules! opt_string_case {
         ($ty:ty, $field:ident) => {{
@@ -276,8 +276,8 @@ mod tests {
         opt_string_case!(vc::RoomStatusEvent, disable_start_time);
         opt_string_case!(vc::RoomStatusEvent, disable_end_time);
         string_case!(EventHeader, create_time);
-        string_case!(ImReceivedMessage, create_time);
-        string_case!(ImReceivedMessage, update_time);
+        string_case!(im::ImReceivedMessage, create_time);
+        string_case!(im::ImReceivedMessage, update_time);
     }
 
     #[derive(Debug, Deserialize)]

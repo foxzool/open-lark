@@ -2,7 +2,7 @@
 //!
 //! 字段权威：Go SDK v3.12.2 `service/im/v1/model.go` 对应 `P2*` 结构的 json tag；
 //! 事件清单对齐 `service/im/v1/dispatcher.go`。Go 指针字段映射为 `Option<T>`，
-//! serde 采用 `#[serde(default)]` 宽松风格，与 [`super::ImMessageReceiveV1`] 一致。
+//! serde 采用 `#[serde(default)]` 宽松风格（`im.message.receive_v1` 家族同样如此）。
 
 use serde::{Deserialize, Serialize};
 
@@ -572,7 +572,123 @@ pub struct Emoji {
     pub emoji_type: Option<String>,
 }
 
+/// `im.message.receive_v1` 完整 envelope。
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct ImMessageReceiveV1 {
+    /// schema，通常为 `2.0`。
+    #[serde(default)]
+    pub schema: String,
+    /// 事件头。
+    pub header: EventHeader,
+    /// 事件体。
+    pub event: ImMessageReceiveV1Event,
+}
+
+/// `im.message.receive_v1` 的 `event` 对象。
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct ImMessageReceiveV1Event {
+    /// 发送者。
+    #[serde(default)]
+    pub sender: Option<ImMessageSender>,
+    /// 消息。
+    pub message: ImReceivedMessage,
+}
+
+/// 消息发送者。
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
+pub struct ImMessageSender {
+    /// sender_id 结构。
+    #[serde(default)]
+    pub sender_id: Option<ImSenderId>,
+    /// 发送者类型，例如 `user`。
+    #[serde(default)]
+    pub sender_type: String,
+    /// 租户 key。
+    #[serde(default)]
+    pub tenant_key: String,
+}
+
+/// 发送者 ID 集合。
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, Default)]
+pub struct ImSenderId {
+    /// union_id。
+    #[serde(default)]
+    pub union_id: String,
+    /// user_id。
+    #[serde(default)]
+    pub user_id: String,
+    /// open_id。
+    #[serde(default)]
+    pub open_id: String,
+}
+
+/// 收到的 IM 消息。
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
+pub struct ImReceivedMessage {
+    /// 消息 ID。
+    #[serde(default)]
+    pub message_id: String,
+    /// 根消息 ID。
+    #[serde(default)]
+    pub root_id: String,
+    /// 父消息 ID。
+    #[serde(default)]
+    pub parent_id: String,
+    /// 创建时间（毫秒）。JSON 字符串与整数都接受，存成十进制字符串。
+    #[serde(default, deserialize_with = "super::flex_time::de_string")]
+    pub create_time: String,
+    /// 更新时间（毫秒）。JSON 字符串与整数都接受，存成十进制字符串。
+    #[serde(default, deserialize_with = "super::flex_time::de_string")]
+    pub update_time: String,
+    /// 聊天 ID。
+    #[serde(default)]
+    pub chat_id: String,
+    /// 话题 ID。无话题时为空。
+    #[serde(default)]
+    pub thread_id: String,
+    /// 聊天类型。
+    #[serde(default)]
+    pub chat_type: String,
+    /// 消息类型。
+    #[serde(default)]
+    pub message_type: String,
+    /// 内容 JSON 字符串。
+    #[serde(default)]
+    pub content: String,
+    /// 被 @ 的用户。
+    #[serde(default)]
+    pub mentions: Vec<ImMention>,
+    /// 发送端 `user_agent`。缺字段时为 `None`。
+    #[serde(default)]
+    pub user_agent: Option<String>,
+}
+
+/// 消息中的 @ 提及。
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, Default)]
+pub struct ImMention {
+    /// 序号，例如 `@_user_1`。
+    #[serde(default)]
+    pub key: String,
+    /// 被提及用户 ID。
+    #[serde(default)]
+    pub id: Option<ImSenderId>,
+    /// `user` 或 `bot`。
+    #[serde(default)]
+    pub mentioned_type: String,
+    /// 姓名。
+    #[serde(default)]
+    pub name: String,
+    /// 租户 key。
+    #[serde(default)]
+    pub tenant_key: String,
+}
+
 typed_events! {
+    /// `im.message.receive_v1` typed 处理器。
+    ///
+    /// 闭包只要签名匹配也会自动实现本 trait。
+    "im.message.receive_v1" | IM_MESSAGE_RECEIVE_V1 | ImMessageReceiveV1 | ImMessageReceiveV1Handler | register_im_message_receive_v1;
+
     /// `im.chat.disbanded_v1` typed 处理器。
     ///
     /// 闭包只要签名匹配也会自动实现本 trait。
@@ -637,9 +753,10 @@ typed_events! {
 #[cfg(test)]
 mod tests {
     use std::sync::{Arc, Mutex};
+    use std::time::Instant;
 
     use super::*;
-    use crate::ws_client::EventDispatcherHandler;
+    use crate::ws_client::{EventDispatcherHandler, EventHandler};
 
     const CHAT_DISBANDED_FIXTURE: &str = r#"{
       "schema":"2.0",
@@ -1170,5 +1287,273 @@ mod tests {
             .register_im_message_recalled_v1(|_event: ImMessageRecalledV1| Ok(()))
             .expect_err("dup raw-then-typed");
         assert!(err.contains("already registered"));
+    }
+
+    #[test]
+    #[allow(deprecated)]
+    fn flat_reexports_still_work_while_deprecated() {
+        // #709：flat 再导出已标 deprecated，但按 DEPRECATED_API_SUPPORT_POLICY
+        // 至少保留一个公开发布周期；且与模块路径是同一类型，可互换。
+        use crate::ws_client::ImMessageReceiveV1 as FlatIm;
+        use crate::ws_client::im::ImMessageReceiveV1 as ModIm;
+
+        fn module_typed(event: ModIm) -> ModIm {
+            event
+        }
+        let flat: FlatIm = serde_json::from_str(IM_FIXTURE).expect("parse flat");
+        let via_module = module_typed(flat);
+        assert_eq!(via_module.event.message.message_id, "om_hello");
+    }
+
+    #[test]
+    fn im_message_receive_v1_available_at_module_path_and_dispatches() {
+        // #709：`im.message.receive_v1` 家族从 typed.rs 手写链收敛进本模块，
+        // `ws_client::im::*` 成为正典入口（flat 再导出随后标 deprecated）。
+        use crate::ws_client::im::{ImMessageReceiveV1, ImMessageReceiveV1Event};
+
+        let fixture = br#"{
+          "schema":"2.0",
+          "header":{"event_id":"e1","event_type":"im.message.receive_v1","token":"t","app_id":"cli_x","tenant_key":"tk"},
+          "event":{
+            "sender":{"sender_id":{"open_id":"ou_1"},"sender_type":"user","tenant_key":"tk"},
+            "message":{
+              "message_id":"om_modpath",
+              "chat_id":"oc_1",
+              "chat_type":"p2p",
+              "message_type":"text",
+              "content":"{\"text\":\"hi\"}",
+              "mentions":[{"key":"@_user_1","id":{"open_id":"ou_mentioned"},"name":"Ada","mentioned_type":"user"}]
+            }
+          }
+        }"#;
+
+        let seen = std::sync::Arc::new(std::sync::Mutex::new(None));
+        let seen_h = std::sync::Arc::clone(&seen);
+        let handler = EventDispatcherHandler::builder()
+            .register_im_message_receive_v1(move |event: ImMessageReceiveV1| {
+                *seen_h.lock().expect("lock") = Some(event.event.message.message_id.clone());
+                Ok(())
+            })
+            .expect("register")
+            .build();
+        handler.do_without_validation(fixture).expect("dispatch");
+        assert_eq!(seen.lock().expect("lock").as_deref(), Some("om_modpath"));
+
+        // 模块路径上可独立反序列化 envelope。
+        let envelope: ImMessageReceiveV1 = serde_json::from_slice(fixture).expect("deserialize");
+        let ImMessageReceiveV1Event { sender, .. } = envelope.event;
+        assert_eq!(
+            sender.expect("sender").sender_id.expect("id").open_id,
+            "ou_1"
+        );
+    }
+    // ---- 以下测试自 typed.rs 迁入（#709：im.message.receive_v1 收敛进本模块） ----
+
+    const IM_FIXTURE: &str = r#"{
+      "schema":"2.0",
+      "header":{"event_id":"e1","event_type":"im.message.receive_v1","token":"t","app_id":"cli_x","tenant_key":"tk"},
+      "event":{
+        "sender":{"sender_id":{"open_id":"ou_1"},"sender_type":"user","tenant_key":"tk"},
+        "message":{
+          "message_id":"om_hello",
+          "chat_id":"oc_1",
+          "chat_type":"p2p",
+          "message_type":"text",
+          "content":"{\"text\":\"hi\"}",
+          "mentions":[{"key":"@_user_1","id":{"open_id":"ou_mentioned"},"name":"Ada","mentioned_type":"user"}]
+        }
+      }
+    }"#;
+
+    struct CaptureIm(Arc<Mutex<Option<String>>>);
+    impl ImMessageReceiveV1Handler for CaptureIm {
+        fn handle(
+            &self,
+            event: ImMessageReceiveV1,
+        ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+            *self.0.lock().expect("lock") = Some(event.event.message.message_id);
+            Ok(())
+        }
+    }
+
+    #[test]
+    fn typed_im_message_receive_deserializes_message_id() {
+        let seen = Arc::new(Mutex::new(None));
+        let handler = EventDispatcherHandler::builder()
+            .register_im_message_receive_v1(CaptureIm(Arc::clone(&seen)))
+            .expect("register")
+            .build();
+        handler
+            .do_without_validation(IM_FIXTURE.as_bytes())
+            .expect("dispatch");
+        assert_eq!(seen.lock().expect("lock").as_deref(), Some("om_hello"));
+    }
+
+    #[test]
+    fn typed_im_message_receive_deserializes_mention_open_id() {
+        let seen = Arc::new(Mutex::new(None));
+        let seen_h = Arc::clone(&seen);
+        let handler = EventDispatcherHandler::builder()
+            .register_im_message_receive_v1(move |event: ImMessageReceiveV1| {
+                let mention = &event.event.message.mentions[0];
+                *seen_h.lock().expect("lock") = mention.id.as_ref().map(|id| id.open_id.clone());
+                Ok(())
+            })
+            .expect("register")
+            .build();
+        handler
+            .do_without_validation(IM_FIXTURE.as_bytes())
+            .expect("dispatch");
+        assert_eq!(seen.lock().expect("lock").as_deref(), Some("ou_mentioned"));
+    }
+
+    #[test]
+    fn register_raw_still_works_for_im_message() {
+        struct Raw(Arc<Mutex<bool>>);
+        impl EventHandler for Raw {
+            fn handle(
+                &self,
+                payload: &[u8],
+            ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+                assert!(payload.starts_with(b"{"));
+                *self.0.lock().expect("lock") = true;
+                Ok(())
+            }
+        }
+        let seen = Arc::new(Mutex::new(false));
+        let handler = EventDispatcherHandler::builder()
+            .register_raw("im.message.receive_v1", Raw(Arc::clone(&seen)))
+            .expect("register")
+            .build();
+        handler
+            .do_without_validation(IM_FIXTURE.as_bytes())
+            .expect("dispatch");
+        assert!(*seen.lock().expect("lock"));
+    }
+
+    #[test]
+    fn typed_im_bad_json_errors() {
+        let handler = EventDispatcherHandler::builder()
+            .register_im_message_receive_v1(|_event: ImMessageReceiveV1| Ok(()))
+            .expect("register")
+            .build();
+        let err = handler
+            .do_without_validation(br#"{"header":{"event_type":"im.message.receive_v1"}}"#)
+            .expect_err("bad json");
+        assert!(
+            err.contains("im.message.receive_v1"),
+            "error should name the event type, got {err}"
+        );
+        assert!(
+            err.contains("反序列化") || err.contains("missing field"),
+            "error should mention deserialize failure, got {err}"
+        );
+    }
+
+    #[test]
+    fn typed_im_receive_duplicate_register_fails() {
+        let err = EventDispatcherHandler::builder()
+            .register_im_message_receive_v1(|_event: ImMessageReceiveV1| Ok(()))
+            .expect("first")
+            .register_raw("im.message.receive_v1", {
+                struct Noop;
+                impl EventHandler for Noop {
+                    fn handle(
+                        &self,
+                        _payload: &[u8],
+                    ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+                        Ok(())
+                    }
+                }
+                Noop
+            })
+            .expect_err("dup");
+        assert!(err.contains("already registered"));
+    }
+
+    #[test]
+    fn typed_im_dispatch_1000_under_budget() {
+        let fixture = IM_FIXTURE.as_bytes();
+        let raw = EventDispatcherHandler::builder()
+            .register_raw("im.message.receive_v1", {
+                // raw 使用者手动反序列化相同事件，确保比较的是相同处理工作。
+                struct DeserializeImMessage;
+                impl EventHandler for DeserializeImMessage {
+                    fn handle(
+                        &self,
+                        payload: &[u8],
+                    ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+                        let event: ImMessageReceiveV1 = serde_json::from_slice(payload)?;
+                        assert_eq!(event.event.message.message_id, "om_hello");
+                        Ok(())
+                    }
+                }
+                DeserializeImMessage
+            })
+            .expect("raw")
+            .build();
+        let typed = EventDispatcherHandler::builder()
+            .register_im_message_receive_v1(|event: ImMessageReceiveV1| {
+                assert_eq!(event.event.message.message_id, "om_hello");
+                Ok(())
+            })
+            .expect("register")
+            .build();
+
+        for _ in 0..100 {
+            raw.do_without_validation(fixture).expect("warm raw");
+            typed.do_without_validation(fixture).expect("warm typed");
+        }
+
+        let raw_started = Instant::now();
+        for _ in 0..1000 {
+            raw.do_without_validation(fixture).expect("raw");
+        }
+        let raw_elapsed = raw_started.elapsed();
+
+        let typed_started = Instant::now();
+        for _ in 0..1000 {
+            typed.do_without_validation(fixture).expect("typed");
+        }
+        let typed_elapsed = typed_started.elapsed();
+
+        eprintln!(
+            "perf668 raw={raw_elapsed:?} typed={typed_elapsed:?} ratio={:.3}",
+            typed_elapsed.as_secs_f64() / raw_elapsed.as_secs_f64().max(1e-12)
+        );
+        assert!(
+            typed_elapsed.as_millis() < 500,
+            "1000 typed dispatches took {typed_elapsed:?}"
+        );
+        // 两条路径都在命中后解析相同类型，typed 注册糖仍应满足原来的 2x 预算。
+        assert!(
+            typed_elapsed.as_secs_f64() <= raw_elapsed.as_secs_f64() * 2.0,
+            "typed {typed_elapsed:?} exceeds 2x raw {raw_elapsed:?}"
+        );
+    }
+
+    #[test]
+    fn message_user_agent_reaches_typed_handler() {
+        let seen = Arc::new(Mutex::new(None));
+        let seen_h = Arc::clone(&seen);
+        let handler = EventDispatcherHandler::builder()
+            .register_im_message_receive_v1(move |event: ImMessageReceiveV1| {
+                *seen_h.lock().expect("lock") = event.event.message.user_agent.clone();
+                Ok(())
+            })
+            .expect("register")
+            .build();
+        handler
+            .do_without_validation(
+                br#"{
+                  "header":{"event_type":"im.message.receive_v1"},
+                  "event":{"message":{"message_type":"text","user_agent":"Mozilla"}}
+                }"#,
+            )
+            .expect("dispatch");
+        assert_eq!(seen.lock().expect("lock").as_deref(), Some("Mozilla"));
+
+        let missing: ImReceivedMessage = serde_json::from_str("{}").expect("defaults");
+        assert_eq!(missing.user_agent, None);
     }
 }

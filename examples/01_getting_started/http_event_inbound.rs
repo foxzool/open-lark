@@ -13,7 +13,8 @@
 use std::collections::HashMap;
 
 use open_lark::event_inbound::{HttpEventInbound, HttpEventRequest};
-use open_lark::ws_client::{EventDispatcherHandler, ImMessageReceiveV1, ImMessageReceiveV1Handler};
+use open_lark::ws_client::EventDispatcherHandler;
+use open_lark::ws_client::im::{ImMessageReceiveV1, ImMessageReceiveV1Handler};
 
 struct LoggingIm;
 

@@ -26,9 +26,10 @@ use serde_json::Value;
 use tokio::runtime::Handle;
 use tokio::sync::{Notify, mpsc, oneshot};
 
+use crate::ws_client::im::ImMessageReceiveV1;
 use crate::ws_client::{
     CardActionCard, CardActionTrigger, CardActionTriggerResponse, CardToast,
-    EventDispatcherHandler, ImMessageReceiveV1, LarkWsClient, WsClientError,
+    EventDispatcherHandler, LarkWsClient, WsClientError,
 };
 
 const MESSAGE_QUEUE: usize = 256;
