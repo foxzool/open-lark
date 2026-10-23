@@ -57,6 +57,7 @@
 
 pub mod auth;
 pub mod common;
+pub mod device_registration;
 pub mod human_authentication;
 pub mod models;
 pub mod passport;
