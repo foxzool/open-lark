@@ -2,7 +2,7 @@
 //!
 //! 字段权威：Go SDK v3.12.2 `service/mail/v1/model.go` 对应 `P2*` 结构的 json tag；
 //! 事件清单对齐 `service/mail/v1/dispatcher.go`。Go 指针字段映射为 `Option<T>`，
-//! serde 采用 `#[serde(default)]` 宽松风格，与 [`super::ImMessageReceiveV1`] 一致。
+//! serde 采用 `#[serde(default)]` 宽松风格，与 [`super::im::ImMessageReceiveV1`] 一致。
 
 use serde::{Deserialize, Serialize};
 
