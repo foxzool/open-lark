@@ -309,6 +309,24 @@ async fn recv_data_response_frame(peer: &mut PeerWs) -> Frame {
     }
 }
 
+/// 发送 Normal Close 后保持 peer 存活并读到流尽，等 session 侧完成关闭握手
+/// 再随脚本返回 drop（#710）。
+///
+/// 直接 close 后 drop 会让 client 读路径在对端 Close 帧被消费前就收到对端
+/// 消失信号（duplex 报 `Io(BrokenPipe)`），此时 session 尚在 Active 态、无
+/// close reason 可保，原始 Io 错误顶替了应有的 `ConnectionClosed{Normal}`；
+/// 单线程负载 ~5%、16 线程高并发 ~29% 复现。读到流尽保证 Close 帧已送达且
+/// session 已完成排空。
+async fn peer_close_and_drain(peer: &mut PeerWs, reason: &'static str) {
+    peer.close(Some(CloseFrame {
+        code: CloseCode::Normal,
+        reason: reason.into(),
+    }))
+    .await
+    .ok();
+    while let Some(Ok(_)) = peer.next().await {}
+}
+
 fn assert_normal_close(result: WsClientResult<()>) {
     match result {
         Err(WsClientError::ConnectionClosed {
@@ -345,12 +363,7 @@ async fn session_dispatches_handler_and_emits_response_frame() {
             .await
             .expect("send event");
             let response = recv_data_response_frame(&mut peer).await;
-            peer.close(Some(CloseFrame {
-                code: CloseCode::Normal,
-                reason: "session complete".into(),
-            }))
-            .await
-            .ok();
+            peer_close_and_drain(&mut peer, "session complete").await;
             response
         },
     )
@@ -451,12 +464,7 @@ async fn session_multipart_out_of_order_dispatches_once() {
             .await
             .expect("send part0");
             let response = recv_data_response_frame(&mut peer).await;
-            peer.close(Some(CloseFrame {
-                code: CloseCode::Normal,
-                reason: "multipart complete".into(),
-            }))
-            .await
-            .ok();
+            peer_close_and_drain(&mut peer, "multipart complete").await;
             response
         },
     )
@@ -502,12 +510,7 @@ async fn session_multipart_incomplete_does_not_dispatch() {
             .await
             .expect("send valid follow-up");
             let _ = recv_data_response_frame(&mut peer).await;
-            peer.close(Some(CloseFrame {
-                code: CloseCode::Normal,
-                reason: "incomplete package test".into(),
-            }))
-            .await
-            .ok();
+            peer_close_and_drain(&mut peer, "incomplete package test").await;
         },
     )
     .await;
@@ -735,12 +738,7 @@ async fn session_multipart_empty_message_id_does_not_dispatch() {
             .await
             .expect("send valid follow-up");
             let _ = recv_data_response_frame(&mut peer).await;
-            peer.close(Some(CloseFrame {
-                code: CloseCode::Normal,
-                reason: "empty message_id withhold".into(),
-            }))
-            .await
-            .ok();
+            peer_close_and_drain(&mut peer, "empty message_id withhold").await;
         },
     )
     .await;
@@ -780,12 +778,7 @@ async fn session_multipart_seq_out_of_range_does_not_dispatch() {
             .await
             .expect("send valid follow-up");
             let _ = recv_data_response_frame(&mut peer).await;
-            peer.close(Some(CloseFrame {
-                code: CloseCode::Normal,
-                reason: "seq oob withhold".into(),
-            }))
-            .await
-            .ok();
+            peer_close_and_drain(&mut peer, "seq oob withhold").await;
         },
     )
     .await;
@@ -928,12 +921,7 @@ async fn session_handlers_run_serially_in_arrival_order() {
                 gate1_tx.send(()).expect("release gate1");
                 let _ = recv_data_response_frame(&mut peer).await;
                 let _ = recv_data_response_frame(&mut peer).await;
-                peer.close(Some(CloseFrame {
-                    code: CloseCode::Normal,
-                    reason: "serial order test".into(),
-                }))
-                .await
-                .ok();
+                peer_close_and_drain(&mut peer, "serial order test").await;
             }
         },
     )
@@ -1038,12 +1026,7 @@ async fn session_callback_ack_round_trips_base64_data() {
             .await
             .expect("send callback event");
             let ack = recv_data_response_frame(&mut peer).await;
-            peer.close(Some(CloseFrame {
-                code: CloseCode::Normal,
-                reason: "callback ack test".into(),
-            }))
-            .await
-            .ok();
+            peer_close_and_drain(&mut peer, "callback ack test").await;
             ack
         },
     )
