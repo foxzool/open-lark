@@ -11,9 +11,8 @@
 use std::sync::Arc;
 
 use open_lark::Config;
-use open_lark::ws_client::{
-    EventDispatcherHandler, ImMessageReceiveV1, ImMessageReceiveV1Handler, LarkWsClient,
-};
+use open_lark::ws_client::im::{ImMessageReceiveV1, ImMessageReceiveV1Handler};
+use open_lark::ws_client::{EventDispatcherHandler, LarkWsClient};
 
 struct PrintIm;
 

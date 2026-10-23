@@ -23,7 +23,7 @@ src/
 │   └── unique.rs            # generation-time 字段去重（#423 / #455 / #471）
 ├── utils.rs                  # env/feature 诊断工具
 └── ws_client/                # WebSocket 客户端（可选 feature）
-    ├── typed.rs             # typed 事件根模块（EventHeader + 手写 im/card 事件）
+    ├── typed.rs             # typed 事件根模块（EventHeader + 手写 card 回调；im 域在 typed/im.rs）
     └── typed/               # 按域 typed 事件（handler trait + register_* 宏批量生成）
         ├── macros.rs       # TypedEventAdapter 与 typed_events! 样板宏
         ├── approval.rs     # approval.*（3 事件）

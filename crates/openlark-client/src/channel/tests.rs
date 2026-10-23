@@ -15,10 +15,11 @@ use super::{
     CardDocument, ChannelError, ChatKind, DmMode, GroupAllowlist, InboundContent, InboundPolicy,
     LarkChannel, MessageId, MessageRecipient, Outbound, RejectReason, SentMessage,
 };
-use crate::ws_client::{
-    CardAction, CardActionTrigger, EventHeader, ImMention, ImMessageReceiveV1,
-    ImMessageReceiveV1Event, ImMessageSender, ImReceivedMessage, ImSenderId, WsClientError,
+use crate::ws_client::im::{
+    ImMention, ImMessageReceiveV1, ImMessageReceiveV1Event, ImMessageSender, ImReceivedMessage,
+    ImSenderId,
 };
+use crate::ws_client::{CardAction, CardActionTrigger, EventHeader, WsClientError};
 
 type BoxFut<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
 

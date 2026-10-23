@@ -3,9 +3,11 @@
 //! typed 事件共 159 个，含 main 原有的 `im.message.receive_v1`，其中 158 个是新增。
 //! 新增分布：im 12、contact 13、approval 3、calendar 4、task 4、drive 12、mail 1、
 //! hire 12、vc 24、corehr v1 28、corehr v2 45（相加为 158）。
-//! `im.message.receive_v1` 与卡片回调 `card.action.trigger` 为 main 既有手写实现，
-//! 保留在本文件。卡片回调不计入这 159 个。158 个新增事件的 handler trait、闭包
-//! blanket impl 与 `register_*` 方法由 `macros` 的 `typed_events!` 样板宏批量生成。
+//! 全部 159 个 raw 事件的 handler trait、闭包 blanket impl 与 `register_*` 方法由
+//! `macros` 的 `typed_events!` 样板宏在各域子模块批量生成（`im.message.receive_v1`
+//! 也在 `im` 子模块，#709 从本文件手写链收敛）。卡片回调 `card.action.trigger`
+//! 走 callback map（可回写 ACK），机制与 raw 事件不同，保留在本文件手写实现，
+//! 且不计入这 159 个。
 //!
 //! envelope 类型名按事件串全段 `CamelCase` 机械生成，如
 //! `im.chat.disbanded_v1` → [`im::ImChatDisbandedV1`]、
@@ -206,7 +208,7 @@ use serde_json::Value;
 
 use crate::error::serialization_error;
 
-use super::{CallbackEventHandler, EventDispatcherHandler, EventHandler};
+use super::{CallbackEventHandler, EventDispatcherHandler};
 
 /// schema 2.0 事件头（高频字段）。
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
@@ -229,165 +231,6 @@ pub struct EventHeader {
     /// 租户 key。
     #[serde(default)]
     pub tenant_key: String,
-}
-
-/// `im.message.receive_v1` 完整 envelope。
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ImMessageReceiveV1 {
-    /// schema，通常为 `2.0`。
-    #[serde(default)]
-    pub schema: String,
-    /// 事件头。
-    pub header: EventHeader,
-    /// 事件体。
-    pub event: ImMessageReceiveV1Event,
-}
-
-/// `im.message.receive_v1` 的 `event` 对象。
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ImMessageReceiveV1Event {
-    /// 发送者。
-    #[serde(default)]
-    pub sender: Option<ImMessageSender>,
-    /// 消息。
-    pub message: ImReceivedMessage,
-}
-
-/// 消息发送者。
-#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
-pub struct ImMessageSender {
-    /// sender_id 结构。
-    #[serde(default)]
-    pub sender_id: Option<ImSenderId>,
-    /// 发送者类型，例如 `user`。
-    #[serde(default)]
-    pub sender_type: String,
-    /// 租户 key。
-    #[serde(default)]
-    pub tenant_key: String,
-}
-
-/// 发送者 ID 集合。
-#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, Default)]
-pub struct ImSenderId {
-    /// union_id。
-    #[serde(default)]
-    pub union_id: String,
-    /// user_id。
-    #[serde(default)]
-    pub user_id: String,
-    /// open_id。
-    #[serde(default)]
-    pub open_id: String,
-}
-
-/// 收到的 IM 消息。
-#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
-pub struct ImReceivedMessage {
-    /// 消息 ID。
-    #[serde(default)]
-    pub message_id: String,
-    /// 根消息 ID。
-    #[serde(default)]
-    pub root_id: String,
-    /// 父消息 ID。
-    #[serde(default)]
-    pub parent_id: String,
-    /// 创建时间（毫秒）。JSON 字符串与整数都接受，存成十进制字符串。
-    #[serde(default, deserialize_with = "flex_time::de_string")]
-    pub create_time: String,
-    /// 更新时间（毫秒）。JSON 字符串与整数都接受，存成十进制字符串。
-    #[serde(default, deserialize_with = "flex_time::de_string")]
-    pub update_time: String,
-    /// 聊天 ID。
-    #[serde(default)]
-    pub chat_id: String,
-    /// 话题 ID。无话题时为空。
-    #[serde(default)]
-    pub thread_id: String,
-    /// 聊天类型。
-    #[serde(default)]
-    pub chat_type: String,
-    /// 消息类型。
-    #[serde(default)]
-    pub message_type: String,
-    /// 内容 JSON 字符串。
-    #[serde(default)]
-    pub content: String,
-    /// 被 @ 的用户。
-    #[serde(default)]
-    pub mentions: Vec<ImMention>,
-    /// 发送端 `user_agent`。缺字段时为 `None`。
-    #[serde(default)]
-    pub user_agent: Option<String>,
-}
-
-/// 消息中的 @ 提及。
-#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, Default)]
-pub struct ImMention {
-    /// 序号，例如 `@_user_1`。
-    #[serde(default)]
-    pub key: String,
-    /// 被提及用户 ID。
-    #[serde(default)]
-    pub id: Option<ImSenderId>,
-    /// `user` 或 `bot`。
-    #[serde(default)]
-    pub mentioned_type: String,
-    /// 姓名。
-    #[serde(default)]
-    pub name: String,
-    /// 租户 key。
-    #[serde(default)]
-    pub tenant_key: String,
-}
-
-/// `im.message.receive_v1` typed 处理器。
-///
-/// 闭包只要签名匹配也会自动实现本 trait。
-pub trait ImMessageReceiveV1Handler: Send + Sync + 'static {
-    /// 处理反序列化后的事件。
-    fn handle(
-        &self,
-        event: ImMessageReceiveV1,
-    ) -> Result<(), Box<dyn std::error::Error + Send + Sync>>;
-}
-
-impl<F> ImMessageReceiveV1Handler for F
-where
-    F: Fn(ImMessageReceiveV1) -> Result<(), Box<dyn std::error::Error + Send + Sync>>
-        + Send
-        + Sync
-        + 'static,
-{
-    fn handle(
-        &self,
-        event: ImMessageReceiveV1,
-    ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-        self(event)
-    }
-}
-
-struct ImMessageReceiveV1Adapter<H>(H);
-
-impl<H: ImMessageReceiveV1Handler> EventHandler for ImMessageReceiveV1Adapter<H> {
-    fn handle(&self, payload: &[u8]) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-        let event: ImMessageReceiveV1 = serde_json::from_slice(payload).map_err(|e| {
-            serialization_error(format!("反序列化 im.message.receive_v1 失败: {e}"))
-        })?;
-        self.0.handle(event)
-    }
-
-    fn handle_from_value(
-        &self,
-        value: &Value,
-        _payload: &[u8],
-    ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-        let event: ImMessageReceiveV1 = ImMessageReceiveV1::deserialize(value).map_err(|e| {
-            serialization_error(format!("反序列化 im.message.receive_v1 失败: {e}"))
-        })?;
-        self.0.handle(event)
-    }
 }
 
 /// `card.action.trigger` 完整 envelope。
@@ -583,23 +426,8 @@ impl<H: CardActionTriggerHandler> CallbackEventHandler for CardActionTriggerAdap
 }
 
 impl EventDispatcherHandler {
-    /// 事件类型 `im.message.receive_v1`。
-    pub const IM_MESSAGE_RECEIVE_V1: &'static str = "im.message.receive_v1";
     /// 事件类型 `card.action.trigger`。
     pub const CARD_ACTION_TRIGGER: &'static str = "card.action.trigger";
-
-    /// 注册 `im.message.receive_v1` typed 处理器。
-    ///
-    /// 写入 raw map。与 [`Self::register_raw`] 使用同一 `event_type` key，重复注册会失败。
-    pub fn register_im_message_receive_v1<H>(self, handler: H) -> Result<Self, String>
-    where
-        H: ImMessageReceiveV1Handler,
-    {
-        self.register_raw(
-            Self::IM_MESSAGE_RECEIVE_V1,
-            ImMessageReceiveV1Adapter(handler),
-        )
-    }
 
     /// 注册 `card.action.trigger` typed 回调处理器（可回写 ACK）。
     ///
@@ -616,40 +444,14 @@ impl EventDispatcherHandler {
 mod tests {
     use super::*;
     use std::sync::{Arc, Mutex};
-    use std::time::Instant;
 
-    const IM_FIXTURE: &str = r#"{
-      "schema":"2.0",
-      "header":{"event_id":"e1","event_type":"im.message.receive_v1","token":"t","app_id":"cli_x","tenant_key":"tk"},
-      "event":{
-        "sender":{"sender_id":{"open_id":"ou_1"},"sender_type":"user","tenant_key":"tk"},
-        "message":{
-          "message_id":"om_hello",
-          "chat_id":"oc_1",
-          "chat_type":"p2p",
-          "message_type":"text",
-          "content":"{\"text\":\"hi\"}",
-          "mentions":[{"key":"@_user_1","id":{"open_id":"ou_mentioned"},"name":"Ada","mentioned_type":"user"}]
-        }
-      }
-    }"#;
+    use crate::ws_client::EventHandler;
 
     const CARD_FIXTURE: &str = r#"{
       "schema":"2.0",
       "header":{"event_id":"f7984f25108f8137722bb63c1d00bd823c2","event_type":"card.action.trigger","create_time":"1603977298000000","token":"tok","app_id":"cli_a511af62e2b5d07f","tenant_key":"736588c9260f175d"},
       "event":{"operator":{"tenant_key":"736588c9260f175d","user_id":"on_8f6f0d15799e5c45","open_id":"ou_4063d88c980c9f2d"},"token":"c-295eed59e6dbb014b72cba6f2ff6d48da9971e99","action":{"value":{"key":"value"},"tag":"button","timezone":"8","name":"btn","form_value":{},"input_value":"","option":"","options":[],"checked":false},"host":"im_message","context":{"open_message_id":"om_dc0d7ab6d7b734d5bff5c0556e8e7616","open_chat_id":"oc_4d83f1dc8596c773a09e86f50a931b77"}}
     }"#;
-
-    struct CaptureIm(Arc<Mutex<Option<String>>>);
-    impl ImMessageReceiveV1Handler for CaptureIm {
-        fn handle(
-            &self,
-            event: ImMessageReceiveV1,
-        ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-            *self.0.lock().expect("lock") = Some(event.event.message.message_id);
-            Ok(())
-        }
-    }
 
     struct ToastCard;
     impl CardActionTriggerHandler for ToastCard {
@@ -674,37 +476,6 @@ mod tests {
     }
 
     #[test]
-    fn typed_im_message_receive_deserializes_message_id() {
-        let seen = Arc::new(Mutex::new(None));
-        let handler = EventDispatcherHandler::builder()
-            .register_im_message_receive_v1(CaptureIm(Arc::clone(&seen)))
-            .expect("register")
-            .build();
-        handler
-            .do_without_validation(IM_FIXTURE.as_bytes())
-            .expect("dispatch");
-        assert_eq!(seen.lock().expect("lock").as_deref(), Some("om_hello"));
-    }
-
-    #[test]
-    fn typed_im_message_receive_deserializes_mention_open_id() {
-        let seen = Arc::new(Mutex::new(None));
-        let seen_h = Arc::clone(&seen);
-        let handler = EventDispatcherHandler::builder()
-            .register_im_message_receive_v1(move |event: ImMessageReceiveV1| {
-                let mention = &event.event.message.mentions[0];
-                *seen_h.lock().expect("lock") = mention.id.as_ref().map(|id| id.open_id.clone());
-                Ok(())
-            })
-            .expect("register")
-            .build();
-        handler
-            .do_without_validation(IM_FIXTURE.as_bytes())
-            .expect("dispatch");
-        assert_eq!(seen.lock().expect("lock").as_deref(), Some("ou_mentioned"));
-    }
-
-    #[test]
     fn typed_card_action_returns_toast_ack() {
         let handler = EventDispatcherHandler::builder()
             .register_card_action_trigger(ToastCard)
@@ -718,30 +489,6 @@ mod tests {
         assert_eq!(v["toast"]["type"], "info");
         assert_eq!(v["toast"]["title"], "hi");
         assert!(v.get("card").is_none());
-    }
-
-    #[test]
-    fn register_raw_still_works_for_im_message() {
-        struct Raw(Arc<Mutex<bool>>);
-        impl EventHandler for Raw {
-            fn handle(
-                &self,
-                payload: &[u8],
-            ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-                assert!(payload.starts_with(b"{"));
-                *self.0.lock().expect("lock") = true;
-                Ok(())
-            }
-        }
-        let seen = Arc::new(Mutex::new(false));
-        let handler = EventDispatcherHandler::builder()
-            .register_raw("im.message.receive_v1", Raw(Arc::clone(&seen)))
-            .expect("register")
-            .build();
-        handler
-            .do_without_validation(IM_FIXTURE.as_bytes())
-            .expect("dispatch");
-        assert!(*seen.lock().expect("lock"));
     }
 
     #[test]
@@ -773,25 +520,6 @@ mod tests {
     }
 
     #[test]
-    fn typed_im_bad_json_errors() {
-        let handler = EventDispatcherHandler::builder()
-            .register_im_message_receive_v1(|_event: ImMessageReceiveV1| Ok(()))
-            .expect("register")
-            .build();
-        let err = handler
-            .do_without_validation(br#"{"header":{"event_type":"im.message.receive_v1"}}"#)
-            .expect_err("bad json");
-        assert!(
-            err.contains("im.message.receive_v1"),
-            "error should name the event type, got {err}"
-        );
-        assert!(
-            err.contains("反序列化") || err.contains("missing field"),
-            "error should mention deserialize failure, got {err}"
-        );
-    }
-
-    #[test]
     fn typed_card_bad_json_errors() {
         let handler = EventDispatcherHandler::builder()
             .register_card_action_trigger(|_event: CardActionTrigger| Ok(None))
@@ -805,124 +533,13 @@ mod tests {
             "error should name the event type, got {err}"
         );
     }
-
-    #[test]
-    fn typed_im_duplicate_register_fails() {
-        let err = EventDispatcherHandler::builder()
-            .register_im_message_receive_v1(|_event: ImMessageReceiveV1| Ok(()))
-            .expect("first")
-            .register_raw("im.message.receive_v1", {
-                struct Noop;
-                impl EventHandler for Noop {
-                    fn handle(
-                        &self,
-                        _payload: &[u8],
-                    ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-                        Ok(())
-                    }
-                }
-                Noop
-            })
-            .expect_err("dup");
-        assert!(err.contains("already registered"));
-    }
-
-    #[test]
-    fn typed_im_dispatch_1000_under_budget() {
-        let fixture = IM_FIXTURE.as_bytes();
-        let raw = EventDispatcherHandler::builder()
-            .register_raw("im.message.receive_v1", {
-                // raw 使用者手动反序列化相同事件，确保比较的是相同处理工作。
-                struct DeserializeImMessage;
-                impl EventHandler for DeserializeImMessage {
-                    fn handle(
-                        &self,
-                        payload: &[u8],
-                    ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-                        let event: ImMessageReceiveV1 = serde_json::from_slice(payload)?;
-                        assert_eq!(event.event.message.message_id, "om_hello");
-                        Ok(())
-                    }
-                }
-                DeserializeImMessage
-            })
-            .expect("raw")
-            .build();
-        let typed = EventDispatcherHandler::builder()
-            .register_im_message_receive_v1(|event: ImMessageReceiveV1| {
-                assert_eq!(event.event.message.message_id, "om_hello");
-                Ok(())
-            })
-            .expect("register")
-            .build();
-
-        for _ in 0..100 {
-            raw.do_without_validation(fixture).expect("warm raw");
-            typed.do_without_validation(fixture).expect("warm typed");
-        }
-
-        let raw_started = Instant::now();
-        for _ in 0..1000 {
-            raw.do_without_validation(fixture).expect("raw");
-        }
-        let raw_elapsed = raw_started.elapsed();
-
-        let typed_started = Instant::now();
-        for _ in 0..1000 {
-            typed.do_without_validation(fixture).expect("typed");
-        }
-        let typed_elapsed = typed_started.elapsed();
-
-        eprintln!(
-            "perf668 raw={raw_elapsed:?} typed={typed_elapsed:?} ratio={:.3}",
-            typed_elapsed.as_secs_f64() / raw_elapsed.as_secs_f64().max(1e-12)
-        );
-        assert!(
-            typed_elapsed.as_millis() < 500,
-            "1000 typed dispatches took {typed_elapsed:?}"
-        );
-        // 两条路径都在命中后解析相同类型，typed 注册糖仍应满足原来的 2x 预算。
-        assert!(
-            typed_elapsed.as_secs_f64() <= raw_elapsed.as_secs_f64() * 2.0,
-            "typed {typed_elapsed:?} exceeds 2x raw {raw_elapsed:?}"
-        );
-    }
 }
 
 #[cfg(test)]
 mod followup_tests {
-    use std::sync::{Arc, Mutex};
-
-    use super::*;
-    use crate::ws_client::EventDispatcherHandler;
 
     const COUNT_SENTENCE: &str =
         "共 159 个，含 main 原有的 `im.message.receive_v1`，其中 158 个是新增";
-
-    #[test]
-    fn message_user_agent_reaches_typed_handler() {
-        let seen = Arc::new(Mutex::new(None));
-        let seen_h = Arc::clone(&seen);
-        let handler = EventDispatcherHandler::builder()
-            .register_im_message_receive_v1(move |event: ImMessageReceiveV1| {
-                *seen_h.lock().expect("lock") = event.event.message.user_agent.clone();
-                Ok(())
-            })
-            .expect("register")
-            .build();
-        handler
-            .do_without_validation(
-                br#"{
-                  "header":{"event_type":"im.message.receive_v1"},
-                  "event":{"message":{"message_type":"text","user_agent":"Mozilla"}}
-                }"#,
-            )
-            .expect("dispatch");
-        assert_eq!(seen.lock().expect("lock").as_deref(), Some("Mozilla"));
-
-        let missing: ImReceivedMessage = serde_json::from_str("{}").expect("defaults");
-        assert_eq!(missing.user_agent, None);
-    }
 
     fn doc_table_rows(src: &str) -> Vec<(String, String)> {
         let start = src
@@ -945,10 +562,7 @@ mod followup_tests {
     }
 
     fn source_registration_rows() -> Vec<(String, String)> {
-        let mut rows = vec![(
-            "im.message.receive_v1".to_string(),
-            "register_im_message_receive_v1".to_string(),
-        )];
+        let mut rows = Vec::new();
         let sources = [
             include_str!("typed/im.rs"),
             include_str!("typed/contact.rs"),

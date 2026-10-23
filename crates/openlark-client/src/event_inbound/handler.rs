@@ -379,7 +379,7 @@ mod tests {
 
     #[test]
     fn typed_im_handler_via_http_inbound() {
-        use crate::ws_client::{ImMessageReceiveV1, ImMessageReceiveV1Handler};
+        use crate::ws_client::im::{ImMessageReceiveV1, ImMessageReceiveV1Handler};
 
         struct Capture(Arc<Mutex<Option<String>>>);
         impl ImMessageReceiveV1Handler for Capture {
