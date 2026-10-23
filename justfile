@@ -83,7 +83,7 @@ build-release:
 # Generate documentation
 docs:
   @echo "📚 Generating documentation..."
-  cargo doc --workspace --all-features --no-deps
+  RUSTDOCFLAGS="-D warnings" cargo doc --workspace --all-features --no-deps
 
 # Run coverage tests (requires cargo-llvm-cov)
 coverage:

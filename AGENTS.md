@@ -126,7 +126,7 @@ just release VERSION  # 发布新版本
 
 - **MSRV**: Rust 1.88+
 - **默认 Features**: `auth`
-- **WebSocket**: 需要单独启用 `websocket` feature
+- **WebSocket**: 需要单独启用 `websocket` feature；跑 `ws_client`/`event_inbound` 相关测试同理须加 `--features websocket`，缺省时这些测试静默不参与编译，过滤器 0 匹配仍 rc=0（假绿）
 - **测试**: 使用 `.env` 文件管理测试凭证（不要提交到 git）
 - **文档**: 使用 `cargo doc --workspace --all-features` 生成完整文档
 - **依赖治理**: 被 2 个或以上 crate 共用的第三方依赖在根 `Cargo.toml [workspace.dependencies]` 统一声明版本，各 crate 以 `{ workspace = true }` 引用，不要在 crate 级自钉版本（避免同一依赖出现多个 resolved 版本）；单 crate 使用的通用基础库也建议走 workspace
@@ -159,5 +159,6 @@ Issues 在 GitHub Issues（`foxzool/openlark`）跟踪，统一用 `gh` CLI；�
   - 构建: `cargo build --workspace --all-features`
   - 测试: `cargo test --workspace --all-features`（整套约 3 分钟）
   - Lint（CI 同款双模式）: `cargo clippy --workspace --all-targets --all-features -- -Dwarnings` 与 `cargo clippy --workspace --all-targets --no-default-features -- -Dwarnings`
+  - 文档（CI doc job 同款）: `RUSTDOCFLAGS="-D warnings" cargo doc --workspace --all-features --no-deps`（悬空 intra-doc 链接本地即红；单 crate `-p` 查不出跨 crate 链接问题）
   - 运行示例: `cargo run --example client_setup --features "auth,communication"`（无需真实凭证即可跑通；示例清单见 `examples/README.md`）
 - **凭证**: 示例/测试默认使用占位值或 `.env`（`.env-example` 为模板），不会发真实请求，除非设置对应环境变量（如 `OPENLARK_APP_ID` / `OPENLARK_USER_SEARCH_NAME`）。
