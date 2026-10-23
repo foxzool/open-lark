@@ -22,7 +22,7 @@ impl AuthHandler {
             AccessTokenType::None => Ok(req_builder),
             AccessTokenType::App => Self::apply_app_auth(req_builder, config, option).await,
             AccessTokenType::Tenant => Self::apply_tenant_auth(req_builder, config, option).await,
-            AccessTokenType::User => Ok(Self::apply_user_auth(req_builder, option)),
+            AccessTokenType::User => Self::apply_user_auth(req_builder, config, option).await,
         }
     }
 
@@ -72,11 +72,25 @@ impl AuthHandler {
     }
 
     /// 应用用户级认证
-    fn apply_user_auth(req_builder: RequestBuilder, option: &RequestOption) -> RequestBuilder {
-        Self::add_auth_header(
-            req_builder,
-            option.user_access_token.as_deref().unwrap_or(""),
-        )
+    ///
+    /// 优先级（#693）：`RequestOption.user_access_token` 显式值 > token 缓存
+    /// （provider 经种子/轮转 refresh token 自动刷新）> 报错。
+    async fn apply_user_auth(
+        req_builder: RequestBuilder,
+        config: &Config,
+        option: &RequestOption,
+    ) -> Result<RequestBuilder, CoreError> {
+        let user_access_token = if let Some(ref token) = option.user_access_token {
+            token.clone()
+        } else if config.enable_token_cache() {
+            config
+                .token_provider()
+                .get_token(TokenRequest::user())
+                .await?
+        } else {
+            return Err(authentication_error("访问令牌缺失"));
+        };
+        Ok(Self::add_auth_header(req_builder, &user_access_token))
     }
 
     /// 添加 Authorization 头
@@ -101,6 +115,15 @@ mod tests {
             .app_secret("test_app_secret")
             .app_type(AppType::SelfBuild)
             .enable_token_cache(false)
+            .build()
+    }
+
+    fn create_test_config_with_cache() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
             .build()
     }
 
@@ -260,19 +283,93 @@ mod tests {
         assert_eq!(header.to_str().unwrap(), "Bearer static_tenant_token");
     }
 
-    #[test]
-    fn test_apply_user_auth() {
+    #[tokio::test]
+    async fn test_apply_user_auth() {
         let req_builder = create_test_request_builder();
         let option = RequestOption {
             user_access_token: Some("user_token_456".to_string()),
             ..Default::default()
         };
 
-        let result = AuthHandler::apply_user_auth(req_builder, &option);
+        let config = create_test_config();
+        let result = AuthHandler::apply_user_auth(req_builder, &config, &option)
+            .await
+            .expect("显式 user_access_token 应直接使用");
 
         // Can't easily test the actual header, but should not panic
         // and should return a RequestBuilder
         assert!(format!("{result:?}").contains("RequestBuilder"));
+    }
+
+    /// #693：显式 user_access_token 存在时优先于 provider（缓存/刷新不接管）。
+    #[tokio::test]
+    async fn explicit_user_token_wins_over_provider() {
+        use std::sync::Arc;
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        #[derive(Debug)]
+        struct PanickingProvider {
+            calls: Arc<AtomicUsize>,
+        }
+        impl TokenProvider for PanickingProvider {
+            fn get_token(
+                &self,
+                _request: crate::auth::TokenRequest,
+            ) -> Pin<Box<dyn Future<Output = SDKResult<String>> + Send + '_>> {
+                let calls = Arc::clone(&self.calls);
+                Box::pin(async move {
+                    calls.fetch_add(1, Ordering::SeqCst);
+                    Ok("provider-token".to_string())
+                })
+            }
+        }
+
+        let calls = Arc::new(AtomicUsize::new(0));
+        let config = create_test_config_with_cache().with_token_provider(PanickingProvider {
+            calls: Arc::clone(&calls),
+        });
+        let option = RequestOption {
+            user_access_token: Some("explicit_token".to_string()),
+            ..Default::default()
+        };
+        let req_builder = create_test_request_builder();
+        let result = AuthHandler::apply_user_auth(req_builder, &config, &option)
+            .await
+            .expect("显式 token 应直接通过");
+        assert!(
+            format!("{result:?}").contains("RequestBuilder"),
+            "应返回 RequestBuilder"
+        );
+        assert_eq!(
+            calls.load(Ordering::SeqCst),
+            0,
+            "显式 user_access_token 存在时不应调用 provider"
+        );
+    }
+
+    /// #693：无显式 token 且缓存启用时走 provider。
+    #[tokio::test]
+    async fn user_token_falls_back_to_provider() {
+        // cache 开启 + static provider（返回 static_user_token）
+        let config = create_test_config_with_cache().with_token_provider(StaticTokenProvider);
+        let option = RequestOption::default();
+        let req_builder = create_test_request_builder();
+        let result = AuthHandler::apply_user_auth(req_builder, &config, &option)
+            .await
+            .expect("provider 应供 token");
+        assert!(format!("{result:?}").contains("RequestBuilder"));
+    }
+
+    /// #693：无显式 token 且缓存关闭 → 报错（不再发空 Bearer）。
+    #[tokio::test]
+    async fn user_token_missing_without_cache_is_error() {
+        let config = create_test_config(); // enable_token_cache(false)
+        let option = RequestOption::default();
+        let req_builder = create_test_request_builder();
+        let err = AuthHandler::apply_user_auth(req_builder, &config, &option)
+            .await
+            .expect_err("缺 token 应报错");
+        assert!(err.to_string().contains("访问令牌缺失"));
     }
 
     #[test]

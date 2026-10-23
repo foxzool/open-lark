@@ -24,6 +24,7 @@ fn test_config_creation() {
         allow_custom_base_url: false,
         client_assertion_provider: None,
         oauth_base_url: None,
+        user_refresh_token: None,
     });
 
     assert_eq!(config.app_id, "test_app_id");
@@ -68,6 +69,7 @@ fn test_config_clone() {
         allow_custom_base_url: false,
         client_assertion_provider: None,
         oauth_base_url: None,
+        user_refresh_token: None,
     });
 
     let cloned_config = config.clone();

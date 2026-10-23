@@ -14,7 +14,7 @@
 | `websocket_echo_bot` | 长连接接收并回显文本消息 | `communication,websocket` |
 | `http_event_inbound` | HTTP 事件入站（challenge / typed 分发 fixture；非 `openlark-webhook` 出站） | `event-http` |
 | `websocket_typed_handler` | WS typed `im.message.receive_v1` fixture（可选真实长连接） | `communication,websocket` |
-| `oauth_user_token` | 显式 `RequestOption.user_access_token`（不自动刷新） | `auth,communication` |
+| `oauth_user_token` | 显式 `RequestOption.user_access_token`（也可用 Config `user_refresh_token` 自动刷新，#693） | `auth,communication` |
 | `workflow_api_example` | 工作流模块调用 | `workflow` |
 
 ## 校验约定
