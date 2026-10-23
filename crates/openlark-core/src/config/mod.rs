@@ -110,6 +110,9 @@ pub struct ConfigInner {
     pub(crate) client_assertion_provider: Option<Arc<dyn ClientAssertionProvider>>,
     /// OAuth 原点，例如 `https://accounts.example.test`。不含 `/oauth/v3/token`。
     pub(crate) oauth_base_url: Option<String>,
+    /// user access token 自动刷新的种子 refresh token（#693）。
+    /// 轮转后的新 refresh token 由 AuthTokenProvider 缓存接管，不回写配置。
+    pub(crate) user_refresh_token: Option<String>,
 }
 
 impl Default for ConfigInner {
@@ -130,6 +133,7 @@ impl Default for ConfigInner {
             allow_custom_base_url: false,
             client_assertion_provider: None,
             oauth_base_url: None,
+            user_refresh_token: None,
         }
     }
 }
@@ -153,6 +157,10 @@ impl std::fmt::Debug for ConfigInner {
                 &self.client_assertion_provider.as_ref().map(|_| "<set>"),
             )
             .field("oauth_base_url", &self.oauth_base_url)
+            .field(
+                "user_refresh_token",
+                &self.user_refresh_token.as_ref().map(|_| "***"),
+            )
             .finish()
     }
 }
@@ -266,6 +274,11 @@ impl Config {
     /// 是否允许自定义 base_url 域名（绕过白名单 SSRF 防护）
     pub fn allow_custom_base_url(&self) -> bool {
         self.inner.allow_custom_base_url
+    }
+
+    /// user access token 自动刷新的种子 refresh token（未设置为 `None`）。
+    pub fn user_refresh_token(&self) -> Option<&str> {
+        self.inner.user_refresh_token.as_deref()
     }
 
     /// 外部 client assertion 供给。`None` 表示仍走 app_secret grant。
@@ -599,6 +612,22 @@ impl ConfigBuilder {
         provider: impl ClientAssertionProvider + 'static,
     ) -> Self {
         self.inner.client_assertion_provider = Some(Arc::new(provider));
+        self
+    }
+
+    /// 设置 user access token 自动刷新的种子 refresh token（#693）。
+    ///
+    /// 设置后 `AccessTokenType::User` 请求可由 token 缓存自动刷新；
+    /// 轮转产生的新 refresh token 由缓存接管。空白与未设置相同。
+    /// `RequestOption.user_access_token` 显式值优先于此路径。
+    pub fn user_refresh_token(mut self, refresh_token: impl Into<String>) -> Self {
+        let value = refresh_token.into();
+        let trimmed = value.trim();
+        self.inner.user_refresh_token = if trimmed.is_empty() {
+            None
+        } else {
+            Some(value)
+        };
         self
     }
 

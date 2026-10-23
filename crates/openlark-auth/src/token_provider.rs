@@ -7,6 +7,7 @@ use crate::auth::auth::v3::auth::{
     AppAccessTokenInternalRequestBuilder, AppAccessTokenRequestBuilder,
     TenantAccessTokenInternalRequestBuilder, TenantAccessTokenRequestBuilder,
 };
+use crate::auth::authen::v1::oidc::OidcRefreshAccessTokenRequestBuilder;
 use openlark_core::{
     SDKResult,
     auth::{
@@ -17,6 +18,7 @@ use openlark_core::{
     config::Config,
     constants::{AccessTokenType, AppType},
     error::configuration_error,
+    req_option::RequestOption,
 };
 use std::collections::HashMap;
 use std::collections::hash_map::DefaultHasher;
@@ -34,6 +36,9 @@ struct CachedToken {
     token: String,
     /// 过期时间戳（Unix 时间戳，秒）
     expires_at: i64,
+    /// user token 路径的轮转 refresh token（app/tenant 为 `None`）。
+    /// 访问令牌过期后仍可作为下一次刷新的凭证读取。
+    refresh_token: Option<String>,
 }
 
 impl std::fmt::Debug for CachedToken {
@@ -41,6 +46,7 @@ impl std::fmt::Debug for CachedToken {
         f.debug_struct("CachedToken")
             .field("token", &"***")
             .field("expires_at", &self.expires_at)
+            .field("refresh_token", &self.refresh_token.as_ref().map(|_| "***"))
             .finish()
     }
 }
@@ -59,7 +65,23 @@ impl CachedToken {
         // 提前 60 秒过期，避免临界情况（小于 60 秒则视为立即过期）
         let expires_at = now.saturating_add(expires_in_seconds.saturating_sub(60));
 
-        Self { token, expires_at }
+        Self {
+            token,
+            expires_at,
+            refresh_token: None,
+        }
+    }
+
+    /// 创建带轮转 refresh token 的缓存项（user token 路径）
+    fn new_with_refresh(
+        token: String,
+        expires_in_seconds: i64,
+        refresh_token: Option<String>,
+    ) -> Self {
+        Self {
+            refresh_token,
+            ..Self::new(token, expires_in_seconds)
+        }
     }
 
     /// 检查 token 是否已过期
@@ -139,6 +161,24 @@ impl AuthTokenProvider {
         self.cache.write().await.insert(cache_key, cached);
     }
 
+    /// user token 路径写回：访问令牌 + 轮转 refresh token 成对入缓存
+    async fn set_cached_with_refresh(
+        &self,
+        cache_key: String,
+        token: String,
+        expires_in_seconds: i64,
+        refresh_token: Option<String>,
+    ) {
+        let cached = CachedToken::new_with_refresh(token, expires_in_seconds, refresh_token);
+        self.cache.write().await.insert(cache_key, cached);
+    }
+
+    /// user token 路径：取轮转 refresh token（访问令牌过期仍可读取）
+    async fn cached_refresh_token(&self, cache_key: &str) -> Option<String> {
+        let cache = self.cache.read().await;
+        cache.get(cache_key).and_then(|c| c.refresh_token.clone())
+    }
+
     async fn get_or_fetch<F, Fut>(&self, cache_key: String, fetch: F) -> SDKResult<String>
     where
         F: FnOnce() -> Fut,
@@ -181,6 +221,49 @@ impl AuthTokenProvider {
             client_assertion::exchange_tenant_token(&self.config, &token_url, assertion).await
         })
         .await
+    }
+
+    /// user access token：命中缓存直接复用；否则用轮转/种子 refresh token
+    /// 走现有刷新接口，并把新的 access + refresh 成对写回缓存（#693）。
+    ///
+    /// 刷新失败不写缓存（与 app/tenant 路径同语义）。
+    async fn get_or_refresh_user_token(&self, cache_key: String) -> SDKResult<String> {
+        if let Some(token) = self.get_cached(&cache_key).await {
+            return Ok(token);
+        }
+
+        // refresh token：优先缓存里轮转写回的，其次配置的种子
+        let refresh_token = self
+            .cached_refresh_token(&cache_key)
+            .await
+            .or_else(|| self.config.user_refresh_token().map(str::to_string));
+        let Some(refresh_token) = refresh_token else {
+            return Err(configuration_error(
+                "token_provider: user token 缓存未命中且未配置 user_refresh_token；请在 Config 设置种子 refresh token，或在 RequestOption 显式传入 user_access_token",
+            ));
+        };
+
+        // 刷新接口走 App 鉴权：显式注入本 provider 缓存的 app token，
+        // 不依赖 config.token_provider 回装自身（独立构造 AuthTokenProvider 也可用）。
+        let app_token = self.get_token(TokenRequest::app()).await?;
+        let refresh_option = RequestOption::builder().app_access_token(app_token).build();
+        let data = OidcRefreshAccessTokenRequestBuilder::new(self.config.clone())
+            .refresh_token(refresh_token.clone())
+            .client_id(self.config.app_id())
+            .client_secret(self.config.app_secret())
+            .execute_with_options(refresh_option)
+            .await?
+            .data;
+        // 轮转：响应给新 refresh token 则写回新的；未给则沿用本次使用的
+        let new_refresh = data.refresh_token.clone().or(Some(refresh_token));
+        self.set_cached_with_refresh(
+            cache_key,
+            data.user_access_token.clone(),
+            data.expires_in as i64,
+            new_refresh,
+        )
+        .await;
+        Ok(data.user_access_token)
     }
 }
 
@@ -285,9 +368,11 @@ impl TokenProvider for AuthTokenProvider {
                     })
                     .await
                 }
-                AccessTokenType::User => Err(configuration_error(
-                    "token_provider: user token 不应由 core 自动获取，请在 RequestOption 中显式传入 user_access_token（或由上层自行实现 TokenProvider 扩展）。",
-                )),
+                AccessTokenType::User => {
+                    let cache_key =
+                        Self::cache_key(&AccessTokenType::User, &self.config.app_type(), &request);
+                    self.get_or_refresh_user_token(cache_key).await
+                }
                 AccessTokenType::None => Err(configuration_error(
                     "token_provider: AccessTokenType::None 不应触发 token 获取",
                 )),

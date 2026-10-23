@@ -741,11 +741,8 @@ mod client_assertion_exchange {
             .get_token(TokenRequest::user())
             .await
             .expect_err("user");
-        assert!(
-            user_err
-                .to_string()
-                .contains("user token 不应由 core 自动获取")
-        );
+        // #693：User 路径改为缓存+刷新；无种子 refresh token 时仍报配置错误
+        assert!(user_err.to_string().contains("user_refresh_token"));
         let none_err = token_provider
             .get_token(TokenRequest {
                 token_type: AccessTokenType::None,
@@ -1079,4 +1076,147 @@ mod client_assertion_exchange {
             other => panic!("应是 ResponseTooLarge，实际 {other:?}"),
         }
     }
+}
+
+// === #693：user access token 自动缓存与刷新（替身 HTTP，不访问真实飞书） ===
+
+fn user_token_config(base_url: impl Into<String>, refresh_seed: Option<&str>) -> Config {
+    let mut builder = Config::builder()
+        .app_id("test_app_id")
+        .app_secret("test_app_secret")
+        .base_url(base_url);
+    if let Some(seed) = refresh_seed {
+        builder = builder.user_refresh_token(seed);
+    }
+    builder.build()
+}
+
+fn app_token_internal_mock() -> Mock {
+    Mock::given(method("POST"))
+        .and(path("/open-apis/auth/v3/app_access_token/internal"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+            "code": 0, "msg": "success",
+            "app_access_token": "app-token-for-refresh", "expire": 7200
+        })))
+}
+
+fn oidc_refresh_mock(access: &str, new_refresh: &str, expires_in: u64) -> Mock {
+    Mock::given(method("POST"))
+        .and(path("/open-apis/authen/v1/oidc/refresh_access_token"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+            "code": 0, "msg": "ok",
+            "data": {
+                "access_token": access,
+                "refresh_token": new_refresh,
+                "expires_in": expires_in,
+                "token_type": "Bearer"
+            }
+        })))
+}
+
+async fn refresh_request_bodies(server: &MockServer) -> Vec<String> {
+    server
+        .received_requests()
+        .await
+        .unwrap_or_default()
+        .iter()
+        .filter(|req| req.url.path().ends_with("oidc/refresh_access_token"))
+        .filter_map(|req| {
+            let body: serde_json::Value = serde_json::from_slice(&req.body).ok()?;
+            body.get("refresh_token")?.as_str().map(str::to_string)
+        })
+        .collect()
+}
+
+/// AC1：配置 refresh token 后，User 类型可从缓存取 token；命中缓存不重复请求。
+#[tokio::test]
+async fn user_token_hits_cache_after_first_refresh() {
+    let server = MockServer::start().await;
+    server.register(app_token_internal_mock()).await;
+    server
+        .register(oidc_refresh_mock("ut-access-1", "rt-2", 7200))
+        .await;
+
+    let provider = AuthTokenProvider::new(user_token_config(server.uri(), Some("rt-1")));
+    let first = provider
+        .get_token(TokenRequest::user())
+        .await
+        .expect("首次应走刷新接口");
+    assert_eq!(first, "ut-access-1");
+
+    let second = provider
+        .get_token(TokenRequest::user())
+        .await
+        .expect("第二次应命中缓存");
+    assert_eq!(second, "ut-access-1");
+
+    let bodies = refresh_request_bodies(&server).await;
+    assert_eq!(bodies.len(), 1, "缓存命中后不应再刷新");
+    assert_eq!(bodies[0], "rt-1", "首次刷新应使用配置的种子 refresh token");
+}
+
+/// AC2：进入提前刷新窗口（expires_in=60 → 有效期 0，立即过期）后自动刷新，
+/// 且写回响应中的新 refresh token（轮转），后续继续命中缓存。
+#[tokio::test]
+async fn user_token_refreshes_with_rotation_in_refresh_window() {
+    let server = MockServer::start().await;
+    server.register(app_token_internal_mock()).await;
+    server
+        .register(oidc_refresh_mock("ut-access-1", "rt-2", 60))
+        .await;
+
+    let provider = AuthTokenProvider::new(user_token_config(server.uri(), Some("rt-1")));
+    let first = provider
+        .get_token(TokenRequest::user())
+        .await
+        .expect("首次刷新");
+    assert_eq!(first, "ut-access-1");
+
+    // 换桩：第二次刷新返回新 access + 再轮转的 refresh，有效期恢复正常
+    let first_bodies = refresh_request_bodies(&server).await;
+    server.reset().await;
+    server.register(app_token_internal_mock()).await;
+    server
+        .register(oidc_refresh_mock("ut-access-2", "rt-3", 7200))
+        .await;
+
+    let second = provider
+        .get_token(TokenRequest::user())
+        .await
+        .expect("过期后应自动刷新");
+    assert_eq!(second, "ut-access-2", "应返回刷新后的新 token");
+    assert_eq!(first_bodies[0], "rt-1");
+
+    let bodies = refresh_request_bodies(&server).await;
+    assert_eq!(bodies.len(), 1, "本阶段恰好一次刷新");
+    assert_eq!(
+        bodies[0], "rt-2",
+        "刷新应使用上次响应写回的轮转 refresh token"
+    );
+
+    let third = provider
+        .get_token(TokenRequest::user())
+        .await
+        .expect("刷新后应命中缓存");
+    assert_eq!(third, "ut-access-2");
+    assert_eq!(
+        refresh_request_bodies(&server).await.len(),
+        1,
+        "缓存有效期内不应再刷新"
+    );
+}
+
+/// AC4：无 refresh token 种子且缓存为空 → 配置错误（不访问网络）。
+#[tokio::test]
+async fn user_token_without_refresh_seed_is_configuration_error() {
+    let provider = AuthTokenProvider::new(user_token_config("http://127.0.0.1:9", None));
+    let err = provider
+        .get_token(TokenRequest::user())
+        .await
+        .expect_err("缺 refresh token 应报配置错误");
+    let msg = err.to_string();
+    assert!(
+        msg.contains("user_access_token") || msg.contains("refresh"),
+        "错误应指引配置 refresh token 或显式传入 user_access_token，got: {msg}"
+    );
 }

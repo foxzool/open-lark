@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Post-0.21 work goes here. -->
 
+### Added
+
+- **auth：user access token 自动缓存与刷新（#693）**：
+  `Config::user_refresh_token` 设置种子 refresh token 后，user 级请求由
+  token 缓存自动续期：命中缓存直接复用，进入提前 60 秒刷新窗口后走现有
+  `oidc/refresh_access_token` 接口，并把新的 access token 与轮转 refresh token
+  成对写回缓存。`RequestOption.user_access_token` 显式值仍优先；两者皆无时
+  返回配置错误（此前发送空 Bearer）。刷新接口的 App 鉴权复用 provider 自身
+  app token 缓存，独立构造 `AuthTokenProvider` 也可用。TLA+ 模型扩展了 user
+  流程（新增 `UserEntryPairsRefresh` 成对写回不变量，TLC 全过）。
+
 ### Deprecated
 
 - **ws：im 域 typed 事件 flat 再导出（#709）**：

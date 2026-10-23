@@ -86,14 +86,15 @@ Indivisible in both: one `get_cached` call; one `fetch` await; one `set_cached` 
 - Discrete clock `MaxTime = 2`; `ExpiresIn = 120`, `SkewSecs = 60` (same 60s skew as `CachedToken::new`).
 - Fetch success/failure is nondeterministic; network timing is only “before/after” steps, not wall ms.
 - Does **not** model: marketplace nested app→tenant fetch, `client_assertion` path, real HTTP, `RwLock` writer queueing fairness, or cross-key isolation (separate keys are out of scope).
+- **#693 user flow is modeled**: procs in `UserProcs` take the ReadRefresh → refresh-fetch → paired-write path (`UserEntryPairsRefresh`); plain and user entries share one modeled cache slot (real Rust uses distinct keys).
 - A pass covers this model and bound, not the whole SDK.
 
 ## Sync commit
 
 Last confirmed that this verification describes the code:
 
-- **sync commit:** `8bbbfc4c1` (model + `AuthTokenProvider::get_or_fetch` confirmed together; advance only after reconfirming)
-- **covered functions:** `CachedToken::new`, `CachedToken::is_expired`, `AuthTokenProvider::get_cached`, `set_cached`, `get_or_fetch`
+- **sync commit:** `17f8acc6b` (model + `AuthTokenProvider` confirmed together, incl. #693 user-token flow; advance only after reconfirming)
+- **covered functions:** `CachedToken::new`, `CachedToken::new_with_refresh`, `CachedToken::is_expired`, `AuthTokenProvider::get_cached`, `set_cached`, `set_cached_with_refresh`, `cached_refresh_token`, `get_or_fetch`, `get_or_refresh_user_token`
 
 Move the sync commit forward only after you confirm the model still matches those functions at the new commit (re-read the Rust, update the `.tla` if steps changed, re-run `./formal/token_provider/run_tlc.sh`).
 
